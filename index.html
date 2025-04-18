@@ -147,11 +147,11 @@
                 </li>
               
                 <li>
-                  <a href="/my-blog/tags/%E6%97%85%E8%A1%8C/">旅行 (1)</a>
+                  <a href="/my-blog/tags/Django/">Django (1)</a>
                 </li>
               
                 <li>
-                  <a href="/my-blog/tags/%E6%97%A5%E6%9C%AC/">日本 (1)</a>
+                  <a href="/my-blog/tags/Python/">Python (2)</a>
                 </li>
               
             </ul>
@@ -187,6 +187,283 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/17/django%E7%9A%84_set%E7%94%A8%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="你的名字">
+      <meta itemprop="description" content="分享旅行故事和經驗">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的旅行部落格">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/04/17/django%E7%9A%84_set%E7%94%A8%E6%B3%95/" class="post-title-link" itemprop="url">Django `_set` 用法筆記（ForeignKey 反向關聯）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              <time title="創建時間：2025-04-17 00:00:00" itemprop="dateCreated datePublished" datetime="2025-04-17T00:00:00+08:00">2025-04-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2025-04-18 20:59:14" itemprop="dateModified" datetime="2025-04-18T20:59:14+08:00">2025-04-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="🔗-Django-set-用法筆記（ForeignKey-反向關聯）"><a href="#🔗-Django-set-用法筆記（ForeignKey-反向關聯）" class="headerlink" title="🔗 Django _set 用法筆記（ForeignKey 反向關聯）"></a>🔗 Django <code>_set</code> 用法筆記（ForeignKey 反向關聯）</h2><h3 id="✅-基本觀念：一對多關係（ForeignKey）"><a href="#✅-基本觀念：一對多關係（ForeignKey）" class="headerlink" title="✅ 基本觀念：一對多關係（ForeignKey）"></a>✅ 基本觀念：一對多關係（ForeignKey）</h3><p>假設有下列兩個 Model：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Interview</span>(models.Model):</span><br><span class="line">    title = models.CharField(max_length=<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Comment</span>(models.Model):</span><br><span class="line">    interview = models.ForeignKey(Interview, on_delete=models.CASCADE)</span><br><span class="line">    content = models.TextField()</span><br></pre></td></tr></table></figure>
+
+<p>這裡代表：</p>
+<ul>
+<li>一個 <code>Interview</code> 可以有多個 <code>Comment</code></li>
+<li><code>Comment</code> 是「多」方，透過 ForeignKey 指向「一」方的 <code>Interview</code></li>
+</ul>
+<hr>
+<h3 id="↻-反向關聯：使用-set"><a href="#↻-反向關聯：使用-set" class="headerlink" title="↻ 反向關聯：使用 _set"></a>↻ 反向關聯：使用 <code>_set</code></h3><p>Django 會<strong>自動在一方的 model 加上一個反向屬性</strong>，名稱預設是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;related_model_name&gt;_set</span><br></pre></td></tr></table></figure>
+
+<p>所以可以這樣用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">interview.comment_set.<span class="built_in">all</span>()  <span class="comment"># 查出這個 interview 底下的所有 comment</span></span><br><span class="line">interview.comment_set.create(content=<span class="string">&#x27;你好&#x27;</span>)  <span class="comment"># 新增一筆 comment 自動連結該 interview</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="📛-注意：預設反向屬性的命名方式"><a href="#📛-注意：預設反向屬性的命名方式" class="headerlink" title="📛 注意：預設反向屬性的命名方式"></a>📛 注意：預設反向屬性的命名方式</h3><p>預設情況下，Django 會以「<strong>小寫 model 名稱 + <code>_set</code></strong>」為一方建立反向屬性。</p>
+<p>例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Comment</span>(models.Model):</span><br><span class="line">    interview = models.ForeignKey(Interview, on_delete=models.CASCADE)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>這會讓你能夠使用 <code>interview.comment_set</code> 來取得該 interview 所有的 comment。</li>
+<li>若 model 名稱為 <code>Message</code>，則會是 <code>article.message_set</code></li>
+</ul>
+<p>若希望有更語意化的名稱，建議加上 <code>related_name</code>（見下方）。</p>
+<hr>
+<h3 id="✍️-常見用法整理："><a href="#✍️-常見用法整理：" class="headerlink" title="✍️ 常見用法整理："></a>✍️ 常見用法整理：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 取得所有 comment</span></span><br><span class="line">comments = interview.comment_set.<span class="built_in">all</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Interview 角度</span></span><br><span class="line"><span class="comment"># 建立一筆新的 comment 並與 interview 關聯</span></span><br><span class="line">interview.comment_set.create(content=req.POST[<span class="string">&#x27;content&#x27;</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># Comment 角度</span></span><br><span class="line">Comment.objects.create(interview=interview, content=req.POST[<span class="string">&#x27;content&#x27;</span>])</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="💡-如何自訂反向名稱（最佳實踐）"><a href="#💡-如何自訂反向名稱（最佳實踐）" class="headerlink" title="💡 如何自訂反向名稱（最佳實踐）"></a>💡 如何自訂反向名稱（最佳實踐）</h3><p>為了讓語意更清楚，可以在 ForeignKey 中加上 <code>related_name</code>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Comment</span>(models.Model):</span><br><span class="line">    interview = models.ForeignKey(</span><br><span class="line">        Interview,</span><br><span class="line">        on_delete=models.CASCADE,</span><br><span class="line">        related_name=<span class="string">&#x27;comments&#x27;</span>  <span class="comment"># 自訂名稱</span></span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+
+<p>就能這樣使用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">interview.comments.<span class="built_in">all</span>()</span><br><span class="line">interview.comments.create(content=<span class="string">&#x27;加油！&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="💬-面試回答（Q-A）"><a href="#💬-面試回答（Q-A）" class="headerlink" title="💬 面試回答（Q&amp;A）"></a>💬 面試回答（Q&amp;A）</h3><p><strong>Q: Django 中如何透過 ForeignKey 建立一對多關係，並如何查詢&#x2F;建立子資料？</strong><br><strong>A:</strong></p>
+<blockquote>
+<p>在多方的 model 使用 <code>ForeignKey</code> 連到一方，並使用 Django 提供的反向屬性 <code>&lt;model&gt;_set</code> 來存取。例如 <code>interview.comment_set.create(...)</code> 可以新增一筆資料，同時建立關聯。如果加上 <code>related_name</code> 可以讓語意更清楚，如 <code>interview.comments.create(...)</code>。</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/17/python%E5%87%BD%E6%95%B8%E8%A3%9D%E9%A3%BE%E5%99%A8%E7%AD%86%E8%A8%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="你的名字">
+      <meta itemprop="description" content="分享旅行故事和經驗">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的旅行部落格">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/04/17/python%E5%87%BD%E6%95%B8%E8%A3%9D%E9%A3%BE%E5%99%A8%E7%AD%86%E8%A8%98/" class="post-title-link" itemprop="url">Python 函數裝飾器 (Function Decorator) 筆記</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              <time title="創建時間：2025-04-17 00:00:00" itemprop="dateCreated datePublished" datetime="2025-04-17T00:00:00+08:00">2025-04-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2025-04-18 20:59:14" itemprop="dateModified" datetime="2025-04-18T20:59:14+08:00">2025-04-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="✅-什麼是函數裝飾器？"><a href="#✅-什麼是函數裝飾器？" class="headerlink" title="✅ 什麼是函數裝飾器？"></a>✅ 什麼是函數裝飾器？</h1><ul>
+<li><p>函數裝飾器(<code>Function Decorator</code>)是一種用來<strong>修改或擴展函數功能的設計模式</strong>。它允許在不改變函數本身的情況下，將額外的邏輯附加到函數上。</p>
+</li>
+<li><p>函數裝飾器是高階函數 <code>Higher-order Function</code>：接收一個函數作為參數，並返回一個包裹在該函數的新函數 (<code>Wrapper</code>)。</p>
+</li>
+</ul>
+<p>函數裝飾器是 Python 中一種強大的功能，允許我們修改或擴展現有函數的行為，而無需改變函數的代碼。它是一種語法糖，基於高階函數的概念，使得函數變得更加靈活和可重複使用。</p>
+<h2 id="函數裝飾器的結構"><a href="#函數裝飾器的結構" class="headerlink" title="函數裝飾器的結構"></a>函數裝飾器的結構</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">decorator</span>(<span class="params">func</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">        <span class="comment"># 在此處進行一些處理或擴展功能</span></span><br><span class="line">        <span class="keyword">return</span> func(*args, **kwargs)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>decorator(func)</code>：裝飾器函數，接收被裝飾的函數 <code>func</code>。</li>
+<li><code>wrapper(*args, **kwargs)</code>：內部包裝函數，可以修改或擴展 <code>func</code> 的行為。</li>
+<li><code>return wrapper</code>：返回包裝函數 <code>wrapper</code>，這樣我們就能在裝飾器中處理邏輯。</li>
+</ul>
+<h1 id="💡-為何要使用裝飾器？"><a href="#💡-為何要使用裝飾器？" class="headerlink" title="💡 為何要使用裝飾器？"></a>💡 為何要使用裝飾器？</h1><ol>
+<li><strong>功能擴展</strong>：可以在不修改函數內容的情況下，擴展或修改其行為。</li>
+<li><strong>程式碼重用</strong>：可以將重複的邏輯提取出來，放在裝飾器中，減少重複代碼。</li>
+<li><strong>增強函數功能</strong>：通過裝飾器可以給函數增加額外的功能，像是日誌、權限檢查、緩存等。</li>
+</ol>
+<h1 id="📝-基本範例"><a href="#📝-基本範例" class="headerlink" title="📝 基本範例"></a>📝 基本範例</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">simple_decorator</span>(<span class="params">func</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrapper</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Before function call.&quot;</span>)</span><br><span class="line">        func()</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;After function call.&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="meta">@simple_decorator</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">say_hello</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello!&quot;</span>)</span><br><span class="line"></span><br><span class="line">say_hello()</span><br></pre></td></tr></table></figure>
+
+<p><strong>輸出：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Before function call.</span><br><span class="line">Hello!</span><br><span class="line">After function call.</span><br></pre></td></tr></table></figure>
+
+<h2 id="如何運作："><a href="#如何運作：" class="headerlink" title="如何運作："></a>如何運作：</h2><ol>
+<li><code>@simple_decorator</code> 是裝飾器的語法糖，等同於 <code>say_hello = simple_decorator(say_hello)</code>。</li>
+<li>裝飾器會包裝 <code>say_hello</code> 函數，使它在被調用時執行額外的邏輯。</li>
+</ol>
+<h1 id="🔄-帶參數的裝飾器"><a href="#🔄-帶參數的裝飾器" class="headerlink" title="🔄 帶參數的裝飾器"></a>🔄 帶參數的裝飾器</h1><p>如果需要裝飾器接受參數，可以再定義一層函數。這樣可以讓裝飾器變得更加通用。</p>
+<h2 id="帶參數範例"><a href="#帶參數範例" class="headerlink" title="帶參數範例"></a>帶參數範例</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">calculator</span>(<span class="params">func</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">calculate_height</span>(<span class="params">weight, height</span>):</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">square_height</span>(<span class="params">height</span>):</span><br><span class="line">            height_in_meters = height / <span class="number">100</span></span><br><span class="line">            <span class="keyword">return</span> height_in_meters</span><br><span class="line">        <span class="keyword">return</span> func(weight, square_height(height))</span><br><span class="line">    <span class="keyword">return</span> calculate_height</span><br><span class="line"></span><br><span class="line"><span class="meta">@calculator</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">bmi_calculator</span>(<span class="params">weight, height</span>):</span><br><span class="line">    <span class="keyword">return</span> weight / (height * height)</span><br><span class="line"></span><br><span class="line">result = bmi_calculator(<span class="number">50</span>, <span class="number">160</span>)</span><br><span class="line"><span class="built_in">print</span>(result)  <span class="comment"># 19.531249999999996</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>解釋：</strong></p>
+<ol>
+<li><code>calculator</code> 是裝飾器，接受 <code>bmi_calculator</code> 作為參數。</li>
+<li>在 <code>calculate_height</code> 函數內部，我們調用 <code>square_height</code> 函數來將身高轉換為米，然後再計算 BMI。</li>
+</ol>
+<h2 id="帶參數裝飾器的工作原理："><a href="#帶參數裝飾器的工作原理：" class="headerlink" title="帶參數裝飾器的工作原理："></a>帶參數裝飾器的工作原理：</h2><ol>
+<li><code>@calculator</code> 會讓 <code>bmi_calculator</code> 被 <code>calculator</code> 包裝。</li>
+<li>裝飾器內的 <code>calculate_height</code> 會在 <code>bmi_calculator</code> 函數之前執行，進行額外處理。</li>
+</ol>
+<h1 id="🔑-函數裝飾器的好處："><a href="#🔑-函數裝飾器的好處：" class="headerlink" title="🔑 函數裝飾器的好處："></a>🔑 函數裝飾器的好處：</h1><ul>
+<li>可以動態地修改函數的行為。</li>
+<li>使得原始函數更簡潔，擴展的邏輯集中於裝飾器內部，提升代碼可維護性。</li>
+<li>允許代碼更加模組化和解耦。</li>
+</ul>
+<h1 id="📚-常見應用場景："><a href="#📚-常見應用場景：" class="headerlink" title="📚 常見應用場景："></a>📚 常見應用場景：</h1><ol>
+<li><p><strong>日誌記錄</strong>：記錄函數的調用及參數。</p>
+<p>範例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">log_decorator</span>(<span class="params">func</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Calling <span class="subst">&#123;func.__name__&#125;</span> with arguments: <span class="subst">&#123;args&#125;</span>, <span class="subst">&#123;kwargs&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> func(*args, **kwargs)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="meta">@log_decorator</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">a, b</span>):</span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line"></span><br><span class="line">add(<span class="number">3</span>, <span class="number">4</span>)  <span class="comment"># 輸出: Calling add with arguments: (3, 4), &#123;&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>計時器</strong>：計算函數執行所花的時間。</p>
+<p>範例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">timer_decorator</span>(<span class="params">func</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">        start_time = time.time()</span><br><span class="line">        result = func(*args, **kwargs)</span><br><span class="line">        end_time = time.time()</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Execution time: <span class="subst">&#123;end_time - start_time&#125;</span> seconds&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="meta">@timer_decorator</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">slow_function</span>():</span><br><span class="line">    time.sleep(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">slow_function()  <span class="comment"># 輸出: Execution time: 2.0xxxxxx seconds</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>權限檢查</strong>：在函數執行之前檢查用戶權限。</p>
+<p>範例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">permission_check</span>(<span class="params">func</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">user_role, *args, **kwargs</span>):</span><br><span class="line">        <span class="keyword">if</span> user_role != <span class="string">&quot;admin&quot;</span>:</span><br><span class="line">            <span class="keyword">raise</span> PermissionError(<span class="string">&quot;You do not have permission to access this function.&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> func(user_role, *args, **kwargs)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="meta">@permission_check</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">delete_user</span>(<span class="params">user_role, user_id</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;User <span class="subst">&#123;user_id&#125;</span> deleted.&quot;</span>)</span><br><span class="line"></span><br><span class="line">delete_user(<span class="string">&quot;admin&quot;</span>, <span class="number">123</span>)  <span class="comment"># 正常執行</span></span><br><span class="line">delete_user(<span class="string">&quot;guest&quot;</span>, <span class="number">123</span>)   <span class="comment"># 會拋出 PermissionError</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>緩存</strong>：為函數結果加上緩存，避免重複計算。</p>
+<p>範例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">cache_decorator</span>(<span class="params">func</span>):</span><br><span class="line">    cache = &#123;&#125;</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">        <span class="keyword">if</span> args <span class="keyword">in</span> cache:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Returning cached result&quot;</span>)</span><br><span class="line">            <span class="keyword">return</span> cache[args]</span><br><span class="line">        result = func(*args, **kwargs)</span><br><span class="line">        cache[args] = result</span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="meta">@cache_decorator</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">expensive_computation</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Performing expensive computation...&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> x * x</span><br><span class="line"></span><br><span class="line">expensive_computation(<span class="number">10</span>)  <span class="comment"># 輸出: Performing expensive computation...</span></span><br><span class="line">expensive_computation(<span class="number">10</span>)  <span class="comment"># 輸出: Returning cached result</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>這樣的範例可以幫助更好地理解每個應用場景，並將裝飾器的應用擴展到真實開發中。</p>
+<blockquote>
+<p>對於新手來說，理解 <code>function decorator</code> 可以從以下幾個步驟入手：</p>
+</blockquote>
+<ol>
+<li><p><strong>理解函數是物件</strong>：首先，理解 Python 函數是物件，可以作為參數傳遞給其他函數。</p>
+</li>
+<li><p><strong>學會基本裝飾器範例</strong>：如日誌記錄、計時等。先從簡單的範例開始，逐步理解其運作。</p>
+</li>
+<li><p><strong>從簡單的實例開始</strong>：不要一開始就嘗試複雜的場景。實踐簡單的範例來熟悉裝飾器的結構。</p>
+</li>
+<li><p><strong>了解如何使用 <code>@</code> 語法</strong>：<code>@decorator</code> 是 Python 中簡化使用裝飾器的語法，它背後實際上是將函數傳遞給裝飾器。</p>
+</li>
+</ol>
+<p>學會裝飾器後，可以根據需求進行進一步的學習和應用。</p>
+<h1 id="面試時如何回答-function-decorator"><a href="#面試時如何回答-function-decorator" class="headerlink" title="面試時如何回答 function decorator"></a>面試時如何回答 <code>function decorator</code></h1><h2 id="1-簡單解釋："><a href="#1-簡單解釋：" class="headerlink" title="1. 簡單解釋："></a>1. <strong>簡單解釋</strong>：</h2><p>裝飾器是一種用來修改或擴展函數功能的設計模式。它允許在不改變函數本身的情況下，將額外的邏輯附加到函數上。</p>
+<h2 id="2-常見應用場景："><a href="#2-常見應用場景：" class="headerlink" title="2. 常見應用場景："></a>2. <strong>常見應用場景</strong>：</h2><ul>
+<li>日誌記錄</li>
+<li>計時</li>
+<li>權限檢查</li>
+<li>緩存</li>
+</ul>
+<h2 id="3-基本結構："><a href="#3-基本結構：" class="headerlink" title="3. 基本結構："></a>3. <strong>基本結構</strong>：</h2><ul>
+<li><strong>裝飾器是高階函數</strong>：接收一個函數作為參數，並返回一個包裹該函數的新函數。</li>
+</ul>
+<h2 id="4-示範範例："><a href="#4-示範範例：" class="headerlink" title="4. 示範範例："></a>4. <strong>示範範例</strong>：</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">decorator</span>(<span class="params">func</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrapper</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Before function execution&quot;</span>)</span><br><span class="line">        func()</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;After function execution&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="meta">@decorator</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">greet</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello!&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-考試重點："><a href="#5-考試重點：" class="headerlink" title="5. 考試重點："></a>5. <strong>考試重點</strong>：</h2><ul>
+<li>知道裝飾器的語法 <code>@decorator</code></li>
+<li>解釋如何將邏輯封裝到函數外部</li>
+<li>理解裝飾器的用途與運作原理</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -895,83 +1172,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2024/04/16/%E6%97%A5%E6%97%85/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="你的名字">
-      <meta itemprop="description" content="分享旅行故事和經驗">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的旅行部落格">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2024/04/16/%E6%97%A5%E6%97%85/" class="post-title-link" itemprop="url">我的第一次日本之旅</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">發表於</span>
-
-              <time title="創建時間：2024-04-16 14:00:00" itemprop="dateCreated datePublished" datetime="2024-04-16T14:00:00+08:00">2024-04-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2025-04-18 20:08:12" itemprop="dateModified" datetime="2025-04-18T20:08:12+08:00">2025-04-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分類於</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/my-blog/categories/%E6%97%85%E9%81%8A/" itemprop="url" rel="index"><span itemprop="name">旅遊</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="我的第一次日本之旅"><a href="#我的第一次日本之旅" class="headerlink" title="我的第一次日本之旅"></a>我的第一次日本之旅</h1><p>這是我第一次去日本旅行的故事…</p>
-<h2 id="第一天：抵達東京"><a href="#第一天：抵達東京" class="headerlink" title="第一天：抵達東京"></a>第一天：抵達東京</h2><p>早上抵達成田機場，搭乘 Skyliner 前往市區…</p>
-<h2 id="第二天：淺草寺"><a href="#第二天：淺草寺" class="headerlink" title="第二天：淺草寺"></a>第二天：淺草寺</h2><p>參觀了著名的淺草寺，品嚐了當地的美食…</p>
-<h2 id="心得分享"><a href="#心得分享" class="headerlink" title="心得分享"></a>心得分享</h2><p>這次旅行讓我收穫滿滿，期待下次再訪！</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
 
@@ -1038,12 +1238,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/my-blog/archives/">
         
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">1</span>
         <span class="site-state-item-name">分類</span>
       </div>
       <div class="site-state-item site-state-tags">
