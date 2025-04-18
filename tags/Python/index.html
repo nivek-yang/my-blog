@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html class="" lang="zh-TW">
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -79,8 +79,6 @@
 
 <body itemscope itemtype="http://schema.org/WebPage">
   <div class="container use-motion">
-    <div class="headband"></div>
-
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
@@ -135,6 +133,14 @@
             <ul class="submenu" style="display: none;">
               
                 <li>
+                  <a href="/my-blog/tags/Django/">Django (1)</a>
+                </li>
+              
+                <li>
+                  <a href="/my-blog/tags/Python/">Python (2)</a>
+                </li>
+              
+                <li>
                   <a href="/my-blog/tags/Hexo/">Hexo (1)</a>
                 </li>
               
@@ -144,14 +150,6 @@
               
                 <li>
                   <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">網站建置 (1)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/Django/">Django (1)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/Python/">Python (2)</a>
                 </li>
               
             </ul>
@@ -172,13 +170,6 @@
 
 </div>
     </header>
-
-    
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-
 
     <main class="main">
       <div class="main-inner">
@@ -412,50 +403,99 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('DOM fully loaded and parsed');
       const menuItem = document.querySelector('.menu-item-tags');
       
       if (menuItem) {
-        console.log('Found menu item:', menuItem);
+        // 確保子選單存在
+        var submenu = menuItem.querySelector('.submenu');
+        if (!submenu) {
+          console.error('Submenu not found!');
+          return;
+        }
         
-        // 點擊標籤選單項
+        // 強制設置初始樣式
+        submenu.style.display = 'none';
+        submenu.style.position = 'absolute';
+        submenu.style.top = '100%';
+        submenu.style.left = '50%';
+        submenu.style.transform = 'translateX(-50%)';
+        submenu.style.background = '#fff';
+        submenu.style.borderRadius = '8px';
+        submenu.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
+        submenu.style.minWidth = '170px';
+        submenu.style.marginTop = '15px';
+        submenu.style.zIndex = '1000';
+        submenu.style.border = '1px solid rgba(0, 0, 0, 0.06)';
+        
+        // 添加三角形指示器
+        const triangle = document.createElement('div');
+        triangle.style.position = 'absolute';
+        triangle.style.top = '-5px';
+        triangle.style.left = '50%';
+        triangle.style.marginLeft = '-5px';
+        triangle.style.width = '10px';
+        triangle.style.height = '10px';
+        triangle.style.transform = 'rotate(45deg)';
+        triangle.style.background = '#fff';
+        triangle.style.borderLeft = '1px solid rgba(0, 0, 0, 0.06)';
+        triangle.style.borderTop = '1px solid rgba(0, 0, 0, 0.06)';
+        triangle.style.zIndex = '1';
+        
+        // 避免重複添加
+        if (!submenu.querySelector('.submenu-triangle')) {
+          triangle.className = 'submenu-triangle';
+          submenu.appendChild(triangle);
+        }
+        
+        // 平滑過渡效果
+        submenu.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+        
+        // 點擊標籤選單項顯示/隱藏子選單
         menuItem.addEventListener('click', function(e) {
-          console.log('Menu item clicked!');
-          
           // 如果不是點擊子選單內的元素
           if (!e.target.closest('.submenu')) {
             e.preventDefault();
-            var submenu = this.querySelector('.submenu');
-            if (submenu) {
-              if (submenu.style.display === 'none' || submenu.style.display === '') {
-                submenu.style.display = 'block';
-                submenu.style.position = 'absolute';
-                submenu.style.top = 'calc(100% + 5px)';
-                submenu.style.right = '0';
-                submenu.style.minWidth = '180px';
-                submenu.style.background = 'white';
-                submenu.style.borderRadius = '8px';
-                submenu.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.1)';
-                submenu.style.padding = '8px 0';
-                submenu.style.zIndex = '900';
-                submenu.style.border = '1px solid rgba(0, 0, 0, 0.06)';
-              } else {
+            e.stopPropagation();
+            
+            if (submenu.style.display === 'none') {
+              // 顯示子選單時的動畫效果
+              submenu.style.opacity = '0';
+              submenu.style.transform = 'translateX(-50%) translateY(-10px)';
+              submenu.style.display = 'block';
+              
+              // 強制重繪
+              submenu.offsetHeight;
+              
+              // 應用過渡效果
+              submenu.style.opacity = '1';
+              submenu.style.transform = 'translateX(-50%) translateY(0)';
+              
+              this.classList.add('active');
+            } else {
+              // 隱藏子選單
+              submenu.style.opacity = '0';
+              submenu.style.transform = 'translateX(-50%) translateY(-10px)';
+              
+              setTimeout(function() {
                 submenu.style.display = 'none';
-              }
+              }, 200);
+              
+              this.classList.remove('active');
             }
-            console.log('Toggled submenu display');
           }
         });
         
         // 點擊頁面其他地方關閉選單
         document.addEventListener('click', function(e) {
-          // 如果點擊的不是選單項或子選單
           if (!menuItem.contains(e.target)) {
-            const submenu = menuItem.querySelector('.submenu');
-            if (submenu && submenu.style.display === 'block') {
+            submenu.style.opacity = '0';
+            submenu.style.transform = 'translateX(-50%) translateY(-10px)';
+            
+            setTimeout(function() {
               submenu.style.display = 'none';
-              console.log('Closed submenu when clicking elsewhere');
-            }
+            }, 200);
+            
+            menuItem.classList.remove('active');
           }
         });
       } else {
