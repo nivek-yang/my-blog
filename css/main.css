@@ -2172,7 +2172,7 @@ ul.breadcrumb li + li:last-child {
   }
 }
 .header-inner {
-  padding-top: 100px;
+  padding-top: 30px;
 }
 @media (max-width: 767px) {
   .header-inner {
@@ -2187,7 +2187,7 @@ ul.breadcrumb li + li:last-child {
 }
 @media (max-width: 767px) {
   .content {
-    padding-top: 35px;
+    padding-top: 100px;
   }
 }
 embed {
