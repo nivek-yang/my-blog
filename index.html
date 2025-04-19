@@ -133,11 +133,11 @@
             <ul class="submenu" style="display: none;">
               
                 <li>
-                  <a href="/my-blog/tags/Django/">Django (1)</a>
+                  <a href="/my-blog/tags/Django/">Django (2)</a>
                 </li>
               
                 <li>
-                  <a href="/my-blog/tags/Python/">Python (2)</a>
+                  <a href="/my-blog/tags/Python/">Python (3)</a>
                 </li>
               
                 <li>
@@ -178,6 +178,124 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/19/Django_ModelForm%E7%AD%86%E8%A8%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="你的名字">
+      <meta itemprop="description" content="分享旅行故事和經驗">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的旅行部落格">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/04/19/Django_ModelForm%E7%AD%86%E8%A8%98/" class="post-title-link" itemprop="url">Django ModelForm 筆記</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              <time title="創建時間：2025-04-19 00:00:00" itemprop="dateCreated datePublished" datetime="2025-04-19T00:00:00+08:00">2025-04-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2025-04-20 01:12:54" itemprop="dateModified" datetime="2025-04-20T01:12:54+08:00">2025-04-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Django-ModelForm-筆記"><a href="#Django-ModelForm-筆記" class="headerlink" title="Django ModelForm 筆記"></a>Django ModelForm 筆記</h1><h2 id="✅-ModelForm-的目的與用途"><a href="#✅-ModelForm-的目的與用途" class="headerlink" title="✅ ModelForm 的目的與用途"></a>✅ ModelForm 的目的與用途</h2><p>Django 的 <code>ModelForm</code> 提供了一個方便的方法，讓我們可以快速根據模型創建表單。它自動從模型推導表單欄位，並進行表單驗證與資料處理。使用 <code>ModelForm</code> 可以減少手動創建表單類別的工作，提高開發效率。</p>
+<h2 id="📝-ModelForm-的常用設定"><a href="#📝-ModelForm-的常用設定" class="headerlink" title="📝 ModelForm 的常用設定"></a>📝 ModelForm 的常用設定</h2><h3 id="1-fields-exclude"><a href="#1-fields-exclude" class="headerlink" title="1. fields &#x2F; exclude"></a>1. <code>fields</code> &#x2F; <code>exclude</code></h3><ul>
+<li><strong><code>model</code></strong>: 指定是哪個 model</li>
+<li><strong><code>fields</code></strong>: 指定哪些欄位會被包含在表單中。</li>
+<li><strong><code>exclude</code></strong>: 排除某些欄位，不會顯示在表單中。</li>
+</ul>
+<p>forms.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">InterviewForm</span>(<span class="title class_ inherited__">ModelForm</span>):</span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">Meta</span>:</span><br><span class="line">        model = Interview</span><br><span class="line">        fields = [<span class="string">&#x27;company_name&#x27;</span>, <span class="string">&#x27;position&#x27;</span>, <span class="string">&#x27;interview_date&#x27;</span>, <span class="string">&#x27;review&#x27;</span>, <span class="string">&#x27;rating&#x27;</span>, <span class="string">&#x27;result&#x27;</span>]</span><br><span class="line">        <span class="comment"># exclude = [&#x27;is_admin&#x27;]  # 不想包含的欄位</span></span><br><span class="line">        <span class="comment"># fields = &quot;__all__&quot; 接受所有欄位，不建議這麼做</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-labels"><a href="#2-labels" class="headerlink" title="2. labels"></a>2. <code>labels</code></h3><p>可以自定義欄位顯示名稱：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">labels = &#123;</span><br><span class="line">    <span class="string">&#x27;company_name&#x27;</span>: <span class="string">&#x27;公司名稱&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;position&#x27;</span>: <span class="string">&#x27;職位&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;interview_date&#x27;</span>: <span class="string">&#x27;面試日期&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;review&#x27;</span>: <span class="string">&#x27;心得&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;rating&#x27;</span>: <span class="string">&#x27;評分&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;result&#x27;</span>: <span class="string">&#x27;面試結果&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-widgets"><a href="#3-widgets" class="headerlink" title="3. widgets"></a>3. <code>widgets</code></h3><p>控制欄位的輸入類型，特別針對日期或其他自定義輸入：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.forms <span class="keyword">import</span> DateInput</span><br><span class="line"></span><br><span class="line">widgets = &#123;</span><br><span class="line">    <span class="string">&#x27;interview_date&#x27;</span>: DateInput(attrs=&#123;<span class="string">&#x27;type&#x27;</span>: <span class="string">&#x27;date&#x27;</span>&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="💡-在-Views-中使用"><a href="#💡-在-Views-中使用" class="headerlink" title="💡 在 Views 中使用"></a>💡 在 Views 中使用</h2><p><code>ModelForm</code> 可以幫助我們簡化新增與更新資料的邏輯：</p>
+<h3 id="新增資料"><a href="#新增資料" class="headerlink" title="新增資料"></a>新增資料</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">index</span>(<span class="params">req</span>):</span><br><span class="line">    <span class="keyword">if</span> req.POST:</span><br><span class="line">        form = InterviewForm(req.POST)  <span class="comment"># 沒有傳入 instance，代表要新增資料</span></span><br><span class="line">        interview = form.save()  <span class="comment"># 存入資料庫並回傳 instance</span></span><br><span class="line">        <span class="keyword">return</span> redirect(<span class="string">&quot;interviews:show&quot;</span>, <span class="built_in">id</span>=interview.<span class="built_in">id</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        interviews = Interview.objects.order_by(<span class="string">&quot;-id&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> render(req, <span class="string">&quot;interviews/index.html&quot;</span>, &#123;<span class="string">&quot;interviews&quot;</span>: interviews&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="編輯資料"><a href="#編輯資料" class="headerlink" title="編輯資料"></a>編輯資料</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">show</span>(<span class="params">req, <span class="built_in">id</span></span>):</span><br><span class="line">    interview = get_object_or_404(Interview, pk=<span class="built_in">id</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> req.POST:</span><br><span class="line">        form = InterviewForm(req.POST, instance=interview)  <span class="comment"># 有傳入 instance，代表要更新資料</span></span><br><span class="line">        form.save()</span><br><span class="line">        <span class="keyword">return</span> redirect(<span class="string">&quot;interviews:show&quot;</span>, interview.<span class="built_in">id</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        comments = interview.comment_set.<span class="built_in">all</span>()</span><br><span class="line">        <span class="keyword">return</span> render(req, <span class="string">&quot;interviews/show.html&quot;</span>, &#123;<span class="string">&quot;interview&quot;</span>: interview, <span class="string">&quot;comments&quot;</span>: comments&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="預填表單（編輯頁面）"><a href="#預填表單（編輯頁面）" class="headerlink" title="預填表單（編輯頁面）"></a>預填表單（編輯頁面）</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">edit</span>(<span class="params">req, <span class="built_in">id</span></span>):</span><br><span class="line">    interview = get_object_or_404(Interview, pk=<span class="built_in">id</span>)</span><br><span class="line">    form = InterviewForm(instance=interview)  <span class="comment"># 預填現有資料</span></span><br><span class="line">    <span class="keyword">return</span> render(req, <span class="string">&quot;interviews/edit.html&quot;</span>, &#123;<span class="string">&quot;interview&quot;</span>: interview, <span class="string">&quot;form&quot;</span>: form&#125;)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="🔄-創建-vs-更新資料"><a href="#🔄-創建-vs-更新資料" class="headerlink" title="🔄 創建 vs 更新資料"></a>🔄 創建 vs 更新資料</h2><p>在使用 <code>ModelForm</code> 時，可透過 <code>instance</code> 參數來決定是要 <strong>創建</strong> 還是 <strong>更新</strong> 資料：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 創建新的資料（不提供 instance）</span></span><br><span class="line">form = InterviewForm(request.POST)</span><br><span class="line"><span class="keyword">if</span> form.is_valid():</span><br><span class="line">    form.save()  <span class="comment"># 會建立一筆新的 Interview 紀錄</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 更新既有資料（提供 instance）</span></span><br><span class="line">form = InterviewForm(request.POST, instance=interview)</span><br><span class="line"><span class="keyword">if</span> form.is_valid():</span><br><span class="line">    form.save()  <span class="comment"># 會更新傳入的 interview 物件</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>不提供 <code>instance</code></strong>：<code>form.save()</code> 會執行 <code>INSERT</code>，新增一筆資料。</li>
+<li><strong>提供 <code>instance</code></strong>：<code>form.save()</code> 會執行 <code>UPDATE</code>，更新該物件的欄位。</li>
+</ul>
+<hr>
+<h2 id="🖥️-在-Templates-中使用"><a href="#🖥️-在-Templates-中使用" class="headerlink" title="🖥️ 在 Templates 中使用"></a>🖥️ 在 Templates 中使用</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line">  &#123;% csrf_token %&#125;</span><br><span class="line">  &#123;&#123; form.as_p &#125;&#125;  <span class="comment">&lt;!-- 將表單欄位渲染為段落 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span>&gt;</span>提交<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>&#123;&#123; form.as_p &#125;&#125;</code>：快捷渲染</li>
+<li><code>csrf_token</code>：防止 CSRF 攻擊</li>
+</ul>
+<hr>
+<h2 id="🎯-ModelForm-的優勢"><a href="#🎯-ModelForm-的優勢" class="headerlink" title="🎯 ModelForm 的優勢"></a>🎯 ModelForm 的優勢</h2><ul>
+<li><strong>自動生成表單欄位</strong>：無需手動一一定義。</li>
+<li><strong>自動資料驗證</strong>：根據模型欄位類型自動檢查輸入。</li>
+<li><strong>簡化新增與更新資料的邏輯</strong>：直接使用 <code>form.save()</code> 完成。</li>
+<li><strong>程式碼更簡潔、可維護性更高</strong>。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1229,7 +1347,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/my-blog/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
