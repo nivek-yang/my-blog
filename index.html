@@ -137,7 +137,7 @@
                 </li>
               
                 <li>
-                  <a href="/my-blog/tags/Python/">Python (4)</a>
+                  <a href="/my-blog/tags/Python/">Python (5)</a>
                 </li>
               
                 <li>
@@ -178,6 +178,184 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/21/python_script%E8%88%87module%E7%9A%84%E5%B7%AE%E7%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="你的名字">
+      <meta itemprop="description" content="分享旅行故事和經驗">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的旅行部落格">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/04/21/python_script%E8%88%87module%E7%9A%84%E5%B7%AE%E7%95%B0/" class="post-title-link" itemprop="url">Python Import 淺談：script 與 module 的差異</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="創建時間：2025-04-21 00:00:00 / 修改時間：23:07:15" itemprop="dateCreated datePublished" datetime="2025-04-21T00:00:00+08:00">2025-04-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在學習 Python 專案結構時，常會遇到一個讓人困惑的問題：</p>
+<blockquote>
+<p>為什麼從某個檔案執行時可以正常 import，換個方式就報錯了？</p>
+</blockquote>
+<p>這背後的關鍵差異，在於你是以「<strong>script</strong>」還是「<strong>module</strong>」的方式執行 Python 檔案。</p>
+<hr>
+<h2 id="🧱-基本目錄架構"><a href="#🧱-基本目錄架構" class="headerlink" title="🧱 基本目錄架構"></a>🧱 基本目錄架構</h2><p>假設我們的專案結構如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">myproject/</span><br><span class="line">├── main.py</span><br><span class="line">└── app/</span><br><span class="line">    ├── __init__.py</span><br><span class="line">    ├── core.py</span><br><span class="line">    └── utils.py</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>core.py</code> 裡面引用了 <code>utils.py</code></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># core.py</span></span><br><span class="line"><span class="keyword">from</span> app <span class="keyword">import</span> utils</span><br></pre></td></tr></table></figure>
+
+<p>這看起來是個合理的絕對 import，照理說應該可以用 <code>python app/core.py</code> 執行吧？</p>
+<p>實際上會報錯：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ModuleNotFoundError: No module named &#x27;app&#x27;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="🤔-script-與-module-的定義是什麼？"><a href="#🤔-script-與-module-的定義是什麼？" class="headerlink" title="🤔 script 與 module 的定義是什麼？"></a>🤔 script 與 module 的定義是什麼？</h2><ul>
+<li><p><strong>script</strong>（腳本）：</p>
+<ul>
+<li>指的是你直接用 <code>python xxx.py</code> 執行的檔案</li>
+<li>它會成為 <code>__main__</code> 模組，也就是程式的進入點</li>
+<li>它<strong>沒有包在任何 package 裡</strong>，也就無法使用相對 import</li>
+</ul>
+</li>
+<li><p><strong>module</strong>（模組）：</p>
+<ul>
+<li>指的是 Python 中可以被 import 的 .py 檔案</li>
+<li>可以透過 <code>import</code> 或 <code>from xxx import yyy</code> 引用</li>
+<li>用 <code>python -m package.module</code> 方式執行時，模組有正確的 package 上下文</li>
+</ul>
+</li>
+</ul>
+<p>兩者最大的差異在於：<strong>script 是執行入口、module 是被載入的單元</strong>。當你想讓某個檔案作為 script 直接執行時，它可能會因為沒處於正確的 package 環境而出錯。</p>
+<hr>
+<h2 id="⚠️-為什麼-python-app-core-py-會錯？"><a href="#⚠️-為什麼-python-app-core-py-會錯？" class="headerlink" title="⚠️ 為什麼 python app/core.py 會錯？"></a>⚠️ 為什麼 <code>python app/core.py</code> 會錯？</h2><p>這是因為 Python 在執行時，會把你執行的 <strong>檔案所在的資料夾</strong> 當作第一個 <code>sys.path[0]</code>，也就是 Python 搜尋模組的起點。</p>
+<table>
+<thead>
+<tr>
+<th>執行方式</th>
+<th>sys.path[0] 設定值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>python app/core.py</code></td>
+<td><code>myproject/app</code></td>
+</tr>
+<tr>
+<td><code>python -m app.core</code></td>
+<td><code>myproject</code>（根目錄）</td>
+</tr>
+</tbody></table>
+<p>當你在 <code>myproject</code> 根目錄執行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python app/core.py</span><br></pre></td></tr></table></figure>
+
+<p>Python 會把 <code>app/core.py</code> 所在的 <code>app/</code> 資料夾作為起點，這時 <code>from app import utils</code> 就會變成找 <code>app/app/utils.py</code>，結果找不到就報錯。</p>
+<p>此外因為 <code>core.py</code> 是 script 模式，沒有包裹在 package 中，也不能使用 <code>from . import utils</code> 相對 import。</p>
+<hr>
+<h2 id="✅-正確做法：以-module-方式執行"><a href="#✅-正確做法：以-module-方式執行" class="headerlink" title="✅ 正確做法：以 module 方式執行"></a>✅ 正確做法：以 module 方式執行</h2><p>使用 <code>-m</code> 可以指定「從 package 中執行」：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> myproject</span><br><span class="line">python -m app.core</span><br></pre></td></tr></table></figure>
+
+<p>這樣 Python 就會把 <code>myproject</code> 加入 <code>sys.path</code>，才能正確找到 <code>app.utils</code> 模組，並允許相對 import。</p>
+<hr>
+<h2 id="📌-script-vs-module-差異整理"><a href="#📌-script-vs-module-差異整理" class="headerlink" title="📌 script vs module 差異整理"></a>📌 script vs module 差異整理</h2><table>
+<thead>
+<tr>
+<th>執行方式</th>
+<th>模式</th>
+<th>sys.path[0] 起點</th>
+<th>絕對 import 是否成功？</th>
+<th>相對 import 是否成功？</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>python app/core.py</code></td>
+<td>script 模式</td>
+<td><code>app/</code></td>
+<td>❌ 失敗</td>
+<td>❌ 無 parent package</td>
+</tr>
+<tr>
+<td><code>python -m app.core</code></td>
+<td>module 模式</td>
+<td><code>myproject/</code></td>
+<td>✅ 成功</td>
+<td>✅ 成功</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="✅-最佳實踐"><a href="#✅-最佳實踐" class="headerlink" title="✅ 最佳實踐"></a>✅ 最佳實踐</h2><ol>
+<li><strong>統一從根目錄啟動專案</strong>：<ul>
+<li>使用 <code>main.py</code> 作為 entry point，避免直接執行模組內部的 py 檔案</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># main.py</span></span><br><span class="line"><span class="keyword">from</span> app.core <span class="keyword">import</span> run</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    run()</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>避免直接執行子模組的 script</strong>：<ul>
+<li><code>python app/core.py</code> 易出錯</li>
+<li>請改用 <code>python -m app.core</code></li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="📚-延伸補充：為什麼-m-可以正確-import？"><a href="#📚-延伸補充：為什麼-m-可以正確-import？" class="headerlink" title="📚 延伸補充：為什麼 -m 可以正確 import？"></a>📚 延伸補充：為什麼 <code>-m</code> 可以正確 import？</h2><p>使用 <code>-m</code> 時，Python 會把指定 module 所在 package 的<strong>上一層目錄</strong>加入 <code>sys.path</code>，這讓整個 package 可以正確地相對或絕對 import。</p>
+<p>這也符合開發大型專案的需求，讓每個 module 可以互相引用而不報錯。</p>
+<hr>
+<p>希望這篇可以幫你釐清 <code>script</code> 與 <code>module</code> 的差異，也知道為什麼在子目錄中就算寫絕對 import 也還是會錯！</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1579,7 +1757,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/my-blog/archives/">
         
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
