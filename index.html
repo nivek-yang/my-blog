@@ -133,11 +133,11 @@
             <ul class="submenu" style="display: none;">
               
                 <li>
-                  <a href="/my-blog/tags/Django/">Django (2)</a>
+                  <a href="/my-blog/tags/Python/">Python (7)</a>
                 </li>
               
                 <li>
-                  <a href="/my-blog/tags/Python/">Python (5)</a>
+                  <a href="/my-blog/tags/Django/">Django (3)</a>
                 </li>
               
                 <li>
@@ -178,6 +178,336 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/23/Django%20login()%20%E5%87%BD%E6%95%B8%E7%9A%84%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="你的名字">
+      <meta itemprop="description" content="分享旅行故事和經驗">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的旅行部落格">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/04/23/Django%20login()%20%E5%87%BD%E6%95%B8%E7%9A%84%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B/" class="post-title-link" itemprop="url">Django `login()` 函數的運作機制</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="創建時間：2025-04-23 00:00:00 / 修改時間：15:15:16" itemprop="dateCreated datePublished" datetime="2025-04-23T00:00:00+08:00">2025-04-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Django 提供的 <code>login()</code> 函數是用來處理用戶認證並建立會話 (session) 和 cookie 的核心工具。以下是該函數的完整流程及其背後的運作機制。</p>
+<hr>
+<h1 id="1-login-函數的作用"><a href="#1-login-函數的作用" class="headerlink" title="1. login() 函數的作用"></a>1. <strong><code>login()</code> 函數的作用</strong></h1><p><code>django.contrib.auth.login(request, user)</code> 是用來將已經通過身份驗證的用戶標記為「已登入」的函數。它會執行以下操作：</p>
+<ul>
+<li>將用戶的 ID 存儲到 session 中。</li>
+<li>更新 session 的相關數據。</li>
+<li>設置用戶的身份驗證狀態，讓 <code>request.user</code> 可以用來驗證用戶。</li>
+</ul>
+<hr>
+<h1 id="2-流程詳解"><a href="#2-流程詳解" class="headerlink" title="2. 流程詳解"></a>2. <strong>流程詳解</strong></h1><h2 id="1-用戶身份驗證"><a href="#1-用戶身份驗證" class="headerlink" title="(1) 用戶身份驗證"></a><strong>(1) 用戶身份驗證</strong></h2><p>在調用 <code>login()</code> 函數之前，通常需要先驗證用戶的身份，例如使用 <code>authenticate()</code> 函數：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.contrib.auth <span class="keyword">import</span> authenticate, login</span><br><span class="line"></span><br><span class="line">user = authenticate(request, username=<span class="string">&#x27;username&#x27;</span>, password=<span class="string">&#x27;password&#x27;</span>)</span><br><span class="line"><span class="keyword">if</span> user <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">    login(request, user)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="comment"># 驗證失敗的處理</span></span><br></pre></td></tr></table></figure>
+
+<p><code>authenticate()</code> 函數會檢查用戶名和密碼是否正確，並返回一個用戶對象 (User instance) 或 <code>None</code>。</p>
+<hr>
+<h2 id="2-調用-login-函數"><a href="#2-調用-login-函數" class="headerlink" title="(2) 調用 login() 函數"></a><strong>(2) 調用 <code>login()</code> 函數</strong></h2><p>當用戶通過身份驗證後，<code>login()</code> 函數會執行以下步驟：</p>
+<ol>
+<li><p><strong>綁定用戶到 session</strong>  </p>
+<ul>
+<li>Django 使用 session 框架來管理用戶的登入狀態。</li>
+<li><code>login()</code> 函數會將用戶的主鍵 (Primary Key) 存儲到 session 中，鍵名為 <code>_auth_user_id</code>。</li>
+<li>同時，還會存儲用戶的後端信息 (<code>_auth_user_backend</code>)，用於標記是哪個身份驗證後端處理了該用戶。</li>
+</ul>
+<p><strong>相關代碼片段：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">request.session[SESSION_KEY] = user.pk  <span class="comment"># 存儲用戶主鍵</span></span><br><span class="line">request.session[BACKEND_SESSION_KEY] = user.backend  <span class="comment"># 存儲後端信息</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>設置 Cookie</strong>  </p>
+<ul>
+<li>Django 的 session 框架會自動將 session ID 存儲到用戶的瀏覽器 Cookie 中。</li>
+<li>這個 Cookie 的名稱默認為 <code>sessionid</code>，可以在 <code>settings.SESSION_COOKIE_NAME</code> 中自定義。</li>
+<li>當用戶發送後續請求時，瀏覽器會自動攜帶這個 Cookie，Django 會根據 Cookie 中的 session ID 找到對應的 session 數據。</li>
+</ul>
+</li>
+<li><p><strong>更新 <code>request.user</code></strong>  </p>
+<ul>
+<li><code>login()</code> 函數會將 <code>request.user</code> 更新為當前登入的用戶對象。</li>
+<li>這樣，後續的請求中可以通過 <code>request.user</code> 獲取當前用戶的相關信息。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="3-驗證用戶狀態"><a href="#3-驗證用戶狀態" class="headerlink" title="(3) 驗證用戶狀態"></a><strong>(3) 驗證用戶狀態</strong></h2><p>在後續的請求中，Django 會自動驗證用戶的登入狀態：</p>
+<ol>
+<li><p><strong>從 Cookie 中提取 session ID</strong>  </p>
+<ul>
+<li>當用戶發送請求時，Django 會從請求的 Cookie 中提取 session ID，並查找對應的 session 數據。</li>
+</ul>
+</li>
+<li><p><strong>加載用戶對象</strong>  </p>
+<ul>
+<li>如果 session 中存在 <code>_auth_user_id</code>，Django 會根據該 ID 從數據庫中加載用戶對象，並將其設置為 <code>request.user</code>。</li>
+</ul>
+</li>
+<li><p><strong>驗證用戶是否已登入</strong>  </p>
+<ul>
+<li>可以通過 <code>request.user.is_authenticated</code> 判斷用戶是否已登入。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h1 id="3-完整流程圖"><a href="#3-完整流程圖" class="headerlink" title="3. 完整流程圖"></a>3. <strong>完整流程圖</strong></h1><ol>
+<li>用戶提交登入表單 (包含用戶名和密碼)。</li>
+<li>後端調用 <code>authenticate()</code> 驗證用戶身份。</li>
+<li>如果驗證成功，調用 <code>login()</code>：<ul>
+<li>將用戶 ID 存入 session。</li>
+<li>設置 session ID 到 Cookie。</li>
+<li>更新 <code>request.user</code>。</li>
+</ul>
+</li>
+<li>後續請求中，Django 根據 Cookie 驗證用戶身份。</li>
+</ol>
+<hr>
+<h1 id="4-相關設置"><a href="#4-相關設置" class="headerlink" title="4. 相關設置"></a>4. <strong>相關設置</strong></h1><ul>
+<li><p><strong>session 存儲方式</strong><br>Django 默認使用數據庫存儲 session 數據，可以通過 <code>SESSION_ENGINE</code> 配置更改：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SESSION_ENGINE = <span class="string">&#x27;django.contrib.sessions.backends.db&#x27;</span>  <span class="comment"># 默認使用數據庫</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Cookie 配置</strong><br>可以通過以下設置自定義 Cookie 行為：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SESSION_COOKIE_NAME = <span class="string">&#x27;sessionid&#x27;</span>  <span class="comment"># Cookie 名稱</span></span><br><span class="line">SESSION_COOKIE_AGE = <span class="number">1209600</span>  <span class="comment"># Cookie 有效期（秒）</span></span><br><span class="line">SESSION_COOKIE_SECURE = <span class="literal">True</span>  <span class="comment"># 僅在 HTTPS 下傳輸</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h1 id="5-注意事項"><a href="#5-注意事項" class="headerlink" title="5. 注意事項"></a>5. <strong>注意事項</strong></h1><ul>
+<li><p><strong><code>request.user</code> 的使用</strong>  </p>
+<ul>
+<li><code>request.user</code> 是一個 <code>User</code> 對象或 <code>AnonymousUser</code> 對象。</li>
+<li>可以通過 <code>request.user.is_authenticated</code> 判斷用戶是否已登入。</li>
+</ul>
+</li>
+<li><p><strong>登出處理</strong><br>使用 <code>logout()</code> 函數可以清除 session 數據並登出用戶：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.contrib.auth <span class="keyword">import</span> logout</span><br><span class="line"></span><br><span class="line">logout(request)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h1 id="6-範例代碼"><a href="#6-範例代碼" class="headerlink" title="6. 範例代碼"></a>6. <strong>範例代碼</strong></h1><p>以下是一個完整的登入流程範例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.contrib.auth <span class="keyword">import</span> authenticate, login, logout</span><br><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> render, redirect</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">login_view</span>(<span class="params">request</span>):</span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">&#x27;POST&#x27;</span>:</span><br><span class="line">        username = request.POST[<span class="string">&#x27;username&#x27;</span>]</span><br><span class="line">        password = request.POST[<span class="string">&#x27;password&#x27;</span>]</span><br><span class="line">        user = authenticate(request, username=username, password=password)</span><br><span class="line">        <span class="keyword">if</span> user <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            login(request, user)</span><br><span class="line">            <span class="keyword">return</span> redirect(<span class="string">&#x27;home&#x27;</span>)  <span class="comment"># 登入成功後跳轉</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> render(request, <span class="string">&#x27;login.html&#x27;</span>, &#123;<span class="string">&#x27;error&#x27;</span>: <span class="string">&#x27;Invalid credentials&#x27;</span>&#125;)</span><br><span class="line">    <span class="keyword">return</span> render(request, <span class="string">&#x27;login.html&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">logout_view</span>(<span class="params">request</span>):</span><br><span class="line">    logout(request)</span><br><span class="line">    <span class="keyword">return</span> redirect(<span class="string">&#x27;login&#x27;</span>)  <span class="comment"># 登出後跳轉</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="7-結論"><a href="#7-結論" class="headerlink" title="7. 結論"></a>7. <strong>結論</strong></h1><p>Django 的 <code>login()</code> 函數通過 session 和 Cookie 管理用戶的登入狀態，並提供了方便的 <code>request.user</code> 接口來驗證用戶身份。理解其運作流程有助於開發安全且高效的用戶認證系統。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/22/TimeTracker%E6%99%82%E9%96%93%E8%BF%BD%E8%B9%A4%E5%B7%A5%E5%85%B7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="你的名字">
+      <meta itemprop="description" content="分享旅行故事和經驗">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的旅行部落格">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/04/22/TimeTracker%E6%99%82%E9%96%93%E8%BF%BD%E8%B9%A4%E5%B7%A5%E5%85%B7/" class="post-title-link" itemprop="url">個人開發：TimeTracker 時間追蹤工具</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="創建時間：2025-04-22 00:00:00 / 修改時間：22:34:03" itemprop="dateCreated datePublished" datetime="2025-04-22T00:00:00+08:00">2025-04-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>這份筆記記錄了 <code>TimeTracker</code> 工具的設計與實現過程，該工具用於追蹤專案和功能的開發時間，並將數據保存為 JSON 格式，以便後續分析與展示。</p>
+<hr>
+<h2 id="一、專案目標"><a href="#一、專案目標" class="headerlink" title="一、專案目標"></a>一、專案目標</h2><ul>
+<li><strong>記錄專案開始與結束時間</strong></li>
+<li><strong>紀錄每個功能（feature）的開發時間</strong></li>
+<li><strong>自動計算持續時間</strong></li>
+<li><strong>將數據存儲為 JSON，方便持久化與後續處理</strong></li>
+<li><strong>提供命令列介面與 Makefile 支援，簡化操作流程</strong></li>
+</ul>
+<hr>
+<h2 id="二、使用技術"><a href="#二、使用技術" class="headerlink" title="二、使用技術"></a>二、使用技術</h2><ul>
+<li><strong><code>datetime</code></strong>：記錄時間戳並計算時間差</li>
+<li><strong><code>json</code></strong>：將追蹤數據序列化為 JSON</li>
+<li><strong><code>os</code></strong>：檢查檔案存在性，確保初始化與讀寫流程穩定</li>
+<li><strong><code>sys</code></strong>：處理命令列參數，實現靈活的命令操作</li>
+<li><strong>Makefile</strong>：簡化常用命令的執行</li>
+</ul>
+<hr>
+<h2 id="三、程式架構"><a href="#三、程式架構" class="headerlink" title="三、程式架構"></a>三、程式架構</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">my_project/</span><br><span class="line">├── time_tracking/</span><br><span class="line">│   ├── main.py          # 命令列介面入口</span><br><span class="line">│   ├── time_tracker.py  # 核心邏輯，負責時間記錄與計算</span><br><span class="line">├── Makefile             # 提供簡化操作的命令</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-1-類別與方法概覽"><a href="#3-1-類別與方法概覽" class="headerlink" title="3.1 類別與方法概覽"></a>3.1 類別與方法概覽</h3><h4 id="time-tracker-py"><a href="#time-tracker-py" class="headerlink" title="time_tracker.py"></a><code>time_tracker.py</code></h4><ul>
+<li><strong>物件導向設計</strong>：<code>TimeTracker</code> 類封裝了所有時間追蹤的邏輯。</li>
+<li><strong>方法</strong>：<ul>
+<li><code>_load_data()</code>：讀取或初始化 JSON 檔案數據</li>
+<li><code>_save_data()</code>：將當前數據寫入 JSON 檔案</li>
+<li><code>_current_time()</code>：取得當前時間字串 (<code>&#39;%Y-%m-%d %H:%M:%S&#39;</code>)</li>
+<li><code>_calc_duration(start, end)</code>：計算並返回時間差字串</li>
+<li><code>start_project()</code>&#x2F;<strong><code>end_project()</code></strong>：記錄專案整體時間</li>
+<li><code>start_feature(name)</code>&#x2F;<strong><code>end_feature(name)</code></strong>：記錄單一功能的時間</li>
+</ul>
+</li>
+</ul>
+<h4 id="main-py"><a href="#main-py" class="headerlink" title="main.py"></a><code>main.py</code></h4><ul>
+<li>提供命令列介面，支援以下命令：<ul>
+<li><code>start_project</code>：開始專案</li>
+<li><code>end_project</code>：結束專案</li>
+<li><code>start_feature &lt;feature_name&gt;</code>：開始功能</li>
+<li><code>end_feature &lt;feature_name&gt;</code>：結束功能</li>
+</ul>
+</li>
+</ul>
+<h4 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a><code>Makefile</code></h4><ul>
+<li>提供簡化操作的命令：<ul>
+<li><code>make start_project</code>：開始專案</li>
+<li><code>make end_project</code>：結束專案</li>
+<li><code>make start_feature feature=&lt;feature_name&gt;</code>：開始功能</li>
+<li><code>make end_feature feature=&lt;feature_name&gt;</code>：結束功能</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="四、核心實現"><a href="#四、核心實現" class="headerlink" title="四、核心實現"></a>四、核心實現</h2><h3 id="4-1-time-tracker-py-的物件導向設計"><a href="#4-1-time-tracker-py-的物件導向設計" class="headerlink" title="4.1 time_tracker.py 的物件導向設計"></a>4.1 <code>time_tracker.py</code> 的物件導向設計</h3><h4 id="初始化與數據管理"><a href="#初始化與數據管理" class="headerlink" title="初始化與數據管理"></a>初始化與數據管理</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">TimeTracker</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, filename=<span class="string">&#x27;time_log.json&#x27;</span></span>):</span><br><span class="line">        <span class="variable language_">self</span>.filename = filename</span><br><span class="line">        <span class="variable language_">self</span>.data = <span class="variable language_">self</span>._load_data()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_load_data</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> os.path.exists(<span class="variable language_">self</span>.filename):</span><br><span class="line">            <span class="keyword">with</span> <span class="built_in">open</span>(<span class="variable language_">self</span>.filename, <span class="string">&#x27;r&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                <span class="keyword">return</span> json.load(f)</span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">&quot;project&quot;</span>: &#123;&#125;, <span class="string">&quot;features&quot;</span>: &#123;&#125;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_save_data</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="variable language_">self</span>.filename, <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            json.dump(<span class="variable language_">self</span>.data, f, indent=<span class="number">4</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong><code>__init__</code></strong>：初始化 <code>TimeTracker</code> 物件，並讀取或初始化數據。</li>
+<li><strong><code>_load_data()</code></strong>：若檔案存在，載入 JSON；否則回傳預設空結構。</li>
+<li><strong><code>_save_data()</code></strong>：將當前內存中的 <code>self.data</code> 寫回檔案，保持持久化。</li>
+</ul>
+<h4 id="時間處理"><a href="#時間處理" class="headerlink" title="時間處理"></a>時間處理</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">_current_time</span>(<span class="params">self</span>):</span><br><span class="line">    <span class="keyword">return</span> datetime.now().strftime(<span class="string">&#x27;%Y-%m-%d %H:%M:%S&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_calc_duration</span>(<span class="params">self, start, end</span>):</span><br><span class="line">    start_dt = datetime.strptime(start, <span class="string">&#x27;%Y-%m-%d %H:%M:%S&#x27;</span>)</span><br><span class="line">    end_dt = datetime.strptime(end, <span class="string">&#x27;%Y-%m-%d %H:%M:%S&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">str</span>(end_dt - start_dt)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong><code>_current_time()</code></strong>：取得格式化的當前時間。</li>
+<li><strong><code>_calc_duration()</code></strong>：計算起訖時間差，並轉為字串。</li>
+</ul>
+<h4 id="專案與功能時間追蹤"><a href="#專案與功能時間追蹤" class="headerlink" title="專案與功能時間追蹤"></a>專案與功能時間追蹤</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">start_project</span>(<span class="params">self</span>):</span><br><span class="line">    <span class="variable language_">self</span>.data[<span class="string">&#x27;project&#x27;</span>][<span class="string">&#x27;start_time&#x27;</span>] = <span class="variable language_">self</span>._current_time()</span><br><span class="line">    <span class="variable language_">self</span>._save_data()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Project started.&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">end_project</span>(<span class="params">self</span>):</span><br><span class="line">    <span class="variable language_">self</span>.data[<span class="string">&#x27;project&#x27;</span>][<span class="string">&#x27;end_time&#x27;</span>] = <span class="variable language_">self</span>._current_time()</span><br><span class="line">    <span class="variable language_">self</span>.data[<span class="string">&#x27;project&#x27;</span>][<span class="string">&#x27;duration&#x27;</span>] = <span class="variable language_">self</span>._calc_duration(</span><br><span class="line">        <span class="variable language_">self</span>.data[<span class="string">&#x27;project&#x27;</span>][<span class="string">&#x27;start_time&#x27;</span>],</span><br><span class="line">        <span class="variable language_">self</span>.data[<span class="string">&#x27;project&#x27;</span>][<span class="string">&#x27;end_time&#x27;</span>]</span><br><span class="line">    )</span><br><span class="line">    <span class="variable language_">self</span>._save_data()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Project ended.&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">start_feature</span>(<span class="params">self, name</span>):</span><br><span class="line">    <span class="keyword">if</span> name <span class="keyword">not</span> <span class="keyword">in</span> <span class="variable language_">self</span>.data[<span class="string">&#x27;features&#x27;</span>]:</span><br><span class="line">        <span class="variable language_">self</span>.data[<span class="string">&#x27;features&#x27;</span>][name] = &#123;&#125;</span><br><span class="line">    <span class="variable language_">self</span>.data[<span class="string">&#x27;features&#x27;</span>][name][<span class="string">&#x27;start_time&#x27;</span>] = <span class="variable language_">self</span>._current_time()</span><br><span class="line">    <span class="variable language_">self</span>._save_data()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Feature &#x27;<span class="subst">&#123;name&#125;</span>&#x27; started.&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">end_feature</span>(<span class="params">self, name</span>):</span><br><span class="line">    feat = <span class="variable language_">self</span>.data[<span class="string">&#x27;features&#x27;</span>].get(name)</span><br><span class="line">    <span class="keyword">if</span> feat <span class="keyword">and</span> <span class="string">&#x27;start_time&#x27;</span> <span class="keyword">in</span> feat:</span><br><span class="line">        feat[<span class="string">&#x27;end_time&#x27;</span>] = <span class="variable language_">self</span>._current_time()</span><br><span class="line">        feat[<span class="string">&#x27;duration&#x27;</span>] = <span class="variable language_">self</span>._calc_duration(</span><br><span class="line">            feat[<span class="string">&#x27;start_time&#x27;</span>], feat[<span class="string">&#x27;end_time&#x27;</span>]</span><br><span class="line">        )</span><br><span class="line">        <span class="variable language_">self</span>._save_data()</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Feature &#x27;<span class="subst">&#123;name&#125;</span>&#x27; ended.&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Feature &#x27;<span class="subst">&#123;name&#125;</span>&#x27; has not been started.&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong><code>start_project()</code></strong>&#x2F;<strong><code>end_project()</code></strong>：記錄專案的開始與結束時間，並計算總持續時間。</li>
+<li><strong><code>start_feature(name)</code></strong>&#x2F;<strong><code>end_feature(name)</code></strong>：記錄功能的開始與結束時間，並計算功能持續時間。</li>
+</ul>
+<hr>
+<h3 id="4-2-main-py-的命令列介面"><a href="#4-2-main-py-的命令列介面" class="headerlink" title="4.2 main.py 的命令列介面"></a>4.2 <code>main.py</code> 的命令列介面</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> time_tracking.time_tracker <span class="keyword">import</span> TimeTracker</span><br><span class="line"></span><br><span class="line">tracker = TimeTracker()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(sys.argv) &lt; <span class="number">2</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Usage: python main.py [command] [feature_name (optional)]&quot;</span>)</span><br><span class="line">        sys.exit(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    command = sys.argv[<span class="number">1</span>]</span><br><span class="line">    feature = sys.argv[<span class="number">2</span>] <span class="keyword">if</span> <span class="built_in">len</span>(sys.argv) &gt;= <span class="number">3</span> <span class="keyword">else</span> <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> command == <span class="string">&quot;start_project&quot;</span>:</span><br><span class="line">        tracker.start_project()</span><br><span class="line">    <span class="keyword">elif</span> command == <span class="string">&quot;end_project&quot;</span>:</span><br><span class="line">        tracker.end_project()</span><br><span class="line">    <span class="keyword">elif</span> command == <span class="string">&quot;start_feature&quot;</span> <span class="keyword">and</span> feature:</span><br><span class="line">        tracker.start_feature(feature)</span><br><span class="line">    <span class="keyword">elif</span> command == <span class="string">&quot;end_feature&quot;</span> <span class="keyword">and</span> feature:</span><br><span class="line">        tracker.end_feature(feature)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Invalid command or missing feature name.&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>命令列支援</strong>：<ul>
+<li><code>start_project</code>：開始專案。</li>
+<li><code>end_project</code>：結束專案。</li>
+<li><code>start_feature &lt;feature_name&gt;</code>：開始功能。</li>
+<li><code>end_feature &lt;feature_name&gt;</code>：結束功能。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="4-3-Makefile-的簡化操作-用-uv-建置環境"><a href="#4-3-Makefile-的簡化操作-用-uv-建置環境" class="headerlink" title="4.3 Makefile 的簡化操作 (用 uv 建置環境)"></a>4.3 Makefile 的簡化操作 (用 uv 建置環境)</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">start_project:</span></span><br><span class="line">    uv run python -m time_tracking.main start_project</span><br><span class="line"></span><br><span class="line"><span class="section">end_project:</span></span><br><span class="line">    uv run python -m time_tracking.main end_project</span><br><span class="line"></span><br><span class="line"><span class="section">start_feature:</span></span><br><span class="line">    uv run python -m time_tracking.main start_feature <span class="variable">$(feature)</span></span><br><span class="line"></span><br><span class="line"><span class="section">end_feature:</span></span><br><span class="line">    uv run python -m time_tracking.main end_feature <span class="variable">$(feature)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong><code>make start_project</code></strong>：執行 <code>start_project</code> 命令。</li>
+<li><strong><code>make end_project</code></strong>：執行 <code>end_project</code> 命令。</li>
+<li><strong><code>make start_feature feature=&lt;feature_name&gt;</code></strong>：開始功能。</li>
+<li><strong><code>make end_feature feature=&lt;feature_name&gt;</code></strong>：結束功能。</li>
+</ul>
+<hr>
+<h2 id="五、改進建議"><a href="#五、改進建議" class="headerlink" title="五、改進建議"></a>五、改進建議</h2><ul>
+<li>加入檔案讀寫錯誤處理，提升穩定性。</li>
+<li>提供更詳細的狀態檢視功能（如顯示所有功能的持續時間）。</li>
+<li>考慮輸出 CSV 或 HTML 報表，便於後續分析。</li>
+<li>整合可視化模組（<code>matplotlib</code>, <code>plotly</code>）展示時間分佈圖。</li>
+<li>支援更多命令列參數（如自定義輸出檔案名稱）。</li>
+</ul>
+<hr>
+<h2 id="六、結語"><a href="#六、結語" class="headerlink" title="六、結語"></a>六、結語</h2><p><code>TimeTracker</code> 是一個輕量且實用的時間追蹤工具，適合個人或小團隊使用。透過物件導向設計與命令列支援，開發者可以輕鬆掌握開發進度並進行效率分析。同時，結合 Makefile 的支援，進一步簡化了操作流程。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1757,7 +2087,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/my-blog/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
