@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html class="" lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/my-blog/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"nivek-yang.github.io","root":"/my-blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":320,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="登入檢查：login_required原理與機制Django 提供了 @login_required 裝飾器，用於保護視圖，確保只有已登入的用戶才能訪問特定的頁面。當未登入的用戶嘗試訪問受保護的視圖時，Django 會自動將用戶重定向到設定中的 LOGIN_URL，並附加一個 next 查詢參數 (QueryString)，表示用戶原本想訪問的 URL。 使用範例123456from django">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Django 登入檢查 &#96;login_required&#96; 裝飾器：處理 &#96;next&#96; 重定向">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/04/24/Django%20%E7%99%BB%E5%85%A5%E6%AA%A2%E6%9F%A5%20%60login_required%60%20%E8%A3%9D%E9%A3%BE%E5%99%A8%EF%BC%9A%E8%99%95%E7%90%86%20%60next%60%20%E9%87%8D%E5%AE%9A%E5%90%91/index.html">
+<meta property="og:site_name" content="我的旅行部落格">
+<meta property="og:description" content="登入檢查：login_required原理與機制Django 提供了 @login_required 裝飾器，用於保護視圖，確保只有已登入的用戶才能訪問特定的頁面。當未登入的用戶嘗試訪問受保護的視圖時，Django 會自動將用戶重定向到設定中的 LOGIN_URL，並附加一個 next 查詢參數 (QueryString)，表示用戶原本想訪問的 URL。 使用範例123456from django">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-04-23T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-23T17:53:35.906Z">
+<meta property="article:author" content="你的名字">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Django">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/04/24/Django%20%E7%99%BB%E5%85%A5%E6%AA%A2%E6%9F%A5%20%60login_required%60%20%E8%A3%9D%E9%A3%BE%E5%99%A8%EF%BC%9A%E8%99%95%E7%90%86%20%60next%60%20%E9%87%8D%E5%AE%9A%E5%90%91/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>Django 登入檢查 `login_required` 裝飾器：處理 `next` 重定向 | 我的旅行部落格</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">我的旅行部落格</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索世界的腳步</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        
+        <li class="menu-item menu-item-home">
+
+    <a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+
+    <a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章</a>
+
+  </li>
+        
+        
+        
+          <li class="menu-item menu-item-tags">
+            <a href="/my-blog/tags/%20" class="menu-item-link">
+                <i class="fa fa-fw fa fa-tags"></i>標籤
+            </a>
+            <ul class="submenu" style="display: none;">
+              
+                <li>
+                  <a href="/my-blog/tags/Python/">Python (9)</a>
+                </li>
+              
+                <li>
+                  <a href="/my-blog/tags/Django/">Django (5)</a>
+                </li>
+              
+                <li>
+                  <a href="/my-blog/tags/Hexo/">Hexo (1)</a>
+                </li>
+              
+                <li>
+                  <a href="/my-blog/tags/GitHub-Pages/">GitHub Pages (1)</a>
+                </li>
+              
+                <li>
+                  <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">網站建置 (1)</a>
+                </li>
+              
+                <li>
+                  <a href="/my-blog/tags/Database/">Database (1)</a>
+                </li>
+              
+            </ul>
+          </li>
+        
+        
+        <li class="menu-item menu-item-about">
+
+    <a href="/my-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a>
+
+  </li>
+        
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/24/Django%20%E7%99%BB%E5%85%A5%E6%AA%A2%E6%9F%A5%20%60login_required%60%20%E8%A3%9D%E9%A3%BE%E5%99%A8%EF%BC%9A%E8%99%95%E7%90%86%20%60next%60%20%E9%87%8D%E5%AE%9A%E5%90%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="你的名字">
+      <meta itemprop="description" content="分享旅行故事和經驗">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的旅行部落格">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Django 登入檢查 `login_required` 裝飾器：處理 `next` 重定向
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="創建時間：2025-04-24 00:00:00 / 修改時間：01:53:35" itemprop="dateCreated datePublished" datetime="2025-04-24T00:00:00+08:00">2025-04-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="登入檢查：login-required"><a href="#登入檢查：login-required" class="headerlink" title="登入檢查：login_required"></a>登入檢查：<code>login_required</code></h1><h2 id="原理與機制"><a href="#原理與機制" class="headerlink" title="原理與機制"></a>原理與機制</h2><p>Django 提供了 <code>@login_required</code> 裝飾器，用於保護視圖，確保只有已登入的用戶才能訪問特定的頁面。當未登入的用戶嘗試訪問受保護的視圖時，Django 會自動將用戶重定向到設定中的 <code>LOGIN_URL</code>，並附加一個 <code>next</code> 查詢參數 (<code>QueryString</code>)，表示用戶原本想訪問的 URL。</p>
+<h2 id="使用範例"><a href="#使用範例" class="headerlink" title="使用範例"></a>使用範例</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.contrib.auth.decorators <span class="keyword">import</span> login_required</span><br><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> render</span><br><span class="line"></span><br><span class="line"><span class="meta">@login_required</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">protected_view</span>(<span class="params">req</span>):</span><br><span class="line">    <span class="keyword">return</span> render(req, <span class="string">&quot;protected_page.html&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><ol>
+<li>當用戶訪問被 <code>@login_required</code> 裝飾的視圖時，Django 會檢查 <code>req.user.is_authenticated</code> 的值。</li>
+<li>如果 <code>req.user.is_authenticated</code> 為 <code>True</code>，則允許訪問該視圖。</li>
+<li>如果 <code>req.user.is_authenticated</code> 為 <code>False</code>，則會將用戶重定向到 <code>settings.LOGIN_URL</code>，並附加 <code>next</code> 查詢參數，指向用戶原本想訪問的 URL。</li>
+</ol>
+<h2 id="關鍵點"><a href="#關鍵點" class="headerlink" title="關鍵點"></a>關鍵點</h2><ul>
+<li><strong><code>req.user.is_authenticated</code></strong> 是一個屬性，用於判斷當前用戶是否已登入。<ul>
+<li>如果用戶已登入，<code>req.user</code> 是一個 <code>User</code> 對象，且 <code>is_authenticated</code> 為 <code>True</code>。</li>
+<li>如果用戶未登入，<code>req.user</code> 是一個 <code>AnonymousUser</code> 對象，且 <code>is_authenticated</code> 為 <code>False</code>。</li>
+</ul>
+</li>
+</ul>
+<h2 id="相關代碼（簡化版）"><a href="#相關代碼（簡化版）" class="headerlink" title="相關代碼（簡化版）"></a>相關代碼（簡化版）</h2><p><code>@login_required</code> 的內部邏輯類似於以下代碼：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> redirect</span><br><span class="line"><span class="keyword">from</span> django.conf <span class="keyword">import</span> settings</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">login_required</span>(<span class="params">view_func</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">req, *args, **kwargs</span>):</span><br><span class="line">        <span class="keyword">if</span> req.user.is_authenticated:</span><br><span class="line">            <span class="keyword">return</span> view_func(req, *args, **kwargs)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            login_url = settings.LOGIN_URL</span><br><span class="line">            <span class="keyword">return</span> redirect(<span class="string">f&quot;<span class="subst">&#123;login_url&#125;</span>?next=<span class="subst">&#123;req.path&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br></pre></td></tr></table></figure>
+
+<p><code>@login_required</code> 的授權條件是基於 <code>req.user.is_authenticated</code> 的值。如果你需要自定義授權邏輯，可以考慮使用 Django 的 <code>PermissionRequiredMixin</code> 或自定義裝飾器。</p>
+<h2 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h2><ol>
+<li>用戶訪問受保護的視圖。</li>
+<li>如果未登入，Django 會將用戶重定向到 <code>LOGIN_URL</code>，例如：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/users/sign_in?next=/protected_page</span><br></pre></td></tr></table></figure></li>
+<li>Django 不會自動處理 next 的重定向邏輯，需要在登入處理的視圖中手動處理 next 的值，並根據它進行重定向。</li>
+</ol>
+<hr>
+<h1 id="如何處理-next"><a href="#如何處理-next" class="headerlink" title="如何處理 next"></a>如何處理 <code>next</code></h1><h2 id="原理與機制-1"><a href="#原理與機制-1" class="headerlink" title="原理與機制"></a>原理與機制</h2><p><code>next</code> 是一個查詢參數，用於保存用戶在未登入時嘗試訪問的目標頁面。當用戶成功登入後，應該根據 <code>next</code> 的值將用戶重定向到該頁面。</p>
+<h3 id="1-在登入表單中傳遞-next"><a href="#1-在登入表單中傳遞-next" class="headerlink" title="1. 在登入表單中傳遞 next"></a>1. <strong>在登入表單中傳遞 <code>next</code></strong></h3><p>在登入頁面中，將 <code>next</code> 的值作為隱藏字段傳遞到表單中，這樣用戶提交表單時，<code>next</code> 的值會被一併提交。</p>
+<p>sign_in.html</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;&#123;% url &#x27;users:create_session&#x27; %&#125;&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line">    &#123;% csrf_token %&#125;</span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;next&quot;</span> <span class="attr">value</span>=<span class="string">&quot;&#123;&#123; next &#125;&#125;&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">placeholder</span>=<span class="string">&quot;Username&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;password&quot;</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">placeholder</span>=<span class="string">&quot;Password&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span>&gt;</span>登入<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="2-在後端處理-next"><a href="#2-在後端處理-next" class="headerlink" title="2. 在後端處理 next"></a>2. <strong>在後端處理 <code>next</code></strong></h3><p>在處理登入的視圖中，檢查 <code>req.POST</code> 或 <code>req.GET</code> 中是否有 <code>next</code> 的值，並在登入成功後進行重定向。</p>
+<p>users&#x2F;views.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.contrib.auth <span class="keyword">import</span> authenticate, login</span><br><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> redirect</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sign_in</span>(<span class="params">req</span>):</span><br><span class="line">    <span class="built_in">next</span> = req.GET.get(<span class="string">&quot;next&quot;</span>, reverse(<span class="string">&quot;pages:index&quot;</span>))</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> render(req, <span class="string">&quot;users/sign_in.html&quot;</span>, &#123;<span class="string">&quot;next&quot;</span>: <span class="built_in">next</span>&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">create_session</span>(<span class="params">req</span>):</span><br><span class="line">    username = req.POST[<span class="string">&#x27;username&#x27;</span>]</span><br><span class="line">    password = req.POST[<span class="string">&#x27;password&#x27;</span>]</span><br><span class="line"></span><br><span class="line">    user = authenticate(username=username, password=password)</span><br><span class="line">    <span class="keyword">if</span> user <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        login(req, user)</span><br><span class="line">        <span class="built_in">next</span> = req.POST.get(<span class="string">&quot;next&quot;</span>, reverse(<span class="string">&quot;pages:index&quot;</span>))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> redirect(<span class="built_in">next</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> redirect(<span class="string">&quot;users:sign_in&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="工作流程-1"><a href="#工作流程-1" class="headerlink" title="工作流程"></a>工作流程</h2><ol>
+<li><p><strong>未登入用戶訪問受保護頁面</strong><br>用戶被重定向到登入頁面，並附加 <code>next</code> 查詢參數，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/users/sign_in?next=/protected_page</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>用戶提交登入表單</strong><br>表單中包含 <code>next</code> 的值，後端接收該值。</p>
+</li>
+<li><p><strong>後端處理重定向</strong><br>後端檢查 <code>next</code> 的值，並在登入成功後將用戶重定向到該頁面。如果 <code>next</code> 不存在，則重定向到預設頁面（如首頁）。</p>
+</li>
+</ol>
+<hr>
+<h1 id="QueryString"><a href="#QueryString" class="headerlink" title="QueryString"></a>QueryString</h1><h2 id="原理與機制-2"><a href="#原理與機制-2" class="headerlink" title="原理與機制"></a>原理與機制</h2><p>QueryString 是 URL 中的查詢參數部分，用於在 URL 中傳遞數據。格式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/path/to/page?key1=value1&amp;key2=value2</span><br></pre></td></tr></table></figure>
+<p>在 Django 中，可以使用 <code>req.GET</code> 獲取 QueryString 中的參數。</p>
+<h2 id="使用範例-1"><a href="#使用範例-1" class="headerlink" title="使用範例"></a>使用範例</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">example_view</span>(<span class="params">req</span>):</span><br><span class="line">    value = req.GET.get(<span class="string">&#x27;key&#x27;</span>, <span class="string">&#x27;default_value&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> render(req, <span class="string">&quot;example.html&quot;</span>, &#123;<span class="string">&quot;value&quot;</span>: value&#125;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="工作流程-2"><a href="#工作流程-2" class="headerlink" title="工作流程"></a>工作流程</h2><ol>
+<li>用戶訪問包含 QueryString 的 URL，例如：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/example?key=hello</span><br></pre></td></tr></table></figure></li>
+<li>Django 通過 <code>req.GET</code> 提供訪問 QueryString 的方法。</li>
+</ol>
+<hr>
+<h1 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h1><ul>
+<li>使用 <code>@login_required</code> 確保視圖只能被已登入用戶訪問。</li>
+<li>通過處理 <code>next</code> 查詢參數，實現用戶登入後的重定向。</li>
+<li>利用 QueryString 傳遞數據，實現靈活的頁面交互。</li>
+<li>使用 <code>logout</code> 方法實現安全的登出功能。</li>
+<li>通過外鍵將 <code>Interview</code> 和 <code>Comment</code> 關聯到 <code>User</code>，實現數據的關聯性。</li>
+</ul>
+<p>這些功能構成了 Django 中用戶認證與權限管理的基礎，為構建安全、可靠的應用提供了強大的支持。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Python/" rel="tag"># Python</a>
+              <a href="/my-blog/tags/Django/" rel="tag"># Django</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/my-blog/2025/04/23/Django%20login()%20%E5%87%BD%E6%95%B8%E7%9A%84%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B/" rel="prev" title="Django `login()` 函數的運作機制">
+      <i class="fa fa-chevron-left"></i> Django `login()` 函數的運作機制
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%99%BB%E5%85%A5%E6%AA%A2%E6%9F%A5%EF%BC%9Alogin-required"><span class="nav-number">1.</span> <span class="nav-text">登入檢查：login_required</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E7%90%86%E8%88%87%E6%A9%9F%E5%88%B6"><span class="nav-number">1.1.</span> <span class="nav-text">原理與機制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%AF%84%E4%BE%8B"><span class="nav-number">1.2.</span> <span class="nav-text">使用範例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">1.3.</span> <span class="nav-text">工作原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%9C%E9%8D%B5%E9%BB%9E"><span class="nav-number">1.4.</span> <span class="nav-text">關鍵點</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E9%97%9C%E4%BB%A3%E7%A2%BC%EF%BC%88%E7%B0%A1%E5%8C%96%E7%89%88%EF%BC%89"><span class="nav-number">1.5.</span> <span class="nav-text">相關代碼（簡化版）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-number">1.6.</span> <span class="nav-text">工作流程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%99%95%E7%90%86-next"><span class="nav-number">2.</span> <span class="nav-text">如何處理 next</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E7%90%86%E8%88%87%E6%A9%9F%E5%88%B6-1"><span class="nav-number">2.1.</span> <span class="nav-text">原理與機制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9C%A8%E7%99%BB%E5%85%A5%E8%A1%A8%E5%96%AE%E4%B8%AD%E5%82%B3%E9%81%9E-next"><span class="nav-number">2.1.1.</span> <span class="nav-text">1. 在登入表單中傳遞 next</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%9C%A8%E5%BE%8C%E7%AB%AF%E8%99%95%E7%90%86-next"><span class="nav-number">2.1.2.</span> <span class="nav-text">2. 在後端處理 next</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B-1"><span class="nav-number">2.2.</span> <span class="nav-text">工作流程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#QueryString"><span class="nav-number">3.</span> <span class="nav-text">QueryString</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E7%90%86%E8%88%87%E6%A9%9F%E5%88%B6-2"><span class="nav-number">3.1.</span> <span class="nav-text">原理與機制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%AF%84%E4%BE%8B-1"><span class="nav-number">3.2.</span> <span class="nav-text">使用範例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B-2"><span class="nav-number">3.3.</span> <span class="nav-text">工作流程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">4.</span> <span class="nav-text">總結</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">你的名字</p>
+  <div class="site-description" itemprop="description">分享旅行故事和經驗</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/my-blog/archives/">
+        
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分類</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">標籤</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">你的名字</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/my-blog/lib/anime.min.js"></script>
+  <script src="/my-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/my-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/my-blog/js/utils.js"></script>
+
+<script src="/my-blog/js/motion.js"></script>
+
+
+<script src="/my-blog/js/schemes/muse.js"></script>
+
+
+<script src="/my-blog/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const menuItem = document.querySelector('.menu-item-tags');
+      
+      if (menuItem) {
+        // 確保子選單存在
+        var submenu = menuItem.querySelector('.submenu');
+        if (!submenu) {
+          console.error('Submenu not found!');
+          return;
+        }
+        
+        // 強制設置初始樣式
+        submenu.style.display = 'none';
+        submenu.style.position = 'absolute';
+        submenu.style.top = '100%';
+        submenu.style.left = '50%';
+        submenu.style.transform = 'translateX(-50%)';
+        submenu.style.background = '#fff';
+        submenu.style.borderRadius = '8px';
+        submenu.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
+        submenu.style.minWidth = '170px';
+        submenu.style.marginTop = '15px';
+        submenu.style.zIndex = '9999';
+        submenu.style.border = '1px solid rgba(0, 0, 0, 0.06)';
+        
+        // 添加三角形指示器
+        const triangle = document.createElement('div');
+        triangle.style.position = 'absolute';
+        triangle.style.top = '-5px';
+        triangle.style.left = '50%';
+        triangle.style.marginLeft = '-5px';
+        triangle.style.width = '10px';
+        triangle.style.height = '10px';
+        triangle.style.transform = 'rotate(45deg)';
+        triangle.style.background = '#fff';
+        triangle.style.borderLeft = '1px solid rgba(0, 0, 0, 0.06)';
+        triangle.style.borderTop = '1px solid rgba(0, 0, 0, 0.06)';
+        triangle.style.zIndex = '1';
+        
+        // 避免重複添加
+        if (!submenu.querySelector('.submenu-triangle')) {
+          triangle.className = 'submenu-triangle';
+          submenu.appendChild(triangle);
+        }
+        
+        // 平滑過渡效果
+        submenu.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+        
+        // 點擊標籤選單項顯示/隱藏子選單
+        menuItem.addEventListener('click', function(e) {
+          // 如果不是點擊子選單內的元素
+          if (!e.target.closest('.submenu')) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (submenu.style.display === 'none') {
+              // 顯示子選單時的動畫效果
+              submenu.style.opacity = '0';
+              submenu.style.transform = 'translateX(-50%) translateY(-10px)';
+              submenu.style.display = 'block';
+              
+              // 強制重繪
+              submenu.offsetHeight;
+              
+              // 應用過渡效果
+              submenu.style.opacity = '1';
+              submenu.style.transform = 'translateX(-50%) translateY(0)';
+              
+              this.classList.add('active');
+            } else {
+              // 隱藏子選單
+              submenu.style.opacity = '0';
+              submenu.style.transform = 'translateX(-50%) translateY(-10px)';
+              
+              setTimeout(function() {
+                submenu.style.display = 'none';
+              }, 200);
+              
+              this.classList.remove('active');
+            }
+          }
+        });
+        
+        // 點擊頁面其他地方關閉選單
+        document.addEventListener('click', function(e) {
+          if (!menuItem.contains(e.target)) {
+            submenu.style.opacity = '0';
+            submenu.style.transform = 'translateX(-50%) translateY(-10px)';
+            
+            setTimeout(function() {
+              submenu.style.display = 'none';
+            }, 200);
+            
+            menuItem.classList.remove('active');
+          }
+        });
+      } else {
+        console.error('Could not find .menu-item-tags element');
+      }
+    });
+  </script>
+</body>
+</html>
