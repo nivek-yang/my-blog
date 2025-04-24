@@ -20,20 +20,22 @@
     var CONFIG = {"hostname":"nivek-yang.github.io","root":"/my-blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":320,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="在學習 Python 專案結構時，常會遇到一個讓人困惑的問題：  為什麼從某個檔案執行時可以正常 import，換個方式就報錯了？  這背後的關鍵差異，在於你是以「script」還是「module」的方式執行 Python 檔案。  🧱 基本目錄架構假設我們的專案結構如下： 123456myproject&#x2F;├── main.py└── app&#x2F;    ├── __init__.py    ├──">
+  <meta name="description" content="以下是安裝 PostgreSQL 以及基本使用的完整流程與注意事項。  1. 安裝 PostgreSQL使用 Homebrew 安裝指定版本的 PostgreSQL： 1brew install postgresql@17  確認安裝路徑： 12brew --prefix postgresql# 範例輸出：&#x2F;usr&#x2F;local&#x2F;opt&#x2F;postgresql@17  將 PostgreSQL 的執行">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Python Import 淺談：script 與 module 的差異">
-<meta property="og:url" content="https://nivek-yang.github.io/2025/04/21/python_script%E8%88%87module%E7%9A%84%E5%B7%AE%E7%95%B0/index.html">
+<meta property="og:title" content="macOS 安裝 PostgreSQL 的流程">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/04/25/macOS%20%E5%AE%89%E8%A3%9D%20PostgreSQL%20%E7%9A%84%E6%B5%81%E7%A8%8B/index.html">
 <meta property="og:site_name" content="我的旅行部落格">
-<meta property="og:description" content="在學習 Python 專案結構時，常會遇到一個讓人困惑的問題：  為什麼從某個檔案執行時可以正常 import，換個方式就報錯了？  這背後的關鍵差異，在於你是以「script」還是「module」的方式執行 Python 檔案。  🧱 基本目錄架構假設我們的專案結構如下： 123456myproject&#x2F;├── main.py└── app&#x2F;    ├── __init__.py    ├──">
+<meta property="og:description" content="以下是安裝 PostgreSQL 以及基本使用的完整流程與注意事項。  1. 安裝 PostgreSQL使用 Homebrew 安裝指定版本的 PostgreSQL： 1brew install postgresql@17  確認安裝路徑： 12brew --prefix postgresql# 範例輸出：&#x2F;usr&#x2F;local&#x2F;opt&#x2F;postgresql@17  將 PostgreSQL 的執行">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2025-04-20T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-04-21T15:07:15.892Z">
+<meta property="article:published_time" content="2025-04-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-24T18:42:56.746Z">
 <meta property="article:author" content="你的名字">
-<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Database">
+<meta property="article:tag" content="SQL">
+<meta property="article:tag" content="Postgresql">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://nivek-yang.github.io/2025/04/21/python_script%E8%88%87module%E7%9A%84%E5%B7%AE%E7%95%B0/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/04/25/macOS%20%E5%AE%89%E8%A3%9D%20PostgreSQL%20%E7%9A%84%E6%B5%81%E7%A8%8B/">
 
 
 <script id="page-configurations">
@@ -46,7 +48,7 @@
   };
 </script>
 
-  <title>Python Import 淺談：script 與 module 的差異 | 我的旅行部落格</title>
+  <title>macOS 安裝 PostgreSQL 的流程 | 我的旅行部落格</title>
   
 
 
@@ -197,7 +199,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/21/python_script%E8%88%87module%E7%9A%84%E5%B7%AE%E7%95%B0/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/25/macOS%20%E5%AE%89%E8%A3%9D%20PostgreSQL%20%E7%9A%84%E6%B5%81%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -210,7 +212,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Python Import 淺談：script 與 module 的差異
+          macOS 安裝 PostgreSQL 的流程
         </h1>
 
         <div class="post-meta">
@@ -221,7 +223,7 @@
               <span class="post-meta-item-text">發表於</span>
               
 
-              <time title="創建時間：2025-04-21 00:00:00 / 修改時間：23:07:15" itemprop="dateCreated datePublished" datetime="2025-04-21T00:00:00+08:00">2025-04-21</time>
+              <time title="創建時間：2025-04-25 00:00:00 / 修改時間：02:42:56" itemprop="dateCreated datePublished" datetime="2025-04-25T00:00:00+08:00">2025-04-25</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -244,117 +246,71 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>在學習 Python 專案結構時，常會遇到一個讓人困惑的問題：</p>
-<blockquote>
-<p>為什麼從某個檔案執行時可以正常 import，換個方式就報錯了？</p>
-</blockquote>
-<p>這背後的關鍵差異，在於你是以「<strong>script</strong>」還是「<strong>module</strong>」的方式執行 Python 檔案。</p>
+        <p>以下是安裝 PostgreSQL 以及基本使用的完整流程與注意事項。</p>
 <hr>
-<h2 id="🧱-基本目錄架構"><a href="#🧱-基本目錄架構" class="headerlink" title="🧱 基本目錄架構"></a>🧱 基本目錄架構</h2><p>假設我們的專案結構如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">myproject/</span><br><span class="line">├── main.py</span><br><span class="line">└── app/</span><br><span class="line">    ├── __init__.py</span><br><span class="line">    ├── core.py</span><br><span class="line">    └── utils.py</span><br></pre></td></tr></table></figure>
+<h1 id="1-安裝-PostgreSQL"><a href="#1-安裝-PostgreSQL" class="headerlink" title="1. 安裝 PostgreSQL"></a>1. 安裝 PostgreSQL</h1><p>使用 Homebrew 安裝指定版本的 PostgreSQL：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install postgresql@17</span><br></pre></td></tr></table></figure>
 
+<p>確認安裝路徑：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew --prefix postgresql</span><br><span class="line"><span class="comment"># 範例輸出：/usr/local/opt/postgresql@17</span></span><br></pre></td></tr></table></figure>
+
+<p>將 PostgreSQL 的執行檔加入環境變數：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> PATH=<span class="string">&quot;/usr/local/opt/postgresql@17/bin:<span class="variable">$PATH</span>&quot;</span> &gt;&gt; ~/.zshrc</span><br><span class="line"><span class="built_in">source</span> ~/.zshrc</span><br></pre></td></tr></table></figure>
+
+<p>確認安裝是否成功：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">psql --version</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="2-啟動-PostgreSQL-服務"><a href="#2-啟動-PostgreSQL-服務" class="headerlink" title="2. 啟動 PostgreSQL 服務"></a>2. 啟動 PostgreSQL 服務</h1><p>啟動 PostgreSQL：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew services start postgresql@17</span><br></pre></td></tr></table></figure>
+
+<p>若啟動失敗，可能需要初始化資料庫：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">initdb -D /usr/local/var/postgresql@17</span><br><span class="line">brew services restart postgresql@17</span><br></pre></td></tr></table></figure>
+
+<p>檢查 PostgreSQL 狀態：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pg_ctl -D /usr/local/var/postgresql@17 status</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="3-建立使用者與資料庫"><a href="#3-建立使用者與資料庫" class="headerlink" title="3. 建立使用者與資料庫"></a>3. 建立使用者與資料庫</h1><p>建立預設的 <code>postgres</code> 使用者與資料庫：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">createuser -s postgres</span><br><span class="line">createdb -U postgres postgres</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="4-使用-psql-連線到資料庫"><a href="#4-使用-psql-連線到資料庫" class="headerlink" title="4. 使用 psql 連線到資料庫"></a>4. 使用 psql 連線到資料庫</h1><p>連線到 PostgreSQL：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">psql -h localhost -U postgres -d postgres</span><br></pre></td></tr></table></figure>
+
+<p>進入 psql 後，建立新的資料庫：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> DATABASE testdb;</span><br></pre></td></tr></table></figure>
+
+<p>切換到新建立的資料庫：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\c testdb</span><br></pre></td></tr></table></figure>
+
+<p>建立資料表範例：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE TABLE</span> <span class="keyword">user</span> (</span><br><span class="line">    id UUID <span class="keyword">PRIMARY KEY</span>,</span><br><span class="line">    name TEXT,</span><br><span class="line">    birthday <span class="type">DATE</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="5-檢查-PostgreSQL-狀態的自動化腳本"><a href="#5-檢查-PostgreSQL-狀態的自動化腳本" class="headerlink" title="5. 檢查 PostgreSQL 狀態的自動化腳本"></a>5. 檢查 PostgreSQL 狀態的自動化腳本</h1><p>建立一個檢查 PostgreSQL 狀態的腳本 <code>check_postgres.sh</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">PGDATA=<span class="string">&quot;/usr/local/var/postgresql@17&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;🔍 Checking PostgreSQL status...&quot;</span></span><br><span class="line">pg_ctl -D <span class="string">&quot;<span class="variable">$PGDATA</span>&quot;</span> status</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ $? -ne 0 ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;🚀 PostgreSQL not running, attempting to start...&quot;</span></span><br><span class="line">    pg_ctl -D <span class="string">&quot;<span class="variable">$PGDATA</span>&quot;</span> start</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;✅ PostgreSQL already running.&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;🌐 Checking port 5432...&quot;</span></span><br><span class="line">lsof -iTCP:5432 -sTCP:LISTEN || <span class="built_in">echo</span> <span class="string">&quot;❌ Not listening on port 5432&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;📋 Existing databases:&quot;</span></span><br><span class="line">psql -l || <span class="built_in">echo</span> <span class="string">&quot;⚠️ psql failed. Is PostgreSQL running?&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>執行腳本檢查 PostgreSQL 狀態：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash check_postgres.sh</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="6-常見問題與解決方法"><a href="#6-常見問題與解決方法" class="headerlink" title="6. 常見問題與解決方法"></a>6. 常見問題與解決方法</h1><h2 id="問題-1：psql-錯誤-role-postgres-does-not-exist"><a href="#問題-1：psql-錯誤-role-postgres-does-not-exist" class="headerlink" title="問題 1：psql: 錯誤: role &quot;postgres&quot; does not exist"></a>問題 1：<code>psql: 錯誤: role &quot;postgres&quot; does not exist</code></h2><p>解決方法：</p>
 <ul>
-<li><code>core.py</code> 裡面引用了 <code>utils.py</code></li>
+<li>使用 <code>createuser -s postgres</code> 建立 <code>postgres</code> 使用者。</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># core.py</span></span><br><span class="line"><span class="keyword">from</span> app <span class="keyword">import</span> utils</span><br></pre></td></tr></table></figure>
-
-<p>這看起來是個合理的絕對 import，照理說應該可以用 <code>python app/core.py</code> 執行吧？</p>
-<p>實際上會報錯：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ModuleNotFoundError: No module named &#x27;app&#x27;</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="🤔-script-與-module-的定義是什麼？"><a href="#🤔-script-與-module-的定義是什麼？" class="headerlink" title="🤔 script 與 module 的定義是什麼？"></a>🤔 script 與 module 的定義是什麼？</h2><ul>
-<li><p><strong>script</strong>（腳本）：</p>
+<h2 id="問題-2：啟動-PostgreSQL-時出現-Bootstrap-failed-5-Input-output-error"><a href="#問題-2：啟動-PostgreSQL-時出現-Bootstrap-failed-5-Input-output-error" class="headerlink" title="問題 2：啟動 PostgreSQL 時出現 Bootstrap failed: 5: Input/output error"></a>問題 2：啟動 PostgreSQL 時出現 <code>Bootstrap failed: 5: Input/output error</code></h2><p>解決方法：</p>
 <ul>
-<li>指的是你直接用 <code>python xxx.py</code> 執行的檔案</li>
-<li>它會成為 <code>__main__</code> 模組，也就是程式的進入點</li>
-<li>它<strong>沒有包在任何 package 裡</strong>，也就無法使用相對 import</li>
+<li>刪除舊的啟動檔案並重新啟動服務：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">rm</span> ~/Library/LaunchAgents/homebrew.mxcl.postgresql@17.plist</span><br><span class="line">brew services cleanup</span><br><span class="line">brew services start postgresql@17</span><br></pre></td></tr></table></figure></li>
 </ul>
-</li>
-<li><p><strong>module</strong>（模組）：</p>
-<ul>
-<li>指的是 Python 中可以被 import 的 .py 檔案</li>
-<li>可以透過 <code>import</code> 或 <code>from xxx import yyy</code> 引用</li>
-<li>用 <code>python -m package.module</code> 方式執行時，模組有正確的 package 上下文</li>
-</ul>
-</li>
-</ul>
-<p>兩者最大的差異在於：<strong>script 是執行入口、module 是被載入的單元</strong>。當你想讓某個檔案作為 script 直接執行時，它可能會因為沒處於正確的 package 環境而出錯。</p>
 <hr>
-<h2 id="⚠️-為什麼-python-app-core-py-會錯？"><a href="#⚠️-為什麼-python-app-core-py-會錯？" class="headerlink" title="⚠️ 為什麼 python app/core.py 會錯？"></a>⚠️ 為什麼 <code>python app/core.py</code> 會錯？</h2><p>這是因為 Python 在執行時，會把你執行的 <strong>檔案所在的資料夾</strong> 當作第一個 <code>sys.path[0]</code>，也就是 Python 搜尋模組的起點。</p>
-<table>
-<thead>
-<tr>
-<th>執行方式</th>
-<th>sys.path[0] 設定值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>python app/core.py</code></td>
-<td><code>myproject/app</code></td>
-</tr>
-<tr>
-<td><code>python -m app.core</code></td>
-<td><code>myproject</code>（根目錄）</td>
-</tr>
-</tbody></table>
-<p>當你在 <code>myproject</code> 根目錄執行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python app/core.py</span><br></pre></td></tr></table></figure>
-
-<p>Python 會把 <code>app/core.py</code> 所在的 <code>app/</code> 資料夾作為起點，這時 <code>from app import utils</code> 就會變成找 <code>app/app/utils.py</code>，結果找不到就報錯。</p>
-<p>此外因為 <code>core.py</code> 是 script 模式，沒有包裹在 package 中，也不能使用 <code>from . import utils</code> 相對 import。</p>
-<hr>
-<h2 id="✅-正確做法：以-module-方式執行"><a href="#✅-正確做法：以-module-方式執行" class="headerlink" title="✅ 正確做法：以 module 方式執行"></a>✅ 正確做法：以 module 方式執行</h2><p>使用 <code>-m</code> 可以指定「從 package 中執行」：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> myproject</span><br><span class="line">python -m app.core</span><br></pre></td></tr></table></figure>
-
-<p>這樣 Python 就會把 <code>myproject</code> 加入 <code>sys.path</code>，才能正確找到 <code>app.utils</code> 模組，並允許相對 import。</p>
-<hr>
-<h2 id="📌-script-vs-module-差異整理"><a href="#📌-script-vs-module-差異整理" class="headerlink" title="📌 script vs module 差異整理"></a>📌 script vs module 差異整理</h2><table>
-<thead>
-<tr>
-<th>執行方式</th>
-<th>模式</th>
-<th>sys.path[0] 起點</th>
-<th>絕對 import 是否成功？</th>
-<th>相對 import 是否成功？</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>python app/core.py</code></td>
-<td>script 模式</td>
-<td><code>app/</code></td>
-<td>❌ 失敗</td>
-<td>❌ 無 parent package</td>
-</tr>
-<tr>
-<td><code>python -m app.core</code></td>
-<td>module 模式</td>
-<td><code>myproject/</code></td>
-<td>✅ 成功</td>
-<td>✅ 成功</td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="✅-最佳實踐"><a href="#✅-最佳實踐" class="headerlink" title="✅ 最佳實踐"></a>✅ 最佳實踐</h2><ol>
-<li><strong>統一從根目錄啟動專案</strong>：<ul>
-<li>使用 <code>main.py</code> 作為 entry point，避免直接執行模組內部的 py 檔案</li>
-</ul>
-</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># main.py</span></span><br><span class="line"><span class="keyword">from</span> app.core <span class="keyword">import</span> run</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    run()</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li><strong>避免直接執行子模組的 script</strong>：<ul>
-<li><code>python app/core.py</code> 易出錯</li>
-<li>請改用 <code>python -m app.core</code></li>
-</ul>
-</li>
+<h1 id="7-注意事項"><a href="#7-注意事項" class="headerlink" title="7. 注意事項"></a>7. 注意事項</h1><ol>
+<li><strong>版本管理</strong>：安裝多個版本的 PostgreSQL 時，需確認環境變數是否正確指向目標版本。</li>
+<li><strong>資料庫初始化</strong>：若安裝後無法啟動，可能需要手動執行 <code>initdb</code> 初始化資料庫。</li>
+<li><strong>權限問題</strong>：確保使用者擁有足夠的權限來操作資料庫。</li>
+<li><strong>服務管理</strong>：使用 <code>brew services</code> 管理 PostgreSQL 的啟動與停止。</li>
 </ol>
 <hr>
-<h2 id="📚-延伸補充：為什麼-m-可以正確-import？"><a href="#📚-延伸補充：為什麼-m-可以正確-import？" class="headerlink" title="📚 延伸補充：為什麼 -m 可以正確 import？"></a>📚 延伸補充：為什麼 <code>-m</code> 可以正確 import？</h2><p>使用 <code>-m</code> 時，Python 會把指定 module 所在 package 的<strong>上一層目錄</strong>加入 <code>sys.path</code>，這讓整個 package 可以正確地相對或絕對 import。</p>
-<p>這也符合開發大型專案的需求，讓每個 module 可以互相引用而不報錯。</p>
-<hr>
-<p>希望這篇可以幫你釐清 <code>script</code> 與 <code>module</code> 的差異，也知道為什麼在子目錄中就算寫絕對 import 也還是會錯！</p>
 
     </div>
 
@@ -364,7 +320,9 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/my-blog/tags/Python/" rel="tag"># Python</a>
+              <a href="/my-blog/tags/Database/" rel="tag"># Database</a>
+              <a href="/my-blog/tags/SQL/" rel="tag"># SQL</a>
+              <a href="/my-blog/tags/Postgresql/" rel="tag"># Postgresql</a>
           </div>
 
         
@@ -373,13 +331,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/my-blog/2025/04/20/%E4%BD%BF%E7%94%A8uv%E5%BB%BA%E7%AB%8BPython%E5%B0%88%E6%A1%88%E7%92%B0%E5%A2%83/" rel="prev" title="使用 uv 建立 Python 專案環境">
-      <i class="fa fa-chevron-left"></i> 使用 uv 建立 Python 專案環境
+    <a href="/my-blog/2025/04/24/Django%20%E7%99%BB%E5%85%A5%E6%AA%A2%E6%9F%A5%20%60login_required%60%20%E8%A3%9D%E9%A3%BE%E5%99%A8%EF%BC%9A%E8%99%95%E7%90%86%20%60next%60%20%E9%87%8D%E5%AE%9A%E5%90%91/" rel="prev" title="Django 登入檢查 `login_required` 裝飾器：處理 `next` 重定向">
+      <i class="fa fa-chevron-left"></i> Django 登入檢查 `login_required` 裝飾器：處理 `next` 重定向
     </a></div>
-      <div class="post-nav-item">
-    <a href="/my-blog/2025/04/22/TimeTracker%E6%99%82%E9%96%93%E8%BF%BD%E8%B9%A4%E5%B7%A5%E5%85%B7/" rel="next" title="個人開發：TimeTracker 時間追蹤工具">
-      個人開發：TimeTracker 時間追蹤工具 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -438,7 +393,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%A7%B1-%E5%9F%BA%E6%9C%AC%E7%9B%AE%E9%8C%84%E6%9E%B6%E6%A7%8B"><span class="nav-number">1.</span> <span class="nav-text">🧱 基本目錄架構</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%A4%94-script-%E8%88%87-module-%E7%9A%84%E5%AE%9A%E7%BE%A9%E6%98%AF%E4%BB%80%E9%BA%BC%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">🤔 script 與 module 的定義是什麼？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E2%9A%A0%EF%B8%8F-%E7%82%BA%E4%BB%80%E9%BA%BC-python-app-core-py-%E6%9C%83%E9%8C%AF%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">⚠️ 為什麼 python app&#x2F;core.py 會錯？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E2%9C%85-%E6%AD%A3%E7%A2%BA%E5%81%9A%E6%B3%95%EF%BC%9A%E4%BB%A5-module-%E6%96%B9%E5%BC%8F%E5%9F%B7%E8%A1%8C"><span class="nav-number">4.</span> <span class="nav-text">✅ 正確做法：以 module 方式執行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%8C-script-vs-module-%E5%B7%AE%E7%95%B0%E6%95%B4%E7%90%86"><span class="nav-number">5.</span> <span class="nav-text">📌 script vs module 差異整理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E2%9C%85-%E6%9C%80%E4%BD%B3%E5%AF%A6%E8%B8%90"><span class="nav-number">6.</span> <span class="nav-text">✅ 最佳實踐</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%9A-%E5%BB%B6%E4%BC%B8%E8%A3%9C%E5%85%85%EF%BC%9A%E7%82%BA%E4%BB%80%E9%BA%BC-m-%E5%8F%AF%E4%BB%A5%E6%AD%A3%E7%A2%BA-import%EF%BC%9F"><span class="nav-number">7.</span> <span class="nav-text">📚 延伸補充：為什麼 -m 可以正確 import？</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%AE%89%E8%A3%9D-PostgreSQL"><span class="nav-number">1.</span> <span class="nav-text">1. 安裝 PostgreSQL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%95%9F%E5%8B%95-PostgreSQL-%E6%9C%8D%E5%8B%99"><span class="nav-number">2.</span> <span class="nav-text">2. 啟動 PostgreSQL 服務</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%BB%BA%E7%AB%8B%E4%BD%BF%E7%94%A8%E8%80%85%E8%88%87%E8%B3%87%E6%96%99%E5%BA%AB"><span class="nav-number">3.</span> <span class="nav-text">3. 建立使用者與資料庫</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E4%BD%BF%E7%94%A8-psql-%E9%80%A3%E7%B7%9A%E5%88%B0%E8%B3%87%E6%96%99%E5%BA%AB"><span class="nav-number">4.</span> <span class="nav-text">4. 使用 psql 連線到資料庫</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E6%AA%A2%E6%9F%A5-PostgreSQL-%E7%8B%80%E6%85%8B%E7%9A%84%E8%87%AA%E5%8B%95%E5%8C%96%E8%85%B3%E6%9C%AC"><span class="nav-number">5.</span> <span class="nav-text">5. 檢查 PostgreSQL 狀態的自動化腳本</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E5%B8%B8%E8%A6%8B%E5%95%8F%E9%A1%8C%E8%88%87%E8%A7%A3%E6%B1%BA%E6%96%B9%E6%B3%95"><span class="nav-number">6.</span> <span class="nav-text">6. 常見問題與解決方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%95%8F%E9%A1%8C-1%EF%BC%9Apsql-%E9%8C%AF%E8%AA%A4-role-postgres-does-not-exist"><span class="nav-number">6.1.</span> <span class="nav-text">問題 1：psql: 錯誤: role &quot;postgres&quot; does not exist</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%95%8F%E9%A1%8C-2%EF%BC%9A%E5%95%9F%E5%8B%95-PostgreSQL-%E6%99%82%E5%87%BA%E7%8F%BE-Bootstrap-failed-5-Input-output-error"><span class="nav-number">6.2.</span> <span class="nav-text">問題 2：啟動 PostgreSQL 時出現 Bootstrap failed: 5: Input&#x2F;output error</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A0%85"><span class="nav-number">7.</span> <span class="nav-text">7. 注意事項</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
