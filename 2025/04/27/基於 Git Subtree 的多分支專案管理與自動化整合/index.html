@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html class="" lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/my-blog/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"nivek-yang.github.io","root":"/my-blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":320,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="這篇筆記說明如何用 Git Subtree 設計一個在 GitHub 上「可重複練習、集中管理」的多分支專案架構，並透過 Makefile 實現自動化整合。  核心目標是：  從 template 分支快速建立開發練習分支，讓每次開發練習都從一致的起點開始 每個開發分支獨立開發、保有完整 commit 紀錄 最終成果自動整合到 master 分支的子資料夾，方便集中展示與維運管理  這樣的流程設">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基於 Git Subtree 的多分支專案管理與自動化整合">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/04/27/%E5%9F%BA%E6%96%BC%20Git%20Subtree%20%E7%9A%84%E5%A4%9A%E5%88%86%E6%94%AF%E5%B0%88%E6%A1%88%E7%AE%A1%E7%90%86%E8%88%87%E8%87%AA%E5%8B%95%E5%8C%96%E6%95%B4%E5%90%88/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="這篇筆記說明如何用 Git Subtree 設計一個在 GitHub 上「可重複練習、集中管理」的多分支專案架構，並透過 Makefile 實現自動化整合。  核心目標是：  從 template 分支快速建立開發練習分支，讓每次開發練習都從一致的起點開始 每個開發分支獨立開發、保有完整 commit 紀錄 最終成果自動整合到 master 分支的子資料夾，方便集中展示與維運管理  這樣的流程設">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-04-26T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-27T16:21:02.817Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Git">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/04/27/%E5%9F%BA%E6%96%BC%20Git%20Subtree%20%E7%9A%84%E5%A4%9A%E5%88%86%E6%94%AF%E5%B0%88%E6%A1%88%E7%AE%A1%E7%90%86%E8%88%87%E8%87%AA%E5%8B%95%E5%8C%96%E6%95%B4%E5%90%88/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>基於 Git Subtree 的多分支專案管理與自動化整合 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">我的技術部落格</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        
+        <li class="menu-item menu-item-home">
+
+    <a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+
+    <a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章</a>
+
+  </li>
+        
+        
+        
+          <li class="menu-item menu-item-tags">
+            <a href="/my-blog/tags/%20" class="menu-item-link">
+                <i class="fa fa-fw fa fa-tags"></i>標籤
+            </a>
+            <ul class="submenu" style="display: none;">
+              
+                <li>
+                  <a href="/my-blog/tags/Python/">Python (9)</a>
+                </li>
+              
+                <li>
+                  <a href="/my-blog/tags/Django/">Django (5)</a>
+                </li>
+              
+                <li>
+                  <a href="/my-blog/tags/Git/">Git (2)</a>
+                </li>
+              
+                <li>
+                  <a href="/my-blog/tags/Database/">Database (2)</a>
+                </li>
+              
+                <li>
+                  <a href="/my-blog/tags/SQL/">SQL (1)</a>
+                </li>
+              
+                <li>
+                  <a href="/my-blog/tags/Postgresql/">Postgresql (1)</a>
+                </li>
+              
+                <li>
+                  <a href="/my-blog/tags/Hexo/">Hexo (1)</a>
+                </li>
+              
+                <li>
+                  <a href="/my-blog/tags/GitHub-Pages/">GitHub Pages (1)</a>
+                </li>
+              
+                <li>
+                  <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">網站建置 (1)</a>
+                </li>
+              
+            </ul>
+          </li>
+        
+        
+        <li class="menu-item menu-item-about">
+
+    <a href="/my-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a>
+
+  </li>
+        
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/27/%E5%9F%BA%E6%96%BC%20Git%20Subtree%20%E7%9A%84%E5%A4%9A%E5%88%86%E6%94%AF%E5%B0%88%E6%A1%88%E7%AE%A1%E7%90%86%E8%88%87%E8%87%AA%E5%8B%95%E5%8C%96%E6%95%B4%E5%90%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          基於 Git Subtree 的多分支專案管理與自動化整合
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              <time title="創建時間：2025-04-27 00:00:00" itemprop="dateCreated datePublished" datetime="2025-04-27T00:00:00+08:00">2025-04-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2025-04-28 00:21:02" itemprop="dateModified" datetime="2025-04-28T00:21:02+08:00">2025-04-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>這篇筆記說明如何用 <code>Git Subtree</code> 設計一個在 GitHub 上「可重複練習、集中管理」的多分支專案架構，並透過 <code>Makefile</code> 實現自動化整合。</p>
+</blockquote>
+<p>核心目標是：</p>
+<ul>
+<li><strong>從 <code>template</code> 分支快速建立開發練習分支</strong>，讓每次開發練習都從一致的起點開始</li>
+<li><strong>每個開發分支獨立開發、保有完整 commit 紀錄</strong></li>
+<li><strong>最終成果自動整合到 <code>master</code> 分支的子資料夾</strong>，方便集中展示與維運管理</li>
+</ul>
+<p>這樣的流程設計有以下優點：</p>
+<ul>
+<li>快速複製練習環境，便於反覆練習與教學</li>
+<li>每次練習皆為獨立專案，保留完整開發歷程</li>
+<li>成果集中到 <code>master</code>，只需瀏覽一個分支即可看到所有進度</li>
+<li>可搭配 GitHub Actions 等工具，自動化整合與部署流程</li>
+</ul>
+<hr>
+<h1 id="🧱-建立-template-分支"><a href="#🧱-建立-template-分支" class="headerlink" title="🧱 建立 template 分支"></a>🧱 建立 template 分支</h1><p><code>template</code> 分支是所有練習的起始樣板，可以依照以下兩種方式建立：</p>
+<ol>
+<li><strong>建立初始開發環境</strong>：準備好基礎的資料夾架構、依賴設定檔（例如 <code>package.json</code>、<code>requirements.txt</code>）或共用的 utility function。</li>
+<li><strong>給予練習規格</strong>：可以只放入說明文件、範例輸入&#x2F;輸出或 TODO 任務，讓想練習的人依據這份規格自行開發。</li>
+</ol>
+<p>建立指令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 從 master 建立 template 分支</span></span><br><span class="line">git checkout -b template</span><br><span class="line"></span><br><span class="line"><span class="comment"># 推送到遠端</span></span><br><span class="line">git push origin template</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="⚙️-更改預設分支（GitHub-操作）"><a href="#⚙️-更改預設分支（GitHub-操作）" class="headerlink" title="⚙️ 更改預設分支（GitHub 操作）"></a>⚙️ 更改預設分支（GitHub 操作）</h1><ol>
+<li>前往 GitHub Repo 頁面</li>
+<li>點擊「⚙ Settings」</li>
+<li>左側選單中選擇「Branches」</li>
+<li>將 Default branch 改為 <code>template</code></li>
+</ol>
+<p>這個設定是為了能夠先刪除 master 分支並重建，讓 master 存放練習後的成果</p>
+<hr>
+<h1 id="🗑️-刪除-master-並重建"><a href="#🗑️-刪除-master-並重建" class="headerlink" title="🗑️ 刪除 master 並重建"></a>🗑️ 刪除 master 並重建</h1><p>如果你想讓 <code>master</code> 分支只存放整合後的成果，而非開發內容，可以重新建立一個乾淨的 <code>master</code> 分支：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 刪除遠端 master 分支</span></span><br><span class="line">git push origin --delete master</span><br><span class="line"></span><br><span class="line"><span class="comment"># 本地切換並建立新的空 master 分支</span></span><br><span class="line">git checkout --orphan master</span><br><span class="line"></span><br><span class="line"><span class="comment"># 移除所有檔案（保留工作區）</span></span><br><span class="line">git <span class="built_in">rm</span> -rf .</span><br><span class="line"></span><br><span class="line"><span class="comment"># 建立 .gitignore 和 Makefile</span></span><br><span class="line"><span class="built_in">touch</span> .gitignore Makefile</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交並推送新的空白 master 分支</span></span><br><span class="line">git add .gitignore Makefile</span><br><span class="line">git commit -m <span class="string">&quot;Initialize new master branch&quot;</span></span><br><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
+
+<p>⚠️ <strong>請記得將預設分支從 <code>template</code> 改回 <code>master</code></strong>，以便未來集中展示成果與管理。</p>
+<hr>
+<h1 id="用-git-subtree-將多分支專案整合"><a href="#用-git-subtree-將多分支專案整合" class="headerlink" title="用 git subtree 將多分支專案整合"></a>用 git subtree 將多分支專案整合</h1><p><code>git subtree</code> 是 Git 提供的工具，允許你將另一個分支的內容匯入到當前分支的某個子資料夾，並保留其完整的 commit 歷史。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git subtree add --prefix=&lt;資料夾路徑&gt; &lt;遠端名稱&gt;/&lt;分支名稱&gt;</span><br></pre></td></tr></table></figure>
+<p>這條指令的作用是將指定的遠端分支內容匯入到當前分支的某個子資料夾中，並保留該分支的完整 commit 歷史</p>
+<ul>
+<li><p><strong><code>--prefix=&lt;資料夾路徑&gt;</code></strong>：</p>
+<ul>
+<li>指定將分支內容匯入到當前分支的哪個子資料夾。</li>
+<li>如果該資料夾不存在，Git 會自動建立。</li>
+</ul>
+</li>
+<li><p><strong><code>&lt;遠端名稱&gt;/&lt;分支名稱&gt;</code></strong>：</p>
+<ul>
+<li>指定要匯入的遠端分支。</li>
+<li>例如，<code>origin/feature-1</code> 表示從遠端 <code>origin</code> 的 <code>feature-1</code> 分支匯入。</li>
+</ul>
+</li>
+</ul>
+<p>在本專案中，我們使用 <code>git subtree</code> 的目的包括：</p>
+<ul>
+<li>將每個練習分支（如 <code>feature_1</code>）的專案內容，<strong>整合匯入到 <code>master</code> 分支的對應子資料夾（如 <code>feature_1/</code>）</strong></li>
+<li>避免用 <code>merge</code> 或 <code>cherry-pick</code> 導致 commit 歷史混亂</li>
+<li>可重複執行，不會影響其他資料夾內容</li>
+</ul>
+<h1 id="建立-Makefile-自動遷移腳本"><a href="#建立-Makefile-自動遷移腳本" class="headerlink" title="建立 Makefile 自動遷移腳本"></a>建立 Makefile 自動遷移腳本</h1><p>以下是 <code>master</code> 分支根目錄的 <code>Makefile</code> 實作：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"><span class="keyword">.PHONY</span>: archive archive-all</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 將指定分支內容以 git subtree 匯入對應資料夾，保留完整 commit 紀錄</span></span><br><span class="line"><span class="section">archive:</span></span><br><span class="line"><span class="keyword">ifndef</span> name</span><br><span class="line">	<span class="variable">$(<span class="built_in">error</span> Usage: make archive name=feature-&lt;X&gt;)</span></span><br><span class="line"><span class="keyword">endif</span></span><br><span class="line">	@echo <span class="string">&quot;🌲 Archiving <span class="variable">$(name)</span> into master:<span class="variable">$(name)</span>/ using git subtree...&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="comment"># 確保在 master 分支</span></span><br><span class="line">	@git checkout master</span><br><span class="line"></span><br><span class="line">	<span class="comment"># 檢查有無未提交的變更</span></span><br><span class="line">	@if [ -n <span class="string">&quot;$$\(git status --porcelain)&quot;</span> ]; then \</span><br><span class="line">		echo <span class="string">&quot;❌ master branch has uncommitted changes. Please commit or stash first.&quot;</span>; \</span><br><span class="line">		exit 1; \</span><br><span class="line">	fi</span><br><span class="line"></span><br><span class="line">	<span class="comment"># 匯入分支內容到對應資料夾（不使用 --squash，可保留所有 commit）</span></span><br><span class="line">	@git subtree add --prefix=<span class="variable">$(name)</span> origin/<span class="variable">$(name)</span></span><br><span class="line"></span><br><span class="line">	@echo <span class="string">&quot;✅ Done archiving <span class="variable">$(name)</span> into master:<span class="variable">$(name)</span>/&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 批次對所有符合 feature-* 的分支執行 subtree 匯入</span></span><br><span class="line"><span class="section">archive-all:</span></span><br><span class="line">	@git fetch origin</span><br><span class="line">	@git branch -r | grep &#x27;origin/feature_&#x27; | sed &#x27;s|origin/||&#x27; | while read branch; do \</span><br><span class="line">		<span class="variable">$(MAKE)</span> archive name=$$branch; \</span><br><span class="line">	done</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="📦-歸檔練習分支內容"><a href="#📦-歸檔練習分支內容" class="headerlink" title="📦 歸檔練習分支內容"></a>📦 歸檔練習分支內容</h1><p>每完成一個 <code>feature_&lt;n&gt;</code> 分支的專案後，執行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make archive name=feature_&lt;n&gt;</span><br></pre></td></tr></table></figure>
+
+<p>系統會自動將該分支所有檔案以 <code>git subtree</code> 匯入到 <code>master</code> 的 <code>feature_&lt;n&gt;/</code> 資料夾中，<strong>保留完整 commit 歷史</strong>。</p>
+<p>若要一鍵歸檔所有 <code>feature_&lt;n&gt;</code> 分支，可執行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make archive-all</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="🚀-後續可整合-GitHub-Actions-自動化流程"><a href="#🚀-後續可整合-GitHub-Actions-自動化流程" class="headerlink" title="🚀 後續可整合 GitHub Actions 自動化流程"></a>🚀 後續可整合 GitHub Actions 自動化流程</h1><p>未來可以使用 GitHub Actions 自動觸發 <code>make archive name=feature_&lt;n&gt;</code> 指令，將 PR 合併後的分支內容自動歸檔到 <code>master</code> 的對應子資料夾。建議流程如下：</p>
+<ol>
+<li>當 PR 合併至 <code>feature_&lt;n&gt;</code> 分支時觸發 workflow</li>
+<li>使用 <code>actions/checkout</code> 切換到 <code>master</code> 分支</li>
+<li>使用 <code>git fetch</code> 確保能抓到對應的分支內容</li>
+<li>執行 <code>make archive name=feature_&lt;n&gt;</code> 自動歸檔</li>
+<li>將更新過的 <code>master</code> 分支 push 回遠端</li>
+</ol>
+<p>這樣可以避免手動切換與操作，讓每個練習成果在合併 PR 後自動整理到展示區。你也可以加入條件判斷，只對分支名稱符合 <code>feature_*</code> 格式的情況執行此流程。</p>
+<hr>
+<h1 id="✅-結果展示"><a href="#✅-結果展示" class="headerlink" title="✅ 結果展示"></a>✅ 結果展示</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">master</span><br><span class="line">├── .gitignore</span><br><span class="line">├── Makefile</span><br><span class="line">├── feature_1/</span><br><span class="line">│   ├── manage.py</span><br><span class="line">│   ├── app/</span><br><span class="line">│   └── ...</span><br><span class="line">├── feature_2/</span><br><span class="line">│   └── ...</span><br><span class="line">└── feature_3/</span><br><span class="line">    └── ...</span><br></pre></td></tr></table></figure>
+
+<p>這樣的架構讓你可以：</p>
+<ul>
+<li>保有一份可重複使用的範本分支（template）</li>
+<li>在多個練習分支開發而不互相干擾</li>
+<li>將成果統一集中到 <code>master</code> 展示，方便他人瀏覽</li>
+<li>將 CI&#x2F;CD、部屬、技術分享等操作聚焦於 <code>master</code> 管理</li>
+</ul>
+<p>非常適合用於建立個人練習倉庫、技術文章範例、或團隊協作練習環境。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Git/" rel="tag"># Git</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/my-blog/2025/04/25/Git%20%E6%8C%87%E5%8D%97%EF%BC%9A%E5%BE%9E%E5%9F%BA%E7%A4%8E%E6%93%8D%E4%BD%9C%E5%88%B0%E9%80%B2%E9%9A%8E%E6%8A%80%E5%B7%A7/" rel="prev" title="Git 指南：從基礎操作到進階技巧">
+      <i class="fa fa-chevron-left"></i> Git 指南：從基礎操作到進階技巧
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%A7%B1-%E5%BB%BA%E7%AB%8B-template-%E5%88%86%E6%94%AF"><span class="nav-number">1.</span> <span class="nav-text">🧱 建立 template 分支</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E2%9A%99%EF%B8%8F-%E6%9B%B4%E6%94%B9%E9%A0%90%E8%A8%AD%E5%88%86%E6%94%AF%EF%BC%88GitHub-%E6%93%8D%E4%BD%9C%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">⚙️ 更改預設分支（GitHub 操作）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%97%91%EF%B8%8F-%E5%88%AA%E9%99%A4-master-%E4%B8%A6%E9%87%8D%E5%BB%BA"><span class="nav-number">3.</span> <span class="nav-text">🗑️ 刪除 master 並重建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8-git-subtree-%E5%B0%87%E5%A4%9A%E5%88%86%E6%94%AF%E5%B0%88%E6%A1%88%E6%95%B4%E5%90%88"><span class="nav-number">4.</span> <span class="nav-text">用 git subtree 將多分支專案整合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B-Makefile-%E8%87%AA%E5%8B%95%E9%81%B7%E7%A7%BB%E8%85%B3%E6%9C%AC"><span class="nav-number">5.</span> <span class="nav-text">建立 Makefile 自動遷移腳本</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%A6-%E6%AD%B8%E6%AA%94%E7%B7%B4%E7%BF%92%E5%88%86%E6%94%AF%E5%85%A7%E5%AE%B9"><span class="nav-number">6.</span> <span class="nav-text">📦 歸檔練習分支內容</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%9A%80-%E5%BE%8C%E7%BA%8C%E5%8F%AF%E6%95%B4%E5%90%88-GitHub-Actions-%E8%87%AA%E5%8B%95%E5%8C%96%E6%B5%81%E7%A8%8B"><span class="nav-number">7.</span> <span class="nav-text">🚀 後續可整合 GitHub Actions 自動化流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E2%9C%85-%E7%B5%90%E6%9E%9C%E5%B1%95%E7%A4%BA"><span class="nav-number">8.</span> <span class="nav-text">✅ 結果展示</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/my-blog/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分類</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">標籤</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/my-blog/lib/anime.min.js"></script>
+  <script src="/my-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/my-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/my-blog/js/utils.js"></script>
+
+<script src="/my-blog/js/motion.js"></script>
+
+
+<script src="/my-blog/js/schemes/muse.js"></script>
+
+
+<script src="/my-blog/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const menuItem = document.querySelector('.menu-item-tags');
+      
+      if (menuItem) {
+        // 確保子選單存在
+        var submenu = menuItem.querySelector('.submenu');
+        if (!submenu) {
+          console.error('Submenu not found!');
+          return;
+        }
+        
+        // 強制設置初始樣式
+        submenu.style.display = 'none';
+        submenu.style.position = 'absolute';
+        submenu.style.top = '100%';
+        submenu.style.left = '50%';
+        submenu.style.transform = 'translateX(-50%)';
+        submenu.style.background = '#fff';
+        submenu.style.borderRadius = '8px';
+        submenu.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
+        submenu.style.minWidth = '170px';
+        submenu.style.marginTop = '15px';
+        submenu.style.zIndex = '9999';
+        submenu.style.border = '1px solid rgba(0, 0, 0, 0.06)';
+        
+        // 添加三角形指示器
+        const triangle = document.createElement('div');
+        triangle.style.position = 'absolute';
+        triangle.style.top = '-5px';
+        triangle.style.left = '50%';
+        triangle.style.marginLeft = '-5px';
+        triangle.style.width = '10px';
+        triangle.style.height = '10px';
+        triangle.style.transform = 'rotate(45deg)';
+        triangle.style.background = '#fff';
+        triangle.style.borderLeft = '1px solid rgba(0, 0, 0, 0.06)';
+        triangle.style.borderTop = '1px solid rgba(0, 0, 0, 0.06)';
+        triangle.style.zIndex = '1';
+        
+        // 避免重複添加
+        if (!submenu.querySelector('.submenu-triangle')) {
+          triangle.className = 'submenu-triangle';
+          submenu.appendChild(triangle);
+        }
+        
+        // 平滑過渡效果
+        submenu.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+        
+        // 點擊標籤選單項顯示/隱藏子選單
+        menuItem.addEventListener('click', function(e) {
+          // 如果不是點擊子選單內的元素
+          if (!e.target.closest('.submenu')) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (submenu.style.display === 'none') {
+              // 顯示子選單時的動畫效果
+              submenu.style.opacity = '0';
+              submenu.style.transform = 'translateX(-50%) translateY(-10px)';
+              submenu.style.display = 'block';
+              
+              // 強制重繪
+              submenu.offsetHeight;
+              
+              // 應用過渡效果
+              submenu.style.opacity = '1';
+              submenu.style.transform = 'translateX(-50%) translateY(0)';
+              
+              this.classList.add('active');
+            } else {
+              // 隱藏子選單
+              submenu.style.opacity = '0';
+              submenu.style.transform = 'translateX(-50%) translateY(-10px)';
+              
+              setTimeout(function() {
+                submenu.style.display = 'none';
+              }, 200);
+              
+              this.classList.remove('active');
+            }
+          }
+        });
+        
+        // 點擊頁面其他地方關閉選單
+        document.addEventListener('click', function(e) {
+          if (!menuItem.contains(e.target)) {
+            submenu.style.opacity = '0';
+            submenu.style.transform = 'translateX(-50%) translateY(-10px)';
+            
+            setTimeout(function() {
+              submenu.style.display = 'none';
+            }, 200);
+            
+            menuItem.classList.remove('active');
+          }
+        });
+      } else {
+        console.error('Could not find .menu-item-tags element');
+      }
+    });
+  </script>
+</body>
+</html>
