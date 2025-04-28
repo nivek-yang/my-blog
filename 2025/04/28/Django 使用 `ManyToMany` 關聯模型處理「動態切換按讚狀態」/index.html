@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html class="" lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/my-blog/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"nivek-yang.github.io","root":"/my-blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":320,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="在本筆記中，將探討如何在 Django 中處理「動態切換按讚狀態」的邏輯:  介紹 ManyToMany 關聯模型的建立，並解釋如何使用它來設置使用者 (User) 與面試（Interview）之間的關聯。 說明為何在這樣的情境下，不能使用 get_object_or_404()，而是應該使用 filter() 方法來處理查詢。 展示如何在 favorite 這樣的 view function">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Django 使用 &#96;ManyToMany&#96; 關聯模型處理「動態切換按讚狀態」">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/04/28/Django%20%E4%BD%BF%E7%94%A8%20%60ManyToMany%60%20%E9%97%9C%E8%81%AF%E6%A8%A1%E5%9E%8B%E8%99%95%E7%90%86%E3%80%8C%E5%8B%95%E6%85%8B%E5%88%87%E6%8F%9B%E6%8C%89%E8%AE%9A%E7%8B%80%E6%85%8B%E3%80%8D/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="在本筆記中，將探討如何在 Django 中處理「動態切換按讚狀態」的邏輯:  介紹 ManyToMany 關聯模型的建立，並解釋如何使用它來設置使用者 (User) 與面試（Interview）之間的關聯。 說明為何在這樣的情境下，不能使用 get_object_or_404()，而是應該使用 filter() 方法來處理查詢。 展示如何在 favorite 這樣的 view function">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-04-27T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-28T14:47:27.619Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Django">
+<meta property="article:tag" content="Database">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/04/28/Django%20%E4%BD%BF%E7%94%A8%20%60ManyToMany%60%20%E9%97%9C%E8%81%AF%E6%A8%A1%E5%9E%8B%E8%99%95%E7%90%86%E3%80%8C%E5%8B%95%E6%85%8B%E5%88%87%E6%8F%9B%E6%8C%89%E8%AE%9A%E7%8B%80%E6%85%8B%E3%80%8D/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>Django 使用 `ManyToMany` 關聯模型處理「動態切換按讚狀態」 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">我的技術部落格</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        
+        <li class="menu-item menu-item-home">
+
+    <a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+
+    <a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章</a>
+
+  </li>
+        
+        
+        
+          <li class="menu-item menu-item-tags">
+            <a href="/my-blog/tags/%20" class="menu-item-link">
+                <i class="fa fa-fw fa fa-tags"></i>標籤
+            </a>
+            <ul class="submenu" style="display: none;">
+              
+                <li>
+                  <a href="/my-blog/tags/Python/">Python (10)</a>
+                </li>
+              
+                <li>
+                  <a href="/my-blog/tags/Django/">Django (6)</a>
+                </li>
+              
+                <li>
+                  <a href="/my-blog/tags/Database/">Database (3)</a>
+                </li>
+              
+                <li>
+                  <a href="/my-blog/tags/Git/">Git (2)</a>
+                </li>
+              
+                <li>
+                  <a href="/my-blog/tags/SQL/">SQL (1)</a>
+                </li>
+              
+                <li>
+                  <a href="/my-blog/tags/Postgresql/">Postgresql (1)</a>
+                </li>
+              
+                <li>
+                  <a href="/my-blog/tags/Hexo/">Hexo (1)</a>
+                </li>
+              
+                <li>
+                  <a href="/my-blog/tags/GitHub-Pages/">GitHub Pages (1)</a>
+                </li>
+              
+                <li>
+                  <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">網站建置 (1)</a>
+                </li>
+              
+            </ul>
+          </li>
+        
+        
+        <li class="menu-item menu-item-about">
+
+    <a href="/my-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a>
+
+  </li>
+        
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/28/Django%20%E4%BD%BF%E7%94%A8%20%60ManyToMany%60%20%E9%97%9C%E8%81%AF%E6%A8%A1%E5%9E%8B%E8%99%95%E7%90%86%E3%80%8C%E5%8B%95%E6%85%8B%E5%88%87%E6%8F%9B%E6%8C%89%E8%AE%9A%E7%8B%80%E6%85%8B%E3%80%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Django 使用 `ManyToMany` 關聯模型處理「動態切換按讚狀態」
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="創建時間：2025-04-28 00:00:00 / 修改時間：22:47:27" itemprop="dateCreated datePublished" datetime="2025-04-28T00:00:00+08:00">2025-04-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <hr>
+<p>在本筆記中，將探討如何在 Django 中處理「動態切換按讚狀態」的邏輯:</p>
+<ol>
+<li><strong>介紹 <code>ManyToMany</code> 關聯模型的建立</strong>，並解釋如何使用它來設置使用者 (<code>User</code>) 與面試（<code>Interview</code>）之間的關聯。</li>
+<li><strong>說明為何在這樣的情境下，不能使用 <code>get_object_or_404()</code></strong>，而是應該使用 <code>filter()</code> 方法來處理查詢。</li>
+<li><strong>展示如何在 <code>favorite</code> 這樣的 view function 中實現按讚與取消按讚功能</strong>，動態切換按讚狀態。</li>
+</ol>
+<hr>
+<h1 id="ManyToMany-關聯模型的建立"><a href="#ManyToMany-關聯模型的建立" class="headerlink" title="ManyToMany 關聯模型的建立"></a><code>ManyToMany</code> 關聯模型的建立</h1><p>在 Django 中，使用 <code>ManyToMany</code> 關聯來表示多對多的關係。假設有 <code>User</code> 和 <code>Interview</code> 模型，可以建立以下的多對多關聯：</p>
+<p>interviews&#x2F;models.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.contrib.auth.models <span class="keyword">import</span> User</span><br><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Interview</span>(models.Model):</span><br><span class="line">    <span class="comment"># 其他欄位...</span></span><br><span class="line">    user = models.ForeignKey(User, on_delete=models.CASCADE)</span><br><span class="line">    favorited_by = models.ManyToManyField(</span><br><span class="line">        User,</span><br><span class="line">        through=<span class="string">&quot;FavoriteInterview&quot;</span>,</span><br><span class="line">        related_name=<span class="string">&quot;favorite_interviews&quot;</span>,  <span class="comment"># join 欄位</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="comment"># join table</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FavoriteInterview</span>(models.Model):</span><br><span class="line">    user = models.ForeignKey(User, on_delete=models.CASCADE)</span><br><span class="line">    interview = models.ForeignKey(Interview, on_delete=models.CASCADE)</span><br></pre></td></tr></table></figure>
+
+<h2 id="關聯設置"><a href="#關聯設置" class="headerlink" title="關聯設置"></a>關聯設置</h2><ul>
+<li><strong><code>FavoriteInterview</code></strong> 表示每個使用者對於某個面試的「按讚」記錄。每一筆記錄由 <code>user</code> 和 <code>interview</code> 兩個外鍵組成。</li>
+</ul>
+<h2 id="使用-ManyToManyField"><a href="#使用-ManyToManyField" class="headerlink" title="使用 ManyToManyField"></a>使用 <code>ManyToManyField</code></h2><p>假設希望在 <code>User</code> 模型中表示使用者按讚過的所有 <code>Interview</code>，可以在 <code>Interview</code> 模型中設置 <code>ManyToManyField</code> 來表示這種關聯</p>
+<ul>
+<li>通過 <code>interview.favorited_by</code> 來獲取按讚某篇面試的所有使用者</li>
+<li>通過 <code>user.favorite_interviews</code> 來獲取某位使用者按讚的所有面試</li>
+</ul>
+<hr>
+<h2 id="在-favorite-view-function-中處理「按讚」和「取消按讚」的邏輯"><a href="#在-favorite-view-function-中處理「按讚」和「取消按讚」的邏輯" class="headerlink" title="在 favorite view function 中處理「按讚」和「取消按讚」的邏輯"></a>在 <code>favorite</code> view function 中處理「按讚」和「取消按讚」的邏輯</h2><p>interviews&#x2F;views.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> get_object_or_404, redirect</span><br><span class="line"><span class="keyword">from</span> django.contrib.auth.decorators <span class="keyword">import</span> login_required</span><br><span class="line"><span class="keyword">from</span> django.views.decorators.http <span class="keyword">import</span> require_POST</span><br><span class="line"></span><br><span class="line"><span class="meta">@require_POST</span></span><br><span class="line"><span class="meta">@login_required</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">favorite</span>(<span class="params">req, <span class="built_in">id</span></span>):</span><br><span class="line">    interview = get_object_or_404(Interview, pk=<span class="built_in">id</span>)  <span class="comment"># 獲取指定的 interview</span></span><br><span class="line">    favorites = req.user.favorite_interviews <span class="comment"># 登入的 user 按讚的所有面試</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 以 User model 的角度處理 ManyToMany 關聯</span></span><br><span class="line">    <span class="comment"># 判斷這位使用者是否已經按過讚</span></span><br><span class="line">    <span class="keyword">if</span> favorites.<span class="built_in">filter</span>(pk=interview.pk).exists():</span><br><span class="line">        <span class="comment"># 如果有按過讚，則取消按讚（remove），在 FavoriteInterview table 裡刪除該筆資料</span></span><br><span class="line">        favorites.remove(interview) </span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 如果沒有按過讚，則加上（add)，在 FavoriteInterview table 裡增加該筆資料</span></span><br><span class="line">        favorites.add(interview)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> redirect(<span class="string">&quot;interviews:show&quot;</span>, <span class="built_in">id</span>=interview.<span class="built_in">id</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="功能解釋："><a href="#功能解釋：" class="headerlink" title="功能解釋："></a>功能解釋：</h2><ul>
+<li><strong><code>get_object_or_404()</code></strong>：查找指定的 <code>Interview</code> 實例，若找不到則會拋出 404 錯誤（這裡是確保該面談存在）。</li>
+<li><strong><code>filter(pk=interview.pk).exists()</code></strong>：檢查該 <code>user</code> 是否已經按讚過這篇 <code>interview</code>，如果已經按讚，則執行 <code>remove()</code>；如果沒有按讚，則執行 <code>add()</code>，這樣就能夠動態切換按讚狀態。</li>
+<li><strong><code>redirect()</code></strong>：操作完成後，重定向回該 <code>interview</code> 的詳細頁面。</li>
+</ul>
+<hr>
+<h2 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h2><ol>
+<li><p><strong><code>ManyToMany</code> 關聯的建立</strong>：使用 <code>ManyToManyField</code> 和 <code>through</code>、<code>related_name</code> 參數來設置 <code>User</code> 和 <code>Interview</code> 之間的多對多關聯，並且在中介模型 <code>FavoriteInterview</code> 中存儲按讚資料。</p>
+</li>
+<li><p><strong>使用 <code>filter()</code> 判斷使用者是否已經按過讚</strong>：使用 <code>filter()</code> 和 <code>.exists()</code> 來檢查 <code>FavoriteInterview</code> 是否存在對應的關聯，根據結果決定是按讚還是移除按讚。<br><code>filter()</code> 方法可以返回符合條件的查詢結果，如果沒有找到任何符合條件的資料，它會返回一個空的 queryset，而不是拋出錯誤，因此<code>filter()</code> 可以靈活處理按讚的狀態</p>
+</li>
+<li><p><strong>為何 <code>get_object_or_404()</code> 不適用判斷使用者是否已經按過讚</strong>：在動態切換按讚狀態時，使用 <code>get_object_or_404()</code> 不適合，因為查詢結果沒有找到資料，它會拋出 404 錯誤，這會讓我們無法靈活處理「已按讚」和「未按讚」的情況。</p>
+</li>
+</ol>
+<hr>
+<h2 id="從不同-Model-角度處理-ManyToMany-關聯"><a href="#從不同-Model-角度處理-ManyToMany-關聯" class="headerlink" title="從不同 Model 角度處理 ManyToMany 關聯"></a>從不同 Model 角度處理 <code>ManyToMany</code> 關聯</h2><p>在 Django 中，<code>ManyToMany</code> 關聯允許兩個模型之間建立多對多的關聯。這些關聯通常由 <code>ManyToManyField</code> 或透過額外的關聯表（如 <code>through</code> 設定）來實現。在不同的 Model 角度處理 <code>ManyToMany</code> 關聯時，我們有不同的寫法來處理關聯資料的新增、刪除與查詢。</p>
+<h3 id="1-從-User-模型的角度處理-ManyToMany-關聯"><a href="#1-從-User-模型的角度處理-ManyToMany-關聯" class="headerlink" title="1. 從 User 模型的角度處理 ManyToMany 關聯"></a>1. <strong>從 <code>User</code> 模型的角度處理 <code>ManyToMany</code> 關聯</strong></h3><p>首先，讓我們回顧如何從 <code>User</code> 模型的角度處理 <code>ManyToMany</code> 關聯。在這個例子中，<code>User</code> 和 <code>Interview</code> 之間的關聯是透過 <code>favorite_interviews</code>（即 <code>ManyToManyField</code>）來建立的。我們可以在 <code>User</code> 模型上使用 <code>favorite_interviews</code>，來處理這篇 <code>Interview</code> 是否已經被使用者按讚過。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@require_POST</span></span><br><span class="line"><span class="meta">@login_required</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">favorite</span>(<span class="params">req, <span class="built_in">id</span></span>):</span><br><span class="line">    interview = get_object_or_404(Interview, pk=<span class="built_in">id</span>)</span><br><span class="line">    user = req.user</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 以 User model 的角度處理 ManyToMany 關聯</span></span><br><span class="line">    <span class="comment"># 判斷這位使用者是否已經按過讚</span></span><br><span class="line">    <span class="keyword">if</span> user.favorite_interviews.<span class="built_in">filter</span>(pk=interview.pk).exists():</span><br><span class="line">        <span class="comment"># 如果有按過讚，則取消按讚（remove）</span></span><br><span class="line">        user.favorite_interviews.remove(interview)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 如果沒有按過讚，則加上（add）</span></span><br><span class="line">        user.favorite_interviews.add(interview)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>user.favorite_interviews.filter(pk=interview.pk)</code>：我們通過 <code>filter</code> 查詢使用者是否已經對這篇 <code>interview</code> 按讚過，這會返回一個 <code>QuerySet</code>，並且使用 <code>exists()</code> 方法檢查是否存在此條記錄。</li>
+<li><code>remove()</code> 和 <code>add()</code>：<code>remove()</code> 用來移除使用者對該 <code>interview</code> 的按讚記錄，<code>add()</code> 用來新增按讚記錄。</li>
+</ul>
+<h3 id="2-從-Interview-模型的角度處理-ManyToMany-關聯"><a href="#2-從-Interview-模型的角度處理-ManyToMany-關聯" class="headerlink" title="2. 從 Interview 模型的角度處理 ManyToMany 關聯"></a>2. <strong>從 <code>Interview</code> 模型的角度處理 <code>ManyToMany</code> 關聯</strong></h3><p>另一種處理方式是從 <code>Interview</code> 模型的角度來管理 <code>ManyToMany</code> 關聯。可以直接操作 <code>favorited_by</code>，這是 <code>Interview</code> 模型中的 <code>ManyToManyField</code>，它用來表示所有按讚過這篇訪談的使用者。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 以 Interview model 的角度處理 ManyToMany 關聯</span></span><br><span class="line"><span class="comment"># 判斷這篇文章是否已經被按過讚</span></span><br><span class="line"><span class="keyword">if</span> interview.favorited_by.<span class="built_in">filter</span>(pk=user.pk).exists():</span><br><span class="line">    <span class="comment"># 如果有按過讚，則取消按讚（remove）</span></span><br><span class="line">    interview.favorited_by.remove(user)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="comment"># 如果沒有按過讚，則加上（add）</span></span><br><span class="line">    interview.favorited_by.add(user)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>interview.favorited_by.filter(pk=user.pk)</code>：使用 <code>filter</code> 查詢是否該 <code>user</code> 已經按讚過這篇 <code>interview</code>，如果有，則移除按讚；如果沒有，則將按讚關聯添加回 <code>favorited_by</code>。</li>
+</ul>
+<h3 id="3-從-FavoriteInterview-模型的角度處理-ManyToMany-關聯"><a href="#3-從-FavoriteInterview-模型的角度處理-ManyToMany-關聯" class="headerlink" title="3. 從 FavoriteInterview 模型的角度處理 ManyToMany 關聯"></a>3. <strong>從 <code>FavoriteInterview</code> 模型的角度處理 <code>ManyToMany</code> 關聯</strong></h3><p>如果我們使用的是 <code>through</code> 設定的 <code>ManyToMany</code> 關聯（在本例中，使用了 <code>FavoriteInterview</code> 作為關聯模型），可以直接操作 <code>FavoriteInterview</code> 模型來添加或刪除按讚記錄。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 以 FavoriteInterview model 的角度處理 ManyToMany 關聯</span></span><br><span class="line">favorite_interview = FavoriteInterview.objects.<span class="built_in">filter</span>(user=user, interview=interview)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> favorite_interview.exists():</span><br><span class="line">    <span class="comment"># 如果已經按過讚，則刪除該記錄</span></span><br><span class="line">    favorite_interview.delete()</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="comment"># 如果沒有按過讚，則新增該記錄</span></span><br><span class="line">    FavoriteInterview.objects.create(user=user, interview=interview)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>首先查詢是否已經存在這個 <code>FavoriteInterview</code> 記錄，如果存在則刪除（使用 <code>.delete()</code>），如果不存在則創建新的 <code>FavoriteInterview</code> 記錄（使用 <code>.create()</code>）。</p>
+</li>
+<li><p>使用 <code>filter(user=user, interview=interview)</code> 來確保我們只關注到該使用者和該訪談的關聯。</p>
+</li>
+</ul>
+<h2 id="總結："><a href="#總結：" class="headerlink" title="總結："></a>總結：</h2><ul>
+<li><strong><code>ManyToManyField</code></strong> 在 Django 可以用來管理多對多的關聯。但當需要處理這些關聯時，必須明確知道該如何從不同的角度來操作。<ul>
+<li><strong>從 <code>User</code> 模型的角度</strong>：我們可以操作該使用者的 <code>favorite_interviews</code> 屬性來添加或移除關聯。</li>
+<li><strong>從 <code>Interview</code> 模型的角度</strong>：我們可以操作該面試的 <code>favorited_by</code> 屬性來處理關聯。</li>
+<li><strong>從 <code>FavoriteInterview</code> 模型的角度</strong>：透過 <code>through</code> 設定的關聯表，可以直接操作這個模型來進行新增或刪除。</li>
+</ul>
+</li>
+</ul>
+<p>這些方法各有其使用場景，選擇哪一種方式取決於你的需求和數據模型的設計。在處理 <code>ManyToMany</code> 關聯時，要特別注意數據一致性和簡潔性，並選擇最符合需求的解決方案。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Python/" rel="tag"># Python</a>
+              <a href="/my-blog/tags/Django/" rel="tag"># Django</a>
+              <a href="/my-blog/tags/Database/" rel="tag"># Database</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/my-blog/2025/04/27/%E5%9F%BA%E6%96%BC%20Git%20Subtree%20%E7%9A%84%E5%A4%9A%E5%88%86%E6%94%AF%E5%B0%88%E6%A1%88%E7%AE%A1%E7%90%86%E8%88%87%E8%87%AA%E5%8B%95%E5%8C%96%E6%95%B4%E5%90%88/" rel="prev" title="基於 Git Subtree 的多分支專案管理與自動化整合">
+      <i class="fa fa-chevron-left"></i> 基於 Git Subtree 的多分支專案管理與自動化整合
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ManyToMany-%E9%97%9C%E8%81%AF%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%BB%BA%E7%AB%8B"><span class="nav-number">1.</span> <span class="nav-text">ManyToMany 關聯模型的建立</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%9C%E8%81%AF%E8%A8%AD%E7%BD%AE"><span class="nav-number">1.1.</span> <span class="nav-text">關聯設置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-ManyToManyField"><span class="nav-number">1.2.</span> <span class="nav-text">使用 ManyToManyField</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8-favorite-view-function-%E4%B8%AD%E8%99%95%E7%90%86%E3%80%8C%E6%8C%89%E8%AE%9A%E3%80%8D%E5%92%8C%E3%80%8C%E5%8F%96%E6%B6%88%E6%8C%89%E8%AE%9A%E3%80%8D%E7%9A%84%E9%82%8F%E8%BC%AF"><span class="nav-number">1.3.</span> <span class="nav-text">在 favorite view function 中處理「按讚」和「取消按讚」的邏輯</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD%E8%A7%A3%E9%87%8B%EF%BC%9A"><span class="nav-number">1.4.</span> <span class="nav-text">功能解釋：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%B5%90"><span class="nav-number">1.5.</span> <span class="nav-text">小結</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%9E%E4%B8%8D%E5%90%8C-Model-%E8%A7%92%E5%BA%A6%E8%99%95%E7%90%86-ManyToMany-%E9%97%9C%E8%81%AF"><span class="nav-number">1.6.</span> <span class="nav-text">從不同 Model 角度處理 ManyToMany 關聯</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%BE%9E-User-%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%A7%92%E5%BA%A6%E8%99%95%E7%90%86-ManyToMany-%E9%97%9C%E8%81%AF"><span class="nav-number">1.6.1.</span> <span class="nav-text">1. 從 User 模型的角度處理 ManyToMany 關聯</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%BE%9E-Interview-%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%A7%92%E5%BA%A6%E8%99%95%E7%90%86-ManyToMany-%E9%97%9C%E8%81%AF"><span class="nav-number">1.6.2.</span> <span class="nav-text">2. 從 Interview 模型的角度處理 ManyToMany 關聯</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%BE%9E-FavoriteInterview-%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%A7%92%E5%BA%A6%E8%99%95%E7%90%86-ManyToMany-%E9%97%9C%E8%81%AF"><span class="nav-number">1.6.3.</span> <span class="nav-text">3. 從 FavoriteInterview 模型的角度處理 ManyToMany 關聯</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90%EF%BC%9A"><span class="nav-number">1.7.</span> <span class="nav-text">總結：</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/my-blog/archives/">
+        
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分類</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">標籤</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/my-blog/lib/anime.min.js"></script>
+  <script src="/my-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/my-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/my-blog/js/utils.js"></script>
+
+<script src="/my-blog/js/motion.js"></script>
+
+
+<script src="/my-blog/js/schemes/muse.js"></script>
+
+
+<script src="/my-blog/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const menuItem = document.querySelector('.menu-item-tags');
+      
+      if (menuItem) {
+        // 確保子選單存在
+        var submenu = menuItem.querySelector('.submenu');
+        if (!submenu) {
+          console.error('Submenu not found!');
+          return;
+        }
+        
+        // 強制設置初始樣式
+        submenu.style.display = 'none';
+        submenu.style.position = 'absolute';
+        submenu.style.top = '100%';
+        submenu.style.left = '50%';
+        submenu.style.transform = 'translateX(-50%)';
+        submenu.style.background = '#fff';
+        submenu.style.borderRadius = '8px';
+        submenu.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
+        submenu.style.minWidth = '170px';
+        submenu.style.marginTop = '15px';
+        submenu.style.zIndex = '9999';
+        submenu.style.border = '1px solid rgba(0, 0, 0, 0.06)';
+        
+        // 添加三角形指示器
+        const triangle = document.createElement('div');
+        triangle.style.position = 'absolute';
+        triangle.style.top = '-5px';
+        triangle.style.left = '50%';
+        triangle.style.marginLeft = '-5px';
+        triangle.style.width = '10px';
+        triangle.style.height = '10px';
+        triangle.style.transform = 'rotate(45deg)';
+        triangle.style.background = '#fff';
+        triangle.style.borderLeft = '1px solid rgba(0, 0, 0, 0.06)';
+        triangle.style.borderTop = '1px solid rgba(0, 0, 0, 0.06)';
+        triangle.style.zIndex = '1';
+        
+        // 避免重複添加
+        if (!submenu.querySelector('.submenu-triangle')) {
+          triangle.className = 'submenu-triangle';
+          submenu.appendChild(triangle);
+        }
+        
+        // 平滑過渡效果
+        submenu.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+        
+        // 點擊標籤選單項顯示/隱藏子選單
+        menuItem.addEventListener('click', function(e) {
+          // 如果不是點擊子選單內的元素
+          if (!e.target.closest('.submenu')) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (submenu.style.display === 'none') {
+              // 顯示子選單時的動畫效果
+              submenu.style.opacity = '0';
+              submenu.style.transform = 'translateX(-50%) translateY(-10px)';
+              submenu.style.display = 'block';
+              
+              // 強制重繪
+              submenu.offsetHeight;
+              
+              // 應用過渡效果
+              submenu.style.opacity = '1';
+              submenu.style.transform = 'translateX(-50%) translateY(0)';
+              
+              this.classList.add('active');
+            } else {
+              // 隱藏子選單
+              submenu.style.opacity = '0';
+              submenu.style.transform = 'translateX(-50%) translateY(-10px)';
+              
+              setTimeout(function() {
+                submenu.style.display = 'none';
+              }, 200);
+              
+              this.classList.remove('active');
+            }
+          }
+        });
+        
+        // 點擊頁面其他地方關閉選單
+        document.addEventListener('click', function(e) {
+          if (!menuItem.contains(e.target)) {
+            submenu.style.opacity = '0';
+            submenu.style.transform = 'translateX(-50%) translateY(-10px)';
+            
+            setTimeout(function() {
+              submenu.style.display = 'none';
+            }, 200);
+            
+            menuItem.classList.remove('active');
+          }
+        });
+      } else {
+        console.error('Could not find .menu-item-tags element');
+      }
+    });
+  </script>
+</body>
+</html>
