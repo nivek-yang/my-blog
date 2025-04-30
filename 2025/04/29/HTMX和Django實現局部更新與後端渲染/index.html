@@ -20,21 +20,20 @@
     var CONFIG = {"hostname":"nivek-yang.github.io","root":"/my-blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":320,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="🔗 Django _set 用法筆記（ForeignKey 反向關聯）✅ 基本觀念：一對多關係（ForeignKey）假設有下列兩個 Model： 123456class Interview(models.Model):    title &#x3D; models.CharField(max_length&#x3D;100)class Comment(models.Model):    interview &#x3D; m">
+  <meta name="description" content="功能概述此功能實現了一個按讚（收藏）按鈕，使用者可以對特定的項目（如面試記錄）進行按讚或取消按讚操作。按鈕的狀態（已收藏或收藏）由後端決定，並通過 HTMX 局部更新頁面。  技術細節1. 前端模板設計favorite.html這個模板負責渲染按讚按鈕，按鈕的狀態根據使用者是否已經按讚來決定。 12345&#123;% if user in interview.favorited_by.all %">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Django &#96;_set&#96; 用法筆記（ForeignKey 反向關聯）">
-<meta property="og:url" content="https://nivek-yang.github.io/2025/04/17/django%E7%9A%84_set%E7%94%A8%E6%B3%95/index.html">
+<meta property="og:title" content="HTMX 與 Django 實現局部更新與後端渲染">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/04/29/HTMX%E5%92%8CDjango%E5%AF%A6%E7%8F%BE%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E8%88%87%E5%BE%8C%E7%AB%AF%E6%B8%B2%E6%9F%93/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="🔗 Django _set 用法筆記（ForeignKey 反向關聯）✅ 基本觀念：一對多關係（ForeignKey）假設有下列兩個 Model： 123456class Interview(models.Model):    title &#x3D; models.CharField(max_length&#x3D;100)class Comment(models.Model):    interview &#x3D; m">
+<meta property="og:description" content="功能概述此功能實現了一個按讚（收藏）按鈕，使用者可以對特定的項目（如面試記錄）進行按讚或取消按讚操作。按鈕的狀態（已收藏或收藏）由後端決定，並通過 HTMX 局部更新頁面。  技術細節1. 前端模板設計favorite.html這個模板負責渲染按讚按鈕，按鈕的狀態根據使用者是否已經按讚來決定。 12345&#123;% if user in interview.favorited_by.all %">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2025-04-16T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-04-18T12:59:14.183Z">
+<meta property="article:published_time" content="2025-04-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-04-29T15:00:19.293Z">
 <meta property="article:author" content="Kaiwii">
-<meta property="article:tag" content="Python">
-<meta property="article:tag" content="Django">
+<meta property="article:tag" content="HTMX">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://nivek-yang.github.io/2025/04/17/django%E7%9A%84_set%E7%94%A8%E6%B3%95/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/04/29/HTMX%E5%92%8CDjango%E5%AF%A6%E7%8F%BE%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E8%88%87%E5%BE%8C%E7%AB%AF%E6%B8%B2%E6%9F%93/">
 
 
 <script id="page-configurations">
@@ -47,7 +46,7 @@
   };
 </script>
 
-  <title>Django `_set` 用法筆記（ForeignKey 反向關聯） | 我的技術部落格</title>
+  <title>HTMX 與 Django 實現局部更新與後端渲染 | 我的技術部落格</title>
   
 
 
@@ -206,7 +205,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/17/django%E7%9A%84_set%E7%94%A8%E6%B3%95/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/29/HTMX%E5%92%8CDjango%E5%AF%A6%E7%8F%BE%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E8%88%87%E5%BE%8C%E7%AB%AF%E6%B8%B2%E6%9F%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -219,7 +218,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Django `_set` 用法筆記（ForeignKey 反向關聯）
+          HTMX 與 Django 實現局部更新與後端渲染
         </h1>
 
         <div class="post-meta">
@@ -228,16 +227,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">發表於</span>
+              
 
-              <time title="創建時間：2025-04-17 00:00:00" itemprop="dateCreated datePublished" datetime="2025-04-17T00:00:00+08:00">2025-04-17</time>
+              <time title="創建時間：2025-04-29 00:00:00 / 修改時間：23:00:19" itemprop="dateCreated datePublished" datetime="2025-04-29T00:00:00+08:00">2025-04-29</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2025-04-18 20:59:14" itemprop="dateModified" datetime="2025-04-18T20:59:14+08:00">2025-04-18</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -259,43 +252,105 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="🔗-Django-set-用法筆記（ForeignKey-反向關聯）"><a href="#🔗-Django-set-用法筆記（ForeignKey-反向關聯）" class="headerlink" title="🔗 Django _set 用法筆記（ForeignKey 反向關聯）"></a>🔗 Django <code>_set</code> 用法筆記（ForeignKey 反向關聯）</h2><h3 id="✅-基本觀念：一對多關係（ForeignKey）"><a href="#✅-基本觀念：一對多關係（ForeignKey）" class="headerlink" title="✅ 基本觀念：一對多關係（ForeignKey）"></a>✅ 基本觀念：一對多關係（ForeignKey）</h3><p>假設有下列兩個 Model：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Interview</span>(models.Model):</span><br><span class="line">    title = models.CharField(max_length=<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Comment</span>(models.Model):</span><br><span class="line">    interview = models.ForeignKey(Interview, on_delete=models.CASCADE)</span><br><span class="line">    content = models.TextField()</span><br></pre></td></tr></table></figure>
+        <h1 id="功能概述"><a href="#功能概述" class="headerlink" title="功能概述"></a>功能概述</h1><p>此功能實現了一個按讚（收藏）按鈕，使用者可以對特定的項目（如面試記錄）進行按讚或取消按讚操作。按鈕的狀態（已收藏或收藏）由後端決定，並通過 HTMX 局部更新頁面。</p>
+<hr>
+<h1 id="技術細節"><a href="#技術細節" class="headerlink" title="技術細節"></a>技術細節</h1><h2 id="1-前端模板設計"><a href="#1-前端模板設計" class="headerlink" title="1. 前端模板設計"></a>1. <strong>前端模板設計</strong></h2><h3 id="favorite-html"><a href="#favorite-html" class="headerlink" title="favorite.html"></a>favorite.html</h3><p>這個模板負責渲染按讚按鈕，按鈕的狀態根據使用者是否已經按讚來決定。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;% if user in interview.favorited_by.all %&#125;</span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">hx-swap</span>=<span class="string">&quot;outerHTML&quot;</span> <span class="attr">hx-post</span>=<span class="string">&quot;&#123;% url &#x27;interviews:favorite&#x27; interview.id %&#125;&quot;</span> <span class="attr">class</span>=<span class="string">&quot;btn btn-primary&quot;</span> &gt;</span>已收藏<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">&#123;% else %&#125;</span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">hx-swap</span>=<span class="string">&quot;outerHTML&quot;</span> <span class="attr">hx-post</span>=<span class="string">&quot;&#123;% url &#x27;interviews:favorite&#x27; interview.id %&#125;&quot;</span> <span class="attr">class</span>=<span class="string">&quot;btn btn-ghost&quot;</span> &gt;</span>收藏<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
 
-<p>這裡代表：</p>
 <ul>
-<li>一個 <code>Interview</code> 可以有多個 <code>Comment</code></li>
-<li><code>Comment</code> 是「多」方，透過 ForeignKey 指向「一」方的 <code>Interview</code></li>
+<li><strong><code>hx-post</code></strong>: 當按鈕被點擊時，發送一個 POST 請求到指定的 URL。</li>
+<li><strong><code>hx-swap=&quot;outerHTML&quot;</code></strong>: 指定 HTMX 替換整個按鈕的 HTML，而不僅僅是按鈕內的內容。</li>
+<li><strong>按鈕狀態</strong>: 使用 Django 模板語法 <code>&#123;% if user in interview.favorited_by.all %&#125;</code> 判斷使用者是否已按讚，並渲染不同的按鈕樣式和文字。</li>
 </ul>
-<hr>
-<h3 id="↻-反向關聯：使用-set"><a href="#↻-反向關聯：使用-set" class="headerlink" title="↻ 反向關聯：使用 _set"></a>↻ 反向關聯：使用 <code>_set</code></h3><p>Django 會<strong>自動在一方的 model 加上一個反向屬性</strong>，名稱預設是：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;related_model_name&gt;_set</span><br></pre></td></tr></table></figure>
-
-<p>所以可以這樣用：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">interview.comment_set.<span class="built_in">all</span>()  <span class="comment"># 查出這個 interview 底下的所有 comment</span></span><br><span class="line">interview.comment_set.create(content=<span class="string">&#x27;你好&#x27;</span>)  <span class="comment"># 新增一筆 comment 自動連結該 interview</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="📛-注意：預設反向屬性的命名方式"><a href="#📛-注意：預設反向屬性的命名方式" class="headerlink" title="📛 注意：預設反向屬性的命名方式"></a>📛 注意：預設反向屬性的命名方式</h3><p>預設情況下，Django 會以「<strong>小寫 model 名稱 + <code>_set</code></strong>」為一方建立反向屬性。</p>
-<p>例如：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Comment</span>(models.Model):</span><br><span class="line">    interview = models.ForeignKey(Interview, on_delete=models.CASCADE)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>這會讓你能夠使用 <code>interview.comment_set</code> 來取得該 interview 所有的 comment。</li>
-<li>若 model 名稱為 <code>Message</code>，則會是 <code>article.message_set</code></li>
-</ul>
-<p>若希望有更語意化的名稱，建議加上 <code>related_name</code>（見下方）。</p>
-<hr>
-<h3 id="✍️-常見用法整理："><a href="#✍️-常見用法整理：" class="headerlink" title="✍️ 常見用法整理："></a>✍️ 常見用法整理：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 取得所有 comment</span></span><br><span class="line">comments = interview.comment_set.<span class="built_in">all</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Interview 角度</span></span><br><span class="line"><span class="comment"># 建立一筆新的 comment 並與 interview 關聯</span></span><br><span class="line">interview.comment_set.create(content=req.POST[<span class="string">&#x27;content&#x27;</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># Comment 角度</span></span><br><span class="line">Comment.objects.create(interview=interview, content=req.POST[<span class="string">&#x27;content&#x27;</span>])</span><br></pre></td></tr></table></figure>
-<hr>
-<h3 id="💡-如何自訂反向名稱（最佳實踐）"><a href="#💡-如何自訂反向名稱（最佳實踐）" class="headerlink" title="💡 如何自訂反向名稱（最佳實踐）"></a>💡 如何自訂反向名稱（最佳實踐）</h3><p>為了讓語意更清楚，可以在 ForeignKey 中加上 <code>related_name</code>：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Comment</span>(models.Model):</span><br><span class="line">    interview = models.ForeignKey(</span><br><span class="line">        Interview,</span><br><span class="line">        on_delete=models.CASCADE,</span><br><span class="line">        related_name=<span class="string">&#x27;comments&#x27;</span>  <span class="comment"># 自訂名稱</span></span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
-
-<p>就能這樣使用：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">interview.comments.<span class="built_in">all</span>()</span><br><span class="line">interview.comments.create(content=<span class="string">&#x27;加油！&#x27;</span>)</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3 id="💬-面試回答（Q-A）"><a href="#💬-面試回答（Q-A）" class="headerlink" title="💬 面試回答（Q&amp;A）"></a>💬 面試回答（Q&amp;A）</h3><p><strong>Q: Django 中如何透過 ForeignKey 建立一對多關係，並如何查詢&#x2F;建立子資料？</strong><br><strong>A:</strong></p>
 <blockquote>
-<p>在多方的 model 使用 <code>ForeignKey</code> 連到一方，並使用 Django 提供的反向屬性 <code>&lt;model&gt;_set</code> 來存取。例如 <code>interview.comment_set.create(...)</code> 可以新增一筆資料，同時建立關聯。如果加上 <code>related_name</code> 可以讓語意更清楚，如 <code>interview.comments.create(...)</code>。</p>
+<p>如果沒有指定 <code>hx-target</code>，HTMX 預設會將後端返回的內容插入到觸發請求的元素本身內部，並替換其內部內容（即 <code>innerHTML</code>）。這是 HTMX 的默認行為</p>
 </blockquote>
+<hr>
+<h3 id="show-html"><a href="#show-html" class="headerlink" title="show.html"></a><code>show.html</code></h3><p>在主頁面中，通過 <code>include</code> 將 favorite.html 嵌入到頁面中，並用 <code>with</code> 傳遞變數。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% include &#x27;interviews/favorite.html&#x27; with user=user interview=interview %&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong><code>include</code></strong>: 將 favorite.html 作為子模板嵌入。</li>
+<li><strong><code>with</code></strong>: 傳遞變數 <code>user</code> 和 <code>interview</code>，供子模板使用。</li>
+</ul>
+<hr>
+<h2 id="2-後端邏輯"><a href="#2-後端邏輯" class="headerlink" title="2. 後端邏輯"></a>2. <strong>後端邏輯</strong></h2><h3 id="views-py"><a href="#views-py" class="headerlink" title="views.py"></a><code>views.py</code></h3><p>後端處理按讚請求，並返回更新後的按鈕 HTML。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@require_POST</span></span><br><span class="line"><span class="meta">@login_required</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">favorite</span>(<span class="params">req, <span class="built_in">id</span></span>):</span><br><span class="line">    interview = get_object_or_404(Interview, pk=<span class="built_in">id</span>)</span><br><span class="line">    favorites = req.user.favorite_interviews</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 判斷使用者是否已按讚</span></span><br><span class="line">    <span class="keyword">if</span> favorites.<span class="built_in">filter</span>(pk=interview.pk).exists():</span><br><span class="line">        <span class="comment"># 如果已按讚，則取消按讚</span></span><br><span class="line">        favorites.remove(interview)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 如果未按讚，則新增按讚</span></span><br><span class="line">        favorites.add(interview)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 返回更新後的按鈕 HTML</span></span><br><span class="line">    <span class="keyword">return</span> render(req, <span class="string">&quot;interviews/favorite.html&quot;</span>, &#123;<span class="string">&quot;user&quot;</span>: req.user, <span class="string">&quot;interview&quot;</span>: interview&#125;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong><code>require_POST</code></strong>: 限制此視圖僅接受 POST 請求。</li>
+<li><strong><code>login_required</code></strong>: 確保只有已登入的使用者可以執行按讚操作。</li>
+<li><strong>按讚邏輯</strong>:<ul>
+<li>使用 <code>ManyToMany</code> 關聯的 <code>filter</code> 方法檢查使用者是否已按讚。</li>
+<li>如果已按讚，則移除關聯（<code>remove</code>）；否則，新增關聯（<code>add</code>）。</li>
+</ul>
+</li>
+<li><strong>返回模板</strong>: 使用 <code>render</code> 返回更新後的 favorite.html，HTMX 會自動將其插入到頁面中。</li>
+</ul>
+<hr>
+<h2 id="3-HTMX-的作用"><a href="#3-HTMX-的作用" class="headerlink" title="3. HTMX 的作用"></a>3. <strong>HTMX 的作用</strong></h2><p>HTMX 在這裡負責處理按鈕的動態更新，無需整頁刷新。</p>
+<ul>
+<li><strong>請求發送</strong>: 當按鈕被點擊時，HTMX 發送一個 POST 請求到後端。</li>
+<li><strong>局部更新</strong>: 後端返回的 HTML 片段（<code>favorite.html</code>）會替換按鈕的 HTML，實現按鈕狀態的即時更新。</li>
+</ul>
+<hr>
+<h1 id="流程總結"><a href="#流程總結" class="headerlink" title="流程總結"></a>流程總結</h1><ol>
+<li><p><strong>頁面初始渲染</strong>:</p>
+<ul>
+<li>在 <code>show.html</code> 中包含 favorite.html，按鈕的初始狀態由後端決定。</li>
+</ul>
+</li>
+<li><p><strong>按鈕點擊</strong>:</p>
+<ul>
+<li>使用者點擊按鈕時，HTMX 發送一個 POST 請求到後端的 <code>favorite</code> 視圖。</li>
+</ul>
+</li>
+<li><p><strong>後端處理請求</strong>:</p>
+<ul>
+<li>後端檢查使用者是否已按讚，並執行相應的新增或移除操作。</li>
+<li>返回更新後的按鈕 HTML。</li>
+</ul>
+</li>
+<li><p><strong>前端更新</strong>:</p>
+<ul>
+<li>HTMX 接收後端返回的 HTML，並使用 <code>hx-swap=&quot;outerHTML&quot;</code> 替換按鈕的 HTML，實現即時更新。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h1 id="優勢分析"><a href="#優勢分析" class="headerlink" title="優勢分析"></a>優勢分析</h1><ol>
+<li><p><strong>簡化前端邏輯</strong>:</p>
+<ul>
+<li>無需撰寫額外的 JavaScript，所有交互邏輯都由 HTMX 和 Django 模板處理。</li>
+</ul>
+</li>
+<li><p><strong>提升性能</strong>:</p>
+<ul>
+<li>使用 HTMX 的局部更新功能，避免整頁刷新，提升用戶體驗。</li>
+</ul>
+</li>
+<li><p><strong>後端驅動渲染</strong>:</p>
+<ul>
+<li>按鈕狀態由後端決定，確保資料一致性，減少前後端同步的複雜性。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h1 id="注意事項"><a href="#注意事項" class="headerlink" title="注意事項"></a>注意事項</h1><ol>
+<li><p><strong>CSRF Token</strong>:</p>
+<ul>
+<li>確保 HTMX 請求包含 CSRF Token，否則 Django 會拒絕請求。</li>
+<li>可以在 <code>&lt;body&gt;</code> 標籤中添加：<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span> <span class="attr">hx-headers</span>=<span class="string">&#x27;&#123;&quot;x-csrftoken&quot;: &quot;&#123;&#123; csrf_token &#125;&#125;&quot;&#125;&#x27;</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>錯誤處理</strong>:</p>
+<ul>
+<li>如果後端操作失敗，應返回適當的錯誤訊息，並在前端顯示。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h1 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h1><p>此功能結合了 HTMX 和 Django 的優勢，實現了一個高效、簡潔的按讚功能。HTMX 的局部更新特性使得頁面交互更加流暢，而 Django 的後端渲染確保了資料的一致性與安全性。</p>
 
     </div>
 
@@ -305,8 +360,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/my-blog/tags/Python/" rel="tag"># Python</a>
-              <a href="/my-blog/tags/Django/" rel="tag"># Django</a>
+              <a href="/my-blog/tags/HTMX/" rel="tag"># HTMX</a>
           </div>
 
         
@@ -315,12 +369,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/my-blog/2025/04/17/python%E5%87%BD%E6%95%B8%E8%A3%9D%E9%A3%BE%E5%99%A8%E7%AD%86%E8%A8%98/" rel="prev" title="Python 函數裝飾器 (Function Decorator) 筆記">
-      <i class="fa fa-chevron-left"></i> Python 函數裝飾器 (Function Decorator) 筆記
+    <a href="/my-blog/2025/04/29/HTMX%E7%B0%A1%E4%BB%8B/" rel="prev" title="HTMX 簡介">
+      <i class="fa fa-chevron-left"></i> HTMX 簡介
     </a></div>
       <div class="post-nav-item">
-    <a href="/my-blog/2025/04/19/Django_ModelForm%E7%AD%86%E8%A8%98/" rel="next" title="Django ModelForm 筆記">
-      Django ModelForm 筆記 <i class="fa fa-chevron-right"></i>
+    <a href="/my-blog/2025/04/30/Django%20messages/" rel="next" title="Django Messages 快閃訊息的運作機制">
+      Django Messages 快閃訊息的運作機制 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -380,7 +434,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%94%97-Django-set-%E7%94%A8%E6%B3%95%E7%AD%86%E8%A8%98%EF%BC%88ForeignKey-%E5%8F%8D%E5%90%91%E9%97%9C%E8%81%AF%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">🔗 Django _set 用法筆記（ForeignKey 反向關聯）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%E5%9F%BA%E6%9C%AC%E8%A7%80%E5%BF%B5%EF%BC%9A%E4%B8%80%E5%B0%8D%E5%A4%9A%E9%97%9C%E4%BF%82%EF%BC%88ForeignKey%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">✅ 基本觀念：一對多關係（ForeignKey）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%86%BB-%E5%8F%8D%E5%90%91%E9%97%9C%E8%81%AF%EF%BC%9A%E4%BD%BF%E7%94%A8-set"><span class="nav-number">1.2.</span> <span class="nav-text">↻ 反向關聯：使用 _set</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9B-%E6%B3%A8%E6%84%8F%EF%BC%9A%E9%A0%90%E8%A8%AD%E5%8F%8D%E5%90%91%E5%B1%AC%E6%80%A7%E7%9A%84%E5%91%BD%E5%90%8D%E6%96%B9%E5%BC%8F"><span class="nav-number">1.3.</span> <span class="nav-text">📛 注意：預設反向屬性的命名方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%8D%EF%B8%8F-%E5%B8%B8%E8%A6%8B%E7%94%A8%E6%B3%95%E6%95%B4%E7%90%86%EF%BC%9A"><span class="nav-number">1.4.</span> <span class="nav-text">✍️ 常見用法整理：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%A1-%E5%A6%82%E4%BD%95%E8%87%AA%E8%A8%82%E5%8F%8D%E5%90%91%E5%90%8D%E7%A8%B1%EF%BC%88%E6%9C%80%E4%BD%B3%E5%AF%A6%E8%B8%90%EF%BC%89"><span class="nav-number">1.5.</span> <span class="nav-text">💡 如何自訂反向名稱（最佳實踐）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%92%AC-%E9%9D%A2%E8%A9%A6%E5%9B%9E%E7%AD%94%EF%BC%88Q-A%EF%BC%89"><span class="nav-number">1.6.</span> <span class="nav-text">💬 面試回答（Q&amp;A）</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">功能概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8A%80%E8%A1%93%E7%B4%B0%E7%AF%80"><span class="nav-number">2.</span> <span class="nav-text">技術細節</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%89%8D%E7%AB%AF%E6%A8%A1%E6%9D%BF%E8%A8%AD%E8%A8%88"><span class="nav-number">2.1.</span> <span class="nav-text">1. 前端模板設計</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#favorite-html"><span class="nav-number">2.1.1.</span> <span class="nav-text">favorite.html</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#show-html"><span class="nav-number">2.1.2.</span> <span class="nav-text">show.html</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%BE%8C%E7%AB%AF%E9%82%8F%E8%BC%AF"><span class="nav-number">2.2.</span> <span class="nav-text">2. 後端邏輯</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#views-py"><span class="nav-number">2.2.1.</span> <span class="nav-text">views.py</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-HTMX-%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">2.3.</span> <span class="nav-text">3. HTMX 的作用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B%E7%B8%BD%E7%B5%90"><span class="nav-number">3.</span> <span class="nav-text">流程總結</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%84%AA%E5%8B%A2%E5%88%86%E6%9E%90"><span class="nav-number">4.</span> <span class="nav-text">優勢分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A0%85"><span class="nav-number">5.</span> <span class="nav-text">注意事項</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">6.</span> <span class="nav-text">總結</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
