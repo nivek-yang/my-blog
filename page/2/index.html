@@ -145,7 +145,11 @@
                 </li>
               
                 <li>
-                  <a href="/my-blog/tags/Git/">Git (2)</a>
+                  <a href="/my-blog/tags/Git/">Git (3)</a>
+                </li>
+              
+                <li>
+                  <a href="/my-blog/tags/Version-Control/">Version Control (1)</a>
                 </li>
               
                 <li>
@@ -158,6 +162,14 @@
               
                 <li>
                   <a href="/my-blog/tags/Postgresql/">Postgresql (1)</a>
+                </li>
+              
+                <li>
+                  <a href="/my-blog/tags/Task-Management/">Task Management (1)</a>
+                </li>
+              
+                <li>
+                  <a href="/my-blog/tags/Team-Collaboration/">Team Collaboration (1)</a>
                 </li>
               
                 <li>
@@ -198,6 +210,298 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/24/Django%20%E7%99%BB%E5%85%A5%E6%AA%A2%E6%9F%A5%20%60login_required%60%20%E8%A3%9D%E9%A3%BE%E5%99%A8%EF%BC%9A%E8%99%95%E7%90%86%20%60next%60%20%E9%87%8D%E5%AE%9A%E5%90%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/04/24/Django%20%E7%99%BB%E5%85%A5%E6%AA%A2%E6%9F%A5%20%60login_required%60%20%E8%A3%9D%E9%A3%BE%E5%99%A8%EF%BC%9A%E8%99%95%E7%90%86%20%60next%60%20%E9%87%8D%E5%AE%9A%E5%90%91/" class="post-title-link" itemprop="url">Django 登入檢查 `login_required` 裝飾器：處理 `next` 重定向</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="創建時間：2025-04-24 00:00:00 / 修改時間：01:53:35" itemprop="dateCreated datePublished" datetime="2025-04-24T00:00:00+08:00">2025-04-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="登入檢查：login-required"><a href="#登入檢查：login-required" class="headerlink" title="登入檢查：login_required"></a>登入檢查：<code>login_required</code></h1><h2 id="原理與機制"><a href="#原理與機制" class="headerlink" title="原理與機制"></a>原理與機制</h2><p>Django 提供了 <code>@login_required</code> 裝飾器，用於保護視圖，確保只有已登入的用戶才能訪問特定的頁面。當未登入的用戶嘗試訪問受保護的視圖時，Django 會自動將用戶重定向到設定中的 <code>LOGIN_URL</code>，並附加一個 <code>next</code> 查詢參數 (<code>QueryString</code>)，表示用戶原本想訪問的 URL。</p>
+<h2 id="使用範例"><a href="#使用範例" class="headerlink" title="使用範例"></a>使用範例</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.contrib.auth.decorators <span class="keyword">import</span> login_required</span><br><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> render</span><br><span class="line"></span><br><span class="line"><span class="meta">@login_required</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">protected_view</span>(<span class="params">req</span>):</span><br><span class="line">    <span class="keyword">return</span> render(req, <span class="string">&quot;protected_page.html&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><ol>
+<li>當用戶訪問被 <code>@login_required</code> 裝飾的視圖時，Django 會檢查 <code>req.user.is_authenticated</code> 的值。</li>
+<li>如果 <code>req.user.is_authenticated</code> 為 <code>True</code>，則允許訪問該視圖。</li>
+<li>如果 <code>req.user.is_authenticated</code> 為 <code>False</code>，則會將用戶重定向到 <code>settings.LOGIN_URL</code>，並附加 <code>next</code> 查詢參數，指向用戶原本想訪問的 URL。</li>
+</ol>
+<h2 id="關鍵點"><a href="#關鍵點" class="headerlink" title="關鍵點"></a>關鍵點</h2><ul>
+<li><strong><code>req.user.is_authenticated</code></strong> 是一個屬性，用於判斷當前用戶是否已登入。<ul>
+<li>如果用戶已登入，<code>req.user</code> 是一個 <code>User</code> 對象，且 <code>is_authenticated</code> 為 <code>True</code>。</li>
+<li>如果用戶未登入，<code>req.user</code> 是一個 <code>AnonymousUser</code> 對象，且 <code>is_authenticated</code> 為 <code>False</code>。</li>
+</ul>
+</li>
+</ul>
+<h2 id="相關代碼（簡化版）"><a href="#相關代碼（簡化版）" class="headerlink" title="相關代碼（簡化版）"></a>相關代碼（簡化版）</h2><p><code>@login_required</code> 的內部邏輯類似於以下代碼：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> redirect</span><br><span class="line"><span class="keyword">from</span> django.conf <span class="keyword">import</span> settings</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">login_required</span>(<span class="params">view_func</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">req, *args, **kwargs</span>):</span><br><span class="line">        <span class="keyword">if</span> req.user.is_authenticated:</span><br><span class="line">            <span class="keyword">return</span> view_func(req, *args, **kwargs)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            login_url = settings.LOGIN_URL</span><br><span class="line">            <span class="keyword">return</span> redirect(<span class="string">f&quot;<span class="subst">&#123;login_url&#125;</span>?next=<span class="subst">&#123;req.path&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br></pre></td></tr></table></figure>
+
+<p><code>@login_required</code> 的授權條件是基於 <code>req.user.is_authenticated</code> 的值。如果你需要自定義授權邏輯，可以考慮使用 Django 的 <code>PermissionRequiredMixin</code> 或自定義裝飾器。</p>
+<h2 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h2><ol>
+<li>用戶訪問受保護的視圖。</li>
+<li>如果未登入，Django 會將用戶重定向到 <code>LOGIN_URL</code>，例如：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/users/sign_in?next=/protected_page</span><br></pre></td></tr></table></figure></li>
+<li>Django 不會自動處理 next 的重定向邏輯，需要在登入處理的視圖中手動處理 next 的值，並根據它進行重定向。</li>
+</ol>
+<hr>
+<h1 id="如何處理-next"><a href="#如何處理-next" class="headerlink" title="如何處理 next"></a>如何處理 <code>next</code></h1><h2 id="原理與機制-1"><a href="#原理與機制-1" class="headerlink" title="原理與機制"></a>原理與機制</h2><p><code>next</code> 是一個查詢參數，用於保存用戶在未登入時嘗試訪問的目標頁面。當用戶成功登入後，應該根據 <code>next</code> 的值將用戶重定向到該頁面。</p>
+<h3 id="1-在登入表單中傳遞-next"><a href="#1-在登入表單中傳遞-next" class="headerlink" title="1. 在登入表單中傳遞 next"></a>1. <strong>在登入表單中傳遞 <code>next</code></strong></h3><p>在登入頁面中，將 <code>next</code> 的值作為隱藏字段傳遞到表單中，這樣用戶提交表單時，<code>next</code> 的值會被一併提交。</p>
+<p>sign_in.html</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;&#123;% url &#x27;users:create_session&#x27; %&#125;&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line">    &#123;% csrf_token %&#125;</span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;next&quot;</span> <span class="attr">value</span>=<span class="string">&quot;&#123;&#123; next &#125;&#125;&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">placeholder</span>=<span class="string">&quot;Username&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;password&quot;</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">placeholder</span>=<span class="string">&quot;Password&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span>&gt;</span>登入<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="2-在後端處理-next"><a href="#2-在後端處理-next" class="headerlink" title="2. 在後端處理 next"></a>2. <strong>在後端處理 <code>next</code></strong></h3><p>在處理登入的視圖中，檢查 <code>req.POST</code> 或 <code>req.GET</code> 中是否有 <code>next</code> 的值，並在登入成功後進行重定向。</p>
+<p>users&#x2F;views.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.contrib.auth <span class="keyword">import</span> authenticate, login</span><br><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> redirect</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sign_in</span>(<span class="params">req</span>):</span><br><span class="line">    <span class="built_in">next</span> = req.GET.get(<span class="string">&quot;next&quot;</span>, reverse(<span class="string">&quot;pages:index&quot;</span>))</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> render(req, <span class="string">&quot;users/sign_in.html&quot;</span>, &#123;<span class="string">&quot;next&quot;</span>: <span class="built_in">next</span>&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">create_session</span>(<span class="params">req</span>):</span><br><span class="line">    username = req.POST[<span class="string">&#x27;username&#x27;</span>]</span><br><span class="line">    password = req.POST[<span class="string">&#x27;password&#x27;</span>]</span><br><span class="line"></span><br><span class="line">    user = authenticate(username=username, password=password)</span><br><span class="line">    <span class="keyword">if</span> user <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        login(req, user)</span><br><span class="line">        <span class="built_in">next</span> = req.POST.get(<span class="string">&quot;next&quot;</span>, reverse(<span class="string">&quot;pages:index&quot;</span>))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> redirect(<span class="built_in">next</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> redirect(<span class="string">&quot;users:sign_in&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="工作流程-1"><a href="#工作流程-1" class="headerlink" title="工作流程"></a>工作流程</h2><ol>
+<li><p><strong>未登入用戶訪問受保護頁面</strong><br>用戶被重定向到登入頁面，並附加 <code>next</code> 查詢參數，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/users/sign_in?next=/protected_page</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>用戶提交登入表單</strong><br>表單中包含 <code>next</code> 的值，後端接收該值。</p>
+</li>
+<li><p><strong>後端處理重定向</strong><br>後端檢查 <code>next</code> 的值，並在登入成功後將用戶重定向到該頁面。如果 <code>next</code> 不存在，則重定向到預設頁面（如首頁）。</p>
+</li>
+</ol>
+<hr>
+<h1 id="QueryString"><a href="#QueryString" class="headerlink" title="QueryString"></a>QueryString</h1><h2 id="原理與機制-2"><a href="#原理與機制-2" class="headerlink" title="原理與機制"></a>原理與機制</h2><p>QueryString 是 URL 中的查詢參數部分，用於在 URL 中傳遞數據。格式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/path/to/page?key1=value1&amp;key2=value2</span><br></pre></td></tr></table></figure>
+<p>在 Django 中，可以使用 <code>req.GET</code> 獲取 QueryString 中的參數。</p>
+<h2 id="使用範例-1"><a href="#使用範例-1" class="headerlink" title="使用範例"></a>使用範例</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">example_view</span>(<span class="params">req</span>):</span><br><span class="line">    value = req.GET.get(<span class="string">&#x27;key&#x27;</span>, <span class="string">&#x27;default_value&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> render(req, <span class="string">&quot;example.html&quot;</span>, &#123;<span class="string">&quot;value&quot;</span>: value&#125;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="工作流程-2"><a href="#工作流程-2" class="headerlink" title="工作流程"></a>工作流程</h2><ol>
+<li>用戶訪問包含 QueryString 的 URL，例如：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/example?key=hello</span><br></pre></td></tr></table></figure></li>
+<li>Django 通過 <code>req.GET</code> 提供訪問 QueryString 的方法。</li>
+</ol>
+<hr>
+<h1 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h1><ul>
+<li>使用 <code>@login_required</code> 確保視圖只能被已登入用戶訪問。</li>
+<li>通過處理 <code>next</code> 查詢參數，實現用戶登入後的重定向。</li>
+<li>利用 QueryString 傳遞數據，實現靈活的頁面交互。</li>
+<li>使用 <code>logout</code> 方法實現安全的登出功能。</li>
+<li>通過外鍵將 <code>Interview</code> 和 <code>Comment</code> 關聯到 <code>User</code>，實現數據的關聯性。</li>
+</ul>
+<p>這些功能構成了 Django 中用戶認證與權限管理的基礎，為構建安全、可靠的應用提供了強大的支持。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/23/Django%20login()%20%E5%87%BD%E6%95%B8%E7%9A%84%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/04/23/Django%20login()%20%E5%87%BD%E6%95%B8%E7%9A%84%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B/" class="post-title-link" itemprop="url">Django `login()` 函數的運作機制</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="創建時間：2025-04-23 00:00:00 / 修改時間：15:15:16" itemprop="dateCreated datePublished" datetime="2025-04-23T00:00:00+08:00">2025-04-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Django 提供的 <code>login()</code> 函數是用來處理用戶認證並建立會話 (session) 和 cookie 的核心工具。以下是該函數的完整流程及其背後的運作機制。</p>
+<hr>
+<h1 id="1-login-函數的作用"><a href="#1-login-函數的作用" class="headerlink" title="1. login() 函數的作用"></a>1. <strong><code>login()</code> 函數的作用</strong></h1><p><code>django.contrib.auth.login(request, user)</code> 是用來將已經通過身份驗證的用戶標記為「已登入」的函數。它會執行以下操作：</p>
+<ul>
+<li>將用戶的 ID 存儲到 session 中。</li>
+<li>更新 session 的相關數據。</li>
+<li>設置用戶的身份驗證狀態，讓 <code>request.user</code> 可以用來驗證用戶。</li>
+</ul>
+<hr>
+<h1 id="2-流程詳解"><a href="#2-流程詳解" class="headerlink" title="2. 流程詳解"></a>2. <strong>流程詳解</strong></h1><h2 id="1-用戶身份驗證"><a href="#1-用戶身份驗證" class="headerlink" title="(1) 用戶身份驗證"></a><strong>(1) 用戶身份驗證</strong></h2><p>在調用 <code>login()</code> 函數之前，通常需要先驗證用戶的身份，例如使用 <code>authenticate()</code> 函數：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.contrib.auth <span class="keyword">import</span> authenticate, login</span><br><span class="line"></span><br><span class="line">user = authenticate(request, username=<span class="string">&#x27;username&#x27;</span>, password=<span class="string">&#x27;password&#x27;</span>)</span><br><span class="line"><span class="keyword">if</span> user <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">    login(request, user)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="comment"># 驗證失敗的處理</span></span><br></pre></td></tr></table></figure>
+
+<p><code>authenticate()</code> 函數會檢查用戶名和密碼是否正確，並返回一個用戶對象 (User instance) 或 <code>None</code>。</p>
+<hr>
+<h2 id="2-調用-login-函數"><a href="#2-調用-login-函數" class="headerlink" title="(2) 調用 login() 函數"></a><strong>(2) 調用 <code>login()</code> 函數</strong></h2><p>當用戶通過身份驗證後，<code>login()</code> 函數會執行以下步驟：</p>
+<ol>
+<li><p><strong>綁定用戶到 session</strong>  </p>
+<ul>
+<li>Django 使用 session 框架來管理用戶的登入狀態。</li>
+<li><code>login()</code> 函數會將用戶的主鍵 (Primary Key) 存儲到 session 中，鍵名為 <code>_auth_user_id</code>。</li>
+<li>同時，還會存儲用戶的後端信息 (<code>_auth_user_backend</code>)，用於標記是哪個身份驗證後端處理了該用戶。</li>
+</ul>
+<p><strong>相關代碼片段：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">request.session[SESSION_KEY] = user.pk  <span class="comment"># 存儲用戶主鍵</span></span><br><span class="line">request.session[BACKEND_SESSION_KEY] = user.backend  <span class="comment"># 存儲後端信息</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>設置 Cookie</strong>  </p>
+<ul>
+<li>Django 的 session 框架會自動將 session ID 存儲到用戶的瀏覽器 Cookie 中。</li>
+<li>這個 Cookie 的名稱默認為 <code>sessionid</code>，可以在 <code>settings.SESSION_COOKIE_NAME</code> 中自定義。</li>
+<li>當用戶發送後續請求時，瀏覽器會自動攜帶這個 Cookie，Django 會根據 Cookie 中的 session ID 找到對應的 session 數據。</li>
+</ul>
+</li>
+<li><p><strong>更新 <code>request.user</code></strong>  </p>
+<ul>
+<li><code>login()</code> 函數會將 <code>request.user</code> 更新為當前登入的用戶對象。</li>
+<li>這樣，後續的請求中可以通過 <code>request.user</code> 獲取當前用戶的相關信息。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="3-驗證用戶狀態"><a href="#3-驗證用戶狀態" class="headerlink" title="(3) 驗證用戶狀態"></a><strong>(3) 驗證用戶狀態</strong></h2><p>在後續的請求中，Django 會自動驗證用戶的登入狀態：</p>
+<ol>
+<li><p><strong>從 Cookie 中提取 session ID</strong>  </p>
+<ul>
+<li>當用戶發送請求時，Django 會從請求的 Cookie 中提取 session ID，並查找對應的 session 數據。</li>
+</ul>
+</li>
+<li><p><strong>加載用戶對象</strong>  </p>
+<ul>
+<li>如果 session 中存在 <code>_auth_user_id</code>，Django 會根據該 ID 從數據庫中加載用戶對象，並將其設置為 <code>request.user</code>。</li>
+</ul>
+</li>
+<li><p><strong>驗證用戶是否已登入</strong>  </p>
+<ul>
+<li>可以通過 <code>request.user.is_authenticated</code> 判斷用戶是否已登入。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h1 id="3-完整流程圖"><a href="#3-完整流程圖" class="headerlink" title="3. 完整流程圖"></a>3. <strong>完整流程圖</strong></h1><ol>
+<li>用戶提交登入表單 (包含用戶名和密碼)。</li>
+<li>後端調用 <code>authenticate()</code> 驗證用戶身份。</li>
+<li>如果驗證成功，調用 <code>login()</code>：<ul>
+<li>將用戶 ID 存入 session。</li>
+<li>設置 session ID 到 Cookie。</li>
+<li>更新 <code>request.user</code>。</li>
+</ul>
+</li>
+<li>後續請求中，Django 根據 Cookie 驗證用戶身份。</li>
+</ol>
+<hr>
+<h1 id="4-相關設置"><a href="#4-相關設置" class="headerlink" title="4. 相關設置"></a>4. <strong>相關設置</strong></h1><ul>
+<li><p><strong>session 存儲方式</strong><br>Django 默認使用數據庫存儲 session 數據，可以通過 <code>SESSION_ENGINE</code> 配置更改：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SESSION_ENGINE = <span class="string">&#x27;django.contrib.sessions.backends.db&#x27;</span>  <span class="comment"># 默認使用數據庫</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Cookie 配置</strong><br>可以通過以下設置自定義 Cookie 行為：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SESSION_COOKIE_NAME = <span class="string">&#x27;sessionid&#x27;</span>  <span class="comment"># Cookie 名稱</span></span><br><span class="line">SESSION_COOKIE_AGE = <span class="number">1209600</span>  <span class="comment"># Cookie 有效期（秒）</span></span><br><span class="line">SESSION_COOKIE_SECURE = <span class="literal">True</span>  <span class="comment"># 僅在 HTTPS 下傳輸</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h1 id="5-注意事項"><a href="#5-注意事項" class="headerlink" title="5. 注意事項"></a>5. <strong>注意事項</strong></h1><ul>
+<li><p><strong><code>request.user</code> 的使用</strong>  </p>
+<ul>
+<li><code>request.user</code> 是一個 <code>User</code> 對象或 <code>AnonymousUser</code> 對象。</li>
+<li>可以通過 <code>request.user.is_authenticated</code> 判斷用戶是否已登入。</li>
+</ul>
+</li>
+<li><p><strong>登出處理</strong><br>使用 <code>logout()</code> 函數可以清除 session 數據並登出用戶：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.contrib.auth <span class="keyword">import</span> logout</span><br><span class="line"></span><br><span class="line">logout(request)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h1 id="6-範例代碼"><a href="#6-範例代碼" class="headerlink" title="6. 範例代碼"></a>6. <strong>範例代碼</strong></h1><p>以下是一個完整的登入流程範例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.contrib.auth <span class="keyword">import</span> authenticate, login, logout</span><br><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> render, redirect</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">login_view</span>(<span class="params">request</span>):</span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">&#x27;POST&#x27;</span>:</span><br><span class="line">        username = request.POST[<span class="string">&#x27;username&#x27;</span>]</span><br><span class="line">        password = request.POST[<span class="string">&#x27;password&#x27;</span>]</span><br><span class="line">        user = authenticate(request, username=username, password=password)</span><br><span class="line">        <span class="keyword">if</span> user <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            login(request, user)</span><br><span class="line">            <span class="keyword">return</span> redirect(<span class="string">&#x27;home&#x27;</span>)  <span class="comment"># 登入成功後跳轉</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> render(request, <span class="string">&#x27;login.html&#x27;</span>, &#123;<span class="string">&#x27;error&#x27;</span>: <span class="string">&#x27;Invalid credentials&#x27;</span>&#125;)</span><br><span class="line">    <span class="keyword">return</span> render(request, <span class="string">&#x27;login.html&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">logout_view</span>(<span class="params">request</span>):</span><br><span class="line">    logout(request)</span><br><span class="line">    <span class="keyword">return</span> redirect(<span class="string">&#x27;login&#x27;</span>)  <span class="comment"># 登出後跳轉</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="7-結論"><a href="#7-結論" class="headerlink" title="7. 結論"></a>7. <strong>結論</strong></h1><p>Django 的 <code>login()</code> 函數通過 session 和 Cookie 管理用戶的登入狀態，並提供了方便的 <code>request.user</code> 接口來驗證用戶身份。理解其運作流程有助於開發安全且高效的用戶認證系統。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -2056,7 +2360,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/my-blog/archives/">
         
-          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-count">20</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -2065,7 +2369,7 @@
         <span class="site-state-item-name">分類</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">標籤</span>
       </div>
   </nav>
