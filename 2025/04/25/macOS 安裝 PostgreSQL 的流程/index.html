@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="" lang="zh-TW">
+<html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"nivek-yang.github.io","root":"/my-blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":320,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"nivek-yang.github.io","root":"/my-blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="以下是安裝 PostgreSQL 以及基本使用的完整流程與注意事項。  1. 安裝 PostgreSQL使用 Homebrew 安裝指定版本的 PostgreSQL： 1brew install postgresql@17  確認安裝路徑： 12brew --prefix postgresql# 範例輸出：&#x2F;usr&#x2F;local&#x2F;opt&#x2F;postgresql@17  將 PostgreSQL 的執行">
@@ -83,6 +83,8 @@
 
 <body itemscope itemtype="http://schema.org/WebPage">
   <div class="container use-motion">
+    <div class="headband"></div>
+
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
@@ -114,90 +116,16 @@
 
 <nav class="site-nav">
   <ul id="menu" class="main-menu menu">
-        
         <li class="menu-item menu-item-home">
 
     <a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
 
   </li>
-        
-        
         <li class="menu-item menu-item-archives">
 
-    <a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章</a>
+    <a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a>
 
   </li>
-        
-        
-        
-          <li class="menu-item menu-item-tags">
-            <a href="/my-blog/tags/%20" class="menu-item-link">
-                <i class="fa fa-fw fa fa-tags"></i>標籤
-            </a>
-            <ul class="submenu" style="display: none;">
-              
-                <li>
-                  <a href="/my-blog/tags/Python/">Python (12)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/Django/">Django (8)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/Database/">Database (3)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/Git/">Git (3)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/Version-Control/">Version Control (1)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/HTMX/">HTMX (2)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/SQL/">SQL (2)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/Postgresql/">Postgresql (1)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/Task-Management/">Task Management (1)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/Team-Collaboration/">Team Collaboration (1)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/Hexo/">Hexo (1)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/GitHub-Pages/">GitHub Pages (1)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">網站建置 (1)</a>
-                </li>
-              
-            </ul>
-          </li>
-        
-        
-        <li class="menu-item menu-item-about">
-
-    <a href="/my-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a>
-
-  </li>
-        
   </ul>
 </nav>
 
@@ -206,6 +134,13 @@
 
 </div>
     </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
 
     <main class="main">
       <div class="main-inner">
@@ -430,7 +365,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/my-blog/archives/">
         
-          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-count">21</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -439,7 +374,7 @@
         <span class="site-state-item-name">分類</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">標籤</span>
       </div>
   </nav>
@@ -522,110 +457,9 @@
 
 
 
+  
 
+  
 
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const menuItem = document.querySelector('.menu-item-tags');
-      
-      if (menuItem) {
-        // 確保子選單存在
-        var submenu = menuItem.querySelector('.submenu');
-        if (!submenu) {
-          console.error('Submenu not found!');
-          return;
-        }
-        
-        // 強制設置初始樣式
-        submenu.style.display = 'none';
-        submenu.style.position = 'absolute';
-        submenu.style.top = '100%';
-        submenu.style.left = '50%';
-        submenu.style.transform = 'translateX(-50%)';
-        submenu.style.background = '#fff';
-        submenu.style.borderRadius = '8px';
-        submenu.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
-        submenu.style.minWidth = '170px';
-        submenu.style.marginTop = '15px';
-        submenu.style.zIndex = '9999';
-        submenu.style.border = '1px solid rgba(0, 0, 0, 0.06)';
-        
-        // 添加三角形指示器
-        const triangle = document.createElement('div');
-        triangle.style.position = 'absolute';
-        triangle.style.top = '-5px';
-        triangle.style.left = '50%';
-        triangle.style.marginLeft = '-5px';
-        triangle.style.width = '10px';
-        triangle.style.height = '10px';
-        triangle.style.transform = 'rotate(45deg)';
-        triangle.style.background = '#fff';
-        triangle.style.borderLeft = '1px solid rgba(0, 0, 0, 0.06)';
-        triangle.style.borderTop = '1px solid rgba(0, 0, 0, 0.06)';
-        triangle.style.zIndex = '1';
-        
-        // 避免重複添加
-        if (!submenu.querySelector('.submenu-triangle')) {
-          triangle.className = 'submenu-triangle';
-          submenu.appendChild(triangle);
-        }
-        
-        // 平滑過渡效果
-        submenu.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
-        
-        // 點擊標籤選單項顯示/隱藏子選單
-        menuItem.addEventListener('click', function(e) {
-          // 如果不是點擊子選單內的元素
-          if (!e.target.closest('.submenu')) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            if (submenu.style.display === 'none') {
-              // 顯示子選單時的動畫效果
-              submenu.style.opacity = '0';
-              submenu.style.transform = 'translateX(-50%) translateY(-10px)';
-              submenu.style.display = 'block';
-              
-              // 強制重繪
-              submenu.offsetHeight;
-              
-              // 應用過渡效果
-              submenu.style.opacity = '1';
-              submenu.style.transform = 'translateX(-50%) translateY(0)';
-              
-              this.classList.add('active');
-            } else {
-              // 隱藏子選單
-              submenu.style.opacity = '0';
-              submenu.style.transform = 'translateX(-50%) translateY(-10px)';
-              
-              setTimeout(function() {
-                submenu.style.display = 'none';
-              }, 200);
-              
-              this.classList.remove('active');
-            }
-          }
-        });
-        
-        // 點擊頁面其他地方關閉選單
-        document.addEventListener('click', function(e) {
-          if (!menuItem.contains(e.target)) {
-            submenu.style.opacity = '0';
-            submenu.style.transform = 'translateX(-50%) translateY(-10px)';
-            
-            setTimeout(function() {
-              submenu.style.display = 'none';
-            }, 200);
-            
-            menuItem.classList.remove('active');
-          }
-        });
-      } else {
-        console.error('Could not find .menu-item-tags element');
-      }
-    });
-  </script>
 </body>
 </html>

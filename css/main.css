@@ -382,29 +382,6 @@ td {
   transform: rotate(45deg);
   top: -5px;
 }
-.highlight-container {
-  position: relative;
-}
-.highlight-container:hover .copy-btn,
-.highlight-container .copy-btn:focus {
-  opacity: 1;
-}
-.copy-btn {
-  color: #333;
-  cursor: pointer;
-  line-height: 1.6;
-  opacity: 0;
-  padding: 2px 6px;
-  position: absolute;
-  transition-delay: 0s;
-  transition-duration: 0.2s;
-  transition-timing-function: ease-in-out;
-  background: #fff;
-  border: 0;
-  font-size: 0.8125em;
-  right: 0;
-  top: 0;
-}
 .highlight,
 pre {
   background: #f7f7f7;
@@ -492,10 +469,10 @@ pre code {
   text-shadow: none;
 }
 pre .deletion {
-  background: #800000;
+  background: #fdd;
 }
 pre .addition {
-  background: #008000;
+  background: #dfd;
 }
 pre .meta {
   color: #eab700;
@@ -963,13 +940,9 @@ pre .javascript .function {
 }
 .header {
   background: transparent;
-  display: flex;
-  justify-content: flex-end;
-  gap: 40px;
 }
 .header-inner {
-  display: flex;
-  justify-content: flex-end;
+  margin: 0 auto;
   width: 700px;
 }
 @media (min-width: 1200px) {
@@ -992,7 +965,6 @@ pre .javascript .function {
   height: 3px;
 }
 .site-meta {
-  display: none;
   flex-grow: 1;
   text-align: center;
 }
@@ -1069,19 +1041,14 @@ pre .javascript .function {
   display: block;
 }
 .menu {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
   margin-top: 20px;
   padding-left: 0;
   text-align: center;
-  width: 100%;
 }
 .menu-item {
   display: inline-block;
   list-style: none;
-  margin: 0 20px;
-  padding: 0 10px;
+  margin: 0 10px;
 }
 @media (max-width: 767px) {
   .menu-item {
@@ -1096,7 +1063,7 @@ pre .javascript .function {
 .menu-item span.exturl {
   border-bottom: 0;
   display: block;
-  font-size: 1.2em;
+  font-size: 0.8125em;
   transition-property: border-color;
   transition-delay: 0s;
   transition-duration: 0.2s;
@@ -1201,7 +1168,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #3d2121;
+  background: #cb7094;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2182,11 +2149,11 @@ ul.breadcrumb li + li:last-child {
   }
 }
 .header-inner {
-  padding-top: 30px;
+  padding-top: 100px;
 }
 @media (max-width: 767px) {
   .header-inner {
-    padding-top: 20px;
+    padding-top: 50px;
   }
 }
 .main-inner {
@@ -2199,9 +2166,6 @@ ul.breadcrumb li + li:last-child {
   .content {
     padding-top: 35px;
   }
-}
-.content.index.posts-expand {
-  padding-top: 180px;
 }
 embed {
   display: block;

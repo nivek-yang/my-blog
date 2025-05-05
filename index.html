@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="" lang="zh-TW">
+<html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"nivek-yang.github.io","root":"/my-blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":320,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"nivek-yang.github.io","root":"/my-blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="分享程式技術">
@@ -79,6 +79,8 @@
 
 <body itemscope itemtype="http://schema.org/WebPage">
   <div class="container use-motion">
+    <div class="headband"></div>
+
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
@@ -110,90 +112,16 @@
 
 <nav class="site-nav">
   <ul id="menu" class="main-menu menu">
-        
         <li class="menu-item menu-item-home">
 
     <a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
 
   </li>
-        
-        
         <li class="menu-item menu-item-archives">
 
-    <a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章</a>
+    <a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a>
 
   </li>
-        
-        
-        
-          <li class="menu-item menu-item-tags">
-            <a href="/my-blog/tags/%20" class="menu-item-link">
-                <i class="fa fa-fw fa fa-tags"></i>標籤
-            </a>
-            <ul class="submenu" style="display: none;">
-              
-                <li>
-                  <a href="/my-blog/tags/Python/">Python (12)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/Django/">Django (8)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/Database/">Database (3)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/Git/">Git (3)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/Version-Control/">Version Control (1)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/HTMX/">HTMX (2)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/SQL/">SQL (2)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/Postgresql/">Postgresql (1)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/Task-Management/">Task Management (1)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/Team-Collaboration/">Team Collaboration (1)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/Hexo/">Hexo (1)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/GitHub-Pages/">GitHub Pages (1)</a>
-                </li>
-              
-                <li>
-                  <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">網站建置 (1)</a>
-                </li>
-              
-            </ul>
-          </li>
-        
-        
-        <li class="menu-item menu-item-about">
-
-    <a href="/my-blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a>
-
-  </li>
-        
   </ul>
 </nav>
 
@@ -203,6 +131,13 @@
 </div>
     </header>
 
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
     <main class="main">
       <div class="main-inner">
         <div class="content-wrap">
@@ -210,6 +145,108 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/05/05/Supabase%20PostgreSQL%20%E9%81%A0%E7%AB%AF%E8%B3%87%E6%96%99%E5%BA%AB%E5%BB%BA%E7%AB%8B%E8%88%87%E9%80%A3%E6%8E%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/05/05/Supabase%20PostgreSQL%20%E9%81%A0%E7%AB%AF%E8%B3%87%E6%96%99%E5%BA%AB%E5%BB%BA%E7%AB%8B%E8%88%87%E9%80%A3%E6%8E%A5/" class="post-title-link" itemprop="url">Supabase PostgreSQL 遠端資料庫建立與連接</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="創建時間：2025-05-05 00:00:00 / 修改時間：23:13:25" itemprop="dateCreated datePublished" datetime="2025-05-05T00:00:00+08:00">2025-05-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="使用-Supabase-替代本機安裝的-PostgreSQL-並連接至-Django"><a href="#使用-Supabase-替代本機安裝的-PostgreSQL-並連接至-Django" class="headerlink" title="使用 Supabase 替代本機安裝的 PostgreSQL 並連接至 Django"></a>使用 Supabase 替代本機安裝的 PostgreSQL 並連接至 Django</h1><p>在開發應用程式時，許多開發者會選擇在本機安裝 PostgreSQL 資料庫。然而，隨著雲端技術的普及，使用遠端資料庫如 Supabase 提供的 PostgreSQL 不僅可以減少本機配置的麻煩，也能讓資料庫更容易在團隊間共享。</p>
+<p>以下是完整的指南，教導如何取代本機安裝的 PostgreSQL，並利用 Django 連接至 Supabase 資料庫。</p>
+<h1 id="1-在-Supabase-官網建立資料庫"><a href="#1-在-Supabase-官網建立資料庫" class="headerlink" title="1. 在 Supabase 官網建立資料庫"></a>1. 在 Supabase 官網建立資料庫</h1><ol>
+<li>前往 <a target="_blank" rel="noopener" href="https://supabase.com/">Supabase 官網</a> 並註冊帳號。</li>
+<li>登入後，點擊 <strong>“New Project”</strong> 按鈕建立新的專案。</li>
+<li>填寫相關資訊：<ul>
+<li><strong>Project name</strong>: 為專案命名。</li>
+<li><strong>Database password</strong>: 設定資料庫的密碼（請妥善保存）。</li>
+<li><strong>Region</strong>: 選擇靠近的伺服器區域以減少延遲。</li>
+</ul>
+</li>
+<li>點擊 <strong>“Create New Project”</strong>，Supabase 將自動配置資料庫，這過程大約需 2-3 分鐘。</li>
+<li>完成後，可以在專案的 <strong>Settings</strong> 頁面下找到資料庫的連線資訊，包括 <code>Host</code>、<code>Port</code>、<code>Database name</code> 和 <code>User credentials</code>。</li>
+</ol>
+<h1 id="2-安裝-Django-和必要的套件"><a href="#2-安裝-Django-和必要的套件" class="headerlink" title="2. 安裝 Django 和必要的套件"></a>2. 安裝 Django 和必要的套件</h1><p>如果尚未安裝 Django，請在專案環境中安裝 Django 以及支援 PostgreSQL 的套件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">uv add <span class="string">&quot;psycopg[binary]&quot;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="3-配置-Django-專案連接-Supabase"><a href="#3-配置-Django-專案連接-Supabase" class="headerlink" title="3. 配置 Django 專案連接 Supabase"></a>3. 配置 Django 專案連接 Supabase</h1><p>在 Django 專案中，修改 <code>settings.py</code> 文件，將資料庫設定更改為 Supabase 提供的連線資訊：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> environ</span><br><span class="line"></span><br><span class="line"><span class="comment"># env init</span></span><br><span class="line">env = environ.Env()</span><br><span class="line"><span class="comment"># 預設會讀取專案根目錄的 `.env`</span></span><br><span class="line">environ.Env.read_env(os.path.join(BASE_DIR, <span class="string">&#x27;.env&#x27;</span>))</span><br><span class="line"></span><br><span class="line">DATABASES = &#123;</span><br><span class="line">    <span class="string">&#x27;default&#x27;</span>: &#123;</span><br><span class="line">        <span class="string">&#x27;ENGINE&#x27;</span>: <span class="string">&#x27;django.db.backends.postgresql&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;NAME&#x27;</span>: env(<span class="string">&#x27;DB_NAME&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;USER&#x27;</span>: env(<span class="string">&#x27;DB_USER&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;PASSWORD&#x27;</span>: env(<span class="string">&#x27;DB_PASSWORD&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;HOST&#x27;</span>: env(<span class="string">&#x27;DB_HOST&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;PORT&#x27;</span>: env(<span class="string">&#x27;DB_PORT&#x27;</span>),</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>在專案根目錄建立一個 <code>.env</code> 檔案，並填入以下設定（請將值替換為 Supabase 提供的實際資訊）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">DB_NAME=your_database_name</span><br><span class="line">DB_USER=postgres</span><br><span class="line">DB_PASSWORD=your_database_password</span><br><span class="line">DB_HOST=db.xxxxxxxxxxxx.supabase.co</span><br><span class="line">DB_PORT=5432</span><br></pre></td></tr></table></figure>
+
+<p>請注意：</p>
+<ul>
+<li>確保 <code>.env</code> 檔案已加入到 <code>.gitignore</code> 中，避免敏感資訊被上傳到版本控制系統。</li>
+<li>資料庫使用者名稱通常是 <code>postgres</code>，這是 Supabase 的預設設定。</li>
+<li>資料庫密碼是建立專案時設定的密碼。</li>
+<li>主機名稱和連接埠可以在 Supabase 專案的設定頁面中找到。</li>
+</ul>
+<h1 id="4-測試連線"><a href="#4-測試連線" class="headerlink" title="4. 測試連線"></a>4. 測試連線</h1><p>執行以下指令以測試資料庫是否正確連接：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">uv run python manage.py migrate</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>如果配置無誤，會看到 Django 成功執行資料庫遷移。</p>
+<h1 id="5-小結"><a href="#5-小結" class="headerlink" title="5. 小結"></a>5. 小結</h1><p>至此，完成將本機 PostgreSQL 替換為 Supabase 遠端資料庫，並成功使用 Django 進行連接。不僅減少了本機安裝的負擔，還能利用 Supabase 提供的強大功能，如即時同步和 API 支援，提升開發效率。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1960,142 +1997,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/25/macOS%20%E5%AE%89%E8%A3%9D%20PostgreSQL%20%E7%9A%84%E6%B5%81%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/04/25/macOS%20%E5%AE%89%E8%A3%9D%20PostgreSQL%20%E7%9A%84%E6%B5%81%E7%A8%8B/" class="post-title-link" itemprop="url">macOS 安裝 PostgreSQL 的流程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">發表於</span>
-              
-
-              <time title="創建時間：2025-04-25 00:00:00 / 修改時間：02:42:56" itemprop="dateCreated datePublished" datetime="2025-04-25T00:00:00+08:00">2025-04-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分類於</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>以下是安裝 PostgreSQL 以及基本使用的完整流程與注意事項。</p>
-<hr>
-<h1 id="1-安裝-PostgreSQL"><a href="#1-安裝-PostgreSQL" class="headerlink" title="1. 安裝 PostgreSQL"></a>1. 安裝 PostgreSQL</h1><p>使用 Homebrew 安裝指定版本的 PostgreSQL：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install postgresql@17</span><br></pre></td></tr></table></figure>
-
-<p>確認安裝路徑：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew --prefix postgresql</span><br><span class="line"><span class="comment"># 範例輸出：/usr/local/opt/postgresql@17</span></span><br></pre></td></tr></table></figure>
-
-<p>將 PostgreSQL 的執行檔加入環境變數：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> PATH=<span class="string">&quot;/usr/local/opt/postgresql@17/bin:<span class="variable">$PATH</span>&quot;</span> &gt;&gt; ~/.zshrc</span><br><span class="line"><span class="built_in">source</span> ~/.zshrc</span><br></pre></td></tr></table></figure>
-
-<p>確認安裝是否成功：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">psql --version</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="2-啟動-PostgreSQL-服務"><a href="#2-啟動-PostgreSQL-服務" class="headerlink" title="2. 啟動 PostgreSQL 服務"></a>2. 啟動 PostgreSQL 服務</h1><p>啟動 PostgreSQL：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew services start postgresql@17</span><br></pre></td></tr></table></figure>
-
-<p>若啟動失敗，可能需要初始化資料庫：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">initdb -D /usr/local/var/postgresql@17</span><br><span class="line">brew services restart postgresql@17</span><br></pre></td></tr></table></figure>
-
-<p>檢查 PostgreSQL 狀態：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pg_ctl -D /usr/local/var/postgresql@17 status</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="3-建立使用者與資料庫"><a href="#3-建立使用者與資料庫" class="headerlink" title="3. 建立使用者與資料庫"></a>3. 建立使用者與資料庫</h1><p>建立預設的 <code>postgres</code> 使用者與資料庫：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">createuser -s postgres</span><br><span class="line">createdb -U postgres postgres</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="4-使用-psql-連線到資料庫"><a href="#4-使用-psql-連線到資料庫" class="headerlink" title="4. 使用 psql 連線到資料庫"></a>4. 使用 psql 連線到資料庫</h1><p>連線到 PostgreSQL：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">psql -h localhost -U postgres -d postgres</span><br></pre></td></tr></table></figure>
-
-<p>進入 psql 後，建立新的資料庫：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> DATABASE testdb;</span><br></pre></td></tr></table></figure>
-
-<p>切換到新建立的資料庫：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\c testdb</span><br></pre></td></tr></table></figure>
-
-<p>建立資料表範例：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE TABLE</span> <span class="keyword">user</span> (</span><br><span class="line">    id UUID <span class="keyword">PRIMARY KEY</span>,</span><br><span class="line">    name TEXT,</span><br><span class="line">    birthday <span class="type">DATE</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="5-檢查-PostgreSQL-狀態的自動化腳本"><a href="#5-檢查-PostgreSQL-狀態的自動化腳本" class="headerlink" title="5. 檢查 PostgreSQL 狀態的自動化腳本"></a>5. 檢查 PostgreSQL 狀態的自動化腳本</h1><p>建立一個檢查 PostgreSQL 狀態的腳本 <code>check_postgres.sh</code>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">PGDATA=<span class="string">&quot;/usr/local/var/postgresql@17&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;🔍 Checking PostgreSQL status...&quot;</span></span><br><span class="line">pg_ctl -D <span class="string">&quot;<span class="variable">$PGDATA</span>&quot;</span> status</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ $? -ne 0 ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;🚀 PostgreSQL not running, attempting to start...&quot;</span></span><br><span class="line">    pg_ctl -D <span class="string">&quot;<span class="variable">$PGDATA</span>&quot;</span> start</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;✅ PostgreSQL already running.&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;🌐 Checking port 5432...&quot;</span></span><br><span class="line">lsof -iTCP:5432 -sTCP:LISTEN || <span class="built_in">echo</span> <span class="string">&quot;❌ Not listening on port 5432&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;📋 Existing databases:&quot;</span></span><br><span class="line">psql -l || <span class="built_in">echo</span> <span class="string">&quot;⚠️ psql failed. Is PostgreSQL running?&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>執行腳本檢查 PostgreSQL 狀態：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash check_postgres.sh</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="6-常見問題與解決方法"><a href="#6-常見問題與解決方法" class="headerlink" title="6. 常見問題與解決方法"></a>6. 常見問題與解決方法</h1><h2 id="問題-1：psql-錯誤-role-postgres-does-not-exist"><a href="#問題-1：psql-錯誤-role-postgres-does-not-exist" class="headerlink" title="問題 1：psql: 錯誤: role &quot;postgres&quot; does not exist"></a>問題 1：<code>psql: 錯誤: role &quot;postgres&quot; does not exist</code></h2><p>解決方法：</p>
-<ul>
-<li>使用 <code>createuser -s postgres</code> 建立 <code>postgres</code> 使用者。</li>
-</ul>
-<h2 id="問題-2：啟動-PostgreSQL-時出現-Bootstrap-failed-5-Input-output-error"><a href="#問題-2：啟動-PostgreSQL-時出現-Bootstrap-failed-5-Input-output-error" class="headerlink" title="問題 2：啟動 PostgreSQL 時出現 Bootstrap failed: 5: Input/output error"></a>問題 2：啟動 PostgreSQL 時出現 <code>Bootstrap failed: 5: Input/output error</code></h2><p>解決方法：</p>
-<ul>
-<li>刪除舊的啟動檔案並重新啟動服務：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">rm</span> ~/Library/LaunchAgents/homebrew.mxcl.postgresql@17.plist</span><br><span class="line">brew services cleanup</span><br><span class="line">brew services start postgresql@17</span><br></pre></td></tr></table></figure></li>
-</ul>
-<hr>
-<h1 id="7-注意事項"><a href="#7-注意事項" class="headerlink" title="7. 注意事項"></a>7. 注意事項</h1><ol>
-<li><strong>版本管理</strong>：安裝多個版本的 PostgreSQL 時，需確認環境變數是否正確指向目標版本。</li>
-<li><strong>資料庫初始化</strong>：若安裝後無法啟動，可能需要手動執行 <code>initdb</code> 初始化資料庫。</li>
-<li><strong>權限問題</strong>：確保使用者擁有足夠的權限來操作資料庫。</li>
-<li><strong>服務管理</strong>：使用 <code>brew services</code> 管理 PostgreSQL 的啟動與停止。</li>
-</ol>
-<hr>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/my-blog/page/2/">2</a><a class="extend next" rel="next" href="/my-blog/page/2/"><i class="fa fa-angle-right" aria-label="下一頁"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/my-blog/page/2/">2</a><a class="page-number" href="/my-blog/page/3/">3</a><a class="extend next" rel="next" href="/my-blog/page/2/"><i class="fa fa-angle-right" aria-label="下一頁"></i></a>
   </nav>
 
 
@@ -2161,7 +2066,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/my-blog/archives/">
         
-          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-count">21</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -2170,7 +2075,7 @@
         <span class="site-state-item-name">分類</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">標籤</span>
       </div>
   </nav>
@@ -2253,110 +2158,9 @@
 
 
 
+  
 
+  
 
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const menuItem = document.querySelector('.menu-item-tags');
-      
-      if (menuItem) {
-        // 確保子選單存在
-        var submenu = menuItem.querySelector('.submenu');
-        if (!submenu) {
-          console.error('Submenu not found!');
-          return;
-        }
-        
-        // 強制設置初始樣式
-        submenu.style.display = 'none';
-        submenu.style.position = 'absolute';
-        submenu.style.top = '100%';
-        submenu.style.left = '50%';
-        submenu.style.transform = 'translateX(-50%)';
-        submenu.style.background = '#fff';
-        submenu.style.borderRadius = '8px';
-        submenu.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
-        submenu.style.minWidth = '170px';
-        submenu.style.marginTop = '15px';
-        submenu.style.zIndex = '9999';
-        submenu.style.border = '1px solid rgba(0, 0, 0, 0.06)';
-        
-        // 添加三角形指示器
-        const triangle = document.createElement('div');
-        triangle.style.position = 'absolute';
-        triangle.style.top = '-5px';
-        triangle.style.left = '50%';
-        triangle.style.marginLeft = '-5px';
-        triangle.style.width = '10px';
-        triangle.style.height = '10px';
-        triangle.style.transform = 'rotate(45deg)';
-        triangle.style.background = '#fff';
-        triangle.style.borderLeft = '1px solid rgba(0, 0, 0, 0.06)';
-        triangle.style.borderTop = '1px solid rgba(0, 0, 0, 0.06)';
-        triangle.style.zIndex = '1';
-        
-        // 避免重複添加
-        if (!submenu.querySelector('.submenu-triangle')) {
-          triangle.className = 'submenu-triangle';
-          submenu.appendChild(triangle);
-        }
-        
-        // 平滑過渡效果
-        submenu.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
-        
-        // 點擊標籤選單項顯示/隱藏子選單
-        menuItem.addEventListener('click', function(e) {
-          // 如果不是點擊子選單內的元素
-          if (!e.target.closest('.submenu')) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            if (submenu.style.display === 'none') {
-              // 顯示子選單時的動畫效果
-              submenu.style.opacity = '0';
-              submenu.style.transform = 'translateX(-50%) translateY(-10px)';
-              submenu.style.display = 'block';
-              
-              // 強制重繪
-              submenu.offsetHeight;
-              
-              // 應用過渡效果
-              submenu.style.opacity = '1';
-              submenu.style.transform = 'translateX(-50%) translateY(0)';
-              
-              this.classList.add('active');
-            } else {
-              // 隱藏子選單
-              submenu.style.opacity = '0';
-              submenu.style.transform = 'translateX(-50%) translateY(-10px)';
-              
-              setTimeout(function() {
-                submenu.style.display = 'none';
-              }, 200);
-              
-              this.classList.remove('active');
-            }
-          }
-        });
-        
-        // 點擊頁面其他地方關閉選單
-        document.addEventListener('click', function(e) {
-          if (!menuItem.contains(e.target)) {
-            submenu.style.opacity = '0';
-            submenu.style.transform = 'translateX(-50%) translateY(-10px)';
-            
-            setTimeout(function() {
-              submenu.style.display = 'none';
-            }, 200);
-            
-            menuItem.classList.remove('active');
-          }
-        });
-      } else {
-        console.error('Could not find .menu-item-tags element');
-      }
-    });
-  </script>
 </body>
 </html>
