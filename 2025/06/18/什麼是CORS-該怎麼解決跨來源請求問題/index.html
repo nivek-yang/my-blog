@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/my-blog/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"nivek-yang.github.io","root":"/my-blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="前端開發常常會遇到「跨來源請求被阻擋」的錯誤訊息，比如： 1Access to fetch at &#x27;https:&#x2F;&#x2F;api.example.com&#x2F;data&#x27; from origin &#x27;http:&#x2F;&#x2F;localhost:3000&#x27; has been blocked by CORS policy: No &#x27;Access-Control-Allow-O">
+<meta property="og:type" content="article">
+<meta property="og:title" content="什麼是 CORS（Cross-Origin Resource Sharing)？ 該怎麼解決跨來源請求問題？">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/06/18/%E4%BB%80%E9%BA%BC%E6%98%AFCORS-%E8%A9%B2%E6%80%8E%E9%BA%BC%E8%A7%A3%E6%B1%BA%E8%B7%A8%E4%BE%86%E6%BA%90%E8%AB%8B%E6%B1%82%E5%95%8F%E9%A1%8C/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="前端開發常常會遇到「跨來源請求被阻擋」的錯誤訊息，比如： 1Access to fetch at &#x27;https:&#x2F;&#x2F;api.example.com&#x2F;data&#x27; from origin &#x27;http:&#x2F;&#x2F;localhost:3000&#x27; has been blocked by CORS policy: No &#x27;Access-Control-Allow-O">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-06-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-06-18T15:52:45.896Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/06/18/%E4%BB%80%E9%BA%BC%E6%98%AFCORS-%E8%A9%B2%E6%80%8E%E9%BA%BC%E8%A7%A3%E6%B1%BA%E8%B7%A8%E4%BE%86%E6%BA%90%E8%AB%8B%E6%B1%82%E5%95%8F%E9%A1%8C/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>什麼是 CORS（Cross-Origin Resource Sharing)？ 該怎麼解決跨來源請求問題？ | 我的技術部落格</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">我的技術部落格</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/06/18/%E4%BB%80%E9%BA%BC%E6%98%AFCORS-%E8%A9%B2%E6%80%8E%E9%BA%BC%E8%A7%A3%E6%B1%BA%E8%B7%A8%E4%BE%86%E6%BA%90%E8%AB%8B%E6%B1%82%E5%95%8F%E9%A1%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          什麼是 CORS（Cross-Origin Resource Sharing)？ 該怎麼解決跨來源請求問題？
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="創建時間：2025-06-18 00:00:00 / 修改時間：23:52:45" itemprop="dateCreated datePublished" datetime="2025-06-18T00:00:00+08:00">2025-06-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>前端開發常常會遇到「跨來源請求被阻擋」的錯誤訊息，比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Access to fetch at &#x27;https://api.example.com/data&#x27; from origin &#x27;http://localhost:3000&#x27; has been blocked by CORS policy: No &#x27;Access-Control-Allow-Origin&#x27; header is present...</span><br></pre></td></tr></table></figure>
+
+<p>這就是著名的 CORS 問題。本篇文章將說明 CORS 是什麼、為什麼會發生，以及常見的解法。</p>
+<hr>
+<h1 id="CORS-是什麼？"><a href="#CORS-是什麼？" class="headerlink" title="CORS 是什麼？"></a>CORS 是什麼？</h1><p>CORS（Cross-Origin Resource Sharing，跨來源資源共享）是一種<strong>瀏覽器的安全機制</strong>，用來限制「不同網域」之間的請求。簡單來說，它防止了一個網站的 JavaScript 去隨意讀取另一個網站的資料。</p>
+<h2 id="什麼是「跨來源」？"><a href="#什麼是「跨來源」？" class="headerlink" title="什麼是「跨來源」？"></a>什麼是「跨來源」？</h2><p>只要以下任何一個不同，就會被視為「不同來源」：</p>
+<table>
+<thead>
+<tr>
+<th>區塊</th>
+<th>範例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>協定</td>
+<td><code>http://example.com</code> vs <code>https://example.com</code></td>
+</tr>
+<tr>
+<td>網域</td>
+<td><code>api.example.com</code> vs <code>www.example.com</code></td>
+</tr>
+<tr>
+<td>Port</td>
+<td><code>example.com:3000</code> vs <code>example.com:8000</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h1 id="為什麼會出現-CORS-錯誤？"><a href="#為什麼會出現-CORS-錯誤？" class="headerlink" title="為什麼會出現 CORS 錯誤？"></a>為什麼會出現 CORS 錯誤？</h1><p>瀏覽器會阻擋從網頁腳本對其他來源發起的請求（例如使用 <code>fetch</code>、<code>axios</code>）。除非 <strong>伺服器端主動聲明允許該請求的來源</strong>，否則請求會被攔截。</p>
+<h2 id="範例情境"><a href="#範例情境" class="headerlink" title="範例情境"></a>範例情境</h2><p>假設前端使用 React (<code>http://localhost:3000</code>)，想從後端 API (<code>http://localhost:8000</code>) 取得資料：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">fetch</span>(<span class="string">&#x27;http://localhost:8000/api/data&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>這是跨來源請求，除非後端有設定 CORS header，否則會被瀏覽器擋下來。</p>
+<hr>
+<h1 id="解決-CORS-問題的方法"><a href="#解決-CORS-問題的方法" class="headerlink" title="解決 CORS 問題的方法"></a>解決 CORS 問題的方法</h1><h2 id="1-修改後端設定"><a href="#1-修改後端設定" class="headerlink" title="1. 修改後端設定"></a>1. <strong>修改後端設定</strong></h2><p>CORS 問題應由「伺服器端」解決。需要在伺服器回應中加上正確的 <code>Access-Control-Allow-Origin</code> header。</p>
+<h3 id="範例：使用-Express"><a href="#範例：使用-Express" class="headerlink" title="範例：使用 Express"></a>範例：使用 Express</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">&#x27;express&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> cors = <span class="built_in">require</span>(<span class="string">&#x27;cors&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = <span class="title function_">express</span>();</span><br><span class="line">app.<span class="title function_">use</span>(<span class="title function_">cors</span>()); <span class="comment">// 允許所有來源</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 或只允許特定來源</span></span><br><span class="line"><span class="comment">// app.use(cors(&#123; origin: &#x27;http://localhost:3000&#x27; &#125;));</span></span><br><span class="line"></span><br><span class="line">app.<span class="title function_">get</span>(<span class="string">&#x27;/api/data&#x27;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  res.<span class="title function_">json</span>(&#123; <span class="attr">message</span>: <span class="string">&#x27;Hello from server!&#x27;</span> &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">listen</span>(<span class="number">8000</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="範例：使用-Django-django-cors-headers"><a href="#範例：使用-Django-django-cors-headers" class="headerlink" title="範例：使用 Django + django-cors-headers"></a>範例：使用 Django + <code>django-cors-headers</code></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install django-cors-headers</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># settings.py</span></span><br><span class="line">INSTALLED_APPS = [</span><br><span class="line">    ...</span><br><span class="line">    <span class="string">&#x27;corsheaders&#x27;</span>,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">MIDDLEWARE = [</span><br><span class="line">    <span class="string">&#x27;corsheaders.middleware.CorsMiddleware&#x27;</span>,</span><br><span class="line">    ...</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 允許所有網域</span></span><br><span class="line">CORS_ALLOW_ALL_ORIGINS = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 或只允許特定網域</span></span><br><span class="line"><span class="comment"># CORS_ALLOWED_ORIGINS = [</span></span><br><span class="line"><span class="comment">#     &quot;http://localhost:3000&quot;,</span></span><br><span class="line"><span class="comment"># ]</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="2-使用-Proxy-避開-CORS"><a href="#2-使用-Proxy-避開-CORS" class="headerlink" title="2. 使用 Proxy 避開 CORS"></a>2. <strong>使用 Proxy 避開 CORS</strong></h2><p>開發時可使用前端代理轉發請求，例如 React：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vite.config.js or package.json</span></span><br><span class="line"><span class="attr">proxy</span>: &#123;</span><br><span class="line">  <span class="string">&#x27;/api&#x27;</span>: &#123;</span><br><span class="line">    <span class="attr">target</span>: <span class="string">&#x27;http://localhost:8000&#x27;</span>,</span><br><span class="line">    <span class="attr">changeOrigin</span>: <span class="literal">true</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>這樣 <code>fetch(&#39;/api/data&#39;)</code> 實際會被代理成後端的請求，不會被視為跨來源。</p>
+<hr>
+<h2 id="3-後端設定-Access-Control-Headers"><a href="#3-後端設定-Access-Control-Headers" class="headerlink" title="3. 後端設定 Access-Control Headers"></a>3. <strong>後端設定 Access-Control Headers</strong></h2><p>除了 <code>Access-Control-Allow-Origin</code>，有時也需要加上這些 header：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Access-Control-Allow-Origin</span><span class="punctuation">: </span>http://localhost:3000</span><br><span class="line"><span class="attribute">Access-Control-Allow-Methods</span><span class="punctuation">: </span>GET, POST, PUT, DELETE</span><br><span class="line"><span class="attribute">Access-Control-Allow-Headers</span><span class="punctuation">: </span>Content-Type, Authorization</span><br></pre></td></tr></table></figure>
+
+<p>這些設定也必須在「預檢請求（Preflight Request）」中正確處理。</p>
+<hr>
+<h1 id="面試題目"><a href="#面試題目" class="headerlink" title="面試題目"></a>面試題目</h1><blockquote>
+<p>「請說明什麼是 CORS（Cross-Origin Resource Sharing），以及如果遇到 CORS 問題該如何解決？」</p>
+</blockquote>
+<hr>
+<h2 id="回答範例："><a href="#回答範例：" class="headerlink" title="回答範例："></a>回答範例：</h2><p><strong>CORS（Cross-Origin Resource Sharing）</strong> 是一種瀏覽器的安全機制，用來限制前端從不同來源（origin）去請求資源，避免惡意網站竊取資料。當前端的 JavaScript 嘗試向不同網域、協定或 port 發送請求時，如果伺服器沒有正確設定 CORS header，瀏覽器會阻擋這個請求。</p>
+<h3 id="常見錯誤："><a href="#常見錯誤：" class="headerlink" title="常見錯誤："></a>常見錯誤：</h3><p>例如使用 fetch 或 axios 向不同來源的 API 發送請求時，會看到類似錯誤：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Access to fetch at &#x27;http://api.example.com&#x27; from origin &#x27;http://localhost:3000&#x27; has been blocked by CORS policy</span><br></pre></td></tr></table></figure>
+
+<h3 id="解決方式："><a href="#解決方式：" class="headerlink" title="解決方式："></a>解決方式：</h3><ol>
+<li><p><strong>從伺服器端設定 CORS header</strong>（這是正確的做法）：</p>
+<ul>
+<li><p>設定 <code>Access-Control-Allow-Origin</code>，明確允許某個前端網域。</p>
+</li>
+<li><p>可搭配套件，如：</p>
+<ul>
+<li>Node.js 可用 <code>cors</code> middleware</li>
+<li>Django 可用 <code>django-cors-headers</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>本地開發時使用 proxy 轉發請求</strong>，避開跨域問題（開發用）：</p>
+<ul>
+<li>例如 React 可以設定 <code>vite.config.js</code> 或 <code>webpack devServer proxy</code></li>
+</ul>
+</li>
+</ol>
+<hr>
+<h1 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h1><table>
+<thead>
+<tr>
+<th>問題</th>
+<th>解法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>跨來源請求被阻擋</td>
+<td>在後端加上 CORS Header</td>
+</tr>
+<tr>
+<td>特定網域允許</td>
+<td>設定 <code>Access-Control-Allow-Origin</code> 為指定來源</td>
+</tr>
+<tr>
+<td>多來源需求</td>
+<td>使用動態設定或 whitelist</td>
+</tr>
+<tr>
+<td>本地開發測試</td>
+<td>使用 Proxy 或開啟允許全部來源</td>
+</tr>
+</tbody></table>
+<hr>
+<h1 id="延伸閱讀"><a href="#延伸閱讀" class="headerlink" title="延伸閱讀"></a>延伸閱讀</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">MDN - HTTP access control (CORS)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.w3.org/TR/cors/">CORS 官方規範 (W3C)</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/adamchainz/django-cors-headers">django-cors-headers GitHub</a></li>
+</ul>
+<hr>
+<p>如果曾經在開發中遇過 CORS 錯誤，不妨回頭看看是不是跨來源造成的限制，並從伺服器端著手解決吧！</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/JavaScript/" rel="tag"># JavaScript</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/my-blog/2025/05/05/Supabase%20PostgreSQL%20%E9%81%A0%E7%AB%AF%E8%B3%87%E6%96%99%E5%BA%AB%E5%BB%BA%E7%AB%8B%E8%88%87%E9%80%A3%E6%8E%A5/" rel="prev" title="Supabase PostgreSQL 遠端資料庫建立與連接">
+      <i class="fa fa-chevron-left"></i> Supabase PostgreSQL 遠端資料庫建立與連接
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CORS-%E6%98%AF%E4%BB%80%E9%BA%BC%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">CORS 是什麼？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF%E3%80%8C%E8%B7%A8%E4%BE%86%E6%BA%90%E3%80%8D%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">什麼是「跨來源」？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E6%9C%83%E5%87%BA%E7%8F%BE-CORS-%E9%8C%AF%E8%AA%A4%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">為什麼會出現 CORS 錯誤？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AF%84%E4%BE%8B%E6%83%85%E5%A2%83"><span class="nav-number">2.1.</span> <span class="nav-text">範例情境</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A3%E6%B1%BA-CORS-%E5%95%8F%E9%A1%8C%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">解決 CORS 問題的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BF%AE%E6%94%B9%E5%BE%8C%E7%AB%AF%E8%A8%AD%E5%AE%9A"><span class="nav-number">3.1.</span> <span class="nav-text">1. 修改後端設定</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AF%84%E4%BE%8B%EF%BC%9A%E4%BD%BF%E7%94%A8-Express"><span class="nav-number">3.1.1.</span> <span class="nav-text">範例：使用 Express</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AF%84%E4%BE%8B%EF%BC%9A%E4%BD%BF%E7%94%A8-Django-django-cors-headers"><span class="nav-number">3.1.2.</span> <span class="nav-text">範例：使用 Django + django-cors-headers</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8-Proxy-%E9%81%BF%E9%96%8B-CORS"><span class="nav-number">3.2.</span> <span class="nav-text">2. 使用 Proxy 避開 CORS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%BE%8C%E7%AB%AF%E8%A8%AD%E5%AE%9A-Access-Control-Headers"><span class="nav-number">3.3.</span> <span class="nav-text">3. 後端設定 Access-Control Headers</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%A2%E8%A9%A6%E9%A1%8C%E7%9B%AE"><span class="nav-number">4.</span> <span class="nav-text">面試題目</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E7%AD%94%E7%AF%84%E4%BE%8B%EF%BC%9A"><span class="nav-number">4.1.</span> <span class="nav-text">回答範例：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A6%8B%E9%8C%AF%E8%AA%A4%EF%BC%9A"><span class="nav-number">4.1.1.</span> <span class="nav-text">常見錯誤：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E6%B1%BA%E6%96%B9%E5%BC%8F%EF%BC%9A"><span class="nav-number">4.1.2.</span> <span class="nav-text">解決方式：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">5.</span> <span class="nav-text">總結</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%B6%E4%BC%B8%E9%96%B1%E8%AE%80"><span class="nav-number">6.</span> <span class="nav-text">延伸閱讀</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/my-blog/archives/">
+        
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分類</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">標籤</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/my-blog/lib/anime.min.js"></script>
+  <script src="/my-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/my-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/my-blog/js/utils.js"></script>
+
+<script src="/my-blog/js/motion.js"></script>
+
+
+<script src="/my-blog/js/schemes/muse.js"></script>
+
+
+<script src="/my-blog/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
