@@ -149,6 +149,262 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/06/21/%E8%B3%87%E6%96%99%E5%BA%AB%E7%B4%A2%E5%BC%95index%E7%9A%84%E5%84%AA%E9%BB%9E%E5%8F%8A%E7%BC%BA%E9%BB%9E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/06/21/%E8%B3%87%E6%96%99%E5%BA%AB%E7%B4%A2%E5%BC%95index%E7%9A%84%E5%84%AA%E9%BB%9E%E5%8F%8A%E7%BC%BA%E9%BB%9E/" class="post-title-link" itemprop="url">資料庫索引 (index) 的優點及缺點</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="創建時間：2025-06-21 00:00:00 / 修改時間：23:24:00" itemprop="dateCreated datePublished" datetime="2025-06-21T00:00:00+08:00">2025-06-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="為什麼需要索引？"><a href="#為什麼需要索引？" class="headerlink" title="為什麼需要索引？"></a>為什麼需要索引？</h1><p>在關聯式資料庫中，若沒有索引，查詢時必須逐列（row‑by‑row）掃描整張表（<strong>全表掃描 &#x2F; Full Table Scan</strong>）。<br>建立索引就像在書本的目錄貼上標籤，讓資料庫能快速定位資料，降低 I&#x2F;O 成本，提升查詢效率。</p>
+<hr>
+<h1 id="索引的主要類型"><a href="#索引的主要類型" class="headerlink" title="索引的主要類型"></a>索引的主要類型</h1><table>
+<thead>
+<tr>
+<th>類型</th>
+<th>主要結構</th>
+<th>適用情境</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>B‑Tree (預設)</td>
+<td>平衡搜尋樹</td>
+<td>大多數範圍查詢、排序</td>
+</tr>
+<tr>
+<td>Hash Index</td>
+<td>雜湊表</td>
+<td>精準比對 (<code>=</code>)</td>
+</tr>
+<tr>
+<td>GiST &#x2F; GIN</td>
+<td>特殊索引</td>
+<td>文字搜尋、GIS、JSONB</td>
+</tr>
+<tr>
+<td>Bitmap Index</td>
+<td>位元圖</td>
+<td>大型資料倉儲、低寫入量，高查詢壓力</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><em>不同資料庫支援的索引型別略有差異，請以官方文件為準。</em></p>
+</blockquote>
+<hr>
+<h1 id="索引的優點"><a href="#索引的優點" class="headerlink" title="索引的優點"></a>索引的優點</h1><ol>
+<li><p><strong>加速查詢</strong>  </p>
+<ul>
+<li><em>O(log n)</em> 級別搜尋（B‑Tree）代替 <em>O(n)</em> 全表掃描  </li>
+<li>對高選擇性欄位（distinct 值多）效果最佳</li>
+</ul>
+</li>
+<li><p><strong>支援唯一性約束（UNIQUE）</strong>  </p>
+<ul>
+<li>防止重複資料，同時利用索引查找衝突</li>
+</ul>
+</li>
+<li><p><strong>提升排序與分組效率</strong>  </p>
+<ul>
+<li><code>ORDER BY / GROUP BY</code> 若使用索引涵蓋欄位，可避免額外排序</li>
+</ul>
+</li>
+<li><p><strong>覆蓋索引（Covering Index）</strong>  </p>
+<ul>
+<li>查詢所需欄位全在索引中，省去回表（回到資料列）的成本</li>
+</ul>
+</li>
+<li><p><strong>優化關聯 &#x2F; JOIN</strong>  </p>
+<ul>
+<li>在外鍵、關聯欄位建索引，可顯著降低複雜查詢時間</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h1 id="索引的缺點"><a href="#索引的缺點" class="headerlink" title="索引的缺點"></a>索引的缺點</h1><ol>
+<li><p><strong>寫入放大（Write Amplification）</strong>  </p>
+<ul>
+<li><code>INSERT / UPDATE / DELETE</code> 必須同步更新索引  </li>
+<li>高頻寫入場景可能因索引過多而拖慢整體效能</li>
+</ul>
+</li>
+<li><p><strong>額外儲存空間</strong>  </p>
+<ul>
+<li>索引需要保存鍵值與指標，通常佔用資料表數倍空間  </li>
+<li>SSD 成本高或磁碟資源有限時需要權衡</li>
+</ul>
+</li>
+<li><p><strong>維護成本</strong>  </p>
+<ul>
+<li>索引碎片化（Fragmentation）導致效能降低  </li>
+<li>需定期 <code>REINDEX / OPTIMIZE</code>，佔用系統資源</li>
+</ul>
+</li>
+<li><p><strong>查詢規劃複雜度</strong>  </p>
+<ul>
+<li>不適當或重疊的索引會混淆查詢最佳化器  </li>
+<li>可能反而導致 sub‑optimal 計劃</li>
+</ul>
+</li>
+<li><p><strong>鎖定與競爭</strong>  </p>
+<ul>
+<li>部分資料庫在建立／重建索引時需鎖表或消耗大量 CPU  </li>
+<li>線上重建（Online Rebuild）仍有資源競爭風險</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h1 id="建立索引的最佳實務"><a href="#建立索引的最佳實務" class="headerlink" title="建立索引的最佳實務"></a>建立索引的最佳實務</h1><ol>
+<li><p><strong>以查詢為核心</strong>  </p>
+<ul>
+<li>依實際慢查詢（slow query log）或 <code>EXPLAIN</code> 報告決定索引策略  </li>
+<li>先優化 schema 與 SQL，再考慮添加索引</li>
+</ul>
+</li>
+<li><p><strong>選擇性 &gt; 0.2</strong>  </p>
+<ul>
+<li>選擇性（distinct&#x2F;total rows）太低的欄位通常不該單獨建索引  </li>
+<li>可考慮複合索引或前綴索引</li>
+</ul>
+</li>
+<li><p><strong>覆蓋索引優先</strong>  </p>
+<ul>
+<li>常見查詢僅讀取少量欄位時，可設計覆蓋索引取得最大效益</li>
+</ul>
+</li>
+<li><p><strong>觀察寫入壓力</strong>  </p>
+<ul>
+<li>高寫入 OLTP 系統：少量、精準索引  </li>
+<li>查詢為主 OLAP &#x2F; 報表系統：可接受多重索引</li>
+</ul>
+</li>
+<li><p><strong>定期審計與重建</strong>  </p>
+<ul>
+<li>使用 <code>pg_stat_user_indexes</code>、<code>mysql.innodb_index_stats</code> 等檢視未使用索引  </li>
+<li>失效或冗餘索引要及時移除</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h1 id="範例：PostgreSQL-建立複合索引"><a href="#範例：PostgreSQL-建立複合索引" class="headerlink" title="範例：PostgreSQL 建立複合索引"></a>範例：PostgreSQL 建立複合索引</h1><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 針對 (status, created_at) 的高頻查詢</span></span><br><span class="line"><span class="keyword">CREATE</span> INDEX idx_orders_status_created</span><br><span class="line"><span class="keyword">ON</span> orders (status, created_at <span class="keyword">DESC</span>);</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：複合索引遵循<strong>最左前綴原則</strong>，若只查 <code>created_at</code> 而不含 <code>status</code>，此索引將無法被使用。</p>
+<hr>
+<h1 id="面試回答"><a href="#面試回答" class="headerlink" title="面試回答"></a>面試回答</h1><p><strong>索引的優點有：</strong></p>
+<ol>
+<li><p><strong>提升查詢效率</strong></p>
+<ul>
+<li>對於常用在 <code>WHERE</code>、<code>JOIN</code>、<code>ORDER BY</code> 的欄位建立索引，可以大幅降低查詢時間，從全表掃描降到數筆查找。</li>
+</ul>
+</li>
+<li><p><strong>支援唯一性限制</strong></p>
+<ul>
+<li>像是 <code>UNIQUE</code> 或主鍵索引可以避免重複資料。</li>
+</ul>
+</li>
+<li><p><strong>覆蓋查詢（Covering Index）</strong></p>
+<ul>
+<li>若查詢所需欄位都包含在索引中，可直接從索引取得資料，省略回表動作。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<p><strong>索引的缺點有：</strong></p>
+<ol>
+<li><p><strong>寫入效能降低</strong></p>
+<ul>
+<li>每次 <code>INSERT</code>、<code>UPDATE</code>、<code>DELETE</code> 都要同步更新相關索引，會增加寫入成本。</li>
+</ul>
+</li>
+<li><p><strong>占用額外空間</strong></p>
+<ul>
+<li>索引是額外資料結構，尤其在高頻查詢、大資料量的系統中，可能需要數倍的空間。</li>
+</ul>
+</li>
+<li><p><strong>維護成本</strong></p>
+<ul>
+<li>索引太多可能會混淆查詢最佳化器（optimizer），導致選錯查詢路徑。也可能隨時間產生碎片，影響效能。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<p><strong>補充實務觀點（加分項）：</strong></p>
+<blockquote>
+<p>平常會配合 <code>EXPLAIN</code> 去分析查詢是否有用到索引，避免建立太多沒被使用的索引。也會觀察查詢選擇性（如某欄位是否夠分散），確保索引是有價值的。</p>
+</blockquote>
+<hr>
+<h1 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h1><p>索引是資料庫效能調校的雙刃劍：</p>
+<ul>
+<li><strong>讀取性能</strong> 與 <strong>寫入開銷</strong> 必須取得平衡</li>
+<li>透過 <strong>持續監控</strong>、<strong>資料分佈分析</strong> 和 <strong>業務場景理解</strong>，才能打造最貼合需求的索引策略</li>
+</ul>
+<blockquote>
+<p><strong>行動項目</strong>：</p>
+<ol>
+<li>立刻檢查慢查詢日誌，找出無索引的查詢。</li>
+<li>使用 <code>EXPLAIN ANALYZE</code> 確認索引是否生效。</li>
+<li>訂定週期性索引健康檢查排程。</li>
+</ol>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
     <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/06/19/%E4%BB%80%E9%BA%BC%E6%98%AF%20SQL%20Injection%E5%8F%88%E8%A9%B2%E5%A6%82%E4%BD%95%E9%A0%90%E9%98%B2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1692,144 +1948,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/28/Django%20%E4%BD%BF%E7%94%A8%20%60ManyToMany%60%20%E9%97%9C%E8%81%AF%E6%A8%A1%E5%9E%8B%E8%99%95%E7%90%86%E3%80%8C%E5%8B%95%E6%85%8B%E5%88%87%E6%8F%9B%E6%8C%89%E8%AE%9A%E7%8B%80%E6%85%8B%E3%80%8D/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/04/28/Django%20%E4%BD%BF%E7%94%A8%20%60ManyToMany%60%20%E9%97%9C%E8%81%AF%E6%A8%A1%E5%9E%8B%E8%99%95%E7%90%86%E3%80%8C%E5%8B%95%E6%85%8B%E5%88%87%E6%8F%9B%E6%8C%89%E8%AE%9A%E7%8B%80%E6%85%8B%E3%80%8D/" class="post-title-link" itemprop="url">Django 使用 `ManyToMany` 關聯模型處理「動態切換按讚狀態」</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">發表於</span>
-              
-
-              <time title="創建時間：2025-04-28 00:00:00 / 修改時間：22:47:27" itemprop="dateCreated datePublished" datetime="2025-04-28T00:00:00+08:00">2025-04-28</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分類於</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <hr>
-<p>在本筆記中，將探討如何在 Django 中處理「動態切換按讚狀態」的邏輯:</p>
-<ol>
-<li><strong>介紹 <code>ManyToMany</code> 關聯模型的建立</strong>，並解釋如何使用它來設置使用者 (<code>User</code>) 與面試（<code>Interview</code>）之間的關聯。</li>
-<li><strong>說明為何在這樣的情境下，不能使用 <code>get_object_or_404()</code></strong>，而是應該使用 <code>filter()</code> 方法來處理查詢。</li>
-<li><strong>展示如何在 <code>favorite</code> 這樣的 view function 中實現按讚與取消按讚功能</strong>，動態切換按讚狀態。</li>
-</ol>
-<hr>
-<h1 id="ManyToMany-關聯模型的建立"><a href="#ManyToMany-關聯模型的建立" class="headerlink" title="ManyToMany 關聯模型的建立"></a><code>ManyToMany</code> 關聯模型的建立</h1><p>在 Django 中，使用 <code>ManyToMany</code> 關聯來表示多對多的關係。假設有 <code>User</code> 和 <code>Interview</code> 模型，可以建立以下的多對多關聯：</p>
-<p>interviews&#x2F;models.py</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.contrib.auth.models <span class="keyword">import</span> User</span><br><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Interview</span>(models.Model):</span><br><span class="line">    <span class="comment"># 其他欄位...</span></span><br><span class="line">    user = models.ForeignKey(User, on_delete=models.CASCADE)</span><br><span class="line">    favorited_by = models.ManyToManyField(</span><br><span class="line">        User,</span><br><span class="line">        through=<span class="string">&quot;FavoriteInterview&quot;</span>,</span><br><span class="line">        related_name=<span class="string">&quot;favorite_interviews&quot;</span>,  <span class="comment"># join 欄位</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="comment"># join table</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FavoriteInterview</span>(models.Model):</span><br><span class="line">    user = models.ForeignKey(User, on_delete=models.CASCADE)</span><br><span class="line">    interview = models.ForeignKey(Interview, on_delete=models.CASCADE)</span><br></pre></td></tr></table></figure>
-
-<h2 id="關聯設置"><a href="#關聯設置" class="headerlink" title="關聯設置"></a>關聯設置</h2><ul>
-<li><strong><code>FavoriteInterview</code></strong> 表示每個使用者對於某個面試的「按讚」記錄。每一筆記錄由 <code>user</code> 和 <code>interview</code> 兩個外鍵組成。</li>
-</ul>
-<h2 id="使用-ManyToManyField"><a href="#使用-ManyToManyField" class="headerlink" title="使用 ManyToManyField"></a>使用 <code>ManyToManyField</code></h2><p>假設希望在 <code>User</code> 模型中表示使用者按讚過的所有 <code>Interview</code>，可以在 <code>Interview</code> 模型中設置 <code>ManyToManyField</code> 來表示這種關聯</p>
-<ul>
-<li>通過 <code>interview.favorited_by</code> 來獲取按讚某篇面試的所有使用者</li>
-<li>通過 <code>user.favorite_interviews</code> 來獲取某位使用者按讚的所有面試</li>
-</ul>
-<hr>
-<h2 id="在-favorite-view-function-中處理「按讚」和「取消按讚」的邏輯"><a href="#在-favorite-view-function-中處理「按讚」和「取消按讚」的邏輯" class="headerlink" title="在 favorite view function 中處理「按讚」和「取消按讚」的邏輯"></a>在 <code>favorite</code> view function 中處理「按讚」和「取消按讚」的邏輯</h2><p>interviews&#x2F;views.py</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> get_object_or_404, redirect</span><br><span class="line"><span class="keyword">from</span> django.contrib.auth.decorators <span class="keyword">import</span> login_required</span><br><span class="line"><span class="keyword">from</span> django.views.decorators.http <span class="keyword">import</span> require_POST</span><br><span class="line"></span><br><span class="line"><span class="meta">@require_POST</span></span><br><span class="line"><span class="meta">@login_required</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">favorite</span>(<span class="params">req, <span class="built_in">id</span></span>):</span><br><span class="line">    interview = get_object_or_404(Interview, pk=<span class="built_in">id</span>)  <span class="comment"># 獲取指定的 interview</span></span><br><span class="line">    favorites = req.user.favorite_interviews <span class="comment"># 登入的 user 按讚的所有面試</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 以 User model 的角度處理 ManyToMany 關聯</span></span><br><span class="line">    <span class="comment"># 判斷這位使用者是否已經按過讚</span></span><br><span class="line">    <span class="keyword">if</span> favorites.<span class="built_in">filter</span>(pk=interview.pk).exists():</span><br><span class="line">        <span class="comment"># 如果有按過讚，則取消按讚（remove），在 FavoriteInterview table 裡刪除該筆資料</span></span><br><span class="line">        favorites.remove(interview) </span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 如果沒有按過讚，則加上（add)，在 FavoriteInterview table 裡增加該筆資料</span></span><br><span class="line">        favorites.add(interview)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> redirect(<span class="string">&quot;interviews:show&quot;</span>, <span class="built_in">id</span>=interview.<span class="built_in">id</span>)</span><br></pre></td></tr></table></figure>
-
-<h2 id="功能解釋："><a href="#功能解釋：" class="headerlink" title="功能解釋："></a>功能解釋：</h2><ul>
-<li><strong><code>get_object_or_404()</code></strong>：查找指定的 <code>Interview</code> 實例，若找不到則會拋出 404 錯誤（這裡是確保該面談存在）。</li>
-<li><strong><code>filter(pk=interview.pk).exists()</code></strong>：檢查該 <code>user</code> 是否已經按讚過這篇 <code>interview</code>，如果已經按讚，則執行 <code>remove()</code>；如果沒有按讚，則執行 <code>add()</code>，這樣就能夠動態切換按讚狀態。</li>
-<li><strong><code>redirect()</code></strong>：操作完成後，重定向回該 <code>interview</code> 的詳細頁面。</li>
-</ul>
-<hr>
-<h2 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h2><ol>
-<li><p><strong><code>ManyToMany</code> 關聯的建立</strong>：使用 <code>ManyToManyField</code> 和 <code>through</code>、<code>related_name</code> 參數來設置 <code>User</code> 和 <code>Interview</code> 之間的多對多關聯，並且在中介模型 <code>FavoriteInterview</code> 中存儲按讚資料。</p>
-</li>
-<li><p><strong>使用 <code>filter()</code> 判斷使用者是否已經按過讚</strong>：使用 <code>filter()</code> 和 <code>.exists()</code> 來檢查 <code>FavoriteInterview</code> 是否存在對應的關聯，根據結果決定是按讚還是移除按讚。<br><code>filter()</code> 方法可以返回符合條件的查詢結果，如果沒有找到任何符合條件的資料，它會返回一個空的 queryset，而不是拋出錯誤，因此<code>filter()</code> 可以靈活處理按讚的狀態</p>
-</li>
-<li><p><strong>為何 <code>get_object_or_404()</code> 不適用判斷使用者是否已經按過讚</strong>：在動態切換按讚狀態時，使用 <code>get_object_or_404()</code> 不適合，因為查詢結果沒有找到資料，它會拋出 404 錯誤，這會讓我們無法靈活處理「已按讚」和「未按讚」的情況。</p>
-</li>
-</ol>
-<hr>
-<h2 id="從不同-Model-角度處理-ManyToMany-關聯"><a href="#從不同-Model-角度處理-ManyToMany-關聯" class="headerlink" title="從不同 Model 角度處理 ManyToMany 關聯"></a>從不同 Model 角度處理 <code>ManyToMany</code> 關聯</h2><p>在 Django 中，<code>ManyToMany</code> 關聯允許兩個模型之間建立多對多的關聯。這些關聯通常由 <code>ManyToManyField</code> 或透過額外的關聯表（如 <code>through</code> 設定）來實現。在不同的 Model 角度處理 <code>ManyToMany</code> 關聯時，我們有不同的寫法來處理關聯資料的新增、刪除與查詢。</p>
-<h3 id="1-從-User-模型的角度處理-ManyToMany-關聯"><a href="#1-從-User-模型的角度處理-ManyToMany-關聯" class="headerlink" title="1. 從 User 模型的角度處理 ManyToMany 關聯"></a>1. <strong>從 <code>User</code> 模型的角度處理 <code>ManyToMany</code> 關聯</strong></h3><p>首先，讓我們回顧如何從 <code>User</code> 模型的角度處理 <code>ManyToMany</code> 關聯。在這個例子中，<code>User</code> 和 <code>Interview</code> 之間的關聯是透過 <code>favorite_interviews</code>（即 <code>ManyToManyField</code>）來建立的。我們可以在 <code>User</code> 模型上使用 <code>favorite_interviews</code>，來處理這篇 <code>Interview</code> 是否已經被使用者按讚過。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@require_POST</span></span><br><span class="line"><span class="meta">@login_required</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">favorite</span>(<span class="params">req, <span class="built_in">id</span></span>):</span><br><span class="line">    interview = get_object_or_404(Interview, pk=<span class="built_in">id</span>)</span><br><span class="line">    user = req.user</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 以 User model 的角度處理 ManyToMany 關聯</span></span><br><span class="line">    <span class="comment"># 判斷這位使用者是否已經按過讚</span></span><br><span class="line">    <span class="keyword">if</span> user.favorite_interviews.<span class="built_in">filter</span>(pk=interview.pk).exists():</span><br><span class="line">        <span class="comment"># 如果有按過讚，則取消按讚（remove）</span></span><br><span class="line">        user.favorite_interviews.remove(interview)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 如果沒有按過讚，則加上（add）</span></span><br><span class="line">        user.favorite_interviews.add(interview)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>user.favorite_interviews.filter(pk=interview.pk)</code>：我們通過 <code>filter</code> 查詢使用者是否已經對這篇 <code>interview</code> 按讚過，這會返回一個 <code>QuerySet</code>，並且使用 <code>exists()</code> 方法檢查是否存在此條記錄。</li>
-<li><code>remove()</code> 和 <code>add()</code>：<code>remove()</code> 用來移除使用者對該 <code>interview</code> 的按讚記錄，<code>add()</code> 用來新增按讚記錄。</li>
-</ul>
-<h3 id="2-從-Interview-模型的角度處理-ManyToMany-關聯"><a href="#2-從-Interview-模型的角度處理-ManyToMany-關聯" class="headerlink" title="2. 從 Interview 模型的角度處理 ManyToMany 關聯"></a>2. <strong>從 <code>Interview</code> 模型的角度處理 <code>ManyToMany</code> 關聯</strong></h3><p>另一種處理方式是從 <code>Interview</code> 模型的角度來管理 <code>ManyToMany</code> 關聯。可以直接操作 <code>favorited_by</code>，這是 <code>Interview</code> 模型中的 <code>ManyToManyField</code>，它用來表示所有按讚過這篇訪談的使用者。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 以 Interview model 的角度處理 ManyToMany 關聯</span></span><br><span class="line"><span class="comment"># 判斷這篇文章是否已經被按過讚</span></span><br><span class="line"><span class="keyword">if</span> interview.favorited_by.<span class="built_in">filter</span>(pk=user.pk).exists():</span><br><span class="line">    <span class="comment"># 如果有按過讚，則取消按讚（remove）</span></span><br><span class="line">    interview.favorited_by.remove(user)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="comment"># 如果沒有按過讚，則加上（add）</span></span><br><span class="line">    interview.favorited_by.add(user)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>interview.favorited_by.filter(pk=user.pk)</code>：使用 <code>filter</code> 查詢是否該 <code>user</code> 已經按讚過這篇 <code>interview</code>，如果有，則移除按讚；如果沒有，則將按讚關聯添加回 <code>favorited_by</code>。</li>
-</ul>
-<h3 id="3-從-FavoriteInterview-模型的角度處理-ManyToMany-關聯"><a href="#3-從-FavoriteInterview-模型的角度處理-ManyToMany-關聯" class="headerlink" title="3. 從 FavoriteInterview 模型的角度處理 ManyToMany 關聯"></a>3. <strong>從 <code>FavoriteInterview</code> 模型的角度處理 <code>ManyToMany</code> 關聯</strong></h3><p>如果我們使用的是 <code>through</code> 設定的 <code>ManyToMany</code> 關聯（在本例中，使用了 <code>FavoriteInterview</code> 作為關聯模型），可以直接操作 <code>FavoriteInterview</code> 模型來添加或刪除按讚記錄。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 以 FavoriteInterview model 的角度處理 ManyToMany 關聯</span></span><br><span class="line">favorite_interview = FavoriteInterview.objects.<span class="built_in">filter</span>(user=user, interview=interview)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> favorite_interview.exists():</span><br><span class="line">    <span class="comment"># 如果已經按過讚，則刪除該記錄</span></span><br><span class="line">    favorite_interview.delete()</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="comment"># 如果沒有按過讚，則新增該記錄</span></span><br><span class="line">    FavoriteInterview.objects.create(user=user, interview=interview)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>首先查詢是否已經存在這個 <code>FavoriteInterview</code> 記錄，如果存在則刪除（使用 <code>.delete()</code>），如果不存在則創建新的 <code>FavoriteInterview</code> 記錄（使用 <code>.create()</code>）。</p>
-</li>
-<li><p>使用 <code>filter(user=user, interview=interview)</code> 來確保我們只關注到該使用者和該訪談的關聯。</p>
-</li>
-</ul>
-<h2 id="總結："><a href="#總結：" class="headerlink" title="總結："></a>總結：</h2><ul>
-<li><strong><code>ManyToManyField</code></strong> 在 Django 可以用來管理多對多的關聯。但當需要處理這些關聯時，必須明確知道該如何從不同的角度來操作。<ul>
-<li><strong>從 <code>User</code> 模型的角度</strong>：我們可以操作該使用者的 <code>favorite_interviews</code> 屬性來添加或移除關聯。</li>
-<li><strong>從 <code>Interview</code> 模型的角度</strong>：我們可以操作該面試的 <code>favorited_by</code> 屬性來處理關聯。</li>
-<li><strong>從 <code>FavoriteInterview</code> 模型的角度</strong>：透過 <code>through</code> 設定的關聯表，可以直接操作這個模型來進行新增或刪除。</li>
-</ul>
-</li>
-</ul>
-<p>這些方法各有其使用場景，選擇哪一種方式取決於你的需求和數據模型的設計。在處理 <code>ManyToMany</code> 關聯時，要特別注意數據一致性和簡潔性，並選擇最符合需求的解決方案。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1899,7 +2017,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/my-blog/archives/">
         
-          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-count">24</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
