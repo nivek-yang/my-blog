@@ -149,6 +149,109 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/04/Django%20%E9%9D%9C%E6%85%8B%E6%AA%94%E6%A1%88%E9%83%A8%E7%BD%B2%E7%88%86%E7%89%88%E5%95%8F%E9%A1%8C%E6%8E%92%E6%9F%A5%E8%88%87%E8%A7%A3%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/07/04/Django%20%E9%9D%9C%E6%85%8B%E6%AA%94%E6%A1%88%E9%83%A8%E7%BD%B2%E7%88%86%E7%89%88%E5%95%8F%E9%A1%8C%E6%8E%92%E6%9F%A5%E8%88%87%E8%A7%A3%E6%B3%95/" class="post-title-link" itemprop="url">Django 靜態檔案部署爆版問題排查與解法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="創建時間：2025-07-04 00:00:00 / 修改時間：23:10:32" itemprop="dateCreated datePublished" datetime="2025-07-04T00:00:00+08:00">2025-07-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>部署 Django 專案時，常見「靜態檔案爆版」問題：明明已經更新了 CSS&#x2F;JS，使用者卻還是看到舊版畫面。這篇文章將帶你找出問題核心，並給出最佳解法。</p>
+<hr>
+<h1 id="問題現象"><a href="#問題現象" class="headerlink" title="問題現象"></a>問題現象</h1><ul>
+<li>前端樣式或 JS 更新後，使用者端仍然載入舊檔案</li>
+<li>清除瀏覽器快取後才會看到新內容</li>
+<li>CDN 或 Nginx 設定了長時間快取</li>
+</ul>
+<hr>
+<h1 id="問題核心"><a href="#問題核心" class="headerlink" title="問題核心"></a>問題核心</h1><p>Django 預設的 <code>collectstatic</code> 只會把檔案複製到 <code>STATIC_ROOT</code>，檔名不變。如果 Nginx 或 CDN 設定了 cache-control&#x2F;expires，檔案內容變了但檔名沒變，使用者端就會一直拿到舊檔案。</p>
+<p><strong>關鍵：</strong><br>只要檔名沒變，快取就不會重新抓新檔案。</p>
+<hr>
+<h1 id="解決方法"><a href="#解決方法" class="headerlink" title="解決方法"></a>解決方法</h1><h2 id="1-啟用-ManifestStaticFilesStorage"><a href="#1-啟用-ManifestStaticFilesStorage" class="headerlink" title="1. 啟用 ManifestStaticFilesStorage"></a>1. 啟用 ManifestStaticFilesStorage</h2><p>Django 內建的 <code>ManifestStaticFilesStorage</code> 會在檔名自動加上 hash，只要內容有變，檔名就會變，快取自然失效。</p>
+<h3 id="設定方式"><a href="#設定方式" class="headerlink" title="設定方式"></a>設定方式</h3><p>在 <code>settings.py</code> 加入：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">STATICFILES_STORAGE = <span class="string">&quot;django.contrib.staticfiles.storage.ManifestStaticFilesStorage&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="2-正確執行-collectstatic"><a href="#2-正確執行-collectstatic" class="headerlink" title="2. 正確執行 collectstatic"></a>2. 正確執行 collectstatic</h2><p>每次部署靜態檔案有變動時，務必執行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py collectstatic</span><br></pre></td></tr></table></figure>
+
+<p>這會自動產生帶 hash 的檔案，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">style.1a2b3c4d.css</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-模板引用方式"><a href="#3-模板引用方式" class="headerlink" title="3. 模板引用方式"></a>3. 模板引用方式</h2><p>確保模板都用 <code>&#123;% static 'path/to/file.css' %&#125;</code>，Django 會自動引用帶 hash 的檔名。</p>
+<h2 id="4-Nginx-CDN-快取設定"><a href="#4-Nginx-CDN-快取設定" class="headerlink" title="4. Nginx &#x2F; CDN 快取設定"></a>4. Nginx &#x2F; CDN 快取設定</h2><p>可以放心設定長快取，例如：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">location</span> /static/ &#123;</span><br><span class="line">    <span class="attribute">alias</span> /staticfiles/;</span><br><span class="line">    <span class="attribute">expires</span> <span class="number">7d</span>;</span><br><span class="line">    <span class="attribute">add_header</span> Cache-Control <span class="string">&quot;public&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>因為檔名有 hash，內容變了檔名也會變，快取不會爆版。</p>
+<hr>
+<h1 id="排查流程"><a href="#排查流程" class="headerlink" title="排查流程"></a>排查流程</h1><ol>
+<li><strong>確認 collectstatic 是否有執行</strong></li>
+<li><strong>檢查 staticfiles 目錄下檔名是否有 hash</strong></li>
+<li><strong>檢查模板是否正確用 static 標籤</strong></li>
+<li><strong>檢查 Nginx&#x2F;CDN 是否有快取設定</strong></li>
+<li><strong>檢查瀏覽器載入的檔案路徑是否為新檔名</strong></li>
+</ol>
+<hr>
+<h1 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h1><p>只要啟用 <code>ManifestStaticFilesStorage</code> 並正確部署，Django 靜態檔案快取問題就能徹底解決。<br>這是現代 Django 專案部署的最佳實踐！</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
     <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/06/21/%E8%B3%87%E6%96%99%E5%BA%AB%E7%B4%A2%E5%BC%95index%E7%9A%84%E5%84%AA%E9%BB%9E%E5%8F%8A%E7%BC%BA%E9%BB%9E/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1648,172 +1751,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/29/HTMX%E5%92%8CDjango%E5%AF%A6%E7%8F%BE%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E8%88%87%E5%BE%8C%E7%AB%AF%E6%B8%B2%E6%9F%93/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/04/29/HTMX%E5%92%8CDjango%E5%AF%A6%E7%8F%BE%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E8%88%87%E5%BE%8C%E7%AB%AF%E6%B8%B2%E6%9F%93/" class="post-title-link" itemprop="url">HTMX 與 Django 實現局部更新與後端渲染</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">發表於</span>
-              
-
-              <time title="創建時間：2025-04-29 00:00:00 / 修改時間：23:00:19" itemprop="dateCreated datePublished" datetime="2025-04-29T00:00:00+08:00">2025-04-29</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分類於</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="功能概述"><a href="#功能概述" class="headerlink" title="功能概述"></a>功能概述</h1><p>此功能實現了一個按讚（收藏）按鈕，使用者可以對特定的項目（如面試記錄）進行按讚或取消按讚操作。按鈕的狀態（已收藏或收藏）由後端決定，並通過 HTMX 局部更新頁面。</p>
-<hr>
-<h1 id="技術細節"><a href="#技術細節" class="headerlink" title="技術細節"></a>技術細節</h1><h2 id="1-前端模板設計"><a href="#1-前端模板設計" class="headerlink" title="1. 前端模板設計"></a>1. <strong>前端模板設計</strong></h2><h3 id="favorite-html"><a href="#favorite-html" class="headerlink" title="favorite.html"></a>favorite.html</h3><p>這個模板負責渲染按讚按鈕，按鈕的狀態根據使用者是否已經按讚來決定。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;% if user in interview.favorited_by.all %&#125;</span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">hx-swap</span>=<span class="string">&quot;outerHTML&quot;</span> <span class="attr">hx-post</span>=<span class="string">&quot;&#123;% url &#x27;interviews:favorite&#x27; interview.id %&#125;&quot;</span> <span class="attr">class</span>=<span class="string">&quot;btn btn-primary&quot;</span> &gt;</span>已收藏<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">&#123;% else %&#125;</span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">hx-swap</span>=<span class="string">&quot;outerHTML&quot;</span> <span class="attr">hx-post</span>=<span class="string">&quot;&#123;% url &#x27;interviews:favorite&#x27; interview.id %&#125;&quot;</span> <span class="attr">class</span>=<span class="string">&quot;btn btn-ghost&quot;</span> &gt;</span>收藏<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong><code>hx-post</code></strong>: 當按鈕被點擊時，發送一個 POST 請求到指定的 URL。</li>
-<li><strong><code>hx-swap=&quot;outerHTML&quot;</code></strong>: 指定 HTMX 替換整個按鈕的 HTML，而不僅僅是按鈕內的內容。</li>
-<li><strong>按鈕狀態</strong>: 使用 Django 模板語法 <code>&#123;% if user in interview.favorited_by.all %&#125;</code> 判斷使用者是否已按讚，並渲染不同的按鈕樣式和文字。</li>
-</ul>
-<blockquote>
-<p>如果沒有指定 <code>hx-target</code>，HTMX 預設會將後端返回的內容插入到觸發請求的元素本身內部，並替換其內部內容（即 <code>innerHTML</code>）。這是 HTMX 的默認行為</p>
-</blockquote>
-<hr>
-<h3 id="show-html"><a href="#show-html" class="headerlink" title="show.html"></a><code>show.html</code></h3><p>在主頁面中，通過 <code>include</code> 將 favorite.html 嵌入到頁面中，並用 <code>with</code> 傳遞變數。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% include &#x27;interviews/favorite.html&#x27; with user=user interview=interview %&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong><code>include</code></strong>: 將 favorite.html 作為子模板嵌入。</li>
-<li><strong><code>with</code></strong>: 傳遞變數 <code>user</code> 和 <code>interview</code>，供子模板使用。</li>
-</ul>
-<hr>
-<h2 id="2-後端邏輯"><a href="#2-後端邏輯" class="headerlink" title="2. 後端邏輯"></a>2. <strong>後端邏輯</strong></h2><h3 id="views-py"><a href="#views-py" class="headerlink" title="views.py"></a><code>views.py</code></h3><p>後端處理按讚請求，並返回更新後的按鈕 HTML。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@require_POST</span></span><br><span class="line"><span class="meta">@login_required</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">favorite</span>(<span class="params">req, <span class="built_in">id</span></span>):</span><br><span class="line">    interview = get_object_or_404(Interview, pk=<span class="built_in">id</span>)</span><br><span class="line">    favorites = req.user.favorite_interviews</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 判斷使用者是否已按讚</span></span><br><span class="line">    <span class="keyword">if</span> favorites.<span class="built_in">filter</span>(pk=interview.pk).exists():</span><br><span class="line">        <span class="comment"># 如果已按讚，則取消按讚</span></span><br><span class="line">        favorites.remove(interview)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 如果未按讚，則新增按讚</span></span><br><span class="line">        favorites.add(interview)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 返回更新後的按鈕 HTML</span></span><br><span class="line">    <span class="keyword">return</span> render(req, <span class="string">&quot;interviews/favorite.html&quot;</span>, &#123;<span class="string">&quot;user&quot;</span>: req.user, <span class="string">&quot;interview&quot;</span>: interview&#125;)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong><code>require_POST</code></strong>: 限制此視圖僅接受 POST 請求。</li>
-<li><strong><code>login_required</code></strong>: 確保只有已登入的使用者可以執行按讚操作。</li>
-<li><strong>按讚邏輯</strong>:<ul>
-<li>使用 <code>ManyToMany</code> 關聯的 <code>filter</code> 方法檢查使用者是否已按讚。</li>
-<li>如果已按讚，則移除關聯（<code>remove</code>）；否則，新增關聯（<code>add</code>）。</li>
-</ul>
-</li>
-<li><strong>返回模板</strong>: 使用 <code>render</code> 返回更新後的 favorite.html，HTMX 會自動將其插入到頁面中。</li>
-</ul>
-<hr>
-<h2 id="3-HTMX-的作用"><a href="#3-HTMX-的作用" class="headerlink" title="3. HTMX 的作用"></a>3. <strong>HTMX 的作用</strong></h2><p>HTMX 在這裡負責處理按鈕的動態更新，無需整頁刷新。</p>
-<ul>
-<li><strong>請求發送</strong>: 當按鈕被點擊時，HTMX 發送一個 POST 請求到後端。</li>
-<li><strong>局部更新</strong>: 後端返回的 HTML 片段（<code>favorite.html</code>）會替換按鈕的 HTML，實現按鈕狀態的即時更新。</li>
-</ul>
-<hr>
-<h1 id="流程總結"><a href="#流程總結" class="headerlink" title="流程總結"></a>流程總結</h1><ol>
-<li><p><strong>頁面初始渲染</strong>:</p>
-<ul>
-<li>在 <code>show.html</code> 中包含 favorite.html，按鈕的初始狀態由後端決定。</li>
-</ul>
-</li>
-<li><p><strong>按鈕點擊</strong>:</p>
-<ul>
-<li>使用者點擊按鈕時，HTMX 發送一個 POST 請求到後端的 <code>favorite</code> 視圖。</li>
-</ul>
-</li>
-<li><p><strong>後端處理請求</strong>:</p>
-<ul>
-<li>後端檢查使用者是否已按讚，並執行相應的新增或移除操作。</li>
-<li>返回更新後的按鈕 HTML。</li>
-</ul>
-</li>
-<li><p><strong>前端更新</strong>:</p>
-<ul>
-<li>HTMX 接收後端返回的 HTML，並使用 <code>hx-swap=&quot;outerHTML&quot;</code> 替換按鈕的 HTML，實現即時更新。</li>
-</ul>
-</li>
-</ol>
-<hr>
-<h1 id="優勢分析"><a href="#優勢分析" class="headerlink" title="優勢分析"></a>優勢分析</h1><ol>
-<li><p><strong>簡化前端邏輯</strong>:</p>
-<ul>
-<li>無需撰寫額外的 JavaScript，所有交互邏輯都由 HTMX 和 Django 模板處理。</li>
-</ul>
-</li>
-<li><p><strong>提升性能</strong>:</p>
-<ul>
-<li>使用 HTMX 的局部更新功能，避免整頁刷新，提升用戶體驗。</li>
-</ul>
-</li>
-<li><p><strong>後端驅動渲染</strong>:</p>
-<ul>
-<li>按鈕狀態由後端決定，確保資料一致性，減少前後端同步的複雜性。</li>
-</ul>
-</li>
-</ol>
-<hr>
-<h1 id="注意事項"><a href="#注意事項" class="headerlink" title="注意事項"></a>注意事項</h1><ol>
-<li><p><strong>CSRF Token</strong>:</p>
-<ul>
-<li>確保 HTMX 請求包含 CSRF Token，否則 Django 會拒絕請求。</li>
-<li>可以在 <code>&lt;body&gt;</code> 標籤中添加：<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span> <span class="attr">hx-headers</span>=<span class="string">&#x27;&#123;&quot;x-csrftoken&quot;: &quot;&#123;&#123; csrf_token &#125;&#125;&quot;&#125;&#x27;</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><p><strong>錯誤處理</strong>:</p>
-<ul>
-<li>如果後端操作失敗，應返回適當的錯誤訊息，並在前端顯示。</li>
-</ul>
-</li>
-</ol>
-<hr>
-<h1 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h1><p>此功能結合了 HTMX 和 Django 的優勢，實現了一個高效、簡潔的按讚功能。HTMX 的局部更新特性使得頁面交互更加流暢，而 Django 的後端渲染確保了資料的一致性與安全性。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
     <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/29/HTMX%E7%B0%A1%E4%BB%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2017,7 +1954,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/my-blog/archives/">
         
-          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-count">25</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -2026,7 +1963,7 @@
         <span class="site-state-item-name">分類</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">標籤</span>
       </div>
   </nav>
