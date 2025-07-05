@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/my-blog/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"nivek-yang.github.io","root":"/my-blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="在現代 Python 專案中，維持一致的程式碼風格與自動排版已成為團隊協作的基本需求。Ruff 是一套超快速、全方位的 Python linter 與 formatter，能同時做到靜態檢查、import 排序與自動格式化。 本文將介紹 Ruff 的安裝、基本設定與常見用法，以及如何在 VS Code 開發環境下，讓 Ruff 在每次儲存檔案時自動執行，確保團隊程式碼品質一致。  Ruff 是什麼">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用 Ruff 打造自動化 Python 格式化與靜態檢查（VS Code 實戰）">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/07/05/%E7%94%A8Ruff%E6%89%93%E9%80%A0%E8%87%AA%E5%8B%95%E5%8C%96Python%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%88%87%E9%9D%9C%E6%85%8B%E6%AA%A2%E6%9F%A5/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="在現代 Python 專案中，維持一致的程式碼風格與自動排版已成為團隊協作的基本需求。Ruff 是一套超快速、全方位的 Python linter 與 formatter，能同時做到靜態檢查、import 排序與自動格式化。 本文將介紹 Ruff 的安裝、基本設定與常見用法，以及如何在 VS Code 開發環境下，讓 Ruff 在每次儲存檔案時自動執行，確保團隊程式碼品質一致。  Ruff 是什麼">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-07-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-07-05T15:36:44.765Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Ruff">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/07/05/%E7%94%A8Ruff%E6%89%93%E9%80%A0%E8%87%AA%E5%8B%95%E5%8C%96Python%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%88%87%E9%9D%9C%E6%85%8B%E6%AA%A2%E6%9F%A5/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>用 Ruff 打造自動化 Python 格式化與靜態檢查（VS Code 實戰） | 我的技術部落格</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">我的技術部落格</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/05/%E7%94%A8Ruff%E6%89%93%E9%80%A0%E8%87%AA%E5%8B%95%E5%8C%96Python%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%88%87%E9%9D%9C%E6%85%8B%E6%AA%A2%E6%9F%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          用 Ruff 打造自動化 Python 格式化與靜態檢查（VS Code 實戰）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="創建時間：2025-07-05 00:00:00 / 修改時間：23:36:44" itemprop="dateCreated datePublished" datetime="2025-07-05T00:00:00+08:00">2025-07-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在現代 Python 專案中，維持一致的程式碼風格與自動排版已成為團隊協作的基本需求。Ruff 是一套超快速、全方位的 Python linter 與 formatter，能同時做到靜態檢查、import 排序與自動格式化。</p>
+<p>本文將介紹 Ruff 的安裝、基本設定與常見用法，以及如何在 VS Code 開發環境下，讓 Ruff 在每次儲存檔案時自動執行，確保團隊程式碼品質一致。</p>
+<hr>
+<h1 id="Ruff-是什麼？"><a href="#Ruff-是什麼？" class="headerlink" title="Ruff 是什麼？"></a>Ruff 是什麼？</h1><p>Ruff 是用 Rust 開發的 Python 靜態分析工具，主打「快」與「多合一」：</p>
+<ul>
+<li><strong>Linter</strong>：檢查語法錯誤、潛在 bug、PEP8 風格等</li>
+<li><strong>Formatter</strong>：自動排版、統一引號、行寬等</li>
+<li><strong>Import 排序</strong>：自動整理 import 順序</li>
+</ul>
+<hr>
+<h1 id="如何安裝-Ruff"><a href="#如何安裝-Ruff" class="headerlink" title="如何安裝 Ruff"></a>如何安裝 Ruff</h1><p>可以直接用 pip 安裝：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install ruff</span><br></pre></td></tr></table></figure>
+
+<p>如果專案有 <code>pyproject.toml</code>，也可以直接在 dev dependencies 加入：</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[dependency-groups]</span></span><br><span class="line"><span class="attr">dev</span> = [</span><br><span class="line">    <span class="string">&quot;ruff&gt;=0.12.0&quot;</span>,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="設定-Ruff：pyproject-toml"><a href="#設定-Ruff：pyproject-toml" class="headerlink" title="設定 Ruff：pyproject.toml"></a>設定 Ruff：pyproject.toml</h1><p>Ruff 支援在 <code>pyproject.toml</code> 設定，常見設定如下：</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[tool.ruff]</span></span><br><span class="line"><span class="attr">select</span> = [<span class="string">&quot;E&quot;</span>, <span class="string">&quot;F&quot;</span>, <span class="string">&quot;I&quot;</span>]  <span class="comment"># 啟用基本錯誤檢查與 import 排序</span></span><br><span class="line"><span class="attr">exclude</span> = [<span class="string">&quot;venv&quot;</span>, <span class="string">&quot;.venv&quot;</span>, <span class="string">&quot;__pycache__&quot;</span>, <span class="string">&quot;migrations&quot;</span>]  <span class="comment"># 排除目錄</span></span><br><span class="line"><span class="attr">line-length</span> = <span class="number">88</span></span><br><span class="line"><span class="attr">target-version</span> = <span class="string">&quot;py311&quot;</span></span><br><span class="line"><span class="attr">fix</span> = <span class="literal">true</span>  <span class="comment"># 預設自動修復違規</span></span><br><span class="line"></span><br><span class="line"><span class="section">[tool.ruff.format]</span></span><br><span class="line"><span class="attr">quote-style</span> = <span class="string">&quot;single&quot;</span>  <span class="comment"># 統一用單引號</span></span><br><span class="line"><span class="attr">line-ending</span> = <span class="string">&quot;lf&quot;</span>      <span class="comment"># 換行符號</span></span><br><span class="line"></span><br><span class="line"><span class="section">[tool.ruff.isort]</span></span><br><span class="line"><span class="attr">combine-as-imports</span> = <span class="literal">true</span>  <span class="comment"># 排序 import 時合併 as 語法</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="VS-Code-設定：儲存時自動執行-Ruff"><a href="#VS-Code-設定：儲存時自動執行-Ruff" class="headerlink" title="VS Code 設定：儲存時自動執行 Ruff"></a>VS Code 設定：儲存時自動執行 Ruff</h1><h2 id="安裝-Python-與-Ruff-擴充套件"><a href="#安裝-Python-與-Ruff-擴充套件" class="headerlink" title="安裝 Python 與 Ruff 擴充套件"></a>安裝 Python 與 Ruff 擴充套件</h2><ol>
+<li>安裝 <a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=ms-python.python">Python extension for VS Code</a></li>
+<li>安裝 <a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff">Ruff extension for VS Code</a></li>
+</ol>
+<h2 id="編輯-vscode-settings-json"><a href="#編輯-vscode-settings-json" class="headerlink" title="編輯 .vscode/settings.json"></a>編輯 <code>.vscode/settings.json</code></h2><p>在專案根目錄建立或編輯 <code>.vscode/settings.json</code>，加入：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;python.formatting.provider&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ruff&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;editor.formatOnSave&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;ruff.enable&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;ruff.formatOnSave&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;python.linting.enabled&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;python.linting.ruffEnabled&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>若同時有安裝 black&#x2F;autopep8&#x2F;yapf，請確保 <code>python.formatting.provider</code> 設為 <code>&quot;ruff&quot;</code>。</p>
+</blockquote>
+<h2 id="實際效果"><a href="#實際效果" class="headerlink" title="實際效果"></a>實際效果</h2><ul>
+<li>每次儲存 Python 檔案時，Ruff 會自動格式化、排序 import、修正違規</li>
+<li>所有格式與靜態檢查規則都依 <code>pyproject.toml</code> 設定</li>
+<li>團隊協作時，程式碼風格一致，減少 review friction</li>
+</ul>
+<hr>
+<h1 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h1><h2 id="自動格式化所有-Python-檔案"><a href="#自動格式化所有-Python-檔案" class="headerlink" title="自動格式化所有 Python 檔案"></a>自動格式化所有 Python 檔案</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ruff format .</span><br></pre></td></tr></table></figure>
+
+<h2 id="檢查並自動修正違規"><a href="#檢查並自動修正違規" class="headerlink" title="檢查並自動修正違規"></a>檢查並自動修正違規</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ruff check . --fix</span><br></pre></td></tr></table></figure>
+
+<h2 id="只檢查，不修正"><a href="#只檢查，不修正" class="headerlink" title="只檢查，不修正"></a>只檢查，不修正</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ruff check .</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>Ruff 結合 VS Code 的自動化設定，能大幅提升 Python 專案的開發效率與品質。  </p>
+<p>只要簡單設定，從此不再為格式與 import 排序煩惱！</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Python/" rel="tag"># Python</a>
+              <a href="/my-blog/tags/Ruff/" rel="tag"># Ruff</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/my-blog/2025/07/04/Django%20%E9%9D%9C%E6%85%8B%E6%AA%94%E6%A1%88%E9%83%A8%E7%BD%B2%E7%88%86%E7%89%88%E5%95%8F%E9%A1%8C%E6%8E%92%E6%9F%A5%E8%88%87%E8%A7%A3%E6%B3%95/" rel="prev" title="Django 靜態檔案部署爆版問題排查與解法">
+      <i class="fa fa-chevron-left"></i> Django 靜態檔案部署爆版問題排查與解法
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Ruff-%E6%98%AF%E4%BB%80%E9%BA%BC%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">Ruff 是什麼？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%9D-Ruff"><span class="nav-number">2.</span> <span class="nav-text">如何安裝 Ruff</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A8%AD%E5%AE%9A-Ruff%EF%BC%9Apyproject-toml"><span class="nav-number">3.</span> <span class="nav-text">設定 Ruff：pyproject.toml</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VS-Code-%E8%A8%AD%E5%AE%9A%EF%BC%9A%E5%84%B2%E5%AD%98%E6%99%82%E8%87%AA%E5%8B%95%E5%9F%B7%E8%A1%8C-Ruff"><span class="nav-number">4.</span> <span class="nav-text">VS Code 設定：儲存時自動執行 Ruff</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-Python-%E8%88%87-Ruff-%E6%93%B4%E5%85%85%E5%A5%97%E4%BB%B6"><span class="nav-number">4.1.</span> <span class="nav-text">安裝 Python 與 Ruff 擴充套件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B7%A8%E8%BC%AF-vscode-settings-json"><span class="nav-number">4.2.</span> <span class="nav-text">編輯 .vscode&#x2F;settings.json</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%A6%E9%9A%9B%E6%95%88%E6%9E%9C"><span class="nav-number">4.3.</span> <span class="nav-text">實際效果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4"><span class="nav-number">5.</span> <span class="nav-text">常用指令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8B%95%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%89%80%E6%9C%89-Python-%E6%AA%94%E6%A1%88"><span class="nav-number">5.1.</span> <span class="nav-text">自動格式化所有 Python 檔案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AA%A2%E6%9F%A5%E4%B8%A6%E8%87%AA%E5%8B%95%E4%BF%AE%E6%AD%A3%E9%81%95%E8%A6%8F"><span class="nav-number">5.2.</span> <span class="nav-text">檢查並自動修正違規</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AA%E6%AA%A2%E6%9F%A5%EF%BC%8C%E4%B8%8D%E4%BF%AE%E6%AD%A3"><span class="nav-number">5.3.</span> <span class="nav-text">只檢查，不修正</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.4.</span> <span class="nav-text">結論</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/my-blog/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分類</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">標籤</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/my-blog/lib/anime.min.js"></script>
+  <script src="/my-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/my-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/my-blog/js/utils.js"></script>
+
+<script src="/my-blog/js/motion.js"></script>
+
+
+<script src="/my-blog/js/schemes/muse.js"></script>
+
+
+<script src="/my-blog/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
