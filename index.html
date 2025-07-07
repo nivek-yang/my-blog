@@ -149,6 +149,254 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/07/%E5%BE%8C%E7%AB%AF%E5%90%8C%E6%AD%A5%E9%9D%9E%E5%90%8C%E6%AD%A5%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E6%A7%8B%E6%95%88%E8%83%BD%E8%88%87%E5%AF%A6%E5%8B%99%E5%B7%AE%E7%95%B0%E8%A7%A3%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/07/07/%E5%BE%8C%E7%AB%AF%E5%90%8C%E6%AD%A5%E9%9D%9E%E5%90%8C%E6%AD%A5%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E6%A7%8B%E6%95%88%E8%83%BD%E8%88%87%E5%AF%A6%E5%8B%99%E5%B7%AE%E7%95%B0%E8%A7%A3%E6%9E%90/" class="post-title-link" itemprop="url">後端同步 vs 非同步伺服器：架構、效能與實務差異解析</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="創建時間：2025-07-07 00:00:00 / 修改時間：23:07:24" itemprop="dateCreated datePublished" datetime="2025-07-07T00:00:00+08:00">2025-07-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在設計一套後端系統時，經常會遇到一個關鍵抉擇：<strong>使用同步（synchronous）還是非同步（asynchronous）伺服器模型？</strong><br>這個選擇不只是語法風格的不同，更直接影響：</p>
+<ul>
+<li>效能與併發能力（Concurrency &amp; Throughput）</li>
+<li>系統架構與部署方式</li>
+<li>開發難度與維運策略</li>
+</ul>
+<p>本文將以實務角度，帶你全面了解兩者的差異、優劣與適用場景。</p>
+<hr>
+<h1 id="同步伺服器（Synchronous-Server）"><a href="#同步伺服器（Synchronous-Server）" class="headerlink" title="同步伺服器（Synchronous Server）"></a>同步伺服器（Synchronous Server）</h1><h2 id="運作方式"><a href="#運作方式" class="headerlink" title="運作方式"></a>運作方式</h2><p>同步伺服器在處理請求時會「一條請求、一條線程（或進程）」，並且整個執行流程（例如存取資料庫、外部 API、檔案）是<strong>阻塞式的</strong>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">handle_request</span>():</span><br><span class="line">    user = db.query_user()         <span class="comment"># 等待資料庫查詢完成</span></span><br><span class="line">    data = requests.get(API_URL)   <span class="comment"># 等待外部 API 回應</span></span><br><span class="line">    <span class="keyword">return</span> render(data)</span><br></pre></td></tr></table></figure>
+
+<h2 id="特點"><a href="#特點" class="headerlink" title="特點"></a>特點</h2><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>阻塞式處理</td>
+<td>一條線程被某個 I&#x2F;O 任務卡住時，無法處理其他請求</td>
+</tr>
+<tr>
+<td>簡單直覺</td>
+<td>程式碼撰寫與除錯容易</td>
+</tr>
+<tr>
+<td>資源密集</td>
+<td>多請求需要多線程，記憶體與 CPU 成本高</td>
+</tr>
+<tr>
+<td>常用框架</td>
+<td>Django（WSGI）、Flask、Laravel、Spring MVC</td>
+</tr>
+</tbody></table>
+<hr>
+<h1 id="非同步伺服器（Asynchronous-Server）"><a href="#非同步伺服器（Asynchronous-Server）" class="headerlink" title="非同步伺服器（Asynchronous Server）"></a>非同步伺服器（Asynchronous Server）</h1><h2 id="運作方式-1"><a href="#運作方式-1" class="headerlink" title="運作方式"></a>運作方式</h2><p>非同步伺服器採用 <strong>事件迴圈 + 協程</strong> 模型，能在等待 I&#x2F;O 操作時釋出資源，去處理其他請求。核心在於 <code>await</code> 或事件回呼（callback）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">handle_request</span>():</span><br><span class="line">    user = <span class="keyword">await</span> db.fetch_user()         <span class="comment"># 非同步資料庫</span></span><br><span class="line">    data = <span class="keyword">await</span> http.get(API_URL)       <span class="comment"># 非同步 HTTP</span></span><br><span class="line">    <span class="keyword">return</span> render(data)</span><br></pre></td></tr></table></figure>
+
+<h3 id="特點-1"><a href="#特點-1" class="headerlink" title="特點"></a>特點</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>非阻塞處理</td>
+<td>請求之間可共享同一事件迴圈，無需多條 thread</td>
+</tr>
+<tr>
+<td>複雜度較高</td>
+<td>需學習 async&#x2F;await，debug 相對困難</td>
+</tr>
+<tr>
+<td>高併發效率</td>
+<td>大幅減少 thread 切換與記憶體使用</td>
+</tr>
+<tr>
+<td>常用框架</td>
+<td>FastAPI、Node.js、Django ASGI、Go、Vert.x</td>
+</tr>
+</tbody></table>
+<hr>
+<h1 id="優缺點比較總表"><a href="#優缺點比較總表" class="headerlink" title="優缺點比較總表"></a>優缺點比較總表</h1><table>
+<thead>
+<tr>
+<th>項目</th>
+<th>同步伺服器</th>
+<th>非同步伺服器</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>開發容易度</td>
+<td>✅ 簡單</td>
+<td>❌ 複雜（需 async&#x2F;await）</td>
+</tr>
+<tr>
+<td>單請求效能</td>
+<td>✅ 穩定</td>
+<td>✅ 穩定</td>
+</tr>
+<tr>
+<td>高併發表現</td>
+<td>❌ thread 限制</td>
+<td>✅ 優異</td>
+</tr>
+<tr>
+<td>記憶體使用</td>
+<td>❌ 高</td>
+<td>✅ 低</td>
+</tr>
+<tr>
+<td>長連線支援（WebSocket）</td>
+<td>❌ 不適合</td>
+<td>✅ 適合</td>
+</tr>
+<tr>
+<td>舊程式碼相容性</td>
+<td>✅ 高</td>
+<td>❌ async 套件有限</td>
+</tr>
+<tr>
+<td>除錯追蹤</td>
+<td>✅ 易懂堆疊</td>
+<td>❌ StackTrace 被拆開</td>
+</tr>
+<tr>
+<td>常見應用</td>
+<td>CMS、內部系統、企業服務</td>
+<td>API Gateway、聊天系統、即時平台</td>
+</tr>
+</tbody></table>
+<hr>
+<h1 id="案例分析：同時處理-1000-個請求"><a href="#案例分析：同時處理-1000-個請求" class="headerlink" title="案例分析：同時處理 1000 個請求"></a>案例分析：同時處理 1000 個請求</h1><h2 id="同步伺服器（如：Django-Gunicorn）"><a href="#同步伺服器（如：Django-Gunicorn）" class="headerlink" title="同步伺服器（如：Django + Gunicorn）"></a>同步伺服器（如：Django + Gunicorn）</h2><ul>
+<li>每個請求綁一條 thread（或 worker）</li>
+<li>等待資料庫或 API 期間 thread 閒置，但資源仍被佔用</li>
+<li>若有 1000 個請求 → 需要 1000 條 thread，否則排隊</li>
+</ul>
+<h2 id="非同步伺服器（如：FastAPI-Uvicorn）"><a href="#非同步伺服器（如：FastAPI-Uvicorn）" class="headerlink" title="非同步伺服器（如：FastAPI + Uvicorn）"></a>非同步伺服器（如：FastAPI + Uvicorn）</h2><ul>
+<li>所有請求共享事件迴圈</li>
+<li>一旦遇到 <code>await</code> 就切去處理其他請求</li>
+<li>少量 thread 即可服務大量併發請求</li>
+</ul>
+<hr>
+<h1 id="常見誤解釐清"><a href="#常見誤解釐清" class="headerlink" title="常見誤解釐清"></a>常見誤解釐清</h1><ol>
+<li><p><strong>Q：前端用 async&#x2F;await，後端也要非同步伺服器嗎？</strong><br>A：不一定。前端非同步只是 UI 不被卡住，與後端架構無關。但若請求量大，後端 async 可顯著減少資源浪費。</p>
+</li>
+<li><p><strong>Q：非同步伺服器無敵嗎？</strong><br>A：不是。對 CPU-bound 任務（如報表、壓縮、加解密），async 無助效能，反而需用多進程處理。</p>
+</li>
+<li><p><strong>Q：用的是同步框架（如 Flask），怎麼辦？</strong><br>A：可透過多進程（如 Gunicorn）擴展，或漸進遷移至 async 架構。</p>
+</li>
+</ol>
+<hr>
+<h1 id="實務建議：哪時候該選哪個？"><a href="#實務建議：哪時候該選哪個？" class="headerlink" title="實務建議：哪時候該選哪個？"></a>實務建議：哪時候該選哪個？</h1><table>
+<thead>
+<tr>
+<th>情境</th>
+<th>建議</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>網站用戶量不高、以 CRUD 為主</td>
+<td>同步伺服器（Flask、Django）</td>
+</tr>
+<tr>
+<td>API Gateway、大量查詢或等待外部資源</td>
+<td>非同步伺服器（FastAPI、Node.js）</td>
+</tr>
+<tr>
+<td>即時互動（聊天室、推播、遊戲）</td>
+<td>非同步 + 長連線（WebSocket）架構</td>
+</tr>
+<tr>
+<td>有舊系統整合需求、需穩定維運</td>
+<td>同步架構保守推進</td>
+</tr>
+</tbody></table>
+<hr>
+<h1 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h1><table>
+<thead>
+<tr>
+<th>結論</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>同步架構簡單、穩定，適合中小型應用與企業內部系統</td>
+</tr>
+<tr>
+<td>非同步適合高併發、I&#x2F;O 密集、WebSocket 等場景</td>
+</tr>
+<tr>
+<td>現代框架（如 FastAPI、Django 4+）皆支援「同步 + 非同步混合」，可漸進導入</td>
+</tr>
+<tr>
+<td>選擇前先分析瓶頸，是 CPU-bound 還是 I&#x2F;O-bound</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>「同步好開發、非同步好擴展」，選擇要根據實際需求、開發人力與併發目標靈活判斷！</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
     <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/06/Nginx%E5%9C%A8%E5%B0%88%E6%A1%88%E4%B8%AD%E7%9A%84%E8%A7%92%E8%89%B2%E8%88%87%E8%A8%AD%E5%AE%9A%E5%AF%A6%E4%BE%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1567,271 +1815,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/05/01/N+1_problem/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/05/01/N+1_problem/" class="post-title-link" itemprop="url">N+1 問題與解決方法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">發表於</span>
-              
-
-              <time title="創建時間：2025-05-01 00:00:00 / 修改時間：23:59:19" itemprop="dateCreated datePublished" datetime="2025-05-01T00:00:00+08:00">2025-05-01</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分類於</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="什麼是-N-1-問題？"><a href="#什麼是-N-1-問題？" class="headerlink" title="什麼是 N+1 問題？"></a>什麼是 N+1 問題？</h1><blockquote>
-<p><strong>N+1 問題</strong> 是一種常見的效能問題，通常發生在處理資料庫查詢時。當我們需要查詢一個主物件及其相關聯的子物件時，程式會執行 1 次查詢來獲取主物件，然後為每個主物件執行 N 次查詢來獲取其相關聯的子物件。這樣總共會執行 <strong>1 + N</strong> 次查詢，導致效能低下。</p>
-</blockquote>
-<hr>
-<h1 id="什麼時候會發生-N-1-問題？"><a href="#什麼時候會發生-N-1-問題？" class="headerlink" title="什麼時候會發生 N+1 問題？"></a>什麼時候會發生 N+1 問題？</h1><ol>
-<li><p><strong>關聯查詢</strong>：</p>
-<ul>
-<li>當模型之間有外鍵（<code>ForeignKey</code>）、一對一（<code>OneToOneField</code>）或多對多（<code>ManyToManyField</code>）關聯時，容易發生 N+1 問題。</li>
-</ul>
-</li>
-<li><p><strong>模板中迴圈訪問關聯物件</strong>：</p>
-<ul>
-<li>在模板中使用迴圈訪問關聯物件時，可能會導致多次查詢。</li>
-</ul>
-<p>範例：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;% for comment in comments %&#125;</span><br><span class="line">    &#123;&#123; comment.author.name &#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure></li>
-</ol>
-<hr>
-<h2 id="範例：留言與作者-多對一"><a href="#範例：留言與作者-多對一" class="headerlink" title="範例：留言與作者 (多對一)"></a>範例：留言與作者 (多對一)</h2><p>假設我們有一個留言系統，每條留言都有一個作者。當我們需要顯示所有留言及其作者時，可能會發生 N+1 問題。</p>
-<ol>
-<li><p><strong>查詢留言</strong>：執行 1 次查詢來獲取所有留言。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> comments;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>查詢作者</strong>：對於每條留言，執行 1 次查詢來獲取該留言的作者。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="operator">&lt;</span>author_id<span class="operator">&gt;</span>;</span><br></pre></td></tr></table></figure></li>
-</ol>
-<p>如果有 100 條留言，總共會執行 <strong>1 + 100 &#x3D; 101 次查詢</strong>。</p>
-<hr>
-<h1 id="N-1-問題的影響"><a href="#N-1-問題的影響" class="headerlink" title="N+1 問題的影響"></a>N+1 問題的影響</h1><ul>
-<li><strong>效能低下</strong>：大量的查詢會增加資料庫的負載，特別是在高流量的應用中。</li>
-<li><strong>延遲增加</strong>：每次查詢都需要與資料庫交互，導致頁面加載時間變長。</li>
-</ul>
-<hr>
-<h1 id="解決方法"><a href="#解決方法" class="headerlink" title="解決方法"></a>解決方法</h1><h2 id="1-使用-select-related"><a href="#1-使用-select-related" class="headerlink" title="1. 使用 select_related"></a>1. <strong>使用 <code>select_related</code></strong></h2><p><code>select_related</code> 用於解決 <strong>一對一</strong> 或 <strong>多對一</strong> 關聯的 N+1 問題。它會在一次查詢中使用 SQL 的 <code>JOIN</code>，將相關聯的資料一起查出來。</p>
-<h3 id="範例-多對一-："><a href="#範例-多對一-：" class="headerlink" title="範例 (多對一)："></a>範例 (多對一)：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># N+1 問題</span></span><br><span class="line">comments = Comment.objects.<span class="built_in">all</span>()</span><br><span class="line"><span class="keyword">for</span> comment <span class="keyword">in</span> comments:</span><br><span class="line">    <span class="built_in">print</span>(comment.author.name)  <span class="comment"># 每次訪問 author 都會執行一次查詢</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 解決 N+1 問題</span></span><br><span class="line">comments = Comment.objects.select_related(<span class="string">&#x27;author&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> comment <span class="keyword">in</span> comments:</span><br><span class="line">    <span class="built_in">print</span>(comment.author.name)  <span class="comment"># 不會再執行額外的查詢</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>使用 <code>select_related</code>，Django 在查詢留言時，會同時透過 SQL 的 <code>JOIN</code> 將留言和作者的資料一起查出來。</li>
-</ul>
-<h3 id="SQL-查詢："><a href="#SQL-查詢：" class="headerlink" title="SQL 查詢："></a>SQL 查詢：</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> comments.<span class="operator">*</span>, users.<span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> comments</span><br><span class="line"><span class="keyword">JOIN</span> users <span class="keyword">ON</span> comments.author_id <span class="operator">=</span> users.id;</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3 id="SQL-查詢對比"><a href="#SQL-查詢對比" class="headerlink" title="SQL 查詢對比"></a><strong>SQL 查詢對比</strong></h3><table>
-<thead>
-<tr>
-<th>方法</th>
-<th>查詢次數</th>
-<th>SQL 查詢範例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>N+1 問題</strong></td>
-<td>1 + N</td>
-<td>1. <code>SELECT * FROM comments;</code> <br> 2. <code>SELECT * FROM users WHERE id = &lt;id&gt;;</code></td>
-</tr>
-<tr>
-<td><strong>使用 <code>select_related</code></strong></td>
-<td>1</td>
-<td><code>SELECT comments.*, users.* FROM comments JOIN users ON comments.author_id = users.id;</code></td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="2-使用-prefetch-related"><a href="#2-使用-prefetch-related" class="headerlink" title="2. 使用 prefetch_related"></a>2. <strong>使用 <code>prefetch_related</code></strong></h2><p><code>prefetch_related</code> 用於解決 <strong>一對多</strong> 或 <strong>多對多</strong> 關聯的 N+1 問題。它會執行兩次查詢，並在 Python 中將結果關聯起來。</p>
-<h3 id="範例-一對多-："><a href="#範例-一對多-：" class="headerlink" title="範例 (一對多)："></a>範例 (一對多)：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># N+1 問題</span></span><br><span class="line">authors = Author.objects.<span class="built_in">all</span>()</span><br><span class="line"><span class="keyword">for</span> author <span class="keyword">in</span> authors:</span><br><span class="line">    <span class="built_in">print</span>(author.books.<span class="built_in">all</span>())  <span class="comment"># 每次訪問 books 都會執行一次查詢</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 解決 N+1 問題</span></span><br><span class="line">authors = Author.objects.prefetch_related(<span class="string">&#x27;books&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> author <span class="keyword">in</span> authors:</span><br><span class="line">    <span class="built_in">print</span>(author.books.<span class="built_in">all</span>())  <span class="comment"># 不會再執行額外的查詢</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>prefetch_related</code> 會執行兩次查詢：<ol>
-<li>查詢所有作者。</li>
-<li>查詢所有書籍，並在 Python 中將書籍與對應的作者關聯起來。</li>
-</ol>
-</li>
-</ul>
-<h3 id="SQL-查詢：-1"><a href="#SQL-查詢：-1" class="headerlink" title="SQL 查詢："></a>SQL 查詢：</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> authors;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> books <span class="keyword">WHERE</span> author_id <span class="keyword">IN</span> (<span class="operator">&lt;</span>author_ids<span class="operator">&gt;</span>);</span><br></pre></td></tr></table></figure>
-
-<h3 id="SQL-查詢對比-1"><a href="#SQL-查詢對比-1" class="headerlink" title="SQL 查詢對比"></a><strong>SQL 查詢對比</strong></h3><table>
-<thead>
-<tr>
-<th>方法</th>
-<th>查詢次數</th>
-<th>SQL 查詢範例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>N+1 問題</strong></td>
-<td>1 + N</td>
-<td>1. <code>SELECT * FROM authors;</code> <br> 2. <code>SELECT * FROM books WHERE author_id = &lt;author_id&gt;;</code></td>
-</tr>
-<tr>
-<td><strong><code>prefetch_related</code></strong></td>
-<td>2</td>
-<td>1. <code>SELECT * FROM authors;</code> <br> 2. <code>SELECT * FROM books WHERE author_id IN (&lt;author_ids&gt;);</code></td>
-</tr>
-</tbody></table>
-<hr>
-<h4 id="N-1-問題的查詢（使用-）"><a href="#N-1-問題的查詢（使用-）" class="headerlink" title="N+1 問題的查詢（使用 =）"></a><strong>N+1 問題的查詢（使用 <code>=</code>）</strong></h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> books <span class="keyword">WHERE</span> author_id <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> books <span class="keyword">WHERE</span> author_id <span class="operator">=</span> <span class="number">2</span>;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> books <span class="keyword">WHERE</span> author_id <span class="operator">=</span> <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>每次查詢只匹配一個 <code>author_id</code>，需要執行多次查詢（N 次）。</li>
-</ul>
-<h4 id="prefetch-related-的查詢（使用-IN）"><a href="#prefetch-related-的查詢（使用-IN）" class="headerlink" title="prefetch_related 的查詢（使用 IN）"></a><strong><code>prefetch_related</code> 的查詢（使用 <code>IN</code>）</strong></h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> books <span class="keyword">WHERE</span> author_id <span class="keyword">IN</span> (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);</span><br></pre></td></tr></table></figure>
-<ul>
-<li>一次查詢即可匹配多個 <code>author_id</code>，大幅減少查詢次數。</li>
-</ul>
-<blockquote>
-<p>在解決 N+1 問題時，<code>prefetch_related</code> 使用 <code>IN</code>，可以一次查詢多個關聯物件，顯著提升效能</p>
-</blockquote>
-<hr>
-<h3 id="select-related-與-prefetch-related-的比較"><a href="#select-related-與-prefetch-related-的比較" class="headerlink" title="select_related 與 prefetch_related 的比較"></a>select_related 與 prefetch_related 的比較</h3><p>select_related 和 prefetch_related 是 Django 中用來解決 N+1 問題的兩個方法，但它們適用於不同的場景，且工作方式也不同</p>
-<table>
-<thead>
-<tr>
-<th>特性</th>
-<th><code>select_related</code></th>
-<th><code>prefetch_related</code></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>適用關係</td>
-<td>多對一、一對一</td>
-<td>一對多、多對多</td>
-</tr>
-<tr>
-<td>查詢次數</td>
-<td>1 次查詢</td>
-<td>2 次查詢</td>
-</tr>
-<tr>
-<td>工作方式</td>
-<td>使用 SQL 的 <code>JOIN</code></td>
-<td>分開查詢，Python 中關聯結果</td>
-</tr>
-<tr>
-<td>效能</td>
-<td>高效，但不適合關聯資料過多的情況</td>
-<td>稍低，但適合處理大量關聯資料</td>
-</tr>
-<tr>
-<td>使用場景</td>
-<td>外鍵（<code>ForeignKey</code>）、一對一關聯</td>
-<td>反向外鍵（<code>related_name</code>）、多對多關聯</td>
-</tr>
-</tbody></table>
-<p>根據資料關聯的類型選擇正確的方法，可以有效提升 Django 應用的效能</p>
-<hr>
-<p>在某些情況下，兩者都可以使用，但選擇哪一個取決於以下因素：</p>
-<ol>
-<li><p><strong>資料量大小</strong>：</p>
-<ul>
-<li>如果關聯資料量較小，使用 <strong><code>select_related</code></strong> 更高效，因為只需要執行一次查詢。</li>
-<li>如果關聯資料量較大，使用 <strong><code>prefetch_related</code></strong> 更合適，因為它避免了 <code>JOIN</code> 導致的查詢結果過於龐大。</li>
-</ul>
-</li>
-<li><p><strong>關聯類型</strong>：</p>
-<ul>
-<li><strong>多對一或一對一</strong>：優先使用 <strong><code>select_related</code></strong>。</li>
-<li><strong>一對多或多對多</strong>：優先使用 <strong><code>prefetch_related</code></strong>。</li>
-</ul>
-</li>
-<li><p><strong>查詢的靈活性</strong>：</p>
-<ul>
-<li>如果需要對關聯表進行額外的過濾或排序，使用 <strong><code>prefetch_related</code></strong> 更靈活，因為它允許自訂查詢。</li>
-<li><code>select_related</code> 無法對關聯表進行過濾或排序，因為它直接使用 SQL 的 <code>JOIN</code></li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<p>當關聯表的資料量較大，且需要過濾或排序時，<code>prefetch_related</code> 是更好的選擇</p>
-</blockquote>
-<hr>
-<h2 id="3-使用-Django-Debug-Toolbar"><a href="#3-使用-Django-Debug-Toolbar" class="headerlink" title="3. 使用 Django Debug Toolbar"></a>3. <strong>使用 Django Debug Toolbar</strong></h2><p><a target="_blank" rel="noopener" href="https://django-debug-toolbar.readthedocs.io/en/latest/">Django Debug Toolbar</a> 是一個強大的工具，可以幫助開發者檢測 N+1 問題，並查看每個請求執行的 SQL 查詢。</p>
-<h3 id="安裝與設定："><a href="#安裝與設定：" class="headerlink" title="安裝與設定："></a>安裝與設定：</h3><ol>
-<li><p>安裝：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install django-debug-toolbar</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在 <code>settings.py</code> 中添加：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">INSTALLED_APPS += [<span class="string">&#x27;debug_toolbar&#x27;</span>]</span><br><span class="line">MIDDLEWARE += [<span class="string">&#x27;debug_toolbar.middleware.DebugToolbarMiddleware&#x27;</span>]</span><br><span class="line">INTERNAL_IPS = [</span><br><span class="line"> <span class="comment"># ...</span></span><br><span class="line"> <span class="string">&quot;127.0.0.1&quot;</span>,</span><br><span class="line"> <span class="comment"># ...</span></span><br><span class="line"> ]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在 <code>urls.py</code> 中添加：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.conf <span class="keyword">import</span> settings</span><br><span class="line"><span class="keyword">from</span> django.conf.urls <span class="keyword">import</span> include</span><br><span class="line"><span class="keyword">from</span> django.urls <span class="keyword">import</span> path</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> settings.DEBUG:</span><br><span class="line">    <span class="keyword">import</span> debug_toolbar</span><br><span class="line">    urlpatterns = [</span><br><span class="line">        path(<span class="string">&#x27;__debug__/&#x27;</span>, include(debug_toolbar.urls)),</span><br><span class="line">    ] + urlpatterns</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>啟動伺服器後，檢查每個請求的 SQL 查詢次數，找出 N+1 問題。</p>
-</li>
-</ol>
-<hr>
-<h1 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h1><ul>
-<li><strong>N+1 問題</strong> 是由於多次查詢資料庫導致的效能問題，特別是在處理關聯資料時容易發生。</li>
-<li><strong>解決方法</strong>：<ol>
-<li>使用 <code>select_related</code> 解決一對一或多對一關聯的問題。</li>
-<li>使用 <code>prefetch_related</code> 解決一對多或多對多關聯的問題。</li>
-<li>使用 Django Debug Toolbar 檢測 SQL 查詢次數，找出潛在的 N+1 問題。</li>
-</ol>
-</li>
-<li><strong>最佳實踐</strong>：<ul>
-<li>在開發過程中，定期檢查 SQL 查詢，確保效能最佳化。</li>
-<li>對於大型應用，考慮使用快取（如 Redis）進一步減少資料庫查詢次數。</li>
-</ul>
-</li>
-</ul>
-<p>透過這些方法，可以有效避免 N+1 問題，提升 Django 應用的效能與穩定性。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1901,7 +1884,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/my-blog/archives/">
         
-          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-count">28</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -1910,7 +1893,7 @@
         <span class="site-state-item-name">分類</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-count">20</span>
         <span class="site-state-item-name">標籤</span>
       </div>
   </nav>
