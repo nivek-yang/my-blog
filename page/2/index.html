@@ -149,6 +149,170 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/05/03/Git%20%E6%9C%AC%E6%A9%9F%E8%88%87%E9%81%A0%E7%AB%AF%E6%93%8D%E4%BD%9C%E8%A9%B3%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/05/03/Git%20%E6%9C%AC%E6%A9%9F%E8%88%87%E9%81%A0%E7%AB%AF%E6%93%8D%E4%BD%9C%E8%A9%B3%E8%A7%A3/" class="post-title-link" itemprop="url">Git 本機與遠端操作詳解</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="創建時間：2025-05-03 00:00:00 / 修改時間：02:37:40" itemprop="dateCreated datePublished" datetime="2025-05-03T00:00:00+08:00">2025-05-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>本文詳細解釋了 Git 本機與遠端操作的常見指令及其應用場景，涵蓋 <code>git fetch</code>、<code>git pull</code>、<code>git push</code>、Pull Request (PR) 的管理，以及如何保持 Git 圖表清晰的最佳實踐。</p>
+</blockquote>
+<hr>
+<h1 id="git-fetch-與分支同步"><a href="#git-fetch-與分支同步" class="headerlink" title="git fetch 與分支同步"></a><code>git fetch</code> 與分支同步</h1><p><code>git fetch</code> 是用來從遠端倉庫抓取最新的更新，但不會自動合併到本地分支。它的作用是讓本地倉庫知道遠端的最新狀態。</p>
+<h2 id="使用範例："><a href="#使用範例：" class="headerlink" title="使用範例："></a>使用範例：</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git fetch</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>效果</strong>：抓取遠端的更新，並建立對應的遠端分支（如 <code>origin/master</code>）。</li>
+<li><strong>應用場景</strong>：當你想檢查遠端的最新變更，但不希望立即影響本地分支時使用。</li>
+</ul>
+<hr>
+<h1 id="本機與遠端同步的方式"><a href="#本機與遠端同步的方式" class="headerlink" title="本機與遠端同步的方式"></a>本機與遠端同步的方式</h1><p>要讓本機分支跟上遠端的進度，可以使用以下幾種方式：</p>
+<h2 id="1-git-merge"><a href="#1-git-merge" class="headerlink" title="1. git merge"></a>1. <code>git merge</code></h2><p>將遠端的變更合併到本地分支，保留本地和遠端的提交歷史。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull = git fetch + git merge</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>效果</strong>：合併後會保留兩條提交記錄，適合需要完整歷史的場景。</li>
+<li><strong>缺點</strong>：可能導致 Git 圖表變得複雜。</li>
+</ul>
+<h2 id="2-git-rebase"><a href="#2-git-rebase" class="headerlink" title="2. git rebase"></a>2. <code>git rebase</code></h2><p>將遠端的變更應用到本地分支的基礎上，重新整理提交歷史。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull --rebase = git fetch + git rebase</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>效果</strong>：提交歷史會變得線性，讓 Git 圖表更清晰。</li>
+<li><strong>注意</strong>：在使用 <code>rebase</code> 時，需確保沒有其他人依賴你的分支，避免衝突。</li>
+</ul>
+<h2 id="3-git-reset"><a href="#3-git-reset" class="headerlink" title="3. git reset"></a>3. <code>git reset</code></h2><p>重置本地分支到遠端分支的狀態，適合需要完全同步的情況。</p>
+<hr>
+<h1 id="git-push-的進階用法"><a href="#git-push-的進階用法" class="headerlink" title="git push 的進階用法"></a><code>git push</code> 的進階用法</h1><p><code>git push</code> 是將本地分支的變更推送到遠端分支。以下是一些進階用法：</p>
+<h2 id="1-推送到相同名稱的分支"><a href="#1-推送到相同名稱的分支" class="headerlink" title="1. 推送到相同名稱的分支"></a>1. 推送到相同名稱的分支</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin main</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>效果</strong>：將本地的 <code>main</code> 分支推送到遠端的 <code>main</code> 分支。</li>
+</ul>
+<h2 id="2-推送到不同名稱的分支"><a href="#2-推送到不同名稱的分支" class="headerlink" title="2. 推送到不同名稱的分支"></a>2. 推送到不同名稱的分支</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin main:<span class="built_in">cat</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>效果</strong>：將本地的 <code>main</code> 分支推送到遠端的 <code>cat</code> 分支。</li>
+</ul>
+<h2 id="3-刪除遠端分支"><a href="#3-刪除遠端分支" class="headerlink" title="3. 刪除遠端分支"></a>3. 刪除遠端分支</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin :<span class="built_in">cat</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>效果</strong>：刪除遠端的 <code>cat</code> 分支，相當於執行 <code>null:cat</code>。</li>
+</ul>
+<hr>
+<h1 id="Pull-Request-PR-的管理"><a href="#Pull-Request-PR-的管理" class="headerlink" title="Pull Request (PR) 的管理"></a>Pull Request (PR) 的管理</h1><p>Pull Request 是團隊協作中不可或缺的一部分，用於代碼審查和合併。</p>
+<h2 id="PR-的最佳實踐"><a href="#PR-的最佳實踐" class="headerlink" title="PR 的最佳實踐"></a>PR 的最佳實踐</h2><ol>
+<li><p><strong>設定審核條件</strong>：</p>
+<ul>
+<li>可以設定 6 人團隊中至少 5 人接受後才能合併。</li>
+<li>當條件滿足時，合併按鈕會亮起，任何人都可以按下合併。</li>
+</ul>
+</li>
+<li><p><strong>PR 的重要性</strong>：</p>
+<ul>
+<li>即使功能不是你開發的，參與 PR 的 Code Review 也能幫助你了解功能的運作方式。</li>
+<li>在面試中，可以提到你參與過的 Code Review，展示對系統的理解。</li>
+</ul>
+</li>
+<li><p><strong>避免 PR 堆積</strong>：</p>
+<ul>
+<li>PR 長時間未處理會導致難以合併，建議每週安排一次 PR 日，集中討論和處理 PR。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h1 id="保持-Git-圖表清晰的建議"><a href="#保持-Git-圖表清晰的建議" class="headerlink" title="保持 Git 圖表清晰的建議"></a>保持 Git 圖表清晰的建議</h1><ol>
+<li><p><strong>優先使用 <code>git rebase</code></strong>：</p>
+<ul>
+<li>在執行 <code>git fetch</code> 後，盡量使用 <code>rebase</code> 而非 <code>merge</code>，避免提交歷史過於複雜。</li>
+</ul>
+</li>
+<li><p><strong>避免強制推送到共享分支</strong>：</p>
+<ul>
+<li><code>git push origin main --force</code> 應謹慎使用，尤其是在共享分支上。</li>
+<li>如果需要整理自己的分支，可以在個人分支上使用 <code>--force</code>。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h1 id="常見操作範例"><a href="#常見操作範例" class="headerlink" title="常見操作範例"></a>常見操作範例</h1><h2 id="建立新分支並推送"><a href="#建立新分支並推送" class="headerlink" title="建立新分支並推送"></a>建立新分支並推送</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git branch issues/705</span><br><span class="line">git push origin issues/705</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>效果</strong>：建立一個名為 <code>issues/705</code> 的分支，並推送到遠端。</li>
+</ul>
+<h2 id="發起-PR-並進行-Code-Review"><a href="#發起-PR-並進行-Code-Review" class="headerlink" title="發起 PR 並進行 Code Review"></a>發起 PR 並進行 Code Review</h2><ol>
+<li>在遠端倉庫中發起 PR，請求其他成員進行代碼審查。</li>
+<li>通過審查後，合併到主分支。</li>
+</ol>
+<hr>
+<h1 id="面試中的-Git-技巧"><a href="#面試中的-Git-技巧" class="headerlink" title="面試中的 Git 技巧"></a>面試中的 Git 技巧</h1><p>在面試中，展示你對 Git 的理解和實踐經驗非常重要。例如：</p>
+<ul>
+<li><strong>參與 Code Review</strong>：<ul>
+<li>即使某功能不是你開發的，可以提到在 PR 中進行過代碼審查，並了解該功能的實現細節。</li>
+</ul>
+</li>
+<li><strong>版本控制的實踐</strong>：<ul>
+<li>提到如何使用 <code>rebase</code> 保持提交歷史清晰，或如何處理衝突。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>這篇文章介紹了 Git 本機與遠端操作的常見場景和實踐，適合用於團隊協作和個人開發的日常工作中。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
     <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/05/02/%E5%9C%98%E9%9A%8A%E5%B0%88%E6%A1%88%E4%BB%BB%E5%8B%99%E7%AE%A1%E7%90%86%E8%88%87%E5%9F%B7%E8%A1%8C%E6%B5%81%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1863,136 +2027,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/24/Django%20%E7%99%BB%E5%85%A5%E6%AA%A2%E6%9F%A5%20%60login_required%60%20%E8%A3%9D%E9%A3%BE%E5%99%A8%EF%BC%9A%E8%99%95%E7%90%86%20%60next%60%20%E9%87%8D%E5%AE%9A%E5%90%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/04/24/Django%20%E7%99%BB%E5%85%A5%E6%AA%A2%E6%9F%A5%20%60login_required%60%20%E8%A3%9D%E9%A3%BE%E5%99%A8%EF%BC%9A%E8%99%95%E7%90%86%20%60next%60%20%E9%87%8D%E5%AE%9A%E5%90%91/" class="post-title-link" itemprop="url">Django 登入檢查 `login_required` 裝飾器：處理 `next` 重定向</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">發表於</span>
-              
-
-              <time title="創建時間：2025-04-24 00:00:00 / 修改時間：01:53:35" itemprop="dateCreated datePublished" datetime="2025-04-24T00:00:00+08:00">2025-04-24</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分類於</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="登入檢查：login-required"><a href="#登入檢查：login-required" class="headerlink" title="登入檢查：login_required"></a>登入檢查：<code>login_required</code></h1><h2 id="原理與機制"><a href="#原理與機制" class="headerlink" title="原理與機制"></a>原理與機制</h2><p>Django 提供了 <code>@login_required</code> 裝飾器，用於保護視圖，確保只有已登入的用戶才能訪問特定的頁面。當未登入的用戶嘗試訪問受保護的視圖時，Django 會自動將用戶重定向到設定中的 <code>LOGIN_URL</code>，並附加一個 <code>next</code> 查詢參數 (<code>QueryString</code>)，表示用戶原本想訪問的 URL。</p>
-<h2 id="使用範例"><a href="#使用範例" class="headerlink" title="使用範例"></a>使用範例</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.contrib.auth.decorators <span class="keyword">import</span> login_required</span><br><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> render</span><br><span class="line"></span><br><span class="line"><span class="meta">@login_required</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">protected_view</span>(<span class="params">req</span>):</span><br><span class="line">    <span class="keyword">return</span> render(req, <span class="string">&quot;protected_page.html&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><ol>
-<li>當用戶訪問被 <code>@login_required</code> 裝飾的視圖時，Django 會檢查 <code>req.user.is_authenticated</code> 的值。</li>
-<li>如果 <code>req.user.is_authenticated</code> 為 <code>True</code>，則允許訪問該視圖。</li>
-<li>如果 <code>req.user.is_authenticated</code> 為 <code>False</code>，則會將用戶重定向到 <code>settings.LOGIN_URL</code>，並附加 <code>next</code> 查詢參數，指向用戶原本想訪問的 URL。</li>
-</ol>
-<h2 id="關鍵點"><a href="#關鍵點" class="headerlink" title="關鍵點"></a>關鍵點</h2><ul>
-<li><strong><code>req.user.is_authenticated</code></strong> 是一個屬性，用於判斷當前用戶是否已登入。<ul>
-<li>如果用戶已登入，<code>req.user</code> 是一個 <code>User</code> 對象，且 <code>is_authenticated</code> 為 <code>True</code>。</li>
-<li>如果用戶未登入，<code>req.user</code> 是一個 <code>AnonymousUser</code> 對象，且 <code>is_authenticated</code> 為 <code>False</code>。</li>
-</ul>
-</li>
-</ul>
-<h2 id="相關代碼（簡化版）"><a href="#相關代碼（簡化版）" class="headerlink" title="相關代碼（簡化版）"></a>相關代碼（簡化版）</h2><p><code>@login_required</code> 的內部邏輯類似於以下代碼：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> redirect</span><br><span class="line"><span class="keyword">from</span> django.conf <span class="keyword">import</span> settings</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">login_required</span>(<span class="params">view_func</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">req, *args, **kwargs</span>):</span><br><span class="line">        <span class="keyword">if</span> req.user.is_authenticated:</span><br><span class="line">            <span class="keyword">return</span> view_func(req, *args, **kwargs)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            login_url = settings.LOGIN_URL</span><br><span class="line">            <span class="keyword">return</span> redirect(<span class="string">f&quot;<span class="subst">&#123;login_url&#125;</span>?next=<span class="subst">&#123;req.path&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br></pre></td></tr></table></figure>
-
-<p><code>@login_required</code> 的授權條件是基於 <code>req.user.is_authenticated</code> 的值。如果你需要自定義授權邏輯，可以考慮使用 Django 的 <code>PermissionRequiredMixin</code> 或自定義裝飾器。</p>
-<h2 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h2><ol>
-<li>用戶訪問受保護的視圖。</li>
-<li>如果未登入，Django 會將用戶重定向到 <code>LOGIN_URL</code>，例如：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/users/sign_in?next=/protected_page</span><br></pre></td></tr></table></figure></li>
-<li>Django 不會自動處理 next 的重定向邏輯，需要在登入處理的視圖中手動處理 next 的值，並根據它進行重定向。</li>
-</ol>
-<hr>
-<h1 id="如何處理-next"><a href="#如何處理-next" class="headerlink" title="如何處理 next"></a>如何處理 <code>next</code></h1><h2 id="原理與機制-1"><a href="#原理與機制-1" class="headerlink" title="原理與機制"></a>原理與機制</h2><p><code>next</code> 是一個查詢參數，用於保存用戶在未登入時嘗試訪問的目標頁面。當用戶成功登入後，應該根據 <code>next</code> 的值將用戶重定向到該頁面。</p>
-<h3 id="1-在登入表單中傳遞-next"><a href="#1-在登入表單中傳遞-next" class="headerlink" title="1. 在登入表單中傳遞 next"></a>1. <strong>在登入表單中傳遞 <code>next</code></strong></h3><p>在登入頁面中，將 <code>next</code> 的值作為隱藏字段傳遞到表單中，這樣用戶提交表單時，<code>next</code> 的值會被一併提交。</p>
-<p>sign_in.html</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;&#123;% url &#x27;users:create_session&#x27; %&#125;&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line">    &#123;% csrf_token %&#125;</span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;next&quot;</span> <span class="attr">value</span>=<span class="string">&quot;&#123;&#123; next &#125;&#125;&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">placeholder</span>=<span class="string">&quot;Username&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;password&quot;</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">placeholder</span>=<span class="string">&quot;Password&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span>&gt;</span>登入<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3 id="2-在後端處理-next"><a href="#2-在後端處理-next" class="headerlink" title="2. 在後端處理 next"></a>2. <strong>在後端處理 <code>next</code></strong></h3><p>在處理登入的視圖中，檢查 <code>req.POST</code> 或 <code>req.GET</code> 中是否有 <code>next</code> 的值，並在登入成功後進行重定向。</p>
-<p>users&#x2F;views.py</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.contrib.auth <span class="keyword">import</span> authenticate, login</span><br><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> redirect</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sign_in</span>(<span class="params">req</span>):</span><br><span class="line">    <span class="built_in">next</span> = req.GET.get(<span class="string">&quot;next&quot;</span>, reverse(<span class="string">&quot;pages:index&quot;</span>))</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> render(req, <span class="string">&quot;users/sign_in.html&quot;</span>, &#123;<span class="string">&quot;next&quot;</span>: <span class="built_in">next</span>&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">create_session</span>(<span class="params">req</span>):</span><br><span class="line">    username = req.POST[<span class="string">&#x27;username&#x27;</span>]</span><br><span class="line">    password = req.POST[<span class="string">&#x27;password&#x27;</span>]</span><br><span class="line"></span><br><span class="line">    user = authenticate(username=username, password=password)</span><br><span class="line">    <span class="keyword">if</span> user <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        login(req, user)</span><br><span class="line">        <span class="built_in">next</span> = req.POST.get(<span class="string">&quot;next&quot;</span>, reverse(<span class="string">&quot;pages:index&quot;</span>))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> redirect(<span class="built_in">next</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> redirect(<span class="string">&quot;users:sign_in&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<h2 id="工作流程-1"><a href="#工作流程-1" class="headerlink" title="工作流程"></a>工作流程</h2><ol>
-<li><p><strong>未登入用戶訪問受保護頁面</strong><br>用戶被重定向到登入頁面，並附加 <code>next</code> 查詢參數，例如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/users/sign_in?next=/protected_page</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>用戶提交登入表單</strong><br>表單中包含 <code>next</code> 的值，後端接收該值。</p>
-</li>
-<li><p><strong>後端處理重定向</strong><br>後端檢查 <code>next</code> 的值，並在登入成功後將用戶重定向到該頁面。如果 <code>next</code> 不存在，則重定向到預設頁面（如首頁）。</p>
-</li>
-</ol>
-<hr>
-<h1 id="QueryString"><a href="#QueryString" class="headerlink" title="QueryString"></a>QueryString</h1><h2 id="原理與機制-2"><a href="#原理與機制-2" class="headerlink" title="原理與機制"></a>原理與機制</h2><p>QueryString 是 URL 中的查詢參數部分，用於在 URL 中傳遞數據。格式如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/path/to/page?key1=value1&amp;key2=value2</span><br></pre></td></tr></table></figure>
-<p>在 Django 中，可以使用 <code>req.GET</code> 獲取 QueryString 中的參數。</p>
-<h2 id="使用範例-1"><a href="#使用範例-1" class="headerlink" title="使用範例"></a>使用範例</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">example_view</span>(<span class="params">req</span>):</span><br><span class="line">    value = req.GET.get(<span class="string">&#x27;key&#x27;</span>, <span class="string">&#x27;default_value&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> render(req, <span class="string">&quot;example.html&quot;</span>, &#123;<span class="string">&quot;value&quot;</span>: value&#125;)</span><br></pre></td></tr></table></figure>
-
-<h2 id="工作流程-2"><a href="#工作流程-2" class="headerlink" title="工作流程"></a>工作流程</h2><ol>
-<li>用戶訪問包含 QueryString 的 URL，例如：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/example?key=hello</span><br></pre></td></tr></table></figure></li>
-<li>Django 通過 <code>req.GET</code> 提供訪問 QueryString 的方法。</li>
-</ol>
-<hr>
-<h1 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h1><ul>
-<li>使用 <code>@login_required</code> 確保視圖只能被已登入用戶訪問。</li>
-<li>通過處理 <code>next</code> 查詢參數，實現用戶登入後的重定向。</li>
-<li>利用 QueryString 傳遞數據，實現靈活的頁面交互。</li>
-<li>使用 <code>logout</code> 方法實現安全的登出功能。</li>
-<li>通過外鍵將 <code>Interview</code> 和 <code>Comment</code> 關聯到 <code>User</code>，實現數據的關聯性。</li>
-</ul>
-<p>這些功能構成了 Django 中用戶認證與權限管理的基礎，為構建安全、可靠的應用提供了強大的支持。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2062,7 +2096,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/my-blog/archives/">
         
-          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-count">30</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -2071,7 +2105,7 @@
         <span class="site-state-item-name">分類</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">標籤</span>
       </div>
   </nav>

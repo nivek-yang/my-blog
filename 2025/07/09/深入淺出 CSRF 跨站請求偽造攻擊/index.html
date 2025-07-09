@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+<link rel="stylesheet" href="/my-blog/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"nivek-yang.github.io","root":"/my-blog/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="我們每天都在打造各式各樣的 Web 應用，從電商網站到社群平台。專注於功能、效能和使用者體驗，但常常忽略一個潛伏在暗處的威脅——CSRF (Cross-Site Request Forgery)。 你可能聽過這個名詞，但真的了解它是如何運作的，以及它會帶來多大的危害嗎？這篇文章將用一個簡單的故事，搞懂 CSRF 是什麼、它想解決什麼問題，以及如何有效地防禦它。 一個關於「代簽」的故事：什麼是 CS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入淺出 CSRF 跨站請求偽造攻擊">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/07/09/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20CSRF%20%E8%B7%A8%E7%AB%99%E8%AB%8B%E6%B1%82%E5%81%BD%E9%80%A0%E6%94%BB%E6%93%8A/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="我們每天都在打造各式各樣的 Web 應用，從電商網站到社群平台。專注於功能、效能和使用者體驗，但常常忽略一個潛伏在暗處的威脅——CSRF (Cross-Site Request Forgery)。 你可能聽過這個名詞，但真的了解它是如何運作的，以及它會帶來多大的危害嗎？這篇文章將用一個簡單的故事，搞懂 CSRF 是什麼、它想解決什麼問題，以及如何有效地防禦它。 一個關於「代簽」的故事：什麼是 CS">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-07-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-07-09T14:50:33.933Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="CSRF">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/07/09/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20CSRF%20%E8%B7%A8%E7%AB%99%E8%AB%8B%E6%B1%82%E5%81%BD%E9%80%A0%E6%94%BB%E6%93%8A/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>深入淺出 CSRF 跨站請求偽造攻擊 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">我的技術部落格</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/09/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20CSRF%20%E8%B7%A8%E7%AB%99%E8%AB%8B%E6%B1%82%E5%81%BD%E9%80%A0%E6%94%BB%E6%93%8A/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深入淺出 CSRF 跨站請求偽造攻擊
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="創建時間：2025-07-09 00:00:00 / 修改時間：22:50:33" itemprop="dateCreated datePublished" datetime="2025-07-09T00:00:00+08:00">2025-07-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>我們每天都在打造各式各樣的 Web 應用，從電商網站到社群平台。專注於功能、效能和使用者體驗，但常常忽略一個潛伏在暗處的威脅——<strong>CSRF (Cross-Site Request Forgery)</strong>。</p>
+<p>你可能聽過這個名詞，但真的了解它是如何運作的，以及它會帶來多大的危害嗎？這篇文章將用一個簡單的故事，搞懂 CSRF 是什麼、它想解決什麼問題，以及如何有效地防禦它。</p>
+<h1 id="一個關於「代簽」的故事：什麼是-CSRF？"><a href="#一個關於「代簽」的故事：什麼是-CSRF？" class="headerlink" title="一個關於「代簽」的故事：什麼是 CSRF？"></a>一個關於「代簽」的故事：什麼是 CSRF？</h1><p>想像一下，你是一位公司大老闆，在你的銀行網站（<code>my-bank.com</code>）上登入了，瀏覽器就像一位忠誠的秘書，手上拿著你的「身份憑證」（Session Cookie），可以幫你處理各種事務。</p>
+<p>這時，一位心懷不軌的攻擊者寄了一封有趣的 Email 給你，標題是「快來看超可愛的貓咪動圖！」。你好奇地點開了連結，進入了一個看似無害的網站（<code>evil-cat-gifs.com</code>）。</p>
+<p>你不知道的是，這個網站的 HTML 裡藏了一段惡意的程式碼，例如一個看不見的表單：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- evil-cat-gifs.com 的惡意程式碼 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span> <span class="attr">onload</span>=<span class="string">&quot;document.forms[0].submit()&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;https://my-bank.com/api/transfer&quot;</span> <span class="attr">method</span>=<span class="string">&quot;POST&quot;</span> <span class="attr">style</span>=<span class="string">&quot;display:none;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;to&quot;</span> <span class="attr">value</span>=<span class="string">&quot;Mallory&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;amount&quot;</span> <span class="attr">value</span>=<span class="string">&quot;100000&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>當你的瀏覽器載入這個頁面時，<code>onload</code> 事件觸發了 JavaScript，自動提交了這個隱藏的表單。</p>
+<p>接下來發生的事，就是 CSRF 的核心：</p>
+<ol>
+<li><strong>請求發送：</strong> 瀏覽器向 <code>https://my-bank.com/api/transfer</code> 發送了一個 POST 請求。</li>
+<li><strong>憑證自動附加：</strong> 因為這個請求是發往 <code>my-bank.com</code> 的，你的瀏覽器秘書很「貼心」地把之前儲存的 <code>my-bank.com</code> 的身份憑證（Cookie）一起附上。</li>
+<li><strong>伺服器驗證：</strong> <code>my-bank.com</code> 的伺服器收到了這個請求。它檢查了 Cookie，發現身份憑證是合法的——「嗯，是大老闆本人沒錯！」</li>
+<li><strong>執行操作：</strong> 伺服器信任了這個請求，因為它通過了身份驗證。於是，它執行了轉帳操作，將 10 萬元轉給了攻擊者。</li>
+</ol>
+<p>整個過程中，你只是點開了一個貓咪網站，錢就不翼而飛了。完全被蒙在鼓裡，因為這個請求是在不知情的情況下，<strong>被偽造並從你的瀏覽器發送出去的</strong>。</p>
+<p>這就是 <strong>跨站請求偽造 (Cross-Site Request Forgery)</strong>。攻擊者利用了你已登入的狀態，誘騙瀏覽器發送一個非你本意的請求。</p>
+<h1 id="CSRF-想要解決的核心問題是什麼？"><a href="#CSRF-想要解決的核心問題是什麼？" class="headerlink" title="CSRF 想要解決的核心問題是什麼？"></a>CSRF 想要解決的核心問題是什麼？</h1><p>從上面的故事我們可以總結出 CSRF 攻擊成功的兩個關鍵因素：</p>
+<ol>
+<li>攻擊利用了瀏覽器在發送跨站請求時，會自動攜帶目標網站 Cookie 的特性。</li>
+<li>受害網站的伺服器<strong>無法區分</strong>一個請求是來自於使用者在自家網站上的真實點擊，還是來自於第三方惡意網站的偽造請求。</li>
+</ol>
+<p>因此，<strong>CSRF 防禦機制想要解決的核心問題是：如何驗證一個請求的「意圖」而非僅僅是「身份」？</strong></p>
+<p>伺服器只驗證 Cookie，等於只問：「你是誰？」。答案是：「我是已登入的使用者」。這沒錯，但伺服器還需要問一個更重要的問題：「<strong>這個操作真的是你本人想要執行的嗎？</strong>」</p>
+<p>CSRF 防禦的目標，就是讓伺服器有能力驗證後者，確保每一個會改變狀態的請求（如新增、修改、刪除）都是源自於使用者在我們自己網站上的真實意圖。</p>
+<h1 id="如何防禦-CSRF？——給請求一個「暗號」"><a href="#如何防禦-CSRF？——給請求一個「暗號」" class="headerlink" title="如何防禦 CSRF？——給請求一個「暗號」"></a>如何防禦 CSRF？——給請求一個「暗號」</h1><p>既然問題在於伺服器無法驗證請求的來源與意圖，那我們就給它一個方法來驗證。以下是目前最主流且有效的防禦策略。</p>
+<h2 id="1-Anti-CSRF-Token-同步權杖模式"><a href="#1-Anti-CSRF-Token-同步權杖模式" class="headerlink" title="1. Anti-CSRF Token (同步權杖模式)"></a>1. Anti-CSRF Token (同步權杖模式)</h2><p>這是最經典也最可靠的防禦方式。</p>
+<p><strong>原理：</strong></p>
+<ol>
+<li><strong>伺服器生成 Token：</strong> 當使用者登入或訪問一個包含表單的頁面時，伺服器會生成一個獨一無二、無法被預測的隨機字串，稱為「CSRF Token」。伺服器會將這個 Token 儲存在伺服器端的 Session 中。</li>
+<li><strong>前端嵌入 Token：</strong> 伺服器將這個 Token 傳遞給前端，前端在渲染頁面時，將它作為一個隱藏欄位嵌入到表單中。<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;/update-profile&quot;</span> <span class="attr">method</span>=<span class="string">&quot;POST&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;email&quot;</span> <span class="attr">value</span>=<span class="string">&quot;user@example.com&quot;</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 嵌入由伺服器給予的 Token --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;csrf_token&quot;</span> <span class="attr">value</span>=<span class="string">&quot;aBcDeFgHiJkLmNoPqRsTuVwXyZ123456&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span>&gt;</span>更新資料<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li><strong>伺服器驗證 Token：</strong> 當使用者提交表單時，這個 <code>csrf_token</code> 會一起被送到伺服器。伺服器在處理請求前，會比較「表單送來的 Token」和「儲存在 Session 中的 Token」是否一致。</li>
+</ol>
+<p><strong>為什麼有效？</strong></p>
+<p>攻擊者在 <code>evil-cat-gifs.com</code> 上無法得知這個 <code>csrf_token</code> 的值。因為瀏覽器的<strong>同源政策 (Same-Origin Policy)</strong> 會阻止惡意網站的腳本讀取 <code>my-bank.com</code> 的頁面內容，自然也就偷不到這個 Token。沒有正確的 Token，偽造的請求就會被伺服器拒絕。</p>
+<h2 id="2-SameSite-Cookie-屬性"><a href="#2-SameSite-Cookie-屬性" class="headerlink" title="2. SameSite Cookie 屬性"></a>2. SameSite Cookie 屬性</h2><p>這是一種更現代、從瀏覽器層面進行防禦的策略。<code>SameSite</code> 是 HTTP Cookie 的一個屬性，用來告訴瀏覽器在跨站請求中是否應該攜帶 Cookie。</p>
+<p>它有三個值：</p>
+<ul>
+<li><strong><code>Strict</code>：</strong> 最嚴格。完全禁止瀏覽器在任何跨站請求中攜帶 Cookie。例如，就算你從 Google 搜尋結果點擊連結到你的網站，如果你的 Cookie 是 <code>SameSite=Strict</code>，你也會是登出狀態。</li>
+<li><strong><code>Lax</code> (常用預設值)：</strong> 較寬鬆。允許在一些安全的頂層導航（如點擊連結 <code>&lt;a href=&quot;...&quot;&gt;</code>）中攜帶 Cookie，但會<strong>阻止</strong>在 <code>POST</code>、<code>PUT</code>、<code>DELETE</code> 等可能改變狀態的跨站請求中攜帶 Cookie。這恰好能防禦我們故事中那個 <code>POST</code> 表單的 CSRF 攻擊。</li>
+<li><strong><code>None</code>：</strong> 關閉 SameSite 限制。瀏覽器會在所有跨站請求中攜帶 Cookie，但必須同時設定 <code>Secure</code> 屬性（即只能在 HTTPS 下傳輸）。</li>
+</ul>
+<p><strong>如何使用？</strong></p>
+<p>在設定 Cookie 時，加上 <code>SameSite</code> 屬性即可。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Set-Cookie</span><span class="punctuation">: </span>session_id=...; SameSite=Lax; HttpOnly; Secure</span><br></pre></td></tr></table></figure>
+
+<p>將 <code>SameSite</code> 設定為 <code>Lax</code> 或 <code>Strict</code> 是非常有效的 CSRF 防禦手段。目前主流瀏覽器已將 <code>Lax</code> 作為預設值，這大大降低了 CSRF 的風險。但為了兼容舊版瀏覽器和增加防禦深度，<strong>建議將 <code>SameSite</code> Cookie 與 Anti-CSRF Token 結合使用</strong>。</p>
+<h2 id="3-檢查來源-Origin-Referer-Header"><a href="#3-檢查來源-Origin-Referer-Header" class="headerlink" title="3. 檢查來源 (Origin&#x2F;Referer Header)"></a>3. 檢查來源 (Origin&#x2F;Referer Header)</h2><p>伺服器也可以檢查 HTTP 請求頭中的 <code>Origin</code> 或 <code>Referer</code> 欄位，確保請求是從我們自己的網站域名發出的。</p>
+<ul>
+<li><code>Referer</code>：表示請求的來源頁面 URL。</li>
+<li><code>Origin</code>：更安全，只包含來源的域名，不含路徑。</li>
+</ul>
+<p><strong>為什麼不建議單獨使用？</strong></p>
+<ul>
+<li><strong>可靠性問題：</strong> <code>Referer</code> 可能因為使用者隱私設定或代理伺服器而被移除。</li>
+<li><strong>安全性問題：</strong> 在某些舊瀏覽器或特定情況下，<code>Referer</code> 可能被偽造。</li>
+</ul>
+<p>因此，它可以作為輔助的防禦手段，但不應作為唯一的防線。</p>
+<h1 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h1><ul>
+<li><strong>CSRF 是什麼？</strong> 一種攻擊，誘騙已登入使用者的瀏覽器，在他們不知情的情況下，向目標網站發送惡意的偽造請求。</li>
+<li><strong>它想解決什麼問題？</strong> 解決伺服器無法驗證請求<strong>意圖</strong>的問題，確保狀態變更的請求確實源自使用者在我們網站上的真實操作。</li>
+<li><strong>如何防禦？</strong><ul>
+<li><strong>首選方案：</strong> 使用 <strong>Anti-CSRF Token</strong>，為每個請求加上只有伺服器和合法前端才知道的「暗號」。</li>
+<li><strong>強力輔助：</strong> 設定 Cookie 的 <strong><code>SameSite=Lax</code></strong> 或 <strong><code>SameSite=Strict</code></strong> 屬性，從瀏覽器層面阻斷惡意請求。</li>
+<li><strong>縱深防禦：</strong> 結合上述兩者，並可考慮檢查 <code>Origin</code> Header，建立多層次的安全防護。</li>
+</ul>
+</li>
+</ul>
+<p>Web 安全是一個攻防不斷演進的領域。理解像 CSRF 這樣的經典漏洞，不僅能幫助我們寫出更安全的程式碼，更能培養我們「預設不信任」的安全思維。希望這篇文章能幫助你鞏固對 CSRF 的理解，並在你的下一個專案中，自信地築起堅固的防線！</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/CSRF/" rel="tag"># CSRF</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/my-blog/2025/07/08/GitHub%20Actions%20%E8%87%AA%E5%8B%95%E5%8C%96%E6%B8%AC%E8%A9%A6%E6%B5%81%E7%A8%8B/" rel="prev" title="GitHub Actions 自動化測試流程">
+      <i class="fa fa-chevron-left"></i> GitHub Actions 自動化測試流程
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E5%80%8B%E9%97%9C%E6%96%BC%E3%80%8C%E4%BB%A3%E7%B0%BD%E3%80%8D%E7%9A%84%E6%95%85%E4%BA%8B%EF%BC%9A%E4%BB%80%E9%BA%BC%E6%98%AF-CSRF%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">一個關於「代簽」的故事：什麼是 CSRF？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CSRF-%E6%83%B3%E8%A6%81%E8%A7%A3%E6%B1%BA%E7%9A%84%E6%A0%B8%E5%BF%83%E5%95%8F%E9%A1%8C%E6%98%AF%E4%BB%80%E9%BA%BC%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">CSRF 想要解決的核心問題是什麼？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%98%B2%E7%A6%A6-CSRF%EF%BC%9F%E2%80%94%E2%80%94%E7%B5%A6%E8%AB%8B%E6%B1%82%E4%B8%80%E5%80%8B%E3%80%8C%E6%9A%97%E8%99%9F%E3%80%8D"><span class="nav-number">3.</span> <span class="nav-text">如何防禦 CSRF？——給請求一個「暗號」</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Anti-CSRF-Token-%E5%90%8C%E6%AD%A5%E6%AC%8A%E6%9D%96%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.1.</span> <span class="nav-text">1. Anti-CSRF Token (同步權杖模式)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-SameSite-Cookie-%E5%B1%AC%E6%80%A7"><span class="nav-number">3.2.</span> <span class="nav-text">2. SameSite Cookie 屬性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%AA%A2%E6%9F%A5%E4%BE%86%E6%BA%90-Origin-Referer-Header"><span class="nav-number">3.3.</span> <span class="nav-text">3. 檢查來源 (Origin&#x2F;Referer Header)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">4.</span> <span class="nav-text">結論</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/my-blog/archives/">
+        
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分類</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">標籤</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/my-blog/lib/anime.min.js"></script>
+  <script src="/my-blog/lib/velocity/velocity.min.js"></script>
+  <script src="/my-blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/my-blog/js/utils.js"></script>
+
+<script src="/my-blog/js/motion.js"></script>
+
+
+<script src="/my-blog/js/schemes/muse.js"></script>
+
+
+<script src="/my-blog/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
