@@ -149,6 +149,138 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/25/macOS%20%E5%AE%89%E8%A3%9D%20PostgreSQL%20%E7%9A%84%E6%B5%81%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/04/25/macOS%20%E5%AE%89%E8%A3%9D%20PostgreSQL%20%E7%9A%84%E6%B5%81%E7%A8%8B/" class="post-title-link" itemprop="url">macOS 安裝 PostgreSQL 的流程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="創建時間：2025-04-25 00:00:00 / 修改時間：02:42:56" itemprop="dateCreated datePublished" datetime="2025-04-25T00:00:00+08:00">2025-04-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>以下是安裝 PostgreSQL 以及基本使用的完整流程與注意事項。</p>
+<hr>
+<h1 id="1-安裝-PostgreSQL"><a href="#1-安裝-PostgreSQL" class="headerlink" title="1. 安裝 PostgreSQL"></a>1. 安裝 PostgreSQL</h1><p>使用 Homebrew 安裝指定版本的 PostgreSQL：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install postgresql@17</span><br></pre></td></tr></table></figure>
+
+<p>確認安裝路徑：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew --prefix postgresql</span><br><span class="line"><span class="comment"># 範例輸出：/usr/local/opt/postgresql@17</span></span><br></pre></td></tr></table></figure>
+
+<p>將 PostgreSQL 的執行檔加入環境變數：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> PATH=<span class="string">&quot;/usr/local/opt/postgresql@17/bin:<span class="variable">$PATH</span>&quot;</span> &gt;&gt; ~/.zshrc</span><br><span class="line"><span class="built_in">source</span> ~/.zshrc</span><br></pre></td></tr></table></figure>
+
+<p>確認安裝是否成功：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">psql --version</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="2-啟動-PostgreSQL-服務"><a href="#2-啟動-PostgreSQL-服務" class="headerlink" title="2. 啟動 PostgreSQL 服務"></a>2. 啟動 PostgreSQL 服務</h1><p>啟動 PostgreSQL：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew services start postgresql@17</span><br></pre></td></tr></table></figure>
+
+<p>若啟動失敗，可能需要初始化資料庫：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">initdb -D /usr/local/var/postgresql@17</span><br><span class="line">brew services restart postgresql@17</span><br></pre></td></tr></table></figure>
+
+<p>檢查 PostgreSQL 狀態：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pg_ctl -D /usr/local/var/postgresql@17 status</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="3-建立使用者與資料庫"><a href="#3-建立使用者與資料庫" class="headerlink" title="3. 建立使用者與資料庫"></a>3. 建立使用者與資料庫</h1><p>建立預設的 <code>postgres</code> 使用者與資料庫：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">createuser -s postgres</span><br><span class="line">createdb -U postgres postgres</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="4-使用-psql-連線到資料庫"><a href="#4-使用-psql-連線到資料庫" class="headerlink" title="4. 使用 psql 連線到資料庫"></a>4. 使用 psql 連線到資料庫</h1><p>連線到 PostgreSQL：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">psql -h localhost -U postgres -d postgres</span><br></pre></td></tr></table></figure>
+
+<p>進入 psql 後，建立新的資料庫：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> DATABASE testdb;</span><br></pre></td></tr></table></figure>
+
+<p>切換到新建立的資料庫：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\c testdb</span><br></pre></td></tr></table></figure>
+
+<p>建立資料表範例：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE TABLE</span> <span class="keyword">user</span> (</span><br><span class="line">    id UUID <span class="keyword">PRIMARY KEY</span>,</span><br><span class="line">    name TEXT,</span><br><span class="line">    birthday <span class="type">DATE</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="5-檢查-PostgreSQL-狀態的自動化腳本"><a href="#5-檢查-PostgreSQL-狀態的自動化腳本" class="headerlink" title="5. 檢查 PostgreSQL 狀態的自動化腳本"></a>5. 檢查 PostgreSQL 狀態的自動化腳本</h1><p>建立一個檢查 PostgreSQL 狀態的腳本 <code>check_postgres.sh</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">PGDATA=<span class="string">&quot;/usr/local/var/postgresql@17&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;🔍 Checking PostgreSQL status...&quot;</span></span><br><span class="line">pg_ctl -D <span class="string">&quot;<span class="variable">$PGDATA</span>&quot;</span> status</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ $? -ne 0 ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;🚀 PostgreSQL not running, attempting to start...&quot;</span></span><br><span class="line">    pg_ctl -D <span class="string">&quot;<span class="variable">$PGDATA</span>&quot;</span> start</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;✅ PostgreSQL already running.&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;🌐 Checking port 5432...&quot;</span></span><br><span class="line">lsof -iTCP:5432 -sTCP:LISTEN || <span class="built_in">echo</span> <span class="string">&quot;❌ Not listening on port 5432&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;📋 Existing databases:&quot;</span></span><br><span class="line">psql -l || <span class="built_in">echo</span> <span class="string">&quot;⚠️ psql failed. Is PostgreSQL running?&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>執行腳本檢查 PostgreSQL 狀態：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash check_postgres.sh</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="6-常見問題與解決方法"><a href="#6-常見問題與解決方法" class="headerlink" title="6. 常見問題與解決方法"></a>6. 常見問題與解決方法</h1><h2 id="問題-1：psql-錯誤-role-postgres-does-not-exist"><a href="#問題-1：psql-錯誤-role-postgres-does-not-exist" class="headerlink" title="問題 1：psql: 錯誤: role &quot;postgres&quot; does not exist"></a>問題 1：<code>psql: 錯誤: role &quot;postgres&quot; does not exist</code></h2><p>解決方法：</p>
+<ul>
+<li>使用 <code>createuser -s postgres</code> 建立 <code>postgres</code> 使用者。</li>
+</ul>
+<h2 id="問題-2：啟動-PostgreSQL-時出現-Bootstrap-failed-5-Input-output-error"><a href="#問題-2：啟動-PostgreSQL-時出現-Bootstrap-failed-5-Input-output-error" class="headerlink" title="問題 2：啟動 PostgreSQL 時出現 Bootstrap failed: 5: Input/output error"></a>問題 2：啟動 PostgreSQL 時出現 <code>Bootstrap failed: 5: Input/output error</code></h2><p>解決方法：</p>
+<ul>
+<li>刪除舊的啟動檔案並重新啟動服務：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">rm</span> ~/Library/LaunchAgents/homebrew.mxcl.postgresql@17.plist</span><br><span class="line">brew services cleanup</span><br><span class="line">brew services start postgresql@17</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h1 id="7-注意事項"><a href="#7-注意事項" class="headerlink" title="7. 注意事項"></a>7. 注意事項</h1><ol>
+<li><strong>版本管理</strong>：安裝多個版本的 PostgreSQL 時，需確認環境變數是否正確指向目標版本。</li>
+<li><strong>資料庫初始化</strong>：若安裝後無法啟動，可能需要手動執行 <code>initdb</code> 初始化資料庫。</li>
+<li><strong>權限問題</strong>：確保使用者擁有足夠的權限來操作資料庫。</li>
+<li><strong>服務管理</strong>：使用 <code>brew services</code> 管理 PostgreSQL 的啟動與停止。</li>
+</ol>
+<hr>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
     <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/24/Django%20%E7%99%BB%E5%85%A5%E6%AA%A2%E6%9F%A5%20%60login_required%60%20%E8%A3%9D%E9%A3%BE%E5%99%A8%EF%BC%9A%E8%99%95%E7%90%86%20%60next%60%20%E9%87%8D%E5%AE%9A%E5%90%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1518,718 +1650,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/16/%E5%BE%9E%E9%9B%B6%E9%96%8B%E5%A7%8B%E5%BB%BA%E7%AB%8B%E5%80%8B%E4%BA%BA%E9%83%A8%E8%90%BD%E6%A0%BC/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/04/16/%E5%BE%9E%E9%9B%B6%E9%96%8B%E5%A7%8B%E5%BB%BA%E7%AB%8B%E5%80%8B%E4%BA%BA%E9%83%A8%E8%90%BD%E6%A0%BC/" class="post-title-link" itemprop="url">從零開始建立個人部落格 (Hexo + Github Pages)</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">發表於</span>
-
-              <time title="創建時間：2025-04-16 00:00:00" itemprop="dateCreated datePublished" datetime="2025-04-16T00:00:00+08:00">2025-04-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2025-04-18 19:03:07" itemprop="dateModified" datetime="2025-04-18T19:03:07+08:00">2025-04-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分類於</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="從零開始建立個人部落格"><a href="#從零開始建立個人部落格" class="headerlink" title="從零開始建立個人部落格"></a>從零開始建立個人部落格</h1><p>這篇文章將詳細記錄如何使用 Hexo 和 GitHub Pages 建立一個個人部落格的完整過程。從環境設置到部署上線，一步一步帶你了解整個流程。</p>
-<h2 id="1-環境準備"><a href="#1-環境準備" class="headerlink" title="1. 環境準備"></a>1. 環境準備</h2><h3 id="1-1-安裝必要工具"><a href="#1-1-安裝必要工具" class="headerlink" title="1.1 安裝必要工具"></a>1.1 安裝必要工具</h3><p>首先，我們需要安裝以下工具：</p>
-<ul>
-<li>Node.js（包含 npm）</li>
-<li>Git</li>
-</ul>
-<p>在 macOS 上，可以使用 Homebrew 安裝：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安裝 Homebrew（如果還沒安裝的話）</span></span><br><span class="line">/bin/bash -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 安裝 Node.js</span></span><br><span class="line">brew install node</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安裝 Git</span></span><br><span class="line">brew install git</span><br></pre></td></tr></table></figure>
-
-<p>安裝完成後，確認版本：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">node -v  <span class="comment"># 應該顯示 v16 或更高版本</span></span><br><span class="line">npm -v   <span class="comment"># 應該顯示 7.0 或更高版本</span></span><br><span class="line">git --version</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p><strong>注意事項</strong>：</p>
-<ul>
-<li>如果已經安裝過這些工具，可以跳過安裝步驟</li>
-<li>如果版本不符合要求，需要先卸載舊版本再安裝新版本</li>
-</ul>
-</blockquote>
-<h3 id="1-2-安裝-Hexo"><a href="#1-2-安裝-Hexo" class="headerlink" title="1.2 安裝 Hexo"></a>1.2 安裝 Hexo</h3><p>安裝 Hexo 命令行工具（全局安裝）：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
-
-<p>安裝完成後，確認安裝成功：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo -v</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-創建部落格"><a href="#2-創建部落格" class="headerlink" title="2. 創建部落格"></a>2. 創建部落格</h2><h3 id="2-1-初始化專案"><a href="#2-1-初始化專案" class="headerlink" title="2.1 初始化專案"></a>2.1 初始化專案</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 創建部落格目錄</span></span><br><span class="line">hexo init my-blog</span><br><span class="line"><span class="built_in">cd</span> my-blog</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化 npm 專案</span></span><br><span class="line">npm init -y</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安裝依賴</span></span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
-
-<p>執行 <code>hexo init</code> 後，會創建以下文件結構：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">my-blog/</span><br><span class="line">├── _config.yml       # 網站配置文件</span><br><span class="line">├── package.json      # 專案依賴配置</span><br><span class="line">├── scaffolds/        # 文章模板目錄</span><br><span class="line">│   ├── draft.md     # 草稿模板</span><br><span class="line">│   ├── page.md      # 頁面模板</span><br><span class="line">│   └── post.md      # 文章模板</span><br><span class="line">├── source/           # 源文件目錄</span><br><span class="line">│   ├── _posts/      # 文章目錄</span><br><span class="line">│   └── _drafts/     # 草稿目錄</span><br><span class="line">├── themes/           # 主題目錄</span><br><span class="line">│   └── landscape/   # 默認主題</span><br><span class="line">└── node_modules/    # 依賴包目錄</span><br></pre></td></tr></table></figure>
-
-<p>各目錄的用途：</p>
-<ul>
-<li><code>_config.yml</code>：網站的配置文件，包含網站標題、描述、作者等基本資訊</li>
-<li><code>package.json</code>：記錄專案依賴的 npm 包</li>
-<li><code>scaffolds/</code>：存放文章模板，用於快速創建新文章</li>
-<li><code>source/</code>：存放源文件，包括文章、頁面、圖片等</li>
-<li><code>themes/</code>：存放主題文件，可以安裝多個主題</li>
-<li><code>node_modules/</code>：存放安裝的 npm 包</li>
-</ul>
-<h3 id="2-1-1-db-json-文件"><a href="#2-1-1-db-json-文件" class="headerlink" title="2.1.1 db.json 文件"></a>2.1.1 db.json 文件</h3><p>當你執行 <code>hexo generate</code> 或 <code>hexo g</code> 命令時，Hexo 會生成一個 <code>db.json</code> 文件。這個文件位於部落格的根目錄，是 Hexo 的資料庫文件，用於存儲所有文章的元數據。</p>
-<p><code>db.json</code> 的生成過程：</p>
-<ol>
-<li><p>當你執行 <code>hexo generate</code> 時：</p>
-<ul>
-<li>Hexo 會掃描 <code>source/_posts/</code> 目錄下的所有文章</li>
-<li>讀取每篇文章的 front-matter（文章頭部的 YAML 配置）</li>
-<li>將這些資訊整理成結構化的數據</li>
-<li>生成 <code>db.json</code> 文件</li>
-</ul>
-</li>
-<li><p><code>db.json</code> 的內容包括：</p>
-<ul>
-<li>所有文章的標題、日期、標籤、分類等元數據</li>
-<li>文章之間的關聯關係</li>
-<li>網站的基本配置資訊</li>
-</ul>
-</li>
-<li><p>用途：</p>
-<ul>
-<li>用於生成靜態網站的導航、分類、標籤等頁面</li>
-<li>提供文章搜索功能</li>
-<li>用於生成 RSS feed</li>
-<li>用於生成網站地圖</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<p><strong>注意事項</strong>：</p>
-<ul>
-<li><code>npm init -y</code> 會創建一個默認的 <code>package.json</code> 文件</li>
-<li>如果 <code>npm install</code> 過程中出現錯誤，可以嘗試使用 <code>npm install --force</code></li>
-<li>確保在執行這些命令時有足夠的權限</li>
-<li>所有安裝的套件都會保存在專案的 <code>node_modules</code> 目錄中</li>
-<li>不要直接修改 <code>themes/</code> 目錄下的主題文件，應該複製到 <code>source/</code> 目錄下修改</li>
-<li><code>source/</code> 目錄下的文件會被編譯到 <code>public/</code> 目錄</li>
-<li><code>_drafts/</code> 目錄下的文件不會被編譯，用於存放草稿</li>
-<li><code>db.json</code> 是自動生成的，不需要手動編輯</li>
-<li>如果修改了文章或配置，需要重新執行 <code>hexo generate</code> 來更新 <code>db.json</code></li>
-<li>執行 <code>hexo clean</code> 會刪除 <code>db.json</code>，下次生成時會重新創建</li>
-<li>如果 <code>db.json</code> 損壞，可以執行 <code>hexo clean &amp;&amp; hexo generate</code> 重新生成</li>
-</ul>
-</blockquote>
-<h3 id="2-2-安裝必要的插件"><a href="#2-2-安裝必要的插件" class="headerlink" title="2.2 安裝必要的插件"></a>2.2 安裝必要的插件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安裝 Git 部署插件（安裝到專案中）</span></span><br><span class="line">npm install hexo-deployer-git --save</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安裝其他有用的插件（安裝到專案中）</span></span><br><span class="line">npm install hexo-generator-feed --save  <span class="comment"># RSS feed</span></span><br><span class="line">npm install hexo-generator-sitemap --save  <span class="comment"># 網站地圖</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p><strong>注意事項</strong>：</p>
-<ul>
-<li>使用 <code>--save</code> 參數會將套件添加到 <code>package.json</code> 的 dependencies 中</li>
-<li>這些套件只會安裝在當前專案的 <code>node_modules</code> 目錄中</li>
-<li>如果需要全局安裝套件，使用 <code>-g</code> 參數，例如：<code>npm install -g 套件名稱</code></li>
-</ul>
-</blockquote>
-<h2 id="3-配置部落格"><a href="#3-配置部落格" class="headerlink" title="3. 配置部落格"></a>3. 配置部落格</h2><h3 id="3-1-基本配置"><a href="#3-1-基本配置" class="headerlink" title="3.1 基本配置"></a>3.1 基本配置</h3><p>編輯 <code>_config.yml</code> 文件，設置基本信息。以下是配置前後的對比：</p>
-<p>配置前：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Site</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">Hexo</span></span><br><span class="line"><span class="attr">subtitle:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="attr">keywords:</span></span><br><span class="line"><span class="attr">author:</span> <span class="string">John</span> <span class="string">Doe</span></span><br><span class="line"><span class="attr">language:</span> <span class="string">en</span></span><br><span class="line"><span class="attr">timezone:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># URL</span></span><br><span class="line"><span class="attr">url:</span> <span class="string">http://example.com</span></span><br><span class="line"><span class="attr">root:</span> <span class="string">/</span></span><br></pre></td></tr></table></figure>
-
-<p>配置後：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 網站資訊</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">我的旅行部落格</span>  <span class="comment"># 修改為你的部落格標題</span></span><br><span class="line"><span class="attr">subtitle:</span> <span class="string">&#x27;探索世界的腳步&#x27;</span>  <span class="comment"># 修改為你的部落格副標題</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">&#x27;分享旅行故事和經驗&#x27;</span>  <span class="comment"># 修改為你的部落格描述</span></span><br><span class="line"><span class="attr">keywords:</span> <span class="string">旅行,攝影,美食,文化</span>  <span class="comment"># 修改為你的部落格關鍵字</span></span><br><span class="line"><span class="attr">author:</span> <span class="string">你的名字</span>  <span class="comment"># 修改為你的名字</span></span><br><span class="line"><span class="attr">language:</span> <span class="string">zh-TW</span></span><br><span class="line"><span class="attr">timezone:</span> <span class="string">&#x27;Asia/Taipei&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># URL 設定</span></span><br><span class="line"><span class="attr">url:</span> <span class="string">https://你的用戶名.github.io/你的部落格名.github.io</span>  <span class="comment"># 修改為你的 GitHub 用戶名和部落格名稱</span></span><br><span class="line"><span class="attr">root:</span> <span class="string">/你的部落格名.github.io/</span>  <span class="comment"># 修改為你的部落格名稱</span></span><br><span class="line"><span class="attr">permalink:</span> <span class="string">:year/:month/:day/:title/</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 目錄設定</span></span><br><span class="line"><span class="attr">source_dir:</span> <span class="string">source</span></span><br><span class="line"><span class="attr">public_dir:</span> <span class="string">public</span></span><br><span class="line"><span class="attr">tag_dir:</span> <span class="string">tags</span></span><br><span class="line"><span class="attr">archive_dir:</span> <span class="string">archives</span></span><br><span class="line"><span class="attr">category_dir:</span> <span class="string">categories</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p><strong>注意事項</strong>：</p>
-<ul>
-<li>確保 <code>url</code> 和 <code>root</code> 設置正確，這會影響到部署後的訪問地址</li>
-<li>建議使用 <code>zh-TW</code> 作為語言設置，以確保中文顯示正常</li>
-<li>所有標記為「修改為…」的部分都需要根據你的個人資訊進行修改</li>
-</ul>
-</blockquote>
-<h3 id="3-2-主題設置"><a href="#3-2-主題設置" class="headerlink" title="3.2 主題設置"></a>3.2 主題設置</h3><p>我們使用了 Next 主題：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安裝 Next 主題</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/theme-next/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
-
-<p>在 <code>_config.yml</code> 中設置主題：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">theme:</span> <span class="string">next</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="4-GitHub-設置"><a href="#4-GitHub-設置" class="headerlink" title="4. GitHub 設置"></a>4. GitHub 設置</h2><h3 id="4-1-創建-GitHub-Repository"><a href="#4-1-創建-GitHub-Repository" class="headerlink" title="4.1 創建 GitHub Repository"></a>4.1 創建 GitHub Repository</h3><ol>
-<li><p>在 GitHub 上創建一個新的 repository：</p>
-<ul>
-<li>名稱格式必須為：<code>你的部落格名.github.io</code></li>
-<li>例如：<code>my_blog.github.io</code></li>
-<li>設置 repository 為 public</li>
-<li>不要初始化 README 文件</li>
-</ul>
-</li>
-<li><p>設置 GitHub Pages：</p>
-<ul>
-<li>進入 repository 的 Settings</li>
-<li>找到 Pages 選項</li>
-<li>在 Source 部分選擇 “Deploy from a branch”</li>
-<li>在 Branch 部分選擇 “gh-pages” 分支</li>
-<li>點擊 Save</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<p><strong>注意事項</strong>：</p>
-<ul>
-<li>Repository 名稱必須完全匹配 <code>你的部落格名.github.io</code></li>
-<li>確保 repository 設置為 public</li>
-<li>不要選擇任何初始化選項</li>
-</ul>
-</blockquote>
-<h3 id="4-2-配置部署設置"><a href="#4-2-配置部署設置" class="headerlink" title="4.2 配置部署設置"></a>4.2 配置部署設置</h3><p>在 <code>_config.yml</code> 中添加部署配置：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">git@github.com:你的用戶名/你的部落格名.github.io.git</span>  <span class="comment"># 修改為你的 GitHub 用戶名跟你的部落格名</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">gh-pages</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p><strong>注意事項</strong>：</p>
-<ul>
-<li>建議使用 SSH 格式的 URL，避免每次部署都要輸入密碼</li>
-<li>如果使用 HTTPS 格式的 URL，每次部署都需要輸入 GitHub 的用戶名和密碼</li>
-</ul>
-</blockquote>
-<h3 id="4-3-設置-SSH-金鑰"><a href="#4-3-設置-SSH-金鑰" class="headerlink" title="4.3 設置 SSH 金鑰"></a>4.3 設置 SSH 金鑰</h3><ol>
-<li>生成 SSH 金鑰：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t ed25519 -C <span class="string">&quot;你的電子郵件&quot;</span>  <span class="comment"># 修改為你的 GitHub 註冊郵箱</span></span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>查看公鑰：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> ~/.ssh/id_ed25519.pub</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>複製顯示的整個內容，包括開頭的 <code>ssh-ed25519</code> 和結尾的郵件地址</p>
-</blockquote>
-<ol start="3">
-<li><p>將公鑰添加到 GitHub：</p>
-<ul>
-<li>進入 GitHub 設置</li>
-<li>找到 SSH and GPG keys</li>
-<li>點擊 New SSH key</li>
-<li>Title: 可以隨意命名（例如：My Blog）</li>
-<li>Key: 貼上剛才複製的公鑰內容</li>
-<li>點擊 Add SSH key</li>
-</ul>
-</li>
-<li><p>測試 SSH 連接：</p>
-</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>如果看到 “Hi 你的用戶名!” 的歡迎信息，表示設置成功</p>
-</blockquote>
-<h2 id="5-創建內容"><a href="#5-創建內容" class="headerlink" title="5. 創建內容"></a>5. 創建內容</h2><h3 id="5-1-創建新文章"><a href="#5-1-創建新文章" class="headerlink" title="5.1 創建新文章"></a>5.1 創建新文章</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 創建新文章</span></span><br><span class="line">hexo new <span class="string">&quot;文章標題&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>文章模板位於 <code>scaffolds/post.md</code>，包含以下內容：</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: &#123;&#123; title &#125;&#125;</span><br><span class="line">date: &#123;&#123; date &#125;&#125;</span><br><span class="line">categories:</span><br><span class="line"><span class="section">tags:</span></span><br><span class="line"><span class="section">---</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="5-2-創建關於頁面"><a href="#5-2-創建關於頁面" class="headerlink" title="5.2 創建關於頁面"></a>5.2 創建關於頁面</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 創建關於頁面</span></span><br><span class="line">hexo new page about</span><br></pre></td></tr></table></figure>
-
-<p>這會創建一個新的頁面檔案 <code>source/about/index.md</code>。編輯這個檔案，加入你的自我介紹。以下是一個範例：</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: 關於我</span><br><span class="line"><span class="section">date: 2024-04-16 14:00:00</span></span><br><span class="line"><span class="section">---</span></span><br><span class="line"></span><br><span class="line">嗨！我是 Test User，一個熱愛旅行的部落客。</span><br><span class="line"></span><br><span class="line">在這個部落格中，我會分享：</span><br><span class="line"><span class="bullet">-</span> 旅行故事</span><br><span class="line"><span class="bullet">-</span> 景點介紹</span><br><span class="line"><span class="bullet">-</span> 旅遊攻略</span><br><span class="line"><span class="bullet">-</span> 美食推薦</span><br><span class="line"></span><br><span class="line">歡迎追蹤我的社群媒體，一起探索世界的美好！</span><br></pre></td></tr></table></figure>
-
-<h3 id="5-3-編輯文章內容"><a href="#5-3-編輯文章內容" class="headerlink" title="5.3 編輯文章內容"></a>5.3 編輯文章內容</h3><p>使用 Markdown 語法編輯你的文章。以下是一個範例：</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: 我的第一次日本之旅</span><br><span class="line">date: 2024-04-16 14:00:00</span><br><span class="line">tags:</span><br><span class="line"><span class="bullet">  -</span> 旅行</span><br><span class="line"><span class="bullet">  -</span> 日本</span><br><span class="line"><span class="section">categories: 旅遊</span></span><br><span class="line"><span class="section">---</span></span><br><span class="line"></span><br><span class="line"><span class="section"># 我的第一次日本之旅</span></span><br><span class="line"></span><br><span class="line">這是我第一次去日本旅行的故事...</span><br><span class="line"></span><br><span class="line"><span class="section">## 第一天：抵達東京</span></span><br><span class="line"></span><br><span class="line">早上抵達成田機場，搭乘 Skyliner 前往市區...</span><br><span class="line"></span><br><span class="line"><span class="section">## 第二天：淺草寺</span></span><br><span class="line"></span><br><span class="line">參觀了著名的淺草寺，品嚐了當地的美食...</span><br><span class="line"></span><br><span class="line"><span class="section">## 心得分享</span></span><br><span class="line"></span><br><span class="line">這次旅行讓我收穫滿滿，期待下次再訪！</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p><strong>注意事項</strong>：</p>
-<ul>
-<li>每篇文章都需要包含 front-matter（文章頭部信息）</li>
-<li>front-matter 必須使用 <code>---</code> 包圍</li>
-<li>至少需要包含 <code>title</code> 和 <code>date</code> 兩個欄位</li>
-<li>可以根據需要添加 <code>tags</code> 和 <code>categories</code></li>
-</ul>
-</blockquote>
-<h2 id="6-本地預覽"><a href="#6-本地預覽" class="headerlink" title="6. 本地預覽"></a>6. 本地預覽</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 啟動本地服務器</span></span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
-
-<p>訪問 <code>http://localhost:4000</code> 預覽部落格。</p>
-<blockquote>
-<p><strong>注意事項</strong>：</p>
-<ul>
-<li>如果 4000 端口被占用，可以使用 <code>hexo server -p 5000</code> 指定其他端口</li>
-<li>按 Ctrl+C 可以停止服務器</li>
-</ul>
-</blockquote>
-<h2 id="7-部署流程"><a href="#7-部署流程" class="headerlink" title="7. 部署流程"></a>7. 部署流程</h2><p>每次更新內容後，執行以下命令部署到 GitHub Pages：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 清理舊的生成文件</span></span><br><span class="line">hexo clean</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成新的靜態文件</span></span><br><span class="line">hexo generate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 部署到 GitHub Pages</span></span><br><span class="line">hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>或者使用簡寫形式：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo g &amp;&amp; hexo d</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p><strong>注意事項</strong>：</p>
-<ul>
-<li>如果使用 HTTPS 格式的 repository URL，每次部署都需要輸入 GitHub 的用戶名和密碼</li>
-<li>建議使用 SSH 格式的 URL，避免每次部署都要輸入密碼</li>
-</ul>
-</blockquote>
-<h3 id="7-1-故障排除指南"><a href="#7-1-故障排除指南" class="headerlink" title="7.1 故障排除指南"></a>7.1 故障排除指南</h3><p>如果在部署過程中遇到問題，請參考以下解決方法：</p>
-<ol>
-<li><p><strong>部署失敗：無法連接到 GitHub</strong></p>
-<ul>
-<li>檢查 SSH 金鑰是否正確設置</li>
-<li>執行 <code>ssh -T git@github.com</code> 測試連接</li>
-<li>如果提示 “Permission denied”，重新生成 SSH 金鑰</li>
-</ul>
-</li>
-<li><p><strong>部署失敗：找不到 repository</strong></p>
-<ul>
-<li>檢查 repository 名稱是否正確</li>
-<li>確認 repository 是否設置為 public</li>
-<li>確認你有權限訪問該 repository</li>
-</ul>
-</li>
-<li><p><strong>部署成功但網站顯示 404</strong></p>
-<ul>
-<li>等待幾分鐘讓 GitHub Pages 完成部署</li>
-<li>檢查 URL 是否正確</li>
-<li>在 GitHub repository 的 Settings &gt; Pages 中確認部署狀態</li>
-</ul>
-</li>
-<li><p><strong>本地預覽正常但部署後樣式錯誤</strong></p>
-<ul>
-<li>執行 <code>hexo clean</code> 清理緩存</li>
-<li>重新執行 <code>hexo g</code> 生成文件</li>
-<li>檢查 <code>_config.yml</code> 中的 URL 設置</li>
-</ul>
-</li>
-<li><p><strong>部署時出現權限錯誤</strong></p>
-<ul>
-<li>確認使用的是 SSH 格式的 URL</li>
-<li>檢查 GitHub 的 SSH 設置</li>
-<li>嘗試重新生成 SSH 金鑰</li>
-</ul>
-</li>
-<li><p><strong>部署時出現文件衝突</strong></p>
-<ul>
-<li>執行 <code>git pull</code> 更新本地文件</li>
-<li>解決衝突後重新部署</li>
-<li>如果問題持續，可以嘗試刪除 <code>public/</code> 目錄後重新部署</li>
-</ul>
-</li>
-</ol>
-<p>部署完成後，訪問 <code>https://你的用戶名.github.io/你的部落格名.github.io</code> 查看你的部落格。例如：<code>https://nivek-yang.github.io/test_blog.github.io</code></p>
-<h2 id="8-自定義設置"><a href="#8-自定義設置" class="headerlink" title="8. 自定義設置"></a>8. 自定義設置</h2><h3 id="8-1-導航菜單"><a href="#8-1-導航菜單" class="headerlink" title="8.1 導航菜單"></a>8.1 導航菜單</h3><p>在 Next 主題的 <code>_config.yml</code> 中設置導航菜單：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">menu:</span></span><br><span class="line">  <span class="attr">home:</span> <span class="string">/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-home</span></span><br><span class="line">  <span class="attr">archives:</span> <span class="string">/archives/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-archive</span></span><br><span class="line">  <span class="attr">about:</span> <span class="string">/about/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-user</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="8-2-社交鏈接"><a href="#8-2-社交鏈接" class="headerlink" title="8.2 社交鏈接"></a>8.2 社交鏈接</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">social:</span></span><br><span class="line">  <span class="attr">GitHub:</span> <span class="string">https://github.com/你的用戶名</span> <span class="string">||</span> <span class="string">fab</span> <span class="string">fa-github</span></span><br><span class="line">  <span class="attr">E-Mail:</span> <span class="string">mailto:你的電子郵件</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-envelope</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="9-維護和更新"><a href="#9-維護和更新" class="headerlink" title="9. 維護和更新"></a>9. 維護和更新</h2><h3 id="9-1-日常維護"><a href="#9-1-日常維護" class="headerlink" title="9.1 日常維護"></a>9.1 日常維護</h3><ol>
-<li>定期更新 Hexo 和主題：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm update</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>備份源文件：<ul>
-<li>將 source 目錄下的文件定期備份</li>
-<li>可以使用 Git 進行版本控制</li>
-</ul>
-</li>
-</ol>
-<h3 id="9-2-故障排除"><a href="#9-2-故障排除" class="headerlink" title="9.2 故障排除"></a>9.2 故障排除</h3><p>常見問題的解決方法：</p>
-<ol>
-<li><p>部署失敗：</p>
-<ul>
-<li>檢查 GitHub 設置</li>
-<li>確認 SSH key 設置正確</li>
-<li>檢查部署配置</li>
-<li>嘗試重新生成 SSH key</li>
-</ul>
-</li>
-<li><p>本地預覽問題：</p>
-<ul>
-<li>清理緩存：<code>hexo clean</code></li>
-<li>重新安裝依賴：<code>npm install</code></li>
-<li>檢查端口是否被占用</li>
-</ul>
-</li>
-<li><p>主題顯示問題：</p>
-<ul>
-<li>確認主題文件是否完整</li>
-<li>檢查主題配置是否正確</li>
-<li>嘗試重新安裝主題</li>
-</ul>
-</li>
-</ol>
-<h2 id="10-結語"><a href="#10-結語" class="headerlink" title="10. 結語"></a>10. 結語</h2><p>通過以上步驟，我們成功建立了一個個人部落格。這個部落格具有以下特點：</p>
-<ul>
-<li>使用 Hexo 靜態網站生成器</li>
-<li>採用 Next 主題，簡潔美觀</li>
-<li>部署在 GitHub Pages，無需額外伺服器</li>
-<li>支持 Markdown 寫作</li>
-<li>具有分類、標籤等功能</li>
-<li>響應式設計，支持多設備訪問</li>
-</ul>
-<p>持續更新和維護這個部落格，它將成為記錄生活和分享知識的好平台。如果遇到任何問題，可以參考：</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://hexo.io/docs/">Hexo 官方文檔</a></li>
-<li><a target="_blank" rel="noopener" href="https://theme-next.js.org/">Next 主題文檔</a></li>
-<li><a target="_blank" rel="noopener" href="https://docs.github.com/pages">GitHub Pages 文檔</a></li>
-</ul>
-<p>希望這篇教學對你建立自己的部落格有所幫助！</p>
-<h2 id="11-更新和部署文章"><a href="#11-更新和部署文章" class="headerlink" title="11. 更新和部署文章"></a>11. 更新和部署文章</h2><h3 id="11-1-更新現有文章"><a href="#11-1-更新現有文章" class="headerlink" title="11.1 更新現有文章"></a>11.1 更新現有文章</h3><ol>
-<li><p>編輯現有文章：</p>
-<ul>
-<li>在 <code>source/_posts/</code> 目錄下找到要修改的文章</li>
-<li>使用編輯器修改文章內容</li>
-<li>保存修改</li>
-</ul>
-</li>
-<li><p>本地預覽修改：</p>
-</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 啟動本地服務器</span></span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
-<ul>
-<li>訪問 <code>http://localhost:4000</code> 查看修改效果</li>
-<li>確認修改符合預期後，按 Ctrl+C 停止服務器</li>
-</ul>
-<h3 id="11-2-新增文章"><a href="#11-2-新增文章" class="headerlink" title="11.2 新增文章"></a>11.2 新增文章</h3><ol>
-<li>創建新文章：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 創建新文章</span></span><br><span class="line">hexo new <span class="string">&quot;新文章標題&quot;</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>這會在 <code>source/_posts/</code> 目錄下創建一個新的 Markdown 文件</li>
-<li>文件名格式為：<code>年-月-日-新文章標題.md</code></li>
-</ul>
-<ol start="2">
-<li><p>編輯新文章：</p>
-<ul>
-<li>使用編輯器打開新創建的文章文件</li>
-<li>添加文章內容</li>
-<li>設置適當的標籤和分類</li>
-<li>保存文件</li>
-</ul>
-</li>
-<li><p>本地預覽新文章：</p>
-</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 啟動本地服務器</span></span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
-<ul>
-<li>訪問 <code>http://localhost:4000</code> 查看新文章效果</li>
-<li>確認文章顯示正常後，按 Ctrl+C 停止服務器</li>
-</ul>
-<h3 id="11-3-部署更新"><a href="#11-3-部署更新" class="headerlink" title="11.3 部署更新"></a>11.3 部署更新</h3><p>完成文章修改或新增後，執行以下命令部署到 GitHub Pages：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 清理舊的生成文件</span></span><br><span class="line">hexo clean</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成新的靜態文件</span></span><br><span class="line">hexo generate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 部署到 GitHub Pages</span></span><br><span class="line">hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>或者使用簡寫形式：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo g &amp;&amp; hexo d</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p><strong>注意事項</strong>：</p>
-<ul>
-<li>部署後需要等待幾分鐘讓 GitHub Pages 完成更新</li>
-<li>如果看到 404 頁面，請等待幾分鐘後重新整理</li>
-<li>可以使用 <code>hexo clean &amp;&amp; hexo g &amp;&amp; hexo d</code> 命令快速部署</li>
-<li>部署前建議先在本地預覽，確認內容正確</li>
-</ul>
-</blockquote>
-<h3 id="11-4-檢查部署狀態"><a href="#11-4-檢查部署狀態" class="headerlink" title="11.4 檢查部署狀態"></a>11.4 檢查部署狀態</h3><ol>
-<li><p>在 GitHub 上檢查：</p>
-<ul>
-<li>進入你的 repository</li>
-<li>點擊 Actions 標籤</li>
-<li>查看最新的部署狀態</li>
-<li>等待部署完成（顯示綠色勾號）</li>
-</ul>
-</li>
-<li><p>訪問你的部落格：</p>
-<ul>
-<li>訪問 <code>https://你的用戶名.github.io/你的部落格名.github.io</code></li>
-<li>檢查新文章或修改是否正確顯示</li>
-<li>如果內容未更新，請等待幾分鐘後重新整理</li>
-</ul>
-</li>
-</ol>
-<h3 id="11-5-常見問題"><a href="#11-5-常見問題" class="headerlink" title="11.5 常見問題"></a>11.5 常見問題</h3><ol>
-<li><p><strong>部署後內容未更新</strong></p>
-<ul>
-<li>等待幾分鐘讓 GitHub Pages 完成更新</li>
-<li>執行 <code>hexo clean</code> 清理緩存</li>
-<li>重新執行部署命令</li>
-</ul>
-</li>
-<li><p><strong>新文章未顯示</strong></p>
-<ul>
-<li>檢查文章文件名格式是否正確</li>
-<li>確認文章是否包含正確的 front-matter</li>
-<li>檢查 <code>_config.yml</code> 中的 URL 設置</li>
-</ul>
-</li>
-<li><p><strong>修改未生效</strong></p>
-<ul>
-<li>確認修改已保存</li>
-<li>執行 <code>hexo clean</code> 清理緩存</li>
-<li>重新執行部署命令</li>
-</ul>
-</li>
-<li><p><strong>部署失敗</strong></p>
-<ul>
-<li>檢查 GitHub 設置</li>
-<li>確認 SSH key 設置正確</li>
-<li>檢查部署配置</li>
-<li>嘗試重新生成 SSH key</li>
-</ul>
-</li>
-</ol>
-<p>部署完成後，訪問 <code>https://你的用戶名.github.io/你的部落格名.github.io</code> 查看你的部落格。例如：<code>https://nivek-yang.github.io/test_blog.github.io</code></p>
-<h2 id="12-自定義設置"><a href="#12-自定義設置" class="headerlink" title="12. 自定義設置"></a>12. 自定義設置</h2><h3 id="12-1-導航菜單"><a href="#12-1-導航菜單" class="headerlink" title="12.1 導航菜單"></a>12.1 導航菜單</h3><p>在 Next 主題的 <code>_config.yml</code> 中設置導航菜單：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">menu:</span></span><br><span class="line">  <span class="attr">home:</span> <span class="string">/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-home</span></span><br><span class="line">  <span class="attr">archives:</span> <span class="string">/archives/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-archive</span></span><br><span class="line">  <span class="attr">about:</span> <span class="string">/about/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-user</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="12-2-社交鏈接"><a href="#12-2-社交鏈接" class="headerlink" title="12.2 社交鏈接"></a>12.2 社交鏈接</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">social:</span></span><br><span class="line">  <span class="attr">GitHub:</span> <span class="string">https://github.com/你的用戶名</span> <span class="string">||</span> <span class="string">fab</span> <span class="string">fa-github</span></span><br><span class="line">  <span class="attr">E-Mail:</span> <span class="string">mailto:你的電子郵件</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-envelope</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="13-維護和更新"><a href="#13-維護和更新" class="headerlink" title="13. 維護和更新"></a>13. 維護和更新</h2><h3 id="13-1-日常維護"><a href="#13-1-日常維護" class="headerlink" title="13.1 日常維護"></a>13.1 日常維護</h3><ol>
-<li>定期更新 Hexo 和主題：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm update</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>備份源文件：<ul>
-<li>將 source 目錄下的文件定期備份</li>
-<li>可以使用 Git 進行版本控制</li>
-</ul>
-</li>
-</ol>
-<h3 id="13-2-故障排除"><a href="#13-2-故障排除" class="headerlink" title="13.2 故障排除"></a>13.2 故障排除</h3><p>常見問題的解決方法：</p>
-<ol>
-<li><p>部署失敗：</p>
-<ul>
-<li>檢查 GitHub 設置</li>
-<li>確認 SSH key 設置正確</li>
-<li>檢查部署配置</li>
-<li>嘗試重新生成 SSH key</li>
-</ul>
-</li>
-<li><p>本地預覽問題：</p>
-<ul>
-<li>清理緩存：<code>hexo clean</code></li>
-<li>重新安裝依賴：<code>npm install</code></li>
-<li>檢查端口是否被占用</li>
-</ul>
-</li>
-<li><p>主題顯示問題：</p>
-<ul>
-<li>確認主題文件是否完整</li>
-<li>檢查主題配置是否正確</li>
-<li>嘗試重新安裝主題</li>
-</ul>
-</li>
-</ol>
-<h2 id="14-結語"><a href="#14-結語" class="headerlink" title="14. 結語"></a>14. 結語</h2><p>通過以上步驟，我們成功建立了一個個人部落格。這個部落格具有以下特點：</p>
-<ul>
-<li>使用 Hexo 靜態網站生成器</li>
-<li>採用 Next 主題，簡潔美觀</li>
-<li>部署在 GitHub Pages，無需額外伺服器</li>
-<li>支持 Markdown 寫作</li>
-<li>具有分類、標籤等功能</li>
-<li>響應式設計，支持多設備訪問</li>
-</ul>
-<p>持續更新和維護這個部落格，它將成為記錄生活和分享知識的好平台。如果遇到任何問題，可以參考：</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://hexo.io/docs/">Hexo 官方文檔</a></li>
-<li><a target="_blank" rel="noopener" href="https://theme-next.js.org/">Next 主題文檔</a></li>
-<li><a target="_blank" rel="noopener" href="https://docs.github.com/pages">GitHub Pages 文檔</a></li>
-</ul>
-<p>希望這篇教學對你建立自己的部落格有所幫助！</p>
-<h2 id="15-部署後的後續工作"><a href="#15-部署後的後續工作" class="headerlink" title="15. 部署後的後續工作"></a>15. 部署後的後續工作</h2><h3 id="15-1-檢查網站功能"><a href="#15-1-檢查網站功能" class="headerlink" title="15.1 檢查網站功能"></a>15.1 檢查網站功能</h3><p>部署完成後，需要檢查以下功能是否正常：</p>
-<ol>
-<li><p><strong>基本功能檢查</strong>：</p>
-<ul>
-<li>首頁是否能正常訪問</li>
-<li>文章列表是否正確顯示</li>
-<li>文章內容是否完整</li>
-<li>圖片是否正常顯示</li>
-<li>導航菜單是否正常運作</li>
-</ul>
-</li>
-<li><p><strong>互動功能檢查</strong>：</p>
-<ul>
-<li>分類頁面是否正常</li>
-<li>標籤頁面是否正常</li>
-<li>搜索功能是否正常</li>
-<li>評論功能（如果有的話）是否正常</li>
-</ul>
-</li>
-<li><p><strong>響應式設計檢查</strong>：</p>
-<ul>
-<li>在手機上訪問是否正常</li>
-<li>在不同瀏覽器中訪問是否正常</li>
-<li>頁面縮放是否正常</li>
-</ul>
-</li>
-</ol>
-<h3 id="15-2-優化網站性能"><a href="#15-2-優化網站性能" class="headerlink" title="15.2 優化網站性能"></a>15.2 優化網站性能</h3><ol>
-<li><p><strong>圖片優化</strong>：</p>
-<ul>
-<li>使用適當的圖片格式（WebP、JPEG、PNG）</li>
-<li>壓縮圖片大小</li>
-<li>使用延遲加載（lazy loading）</li>
-</ul>
-</li>
-<li><p><strong>SEO 優化</strong>：</p>
-<ul>
-<li>確保每篇文章都有適當的標題和描述</li>
-<li>添加適當的 meta 標籤</li>
-<li>提交網站地圖到搜索引擎</li>
-</ul>
-</li>
-<li><p><strong>性能監控</strong>：</p>
-<ul>
-<li>使用 Google Analytics 或類似工具監控訪問量</li>
-<li>使用 PageSpeed Insights 檢查網站性能</li>
-<li>定期檢查網站加載速度</li>
-</ul>
-</li>
-</ol>
-<h3 id="15-3-定期維護"><a href="#15-3-定期維護" class="headerlink" title="15.3 定期維護"></a>15.3 定期維護</h3><ol>
-<li><p><strong>內容更新</strong>：</p>
-<ul>
-<li>定期發布新文章</li>
-<li>更新舊文章的內容</li>
-<li>維護分類和標籤</li>
-</ul>
-</li>
-<li><p><strong>技術維護</strong>：</p>
-<ul>
-<li>定期更新 Hexo 和主題</li>
-<li>更新依賴包</li>
-<li>備份源文件</li>
-</ul>
-</li>
-<li><p><strong>安全維護</strong>：</p>
-<ul>
-<li>定期檢查 GitHub 設置</li>
-<li>更新 SSH 金鑰</li>
-<li>檢查訪問權限</li>
-</ul>
-</li>
-</ol>
-<h3 id="15-4-推廣和互動"><a href="#15-4-推廣和互動" class="headerlink" title="15.4 推廣和互動"></a>15.4 推廣和互動</h3><ol>
-<li><p><strong>社群媒體推廣</strong>：</p>
-<ul>
-<li>在社群媒體上分享文章</li>
-<li>與讀者互動</li>
-<li>收集反饋</li>
-</ul>
-</li>
-<li><p><strong>SEO 優化</strong>：</p>
-<ul>
-<li>使用適當的關鍵字</li>
-<li>建立外部連結</li>
-<li>優化文章結構</li>
-</ul>
-</li>
-<li><p><strong>內容策略</strong>：</p>
-<ul>
-<li>制定發布計劃</li>
-<li>分析讀者反饋</li>
-<li>調整內容方向</li>
-</ul>
-</li>
-</ol>
-<h3 id="15-5-備份策略"><a href="#15-5-備份策略" class="headerlink" title="15.5 備份策略"></a>15.5 備份策略</h3><ol>
-<li><p><strong>源文件備份</strong>：</p>
-<ul>
-<li>定期備份 <code>source</code> 目錄</li>
-<li>使用 Git 進行版本控制</li>
-<li>保存到雲端存儲</li>
-</ul>
-</li>
-<li><p><strong>配置備份</strong>：</p>
-<ul>
-<li>備份 <code>_config.yml</code> 文件</li>
-<li>備份主題配置</li>
-<li>記錄重要的修改</li>
-</ul>
-</li>
-<li><p><strong>恢復計劃</strong>：</p>
-<ul>
-<li>制定網站恢復流程</li>
-<li>測試備份文件</li>
-<li>準備應急方案</li>
-</ul>
-</li>
-</ol>
-<h3 id="15-6-持續學習"><a href="#15-6-持續學習" class="headerlink" title="15.6 持續學習"></a>15.6 持續學習</h3><ol>
-<li><p><strong>技術學習</strong>：</p>
-<ul>
-<li>學習新的 Markdown 技巧</li>
-<li>了解 Hexo 的新功能</li>
-<li>學習前端開發知識</li>
-</ul>
-</li>
-<li><p><strong>內容創作</strong>：</p>
-<ul>
-<li>提高寫作技巧</li>
-<li>學習攝影技巧</li>
-<li>研究 SEO 最佳實踐</li>
-</ul>
-</li>
-<li><p><strong>社群參與</strong>：</p>
-<ul>
-<li>參與 Hexo 社群</li>
-<li>分享經驗</li>
-<li>學習他人經驗</li>
-</ul>
-</li>
-</ol>
-<p>通過這些後續工作，你可以不斷優化和改進你的部落格，提供更好的閱讀體驗，吸引更多讀者。記住，建立部落格只是一個開始，持續的維護和改進才是關鍵。 </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/my-blog/page/2/"><i class="fa fa-angle-left" aria-label="上一頁"></i></a><a class="page-number" href="/my-blog/">1</a><a class="page-number" href="/my-blog/page/2/">2</a><span class="page-number current">3</span>
+    <a class="extend prev" rel="prev" href="/my-blog/page/2/"><i class="fa fa-angle-left" aria-label="上一頁"></i></a><a class="page-number" href="/my-blog/">1</a><a class="page-number" href="/my-blog/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/my-blog/page/4/">4</a><a class="extend next" rel="next" href="/my-blog/page/4/"><i class="fa fa-angle-right" aria-label="下一頁"></i></a>
   </nav>
 
 
@@ -2295,7 +1719,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/my-blog/archives/">
         
-          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-count">31</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
