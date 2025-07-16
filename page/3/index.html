@@ -149,6 +149,173 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/27/%E5%9F%BA%E6%96%BC%20Git%20Subtree%20%E7%9A%84%E5%A4%9A%E5%88%86%E6%94%AF%E5%B0%88%E6%A1%88%E7%AE%A1%E7%90%86%E8%88%87%E8%87%AA%E5%8B%95%E5%8C%96%E6%95%B4%E5%90%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/04/27/%E5%9F%BA%E6%96%BC%20Git%20Subtree%20%E7%9A%84%E5%A4%9A%E5%88%86%E6%94%AF%E5%B0%88%E6%A1%88%E7%AE%A1%E7%90%86%E8%88%87%E8%87%AA%E5%8B%95%E5%8C%96%E6%95%B4%E5%90%88/" class="post-title-link" itemprop="url">基於 Git Subtree 的多分支專案管理與自動化整合</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              <time title="創建時間：2025-04-27 00:00:00" itemprop="dateCreated datePublished" datetime="2025-04-27T00:00:00+08:00">2025-04-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2025-04-28 00:21:02" itemprop="dateModified" datetime="2025-04-28T00:21:02+08:00">2025-04-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>這篇筆記說明如何用 <code>Git Subtree</code> 設計一個在 GitHub 上「可重複練習、集中管理」的多分支專案架構，並透過 <code>Makefile</code> 實現自動化整合。</p>
+</blockquote>
+<p>核心目標是：</p>
+<ul>
+<li><strong>從 <code>template</code> 分支快速建立開發練習分支</strong>，讓每次開發練習都從一致的起點開始</li>
+<li><strong>每個開發分支獨立開發、保有完整 commit 紀錄</strong></li>
+<li><strong>最終成果自動整合到 <code>master</code> 分支的子資料夾</strong>，方便集中展示與維運管理</li>
+</ul>
+<p>這樣的流程設計有以下優點：</p>
+<ul>
+<li>快速複製練習環境，便於反覆練習與教學</li>
+<li>每次練習皆為獨立專案，保留完整開發歷程</li>
+<li>成果集中到 <code>master</code>，只需瀏覽一個分支即可看到所有進度</li>
+<li>可搭配 GitHub Actions 等工具，自動化整合與部署流程</li>
+</ul>
+<hr>
+<h1 id="🧱-建立-template-分支"><a href="#🧱-建立-template-分支" class="headerlink" title="🧱 建立 template 分支"></a>🧱 建立 template 分支</h1><p><code>template</code> 分支是所有練習的起始樣板，可以依照以下兩種方式建立：</p>
+<ol>
+<li><strong>建立初始開發環境</strong>：準備好基礎的資料夾架構、依賴設定檔（例如 <code>package.json</code>、<code>requirements.txt</code>）或共用的 utility function。</li>
+<li><strong>給予練習規格</strong>：可以只放入說明文件、範例輸入&#x2F;輸出或 TODO 任務，讓想練習的人依據這份規格自行開發。</li>
+</ol>
+<p>建立指令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 從 master 建立 template 分支</span></span><br><span class="line">git checkout -b template</span><br><span class="line"></span><br><span class="line"><span class="comment"># 推送到遠端</span></span><br><span class="line">git push origin template</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="⚙️-更改預設分支（GitHub-操作）"><a href="#⚙️-更改預設分支（GitHub-操作）" class="headerlink" title="⚙️ 更改預設分支（GitHub 操作）"></a>⚙️ 更改預設分支（GitHub 操作）</h1><ol>
+<li>前往 GitHub Repo 頁面</li>
+<li>點擊「⚙ Settings」</li>
+<li>左側選單中選擇「Branches」</li>
+<li>將 Default branch 改為 <code>template</code></li>
+</ol>
+<p>這個設定是為了能夠先刪除 master 分支並重建，讓 master 存放練習後的成果</p>
+<hr>
+<h1 id="🗑️-刪除-master-並重建"><a href="#🗑️-刪除-master-並重建" class="headerlink" title="🗑️ 刪除 master 並重建"></a>🗑️ 刪除 master 並重建</h1><p>如果你想讓 <code>master</code> 分支只存放整合後的成果，而非開發內容，可以重新建立一個乾淨的 <code>master</code> 分支：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 刪除遠端 master 分支</span></span><br><span class="line">git push origin --delete master</span><br><span class="line"></span><br><span class="line"><span class="comment"># 本地切換並建立新的空 master 分支</span></span><br><span class="line">git checkout --orphan master</span><br><span class="line"></span><br><span class="line"><span class="comment"># 移除所有檔案（保留工作區）</span></span><br><span class="line">git <span class="built_in">rm</span> -rf .</span><br><span class="line"></span><br><span class="line"><span class="comment"># 建立 .gitignore 和 Makefile</span></span><br><span class="line"><span class="built_in">touch</span> .gitignore Makefile</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交並推送新的空白 master 分支</span></span><br><span class="line">git add .gitignore Makefile</span><br><span class="line">git commit -m <span class="string">&quot;Initialize new master branch&quot;</span></span><br><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
+
+<p>⚠️ <strong>請記得將預設分支從 <code>template</code> 改回 <code>master</code></strong>，以便未來集中展示成果與管理。</p>
+<hr>
+<h1 id="用-git-subtree-將多分支專案整合"><a href="#用-git-subtree-將多分支專案整合" class="headerlink" title="用 git subtree 將多分支專案整合"></a>用 git subtree 將多分支專案整合</h1><p><code>git subtree</code> 是 Git 提供的工具，允許你將另一個分支的內容匯入到當前分支的某個子資料夾，並保留其完整的 commit 歷史。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git subtree add --prefix=&lt;資料夾路徑&gt; &lt;遠端名稱&gt;/&lt;分支名稱&gt;</span><br></pre></td></tr></table></figure>
+<p>這條指令的作用是將指定的遠端分支內容匯入到當前分支的某個子資料夾中，並保留該分支的完整 commit 歷史</p>
+<ul>
+<li><p><strong><code>--prefix=&lt;資料夾路徑&gt;</code></strong>：</p>
+<ul>
+<li>指定將分支內容匯入到當前分支的哪個子資料夾。</li>
+<li>如果該資料夾不存在，Git 會自動建立。</li>
+</ul>
+</li>
+<li><p><strong><code>&lt;遠端名稱&gt;/&lt;分支名稱&gt;</code></strong>：</p>
+<ul>
+<li>指定要匯入的遠端分支。</li>
+<li>例如，<code>origin/feature-1</code> 表示從遠端 <code>origin</code> 的 <code>feature-1</code> 分支匯入。</li>
+</ul>
+</li>
+</ul>
+<p>在本專案中，我們使用 <code>git subtree</code> 的目的包括：</p>
+<ul>
+<li>將每個練習分支（如 <code>feature_1</code>）的專案內容，<strong>整合匯入到 <code>master</code> 分支的對應子資料夾（如 <code>feature_1/</code>）</strong></li>
+<li>避免用 <code>merge</code> 或 <code>cherry-pick</code> 導致 commit 歷史混亂</li>
+<li>可重複執行，不會影響其他資料夾內容</li>
+</ul>
+<h1 id="建立-Makefile-自動遷移腳本"><a href="#建立-Makefile-自動遷移腳本" class="headerlink" title="建立 Makefile 自動遷移腳本"></a>建立 Makefile 自動遷移腳本</h1><p>以下是 <code>master</code> 分支根目錄的 <code>Makefile</code> 實作：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"><span class="keyword">.PHONY</span>: archive archive-all</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 將指定分支內容以 git subtree 匯入對應資料夾，保留完整 commit 紀錄</span></span><br><span class="line"><span class="section">archive:</span></span><br><span class="line"><span class="keyword">ifndef</span> name</span><br><span class="line">	<span class="variable">$(<span class="built_in">error</span> Usage: make archive name=feature-&lt;X&gt;)</span></span><br><span class="line"><span class="keyword">endif</span></span><br><span class="line">	@echo <span class="string">&quot;🌲 Archiving <span class="variable">$(name)</span> into master:<span class="variable">$(name)</span>/ using git subtree...&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="comment"># 確保在 master 分支</span></span><br><span class="line">	@git checkout master</span><br><span class="line"></span><br><span class="line">	<span class="comment"># 檢查有無未提交的變更</span></span><br><span class="line">	@if [ -n <span class="string">&quot;$$\(git status --porcelain)&quot;</span> ]; then \</span><br><span class="line">		echo <span class="string">&quot;❌ master branch has uncommitted changes. Please commit or stash first.&quot;</span>; \</span><br><span class="line">		exit 1; \</span><br><span class="line">	fi</span><br><span class="line"></span><br><span class="line">	<span class="comment"># 匯入分支內容到對應資料夾（不使用 --squash，可保留所有 commit）</span></span><br><span class="line">	@git subtree add --prefix=<span class="variable">$(name)</span> origin/<span class="variable">$(name)</span></span><br><span class="line"></span><br><span class="line">	@echo <span class="string">&quot;✅ Done archiving <span class="variable">$(name)</span> into master:<span class="variable">$(name)</span>/&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 批次對所有符合 feature-* 的分支執行 subtree 匯入</span></span><br><span class="line"><span class="section">archive-all:</span></span><br><span class="line">	@git fetch origin</span><br><span class="line">	@git branch -r | grep &#x27;origin/feature_&#x27; | sed &#x27;s|origin/||&#x27; | while read branch; do \</span><br><span class="line">		<span class="variable">$(MAKE)</span> archive name=$$branch; \</span><br><span class="line">	done</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="📦-歸檔練習分支內容"><a href="#📦-歸檔練習分支內容" class="headerlink" title="📦 歸檔練習分支內容"></a>📦 歸檔練習分支內容</h1><p>每完成一個 <code>feature_&lt;n&gt;</code> 分支的專案後，執行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make archive name=feature_&lt;n&gt;</span><br></pre></td></tr></table></figure>
+
+<p>系統會自動將該分支所有檔案以 <code>git subtree</code> 匯入到 <code>master</code> 的 <code>feature_&lt;n&gt;/</code> 資料夾中，<strong>保留完整 commit 歷史</strong>。</p>
+<p>若要一鍵歸檔所有 <code>feature_&lt;n&gt;</code> 分支，可執行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make archive-all</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="🚀-後續可整合-GitHub-Actions-自動化流程"><a href="#🚀-後續可整合-GitHub-Actions-自動化流程" class="headerlink" title="🚀 後續可整合 GitHub Actions 自動化流程"></a>🚀 後續可整合 GitHub Actions 自動化流程</h1><p>未來可以使用 GitHub Actions 自動觸發 <code>make archive name=feature_&lt;n&gt;</code> 指令，將 PR 合併後的分支內容自動歸檔到 <code>master</code> 的對應子資料夾。建議流程如下：</p>
+<ol>
+<li>當 PR 合併至 <code>feature_&lt;n&gt;</code> 分支時觸發 workflow</li>
+<li>使用 <code>actions/checkout</code> 切換到 <code>master</code> 分支</li>
+<li>使用 <code>git fetch</code> 確保能抓到對應的分支內容</li>
+<li>執行 <code>make archive name=feature_&lt;n&gt;</code> 自動歸檔</li>
+<li>將更新過的 <code>master</code> 分支 push 回遠端</li>
+</ol>
+<p>這樣可以避免手動切換與操作，讓每個練習成果在合併 PR 後自動整理到展示區。你也可以加入條件判斷，只對分支名稱符合 <code>feature_*</code> 格式的情況執行此流程。</p>
+<hr>
+<h1 id="✅-結果展示"><a href="#✅-結果展示" class="headerlink" title="✅ 結果展示"></a>✅ 結果展示</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">master</span><br><span class="line">├── .gitignore</span><br><span class="line">├── Makefile</span><br><span class="line">├── feature_1/</span><br><span class="line">│   ├── manage.py</span><br><span class="line">│   ├── app/</span><br><span class="line">│   └── ...</span><br><span class="line">├── feature_2/</span><br><span class="line">│   └── ...</span><br><span class="line">└── feature_3/</span><br><span class="line">    └── ...</span><br></pre></td></tr></table></figure>
+
+<p>這樣的架構讓你可以：</p>
+<ul>
+<li>保有一份可重複使用的範本分支（template）</li>
+<li>在多個練習分支開發而不互相干擾</li>
+<li>將成果統一集中到 <code>master</code> 展示，方便他人瀏覽</li>
+<li>將 CI&#x2F;CD、部屬、技術分享等操作聚焦於 <code>master</code> 管理</li>
+</ul>
+<p>非常適合用於建立個人練習倉庫、技術文章範例、或團隊協作練習環境。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
     <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/25/Git%20%E6%8C%87%E5%8D%97%EF%BC%9A%E5%BE%9E%E5%9F%BA%E7%A4%8E%E6%93%8D%E4%BD%9C%E5%88%B0%E9%80%B2%E9%9A%8E%E6%8A%80%E5%B7%A7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1719,116 +1886,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/17/django%E7%9A%84_set%E7%94%A8%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/04/17/django%E7%9A%84_set%E7%94%A8%E6%B3%95/" class="post-title-link" itemprop="url">Django `_set` 用法筆記（ForeignKey 反向關聯）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">發表於</span>
-
-              <time title="創建時間：2025-04-17 00:00:00" itemprop="dateCreated datePublished" datetime="2025-04-17T00:00:00+08:00">2025-04-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2025-04-18 20:59:14" itemprop="dateModified" datetime="2025-04-18T20:59:14+08:00">2025-04-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分類於</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="🔗-Django-set-用法筆記（ForeignKey-反向關聯）"><a href="#🔗-Django-set-用法筆記（ForeignKey-反向關聯）" class="headerlink" title="🔗 Django _set 用法筆記（ForeignKey 反向關聯）"></a>🔗 Django <code>_set</code> 用法筆記（ForeignKey 反向關聯）</h2><h3 id="✅-基本觀念：一對多關係（ForeignKey）"><a href="#✅-基本觀念：一對多關係（ForeignKey）" class="headerlink" title="✅ 基本觀念：一對多關係（ForeignKey）"></a>✅ 基本觀念：一對多關係（ForeignKey）</h3><p>假設有下列兩個 Model：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Interview</span>(models.Model):</span><br><span class="line">    title = models.CharField(max_length=<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Comment</span>(models.Model):</span><br><span class="line">    interview = models.ForeignKey(Interview, on_delete=models.CASCADE)</span><br><span class="line">    content = models.TextField()</span><br></pre></td></tr></table></figure>
-
-<p>這裡代表：</p>
-<ul>
-<li>一個 <code>Interview</code> 可以有多個 <code>Comment</code></li>
-<li><code>Comment</code> 是「多」方，透過 ForeignKey 指向「一」方的 <code>Interview</code></li>
-</ul>
-<hr>
-<h3 id="↻-反向關聯：使用-set"><a href="#↻-反向關聯：使用-set" class="headerlink" title="↻ 反向關聯：使用 _set"></a>↻ 反向關聯：使用 <code>_set</code></h3><p>Django 會<strong>自動在一方的 model 加上一個反向屬性</strong>，名稱預設是：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;related_model_name&gt;_set</span><br></pre></td></tr></table></figure>
-
-<p>所以可以這樣用：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">interview.comment_set.<span class="built_in">all</span>()  <span class="comment"># 查出這個 interview 底下的所有 comment</span></span><br><span class="line">interview.comment_set.create(content=<span class="string">&#x27;你好&#x27;</span>)  <span class="comment"># 新增一筆 comment 自動連結該 interview</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="📛-注意：預設反向屬性的命名方式"><a href="#📛-注意：預設反向屬性的命名方式" class="headerlink" title="📛 注意：預設反向屬性的命名方式"></a>📛 注意：預設反向屬性的命名方式</h3><p>預設情況下，Django 會以「<strong>小寫 model 名稱 + <code>_set</code></strong>」為一方建立反向屬性。</p>
-<p>例如：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Comment</span>(models.Model):</span><br><span class="line">    interview = models.ForeignKey(Interview, on_delete=models.CASCADE)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>這會讓你能夠使用 <code>interview.comment_set</code> 來取得該 interview 所有的 comment。</li>
-<li>若 model 名稱為 <code>Message</code>，則會是 <code>article.message_set</code></li>
-</ul>
-<p>若希望有更語意化的名稱，建議加上 <code>related_name</code>（見下方）。</p>
-<hr>
-<h3 id="✍️-常見用法整理："><a href="#✍️-常見用法整理：" class="headerlink" title="✍️ 常見用法整理："></a>✍️ 常見用法整理：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 取得所有 comment</span></span><br><span class="line">comments = interview.comment_set.<span class="built_in">all</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Interview 角度</span></span><br><span class="line"><span class="comment"># 建立一筆新的 comment 並與 interview 關聯</span></span><br><span class="line">interview.comment_set.create(content=req.POST[<span class="string">&#x27;content&#x27;</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># Comment 角度</span></span><br><span class="line">Comment.objects.create(interview=interview, content=req.POST[<span class="string">&#x27;content&#x27;</span>])</span><br></pre></td></tr></table></figure>
-<hr>
-<h3 id="💡-如何自訂反向名稱（最佳實踐）"><a href="#💡-如何自訂反向名稱（最佳實踐）" class="headerlink" title="💡 如何自訂反向名稱（最佳實踐）"></a>💡 如何自訂反向名稱（最佳實踐）</h3><p>為了讓語意更清楚，可以在 ForeignKey 中加上 <code>related_name</code>：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Comment</span>(models.Model):</span><br><span class="line">    interview = models.ForeignKey(</span><br><span class="line">        Interview,</span><br><span class="line">        on_delete=models.CASCADE,</span><br><span class="line">        related_name=<span class="string">&#x27;comments&#x27;</span>  <span class="comment"># 自訂名稱</span></span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
-
-<p>就能這樣使用：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">interview.comments.<span class="built_in">all</span>()</span><br><span class="line">interview.comments.create(content=<span class="string">&#x27;加油！&#x27;</span>)</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3 id="💬-面試回答（Q-A）"><a href="#💬-面試回答（Q-A）" class="headerlink" title="💬 面試回答（Q&amp;A）"></a>💬 面試回答（Q&amp;A）</h3><p><strong>Q: Django 中如何透過 ForeignKey 建立一對多關係，並如何查詢&#x2F;建立子資料？</strong><br><strong>A:</strong></p>
-<blockquote>
-<p>在多方的 model 使用 <code>ForeignKey</code> 連到一方，並使用 Django 提供的反向屬性 <code>&lt;model&gt;_set</code> 來存取。例如 <code>interview.comment_set.create(...)</code> 可以新增一筆資料，同時建立關聯。如果加上 <code>related_name</code> 可以讓語意更清楚，如 <code>interview.comments.create(...)</code>。</p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1898,7 +1955,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/my-blog/archives/">
         
-          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-count">33</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -1907,7 +1964,7 @@
         <span class="site-state-item-name">分類</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">標籤</span>
       </div>
   </nav>
