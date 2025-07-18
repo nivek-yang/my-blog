@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="當在 Node.js 或 Python FastAPI 中寫下 async 和 await 時，感覺就像施展了魔法。程式碼在 await 的地方優雅地「暫停」，伺服器卻沒有因此卡死，反而能繼續處理成千上萬的請求。 但魔法的背後總是科學。那個被「暫停」的任務，尤其是像資料庫查詢、API 呼叫這種 I&#x2F;O 操作，究竟是誰在處理？它被交給了機器的哪個部分？ 答案可能會讓你驚訝：把最耗時的「等待">
+<meta property="og:type" content="article">
+<meta property="og:title" content="解密非同步魔法：Async&#x2F;Await 究竟把工作交給了誰？">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/07/18/%E8%A7%A3%E5%AF%86%E9%9D%9E%E5%90%8C%E6%AD%A5%E9%AD%94%E6%B3%95%20Async%20Await%20%E7%A9%B6%E7%AB%9F%E6%8A%8A%E5%B7%A5%E4%BD%9C%E4%BA%A4%E7%B5%A6%E4%BA%86%E8%AA%B0/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="當在 Node.js 或 Python FastAPI 中寫下 async 和 await 時，感覺就像施展了魔法。程式碼在 await 的地方優雅地「暫停」，伺服器卻沒有因此卡死，反而能繼續處理成千上萬的請求。 但魔法的背後總是科學。那個被「暫停」的任務，尤其是像資料庫查詢、API 呼叫這種 I&#x2F;O 操作，究竟是誰在處理？它被交給了機器的哪個部分？ 答案可能會讓你驚訝：把最耗時的「等待">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-07-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-07-18T17:50:41.462Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Async">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/07/18/%E8%A7%A3%E5%AF%86%E9%9D%9E%E5%90%8C%E6%AD%A5%E9%AD%94%E6%B3%95%20Async%20Await%20%E7%A9%B6%E7%AB%9F%E6%8A%8A%E5%B7%A5%E4%BD%9C%E4%BA%A4%E7%B5%A6%E4%BA%86%E8%AA%B0/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/07/18/%E8%A7%A3%E5%AF%86%E9%9D%9E%E5%90%8C%E6%AD%A5%E9%AD%94%E6%B3%95%20Async%20Await%20%E7%A9%B6%E7%AB%9F%E6%8A%8A%E5%B7%A5%E4%BD%9C%E4%BA%A4%E7%B5%A6%E4%BA%86%E8%AA%B0/","path":"2025/07/18/解密非同步魔法 Async Await 究竟把工作交給了誰/","title":"解密非同步魔法：Async/Await 究竟把工作交給了誰？"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>解密非同步魔法：Async/Await 究竟把工作交給了誰？ | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">35</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">25</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(6)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(13)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%B7%E6%80%9D%EF%BC%9A%E6%98%AF%E9%9D%9E%E5%90%8C%E6%AD%A5%E6%A1%86%E6%9E%B6%E8%87%AA%E5%B7%B1%E9%96%8B%E4%BA%86%E5%80%8B%E7%B7%9A%E7%A8%8B%E5%97%8E%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">迷思：是非同步框架自己開了個線程嗎？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9C%9F%E6%AD%A3%E7%9A%84%E6%BC%94%E5%93%A1%EF%BC%9A%E5%B0%88%E6%A1%88%E7%B6%93%E7%90%86%E8%88%87%E8%A1%8C%E6%94%BF%E9%83%A8%E9%96%80"><span class="nav-number">2.</span> <span class="nav-text">真正的演員：專案經理與行政部門</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E6%BC%94%E9%96%8B%E5%A7%8B%EF%BC%9A%E4%B8%80%E6%AC%A1%E9%9D%9E%E5%90%8C%E6%AD%A5-API-%E5%91%BC%E5%8F%AB%E7%9A%84%E6%97%85%E7%A8%8B"><span class="nav-number">2.1.</span> <span class="nav-text">表演開始：一次非同步 API 呼叫的旅程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F-1%EF%BC%9A%E5%B0%88%E6%A1%88%E7%B6%93%E7%90%86%E4%B8%8B%E9%81%94%E6%8C%87%E4%BB%A4"><span class="nav-number">2.1.1.</span> <span class="nav-text">步驟 1：專案經理下達指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F-2%EF%BC%9A%E5%B0%88%E6%A1%88%E7%B6%93%E7%90%86%E5%9B%9E%E5%8E%BB%E5%BF%99%E5%88%A5%E7%9A%84"><span class="nav-number">2.1.2.</span> <span class="nav-text">步驟 2：專案經理回去忙別的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F-3%EF%BC%9A%E8%A1%8C%E6%94%BF%E9%83%A8%E9%96%80%E7%9A%84%E9%AB%98%E7%A7%91%E6%8A%80%E7%9C%8B%E6%9D%BF-epoll-kqueue-IOCP"><span class="nav-number">2.1.3.</span> <span class="nav-text">步驟 3：行政部門的高科技看板 (epoll &#x2F; kqueue &#x2F; IOCP)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F-4%EF%BC%9A%E4%BB%BB%E5%8B%99%E5%AE%8C%E6%88%90%EF%BC%8C%E9%A0%98%E5%8F%96%E7%B5%90%E6%9E%9C"><span class="nav-number">2.1.4.</span> <span class="nav-text">步驟 4：任務完成，領取結果</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B3%87%E6%BA%90%E5%88%86%E9%85%8D%EF%BC%9ACPU-%E5%92%8C%E8%A8%98%E6%86%B6%E9%AB%94%E7%94%A8%E5%9C%A8%E5%93%AA%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">資源分配：CPU 和記憶體用在哪？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">4.</span> <span class="nav-text">結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/18/%E8%A7%A3%E5%AF%86%E9%9D%9E%E5%90%8C%E6%AD%A5%E9%AD%94%E6%B3%95%20Async%20Await%20%E7%A9%B6%E7%AB%9F%E6%8A%8A%E5%B7%A5%E4%BD%9C%E4%BA%A4%E7%B5%A6%E4%BA%86%E8%AA%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="解密非同步魔法：Async&#x2F;Await 究竟把工作交給了誰？ | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          解密非同步魔法：Async/Await 究竟把工作交給了誰？
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2025-07-18 00:00:00" itemprop="dateCreated datePublished" datetime="2025-07-18T00:00:00+08:00">2025-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-07-19 01:50:41" itemprop="dateModified" datetime="2025-07-19T01:50:41+08:00">2025-07-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>當在 Node.js 或 Python FastAPI 中寫下 <code>async</code> 和 <code>await</code> 時，感覺就像施展了魔法。程式碼在 <code>await</code> 的地方優雅地「暫停」，伺服器卻沒有因此卡死，反而能繼續處理成千上萬的請求。</p>
+<p>但魔法的背後總是科學。那個被「暫停」的任務，尤其是像資料庫查詢、API 呼叫這種 I&#x2F;O 操作，<strong>究竟是誰在處理？它被交給了機器的哪個部分？</strong></p>
+<p>答案可能會讓你驚訝：<strong>把最耗時的「等待」工作，外包給了電腦中最勤勞、最高效的員工——作業系統核心 (Operating System Kernel)。</strong></p>
+<p>讓我們深入探討這個過程。</p>
+<hr>
+<h1 id="迷思：是非同步框架自己開了個線程嗎？"><a href="#迷思：是非同步框架自己開了個線程嗎？" class="headerlink" title="迷思：是非同步框架自己開了個線程嗎？"></a>迷思：是非同步框架自己開了個線程嗎？</h1><p>一個常見的誤解是，每當 <code>await</code> 一個 I&#x2F;O 操作，框架就會在背景開一個新的線程 (thread) 去處理它。雖然這在某些情況下（如 CPU 密集型任務）是可能的，但對於處理大量 I&#x2F;O 請求來說，這種模型效率極低。每開一個線程都要消耗記憶體和 CPU 上下文切換的成本，無法支撐成千上萬的併發連接。</p>
+<p>真正的答案，是一場由 <strong>應用程式執行環境 (Runtime)</strong> 和 <strong>作業系統 (OS)</strong> 配合演出的精采好戲。</p>
+<h1 id="真正的演員：專案經理與行政部門"><a href="#真正的演員：專案經理與行政部門" class="headerlink" title="真正的演員：專案經理與行政部門"></a>真正的演員：專案經理與行政部門</h1><p>我們可以把整個非同步流程想像成一個高效的辦公室：</p>
+<ol>
+<li><p><strong>專案經理 (The Runtime &#x2F; Event Loop)</strong></p>
+<ul>
+<li>在 <strong>Node.js</strong> 的世界裡，它就是 <strong>Node.js Runtime</strong> (由 V8 引擎和 libuv 函式庫組成)。</li>
+<li>在 <strong>FastAPI</strong> 的世界裡，它就是由 <strong>Uvicorn</strong> 伺服器所驅動的 <strong>Python 事件循環 (Event Loop)</strong>。</li>
+<li><strong>職責</strong>：執行程式碼 (JavaScript 或 Python)。它非常忙碌，討厭等待。</li>
+</ul>
+</li>
+<li><p><strong>行政部門 (The Operating System Kernel)</strong></p>
+<ul>
+<li>無論是 Linux, macOS, 還是 Windows，它們的核心都具備強大的 I&#x2F;O 處理能力。</li>
+<li><strong>職責</strong>：處理所有與硬體相關的「髒活累活」，比如網路通訊、讀寫檔案。它有自己的高效工具。</li>
+</ul>
+</li>
+</ol>
+<h2 id="表演開始：一次非同步-API-呼叫的旅程"><a href="#表演開始：一次非同步-API-呼叫的旅程" class="headerlink" title="表演開始：一次非同步 API 呼叫的旅程"></a>表演開始：一次非同步 API 呼叫的旅程</h2><p>假設 Node.js 或 FastAPI 應用需要呼叫一個外部 API。</p>
+<h3 id="步驟-1：專案經理下達指令"><a href="#步驟-1：專案經理下達指令" class="headerlink" title="步驟 1：專案經理下達指令"></a>步驟 1：專案經理下達指令</h3><p>當程式碼執行到 <code>await</code> 這一行時：</p>
+<p><strong>Node.js (使用 <code>node-fetch</code>)</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> fetch <span class="keyword">from</span> <span class="string">&#x27;node-fetch&#x27;</span>;</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">get</span>(<span class="string">&#x27;/data&#x27;</span>, <span class="title function_">async</span> (req, res) =&gt; &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;準備發送請求...&quot;</span>);</span><br><span class="line">    <span class="comment">// 指令點</span></span><br><span class="line">    <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="title function_">fetch</span>(<span class="string">&#x27;https://api.example.com/items&#x27;</span>); </span><br><span class="line">    <span class="keyword">const</span> data = <span class="keyword">await</span> response.<span class="title function_">json</span>();</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;收到資料！&quot;</span>);</span><br><span class="line">    res.<span class="title function_">send</span>(data);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><strong>FastAPI (使用 <code>httpx</code>)</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> httpx</span><br><span class="line"><span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI</span><br><span class="line"></span><br><span class="line">app = FastAPI()</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.get(<span class="params"><span class="string">&quot;/data&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">get_data</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;準備發送請求...&quot;</span>)</span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> httpx.AsyncClient() <span class="keyword">as</span> client:</span><br><span class="line">        <span class="comment"># 指令點</span></span><br><span class="line">        response = <span class="keyword">await</span> client.get(<span class="string">&quot;https://api.example.com/items&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;收到資料！&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> response.json()</span><br></pre></td></tr></table></figure>
+
+<p>專案經理 (Runtime) 看到這個指令，它並不會傻等。它會透過一個<strong>系統呼叫 (System Call)</strong>，把任務交給行政部門 (OS)。它對 OS 說：</p>
+<blockquote>
+<p>「嘿，OS！請透過網路向 <code>api.example.com</code> 發送這個 GET 請求。完成後，在你的任務看板上通知我。這是這個任務的編號。」</p>
+</blockquote>
+<h3 id="步驟-2：專案經理回去忙別的"><a href="#步驟-2：專案經理回去忙別的" class="headerlink" title="步驟 2：專案經理回去忙別的"></a>步驟 2：專案經理回去忙別的</h3><p>下達指令後，專案經理的雙手就自由了！它會立刻返回它的<strong>事件佇列 (Event Queue)</strong>，看看有沒有其他事情可以做，比如：</p>
+<ul>
+<li>處理另一個剛進來的 HTTP 請求。</li>
+<li>執行一個剛剛計時器到期的 <code>setTimeout</code>。</li>
+<li>處理任何已經完成的 I&#x2F;O 事件。</li>
+</ul>
+<p>這就是<strong>非阻塞 (Non-blocking)</strong> 的核心：<strong>永不等待 I&#x2F;O</strong>。</p>
+<h3 id="步驟-3：行政部門的高科技看板-epoll-kqueue-IOCP"><a href="#步驟-3：行政部門的高科技看板-epoll-kqueue-IOCP" class="headerlink" title="步驟 3：行政部門的高科技看板 (epoll &#x2F; kqueue &#x2F; IOCP)"></a>步驟 3：行政部門的高科技看板 (epoll &#x2F; kqueue &#x2F; IOCP)</h3><p>作業系統是如何高效管理成千上萬個待辦的 I&#x2F;O 任務的？它有秘密武器：</p>
+<ul>
+<li><strong>Linux</strong>: <code>epoll</code></li>
+<li><strong>macOS&#x2F;BSD</strong>: <code>kqueue</code></li>
+<li><strong>Windows</strong>: <code>IOCP</code> (I&#x2F;O Completion Ports)</li>
+</ul>
+<p>可以把 <code>epoll</code> 想像成一個極其高效的電子任務看板。OS 把所有待辦的 I&#x2F;O 請求（來自不同應用、不同進程）都註冊到這個看板上。</p>
+<p>專案經理 (Runtime 的 Event Loop) 現在只需要做一件非常簡單的事：每隔一小段時間就問 OS 同一個問題：</p>
+<blockquote>
+<p>「看板上有沒有任何任務更新狀態為『已完成』？」</p>
+</blockquote>
+<p>這個查詢操作本身非常快，幾乎不耗費資源。</p>
+<h3 id="步驟-4：任務完成，領取結果"><a href="#步驟-4：任務完成，領取結果" class="headerlink" title="步驟 4：任務完成，領取結果"></a>步驟 4：任務完成，領取結果</h3><p>當外部 API 回傳資料，電腦的網路卡接收到數據後，會透過硬體中斷通知 OS。OS 知道這是之前那個任務的結果，於是它在 <code>epoll</code> 看板上，把對應任務的狀態更新為「已完成」。</p>
+<p>下一次，當專案經理 (Event Loop) 再來詢問時，OS 就會告訴它：「是的，任務 #123 已經完成了，結果在這裡。」</p>
+<p>專案經理拿到結果後，就會喚醒之前在 <code>await</code> 點被「暫停」的函式，把結果 (<code>response</code>) 交給它，讓它繼續執行後續的程式碼，例如 <code>response.json()</code> 和 <code>res.send(data)</code>。</p>
+<hr>
+<h1 id="資源分配：CPU-和記憶體用在哪？"><a href="#資源分配：CPU-和記憶體用在哪？" class="headerlink" title="資源分配：CPU 和記憶體用在哪？"></a>資源分配：CPU 和記憶體用在哪？</h1><p>既然工作外包給了 OS，還需要為此分配 CPU 和記憶體嗎？</p>
+<p>是的，但分配的對象是<strong>應用程式進程 (Node.js 或 Uvicorn)</strong>，而不是那個抽象的「等待」過程。</p>
+<ul>
+<li><p><strong>CPU</strong>:</p>
+<ul>
+<li><strong>何時使用</strong>: 當你的<strong>程式碼正在被執行時</strong>。比如解析 JSON、執行業務邏輯、序列化回應。</li>
+<li><strong>何時不用</strong>: 在 <code>await</code> I&#x2F;O 的漫長等待期間，你的進程會讓出 CPU，讓 CPU 可以去執行其他工作（或者被 OS 閒置）。這就是非同步模型省 CPU 的關鍵。</li>
+</ul>
+</li>
+<li><p><strong>記憶體</strong>:</p>
+<ul>
+<li><strong>用在哪裡</strong>: 用於儲存<strong>每一個併發請求的上下文 (Context)</strong>。即使一個請求正在 <code>await</code>，它的所有狀態（局部變數、函式呼叫堆疊等）都必須保存在記憶體中，以便在任務完成時可以從中斷的地方繼續。</li>
+<li><strong>這意味著</strong>：你的應用能處理的<strong>併發量</strong>，直接受限於<strong>可用記憶體</strong>。</li>
+</ul>
+</li>
+</ul>
+<h1 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h1><p><code>async/await</code> 的魔法，源於一場分工明確的合作：</p>
+<blockquote>
+<p><strong>應用程式 Runtime (Node.js&#x2F;Uvicorn) 擔任「專案經理」，負責執行業務邏輯程式碼；而它將所有耗時的 I&#x2F;O 等待工作，外包給了最高效的「行政部門」——作業系統核心。</strong></p>
+</blockquote>
+<p>它們之間透過一個名為<strong>事件循環 (Event Loop)</strong> 的高效溝通機制來協調。</p>
+<p>下一次當你寫下 <code>await</code> 時，可以自豪地知道，你不是在施展魔法，而是在指揮現代計算機中最優雅、最高效的協作模式之一。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Async/" rel="tag"># Async</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/07/17/%E6%8E%8C%E6%8F%A1%E7%92%B0%E5%A2%83%E8%AE%8A%E6%95%B8%E7%9A%84%E8%A8%AD%E5%AE%9A%E8%88%87%E5%BB%BA%E7%BD%AE/" rel="prev" title="深入淺出：掌握環境變數的設定與建置">
+                  <i class="fa fa-angle-left"></i> 深入淺出：掌握環境變數的設定與建置
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

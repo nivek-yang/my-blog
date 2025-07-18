@@ -103,7 +103,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">34</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">35</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">25</span></a>
       <ul class="sub-menu">
   
@@ -111,7 +111,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Async/">
         Async
-        <span class="post-count">(4)</span>
+        <span class="post-count">(5)</span>
       </a>
     </li>
   
@@ -322,7 +322,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-count">35</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -347,6 +347,98 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/18/%E8%A7%A3%E5%AF%86%E9%9D%9E%E5%90%8C%E6%AD%A5%E9%AD%94%E6%B3%95%20Async%20Await%20%E7%A9%B6%E7%AB%9F%E6%8A%8A%E5%B7%A5%E4%BD%9C%E4%BA%A4%E7%B5%A6%E4%BA%86%E8%AA%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/07/18/%E8%A7%A3%E5%AF%86%E9%9D%9E%E5%90%8C%E6%AD%A5%E9%AD%94%E6%B3%95%20Async%20Await%20%E7%A9%B6%E7%AB%9F%E6%8A%8A%E5%B7%A5%E4%BD%9C%E4%BA%A4%E7%B5%A6%E4%BA%86%E8%AA%B0/" class="post-title-link" itemprop="url">
+              解密非同步魔法：Async/Await 究竟把工作交給了誰？
+            </a>
+            <a href="/my-blog/2025/07/18/%E8%A7%A3%E5%AF%86%E9%9D%9E%E5%90%8C%E6%AD%A5%E9%AD%94%E6%B3%95%20Async%20Await%20%E7%A9%B6%E7%AB%9F%E6%8A%8A%E5%B7%A5%E4%BD%9C%E4%BA%A4%E7%B5%A6%E4%BA%86%E8%AA%B0/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2025-07-18 00:00:00" itemprop="dateCreated datePublished" datetime="2025-07-18T00:00:00+08:00">2025-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-07-19 01:50:41" itemprop="dateModified" datetime="2025-07-19T01:50:41+08:00">2025-07-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">當在 Node.js 或 Python FastAPI 中寫下 async 和 await 時，感覺就像施展了魔法。程式碼在 await 的地方優雅地「暫停」，伺服器卻沒有因此卡死，反而能繼續處理成千上萬的請求。 但魔法的背後總是科學。那個被「暫停」的任務，尤其是像資料庫查詢、API 呼叫這種 I&#x2F;O 操作，究竟是誰在處理？它被交給了機器的哪個部分？ 答案可能會讓你驚訝：把最耗時的「等待」工作，外包給了電腦中最勤勞、最高效的員工——作業系統核心 (Operating System Kernel)。 讓我們深入探討這個過程。 迷思：是非同步框架自己開了個線程嗎？一個常見的誤解是，每當 await 一個 I&#x2F;O 操作，框架就會在背景開一個新的線程 (thread) 去處理它。雖然這在某些情況下（如 CPU 密集型任務）是可能的，但對於處理大量 I&#x2F;O 請求來說，這種模型效率極低。每開一個線程都要消耗記憶體和 CPU 上下文切換的成本，無法支撐成千上萬的併發連接。 真正的答案，是一場由 應用程式執行環境 (Runtime) 和 作業系統 (OS) 配合演出的精采好戲。 真正的演員：專案經理與行政部門我們可以把整個非同步流程想像成一個高效的辦公室： 專案經理 (The Runtime &#x2F; Event Loop) 在 Node.js 的世界裡，它就是 Node.js Runtime (由 V8 引擎和 libuv 函式庫組成)。 在 FastAPI 的世界裡，它就是由 Uvicorn 伺服器所驅動的 Python 事件循環 (Event Loop)。 職責：執行程式碼 (JavaScript 或 Python)。它非常忙碌，討厭等待。 行政部門 (The Operating System Kernel) 無論是 Linux, macOS, 還是 Windows，它們的核心都具備強大的 I&#x2F;O 處理能力。 職責：處理所有與硬體相關的「髒活累活」，比如網路通訊、讀寫檔案。它有自己的高效工具。 表演開始：一次非同步 API 呼叫的旅程假設 Node.js 或 FastAPI 應用需要呼叫一個外部 API。 步驟 1：專案經理下達指令當程式碼執行到 await 這一行時： Node.js (使用 node-fetch) 12345678910import fetch from &#x27;node-fetch&#x27;;app.get(&#x27;/data&#x27;, async (req, res) =&gt; &#123; console.log(&quot;準備發送請求...&quot;); // 指令點 const response = await fetch(&#x27;https://api.example.com/items&#x27;); const data = await response.json(); console.log(&quot;收到資料！&quot;); res.send(data);&#125;); FastAPI (使用 httpx) 12345678910111213import httpxfrom fastapi import FastAPIapp = FastAPI()@app.get(&quot;/data&quot;)async def get_data(): print(&quot;準備發送請求...&quot;) async with httpx.AsyncClient() as client: # 指令點 response = await client.get(&quot;https://api.example.com/items&quot;) print(&quot;收到資料！&quot;) return response.json() 專案經理 (Runtime) 看到這個指令，它並不會傻等。它會透過一個系統呼叫 (System Call)，把任務交給行政部門 (OS)。它對 OS 說： 「嘿，OS！請透過網路向 api.example.com 發送這個 GET 請求。完成後，在你的任務看板上通知我。這是這個任務的編號。」 步驟 2：專案經理回去忙別的下達指令後，專案經理的雙手就自由了！它會立刻返回它的事件佇列 (Event Queue)，看看有沒有其他事情可以做，比如： 處理另一個剛進來的 HTTP 請求。 執行一個剛剛計時器到期的 setTimeout。 處理任何已經完成的 I&#x2F;O 事件。 這就是非阻塞 (Non-blocking) 的核心：永不等待 I&#x2F;O。 步驟 3：行政部門的高科技看板 (epoll &#x2F; kqueue &#x2F; IOCP)作業系統是如何高效管理成千上萬個待辦的 I&#x2F;O 任務的？它有秘密武器： Linux: epoll macOS&#x2F;BSD: kqueue Windows: IOCP (I&#x2F;O Completion Ports) 可以把 epoll 想像成一個極其高效的電子任務看板。OS 把所有待辦的 I&#x2F;O 請求（來自不同應用、不同進程）都註冊到這個看板上。 專案經理 (Runtime 的 Event Loop) 現在只需要做一件非常簡單的事：每隔一小段時間就問 OS 同一個問題： 「看板上有沒有任何任務更新狀態為『已完成』？」 這個查詢操作本身非常快，幾乎不耗費資源。 步驟 4：任務完成，領取結果當外部 API 回傳資料，電腦的網路卡接收到數據後，會透過硬體中斷通知 OS。OS 知道這是之前那個任務的結果，於是它在 epoll 看板上，把對應任務的狀態更新為「已完成」。 下一次，當專案經理 (Event Loop) 再來詢問時，OS 就會告訴它：「是的，任務 #123 已經完成了，結果在這裡。」 專案經理拿到結果後，就會喚醒之前在 await 點被「暫停」的函式，把結果 (response) 交給它，讓它繼續執行後續的程式碼，例如 response.json() 和 res.send(data)。 資源分配：CPU 和記憶體用在哪？既然工作外包給了 OS，還需要為此分配 CPU 和記憶體嗎？ 是的，但分配的對象是應用程式進程 (Node.js 或 Uvicorn)，而不是那個抽象的「等待」過程。 CPU: 何時使用: 當你的程式碼正在被執行時。比如解析 JSON、執行業務邏輯、序列化回應。 何時不用: 在 await I&#x2F;O 的漫長等待期間，你的進程會讓出 CPU，讓 CPU 可以去執行其他工作（或者被 OS 閒置）。這就是非同步模型省 CPU 的關鍵。 記憶體: 用在哪裡: 用於儲存每一個併發請求的上下文 (Context)。即使一個請求正在 await，它的所有狀態（局部變數、函式呼叫堆疊等）都必須保存在記憶體中，以便在任務完成時可以從中斷的地方繼續。 這意味著：你的應用能處理的併發量，直接受限於可用記憶體。 結論async/await 的魔法，源於一場分工明確的合作： 應用程式 Runtime (Node.js&#x2F;Uvicorn) 擔任「專案經理」，負責執行業務邏輯程式碼；而它將所有耗時的 I&#x2F;O 等待工作，外包給了最高效的「行政部門」——作業系統核心。 它們之間透過一個名為事件循環 (Event Loop) 的高效溝通機制來協調。 下一次當你寫下 await 時，可以自豪地知道，你不是在施展魔法，而是在指揮現代計算機中最優雅、最高效的協作模式之一。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/07/18/%E8%A7%A3%E5%AF%86%E9%9D%9E%E5%90%8C%E6%AD%A5%E9%AD%94%E6%B3%95%20Async%20Await%20%E7%A9%B6%E7%AB%9F%E6%8A%8A%E5%B7%A5%E4%BD%9C%E4%BA%A4%E7%B5%A6%E4%BA%86%E8%AA%B0/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -396,7 +488,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新於</span>
-      <time title="修改時間：2025-07-18 00:08:13" itemprop="dateModified" datetime="2025-07-18T00:08:13+08:00">2025-07-18</time>
+      <time title="修改時間：2025-07-18 02:09:35" itemprop="dateModified" datetime="2025-07-18T02:09:35+08:00">2025-07-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -418,7 +510,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">在現代軟體開發中，管理應用程式的設定是一個不可或缺的環節。從資料庫連線字串、API 金鑰到各種服務的憑證，這些敏感或因環境而異的資訊，都不希望直接寫死在程式碼中。這就是「環境變數」發揮關鍵作用的地方。 本文將帶您深入了解環境變數的核心概念、為什麼它如此重要，以及如何在各種環境中有效地設定與使用它。 什麼是環境變數？環境變數（Environment Variables）是在作業系統層級定義的動態具名值。它們存在於應用程式的執行環境中，可以被應用程式讀取和使用。簡單來說，它們是將設定與程式碼分離的一種強大機制。 為什麼要使用環境變數？使用環境變數主要有以下幾個優點： 安全性 (Security)：將 API 金鑰、密碼等敏感資訊儲存在環境變數中，可以避免將它們提交到版本控制系統（如 Git），從而降低洩漏風險。 可攜性 (Portability)：應用程式可以在不同的環境（開發、測試、生產）中執行，而無需修改任何程式碼。只需為每個環境設定對應的變數值即可。 靈活性 (Flexibility)：當設定需要變更時（例如更換資料庫），只需要更新環境變數的值並重新啟動應用程式，而不需要重新部署整個程式。 遵循十二因子應用程式 (The Twelve-Factor App)：這是建構現代雲端原生應用程式的一套方法論，其中第三條原則明確指出「在環境中儲存設定」。 如何設定環境變數？設定環境變數的方式因作業系統而異。 在 macOS 與 Linux在類 Unix 系統中，可以使用 export 指令來設定一個在當前終端機 session 中有效的環境變數。 1export DATABASE_URL=&quot;postgresql://user:password@host:port/dbname&quot; 若要讓變數永久生效，可以將此行加入到 shell 的設定檔中，例如 ~/.bash_profile、~/.zshrc 或 ~/.profile。 在 Windows在 Windows 中，可以使用圖形化介面或 setx 指令來設定。 圖形化介面： 在「開始」功能表中搜尋「編輯系統環境變數」。 點擊「環境變數…」按鈕。 在「系統變數」或「使用者變數」區塊中新增或編輯。 命令提示字元 (Command Prompt)：使用 setx 指令可以永久設定一個環境變數。 1setx DATABASE_URL &quot;postgresql://user:password@host:port/dbname&quot; 請注意，setx 設定的變數只會在新的命令提示字元視窗中生效。 在專案中使用 .env 檔案在開發環境中，每次都手動 export 或 setx 變數可能有點繁瑣。一個更常見且方便的做法是使用 .env 檔案。 .env 是一個純文字檔案，可以在其中以 KEY=VALUE 的格式定義環境變數。 1234# .env fileDATABASE_URL=postgresql://user:password@localhost:5432/mydbAPI_KEY=your_secret_api_keyDEBUG=True 大多數現代程式語言和框架都有對應的函式庫可以自動讀取 .env 檔案並將其載入到執行環境中。 Python: python-dotenv Node.js: dotenv Ruby: dotenv-rails Go: godotenv 重要提示：永遠不要將 .env 檔案提交到版本控制中！請務必將它加入到 .gitignore 檔案中。通常，您會提交一個名為 .env.example 或 .env.template 的範本檔案，其中包含所有必要的環境變數名稱，但值是空的或範例值，以供其他開發者參考。 12# .gitignore.env 現代化 Python 工具的自動載入機制值得注意的是，許多現代化的 Python 開發工具，例如 poetry 和 uv，已經內建了自動偵測並載入 .env 檔案的功能。當您使用 poetry run 或 uv run 來執行您的腳本或應用程式時，它們會自動將專案根目錄下的 .env 檔案中的變數載入到執行環境中。 這意味著在本地開發時，通常不需要在 Python 程式碼中額外引用 python-dotenv 這類的函式庫來手動載入 .env 檔案，讓開發流程更加簡潔。 如何在程式碼中讀取環境變數？一旦環境變數被設定（無論是透過 export、.env 檔案或容器設定），就可以在程式碼中存取它們。 以 Python 為例：os.getenv()在 Python 中，標準函式庫 os 提供了讀取環境變數最直接的方法。 1234567891011121314import os# 讀取環境變數 &#x27;DATABASE_URL&#x27;database_url = os.getenv(&quot;DATABASE_URL&quot;)# 建議提供一個預設值，以防變數未被設定# os.getenv(&#x27;KEY&#x27;, &#x27;default_value&#x27;)api_key = os.getenv(&quot;API_KEY&quot;, &quot;default_api_key_for_development&quot;)if database_url: print(&quot;成功讀取到資料庫連線資訊。&quot;)else: print(&quot;警告：未設定 DATABASE_URL 環境變數。&quot;) os.getenv(KEY, default=None) 是最常用的函式。它的優點是當環境變數不存在時，它會回傳 None（或您指定的預設值），而不會導致程式出錯。這使得處理可選的設定變得非常方便。 Docker 與 Docker Compose 中的環境變數Docker Compose 變數載入的核心機制這是最關鍵的部分。當執行 docker compose up 時，它會自動偵測並載入專案根目錄下的 .env 檔案。變數的最終生效優先級如下： Shell 環境變數：在執行指令的終端機中 export 的變數，或是在 CI step 的 env 區塊中設定的變數。這是最高優先級。 .env 檔案：位於專案根目錄下的 .env 檔案。 docker-compose.yml 中的 environment 區塊：這裡定義的變數會覆蓋前兩者。 Dockerfile 中的 ENV：映像檔內建的環境變數（最低優先級）。 了解這個優先級是選擇正確策略的基礎。 CI&#x2F;CD 整合策略如何將 GitHub Actions 中的 secrets 安全地注入到 docker-compose 服務中？ 策略一：隱性繼承 (最簡潔)此策略充分利用了 Docker Compose 的自動化特性，實現了極致的簡潔。 1. docker-compose.yml 設定 docker-compose.yml 中完全不提及環境變數。 12345# docker-compose.ymlservices: web: image: my_app # 此處留空，讓容器直接繼承執行環境的變數 這是最關鍵的一點：當服務中沒有 environment 或 env_file 區塊時，Compose 會將從 Shell 或 .env 檔案中讀取到的所有變數自動傳遞給容器。 2. 本地與 CI 的實現 本地開發：開發者在專案根目錄下建立 .env 檔案。執行 docker compose up 時，Compose 會自動讀取它並將變數注入容器。 CI&#x2F;CD (GitHub Actions)：在 step 中使用 env 區塊設定變數。 1234567# .github/workflows/ci.yml... - name: Build and run containers env: DATABASE_URL: $&#123;&#123; secrets.DATABASE_URL &#125;&#125; API_KEY: $&#123;&#123; secrets.API_KEY &#125;&#125; run: docker-compose up -d --build 由於 Shell 環境變數（由 env 區塊設定）的優先級最高，這些變數會被直接注入容器，完美實現了目標。 優點： 極致簡潔：docker-compose.yml 和 CI 腳本都達到了最簡潔的狀態。 無縫開發體驗：本地開發者只需維護 .env 檔案，符合直覺。 缺點： 隱性依賴：容器的行為完全依賴於外部環境，對於不熟悉 Compose 優先級規則的人來說，可能會感到困惑（「變數是從哪裡來的？」）。 策略二：動態生成 .env 檔案 (最明確)此策略的核心是，無論在哪個環境，都明確地透過一個 .env 檔案來提供設定。 1. docker-compose.yml 設定 docker-compose.yml 保持乾淨，不需要設定 env_file，因為 Compose 會自動尋找 .env。 12345# docker-compose.ymlservices: web: image: my_app # 留空，依賴自動載入的 .env 檔案 2. 本地與 CI 的實現 本地開發：開發者手動建立和維護 .env 檔案。 CI&#x2F;CD (GitHub Actions)：在執行 docker-compose 前，動態生成 .env 檔案。 12345678# .github/workflows/ci.yml... - name: Create .env file from secrets run: | echo &quot;DATABASE_URL=$&#123;&#123; secrets.DATABASE_URL &#125;&#125;&quot; &gt;&gt; .env echo &quot;API_KEY=$&#123;&#123; secrets.API_KEY &#125;&#125;&quot; &gt;&gt; .env - name: Run containers run: docker-compose up -d 優點： 高度明確：.env 檔案是唯一的事實來源，非常清晰。 工作流程一致：本地和 CI 都圍繞 .env 這個核心檔案工作。 缺點： CI 腳本稍繁瑣：需要在 workflow 中維護一個變數列表來生成檔案。 結論與如何選擇？經過最終的分析，兩種策略都非常優秀，且都利用了 docker-compose 自動載入 .env 的特性。 策略一 (隱性繼承) 更為優雅、簡潔。它相信工具的自動化能力，適合追求極致效率和簡潔性的團隊。 策略二 (動態生成 .env) 更為穩健、明確。它將「環境設定」這個關注點顯式地固化在一個檔案中，適合大型、複雜或對可讀性要求極高的專案。 最終的選擇取決於團隊的風格和偏好：是擁抱「隱性的魔法」，還是堅持「明確的契約」？理解這兩種方法的底層邏輯和權衡，是做出最佳決策的關鍵。 結論有效地管理環境變數是專業軟體開發的基石。它不僅能提升應用程式的安全性與可攜性，更是實踐 CI&#x2F;CD 與雲端原生開發的必要技能。 無論是個人開發者還是團隊的一員，都應該養成從專案一開始就使用環境變數來管理設定的好習慣。從本地開發利用 .env 和 os.getenv，到深刻理解 Docker Compose 變數載入的優先級，為專案選擇最合適的 CI&#x2F;CD 整合策略，再到最終在容器中進行標準化部署，掌握這些技巧將使開發流程更加順暢、安全和專業。</div>
+          <div class="post-card-content">在現代軟體開發中，管理應用程式的設定是一個不可或缺的環節。從資料庫連線字串、API 金鑰到各種服務的憑證，這些敏感或因環境而異的資訊，都不希望直接寫死在程式碼中。這就是「環境變數」發揮關鍵作用的地方。 本文將帶您深入了解環境變數的核心概念、為什麼它如此重要，以及如何在各種環境中有效地設定與使用它。 什麼是環境變數？環境變數（Environment Variables）是在作業系統層級定義的動態具名值。它們存在於應用程式的執行環境中，可以被應用程式讀取和使用。簡單來說，它們是將設定與程式碼分離的一種強大機制。 為什麼要使用環境變數？使用環境變數主要有以下幾個優點： 安全性 (Security)：將 API 金鑰、密碼等敏感資訊儲存在環境變數中，可以避免將它們提交到版本控制系統（如 Git），從而降低洩漏風險。 可攜性 (Portability)：應用程式可以在不同的環境（開發、測試、生產）中執行，而無需修改任何程式碼。只需為每個環境設定對應的變數值即可。 靈活性 (Flexibility)：當設定需要變更時（例如更換資料庫），只需要更新環境變數的值並重新啟動應用程式，而不需要重新部署整個程式。 遵循十二因子應用程式 (The Twelve-Factor App)：這是建構現代雲端原生應用程式的一套方法論，其中第三條原則明確指出「在環境中儲存設定」。 如何設定環境變數？設定環境變數的方式因作業系統而異。 在 macOS 與 Linux在類 Unix 系統中，可以使用 export 指令來設定一個在當前終端機 session 中有效的環境變數。 1export DATABASE_URL=&quot;postgresql://user:password@host:port/dbname&quot; 若要讓變數永久生效，可以將此行加入到 shell 的設定檔中，例如 ~/.bash_profile、~/.zshrc 或 ~/.profile。 在 Windows在 Windows 中，可以使用圖形化介面或 setx 指令來設定。 圖形化介面： 在「開始」功能表中搜尋「編輯系統環境變數」。 點擊「環境變數…」按鈕。 在「系統變數」或「使用者變數」區塊中新增或編輯。 命令提示字元 (Command Prompt)：使用 setx 指令可以永久設定一個環境變數。 1setx DATABASE_URL &quot;postgresql://user:password@host:port/dbname&quot; 請注意，setx 設定的變數只會在新的命令提示字元視窗中生效。 在專案中使用 .env 檔案在開發環境中，每次都手動 export 或 setx 變數可能有點繁瑣。一個更常見且方便的做法是使用 .env 檔案。 .env 是一個純文字檔案，可以在其中以 KEY=VALUE 的格式定義環境變數。 1234# .env fileDATABASE_URL=postgresql://user:password@localhost:5432/mydbAPI_KEY=your_secret_api_keyDEBUG=True 大多數現代程式語言和框架都有對應的函式庫可以自動讀取 .env 檔案並將其載入到執行環境中。 Python: python-dotenv Node.js: dotenv Ruby: dotenv-rails Go: godotenv 重要提示：永遠不要將 .env 檔案提交到版本控制中！請務必將它加入到 .gitignore 檔案中。通常，您會提交一個名為 .env.example 或 .env.template 的範本檔案，其中包含所有必要的環境變數名稱，但值是空的或範例值，以供其他開發者參考。 12# .gitignore.env 多環境設定 (.env.dev, .env.prod)當需要管理多個環境時，可以建立不同的 .env 檔案，例如 .env.dev 和 .env.prod。 工具如何載入非標準 .env 檔案？ python-dotenv:123from dotenv import load_dotenv# 明確指定要載入的 .env 檔案路徑load_dotenv(dotenv_path=&quot;.env.dev&quot;) uv &#x2F; poetry:12# 使用 --env-file 旗標uv run --env-file .env.dev -- python my_script.py docker-compose:12345# 在 docker-compose.yml 中明確指定services: web: env_file: - .env.dev docker run:1docker run --env-file .env.dev myimage 現代化 Python 工具的自動載入機制值得注意的是，許多現代化的 Python 開發工具，例如 poetry 和 uv，已經內建了自動偵測並載入 .env 檔案的功能。當使用 poetry run 或 uv run 來執行腳本或應用程式時，它們會自動將專案根目錄下的 .env 檔案中的變數載入到執行環境中。 這意味著在本地開發時，通常不需要在 Python 程式碼中額外引用 python-dotenv 這類的函式庫來手動載入 .env 檔案，讓開發流程更加簡潔。 如何在程式碼中讀取環境變數？一旦環境變數被設定（無論是透過 export、.env 檔案或容器設定），就可以在程式碼中存取它們。 以 Python 為例：os.getenv()在 Python 中，標準函式庫 os 提供了讀取環境變數最直接的方法。 1234567891011121314import os# 讀取環境變數 &#x27;DATABASE_URL&#x27;database_url = os.getenv(&quot;DATABASE_URL&quot;)# 建議提供一個預設值，以防變數未被設定# os.getenv(&#x27;KEY&#x27;, &#x27;default_value&#x27;)api_key = os.getenv(&quot;API_KEY&quot;, &quot;default_api_key_for_development&quot;)if database_url: print(&quot;成功讀取到資料庫連線資訊。&quot;)else: print(&quot;警告：未設定 DATABASE_URL 環境變數。&quot;) os.getenv(KEY, default=None) 是最常用的函式。它的優點是當環境變數不存在時，它會回傳 None（或指定的預設值），而不會導致程式出錯。這使得處理可選的設定變得非常方便。 Docker 與 Docker Compose 中的環境變數Docker &amp; Docker Compose 中的變數管理核心：變數的優先級理解變數如何被載入和覆蓋是關鍵。對於 docker-compose，優先級順序如下（數字越小，優先級越高）： Shell 環境變數：在執行 docker-compose up 的終端機中設定的變數，或是在 CI step 的 env 區塊中設定的變數。這是最高優先級。 docker-compose.yml 中的 environment 區塊：這裡定義的變數。 docker-compose.yml 中的 env_file 區塊：env_file 指定的檔案中的變數。 .env 檔案：位於專案根目錄下的 .env 檔案（會被自動載入）。 Dockerfile 中的 ENV：映像檔內建的環境變數（最低優先級）。 docker run vs docker-compose docker run 不會自動載入 .env 檔案。它是一個較低階的指令，必須明確地使用 -e (單個變數) 或 --env-file (檔案) 來傳遞變數。123456# 從 shell 傳遞單個變數export API_KEY=&quot;123&quot;docker run -e API_KEY my_image# 使用 env filedocker run --env-file ./.env.prod my_image docker-compose 會自動載入 .env 檔案，這使得它在開發中更為方便。 Dockerfile 中的 ENVDockerfile 中的 ENV 指令是在建置映像檔 (build time) 時設定的，它不支持 $&#123;VARIABLE&#125; 這種執行時的變數替換。它定義的是映像檔的「預設」環境變數，優先級最低，會被任何執行期的設定所覆蓋。 12345# Dockerfile# 設定一個靜態的預設值ENV GREETING=&quot;Hello&quot;# 這個值可以在執行時被 docker run 或 docker-compose 的設定覆蓋 關鍵差異：docker-compose vs uv 的載入行為這是一個極其重要的細節： docker-compose (合併與覆蓋): 當在 docker-compose.yml 中使用 env_file 指定了 .env.dev，docker-compose 仍然會先載入預設的 .env 檔案，然後再載入 .env.dev。這是一個合併 (merge) 的過程，如果兩個檔案有相同變數，.env.dev 的值會覆蓋 .env 的值。 uv run (精確指定): 當使用 uv run --env-file .env.dev 時，uv 只會載入您指定的 .env.dev 這一個檔案，它不會再去自動尋找並載入預設的 .env 檔案。 CI&#x2F;CD 整合策略如何將 GitHub Actions 中的 secrets 安全地注入到 docker-compose 服務中？ 策略一：隱性繼承 (最簡潔)此策略充分利用了 Docker Compose 的自動化特性，實現了極致的簡潔。 1. docker-compose.yml 設定 docker-compose.yml 中完全不提及環境變數。 12345# docker-compose.ymlservices: web: image: my_app # 此處留空，讓容器直接繼承執行環境的變數 這是最關鍵的一點：當服務中沒有 environment 或 env_file 區塊時，Compose 會將從 Shell 或 .env 檔案中讀取到的所有變數自動傳遞給容器。 2. 本地與 CI 的實現 本地開發：開發者在專案根目錄下建立 .env 檔案。執行 docker compose up 時，Compose 會自動讀取它並將變數注入容器。 CI&#x2F;CD (GitHub Actions)：在 step 中使用 env 區塊設定變數。 1234567# .github/workflows/ci.yml... - name: Build and run containers env: DATABASE_URL: $&#123;&#123; secrets.DATABASE_URL &#125;&#125; API_KEY: $&#123;&#123; secrets.API_KEY &#125;&#125; run: docker-compose up -d --build 由於 Shell 環境變數（由 env 區塊設定）的優先級最高，這些變數會被直接注入容器，完美實現了目標。 優點： 極致簡潔：docker-compose.yml 和 CI 腳本都達到了最簡潔的狀態。 無縫開發體驗：本地開發者只需維護 .env 檔案，符合直覺。 缺點： 隱性依賴：容器的行為完全依賴於外部環境，對於不熟悉 Compose 優先級規則的人來說，可能會感到困惑（「變數是從哪裡來的？」）。 策略二：動態生成 .env 檔案 (最明確)此策略的核心是，無論在哪個環境，都明確地透過一個 .env 檔案來提供設定。 1. docker-compose.yml 設定 docker-compose.yml 保持乾淨，不需要設定 env_file，因為 Compose 會自動尋找 .env。 12345# docker-compose.ymlservices: web: image: my_app # 留空，依賴自動載入的 .env 檔案 2. 本地與 CI 的實現 本地開發：開發者手動建立和維護 .env 檔案。 CI&#x2F;CD (GitHub Actions)：在執行 docker-compose 前，動態生成 .env 檔案。 12345678# .github/workflows/ci.yml... - name: Create .env file from secrets run: | echo &quot;DATABASE_URL=$&#123;&#123; secrets.DATABASE_URL &#125;&#125;&quot; &gt;&gt; .env echo &quot;API_KEY=$&#123;&#123; secrets.API_KEY &#125;&#125;&quot; &gt;&gt; .env - name: Run containers run: docker-compose up -d 優點： 高度明確：.env 檔案是唯一的事實來源，非常清晰。 工作流程一致：本地和 CI 都圍繞 .env 這個核心檔案工作。 缺點： CI 腳本稍繁瑣：需要在 workflow 中維護一個變數列表來生成檔案。 結論與如何選擇？經過最終的分析，兩種策略都非常優秀，且都利用了 docker-compose 自動載入 .env 的特性。 策略一 (隱性繼承) 更為優雅、簡潔。它相信工具的自動化能力，適合追求極致效率和簡潔性的團隊。 策略二 (動態生成 .env) 更為穩健、明確。它將「環境設定」這個關注點顯式地固化在一個檔案中，適合大型、複雜或對可讀性要求極高的專案。 最終的選擇取決於團隊的風格和偏好：是擁抱「隱性的魔法」，還是堅持「明確的契約」？理解這兩種方法的底層邏輯和權衡，是做出最佳決策的關鍵。 結論有效地管理環境變數是專業軟體開發的基石。它不僅能提升應用程式的安全性與可攜性，更是實踐 CI&#x2F;CD 與雲端原生開發的必要技能。 無論是個人開發者還是團隊的一員，都應該養成從專案一開始就使用環境變數來管理設定的好習慣。從本地開發利用 .env 和 os.getenv，到深刻理解 Docker Compose 變數載入的優先級，為專案選擇最合適的 CI&#x2F;CD 整合策略，再到最終在容器中進行標準化部署，掌握這些技巧將使開發流程更加順暢、安全和專業。</div>
       
     </div>
 
@@ -1117,92 +1209,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/07/05/%E7%94%A8Ruff%E6%89%93%E9%80%A0%E8%87%AA%E5%8B%95%E5%8C%96Python%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%88%87%E9%9D%9C%E6%85%8B%E6%AA%A2%E6%9F%A5/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/04/Django%20%E9%9D%9C%E6%85%8B%E6%AA%94%E6%A1%88%E9%83%A8%E7%BD%B2%E7%88%86%E7%89%88%E5%95%8F%E9%A1%8C%E6%8E%92%E6%9F%A5%E8%88%87%E8%A7%A3%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/07/04/Django%20%E9%9D%9C%E6%85%8B%E6%AA%94%E6%A1%88%E9%83%A8%E7%BD%B2%E7%88%86%E7%89%88%E5%95%8F%E9%A1%8C%E6%8E%92%E6%9F%A5%E8%88%87%E8%A7%A3%E6%B3%95/" class="post-title-link" itemprop="url">
-              Django 靜態檔案部署爆版問題排查與解法
-            </a>
-            <a href="/my-blog/2025/07/04/Django%20%E9%9D%9C%E6%85%8B%E6%AA%94%E6%A1%88%E9%83%A8%E7%BD%B2%E7%88%86%E7%89%88%E5%95%8F%E9%A1%8C%E6%8E%92%E6%9F%A5%E8%88%87%E8%A7%A3%E6%B3%95/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-07-04 00:00:00 / 修改時間：23:10:32" itemprop="dateCreated datePublished" datetime="2025-07-04T00:00:00+08:00">2025-07-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">部署 Django 專案時，常見「靜態檔案爆版」問題：明明已經更新了 CSS&#x2F;JS，使用者卻還是看到舊版畫面。這篇文章將帶你找出問題核心，並給出最佳解法。 問題現象 前端樣式或 JS 更新後，使用者端仍然載入舊檔案 清除瀏覽器快取後才會看到新內容 CDN 或 Nginx 設定了長時間快取 問題核心Django 預設的 collectstatic 只會把檔案複製到 STATIC_ROOT，檔名不變。如果 Nginx 或 CDN 設定了 cache-control&#x2F;expires，檔案內容變了但檔名沒變，使用者端就會一直拿到舊檔案。 關鍵：只要檔名沒變，快取就不會重新抓新檔案。 解決方法1. 啟用 ManifestStaticFilesStorageDjango 內建的 ManifestStaticFilesStorage 會在檔名自動加上 hash，只要內容有變，檔名就會變，快取自然失效。 設定方式在 settings.py 加入： 1STATICFILES_STORAGE = &quot;django.contrib.staticfiles.storage.ManifestStaticFilesStorage&quot; 2. 正確執行 collectstatic每次部署靜態檔案有變動時，務必執行： 1python manage.py collectstatic 這會自動產生帶 hash 的檔案，例如： 1style.1a2b3c4d.css 3. 模板引用方式確保模板都用 &#123;% static 'path/to/file.css' %&#125;，Django 會自動引用帶 hash 的檔名。 4. Nginx &#x2F; CDN 快取設定可以放心設定長快取，例如： 12345location /static/ &#123; alias /staticfiles/; expires 7d; add_header Cache-Control &quot;public&quot;;&#125; 因為檔名有 hash，內容變了檔名也會變，快取不會爆版。 排查流程 確認 collectstatic 是否有執行 檢查 staticfiles 目錄下檔名是否有 hash 檢查模板是否正確用 static 標籤 檢查 Nginx&#x2F;CDN 是否有快取設定 檢查瀏覽器載入的檔案路徑是否為新檔名 結論只要啟用 ManifestStaticFilesStorage 並正確部署，Django 靜態檔案快取問題就能徹底解決。這是現代 Django 專案部署的最佳實踐！</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/07/04/Django%20%E9%9D%9C%E6%85%8B%E6%AA%94%E6%A1%88%E9%83%A8%E7%BD%B2%E7%88%86%E7%89%88%E5%95%8F%E9%A1%8C%E6%8E%92%E6%9F%A5%E8%88%87%E8%A7%A3%E6%B3%95/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>
