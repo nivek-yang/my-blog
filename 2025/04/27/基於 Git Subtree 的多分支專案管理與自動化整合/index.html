@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":false,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
     <meta name="description" content="這篇筆記說明如何用 Git Subtree 設計一個在 GitHub 上「可重複練習、集中管理」的多分支專案架構，並透過 Makefile 實現自動化整合。  核心目標是：  從 template 分支快速建立開發練習分支，讓每次開發練習都從一致的起點開始 每個開發分支獨立開發、保有完整 commit 紀錄 最終成果自動整合到 master 分支的子資料夾，方便集中展示與維運管理  這樣的流程設">
 <meta property="og:type" content="article">
@@ -321,7 +321,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%A7%B1-%E5%BB%BA%E7%AB%8B-template-%E5%88%86%E6%94%AF"><span class="nav-number">1.</span> <span class="nav-text">🧱 建立 template 分支</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E2%9A%99%EF%B8%8F-%E6%9B%B4%E6%94%B9%E9%A0%90%E8%A8%AD%E5%88%86%E6%94%AF%EF%BC%88GitHub-%E6%93%8D%E4%BD%9C%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">⚙️ 更改預設分支（GitHub 操作）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%97%91%EF%B8%8F-%E5%88%AA%E9%99%A4-master-%E4%B8%A6%E9%87%8D%E5%BB%BA"><span class="nav-number">3.</span> <span class="nav-text">🗑️ 刪除 master 並重建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8-git-subtree-%E5%B0%87%E5%A4%9A%E5%88%86%E6%94%AF%E5%B0%88%E6%A1%88%E6%95%B4%E5%90%88"><span class="nav-number">4.</span> <span class="nav-text">用 git subtree 將多分支專案整合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B-Makefile-%E8%87%AA%E5%8B%95%E9%81%B7%E7%A7%BB%E8%85%B3%E6%9C%AC"><span class="nav-number">5.</span> <span class="nav-text">建立 Makefile 自動遷移腳本</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%A6-%E6%AD%B8%E6%AA%94%E7%B7%B4%E7%BF%92%E5%88%86%E6%94%AF%E5%85%A7%E5%AE%B9"><span class="nav-number">6.</span> <span class="nav-text">📦 歸檔練習分支內容</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%9A%80-%E5%BE%8C%E7%BA%8C%E5%8F%AF%E6%95%B4%E5%90%88-GitHub-Actions-%E8%87%AA%E5%8B%95%E5%8C%96%E6%B5%81%E7%A8%8B"><span class="nav-number">7.</span> <span class="nav-text">🚀 後續可整合 GitHub Actions 自動化流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E2%9C%85-%E7%B5%90%E6%9E%9C%E5%B1%95%E7%A4%BA"><span class="nav-number">8.</span> <span class="nav-text">✅ 結果展示</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B-template-%E5%88%86%E6%94%AF"><span class="nav-number">1.</span> <span class="nav-text"> 🧱 建立 template 分支</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%EF%B8%8F-%E6%9B%B4%E6%94%B9%E9%A0%90%E8%A8%AD%E5%88%86%E6%94%AFgithub-%E6%93%8D%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text"> ⚙️ 更改預設分支（GitHub 操作）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%EF%B8%8F-%E5%88%AA%E9%99%A4-master-%E4%B8%A6%E9%87%8D%E5%BB%BA"><span class="nav-number">3.</span> <span class="nav-text"> 🗑️ 刪除 master 並重建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8-git-subtree-%E5%B0%87%E5%A4%9A%E5%88%86%E6%94%AF%E5%B0%88%E6%A1%88%E6%95%B4%E5%90%88"><span class="nav-number">4.</span> <span class="nav-text"> 用 git subtree 將多分支專案整合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B-makefile-%E8%87%AA%E5%8B%95%E9%81%B7%E7%A7%BB%E8%85%B3%E6%9C%AC"><span class="nav-number">5.</span> <span class="nav-text"> 建立 Makefile 自動遷移腳本</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%B8%E6%AA%94%E7%B7%B4%E7%BF%92%E5%88%86%E6%94%AF%E5%85%A7%E5%AE%B9"><span class="nav-number">6.</span> <span class="nav-text"> 📦 歸檔練習分支內容</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BE%8C%E7%BA%8C%E5%8F%AF%E6%95%B4%E5%90%88-github-actions-%E8%87%AA%E5%8B%95%E5%8C%96%E6%B5%81%E7%A8%8B"><span class="nav-number">7.</span> <span class="nav-text"> 🚀 後續可整合 GitHub Actions 自動化流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E6%9E%9C%E5%B1%95%E7%A4%BA"><span class="nav-number">8.</span> <span class="nav-text"> ✅ 結果展示</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -442,40 +442,66 @@
 <li>成果集中到 <code>master</code>，只需瀏覽一個分支即可看到所有進度</li>
 <li>可搭配 GitHub Actions 等工具，自動化整合與部署流程</li>
 </ul>
-<hr>
-<h1 id="🧱-建立-template-分支"><a href="#🧱-建立-template-分支" class="headerlink" title="🧱 建立 template 分支"></a>🧱 建立 template 分支</h1><p><code>template</code> 分支是所有練習的起始樣板，可以依照以下兩種方式建立：</p>
+<hr />
+<h1 id="建立-template-分支"><a class="markdownIt-Anchor" href="#建立-template-分支"></a> 🧱 建立 template 分支</h1>
+<p><code>template</code> 分支是所有練習的起始樣板，可以依照以下兩種方式建立：</p>
 <ol>
 <li><strong>建立初始開發環境</strong>：準備好基礎的資料夾架構、依賴設定檔（例如 <code>package.json</code>、<code>requirements.txt</code>）或共用的 utility function。</li>
-<li><strong>給予練習規格</strong>：可以只放入說明文件、範例輸入&#x2F;輸出或 TODO 任務，讓想練習的人依據這份規格自行開發。</li>
+<li><strong>給予練習規格</strong>：可以只放入說明文件、範例輸入/輸出或 TODO 任務，讓想練習的人依據這份規格自行開發。</li>
 </ol>
 <p>建立指令如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 從 master 建立 template 分支</span></span><br><span class="line">git checkout -b template</span><br><span class="line"></span><br><span class="line"><span class="comment"># 推送到遠端</span></span><br><span class="line">git push origin template</span><br></pre></td></tr></table></figure>
+<pre class="highlight"><code class="bash"><span class="hljs-comment"># 從 master 建立 template 分支</span>
+git checkout -b template
 
-<hr>
-<h1 id="⚙️-更改預設分支（GitHub-操作）"><a href="#⚙️-更改預設分支（GitHub-操作）" class="headerlink" title="⚙️ 更改預設分支（GitHub 操作）"></a>⚙️ 更改預設分支（GitHub 操作）</h1><ol>
+<span class="hljs-comment"># 推送到遠端</span>
+git push origin template
+</code></pre>
+<hr />
+<h1 id="️-更改預設分支github-操作"><a class="markdownIt-Anchor" href="#️-更改預設分支github-操作"></a> ⚙️ 更改預設分支（GitHub 操作）</h1>
+<ol>
 <li>前往 GitHub Repo 頁面</li>
 <li>點擊「⚙ Settings」</li>
 <li>左側選單中選擇「Branches」</li>
 <li>將 Default branch 改為 <code>template</code></li>
 </ol>
 <p>這個設定是為了能夠先刪除 master 分支並重建，讓 master 存放練習後的成果</p>
-<hr>
-<h1 id="🗑️-刪除-master-並重建"><a href="#🗑️-刪除-master-並重建" class="headerlink" title="🗑️ 刪除 master 並重建"></a>🗑️ 刪除 master 並重建</h1><p>如果你想讓 <code>master</code> 分支只存放整合後的成果，而非開發內容，可以重新建立一個乾淨的 <code>master</code> 分支：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 刪除遠端 master 分支</span></span><br><span class="line">git push origin --delete master</span><br><span class="line"></span><br><span class="line"><span class="comment"># 本地切換並建立新的空 master 分支</span></span><br><span class="line">git checkout --orphan master</span><br><span class="line"></span><br><span class="line"><span class="comment"># 移除所有檔案（保留工作區）</span></span><br><span class="line">git <span class="built_in">rm</span> -rf .</span><br><span class="line"></span><br><span class="line"><span class="comment"># 建立 .gitignore 和 Makefile</span></span><br><span class="line"><span class="built_in">touch</span> .gitignore Makefile</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交並推送新的空白 master 分支</span></span><br><span class="line">git add .gitignore Makefile</span><br><span class="line">git commit -m <span class="string">&quot;Initialize new master branch&quot;</span></span><br><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
+<hr />
+<h1 id="️-刪除-master-並重建"><a class="markdownIt-Anchor" href="#️-刪除-master-並重建"></a> 🗑️ 刪除 master 並重建</h1>
+<p>如果你想讓 <code>master</code> 分支只存放整合後的成果，而非開發內容，可以重新建立一個乾淨的 <code>master</code> 分支：</p>
+<pre class="highlight"><code class="bash"><span class="hljs-comment"># 刪除遠端 master 分支</span>
+git push origin --delete master
 
+<span class="hljs-comment"># 本地切換並建立新的空 master 分支</span>
+git checkout --orphan master
+
+<span class="hljs-comment"># 移除所有檔案（保留工作區）</span>
+git <span class="hljs-built_in">rm</span> -rf .
+
+<span class="hljs-comment"># 建立 .gitignore 和 Makefile</span>
+<span class="hljs-built_in">touch</span> .gitignore Makefile
+
+<span class="hljs-comment"># 提交並推送新的空白 master 分支</span>
+git add .gitignore Makefile
+git commit -m <span class="hljs-string">&quot;Initialize new master branch&quot;</span>
+git push -u origin master
+</code></pre>
 <p>⚠️ <strong>請記得將預設分支從 <code>template</code> 改回 <code>master</code></strong>，以便未來集中展示成果與管理。</p>
-<hr>
-<h1 id="用-git-subtree-將多分支專案整合"><a href="#用-git-subtree-將多分支專案整合" class="headerlink" title="用 git subtree 將多分支專案整合"></a>用 git subtree 將多分支專案整合</h1><p><code>git subtree</code> 是 Git 提供的工具，允許你將另一個分支的內容匯入到當前分支的某個子資料夾，並保留其完整的 commit 歷史。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git subtree add --prefix=&lt;資料夾路徑&gt; &lt;遠端名稱&gt;/&lt;分支名稱&gt;</span><br></pre></td></tr></table></figure>
+<hr />
+<h1 id="用-git-subtree-將多分支專案整合"><a class="markdownIt-Anchor" href="#用-git-subtree-將多分支專案整合"></a> 用 git subtree 將多分支專案整合</h1>
+<p><code>git subtree</code> 是 Git 提供的工具，允許你將另一個分支的內容匯入到當前分支的某個子資料夾，並保留其完整的 commit 歷史。</p>
+<pre class="highlight"><code class="sh">git subtree add --prefix=&lt;資料夾路徑&gt; &lt;遠端名稱&gt;/&lt;分支名稱&gt;
+</code></pre>
 <p>這條指令的作用是將指定的遠端分支內容匯入到當前分支的某個子資料夾中，並保留該分支的完整 commit 歷史</p>
 <ul>
-<li><p><strong><code>--prefix=&lt;資料夾路徑&gt;</code></strong>：</p>
+<li>
+<p><strong><code>--prefix=&lt;資料夾路徑&gt;</code></strong>：</p>
 <ul>
 <li>指定將分支內容匯入到當前分支的哪個子資料夾。</li>
 <li>如果該資料夾不存在，Git 會自動建立。</li>
 </ul>
 </li>
-<li><p><strong><code>&lt;遠端名稱&gt;/&lt;分支名稱&gt;</code></strong>：</p>
+<li>
+<p><strong><code>&lt;遠端名稱&gt;/&lt;分支名稱&gt;</code></strong>：</p>
 <ul>
 <li>指定要匯入的遠端分支。</li>
 <li>例如，<code>origin/feature-1</code> 表示從遠端 <code>origin</code> 的 <code>feature-1</code> 分支匯入。</li>
@@ -488,19 +514,50 @@
 <li>避免用 <code>merge</code> 或 <code>cherry-pick</code> 導致 commit 歷史混亂</li>
 <li>可重複執行，不會影響其他資料夾內容</li>
 </ul>
-<h1 id="建立-Makefile-自動遷移腳本"><a href="#建立-Makefile-自動遷移腳本" class="headerlink" title="建立 Makefile 自動遷移腳本"></a>建立 Makefile 自動遷移腳本</h1><p>以下是 <code>master</code> 分支根目錄的 <code>Makefile</code> 實作：</p>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"><span class="keyword">.PHONY</span>: archive archive-all</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 將指定分支內容以 git subtree 匯入對應資料夾，保留完整 commit 紀錄</span></span><br><span class="line"><span class="section">archive:</span></span><br><span class="line"><span class="keyword">ifndef</span> name</span><br><span class="line">	<span class="variable">$(<span class="built_in">error</span> Usage: make archive name=feature-&lt;X&gt;)</span></span><br><span class="line"><span class="keyword">endif</span></span><br><span class="line">	@echo <span class="string">&quot;🌲 Archiving <span class="variable">$(name)</span> into master:<span class="variable">$(name)</span>/ using git subtree...&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="comment"># 確保在 master 分支</span></span><br><span class="line">	@git checkout master</span><br><span class="line"></span><br><span class="line">	<span class="comment"># 檢查有無未提交的變更</span></span><br><span class="line">	@if [ -n <span class="string">&quot;$$\(git status --porcelain)&quot;</span> ]; then \</span><br><span class="line">		echo <span class="string">&quot;❌ master branch has uncommitted changes. Please commit or stash first.&quot;</span>; \</span><br><span class="line">		exit 1; \</span><br><span class="line">	fi</span><br><span class="line"></span><br><span class="line">	<span class="comment"># 匯入分支內容到對應資料夾（不使用 --squash，可保留所有 commit）</span></span><br><span class="line">	@git subtree add --prefix=<span class="variable">$(name)</span> origin/<span class="variable">$(name)</span></span><br><span class="line"></span><br><span class="line">	@echo <span class="string">&quot;✅ Done archiving <span class="variable">$(name)</span> into master:<span class="variable">$(name)</span>/&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 批次對所有符合 feature-* 的分支執行 subtree 匯入</span></span><br><span class="line"><span class="section">archive-all:</span></span><br><span class="line">	@git fetch origin</span><br><span class="line">	@git branch -r | grep &#x27;origin/feature_&#x27; | sed &#x27;s|origin/||&#x27; | while read branch; do \</span><br><span class="line">		<span class="variable">$(MAKE)</span> archive name=$$branch; \</span><br><span class="line">	done</span><br></pre></td></tr></table></figure>
+<h1 id="建立-makefile-自動遷移腳本"><a class="markdownIt-Anchor" href="#建立-makefile-自動遷移腳本"></a> 建立 Makefile 自動遷移腳本</h1>
+<p>以下是 <code>master</code> 分支根目錄的 <code>Makefile</code> 實作：</p>
+<pre class="highlight"><code class="makefile"><span class="hljs-meta"><span class="hljs-keyword">.PHONY</span>: archive archive-all</span>
 
-<hr>
-<h1 id="📦-歸檔練習分支內容"><a href="#📦-歸檔練習分支內容" class="headerlink" title="📦 歸檔練習分支內容"></a>📦 歸檔練習分支內容</h1><p>每完成一個 <code>feature_&lt;n&gt;</code> 分支的專案後，執行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make archive name=feature_&lt;n&gt;</span><br></pre></td></tr></table></figure>
+<span class="hljs-comment"># 將指定分支內容以 git subtree 匯入對應資料夾，保留完整 commit 紀錄</span>
+<span class="hljs-section">archive:</span>
+<span class="hljs-keyword">ifndef</span> name
+	<span class="hljs-variable">$(<span class="hljs-built_in">error</span> Usage: make archive name=feature-&lt;X&gt;)</span>
+<span class="hljs-keyword">endif</span>
+	@echo <span class="hljs-string">&quot;🌲 Archiving <span class="hljs-variable">$(name)</span> into master:<span class="hljs-variable">$(name)</span>/ using git subtree...&quot;</span>
 
+	<span class="hljs-comment"># 確保在 master 分支</span>
+	@git checkout master
+
+	<span class="hljs-comment"># 檢查有無未提交的變更</span>
+	@if [ -n <span class="hljs-string">&quot;$$\(git status --porcelain)&quot;</span> ]; then \
+		echo <span class="hljs-string">&quot;❌ master branch has uncommitted changes. Please commit or stash first.&quot;</span>; \
+		exit 1; \
+	fi
+
+	<span class="hljs-comment"># 匯入分支內容到對應資料夾（不使用 --squash，可保留所有 commit）</span>
+	@git subtree add --prefix=<span class="hljs-variable">$(name)</span> origin/<span class="hljs-variable">$(name)</span>
+
+	@echo <span class="hljs-string">&quot;✅ Done archiving <span class="hljs-variable">$(name)</span> into master:<span class="hljs-variable">$(name)</span>/&quot;</span>
+
+<span class="hljs-comment"># 批次對所有符合 feature-* 的分支執行 subtree 匯入</span>
+<span class="hljs-section">archive-all:</span>
+	@git fetch origin
+	@git branch -r | grep &#x27;origin/feature_&#x27; | sed &#x27;s|origin/||&#x27; | while read branch; do \
+		<span class="hljs-variable">$(MAKE)</span> archive name=$$branch; \
+	done
+</code></pre>
+<hr />
+<h1 id="歸檔練習分支內容"><a class="markdownIt-Anchor" href="#歸檔練習分支內容"></a> 📦 歸檔練習分支內容</h1>
+<p>每完成一個 <code>feature_&lt;n&gt;</code> 分支的專案後，執行：</p>
+<pre class="highlight"><code class="bash">make archive name=feature_&lt;n&gt;
+</code></pre>
 <p>系統會自動將該分支所有檔案以 <code>git subtree</code> 匯入到 <code>master</code> 的 <code>feature_&lt;n&gt;/</code> 資料夾中，<strong>保留完整 commit 歷史</strong>。</p>
 <p>若要一鍵歸檔所有 <code>feature_&lt;n&gt;</code> 分支，可執行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make archive-all</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="🚀-後續可整合-GitHub-Actions-自動化流程"><a href="#🚀-後續可整合-GitHub-Actions-自動化流程" class="headerlink" title="🚀 後續可整合 GitHub Actions 自動化流程"></a>🚀 後續可整合 GitHub Actions 自動化流程</h1><p>未來可以使用 GitHub Actions 自動觸發 <code>make archive name=feature_&lt;n&gt;</code> 指令，將 PR 合併後的分支內容自動歸檔到 <code>master</code> 的對應子資料夾。建議流程如下：</p>
+<pre class="highlight"><code class="bash">make archive-all
+</code></pre>
+<hr />
+<h1 id="後續可整合-github-actions-自動化流程"><a class="markdownIt-Anchor" href="#後續可整合-github-actions-自動化流程"></a> 🚀 後續可整合 GitHub Actions 自動化流程</h1>
+<p>未來可以使用 GitHub Actions 自動觸發 <code>make archive name=feature_&lt;n&gt;</code> 指令，將 PR 合併後的分支內容自動歸檔到 <code>master</code> 的對應子資料夾。建議流程如下：</p>
 <ol>
 <li>當 PR 合併至 <code>feature_&lt;n&gt;</code> 分支時觸發 workflow</li>
 <li>使用 <code>actions/checkout</code> 切換到 <code>master</code> 分支</li>
@@ -509,15 +566,26 @@
 <li>將更新過的 <code>master</code> 分支 push 回遠端</li>
 </ol>
 <p>這樣可以避免手動切換與操作，讓每個練習成果在合併 PR 後自動整理到展示區。你也可以加入條件判斷，只對分支名稱符合 <code>feature_*</code> 格式的情況執行此流程。</p>
-<hr>
-<h1 id="✅-結果展示"><a href="#✅-結果展示" class="headerlink" title="✅ 結果展示"></a>✅ 結果展示</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">master</span><br><span class="line">├── .gitignore</span><br><span class="line">├── Makefile</span><br><span class="line">├── feature_1/</span><br><span class="line">│   ├── manage.py</span><br><span class="line">│   ├── app/</span><br><span class="line">│   └── ...</span><br><span class="line">├── feature_2/</span><br><span class="line">│   └── ...</span><br><span class="line">└── feature_3/</span><br><span class="line">    └── ...</span><br></pre></td></tr></table></figure>
-
+<hr />
+<h1 id="結果展示"><a class="markdownIt-Anchor" href="#結果展示"></a> ✅ 結果展示</h1>
+<pre class="highlight"><code class="">master
+├── .gitignore
+├── Makefile
+├── feature_1/
+│   ├── manage.py
+│   ├── app/
+│   └── ...
+├── feature_2/
+│   └── ...
+└── feature_3/
+    └── ...
+</code></pre>
 <p>這樣的架構讓你可以：</p>
 <ul>
 <li>保有一份可重複使用的範本分支（template）</li>
 <li>在多個練習分支開發而不互相干擾</li>
 <li>將成果統一集中到 <code>master</code> 展示，方便他人瀏覽</li>
-<li>將 CI&#x2F;CD、部屬、技術分享等操作聚焦於 <code>master</code> 管理</li>
+<li>將 CI/CD、部屬、技術分享等操作聚焦於 <code>master</code> 管理</li>
 </ul>
 <p>非常適合用於建立個人練習倉庫、技術文章範例、或團隊協作練習環境。</p>
 

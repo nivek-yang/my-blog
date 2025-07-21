@@ -17,14 +17,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":false,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="在 Web 開發中，SQL Injection（SQL 注入） 是最常見且危害極大的資安漏洞之一。它可以讓攻擊者透過竄改 SQL 查詢語句來未授權地讀取、修改、甚至刪除資料庫中的資料。本文將帶你認識 SQL Injection 是什麼、實際攻擊範例，以及開發者該如何有效預防這種攻擊。  SQL Injection 是什麼？SQL Injection 是一種將惡意 SQL 語句插入應用程式輸入欄位中">
+    <meta name="description" content="在 Web 開發中，SQL Injection（SQL 注入） 是最常見且危害極大的資安漏洞之一。它可以讓攻擊者透過竄改 SQL 查詢語句來未授權地讀取、修改、甚至刪除資料庫中的資料。本文將帶你認識 SQL Injection 是什麼、實際攻擊範例，以及開發者該如何有效預防這種攻擊。   SQL Injection 是什麼？ SQL Injection 是一種將惡意 SQL 語句插入應用程式輸入欄">
 <meta property="og:type" content="article">
 <meta property="og:title" content="什麼是 SQL Injection？又該如何預防？">
 <meta property="og:url" content="https://nivek-yang.github.io/2025/06/19/%E4%BB%80%E9%BA%BC%E6%98%AF%20SQL%20Injection%E5%8F%88%E8%A9%B2%E5%A6%82%E4%BD%95%E9%A0%90%E9%98%B2/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="在 Web 開發中，SQL Injection（SQL 注入） 是最常見且危害極大的資安漏洞之一。它可以讓攻擊者透過竄改 SQL 查詢語句來未授權地讀取、修改、甚至刪除資料庫中的資料。本文將帶你認識 SQL Injection 是什麼、實際攻擊範例，以及開發者該如何有效預防這種攻擊。  SQL Injection 是什麼？SQL Injection 是一種將惡意 SQL 語句插入應用程式輸入欄位中">
+<meta property="og:description" content="在 Web 開發中，SQL Injection（SQL 注入） 是最常見且危害極大的資安漏洞之一。它可以讓攻擊者透過竄改 SQL 查詢語句來未授權地讀取、修改、甚至刪除資料庫中的資料。本文將帶你認識 SQL Injection 是什麼、實際攻擊範例，以及開發者該如何有效預防這種攻擊。   SQL Injection 是什麼？ SQL Injection 是一種將惡意 SQL 語句插入應用程式輸入欄">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2025-06-18T16:00:00.000Z">
 <meta property="article:modified_time" content="2025-06-19T17:26:27.935Z">
@@ -322,7 +322,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL-Injection-%E6%98%AF%E4%BB%80%E9%BA%BC%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">SQL Injection 是什麼？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL-Injection-%E7%9A%84%E6%BD%9B%E5%9C%A8%E5%8D%B1%E5%AE%B3"><span class="nav-number">2.</span> <span class="nav-text">SQL Injection 的潛在危害</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%A0%90%E9%98%B2-SQL-Injection%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">如何預防 SQL Injection？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BD%BF%E7%94%A8%E5%8F%83%E6%95%B8%E5%8C%96%E6%9F%A5%E8%A9%A2%EF%BC%88Prepared-Statements%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">1. 使用參數化查詢（Prepared Statements）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8-ORM%EF%BC%88Object-Relational-Mapping%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">2. 使用 ORM（Object-Relational Mapping）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%BC%B8%E5%85%A5%E9%A9%97%E8%AD%89%E8%88%87%E6%B8%85%E6%B4%97"><span class="nav-number">3.3.</span> <span class="nav-text">3. 輸入驗證與清洗</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%9C%80%E5%B0%8F%E6%AC%8A%E9%99%90%E5%8E%9F%E5%89%87%EF%BC%88Least-Privilege%EF%BC%89"><span class="nav-number">3.4.</span> <span class="nav-text">4. 最小權限原則（Least Privilege）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E4%BD%BF%E7%94%A8-Web-%E6%87%89%E7%94%A8%E9%98%B2%E7%81%AB%E7%89%86%EF%BC%88WAF%EF%BC%89"><span class="nav-number">3.5.</span> <span class="nav-text">5. 使用 Web 應用防火牆（WAF）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%AA%A2%E6%B8%AC%E6%98%AF%E5%90%A6%E6%9C%89-SQL-Injection%EF%BC%9F"><span class="nav-number">4.</span> <span class="nav-text">如何檢測是否有 SQL Injection？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%A2%E8%A9%A6%E5%9B%9E%E7%AD%94"><span class="nav-number">5.</span> <span class="nav-text">面試回答</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">6.</span> <span class="nav-text">總結</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%B6%E4%BC%B8%E9%96%B1%E8%AE%80"><span class="nav-number">7.</span> <span class="nav-text">延伸閱讀</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#sql-injection-%E6%98%AF%E4%BB%80%E9%BA%BC"><span class="nav-number">1.</span> <span class="nav-text"> SQL Injection 是什麼？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sql-injection-%E7%9A%84%E6%BD%9B%E5%9C%A8%E5%8D%B1%E5%AE%B3"><span class="nav-number">2.</span> <span class="nav-text"> SQL Injection 的潛在危害</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%A0%90%E9%98%B2-sql-injection"><span class="nav-number">3.</span> <span class="nav-text"> 如何預防 SQL Injection？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BD%BF%E7%94%A8%E5%8F%83%E6%95%B8%E5%8C%96%E6%9F%A5%E8%A9%A2prepared-statements"><span class="nav-number">3.1.</span> <span class="nav-text"> 1. 使用參數化查詢（Prepared Statements）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8-ormobject-relational-mapping"><span class="nav-number">3.2.</span> <span class="nav-text"> 2. 使用 ORM（Object-Relational Mapping）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%BC%B8%E5%85%A5%E9%A9%97%E8%AD%89%E8%88%87%E6%B8%85%E6%B4%97"><span class="nav-number">3.3.</span> <span class="nav-text"> 3. 輸入驗證與清洗</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%9C%80%E5%B0%8F%E6%AC%8A%E9%99%90%E5%8E%9F%E5%89%87least-privilege"><span class="nav-number">3.4.</span> <span class="nav-text"> 4. 最小權限原則（Least Privilege）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E4%BD%BF%E7%94%A8-web-%E6%87%89%E7%94%A8%E9%98%B2%E7%81%AB%E7%89%86waf"><span class="nav-number">3.5.</span> <span class="nav-text"> 5. 使用 Web 應用防火牆（WAF）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%AA%A2%E6%B8%AC%E6%98%AF%E5%90%A6%E6%9C%89-sql-injection"><span class="nav-number">4.</span> <span class="nav-text"> 如何檢測是否有 SQL Injection？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%A2%E8%A9%A6%E5%9B%9E%E7%AD%94"><span class="nav-number">5.</span> <span class="nav-text"> 面試回答</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">6.</span> <span class="nav-text"> 總結</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%B6%E4%BC%B8%E9%96%B1%E8%AE%80"><span class="nav-number">7.</span> <span class="nav-text"> 延伸閱讀</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -428,51 +428,68 @@
     
     
     <div class="post-body" itemprop="articleBody"><p>在 Web 開發中，<strong>SQL Injection（SQL 注入）</strong> 是最常見且危害極大的資安漏洞之一。它可以讓攻擊者透過竄改 SQL 查詢語句來未授權地讀取、修改、甚至刪除資料庫中的資料。本文將帶你認識 SQL Injection 是什麼、實際攻擊範例，以及開發者該如何有效預防這種攻擊。</p>
-<hr>
-<h1 id="SQL-Injection-是什麼？"><a href="#SQL-Injection-是什麼？" class="headerlink" title="SQL Injection 是什麼？"></a>SQL Injection 是什麼？</h1><p><strong>SQL Injection</strong> 是一種將惡意 SQL 語句插入應用程式輸入欄位中的攻擊方式，目的是操控原本預期的 SQL 查詢邏輯。</p>
+<hr />
+<h1 id="sql-injection-是什麼"><a class="markdownIt-Anchor" href="#sql-injection-是什麼"></a> SQL Injection 是什麼？</h1>
+<p><strong>SQL Injection</strong> 是一種將惡意 SQL 語句插入應用程式輸入欄位中的攻擊方式，目的是操控原本預期的 SQL 查詢邏輯。</p>
 <p>舉例來說，假設以下是一段不安全的登入邏輯：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ❌ 極度危險的程式碼</span></span><br><span class="line">username = <span class="built_in">input</span>(<span class="string">&quot;請輸入帳號：&quot;</span>)</span><br><span class="line">password = <span class="built_in">input</span>(<span class="string">&quot;請輸入密碼：&quot;</span>)</span><br><span class="line"></span><br><span class="line">query = <span class="string">f&quot;SELECT * FROM users WHERE username = &#x27;<span class="subst">&#123;username&#125;</span>&#x27; AND password = &#x27;<span class="subst">&#123;password&#125;</span>&#x27;&quot;</span></span><br><span class="line">cursor.execute(query)</span><br></pre></td></tr></table></figure>
+<pre class="highlight"><code class="python"><span class="hljs-comment"># ❌ 極度危險的程式碼</span>
+username = <span class="hljs-built_in">input</span>(<span class="hljs-string">&quot;請輸入帳號：&quot;</span>)
+password = <span class="hljs-built_in">input</span>(<span class="hljs-string">&quot;請輸入密碼：&quot;</span>)
 
+query = <span class="hljs-string">f&quot;SELECT * FROM users WHERE username = &#x27;<span class="hljs-subst">&#123;username&#125;</span>&#x27; AND password = &#x27;<span class="hljs-subst">&#123;password&#125;</span>&#x27;&quot;</span>
+cursor.execute(query)
+</code></pre>
 <p>當攻擊者輸入以下資料時：</p>
 <ul>
-<li><code>username</code>: <code>&#39; OR 1=1 --</code></li>
+<li><code>username</code>: <code>' OR 1=1 --</code></li>
 <li><code>password</code>: <code>任意內容</code></li>
 </ul>
 <p>查詢語句將變成：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> username <span class="operator">=</span> <span class="string">&#x27;&#x27;</span> <span class="keyword">OR</span> <span class="number">1</span><span class="operator">=</span><span class="number">1</span> <span class="comment">--&#x27; AND password = &#x27;任意內容&#x27;</span></span><br></pre></td></tr></table></figure>
-
+<pre class="highlight"><code class="sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> users <span class="hljs-keyword">WHERE</span> username <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;&#x27;</span> <span class="hljs-keyword">OR</span> <span class="hljs-number">1</span><span class="hljs-operator">=</span><span class="hljs-number">1</span> <span class="hljs-comment">--&#x27; AND password = &#x27;任意內容&#x27;</span>
+</code></pre>
 <p>由於 <code>--</code> 是 SQL 的註解符號，後面的內容會被忽略，而 <code>OR 1=1</code> 永遠為真，攻擊者即可繞過密碼驗證成功登入！</p>
-<hr>
-<h1 id="SQL-Injection-的潛在危害"><a href="#SQL-Injection-的潛在危害" class="headerlink" title="SQL Injection 的潛在危害"></a>SQL Injection 的潛在危害</h1><ul>
+<hr />
+<h1 id="sql-injection-的潛在危害"><a class="markdownIt-Anchor" href="#sql-injection-的潛在危害"></a> SQL Injection 的潛在危害</h1>
+<ul>
 <li><strong>繞過身份驗證</strong>：如上例，攻擊者可直接登入任意帳戶。</li>
 <li><strong>資料洩漏</strong>：SELECT 語句被竄改，可讀取整個資料表。</li>
-<li><strong>資料破壞</strong>：透過 INSERT&#x2F;UPDATE&#x2F;DELETE 修改或刪除資料。</li>
+<li><strong>資料破壞</strong>：透過 INSERT/UPDATE/DELETE 修改或刪除資料。</li>
 <li><strong>系統控制</strong>：某些情況下可執行資料庫指令進而控制伺服器。</li>
 </ul>
-<hr>
-<h1 id="如何預防-SQL-Injection？"><a href="#如何預防-SQL-Injection？" class="headerlink" title="如何預防 SQL Injection？"></a>如何預防 SQL Injection？</h1><p>防範 SQL Injection 是開發者的責任，以下是幾種有效的預防方式：</p>
-<h2 id="1-使用參數化查詢（Prepared-Statements）"><a href="#1-使用參數化查詢（Prepared-Statements）" class="headerlink" title="1. 使用參數化查詢（Prepared Statements）"></a>1. 使用參數化查詢（Prepared Statements）</h2><p>最根本的解法是使用參數化查詢，將使用者輸入與 SQL 語句分離。</p>
+<hr />
+<h1 id="如何預防-sql-injection"><a class="markdownIt-Anchor" href="#如何預防-sql-injection"></a> 如何預防 SQL Injection？</h1>
+<p>防範 SQL Injection 是開發者的責任，以下是幾種有效的預防方式：</p>
+<h2 id="1-使用參數化查詢prepared-statements"><a class="markdownIt-Anchor" href="#1-使用參數化查詢prepared-statements"></a> 1. 使用參數化查詢（Prepared Statements）</h2>
+<p>最根本的解法是使用參數化查詢，將使用者輸入與 SQL 語句分離。</p>
 <p><strong>以 Python（Django ORM）為例：</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ✅ 安全寫法（ORM 自動處理 SQL 注入風險）</span></span><br><span class="line">User.objects.<span class="built_in">filter</span>(username=username, password=password).exists()</span><br></pre></td></tr></table></figure>
-
+<pre class="highlight"><code class="python"><span class="hljs-comment"># ✅ 安全寫法（ORM 自動處理 SQL 注入風險）</span>
+User.objects.<span class="hljs-built_in">filter</span>(username=username, password=password).exists()
+</code></pre>
 <p><strong>以 Python 搭配 psycopg2 原生查詢為例：</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ✅ 安全寫法（使用參數化）</span></span><br><span class="line">cursor.execute(<span class="string">&quot;SELECT * FROM users WHERE username = %s AND password = %s&quot;</span>, (username, password))</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-使用-ORM（Object-Relational-Mapping）"><a href="#2-使用-ORM（Object-Relational-Mapping）" class="headerlink" title="2. 使用 ORM（Object-Relational Mapping）"></a>2. 使用 ORM（Object-Relational Mapping）</h2><p>ORM 框架（如 Django ORM、SQLAlchemy）天生會處理 SQL Injection 的風險，因為它們自動將參數轉義為安全格式。</p>
-<h2 id="3-輸入驗證與清洗"><a href="#3-輸入驗證與清洗" class="headerlink" title="3. 輸入驗證與清洗"></a>3. 輸入驗證與清洗</h2><p>雖不能取代參數化查詢，但針對表單輸入進行格式驗證（如 email 格式、字數限制）可降低惡意資料混入。</p>
-<h2 id="4-最小權限原則（Least-Privilege）"><a href="#4-最小權限原則（Least-Privilege）" class="headerlink" title="4. 最小權限原則（Least Privilege）"></a>4. 最小權限原則（Least Privilege）</h2><p>資料庫帳號應只授予應用程式所需的最低權限。避免使用擁有 DROP、GRANT 等高權限的帳號。</p>
-<h2 id="5-使用-Web-應用防火牆（WAF）"><a href="#5-使用-Web-應用防火牆（WAF）" class="headerlink" title="5. 使用 Web 應用防火牆（WAF）"></a>5. 使用 Web 應用防火牆（WAF）</h2><p>WAF 可自動攔截常見的 SQL Injection 攻擊模式，作為第二道防線。</p>
-<hr>
-<h1 id="如何檢測是否有-SQL-Injection？"><a href="#如何檢測是否有-SQL-Injection？" class="headerlink" title="如何檢測是否有 SQL Injection？"></a>如何檢測是否有 SQL Injection？</h1><ul>
+<pre class="highlight"><code class="python"><span class="hljs-comment"># ✅ 安全寫法（使用參數化）</span>
+cursor.execute(<span class="hljs-string">&quot;SELECT * FROM users WHERE username = %s AND password = %s&quot;</span>, (username, password))
+</code></pre>
+<h2 id="2-使用-ormobject-relational-mapping"><a class="markdownIt-Anchor" href="#2-使用-ormobject-relational-mapping"></a> 2. 使用 ORM（Object-Relational Mapping）</h2>
+<p>ORM 框架（如 Django ORM、SQLAlchemy）天生會處理 SQL Injection 的風險，因為它們自動將參數轉義為安全格式。</p>
+<h2 id="3-輸入驗證與清洗"><a class="markdownIt-Anchor" href="#3-輸入驗證與清洗"></a> 3. 輸入驗證與清洗</h2>
+<p>雖不能取代參數化查詢，但針對表單輸入進行格式驗證（如 email 格式、字數限制）可降低惡意資料混入。</p>
+<h2 id="4-最小權限原則least-privilege"><a class="markdownIt-Anchor" href="#4-最小權限原則least-privilege"></a> 4. 最小權限原則（Least Privilege）</h2>
+<p>資料庫帳號應只授予應用程式所需的最低權限。避免使用擁有 DROP、GRANT 等高權限的帳號。</p>
+<h2 id="5-使用-web-應用防火牆waf"><a class="markdownIt-Anchor" href="#5-使用-web-應用防火牆waf"></a> 5. 使用 Web 應用防火牆（WAF）</h2>
+<p>WAF 可自動攔截常見的 SQL Injection 攻擊模式，作為第二道防線。</p>
+<hr />
+<h1 id="如何檢測是否有-sql-injection"><a class="markdownIt-Anchor" href="#如何檢測是否有-sql-injection"></a> 如何檢測是否有 SQL Injection？</h1>
+<ul>
 <li>使用自動化工具（如 <a target="_blank" rel="noopener" href="https://sqlmap.org/">sqlmap</a>）對 API 或表單送出測試 payload。</li>
 <li>開發階段可使用 lint 工具檢查潛在的不安全 SQL 組合。</li>
 <li>確保有完整的測試覆蓋對外輸入的功能。</li>
 </ul>
-<hr>
-<h1 id="面試回答"><a href="#面試回答" class="headerlink" title="面試回答"></a>面試回答</h1><blockquote>
+<hr />
+<h1 id="面試回答"><a class="markdownIt-Anchor" href="#面試回答"></a> 面試回答</h1>
+<blockquote>
 <p>SQL Injection 是一種資安攻擊手法，攻擊者在表單輸入或 URL 中注入惡意 SQL 語句，藉此操控原本的資料庫查詢邏輯，可能造成未授權的資料讀取、修改，甚至整個資料庫被破壞。</p>
 </blockquote>
-<p>舉例來說，若在登入功能中直接把使用者輸入組合成 SQL 字串而未加防護，攻擊者就能透過像 <code>&#39; OR 1=1 --</code> 的輸入繞過驗證。</p>
+<p>舉例來說，若在登入功能中直接把使用者輸入組合成 SQL 字串而未加防護，攻擊者就能透過像 <code>' OR 1=1 --</code> 的輸入繞過驗證。</p>
 <p><strong>預防方式主要有三個：</strong></p>
 <ol>
 <li><strong>使用參數化查詢（Prepared Statements）</strong>：將輸入值與 SQL 語句分離，是最根本的解法。</li>
@@ -480,8 +497,9 @@
 <li><strong>避免直接拼接 SQL</strong>，並搭配輸入驗證與資料庫權限控管，從多層面加強安全性。</li>
 </ol>
 <p>在我自己的專案中，例如使用 Django 框架時，會透過 ORM 查詢，確保使用者輸入不會直接進入 SQL 字串，並依角色限制資料庫操作權限，確保資安基本面不被忽略。</p>
-<hr>
-<h1 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h1><table>
+<hr />
+<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
+<table>
 <thead>
 <tr>
 <th>安全措施</th>
@@ -489,7 +507,8 @@
 <th>備註</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>參數化查詢</td>
 <td>✅ 必須實作</td>
 <td>最根本防禦方式</td>
@@ -514,10 +533,12 @@
 <td>⚠️ 加強防禦</td>
 <td>作為額外保護</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p>SQL Injection 是老生常談但仍極常見的安全漏洞，唯有落實安全開發習慣，才能避免這類攻擊發生。</p>
-<hr>
-<h1 id="延伸閱讀"><a href="#延伸閱讀" class="headerlink" title="延伸閱讀"></a>延伸閱讀</h1><ul>
+<hr />
+<h1 id="延伸閱讀"><a class="markdownIt-Anchor" href="#延伸閱讀"></a> 延伸閱讀</h1>
+<ul>
 <li><a target="_blank" rel="noopener" href="https://owasp.org/www-community/attacks/SQL_Injection">OWASP: SQL Injection</a></li>
 <li><a target="_blank" rel="noopener" href="https://docs.djangoproject.com/en/stable/topics/security/">Django Security Docs</a></li>
 </ul>

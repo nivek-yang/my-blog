@@ -17,14 +17,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":false,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="使用 uv 建立 Python 專案環境：快速、乾淨、可重現uv 是由 Astral 開發的超高速 Python 工具，可取代 pip, venv, pyenv, poetry 的安裝、建立虛擬環境、Python 版本管理、專案管理等功能，支援 pyproject.toml 的依賴管理，是現代化 Python 專案環境建置的利器。 這篇筆記整理了使用 uv 建立虛擬環境、安裝套件、管理依賴的完整流">
+    <meta name="description" content="使用 uv 建立 Python 專案環境：快速、乾淨、可重現 uv 是由 Astral 開發的超高速 Python 工具，可取代 pip, venv, pyenv, poetry 的安裝、建立虛擬環境、Python 版本管理、專案管理等功能，支援 pyproject.toml 的依賴管理，是現代化 Python 專案環境建置的利器。 這篇筆記整理了使用 uv 建立虛擬環境、安裝套件、管理依賴的完">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用 uv 建立 Python 專案環境">
 <meta property="og:url" content="https://nivek-yang.github.io/2025/04/20/%E4%BD%BF%E7%94%A8uv%E5%BB%BA%E7%AB%8BPython%E5%B0%88%E6%A1%88%E7%92%B0%E5%A2%83/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="使用 uv 建立 Python 專案環境：快速、乾淨、可重現uv 是由 Astral 開發的超高速 Python 工具，可取代 pip, venv, pyenv, poetry 的安裝、建立虛擬環境、Python 版本管理、專案管理等功能，支援 pyproject.toml 的依賴管理，是現代化 Python 專案環境建置的利器。 這篇筆記整理了使用 uv 建立虛擬環境、安裝套件、管理依賴的完整流">
+<meta property="og:description" content="使用 uv 建立 Python 專案環境：快速、乾淨、可重現 uv 是由 Astral 開發的超高速 Python 工具，可取代 pip, venv, pyenv, poetry 的安裝、建立虛擬環境、Python 版本管理、專案管理等功能，支援 pyproject.toml 的依賴管理，是現代化 Python 專案環境建置的利器。 這篇筆記整理了使用 uv 建立虛擬環境、安裝套件、管理依賴的完">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2025-04-19T16:00:00.000Z">
 <meta property="article:modified_time" content="2025-04-20T18:31:35.915Z">
@@ -321,7 +321,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-uv-%E5%BB%BA%E7%AB%8B-Python-%E5%B0%88%E6%A1%88%E7%92%B0%E5%A2%83%EF%BC%9A%E5%BF%AB%E9%80%9F%E3%80%81%E4%B9%BE%E6%B7%A8%E3%80%81%E5%8F%AF%E9%87%8D%E7%8F%BE"><span class="nav-number">1.</span> <span class="nav-text">使用 uv 建立 Python 專案環境：快速、乾淨、可重現</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%9B%A0-%E5%AE%89%E8%A3%9D-uv"><span class="nav-number">1.1.</span> <span class="nav-text">🛠 安裝 uv</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%9A%80-%E5%BB%BA%E7%AB%8B-Python-%E5%B0%88%E6%A1%88%E7%92%B0%E5%A2%83%E6%B5%81%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text">🚀 建立 Python 專案環境流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F%E8%AA%AA%E6%98%8E%EF%BC%9A"><span class="nav-number">1.2.1.</span> <span class="nav-text">步驟說明：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E2%9C%85-%E5%B8%B8%E7%94%A8-uv-%E6%8C%87%E4%BB%A4%E7%B8%BD%E8%A6%BD"><span class="nav-number">1.3.</span> <span class="nav-text">✅ 常用 uv 指令總覽</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%94%84-%E6%B8%85%E9%99%A4%E4%B8%A6%E9%87%8D%E5%BB%BA%E8%99%9B%E6%93%AC%E7%92%B0%E5%A2%83"><span class="nav-number">1.4.</span> <span class="nav-text">🔄 清除並重建虛擬環境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%90%8D-%E6%8C%87%E5%AE%9A-Python-%E7%89%88%E6%9C%AC%EF%BC%88%E9%81%B8%E6%93%87%E6%80%A7%EF%BC%89"><span class="nav-number">1.5.</span> <span class="nav-text">🐍 指定 Python 版本（選擇性）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%94%E8%BC%83-pyenv-%E8%B7%9F-uv-%E5%85%A9%E7%A8%AE-Python-%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86"><span class="nav-number">1.5.1.</span> <span class="nav-text">比較 pyenv 跟 uv 兩種 Python 版本管理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%A7%AA-%E5%9F%B7%E8%A1%8C%E8%88%87%E9%96%8B%E7%99%BC%EF%BC%88%E4%B8%8D%E7%94%A8%E6%89%8B%E5%8B%95-activate-%E8%99%9B%E6%93%AC%E7%92%B0%E5%A2%83%EF%BC%81%EF%BC%89"><span class="nav-number">1.6.</span> <span class="nav-text">🧪 執行與開發（不用手動 activate 虛擬環境！）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%8C-%E7%AF%84%E4%BE%8B-pyproject-toml"><span class="nav-number">1.7.</span> <span class="nav-text">📌 範例 pyproject.toml</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E6%AF%94%E8%BC%83"><span class="nav-number">1.8.</span> <span class="nav-text">指令比較</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%A7%A0-%E5%B0%8F%E7%B5%90"><span class="nav-number">1.9.</span> <span class="nav-text">🧠 小結</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-uv-%E5%BB%BA%E7%AB%8B-python-%E5%B0%88%E6%A1%88%E7%92%B0%E5%A2%83%E5%BF%AB%E9%80%9F-%E4%B9%BE%E6%B7%A8-%E5%8F%AF%E9%87%8D%E7%8F%BE"><span class="nav-number">1.</span> <span class="nav-text"> 使用 uv 建立 Python 專案環境：快速、乾淨、可重現</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-uv"><span class="nav-number">1.1.</span> <span class="nav-text"> 🛠 安裝 uv</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B-python-%E5%B0%88%E6%A1%88%E7%92%B0%E5%A2%83%E6%B5%81%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text"> 🚀 建立 Python 專案環境流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F%E8%AA%AA%E6%98%8E"><span class="nav-number">1.2.1.</span> <span class="nav-text"> 步驟說明：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8-uv-%E6%8C%87%E4%BB%A4%E7%B8%BD%E8%A6%BD"><span class="nav-number">1.3.</span> <span class="nav-text"> ✅ 常用 uv 指令總覽</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%85%E9%99%A4%E4%B8%A6%E9%87%8D%E5%BB%BA%E8%99%9B%E6%93%AC%E7%92%B0%E5%A2%83"><span class="nav-number">1.4.</span> <span class="nav-text"> 🔄 清除並重建虛擬環境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E5%AE%9A-python-%E7%89%88%E6%9C%AC%E9%81%B8%E6%93%87%E6%80%A7"><span class="nav-number">1.5.</span> <span class="nav-text"> 🐍 指定 Python 版本（選擇性）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%94%E8%BC%83-pyenv-%E8%B7%9F-uv-%E5%85%A9%E7%A8%AE-python-%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86"><span class="nav-number">1.5.1.</span> <span class="nav-text"> 比較 pyenv 跟 uv 兩種 Python 版本管理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%B7%E8%A1%8C%E8%88%87%E9%96%8B%E7%99%BC%E4%B8%8D%E7%94%A8%E6%89%8B%E5%8B%95-activate-%E8%99%9B%E6%93%AC%E7%92%B0%E5%A2%83"><span class="nav-number">1.6.</span> <span class="nav-text"> 🧪 執行與開發（不用手動 activate 虛擬環境！）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AF%84%E4%BE%8B-pyprojecttoml"><span class="nav-number">1.7.</span> <span class="nav-text"> 📌 範例 pyproject.toml</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E6%AF%94%E8%BC%83"><span class="nav-number">1.8.</span> <span class="nav-text"> 指令比較</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%B5%90"><span class="nav-number">1.9.</span> <span class="nav-text"> 🧠 小結</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -426,25 +426,32 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="使用-uv-建立-Python-專案環境：快速、乾淨、可重現"><a href="#使用-uv-建立-Python-專案環境：快速、乾淨、可重現" class="headerlink" title="使用 uv 建立 Python 專案環境：快速、乾淨、可重現"></a>使用 <code>uv</code> 建立 Python 專案環境：快速、乾淨、可重現</h1><p><a target="_blank" rel="noopener" href="https://github.com/astral-sh/uv"><code>uv</code></a> 是由 Astral 開發的超高速 Python 工具，可取代 <code>pip</code>, <code>venv</code>, <code>pyenv</code>, <code>poetry</code> 的安裝、建立虛擬環境、Python 版本管理、專案管理等功能，支援 <code>pyproject.toml</code> 的依賴管理，是現代化 Python 專案環境建置的利器。</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="使用-uv-建立-python-專案環境快速-乾淨-可重現"><a class="markdownIt-Anchor" href="#使用-uv-建立-python-專案環境快速-乾淨-可重現"></a> 使用 <code>uv</code> 建立 Python 專案環境：快速、乾淨、可重現</h1>
+<p><a target="_blank" rel="noopener" href="https://github.com/astral-sh/uv"><code>uv</code></a> 是由 Astral 開發的超高速 Python 工具，可取代 <code>pip</code>, <code>venv</code>, <code>pyenv</code>, <code>poetry</code> 的安裝、建立虛擬環境、Python 版本管理、專案管理等功能，支援 <code>pyproject.toml</code> 的依賴管理，是現代化 Python 專案環境建置的利器。</p>
 <p>這篇筆記整理了使用 <code>uv</code> 建立虛擬環境、安裝套件、管理依賴的完整流程，適合給想建立 <strong>快速、可重現、乾淨的 Python 開發環境</strong> 的工程師參考。</p>
-<hr>
-<h2 id="🛠-安裝-uv"><a href="#🛠-安裝-uv" class="headerlink" title="🛠 安裝 uv"></a>🛠 安裝 uv</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install uv</span><br></pre></td></tr></table></figure>
-
-<p>或使用 Homebrew (macOS&#x2F;Linux)：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install astral-sh/tap/uv</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="🚀-建立-Python-專案環境流程"><a href="#🚀-建立-Python-專案環境流程" class="headerlink" title="🚀 建立 Python 專案環境流程"></a>🚀 建立 Python 專案環境流程</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">uv init .</span><br><span class="line">uv venv</span><br><span class="line">uv add django</span><br></pre></td></tr></table></figure>
-
-<h3 id="步驟說明："><a href="#步驟說明：" class="headerlink" title="步驟說明："></a>步驟說明：</h3><table>
+<hr />
+<h2 id="安裝-uv"><a class="markdownIt-Anchor" href="#安裝-uv"></a> 🛠 安裝 uv</h2>
+<pre class="highlight"><code class="bash">pip install uv
+</code></pre>
+<p>或使用 Homebrew (macOS/Linux)：</p>
+<pre class="highlight"><code class="bash">brew install astral-sh/tap/uv
+</code></pre>
+<hr />
+<h2 id="建立-python-專案環境流程"><a class="markdownIt-Anchor" href="#建立-python-專案環境流程"></a> 🚀 建立 Python 專案環境流程</h2>
+<pre class="highlight"><code class="bash">uv init .
+uv venv
+uv add django
+</code></pre>
+<h3 id="步驟說明"><a class="markdownIt-Anchor" href="#步驟說明"></a> 步驟說明：</h3>
+<table>
 <thead>
 <tr>
 <th>指令</th>
 <th>功能說明</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><code>uv init .</code></td>
 <td>初始化 <code>pyproject.toml</code>，設定專案 metadata</td>
 </tr>
@@ -456,10 +463,12 @@
 <td><code>uv add django</code></td>
 <td>安裝 Django 並加入 <code>pyproject.toml</code> + <code>uv.lock</code></td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p>✅ 安裝的套件會被記錄到 <code>pyproject.toml</code> 中，並且自動鎖定到 <code>uv.lock</code>，確保環境重現性。</p>
-<hr>
-<h2 id="✅-常用-uv-指令總覽"><a href="#✅-常用-uv-指令總覽" class="headerlink" title="✅ 常用 uv 指令總覽"></a>✅ 常用 uv 指令總覽</h2><table>
+<hr />
+<h2 id="常用-uv-指令總覽"><a class="markdownIt-Anchor" href="#常用-uv-指令總覽"></a> ✅ 常用 uv 指令總覽</h2>
+<table>
 <thead>
 <tr>
 <th>功能</th>
@@ -467,7 +476,8 @@
 <th>說明</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>安裝套件</td>
 <td><code>uv add requests</code></td>
 <td>加入正式依賴</td>
@@ -497,25 +507,34 @@
 <td><code>uv sync</code></td>
 <td>根據 lock 檔安裝所有依賴</td>
 </tr>
-</tbody></table>
-<hr>
-<h2 id="🔄-清除並重建虛擬環境"><a href="#🔄-清除並重建虛擬環境" class="headerlink" title="🔄 清除並重建虛擬環境"></a>🔄 清除並重建虛擬環境</h2><p>如果想清除多餘的依賴或重建乾淨環境：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">rm</span> -rf .venv uv.lock</span><br><span class="line">uv venv</span><br><span class="line">uv <span class="built_in">sync</span></span><br></pre></td></tr></table></figure>
-
+</tbody>
+</table>
+<hr />
+<h2 id="清除並重建虛擬環境"><a class="markdownIt-Anchor" href="#清除並重建虛擬環境"></a> 🔄 清除並重建虛擬環境</h2>
+<p>如果想清除多餘的依賴或重建乾淨環境：</p>
+<pre class="highlight"><code class="bash"><span class="hljs-built_in">rm</span> -rf .venv uv.lock
+uv venv
+uv <span class="hljs-built_in">sync</span>
+</code></pre>
 <p>這會根據目前 <code>pyproject.toml</code> 重建乾淨環境，不殘留任何「孤兒套件」。</p>
-<hr>
-<h2 id="🐍-指定-Python-版本（選擇性）"><a href="#🐍-指定-Python-版本（選擇性）" class="headerlink" title="🐍 指定 Python 版本（選擇性）"></a>🐍 指定 Python 版本（選擇性）</h2><p>檢查可安裝哪些 Python 版本並安裝</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">uv python list</span><br><span class="line">uv python install 3.12</span><br></pre></td></tr></table></figure>
-
+<hr />
+<h2 id="指定-python-版本選擇性"><a class="markdownIt-Anchor" href="#指定-python-版本選擇性"></a> 🐍 指定 Python 版本（選擇性）</h2>
+<p>檢查可安裝哪些 Python 版本並安裝</p>
+<pre class="highlight"><code class="sh">uv python list
+uv python install 3.12
+</code></pre>
 <p>切換 Python 版本</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uv python pin 3.12</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># pyproject.toml</span></span><br><span class="line"><span class="section">[project]</span></span><br><span class="line"><span class="attr">requires-python</span> = <span class="string">&quot;&gt;=3.10&quot;</span></span><br></pre></td></tr></table></figure>
-
+<pre class="highlight"><code class="sh">uv python pin 3.12
+</code></pre>
+<pre class="highlight"><code class="toml"><span class="hljs-comment"># pyproject.toml</span>
+<span class="hljs-section">[project]</span>
+<span class="hljs-attr">requires-python</span> = <span class="hljs-string">&quot;&gt;=3.10&quot;</span>
+</code></pre>
 <p>如需使用指定的 Python 安裝版本建構 <code>.venv</code>，可這樣設定：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PYTHON=/usr/local/bin/python3.10 uv venv</span><br></pre></td></tr></table></figure>
-
-<h3 id="比較-pyenv-跟-uv-兩種-Python-版本管理"><a href="#比較-pyenv-跟-uv-兩種-Python-版本管理" class="headerlink" title="比較 pyenv 跟 uv 兩種 Python 版本管理"></a>比較 pyenv 跟 uv 兩種 Python 版本管理</h3><table>
+<pre class="highlight"><code class="bash">PYTHON=/usr/local/bin/python3.10 uv venv
+</code></pre>
+<h3 id="比較-pyenv-跟-uv-兩種-python-版本管理"><a class="markdownIt-Anchor" href="#比較-pyenv-跟-uv-兩種-python-版本管理"></a> 比較 pyenv 跟 uv 兩種 Python 版本管理</h3>
+<table>
 <thead>
 <tr>
 <th>工具</th>
@@ -523,7 +542,8 @@
 <th>影響範圍</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><code>pyenv</code></td>
 <td>控制 <strong>整個系統或目錄的 Python 版本</strong></td>
 <td>全域或目錄切換</td>
@@ -533,18 +553,33 @@
 <td>在虛擬環境中自動管理 Python 版本</td>
 <td>只限 <code>.venv</code></td>
 </tr>
-</tbody></table>
-<hr>
-<h2 id="🧪-執行與開發（不用手動-activate-虛擬環境！）"><a href="#🧪-執行與開發（不用手動-activate-虛擬環境！）" class="headerlink" title="🧪 執行與開發（不用手動 activate 虛擬環境！）"></a>🧪 執行與開發（不用手動 activate 虛擬環境！）</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">uv run python manage.py runserver  <span class="comment"># 執行 Django 開發伺服器</span></span><br><span class="line">uv run pytest                      <span class="comment"># 執行測試</span></span><br></pre></td></tr></table></figure>
-
+</tbody>
+</table>
+<hr />
+<h2 id="執行與開發不用手動-activate-虛擬環境"><a class="markdownIt-Anchor" href="#執行與開發不用手動-activate-虛擬環境"></a> 🧪 執行與開發（不用手動 activate 虛擬環境！）</h2>
+<pre class="highlight"><code class="bash">uv run python manage.py runserver  <span class="hljs-comment"># 執行 Django 開發伺服器</span>
+uv run pytest                      <span class="hljs-comment"># 執行測試</span>
+</code></pre>
 <blockquote>
 <p><code>uv run</code> 會自動使用 <code>.venv/bin/python</code>，不需手動 <code>source .venv/bin/activate</code></p>
 </blockquote>
-<hr>
-<h2 id="📌-範例-pyproject-toml"><a href="#📌-範例-pyproject-toml" class="headerlink" title="📌 範例 pyproject.toml"></a>📌 範例 <code>pyproject.toml</code></h2><figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[project]</span></span><br><span class="line"><span class="attr">name</span> = <span class="string">&quot;my-uv-app&quot;</span></span><br><span class="line"><span class="attr">version</span> = <span class="string">&quot;0.1.0&quot;</span></span><br><span class="line"><span class="attr">description</span> = <span class="string">&quot;A Python app using uv for dependency management&quot;</span></span><br><span class="line"><span class="attr">requires-python</span> = <span class="string">&quot;&gt;=3.10&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[tool.uv.dependencies]</span></span><br><span class="line"><span class="attr">django</span> = <span class="string">&quot;*&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[tool.uv.dev-dependencies]</span></span><br><span class="line"><span class="attr">ruff</span> = <span class="string">&quot;*&quot;</span></span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="範例-pyprojecttoml"><a class="markdownIt-Anchor" href="#範例-pyprojecttoml"></a> 📌 範例 <code>pyproject.toml</code></h2>
+<pre class="highlight"><code class="toml"><span class="hljs-section">[project]</span>
+<span class="hljs-attr">name</span> = <span class="hljs-string">&quot;my-uv-app&quot;</span>
+<span class="hljs-attr">version</span> = <span class="hljs-string">&quot;0.1.0&quot;</span>
+<span class="hljs-attr">description</span> = <span class="hljs-string">&quot;A Python app using uv for dependency management&quot;</span>
+<span class="hljs-attr">requires-python</span> = <span class="hljs-string">&quot;&gt;=3.10&quot;</span>
 
-<hr>
-<h2 id="指令比較"><a href="#指令比較" class="headerlink" title="指令比較"></a>指令比較</h2><table>
+<span class="hljs-section">[tool.uv.dependencies]</span>
+<span class="hljs-attr">django</span> = <span class="hljs-string">&quot;*&quot;</span>
+
+<span class="hljs-section">[tool.uv.dev-dependencies]</span>
+<span class="hljs-attr">ruff</span> = <span class="hljs-string">&quot;*&quot;</span>
+</code></pre>
+<hr />
+<h2 id="指令比較"><a class="markdownIt-Anchor" href="#指令比較"></a> 指令比較</h2>
+<table>
 <thead>
 <tr>
 <th>動作</th>
@@ -553,7 +588,8 @@
 <th>安裝到虛擬環境</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><code>uv add flask</code></td>
 <td>✅ 是</td>
 <td>✅ 是</td>
@@ -577,13 +613,15 @@
 <td>❌ 否</td>
 <td>✅ 是（根據 uv.lock）</td>
 </tr>
-</tbody></table>
-<hr>
-<h2 id="🧠-小結"><a href="#🧠-小結" class="headerlink" title="🧠 小結"></a>🧠 小結</h2><ul>
+</tbody>
+</table>
+<hr />
+<h2 id="小結"><a class="markdownIt-Anchor" href="#小結"></a> 🧠 小結</h2>
+<ul>
 <li><code>uv</code> 是快速又現代的 Python 專案工具。</li>
 <li>和 <code>pip</code> 不同，<code>uv add</code> 是<strong>管理專案依賴</strong>，自動記錄與鎖定。</li>
 <li>搭配 <code>pyproject.toml</code> + <code>uv.lock</code> 可以輕鬆建立 <strong>一致可重現</strong> 的環境。</li>
-<li><code>uv run</code> 取代虛擬環境的啟動&#x2F;關閉流程，開發更方便。</li>
+<li><code>uv run</code> 取代虛擬環境的啟動/關閉流程，開發更方便。</li>
 </ul>
 
     </div>

@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":false,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="在現代分散式系統架構中，非同步訊息傳遞是實現服務解耦、提升系統擴展性與可靠性的關鍵。而在眾多訊息傳遞模式中，Message Queues (消息隊列) 與 Publish-Subscribe (發布&#x2F;訂閱，簡稱 Pub&#x2F;Sub) 是最常被討論也最容易被混淆的兩種。本文將深入探討這兩種模式的核心差異、應用場景及各自的優缺點，幫助在系統設計時做出更明智的選擇。   關於術語的重要說明 在深入探討之前，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="解析 Message Queues 與 Pub&#x2F;Sub 的差別">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/07/21/%E8%A7%A3%E6%9E%90%20Message%20Queues%20%E8%88%87%20PubSub%20%E7%9A%84%E5%B7%AE%E5%88%A5/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="在現代分散式系統架構中，非同步訊息傳遞是實現服務解耦、提升系統擴展性與可靠性的關鍵。而在眾多訊息傳遞模式中，Message Queues (消息隊列) 與 Publish-Subscribe (發布&#x2F;訂閱，簡稱 Pub&#x2F;Sub) 是最常被討論也最容易被混淆的兩種。本文將深入探討這兩種模式的核心差異、應用場景及各自的優缺點，幫助在系統設計時做出更明智的選擇。   關於術語的重要說明 在深入探討之前，">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-07-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-07-21T16:13:31.441Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Message Queue">
+<meta property="article:tag" content="Pub&#x2F;Sub">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/07/21/%E8%A7%A3%E6%9E%90%20Message%20Queues%20%E8%88%87%20PubSub%20%E7%9A%84%E5%B7%AE%E5%88%A5/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/07/21/%E8%A7%A3%E6%9E%90%20Message%20Queues%20%E8%88%87%20PubSub%20%E7%9A%84%E5%B7%AE%E5%88%A5/","path":"2025/07/21/解析 Message Queues 與 PubSub 的差別/","title":"解析 Message Queues 與 Pub/Sub 的差別"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>解析 Message Queues 與 Pub/Sub 的差別 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">36</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">26</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(6)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(13)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%9C%E6%96%BC%E8%A1%93%E8%AA%9E%E7%9A%84%E9%87%8D%E8%A6%81%E8%AA%AA%E6%98%8E"><span class="nav-number">1.</span> <span class="nav-text"> 關於術語的重要說明</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-message-queue"><span class="nav-number">2.</span> <span class="nav-text"> 什麼是 Message Queue？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7"><span class="nav-number">2.1.</span> <span class="nav-text"> 核心特性：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%90%86%E6%83%B3%E6%87%89%E7%94%A8%E5%A0%B4%E6%99%AF"><span class="nav-number">2.2.</span> <span class="nav-text"> 理想應用場景：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B%E5%9C%96%E7%AB%B6%E7%88%AD%E6%B6%88%E8%B2%BB%E8%80%85%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.3.</span> <span class="nav-text"> 流程圖：競爭消費者模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-publish-subscribe-pubsub"><span class="nav-number">3.</span> <span class="nav-text"> 什麼是 Publish-Subscribe (Pub&#x2F;Sub)？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7-2"><span class="nav-number">3.1.</span> <span class="nav-text"> 核心特性：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%90%86%E6%83%B3%E6%87%89%E7%94%A8%E5%A0%B4%E6%99%AF-2"><span class="nav-number">3.2.</span> <span class="nav-text"> 理想應用場景：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B%E5%9C%96"><span class="nav-number">3.3.</span> <span class="nav-text"> 流程圖</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%B7%AE%E7%95%B0%E7%B8%BD%E7%B5%90"><span class="nav-number">4.</span> <span class="nav-text"> 核心差異總結</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%81%B8%E6%93%87"><span class="nav-number">5.</span> <span class="nav-text"> 如何選擇？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">6.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/21/%E8%A7%A3%E6%9E%90%20Message%20Queues%20%E8%88%87%20PubSub%20%E7%9A%84%E5%B7%AE%E5%88%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="解析 Message Queues 與 Pub&#x2F;Sub 的差別 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          解析 Message Queues 與 Pub/Sub 的差別
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2025-07-21 00:00:00" itemprop="dateCreated datePublished" datetime="2025-07-21T00:00:00+08:00">2025-07-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-07-22 00:13:31" itemprop="dateModified" datetime="2025-07-22T00:13:31+08:00">2025-07-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在現代分散式系統架構中，非同步訊息傳遞是實現服務解耦、提升系統擴展性與可靠性的關鍵。而在眾多訊息傳遞模式中，Message Queues (消息隊列) 與 Publish-Subscribe (發布/訂閱，簡稱 Pub/Sub) 是最常被討論也最容易被混淆的兩種。本文將深入探討這兩種模式的核心差異、應用場景及各自的優缺點，幫助在系統設計時做出更明智的選擇。</p>
+<hr />
+<h1 id="關於術語的重要說明"><a class="markdownIt-Anchor" href="#關於術語的重要說明"></a> 關於術語的重要說明</h1>
+<p>在深入探討之前，必須澄清一個常見的混淆點。術語「Message Queue」常被用於兩種不同的語境：</p>
+<ol>
+<li><strong>作為一種設計模式 (Pattern)</strong>：特指本文將要介紹的「點對點」一對一訊息傳遞模型。</li>
+<li><strong>作為一類技術產品 (Technology)</strong>：泛指像 RabbitMQ、Apache Kafka、AWS SQS 等訊息中介軟體 (Message-Oriented Middleware)。</li>
+</ol>
+<p>值得注意的是，大多數我們稱為「Message Queue」的<strong>技術產品</strong>，其功能非常強大，通常<strong>同時支援</strong>「點對點的佇列模式」和「一對多的發布/訂閱模式」。本文為了清晰地比較這兩種核心設計理念，將嚴格按照<strong>設計模式</strong>進行劃分，分別探討「Message Queue (點對點模式)」與「Pub/Sub (發布/訂閱模式)」的差異。</p>
+<hr />
+<h1 id="什麼是-message-queue"><a class="markdownIt-Anchor" href="#什麼是-message-queue"></a> 什麼是 Message Queue？</h1>
+<p>Message Queue (MQ) 遵循的是「點對點」(point-to-point) 的通訊模型、消費者競爭 (Competing Consumers) 模式。在這個模型中，訊息的生產者 (Producer) 將訊息發送到一個佇列 (Queue)，而消費者 (Consumer) 則從這個佇列中取出並處理訊息。</p>
+<h2 id="核心特性"><a class="markdownIt-Anchor" href="#核心特性"></a> 核心特性：</h2>
+<ul>
+<li><strong>一對一消費與負載平衡</strong>：一則訊息只會被<strong>一個</strong>消費者成功處理，這是此模式的黃金法則。即使有多個消費者（通常是同一個服務的多個實例）同時監聽同一個佇列，佇列中的一則訊息也只會被<strong>其中一個</strong>消費者取出處理。這種機制被稱為「競爭消費者」(Competing Consumers)，是實現任務分發與負載平衡的關鍵。</li>
+<li><strong>訊息保留與確認</strong>：訊息在被消費者成功處理並發出確認 (Acknowledgement) 之前，會一直保留在佇列中，確保訊息不會遺失。如果消費者處理失敗，訊息可以被放回佇列由其他消費者處理。</li>
+<li><strong>任務導向</strong>：此模式的<strong>意圖</strong>是<strong>委派一個任務</strong>。生產者不關心是哪個消費者執行，只關心這個任務最終會被完成。</li>
+<li><strong>順序性</strong>：在許多使用案例中，Message Queue 能確保訊息的先進先出 (FIFO)，不過實際的傳遞順序有時會依據實作與設定而異。</li>
+</ul>
+<h2 id="理想應用場景"><a class="markdownIt-Anchor" href="#理想應用場景"></a> 理想應用場景：</h2>
+<ul>
+<li><strong>任務分發與負載平衡</strong>：當需要將耗時的任務分配給多個背景工作者 (Worker) 處理時，Message Queue 是絕佳選擇。</li>
+<li><strong>非同步處理</strong>：將非必要的任務（如寄送電子郵件、產生報表）丟入佇列，讓主要應用程式能立即回應使用者請求，提升反應速度。</li>
+<li><strong>流量削峰</strong>：在高併發場景下，利用佇列作為緩衝區，可以避免瞬間流量衝垮後端服務。</li>
+</ul>
+<h2 id="流程圖競爭消費者模型"><a class="markdownIt-Anchor" href="#流程圖競爭消費者模型"></a> 流程圖：競爭消費者模型</h2>
+<p>這個流程圖展示了典型的「競爭消費者」場景。多個背景工作者實例監聽同一個任務佇列，並從中競爭任務來執行，實現了工作負載的均衡。</p>
+<pre class="highlight"><code class="mermaid">sequenceDiagram
+    participant Producer as 生產者 (Producer)
+    participant Queue as 訊息佇列 (Queue)
+    participant ConsumerA as 消費者 A (Consumer A)
+    participant ConsumerB as 消費者 B (Consumer B)
+
+    autonumber
+
+    Producer-&gt;&gt;+Queue: 發送訊息 M1
+    note right of Producer: 訊息 M1 進入佇列等待處理
+    Producer-&gt;&gt;+Queue: 發送訊息 M2
+    note right of Producer: 訊息 M2 進入佇列等待處理
+
+    alt 訊息處理
+        Queue--&gt;&gt;-ConsumerA: 分派訊息 M1
+        note left of ConsumerA: 消費者 A 取得 M1 並開始處理
+
+        Queue--&gt;&gt;-ConsumerB: 分派訊息 M2
+        note right of ConsumerB: 消費者 B 取得 M2 並開始處理
+    end
+
+    ConsumerA-&gt;&gt;Queue: 確認 (Ack) M1 處理完畢
+    ConsumerB-&gt;&gt;Queue: 確認 (Ack) M2 處理完畢
+</code></pre>
+<p>這個模式的核心是 工作分發 和 負載均衡。</p>
+<ol>
+<li><strong>發送訊息</strong>：生產者產生了兩則訊息 (M1, M2) 並把它們發送到同一個訊息佇列中。</li>
+<li><strong>訊息分派</strong>：佇列將訊息 M1 分派給了消費者 A，同時將訊息 M2 分派給了消費者 B。<strong>關鍵點在於，M1 不會再被 B 處理，M2 也不會再被 A 處理。</strong></li>
+<li><strong>處理與確認</strong>：消費者各自處理完訊息後，會向佇列發送一個「確認 (Acknowledgement)」，通知佇列該訊息已被成功處理，可以從佇列中永久移除了。</li>
+</ol>
+<h1 id="什麼是-publish-subscribe-pubsub"><a class="markdownIt-Anchor" href="#什麼是-publish-subscribe-pubsub"></a> 什麼是 Publish-Subscribe (Pub/Sub)？</h1>
+<p>當需求從「把工作分給下一個有空的人」變成「把消息告訴所有關心這件事的人」時，就跨入了 Pub/Sub 的領域。</p>
+<p>Publish-Subscribe (Pub/Sub) 是一種「一對多」的廣播模型。在此模型中，發布者 (Publisher) 將訊息（或事件）發布到一個特定的「主題」(Topic)，所有訂閱了該主題的訂閱者 (Subscriber) 都會收到這則訊息的副本並各自處理。</p>
+<h2 id="核心特性-2"><a class="markdownIt-Anchor" href="#核心特性-2"></a> 核心特性：</h2>
+<ul>
+<li><strong>一對多通訊</strong>：一則訊息可以被多個訂閱者接收並各自處理。 發布者與訂閱者之間是解耦的，發布者不需要知道有誰訂閱了訊息，甚至不知道是否有任何訂閱者存在。</li>
+<li><strong>事件導向</strong>：此模式的<strong>意圖</strong>是<strong>廣播一個事件</strong>。發布者只是在宣告「某件事發生了」（例如：使用者下單了），而不關心後續誰會對這個事件做出反應，也不關心反應是什麼。</li>
+<li><strong>主題式分類</strong>：訊息是依據「主題」進行分類的，訂閱者可以選擇性地訂閱感興趣的主題。</li>
+<li><strong>即時性</strong>：Pub/Sub 通常被用於即時事件的通知與傳播，採取的是「即發即忘」(fire-and-forget) 的模式，可靠性保障通常較 Message Queue 低。</li>
+</ul>
+<h2 id="理想應用場景-2"><a class="markdownIt-Anchor" href="#理想應用場景-2"></a> 理想應用場景：</h2>
+<ul>
+<li><strong>事件驅動架構 (Event-Driven Architecture)</strong>：當系統中某個狀態發生改變時（例如：使用者下單），透過 Pub/Sub 將此「事件」通知給所有相關的<strong>不同微服務</strong>（如庫存服務、通知服務、數據分析服務）。</li>
+<li><strong>即時通知</strong>：應用於推播通知、即時聊天、股價更新等需要將單一事件廣播給大量使用者的場景。</li>
+<li><strong>數據扇出 (Data Fan-out)</strong>：將一份數據（如 IoT 感測器數據）同時發送給多個後端系統進行儲存、分析和監控。</li>
+</ul>
+<h2 id="流程圖"><a class="markdownIt-Anchor" href="#流程圖"></a> 流程圖</h2>
+<p>這個流程圖展示了「一對多」的廣播模式。不同的服務訂閱同一個主題，當事件發生時，它們都會收到通知並執行各自的業務邏輯。</p>
+<pre class="highlight"><code class="mermaid">sequenceDiagram
+    participant Publisher as 發布者
+    participant Topic as 主題 (Topic/Exchange)
+    participant QueueA as 佇列 A (給庫存服務)
+    participant QueueB as 佇列 B (給通知服務)
+    participant StockService as 庫存服務
+    participant NotificationService as 通知服務
+
+    autonumber
+
+    Publisher-&gt;&gt;Topic: 發布「使用者下單」事件
+    note over Topic, QueueB: Topic 將事件扇出 (Fan-out) 給所有訂閱者
+
+    par
+        Topic--&gt;&gt;QueueA: 複製事件到佇列 A
+    and
+        Topic--&gt;&gt;QueueB: 複製事件到佇列 B
+    end
+
+    QueueA--&gt;&gt;StockService: 傳遞事件
+    StockService-&gt;&gt;StockService: 處理：扣減庫存
+
+    QueueB--&gt;&gt;NotificationService: 傳遞事件
+    NotificationService-&gt;&gt;NotificationService: 處理：寄送 E-mail
+
+</code></pre>
+<ol>
+<li><strong>發布事件</strong>：發布者向主題發布一個 <code>E1</code> 事件。</li>
+<li><strong>並行廣播 (par…end)</strong>：<code>par</code> 區塊表示動作是<strong>同時發生</strong>的。主題將事件並行地廣播給所有訂閱者。</li>
+<li><strong>獨立處理</strong>：每個訂閱者在收到事件後，開始執行各自的內部邏輯，彼此之間互不干擾。</li>
+</ol>
+<h1 id="核心差異總結"><a class="markdownIt-Anchor" href="#核心差異總結"></a> 核心差異總結</h1>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Message Queue</th>
+<th>Publish-Subscribe (Pub/Sub)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>核心意圖</strong></td>
+<td><strong>任務導向</strong> (Task-Oriented)</td>
+<td><strong>事件導向</strong> (Event-Oriented)</td>
+</tr>
+<tr>
+<td><strong>通訊模型</strong></td>
+<td>點對點 (一對一)</td>
+<td>發布/訂閱 (一對多)</td>
+</tr>
+<tr>
+<td><strong>訊息消耗</strong></td>
+<td>一則訊息只被一個消費者處理。</td>
+<td>一則訊息會被所有訂閱者處理。</td>
+</tr>
+<tr>
+<td><strong>耦合度</strong></td>
+<td>生產者與單一消費者解耦。</td>
+<td>發布者與多個訂閱者完全解耦。</td>
+</tr>
+<tr>
+<td><strong>可靠性</strong></td>
+<td>可靠性高，通常有訊息確認機制。</td>
+<td>可靠性相對較低，可能因訂閱者離線而遺失訊息。</td>
+</tr>
+<tr>
+<td><strong>主要用途</strong></td>
+<td>任務分發、負載平衡、非同步處理。</td>
+<td>事件廣播、即時通知、數據串流。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>備註</strong>: 雖然 Pub/Sub 可以配置為「即發即忘」(fire-and-forget) 模式，但現代主流系統（如 Kafka, RabbitMQ）通常會為訂閱者維護獨立的佇列或日誌偏移量 (offset)，確保即使訂閱者短暫離線，也能在重新上線後接收到錯過的訊息，實現高可靠性。</p>
+<h1 id="如何選擇"><a class="markdownIt-Anchor" href="#如何選擇"></a> 如何選擇？</h1>
+<p>選擇 Message Queue 還是 Pub/Sub，完全取決於具體需求：</p>
+<ul>
+<li>如果需要確保<strong>每一項任務都只被執行一次</strong>，並且希望在多個工作者之間<strong>分攤處理壓力</strong>，那麼 <strong>Message Queue</strong> 是首選。</li>
+<li>如果需要將一個<strong>事件通知給多個不同的處理單元</strong>，並且強調<strong>服務間的完全解耦</strong>與即時性，那麼 <strong>Pub/Sub</strong> 會是更合適的模式。</li>
+</ul>
+<p>在某些複雜的系統中，甚至會將兩者結合使用。例如，一個服務透過 Pub/Sub 接收到事件通知後，再將具體的處理任務放入 Message Queue 中，交由後端工作者執行。</p>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>Message Queues 和 Pub/Sub 都是構成現代化分散式系統的重要基石。理解它們之間最根本的差異——「一對一」的<strong>任務導向</strong>與「一對多」的<strong>事件廣播</strong>——是設計出高效、可擴展且穩健系統的第一步。希望本文釐清了術語上的混淆，並能幫助你在未來的技術選型中，更有信心地從設計意圖出發，做出正確的決策。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Message-Queue/" rel="tag"># Message Queue</a>
+              <a href="/my-blog/tags/Pub-Sub/" rel="tag"># Pub/Sub</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/07/18/%E8%A7%A3%E5%AF%86%E9%9D%9E%E5%90%8C%E6%AD%A5%E9%AD%94%E6%B3%95%20Async%20Await%20%E7%A9%B6%E7%AB%9F%E6%8A%8A%E5%B7%A5%E4%BD%9C%E4%BA%A4%E7%B5%A6%E4%BA%86%E8%AA%B0/" rel="prev" title="解密非同步魔法：Async&#x2F;Await 究竟把工作交給了誰？">
+                  <i class="fa fa-angle-left"></i> 解密非同步魔法：Async/Await 究竟把工作交給了誰？
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

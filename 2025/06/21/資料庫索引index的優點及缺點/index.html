@@ -17,14 +17,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":false,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="為什麼需要索引？在關聯式資料庫中，若沒有索引，查詢時必須逐列（row‑by‑row）掃描整張表（全表掃描 &#x2F; Full Table Scan）。建立索引就像在書本的目錄貼上標籤，讓資料庫能快速定位資料，降低 I&#x2F;O 成本，提升查詢效率。  索引的主要類型   類型 主要結構 適用情境    B‑Tree (預設) 平衡搜尋樹 大多數範圍查詢、排序   Hash Index 雜湊">
+    <meta name="description" content="為什麼需要索引？ 在關聯式資料庫中，若沒有索引，查詢時必須逐列（row‑by‑row）掃描整張表（全表掃描 &#x2F; Full Table Scan）。 建立索引就像在書本的目錄貼上標籤，讓資料庫能快速定位資料，降低 I&#x2F;O 成本，提升查詢效率。   索引的主要類型    類型 主要結構 適用情境     B‑Tree (預設) 平衡搜尋樹 大多數範圍查詢、排序   Hash Index 雜湊表 精準">
 <meta property="og:type" content="article">
 <meta property="og:title" content="資料庫索引 (index) 的優點及缺點">
 <meta property="og:url" content="https://nivek-yang.github.io/2025/06/21/%E8%B3%87%E6%96%99%E5%BA%AB%E7%B4%A2%E5%BC%95index%E7%9A%84%E5%84%AA%E9%BB%9E%E5%8F%8A%E7%BC%BA%E9%BB%9E/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="為什麼需要索引？在關聯式資料庫中，若沒有索引，查詢時必須逐列（row‑by‑row）掃描整張表（全表掃描 &#x2F; Full Table Scan）。建立索引就像在書本的目錄貼上標籤，讓資料庫能快速定位資料，降低 I&#x2F;O 成本，提升查詢效率。  索引的主要類型   類型 主要結構 適用情境    B‑Tree (預設) 平衡搜尋樹 大多數範圍查詢、排序   Hash Index 雜湊">
+<meta property="og:description" content="為什麼需要索引？ 在關聯式資料庫中，若沒有索引，查詢時必須逐列（row‑by‑row）掃描整張表（全表掃描 &#x2F; Full Table Scan）。 建立索引就像在書本的目錄貼上標籤，讓資料庫能快速定位資料，降低 I&#x2F;O 成本，提升查詢效率。   索引的主要類型    類型 主要結構 適用情境     B‑Tree (預設) 平衡搜尋樹 大多數範圍查詢、排序   Hash Index 雜湊表 精準">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2025-06-20T16:00:00.000Z">
 <meta property="article:modified_time" content="2025-06-21T15:24:00.030Z">
@@ -321,7 +321,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9C%80%E8%A6%81%E7%B4%A2%E5%BC%95%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">為什麼需要索引？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E4%B8%BB%E8%A6%81%E9%A1%9E%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">索引的主要類型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E5%84%AA%E9%BB%9E"><span class="nav-number">3.</span> <span class="nav-text">索引的優點</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E7%BC%BA%E9%BB%9E"><span class="nav-number">4.</span> <span class="nav-text">索引的缺點</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E7%B4%A2%E5%BC%95%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AF%A6%E5%8B%99"><span class="nav-number">5.</span> <span class="nav-text">建立索引的最佳實務</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AF%84%E4%BE%8B%EF%BC%9APostgreSQL-%E5%BB%BA%E7%AB%8B%E8%A4%87%E5%90%88%E7%B4%A2%E5%BC%95"><span class="nav-number">6.</span> <span class="nav-text">範例：PostgreSQL 建立複合索引</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%A2%E8%A9%A6%E5%9B%9E%E7%AD%94"><span class="nav-number">7.</span> <span class="nav-text">面試回答</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">8.</span> <span class="nav-text">結論</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9C%80%E8%A6%81%E7%B4%A2%E5%BC%95"><span class="nav-number">1.</span> <span class="nav-text"> 為什麼需要索引？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E4%B8%BB%E8%A6%81%E9%A1%9E%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text"> 索引的主要類型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E5%84%AA%E9%BB%9E"><span class="nav-number">3.</span> <span class="nav-text"> 索引的優點</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E7%BC%BA%E9%BB%9E"><span class="nav-number">4.</span> <span class="nav-text"> 索引的缺點</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E7%B4%A2%E5%BC%95%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AF%A6%E5%8B%99"><span class="nav-number">5.</span> <span class="nav-text"> 建立索引的最佳實務</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AF%84%E4%BE%8Bpostgresql-%E5%BB%BA%E7%AB%8B%E8%A4%87%E5%90%88%E7%B4%A2%E5%BC%95"><span class="nav-number">6.</span> <span class="nav-text"> 範例：PostgreSQL 建立複合索引</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%A2%E8%A9%A6%E5%9B%9E%E7%AD%94"><span class="nav-number">7.</span> <span class="nav-text"> 面試回答</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">8.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -420,9 +420,12 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="為什麼需要索引？"><a href="#為什麼需要索引？" class="headerlink" title="為什麼需要索引？"></a>為什麼需要索引？</h1><p>在關聯式資料庫中，若沒有索引，查詢時必須逐列（row‑by‑row）掃描整張表（<strong>全表掃描 &#x2F; Full Table Scan</strong>）。<br>建立索引就像在書本的目錄貼上標籤，讓資料庫能快速定位資料，降低 I&#x2F;O 成本，提升查詢效率。</p>
-<hr>
-<h1 id="索引的主要類型"><a href="#索引的主要類型" class="headerlink" title="索引的主要類型"></a>索引的主要類型</h1><table>
+    <div class="post-body" itemprop="articleBody"><h1 id="為什麼需要索引"><a class="markdownIt-Anchor" href="#為什麼需要索引"></a> 為什麼需要索引？</h1>
+<p>在關聯式資料庫中，若沒有索引，查詢時必須逐列（row‑by‑row）掃描整張表（<strong>全表掃描 / Full Table Scan</strong>）。<br />
+建立索引就像在書本的目錄貼上標籤，讓資料庫能快速定位資料，降低 I/O 成本，提升查詢效率。</p>
+<hr />
+<h1 id="索引的主要類型"><a class="markdownIt-Anchor" href="#索引的主要類型"></a> 索引的主要類型</h1>
+<table>
 <thead>
 <tr>
 <th>類型</th>
@@ -430,7 +433,8 @@
 <th>適用情境</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>B‑Tree (預設)</td>
 <td>平衡搜尋樹</td>
 <td>大多數範圍查詢、排序</td>
@@ -441,7 +445,7 @@
 <td>精準比對 (<code>=</code>)</td>
 </tr>
 <tr>
-<td>GiST &#x2F; GIN</td>
+<td>GiST / GIN</td>
 <td>特殊索引</td>
 <td>文字搜尋、GIS、JSONB</td>
 </tr>
@@ -450,153 +454,183 @@
 <td>位元圖</td>
 <td>大型資料倉儲、低寫入量，高查詢壓力</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <blockquote>
 <p><em>不同資料庫支援的索引型別略有差異，請以官方文件為準。</em></p>
 </blockquote>
-<hr>
-<h1 id="索引的優點"><a href="#索引的優點" class="headerlink" title="索引的優點"></a>索引的優點</h1><ol>
-<li><p><strong>加速查詢</strong>  </p>
+<hr />
+<h1 id="索引的優點"><a class="markdownIt-Anchor" href="#索引的優點"></a> 索引的優點</h1>
+<ol>
+<li>
+<p><strong>加速查詢</strong></p>
 <ul>
-<li><em>O(log n)</em> 級別搜尋（B‑Tree）代替 <em>O(n)</em> 全表掃描  </li>
+<li><em>O(log n)</em> 級別搜尋（B‑Tree）代替 <em>O(n)</em> 全表掃描</li>
 <li>對高選擇性欄位（distinct 值多）效果最佳</li>
 </ul>
 </li>
-<li><p><strong>支援唯一性約束（UNIQUE）</strong>  </p>
+<li>
+<p><strong>支援唯一性約束（UNIQUE）</strong></p>
 <ul>
 <li>防止重複資料，同時利用索引查找衝突</li>
 </ul>
 </li>
-<li><p><strong>提升排序與分組效率</strong>  </p>
+<li>
+<p><strong>提升排序與分組效率</strong></p>
 <ul>
 <li><code>ORDER BY / GROUP BY</code> 若使用索引涵蓋欄位，可避免額外排序</li>
 </ul>
 </li>
-<li><p><strong>覆蓋索引（Covering Index）</strong>  </p>
+<li>
+<p><strong>覆蓋索引（Covering Index）</strong></p>
 <ul>
 <li>查詢所需欄位全在索引中，省去回表（回到資料列）的成本</li>
 </ul>
 </li>
-<li><p><strong>優化關聯 &#x2F; JOIN</strong>  </p>
+<li>
+<p><strong>優化關聯 / JOIN</strong></p>
 <ul>
 <li>在外鍵、關聯欄位建索引，可顯著降低複雜查詢時間</li>
 </ul>
 </li>
 </ol>
-<hr>
-<h1 id="索引的缺點"><a href="#索引的缺點" class="headerlink" title="索引的缺點"></a>索引的缺點</h1><ol>
-<li><p><strong>寫入放大（Write Amplification）</strong>  </p>
+<hr />
+<h1 id="索引的缺點"><a class="markdownIt-Anchor" href="#索引的缺點"></a> 索引的缺點</h1>
+<ol>
+<li>
+<p><strong>寫入放大（Write Amplification）</strong></p>
 <ul>
-<li><code>INSERT / UPDATE / DELETE</code> 必須同步更新索引  </li>
+<li><code>INSERT / UPDATE / DELETE</code> 必須同步更新索引</li>
 <li>高頻寫入場景可能因索引過多而拖慢整體效能</li>
 </ul>
 </li>
-<li><p><strong>額外儲存空間</strong>  </p>
+<li>
+<p><strong>額外儲存空間</strong></p>
 <ul>
-<li>索引需要保存鍵值與指標，通常佔用資料表數倍空間  </li>
+<li>索引需要保存鍵值與指標，通常佔用資料表數倍空間</li>
 <li>SSD 成本高或磁碟資源有限時需要權衡</li>
 </ul>
 </li>
-<li><p><strong>維護成本</strong>  </p>
+<li>
+<p><strong>維護成本</strong></p>
 <ul>
-<li>索引碎片化（Fragmentation）導致效能降低  </li>
+<li>索引碎片化（Fragmentation）導致效能降低</li>
 <li>需定期 <code>REINDEX / OPTIMIZE</code>，佔用系統資源</li>
 </ul>
 </li>
-<li><p><strong>查詢規劃複雜度</strong>  </p>
+<li>
+<p><strong>查詢規劃複雜度</strong></p>
 <ul>
-<li>不適當或重疊的索引會混淆查詢最佳化器  </li>
+<li>不適當或重疊的索引會混淆查詢最佳化器</li>
 <li>可能反而導致 sub‑optimal 計劃</li>
 </ul>
 </li>
-<li><p><strong>鎖定與競爭</strong>  </p>
+<li>
+<p><strong>鎖定與競爭</strong></p>
 <ul>
-<li>部分資料庫在建立／重建索引時需鎖表或消耗大量 CPU  </li>
+<li>部分資料庫在建立／重建索引時需鎖表或消耗大量 CPU</li>
 <li>線上重建（Online Rebuild）仍有資源競爭風險</li>
 </ul>
 </li>
 </ol>
-<hr>
-<h1 id="建立索引的最佳實務"><a href="#建立索引的最佳實務" class="headerlink" title="建立索引的最佳實務"></a>建立索引的最佳實務</h1><ol>
-<li><p><strong>以查詢為核心</strong>  </p>
+<hr />
+<h1 id="建立索引的最佳實務"><a class="markdownIt-Anchor" href="#建立索引的最佳實務"></a> 建立索引的最佳實務</h1>
+<ol>
+<li>
+<p><strong>以查詢為核心</strong></p>
 <ul>
-<li>依實際慢查詢（slow query log）或 <code>EXPLAIN</code> 報告決定索引策略  </li>
+<li>依實際慢查詢（slow query log）或 <code>EXPLAIN</code> 報告決定索引策略</li>
 <li>先優化 schema 與 SQL，再考慮添加索引</li>
 </ul>
 </li>
-<li><p><strong>選擇性 &gt; 0.2</strong>  </p>
+<li>
+<p><strong>選擇性 &gt; 0.2</strong></p>
 <ul>
-<li>選擇性（distinct&#x2F;total rows）太低的欄位通常不該單獨建索引  </li>
+<li>選擇性（distinct/total rows）太低的欄位通常不該單獨建索引</li>
 <li>可考慮複合索引或前綴索引</li>
 </ul>
 </li>
-<li><p><strong>覆蓋索引優先</strong>  </p>
+<li>
+<p><strong>覆蓋索引優先</strong></p>
 <ul>
 <li>常見查詢僅讀取少量欄位時，可設計覆蓋索引取得最大效益</li>
 </ul>
 </li>
-<li><p><strong>觀察寫入壓力</strong>  </p>
+<li>
+<p><strong>觀察寫入壓力</strong></p>
 <ul>
-<li>高寫入 OLTP 系統：少量、精準索引  </li>
-<li>查詢為主 OLAP &#x2F; 報表系統：可接受多重索引</li>
+<li>高寫入 OLTP 系統：少量、精準索引</li>
+<li>查詢為主 OLAP / 報表系統：可接受多重索引</li>
 </ul>
 </li>
-<li><p><strong>定期審計與重建</strong>  </p>
+<li>
+<p><strong>定期審計與重建</strong></p>
 <ul>
-<li>使用 <code>pg_stat_user_indexes</code>、<code>mysql.innodb_index_stats</code> 等檢視未使用索引  </li>
+<li>使用 <code>pg_stat_user_indexes</code>、<code>mysql.innodb_index_stats</code> 等檢視未使用索引</li>
 <li>失效或冗餘索引要及時移除</li>
 </ul>
 </li>
 </ol>
-<hr>
-<h1 id="範例：PostgreSQL-建立複合索引"><a href="#範例：PostgreSQL-建立複合索引" class="headerlink" title="範例：PostgreSQL 建立複合索引"></a>範例：PostgreSQL 建立複合索引</h1><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 針對 (status, created_at) 的高頻查詢</span></span><br><span class="line"><span class="keyword">CREATE</span> INDEX idx_orders_status_created</span><br><span class="line"><span class="keyword">ON</span> orders (status, created_at <span class="keyword">DESC</span>);</span><br></pre></td></tr></table></figure>
-
+<hr />
+<h1 id="範例postgresql-建立複合索引"><a class="markdownIt-Anchor" href="#範例postgresql-建立複合索引"></a> 範例：PostgreSQL 建立複合索引</h1>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 針對 (status, created_at) 的高頻查詢</span>
+<span class="hljs-keyword">CREATE</span> INDEX idx_orders_status_created
+<span class="hljs-keyword">ON</span> orders (status, created_at <span class="hljs-keyword">DESC</span>);
+</code></pre>
 <p><strong>注意</strong>：複合索引遵循<strong>最左前綴原則</strong>，若只查 <code>created_at</code> 而不含 <code>status</code>，此索引將無法被使用。</p>
-<hr>
-<h1 id="面試回答"><a href="#面試回答" class="headerlink" title="面試回答"></a>面試回答</h1><p><strong>索引的優點有：</strong></p>
+<hr />
+<h1 id="面試回答"><a class="markdownIt-Anchor" href="#面試回答"></a> 面試回答</h1>
+<p><strong>索引的優點有：</strong></p>
 <ol>
-<li><p><strong>提升查詢效率</strong></p>
+<li>
+<p><strong>提升查詢效率</strong></p>
 <ul>
 <li>對於常用在 <code>WHERE</code>、<code>JOIN</code>、<code>ORDER BY</code> 的欄位建立索引，可以大幅降低查詢時間，從全表掃描降到數筆查找。</li>
 </ul>
 </li>
-<li><p><strong>支援唯一性限制</strong></p>
+<li>
+<p><strong>支援唯一性限制</strong></p>
 <ul>
 <li>像是 <code>UNIQUE</code> 或主鍵索引可以避免重複資料。</li>
 </ul>
 </li>
-<li><p><strong>覆蓋查詢（Covering Index）</strong></p>
+<li>
+<p><strong>覆蓋查詢（Covering Index）</strong></p>
 <ul>
 <li>若查詢所需欄位都包含在索引中，可直接從索引取得資料，省略回表動作。</li>
 </ul>
 </li>
 </ol>
-<hr>
+<hr />
 <p><strong>索引的缺點有：</strong></p>
 <ol>
-<li><p><strong>寫入效能降低</strong></p>
+<li>
+<p><strong>寫入效能降低</strong></p>
 <ul>
 <li>每次 <code>INSERT</code>、<code>UPDATE</code>、<code>DELETE</code> 都要同步更新相關索引，會增加寫入成本。</li>
 </ul>
 </li>
-<li><p><strong>占用額外空間</strong></p>
+<li>
+<p><strong>占用額外空間</strong></p>
 <ul>
 <li>索引是額外資料結構，尤其在高頻查詢、大資料量的系統中，可能需要數倍的空間。</li>
 </ul>
 </li>
-<li><p><strong>維護成本</strong></p>
+<li>
+<p><strong>維護成本</strong></p>
 <ul>
 <li>索引太多可能會混淆查詢最佳化器（optimizer），導致選錯查詢路徑。也可能隨時間產生碎片，影響效能。</li>
 </ul>
 </li>
 </ol>
-<hr>
+<hr />
 <p><strong>補充實務觀點（加分項）：</strong></p>
 <blockquote>
 <p>平常會配合 <code>EXPLAIN</code> 去分析查詢是否有用到索引，避免建立太多沒被使用的索引。也會觀察查詢選擇性（如某欄位是否夠分散），確保索引是有價值的。</p>
 </blockquote>
-<hr>
-<h1 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h1><p>索引是資料庫效能調校的雙刃劍：</p>
+<hr />
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>索引是資料庫效能調校的雙刃劍：</p>
 <ul>
 <li><strong>讀取性能</strong> 與 <strong>寫入開銷</strong> 必須取得平衡</li>
 <li>透過 <strong>持續監控</strong>、<strong>資料分佈分析</strong> 和 <strong>業務場景理解</strong>，才能打造最貼合需求的索引策略</li>

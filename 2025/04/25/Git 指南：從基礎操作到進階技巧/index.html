@@ -17,14 +17,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":false,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="1. Git 的核心概念Git 的版本控制就像拍照一樣，能夠記錄當下的專案狀態（snapshot），並允許我們回到某個時間點的狀態。  版本控制：每次提交（commit）都像拍照，記錄當下的檔案狀態。 非破壞性操作：Git 的操作不會刪除歷史，只會新增記錄，讓我們可以隨時回溯。   2. 安裝 Git在 macOS 上可以使用 Homebrew 來安裝 Git： 12brew install gi">
+    <meta name="description" content="1. Git 的核心概念 Git 的版本控制就像拍照一樣，能夠記錄當下的專案狀態（snapshot），並允許我們回到某個時間點的狀態。  版本控制：每次提交（commit）都像拍照，記錄當下的檔案狀態。 非破壞性操作：Git 的操作不會刪除歷史，只會新增記錄，讓我們可以隨時回溯。    2. 安裝 Git 在 macOS 上可以使用 Homebrew 來安裝 Git： brew install">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Git 指南：從基礎操作到進階技巧">
 <meta property="og:url" content="https://nivek-yang.github.io/2025/04/25/Git%20%E6%8C%87%E5%8D%97%EF%BC%9A%E5%BE%9E%E5%9F%BA%E7%A4%8E%E6%93%8D%E4%BD%9C%E5%88%B0%E9%80%B2%E9%9A%8E%E6%8A%80%E5%B7%A7/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="1. Git 的核心概念Git 的版本控制就像拍照一樣，能夠記錄當下的專案狀態（snapshot），並允許我們回到某個時間點的狀態。  版本控制：每次提交（commit）都像拍照，記錄當下的檔案狀態。 非破壞性操作：Git 的操作不會刪除歷史，只會新增記錄，讓我們可以隨時回溯。   2. 安裝 Git在 macOS 上可以使用 Homebrew 來安裝 Git： 12brew install gi">
+<meta property="og:description" content="1. Git 的核心概念 Git 的版本控制就像拍照一樣，能夠記錄當下的專案狀態（snapshot），並允許我們回到某個時間點的狀態。  版本控制：每次提交（commit）都像拍照，記錄當下的檔案狀態。 非破壞性操作：Git 的操作不會刪除歷史，只會新增記錄，讓我們可以隨時回溯。    2. 安裝 Git 在 macOS 上可以使用 Homebrew 來安裝 Git： brew install">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2025-04-24T16:00:00.000Z">
 <meta property="article:modified_time" content="2025-04-25T18:21:44.199Z">
@@ -321,7 +321,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Git-%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">1. Git 的核心概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%AE%89%E8%A3%9D-Git"><span class="nav-number">2.</span> <span class="nav-text">2. 安裝 Git</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%88%9D%E5%A7%8B%E5%8C%96%E5%B0%88%E6%A1%88"><span class="nav-number">3.</span> <span class="nav-text">3. 初始化專案</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-number">4.</span> <span class="nav-text">4. 基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E7%8B%80%E6%85%8B"><span class="nav-number">4.1.</span> <span class="nav-text">查看狀態</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%BD%E8%B9%A4%E6%AA%94%E6%A1%88"><span class="nav-number">4.2.</span> <span class="nav-text">追蹤檔案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%96%E6%B6%88%E8%BF%BD%E8%B9%A4%E6%AA%94%E6%A1%88"><span class="nav-number">4.3.</span> <span class="nav-text">取消追蹤檔案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E4%BA%A4%E8%AE%8A%E6%9B%B4"><span class="nav-number">4.4.</span> <span class="nav-text">提交變更</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-git-config-%E8%A8%AD%E5%AE%9A%E4%BD%BF%E7%94%A8%E8%80%85%E8%B3%87%E8%A8%8A"><span class="nav-number">5.</span> <span class="nav-text">5. git config 設定使用者資訊</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E6%8F%90%E4%BA%A4%E8%A8%8A%E6%81%AF%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AF%A6%E8%B8%90"><span class="nav-number">6.</span> <span class="nav-text">6. 提交訊息的最佳實踐</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-git-log-%E6%9F%A5%E7%9C%8B%E6%AD%B7%E5%8F%B2%E7%B4%80%E9%8C%84"><span class="nav-number">7.</span> <span class="nav-text">7. git log 查看歷史紀錄</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%8C%87%E4%BB%A4"><span class="nav-number">7.1.</span> <span class="nav-text">使用指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="nav-number">7.2.</span> <span class="nav-text">使用工具</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-git-restore-%E9%82%84%E5%8E%9F%E6%AA%94%E6%A1%88"><span class="nav-number">8.</span> <span class="nav-text">8. git restore 還原檔案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%82%84%E5%8E%9F%E5%96%AE%E4%B8%80%E6%AA%94%E6%A1%88"><span class="nav-number">8.1.</span> <span class="nav-text">還原單一檔案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%82%84%E5%8E%9F%E6%89%80%E6%9C%89%E6%AA%94%E6%A1%88"><span class="nav-number">8.2.</span> <span class="nav-text">還原所有檔案</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9-git-branch-%E5%88%86%E6%94%AF%E6%93%8D%E4%BD%9C"><span class="nav-number">9.</span> <span class="nav-text">9. git branch 分支操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%88%86%E6%94%AF"><span class="nav-number">9.1.</span> <span class="nav-text">查看分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E5%88%86%E6%94%AF"><span class="nav-number">9.2.</span> <span class="nav-text">建立分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%AA%E9%99%A4%E5%88%86%E6%94%AF"><span class="nav-number">9.3.</span> <span class="nav-text">刪除分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%87%E6%8F%9B%E5%88%86%E6%94%AF"><span class="nav-number">9.4.</span> <span class="nav-text">切換分支</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#10-git-merge-%E5%90%88%E4%BD%B5%E5%88%86%E6%94%AF"><span class="nav-number">10.</span> <span class="nav-text">10. git merge 合併分支</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BF%AB%E8%BD%89-fast-forward-%E5%90%88%E4%BD%B5"><span class="nav-number">10.1.</span> <span class="nav-text">快轉 (fast-forward) 合併</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%9E%E5%BF%AB%E8%BD%89%E5%90%88%E4%BD%B5"><span class="nav-number">10.2.</span> <span class="nav-text">非快轉合併</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%84%A1%E6%B3%95%E5%BF%AB%E8%BD%89%E7%9A%84%E5%90%88%E4%BD%B5"><span class="nav-number">10.3.</span> <span class="nav-text">無法快轉的合併</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%88%87%E5%BF%AB%E8%BD%89%E5%90%88%E4%BD%B5%E7%9A%84%E6%AF%94%E8%BC%83"><span class="nav-number">10.4.</span> <span class="nav-text">與快轉合併的比較</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#11-Merge-%E8%A1%9D%E7%AA%81%E6%9C%AA%E8%A7%A3%E6%B1%BA%E7%9A%84%E6%83%85%E6%B3%81"><span class="nav-number">11.</span> <span class="nav-text">11 Merge 衝突未解決的情況</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%B1%BA%E6%96%B9%E6%B3%95"><span class="nav-number">11.1.</span> <span class="nav-text">解決方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#12-git-rebase"><span class="nav-number">12.</span> <span class="nav-text">12. git rebase</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Rebase-%E7%9A%84%E7%94%A8%E9%80%94"><span class="nav-number">12.1.</span> <span class="nav-text">Rebase 的用途</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rebase-%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-number">12.2.</span> <span class="nav-text">Rebase 的基本操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rebase-%E7%9A%84%E5%84%AA%E7%BC%BA%E9%BB%9E"><span class="nav-number">12.3.</span> <span class="nav-text">Rebase 的優缺點</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%84%AA%E9%BB%9E%EF%BC%9A"><span class="nav-number">12.3.1.</span> <span class="nav-text">優點：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%BA%E9%BB%9E%EF%BC%9A"><span class="nav-number">12.3.2.</span> <span class="nav-text">缺點：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rebase-%E8%88%87-Merge-%E7%9A%84%E6%AF%94%E8%BC%83"><span class="nav-number">12.4.</span> <span class="nav-text">Rebase 與 Merge 的比較</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A0%85"><span class="nav-number">12.5.</span> <span class="nav-text">注意事項</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#13-git-reset-%E5%88%AA%E9%99%A4%E8%88%87%E5%BE%A9%E5%8E%9F%E7%AF%80%E9%BB%9E"><span class="nav-number">13.</span> <span class="nav-text">13. git reset 刪除與復原節點</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%AA%E9%99%A4%E6%9C%AB%E7%AB%AF%E7%AF%80%E9%BB%9E"><span class="nav-number">13.1.</span> <span class="nav-text">刪除末端節點</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-git-reflog-%E6%89%BE%E5%9B%9E%E7%AF%80%E9%BB%9E"><span class="nav-number">13.2.</span> <span class="nav-text">使用 git reflog 找回節點</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#14-%E9%80%B2%E9%9A%8E%E6%8A%80%E5%B7%A7"><span class="nav-number">14.</span> <span class="nav-text">14. 進階技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E8%A9%A2%E6%AA%94%E6%A1%88%E6%AD%B7%E5%8F%B2"><span class="nav-number">14.1.</span> <span class="nav-text">查詢檔案歷史</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E5%88%86%E6%94%AF%E5%90%8D%E7%A8%B1"><span class="nav-number">14.2.</span> <span class="nav-text">修改分支名稱</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#15-%E5%BE%A9%E5%8E%9F%E6%93%8D%E4%BD%9C"><span class="nav-number">15.</span> <span class="nav-text">15. 復原操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%A9%E5%8E%9F-Merge"><span class="nav-number">15.1.</span> <span class="nav-text">復原 Merge</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%A9%E5%8E%9F-Rebase"><span class="nav-number">15.2.</span> <span class="nav-text">復原 Rebase</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#16-Reset-%E8%88%87-Reflog-%E7%9A%84%E6%90%AD%E9%85%8D%E4%BD%BF%E7%94%A8"><span class="nav-number">16.</span> <span class="nav-text">16. Reset 與 Reflog 的搭配使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%AF%84%E4%BE%8B"><span class="nav-number">16.1.</span> <span class="nav-text">使用範例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A0%85-1"><span class="nav-number">16.2.</span> <span class="nav-text">注意事項</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#17-%E9%9A%B1%E5%BD%A2%E7%AF%80%E9%BB%9E%E7%9A%84%E7%94%A2%E7%94%9F"><span class="nav-number">17.</span> <span class="nav-text">17. 隱形節點的產生</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%93%E9%9A%B1%E5%BD%A2%E7%AF%80%E9%BB%9E%E9%87%8D%E6%96%B0%E7%8F%BE%E5%BD%A2"><span class="nav-number">17.1.</span> <span class="nav-text">讓隱形節點重新現形</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#18-Git-%E7%9A%84%E9%9D%9E%E7%A0%B4%E5%A3%9E%E6%80%A7%E6%93%8D%E4%BD%9C"><span class="nav-number">18.</span> <span class="nav-text">18. Git 的非破壞性操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Rebase-%E7%9A%84%E8%83%8C%E5%BE%8C%E5%8E%9F%E7%90%86"><span class="nav-number">18.1.</span> <span class="nav-text">Rebase 的背後原理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#19-%E7%B5%90%E8%AA%9E"><span class="nav-number">19.</span> <span class="nav-text">19. 結語</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-git-%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text"> 1. Git 的核心概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%AE%89%E8%A3%9D-git"><span class="nav-number">2.</span> <span class="nav-text"> 2. 安裝 Git</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%88%9D%E5%A7%8B%E5%8C%96%E5%B0%88%E6%A1%88"><span class="nav-number">3.</span> <span class="nav-text"> 3. 初始化專案</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-number">4.</span> <span class="nav-text"> 4. 基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E7%8B%80%E6%85%8B"><span class="nav-number">4.1.</span> <span class="nav-text"> 查看狀態</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%BD%E8%B9%A4%E6%AA%94%E6%A1%88"><span class="nav-number">4.2.</span> <span class="nav-text"> 追蹤檔案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%96%E6%B6%88%E8%BF%BD%E8%B9%A4%E6%AA%94%E6%A1%88"><span class="nav-number">4.3.</span> <span class="nav-text"> 取消追蹤檔案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E4%BA%A4%E8%AE%8A%E6%9B%B4"><span class="nav-number">4.4.</span> <span class="nav-text"> 提交變更</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-git-config-%E8%A8%AD%E5%AE%9A%E4%BD%BF%E7%94%A8%E8%80%85%E8%B3%87%E8%A8%8A"><span class="nav-number">5.</span> <span class="nav-text"> 5. git config 設定使用者資訊</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E6%8F%90%E4%BA%A4%E8%A8%8A%E6%81%AF%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AF%A6%E8%B8%90"><span class="nav-number">6.</span> <span class="nav-text"> 6. 提交訊息的最佳實踐</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-git-log-%E6%9F%A5%E7%9C%8B%E6%AD%B7%E5%8F%B2%E7%B4%80%E9%8C%84"><span class="nav-number">7.</span> <span class="nav-text"> 7. git log 查看歷史紀錄</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%8C%87%E4%BB%A4"><span class="nav-number">7.1.</span> <span class="nav-text"> 使用指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="nav-number">7.2.</span> <span class="nav-text"> 使用工具</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-git-restore-%E9%82%84%E5%8E%9F%E6%AA%94%E6%A1%88"><span class="nav-number">8.</span> <span class="nav-text"> 8. git restore 還原檔案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%82%84%E5%8E%9F%E5%96%AE%E4%B8%80%E6%AA%94%E6%A1%88"><span class="nav-number">8.1.</span> <span class="nav-text"> 還原單一檔案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%82%84%E5%8E%9F%E6%89%80%E6%9C%89%E6%AA%94%E6%A1%88"><span class="nav-number">8.2.</span> <span class="nav-text"> 還原所有檔案</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9-git-branch-%E5%88%86%E6%94%AF%E6%93%8D%E4%BD%9C"><span class="nav-number">9.</span> <span class="nav-text"> 9. git branch 分支操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%88%86%E6%94%AF"><span class="nav-number">9.1.</span> <span class="nav-text"> 查看分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E5%88%86%E6%94%AF"><span class="nav-number">9.2.</span> <span class="nav-text"> 建立分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%AA%E9%99%A4%E5%88%86%E6%94%AF"><span class="nav-number">9.3.</span> <span class="nav-text"> 刪除分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%87%E6%8F%9B%E5%88%86%E6%94%AF"><span class="nav-number">9.4.</span> <span class="nav-text"> 切換分支</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#10-git-merge-%E5%90%88%E4%BD%B5%E5%88%86%E6%94%AF"><span class="nav-number">10.</span> <span class="nav-text"> 10. git merge 合併分支</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BF%AB%E8%BD%89-fast-forward-%E5%90%88%E4%BD%B5"><span class="nav-number">10.1.</span> <span class="nav-text"> 快轉 (fast-forward) 合併</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%9E%E5%BF%AB%E8%BD%89%E5%90%88%E4%BD%B5"><span class="nav-number">10.2.</span> <span class="nav-text"> 非快轉合併</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%84%A1%E6%B3%95%E5%BF%AB%E8%BD%89%E7%9A%84%E5%90%88%E4%BD%B5"><span class="nav-number">10.3.</span> <span class="nav-text"> 無法快轉的合併</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%88%87%E5%BF%AB%E8%BD%89%E5%90%88%E4%BD%B5%E7%9A%84%E6%AF%94%E8%BC%83"><span class="nav-number">10.4.</span> <span class="nav-text"> 與快轉合併的比較</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#11-merge-%E8%A1%9D%E7%AA%81%E6%9C%AA%E8%A7%A3%E6%B1%BA%E7%9A%84%E6%83%85%E6%B3%81"><span class="nav-number">11.</span> <span class="nav-text"> 11 Merge 衝突未解決的情況</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%B1%BA%E6%96%B9%E6%B3%95"><span class="nav-number">11.1.</span> <span class="nav-text"> 解決方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#12-git-rebase"><span class="nav-number">12.</span> <span class="nav-text"> 12. git rebase</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#rebase-%E7%9A%84%E7%94%A8%E9%80%94"><span class="nav-number">12.1.</span> <span class="nav-text"> Rebase 的用途</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rebase-%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-number">12.2.</span> <span class="nav-text"> Rebase 的基本操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rebase-%E7%9A%84%E5%84%AA%E7%BC%BA%E9%BB%9E"><span class="nav-number">12.3.</span> <span class="nav-text"> Rebase 的優缺點</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%84%AA%E9%BB%9E"><span class="nav-number">12.3.1.</span> <span class="nav-text"> 優點：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%BA%E9%BB%9E"><span class="nav-number">12.3.2.</span> <span class="nav-text"> 缺點：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rebase-%E8%88%87-merge-%E7%9A%84%E6%AF%94%E8%BC%83"><span class="nav-number">12.4.</span> <span class="nav-text"> Rebase 與 Merge 的比較</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A0%85"><span class="nav-number">12.5.</span> <span class="nav-text"> 注意事項</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#13-git-reset-%E5%88%AA%E9%99%A4%E8%88%87%E5%BE%A9%E5%8E%9F%E7%AF%80%E9%BB%9E"><span class="nav-number">13.</span> <span class="nav-text"> 13. git reset 刪除與復原節點</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%AA%E9%99%A4%E6%9C%AB%E7%AB%AF%E7%AF%80%E9%BB%9E"><span class="nav-number">13.1.</span> <span class="nav-text"> 刪除末端節點</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-git-reflog-%E6%89%BE%E5%9B%9E%E7%AF%80%E9%BB%9E"><span class="nav-number">13.2.</span> <span class="nav-text"> 使用 git reflog 找回節點</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#14-%E9%80%B2%E9%9A%8E%E6%8A%80%E5%B7%A7"><span class="nav-number">14.</span> <span class="nav-text"> 14. 進階技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E8%A9%A2%E6%AA%94%E6%A1%88%E6%AD%B7%E5%8F%B2"><span class="nav-number">14.1.</span> <span class="nav-text"> 查詢檔案歷史</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E5%88%86%E6%94%AF%E5%90%8D%E7%A8%B1"><span class="nav-number">14.2.</span> <span class="nav-text"> 修改分支名稱</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#15-%E5%BE%A9%E5%8E%9F%E6%93%8D%E4%BD%9C"><span class="nav-number">15.</span> <span class="nav-text"> 15. 復原操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%A9%E5%8E%9F-merge"><span class="nav-number">15.1.</span> <span class="nav-text"> 復原 Merge</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%A9%E5%8E%9F-rebase"><span class="nav-number">15.2.</span> <span class="nav-text"> 復原 Rebase</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#16-reset-%E8%88%87-reflog-%E7%9A%84%E6%90%AD%E9%85%8D%E4%BD%BF%E7%94%A8"><span class="nav-number">16.</span> <span class="nav-text"> 16. Reset 與 Reflog 的搭配使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%AF%84%E4%BE%8B"><span class="nav-number">16.1.</span> <span class="nav-text"> 使用範例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A0%85-2"><span class="nav-number">16.2.</span> <span class="nav-text"> 注意事項</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#17-%E9%9A%B1%E5%BD%A2%E7%AF%80%E9%BB%9E%E7%9A%84%E7%94%A2%E7%94%9F"><span class="nav-number">17.</span> <span class="nav-text"> 17. 隱形節點的產生</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%93%E9%9A%B1%E5%BD%A2%E7%AF%80%E9%BB%9E%E9%87%8D%E6%96%B0%E7%8F%BE%E5%BD%A2"><span class="nav-number">17.1.</span> <span class="nav-text"> 讓隱形節點重新現形</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#18-git-%E7%9A%84%E9%9D%9E%E7%A0%B4%E5%A3%9E%E6%80%A7%E6%93%8D%E4%BD%9C"><span class="nav-number">18.</span> <span class="nav-text"> 18. Git 的非破壞性操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#rebase-%E7%9A%84%E8%83%8C%E5%BE%8C%E5%8E%9F%E7%90%86"><span class="nav-number">18.1.</span> <span class="nav-text"> Rebase 的背後原理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#19-%E7%B5%90%E8%AA%9E"><span class="nav-number">19.</span> <span class="nav-text"> 19. 結語</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -426,127 +426,180 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="1-Git-的核心概念"><a href="#1-Git-的核心概念" class="headerlink" title="1. Git 的核心概念"></a>1. Git 的核心概念</h1><p>Git 的版本控制就像拍照一樣，能夠記錄當下的專案狀態（snapshot），並允許我們回到某個時間點的狀態。</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="1-git-的核心概念"><a class="markdownIt-Anchor" href="#1-git-的核心概念"></a> 1. Git 的核心概念</h1>
+<p>Git 的版本控制就像拍照一樣，能夠記錄當下的專案狀態（snapshot），並允許我們回到某個時間點的狀態。</p>
 <ul>
 <li><strong>版本控制</strong>：每次提交（commit）都像拍照，記錄當下的檔案狀態。</li>
 <li><strong>非破壞性操作</strong>：Git 的操作不會刪除歷史，只會新增記錄，讓我們可以隨時回溯。</li>
 </ul>
-<hr>
-<h1 id="2-安裝-Git"><a href="#2-安裝-Git" class="headerlink" title="2. 安裝 Git"></a>2. 安裝 Git</h1><p>在 macOS 上可以使用 Homebrew 來安裝 Git：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew install git</span><br><span class="line">git --version</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="3-初始化專案"><a href="#3-初始化專案" class="headerlink" title="3. 初始化專案"></a>3. 初始化專案</h1><p>初始化一個 Git 儲存庫，會在專案目錄中建立 .git 資料夾：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="4-基本操作"><a href="#4-基本操作" class="headerlink" title="4. 基本操作"></a>4. 基本操作</h1><h2 id="查看狀態"><a href="#查看狀態" class="headerlink" title="查看狀態"></a>查看狀態</h2><p>檢查目前的檔案狀態：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git status</span><br></pre></td></tr></table></figure>
-
-<h2 id="追蹤檔案"><a href="#追蹤檔案" class="headerlink" title="追蹤檔案"></a>追蹤檔案</h2><p>將檔案加入暫存區：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add index.html</span><br></pre></td></tr></table></figure>
-
-<h2 id="取消追蹤檔案"><a href="#取消追蹤檔案" class="headerlink" title="取消追蹤檔案"></a>取消追蹤檔案</h2><p>將檔案從暫存區移回工作目錄：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git restore --staged index.html</span><br></pre></td></tr></table></figure>
-
-<h2 id="提交變更"><a href="#提交變更" class="headerlink" title="提交變更"></a>提交變更</h2><p>提交檔案並附加說明訊息：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -m <span class="string">&quot;feat: add index.html&quot;</span></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="5-git-config-設定使用者資訊"><a href="#5-git-config-設定使用者資訊" class="headerlink" title="5. git config 設定使用者資訊"></a>5. git config 設定使用者資訊</h1><p>設定全域的使用者名稱與信箱：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">&#x27;YOURNAME&#x27;</span></span><br><span class="line">git config --global user.email <span class="string">&#x27;YOUR_EMAIL&#x27;</span></span><br></pre></td></tr></table></figure>
-
+<hr />
+<h1 id="2-安裝-git"><a class="markdownIt-Anchor" href="#2-安裝-git"></a> 2. 安裝 Git</h1>
+<p>在 macOS 上可以使用 Homebrew 來安裝 Git：</p>
+<pre class="highlight"><code class="sh">brew install git
+git --version
+</code></pre>
+<hr />
+<h1 id="3-初始化專案"><a class="markdownIt-Anchor" href="#3-初始化專案"></a> 3. 初始化專案</h1>
+<p>初始化一個 Git 儲存庫，會在專案目錄中建立 .git 資料夾：</p>
+<pre class="highlight"><code class="sh">git init
+</code></pre>
+<hr />
+<h1 id="4-基本操作"><a class="markdownIt-Anchor" href="#4-基本操作"></a> 4. 基本操作</h1>
+<h2 id="查看狀態"><a class="markdownIt-Anchor" href="#查看狀態"></a> 查看狀態</h2>
+<p>檢查目前的檔案狀態：</p>
+<pre class="highlight"><code class="sh">git status
+</code></pre>
+<h2 id="追蹤檔案"><a class="markdownIt-Anchor" href="#追蹤檔案"></a> 追蹤檔案</h2>
+<p>將檔案加入暫存區：</p>
+<pre class="highlight"><code class="sh">git add index.html
+</code></pre>
+<h2 id="取消追蹤檔案"><a class="markdownIt-Anchor" href="#取消追蹤檔案"></a> 取消追蹤檔案</h2>
+<p>將檔案從暫存區移回工作目錄：</p>
+<pre class="highlight"><code class="sh">git restore --staged index.html
+</code></pre>
+<h2 id="提交變更"><a class="markdownIt-Anchor" href="#提交變更"></a> 提交變更</h2>
+<p>提交檔案並附加說明訊息：</p>
+<pre class="highlight"><code class="sh">git commit -m <span class="hljs-string">&quot;feat: add index.html&quot;</span>
+</code></pre>
+<hr />
+<h1 id="5-git-config-設定使用者資訊"><a class="markdownIt-Anchor" href="#5-git-config-設定使用者資訊"></a> 5. git config 設定使用者資訊</h1>
+<p>設定全域的使用者名稱與信箱：</p>
+<pre class="highlight"><code class="sh">git config --global user.name <span class="hljs-string">&#x27;YOURNAME&#x27;</span>
+git config --global user.email <span class="hljs-string">&#x27;YOUR_EMAIL&#x27;</span>
+</code></pre>
 <p>查看目前的 Git 設定：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --list</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="6-提交訊息的最佳實踐"><a href="#6-提交訊息的最佳實踐" class="headerlink" title="6. 提交訊息的最佳實踐"></a>6. 提交訊息的最佳實踐</h1><ul>
-<li><strong>避免</strong>使用模糊的訊息，例如：<ul>
+<pre class="highlight"><code class="sh">git config --list
+</code></pre>
+<hr />
+<h1 id="6-提交訊息的最佳實踐"><a class="markdownIt-Anchor" href="#6-提交訊息的最佳實踐"></a> 6. 提交訊息的最佳實踐</h1>
+<ul>
+<li><strong>避免</strong>使用模糊的訊息，例如：
+<ul>
 <li><code>&quot;update&quot;</code></li>
 <li><code>&quot;bug fixed&quot;</code></li>
 <li><code>&quot;temp&quot;</code></li>
 </ul>
 </li>
-<li><strong>推薦</strong>使用具體且有意義的訊息，例如：<ul>
+<li><strong>推薦</strong>使用具體且有意義的訊息，例如：
+<ul>
 <li><code>&quot;#23 bug fixed&quot;</code></li>
 <li><code>&quot;member sign in (WIP)&quot;</code></li>
 </ul>
 </li>
 </ul>
 <p>建議遵循 <a target="_blank" rel="noopener" href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a> 標準。</p>
-<hr>
-<h1 id="7-git-log-查看歷史紀錄"><a href="#7-git-log-查看歷史紀錄" class="headerlink" title="7. git log 查看歷史紀錄"></a>7. git log 查看歷史紀錄</h1><h2 id="使用指令"><a href="#使用指令" class="headerlink" title="使用指令"></a>使用指令</h2><p>查看專案的提交歷史：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">log</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="使用工具"><a href="#使用工具" class="headerlink" title="使用工具"></a>使用工具</h2><p>在 VS Code 中可以使用 <code>Git Graph</code> 插件來視覺化歷史紀錄。</p>
-<hr>
-<h1 id="8-git-restore-還原檔案"><a href="#8-git-restore-還原檔案" class="headerlink" title="8. git restore 還原檔案"></a>8. git restore 還原檔案</h1><h2 id="還原單一檔案"><a href="#還原單一檔案" class="headerlink" title="還原單一檔案"></a>還原單一檔案</h2><p>將檔案還原到最新一次的提交狀態：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git restore index.html</span><br></pre></td></tr></table></figure>
-
-<h2 id="還原所有檔案"><a href="#還原所有檔案" class="headerlink" title="還原所有檔案"></a>還原所有檔案</h2><p>將整個目錄還原到最新一次的提交狀態（不推薦）：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git restore .</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="9-git-branch-分支操作"><a href="#9-git-branch-分支操作" class="headerlink" title="9. git branch 分支操作"></a>9. git branch 分支操作</h1><h2 id="查看分支"><a href="#查看分支" class="headerlink" title="查看分支"></a>查看分支</h2><p>列出所有分支：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch</span><br></pre></td></tr></table></figure>
-
-<h2 id="建立分支"><a href="#建立分支" class="headerlink" title="建立分支"></a>建立分支</h2><p>建立新分支：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch <span class="built_in">cat</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="刪除分支"><a href="#刪除分支" class="headerlink" title="刪除分支"></a>刪除分支</h2><p>刪除分支：</p>
+<hr />
+<h1 id="7-git-log-查看歷史紀錄"><a class="markdownIt-Anchor" href="#7-git-log-查看歷史紀錄"></a> 7. git log 查看歷史紀錄</h1>
+<h2 id="使用指令"><a class="markdownIt-Anchor" href="#使用指令"></a> 使用指令</h2>
+<p>查看專案的提交歷史：</p>
+<pre class="highlight"><code class="sh">git <span class="hljs-built_in">log</span>
+</code></pre>
+<h2 id="使用工具"><a class="markdownIt-Anchor" href="#使用工具"></a> 使用工具</h2>
+<p>在 VS Code 中可以使用 <code>Git Graph</code> 插件來視覺化歷史紀錄。</p>
+<hr />
+<h1 id="8-git-restore-還原檔案"><a class="markdownIt-Anchor" href="#8-git-restore-還原檔案"></a> 8. git restore 還原檔案</h1>
+<h2 id="還原單一檔案"><a class="markdownIt-Anchor" href="#還原單一檔案"></a> 還原單一檔案</h2>
+<p>將檔案還原到最新一次的提交狀態：</p>
+<pre class="highlight"><code class="sh">git restore index.html
+</code></pre>
+<h2 id="還原所有檔案"><a class="markdownIt-Anchor" href="#還原所有檔案"></a> 還原所有檔案</h2>
+<p>將整個目錄還原到最新一次的提交狀態（不推薦）：</p>
+<pre class="highlight"><code class="sh">git restore .
+</code></pre>
+<hr />
+<h1 id="9-git-branch-分支操作"><a class="markdownIt-Anchor" href="#9-git-branch-分支操作"></a> 9. git branch 分支操作</h1>
+<h2 id="查看分支"><a class="markdownIt-Anchor" href="#查看分支"></a> 查看分支</h2>
+<p>列出所有分支：</p>
+<pre class="highlight"><code class="sh">git branch
+</code></pre>
+<h2 id="建立分支"><a class="markdownIt-Anchor" href="#建立分支"></a> 建立分支</h2>
+<p>建立新分支：</p>
+<pre class="highlight"><code class="sh">git branch <span class="hljs-built_in">cat</span>
+</code></pre>
+<h2 id="刪除分支"><a class="markdownIt-Anchor" href="#刪除分支"></a> 刪除分支</h2>
+<p>刪除分支：</p>
 <ol>
-<li><code>git branch -d</code><br><code>git branch -d</code> 用於刪除 已經合併到當前分支的分支。如果分支尚未合併，Git 會拒絕刪除，並提示錯誤，避免意外刪除未合併的工作。</li>
+<li><code>git branch -d</code><br />
+<code>git branch -d</code> 用於刪除 已經合併到當前分支的分支。如果分支尚未合併，Git 會拒絕刪除，並提示錯誤，避免意外刪除未合併的工作。</li>
 </ol>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -d &lt;branch_name&gt;</span><br></pre></td></tr></table></figure>
-
+<pre class="highlight"><code class="sh">git branch -d &lt;branch_name&gt;
+</code></pre>
 <ol start="2">
-<li><code>git branch -D</code><br><code>git branch -D</code> 是強制刪除分支的指令，無論分支是否已經合併到當前分支，都會直接刪除。</li>
+<li><code>git branch -D</code><br />
+<code>git branch -D</code> 是強制刪除分支的指令，無論分支是否已經合併到當前分支，都會直接刪除。</li>
 </ol>
 <ul>
 <li>不需要檢查分支是否已合併。</li>
 <li>適用於確定不需要該分支的情況，但需謹慎使用，因為未合併的工作可能會丟失（除非透過 <code>git reflog</code> 找回）。</li>
 </ul>
 <p>找回被刪除的分支：如果誤刪分支，可以使用 <code>git reflog</code> 找回：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git reflog</span><br><span class="line">git branch &lt;branch_name&gt; &lt;commit_id&gt;</span><br></pre></td></tr></table></figure>
-
-<h2 id="切換分支"><a href="#切換分支" class="headerlink" title="切換分支"></a>切換分支</h2><p>切換到指定分支：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git switch <span class="built_in">cat</span></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="10-git-merge-合併分支"><a href="#10-git-merge-合併分支" class="headerlink" title="10. git merge 合併分支"></a>10. git merge 合併分支</h1><h2 id="快轉-fast-forward-合併"><a href="#快轉-fast-forward-合併" class="headerlink" title="快轉 (fast-forward) 合併"></a>快轉 (fast-forward) 合併</h2><p>將目前分支快轉到另一個分支：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git switch master</span><br><span class="line">git merge <span class="built_in">cat</span></span><br></pre></td></tr></table></figure>
-
+<pre class="highlight"><code class="">git reflog
+git branch &lt;branch_name&gt; &lt;commit_id&gt;
+</code></pre>
+<h2 id="切換分支"><a class="markdownIt-Anchor" href="#切換分支"></a> 切換分支</h2>
+<p>切換到指定分支：</p>
+<pre class="highlight"><code class="sh">git switch <span class="hljs-built_in">cat</span>
+</code></pre>
+<hr />
+<h1 id="10-git-merge-合併分支"><a class="markdownIt-Anchor" href="#10-git-merge-合併分支"></a> 10. git merge 合併分支</h1>
+<h2 id="快轉-fast-forward-合併"><a class="markdownIt-Anchor" href="#快轉-fast-forward-合併"></a> 快轉 (fast-forward) 合併</h2>
+<p>將目前分支快轉到另一個分支：</p>
+<pre class="highlight"><code class="sh">git switch master
+git merge <span class="hljs-built_in">cat</span>
+</code></pre>
 <p><strong>合併前的 Git Graph</strong>：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">* C3 (cat)</span><br><span class="line">|</span><br><span class="line">* C2 (master)</span><br><span class="line">|</span><br><span class="line">* C1</span><br></pre></td></tr></table></figure>
-
+<pre class="highlight"><code class="">* C3 (cat)
+|
+* C2 (master)
+|
+* C1
+</code></pre>
 <p><strong>合併後（快轉合併）</strong>：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">* C3 (cat, master)</span><br><span class="line">|</span><br><span class="line">* C2</span><br><span class="line">|</span><br><span class="line">* C1</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="非快轉合併"><a href="#非快轉合併" class="headerlink" title="非快轉合併"></a>非快轉合併</h2><p>如果想保留合併歷程，產生一個新的合併節點（merge commit），可以使用 <code>--no-ff</code> 參數：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge <span class="built_in">cat</span> --no-ff -m <span class="string">&quot;merge&quot;</span></span><br></pre></td></tr></table></figure>
-
+<pre class="highlight"><code class="">* C3 (cat, master)
+|
+* C2
+|
+* C1
+</code></pre>
+<hr />
+<h2 id="非快轉合併"><a class="markdownIt-Anchor" href="#非快轉合併"></a> 非快轉合併</h2>
+<p>如果想保留合併歷程，產生一個新的合併節點（merge commit），可以使用 <code>--no-ff</code> 參數：</p>
+<pre class="highlight"><code class="sh">git merge <span class="hljs-built_in">cat</span> --no-ff -m <span class="hljs-string">&quot;merge&quot;</span>
+</code></pre>
 <p><strong>合併後（非快轉合併）</strong>：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">* M  (master) merge commit</span><br><span class="line">|\</span><br><span class="line">| * C3 (cat)</span><br><span class="line">| |</span><br><span class="line">* | C2</span><br><span class="line">|/</span><br><span class="line">* C1</span><br></pre></td></tr></table></figure>
-
+<pre class="highlight"><code class="">* M  (master) merge commit
+|\
+| * C3 (cat)
+| |
+* | C2
+|/
+* C1
+</code></pre>
 <ul>
-<li><p><code>M</code>（merge commit）：新的合併節點，記錄了 <code>dog</code> 和 <code>cat</code> 分支的合併歷史。</p>
+<li>
+<p><code>M</code>（merge commit）：新的合併節點，記錄了 <code>dog</code> 和 <code>cat</code> 分支的合併歷史。</p>
 </li>
-<li><p>分支歷史：<code>dog</code> 分支的歷史現在包含了 <code>cat</code> 分支的提交。</p>
+<li>
+<p>分支歷史：<code>dog</code> 分支的歷史現在包含了 <code>cat</code> 分支的提交。</p>
 </li>
-<li><p>合併歷程可視化：這種方式保留了分支的合併歷史，能在 Git Graph 中清楚地看到分支的合併過程。</p>
+<li>
+<p>合併歷程可視化：這種方式保留了分支的合併歷史，能在 Git Graph 中清楚地看到分支的合併過程。</p>
 </li>
-<li><p>適用場景：當需要保留分支的合併歷史，或在團隊協作中需要清楚記錄分支的來源時，使用非快轉合併是更好的選擇。</p>
+<li>
+<p>適用場景：當需要保留分支的合併歷史，或在團隊協作中需要清楚記錄分支的來源時，使用非快轉合併是更好的選擇。</p>
 </li>
 </ul>
-<hr>
-<h2 id="無法快轉的合併"><a href="#無法快轉的合併" class="headerlink" title="無法快轉的合併"></a>無法快轉的合併</h2><p>在 Git 中，快轉合併（fast-forward merge）是指當目標分支的歷史是當前分支的直接延續時，Git 只需將當前分支的指標移動到目標分支的最新提交即可完成合併。</p>
+<hr />
+<h2 id="無法快轉的合併"><a class="markdownIt-Anchor" href="#無法快轉的合併"></a> 無法快轉的合併</h2>
+<p>在 Git 中，快轉合併（fast-forward merge）是指當目標分支的歷史是當前分支的直接延續時，Git 只需將當前分支的指標移動到目標分支的最新提交即可完成合併。</p>
 <p>然而，當兩個分支的歷史路徑不同時，無法進行快轉合併，因為這兩個分支的提交歷史已經分叉。此時，Git 需要創建一個新的合併節點來將這兩條歷史路徑合併在一起。</p>
 <p>當兩個分支的歷史路徑不同時，無法進行快轉合併（fast-forward merge），這種情況會產生一個新的合併節點（merge commit）。以下是詳細的解釋與範例。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git switch dog</span><br><span class="line">git merge <span class="built_in">cat</span> -m <span class="string">&quot;Merge branch &#x27;cat&#x27; into dog&quot;</span></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="與快轉合併的比較"><a href="#與快轉合併的比較" class="headerlink" title="與快轉合併的比較"></a>與快轉合併的比較</h2><table>
+<pre class="highlight"><code class="sh">git switch dog
+git merge <span class="hljs-built_in">cat</span> -m <span class="hljs-string">&quot;Merge branch &#x27;cat&#x27; into dog&quot;</span>
+</code></pre>
+<hr />
+<h2 id="與快轉合併的比較"><a class="markdownIt-Anchor" href="#與快轉合併的比較"></a> 與快轉合併的比較</h2>
+<table>
 <thead>
 <tr>
 <th>特性</th>
@@ -554,7 +607,8 @@
 <th>無法快轉合併（Non-Fast-Forward Merge）</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><strong>提交歷史</strong></td>
 <td>不產生新的合併節點</td>
 <td>產生新的合併節點</td>
@@ -569,37 +623,55 @@
 <td>單人開發或簡單的分支合併</td>
 <td>團隊協作或需要完整歷史記錄</td>
 </tr>
-</tbody></table>
-<hr>
-<h1 id="11-Merge-衝突未解決的情況"><a href="#11-Merge-衝突未解決的情況" class="headerlink" title="11 Merge 衝突未解決的情況"></a>11 Merge 衝突未解決的情況</h1><p>當執行 <code>git merge</code> 時，如果發生衝突但未解決，Git 仍然允許合併完成，但這可能導致合併的內容不正確。</p>
-<h2 id="解決方法"><a href="#解決方法" class="headerlink" title="解決方法"></a>解決方法</h2><ol>
+</tbody>
+</table>
+<hr />
+<h1 id="11-merge-衝突未解決的情況"><a class="markdownIt-Anchor" href="#11-merge-衝突未解決的情況"></a> 11 Merge 衝突未解決的情況</h1>
+<p>當執行 <code>git merge</code> 時，如果發生衝突但未解決，Git 仍然允許合併完成，但這可能導致合併的內容不正確。</p>
+<h2 id="解決方法"><a class="markdownIt-Anchor" href="#解決方法"></a> 解決方法</h2>
+<ol>
 <li><strong>檢查衝突</strong>：Git 會在衝突的檔案中標註衝突的區域，需要手動編輯檔案來解決衝突。</li>
-<li><strong>提交修正後的結果</strong>：<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">&quot;Resolve merge conflict&quot;</span></span><br></pre></td></tr></table></figure></li>
-<li>如果決定放棄合併，可以使用以下指令取消合併過程：<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge --abort</span><br></pre></td></tr></table></figure></li>
+<li><strong>提交修正後的結果</strong>：<pre class="highlight"><code class="sh">git add .
+git commit -m <span class="hljs-string">&quot;Resolve merge conflict&quot;</span>
+</code></pre>
+</li>
+<li>如果決定放棄合併，可以使用以下指令取消合併過程：<pre class="highlight"><code class="sh">git merge --abort
+</code></pre>
+</li>
 </ol>
-<hr>
-<h1 id="12-git-rebase"><a href="#12-git-rebase" class="headerlink" title="12. git rebase"></a>12. git rebase</h1><p>用於重新整理分支的提交歷史。它可以將一個分支的基底（base）換到另一個分支上，從而使提交歷史更加線性化，便於閱讀和管理。</p>
+<hr />
+<h1 id="12-git-rebase"><a class="markdownIt-Anchor" href="#12-git-rebase"></a> 12. git rebase</h1>
+<p>用於重新整理分支的提交歷史。它可以將一個分支的基底（base）換到另一個分支上，從而使提交歷史更加線性化，便於閱讀和管理。</p>
 <p>git rebase 其實算是一個「危險」的指令，因為它會改寫整個commit 的歷史，實務上不會對團隊共同開發的穩定分支（像master, main, dev,…等）下這個指令</p>
-<h2 id="Rebase-的用途"><a href="#Rebase-的用途" class="headerlink" title="Rebase 的用途"></a>Rebase 的用途</h2><ol>
+<h2 id="rebase-的用途"><a class="markdownIt-Anchor" href="#rebase-的用途"></a> Rebase 的用途</h2>
+<ol>
 <li><strong>清理提交歷史</strong>：將分支的提交歷史整理成一條直線，避免分支間的交錯。</li>
 <li><strong>整合功能分支</strong>：在將功能分支合併到主分支之前，使用 Rebase 將功能分支的基底更新到最新的主分支。</li>
 <li><strong>避免多餘的合併節點</strong>：與 <code>merge</code> 不同，Rebase 不會產生新的合併節點（merge commit）。</li>
 </ol>
-<hr>
-<h2 id="Rebase-的基本操作"><a href="#Rebase-的基本操作" class="headerlink" title="Rebase 的基本操作"></a>Rebase 的基本操作</h2><p>以下是將 <code>dog</code> 分支的基底換到 <code>cat</code> 分支的範例：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git switch dog</span><br><span class="line">git rebase <span class="built_in">cat</span></span><br></pre></td></tr></table></figure>
-
+<hr />
+<h2 id="rebase-的基本操作"><a class="markdownIt-Anchor" href="#rebase-的基本操作"></a> Rebase 的基本操作</h2>
+<p>以下是將 <code>dog</code> 分支的基底換到 <code>cat</code> 分支的範例：</p>
+<pre class="highlight"><code class="sh">git switch dog
+git rebase <span class="hljs-built_in">cat</span>
+</code></pre>
 <p>執行上述指令後，<code>dog</code> 分支的提交歷史會被重新整理，並接在 <code>cat</code> 分支的最新提交之後。</p>
-<hr>
-<h2 id="Rebase-的優缺點"><a href="#Rebase-的優缺點" class="headerlink" title="Rebase 的優缺點"></a>Rebase 的優缺點</h2><h3 id="優點："><a href="#優點：" class="headerlink" title="優點："></a>優點：</h3><ol>
+<hr />
+<h2 id="rebase-的優缺點"><a class="markdownIt-Anchor" href="#rebase-的優缺點"></a> Rebase 的優缺點</h2>
+<h3 id="優點"><a class="markdownIt-Anchor" href="#優點"></a> 優點：</h3>
+<ol>
 <li><strong>簡化歷史</strong>：提交歷史更加線性，便於閱讀。</li>
 <li><strong>避免多餘的合併節點</strong>：不像 <code>merge</code>，Rebase 不會產生新的合併節點。</li>
 </ol>
-<h3 id="缺點："><a href="#缺點：" class="headerlink" title="缺點："></a>缺點：</h3><ol>
+<h3 id="缺點"><a class="markdownIt-Anchor" href="#缺點"></a> 缺點：</h3>
+<ol>
 <li><strong>破壞歷史</strong>：Rebase 會改變提交的哈希值（commit hash），因此不適合用於已經共享的分支。</li>
-<li><strong>衝突處理</strong>：如果 Rebase 過程中發生衝突，需要手動解決，並使用以下指令繼續 Rebase：<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git rebase --<span class="built_in">continue</span></span><br></pre></td></tr></table></figure></li>
+<li><strong>衝突處理</strong>：如果 Rebase 過程中發生衝突，需要手動解決，並使用以下指令繼續 Rebase：<pre class="highlight"><code class="sh">git rebase --<span class="hljs-built_in">continue</span>
+</code></pre>
+</li>
 </ol>
-<h2 id="Rebase-與-Merge-的比較"><a href="#Rebase-與-Merge-的比較" class="headerlink" title="Rebase 與 Merge 的比較"></a>Rebase 與 Merge 的比較</h2><table>
+<h2 id="rebase-與-merge-的比較"><a class="markdownIt-Anchor" href="#rebase-與-merge-的比較"></a> Rebase 與 Merge 的比較</h2>
+<table>
 <thead>
 <tr>
 <th>特性</th>
@@ -607,7 +679,8 @@
 <th>Merge</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><strong>提交歷史</strong></td>
 <td>線性化，歷史更簡潔</td>
 <td>保留完整的分支合併歷史</td>
@@ -627,78 +700,113 @@
 <td>每個提交單獨解決衝突</td>
 <td>一次解決所有衝突</td>
 </tr>
-</tbody></table>
-<hr>
-<h2 id="注意事項"><a href="#注意事項" class="headerlink" title="注意事項"></a>注意事項</h2><ol>
-<li><p><strong>避免在共享分支上使用 Rebase</strong>：Rebase 會改變提交的哈希值，可能導致其他開發者的分支出現問題。</p>
+</tbody>
+</table>
+<hr />
+<h2 id="注意事項"><a class="markdownIt-Anchor" href="#注意事項"></a> 注意事項</h2>
+<ol>
+<li>
+<p><strong>避免在共享分支上使用 Rebase</strong>：Rebase 會改變提交的哈希值，可能導致其他開發者的分支出現問題。</p>
 </li>
-<li><p><strong>記住原始狀態</strong>： <code>git rebase</code> 是一個「危險」的指令，rebase 前，git 會自動保存原始狀態到 <code>ORIG_HEAD</code>，如果需要回到 rebase 前的狀態，可以使用以下指令：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reset ORIG_HEAD --hard</span><br></pre></td></tr></table></figure></li>
+<li>
+<p><strong>記住原始狀態</strong>： <code>git rebase</code> 是一個「危險」的指令，rebase 前，git 會自動保存原始狀態到 <code>ORIG_HEAD</code>，如果需要回到 rebase 前的狀態，可以使用以下指令：</p>
+<pre class="highlight"><code class="sh">git reset ORIG_HEAD --hard
+</code></pre>
+</li>
 </ol>
-<hr>
-<h1 id="13-git-reset-刪除與復原節點"><a href="#13-git-reset-刪除與復原節點" class="headerlink" title="13. git reset 刪除與復原節點"></a>13. git reset 刪除與復原節點</h1><h2 id="刪除末端節點"><a href="#刪除末端節點" class="headerlink" title="刪除末端節點"></a>刪除末端節點</h2><p>將目前的分支重置到指定的提交：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reset &lt;ID&gt;</span><br></pre></td></tr></table></figure>
-
+<hr />
+<h1 id="13-git-reset-刪除與復原節點"><a class="markdownIt-Anchor" href="#13-git-reset-刪除與復原節點"></a> 13. git reset 刪除與復原節點</h1>
+<h2 id="刪除末端節點"><a class="markdownIt-Anchor" href="#刪除末端節點"></a> 刪除末端節點</h2>
+<p>將目前的分支重置到指定的提交：</p>
+<pre class="highlight"><code class="sh">git reset &lt;ID&gt;
+</code></pre>
 <p>重置模式：</p>
 <ul>
 <li><code>--mixed</code>（預設）：異動會出現在工作目錄（unstaged）。</li>
 <li><code>--soft</code>：異動會出現在 staging 區（已 add）。</li>
 <li><code>--hard</code>：異動會直接被丟棄。</li>
 </ul>
-<hr>
-<h2 id="使用-git-reflog-找回節點"><a href="#使用-git-reflog-找回節點" class="headerlink" title="使用 git reflog 找回節點"></a>使用 git reflog 找回節點</h2><p><code>git reflog</code> 紀錄 <code>HEAD</code> 的移動</p>
+<hr />
+<h2 id="使用-git-reflog-找回節點"><a class="markdownIt-Anchor" href="#使用-git-reflog-找回節點"></a> 使用 git reflog 找回節點</h2>
+<p><code>git reflog</code> 紀錄 <code>HEAD</code> 的移動</p>
 <p>如果分支被刪除，該節點會變成無名分支（dangling commit）。可以使用 <code>git reflog</code> 找回並重新貼上分支：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch <span class="built_in">cat</span> &lt;commit_id&gt;</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="14-進階技巧"><a href="#14-進階技巧" class="headerlink" title="14. 進階技巧"></a>14. 進階技巧</h1><h2 id="查詢檔案歷史"><a href="#查詢檔案歷史" class="headerlink" title="查詢檔案歷史"></a>查詢檔案歷史</h2><p>查看檔案每行程式的作者與修改時間：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git blame index.html</span><br></pre></td></tr></table></figure>
-
+<pre class="highlight"><code class="sh">git branch <span class="hljs-built_in">cat</span> &lt;commit_id&gt;
+</code></pre>
+<hr />
+<h1 id="14-進階技巧"><a class="markdownIt-Anchor" href="#14-進階技巧"></a> 14. 進階技巧</h1>
+<h2 id="查詢檔案歷史"><a class="markdownIt-Anchor" href="#查詢檔案歷史"></a> 查詢檔案歷史</h2>
+<p>查看檔案每行程式的作者與修改時間：</p>
+<pre class="highlight"><code class="sh">git blame index.html
+</code></pre>
 <p>在 VS Code 中可以使用 <code>GitLens</code> 插件直接查看。</p>
-<h2 id="修改分支名稱"><a href="#修改分支名稱" class="headerlink" title="修改分支名稱"></a>修改分支名稱</h2><p>重新命名分支：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -m new_name</span><br></pre></td></tr></table></figure>
-
-<p>git branch 也可能造成 HEAD 移動:<br>改 branch 名字， HEAD 本身沒有動，但換指向另一個地方，reflog 有紀錄</p>
-<hr>
-<h1 id="15-復原操作"><a href="#15-復原操作" class="headerlink" title="15. 復原操作"></a>15. 復原操作</h1><h2 id="復原-Merge"><a href="#復原-Merge" class="headerlink" title="復原 Merge"></a>復原 Merge</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git merge <span class="built_in">cat</span> -m <span class="string">&quot;Merge&quot;</span></span><br><span class="line">git reset HEAD^ --hard <span class="comment"># 回到 HEAD 的上一步</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="復原-Rebase"><a href="#復原-Rebase" class="headerlink" title="復原 Rebase"></a>復原 Rebase</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git rebase <span class="built_in">cat</span></span><br><span class="line">git reset ORIG_HEAD --hard</span><br></pre></td></tr></table></figure>
-
+<h2 id="修改分支名稱"><a class="markdownIt-Anchor" href="#修改分支名稱"></a> 修改分支名稱</h2>
+<p>重新命名分支：</p>
+<pre class="highlight"><code class="sh">git branch -m new_name
+</code></pre>
+<p>git branch 也可能造成 HEAD 移動:<br />
+改 branch 名字， HEAD 本身沒有動，但換指向另一個地方，reflog 有紀錄</p>
+<hr />
+<h1 id="15-復原操作"><a class="markdownIt-Anchor" href="#15-復原操作"></a> 15. 復原操作</h1>
+<h2 id="復原-merge"><a class="markdownIt-Anchor" href="#復原-merge"></a> 復原 Merge</h2>
+<pre class="highlight"><code class="sh">git merge <span class="hljs-built_in">cat</span> -m <span class="hljs-string">&quot;Merge&quot;</span>
+git reset HEAD^ --hard <span class="hljs-comment"># 回到 HEAD 的上一步</span>
+</code></pre>
+<h2 id="復原-rebase"><a class="markdownIt-Anchor" href="#復原-rebase"></a> 復原 Rebase</h2>
+<pre class="highlight"><code class="sh">git rebase <span class="hljs-built_in">cat</span>
+git reset ORIG_HEAD --hard
+</code></pre>
 <blockquote>
 <p>Rebase 前會自動存一份 ORIG_HEAD，方便回到舊狀態。</p>
 </blockquote>
-<h1 id="16-Reset-與-Reflog-的搭配使用"><a href="#16-Reset-與-Reflog-的搭配使用" class="headerlink" title="16. Reset 與 Reflog 的搭配使用"></a>16. Reset 與 Reflog 的搭配使用</h1><p>在 Git 中，<code>reset</code> 和 <code>reflog</code> 是一組強大的工具，能夠讓我們靈活地操作分支歷史：</p>
+<h1 id="16-reset-與-reflog-的搭配使用"><a class="markdownIt-Anchor" href="#16-reset-與-reflog-的搭配使用"></a> 16. Reset 與 Reflog 的搭配使用</h1>
+<p>在 Git 中，<code>reset</code> 和 <code>reflog</code> 是一組強大的工具，能夠讓我們靈活地操作分支歷史：</p>
 <ul>
 <li><strong>Reset</strong>：可以將目前的分支移動到任何指定的節點，讓分支的狀態回到該節點的樣子。這就像「飛行」一樣，可以快速跳轉到不同的提交。</li>
 <li><strong>Reflog</strong>：記錄了 <code>HEAD</code> 的所有移動歷史，就像一張「地圖」，幫助我們追蹤分支的變化。即使某些節點不再被分支指向，也可以透過 <code>reflog</code> 找回。</li>
 </ul>
-<h2 id="使用範例"><a href="#使用範例" class="headerlink" title="使用範例"></a>使用範例</h2><ol>
-<li><p>查看 <code>HEAD</code> 的移動歷史：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reflog</span><br></pre></td></tr></table></figure>
+<h2 id="使用範例"><a class="markdownIt-Anchor" href="#使用範例"></a> 使用範例</h2>
+<ol>
+<li>
+<p>查看 <code>HEAD</code> 的移動歷史：</p>
+<pre class="highlight"><code class="sh">git reflog
+</code></pre>
 </li>
-<li><p>將分支重置到某個歷史節點：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reset &lt;commit_id&gt; --hard</span><br></pre></td></tr></table></figure></li>
+<li>
+<p>將分支重置到某個歷史節點：</p>
+<pre class="highlight"><code class="sh">git reset &lt;commit_id&gt; --hard
+</code></pre>
+</li>
 </ol>
-<h2 id="注意事項-1"><a href="#注意事項-1" class="headerlink" title="注意事項"></a>注意事項</h2><ul>
+<h2 id="注意事項-2"><a class="markdownIt-Anchor" href="#注意事項-2"></a> 注意事項</h2>
+<ul>
 <li><code>reset</code> 是一個強大的工具，但需謹慎使用，特別是 <code>--hard</code> 模式，因為它會丟棄未提交的變更。</li>
 <li><code>reflog</code> 是找回遺失節點的救命工具，即使分支被刪除，節點仍然可以透過 <code>reflog</code> 找回。</li>
 </ul>
 <p>透過 <code>reset</code> 和 <code>reflog</code> 的搭配，可以靈活地操作分支歷史，並在需要時回到任何過去的狀態。</p>
-<hr>
-<h1 id="17-隱形節點的產生"><a href="#17-隱形節點的產生" class="headerlink" title="17. 隱形節點的產生"></a>17. 隱形節點的產生</h1><p>在 Git 中，每個分支都像一個便利貼，指向某個提交（commit）。當分支被刪除後，該分支指向的節點（末端節點）會變成無人看管的狀態，這些節點會「隱形」，但實際上它們仍然存在於 Git 的歷史中。</p>
-<h2 id="讓隱形節點重新現形"><a href="#讓隱形節點重新現形" class="headerlink" title="讓隱形節點重新現形"></a>讓隱形節點重新現形</h2><p>如果需要讓隱形的節點重新出現在分支中，可以將分支重新貼回該節點：</p>
+<hr />
+<h1 id="17-隱形節點的產生"><a class="markdownIt-Anchor" href="#17-隱形節點的產生"></a> 17. 隱形節點的產生</h1>
+<p>在 Git 中，每個分支都像一個便利貼，指向某個提交（commit）。當分支被刪除後，該分支指向的節點（末端節點）會變成無人看管的狀態，這些節點會「隱形」，但實際上它們仍然存在於 Git 的歷史中。</p>
+<h2 id="讓隱形節點重新現形"><a class="markdownIt-Anchor" href="#讓隱形節點重新現形"></a> 讓隱形節點重新現形</h2>
+<p>如果需要讓隱形的節點重新出現在分支中，可以將分支重新貼回該節點：</p>
 <ol>
-<li>使用 <code>git reflog</code> 找到隱形節點的提交 ID。<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reflog</span><br></pre></td></tr></table></figure></li>
-<li>建立一個新的分支，指向該提交：<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch &lt;branch_name&gt; &lt;commit_id&gt;</span><br></pre></td></tr></table></figure></li>
+<li>使用 <code>git reflog</code> 找到隱形節點的提交 ID。<pre class="highlight"><code class="sh">git reflog
+</code></pre>
+</li>
+<li>建立一個新的分支，指向該提交：<pre class="highlight"><code class="sh">git branch &lt;branch_name&gt; &lt;commit_id&gt;
+</code></pre>
+</li>
 </ol>
-<hr>
-<h1 id="18-Git-的非破壞性操作"><a href="#18-Git-的非破壞性操作" class="headerlink" title="18. Git 的非破壞性操作"></a>18. Git 的非破壞性操作</h1><p>Git 的操作本質上是非破壞性的，所有的提交歷史都會被保留。即使使用 <code>git rebase</code>，原始的節點也不會被刪除，而是被隱藏。</p>
-<h2 id="Rebase-的背後原理"><a href="#Rebase-的背後原理" class="headerlink" title="Rebase 的背後原理"></a>Rebase 的背後原理</h2><ul>
+<hr />
+<h1 id="18-git-的非破壞性操作"><a class="markdownIt-Anchor" href="#18-git-的非破壞性操作"></a> 18. Git 的非破壞性操作</h1>
+<p>Git 的操作本質上是非破壞性的，所有的提交歷史都會被保留。即使使用 <code>git rebase</code>，原始的節點也不會被刪除，而是被隱藏。</p>
+<h2 id="rebase-的背後原理"><a class="markdownIt-Anchor" href="#rebase-的背後原理"></a> Rebase 的背後原理</h2>
+<ul>
 <li><strong>複製節點</strong>：<code>git rebase</code> 的操作實際上是複製原始節點，並將它們移動到新的基底（base）後面。</li>
 <li><strong>隱藏原始節點</strong>：原始的節點會被隱藏，但可以透過 <code>git reflog</code> 找回。</li>
 </ul>
-<hr>
-<h1 id="19-結語"><a href="#19-結語" class="headerlink" title="19. 結語"></a>19. 結語</h1><p>Git 是一個功能強大的版本控制工具，熟練掌握後可以大幅提升開發效率與團隊協作能力。</p>
+<hr />
+<h1 id="19-結語"><a class="markdownIt-Anchor" href="#19-結語"></a> 19. 結語</h1>
+<p>Git 是一個功能強大的版本控制工具，熟練掌握後可以大幅提升開發效率與團隊協作能力。</p>
 
     </div>
 

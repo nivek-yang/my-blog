@@ -17,14 +17,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":false,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="本文詳細解釋了 Git 本機與遠端操作的常見指令及其應用場景，涵蓋 git fetch、git pull、git push、Pull Request (PR) 的管理，以及如何保持 Git 圖表清晰的最佳實踐。   git fetch 與分支同步git fetch 是用來從遠端倉庫抓取最新的更新，但不會自動合併到本地分支。它的作用是讓本地倉庫知道遠端的最新狀態。 使用範例：1git fetch">
+    <meta name="description" content="本文詳細解釋了 Git 本機與遠端操作的常見指令及其應用場景，涵蓋 git fetch、git pull、git push、Pull Request (PR) 的管理，以及如何保持 Git 圖表清晰的最佳實踐。    git fetch 與分支同步 git fetch 是用來從遠端倉庫抓取最新的更新，但不會自動合併到本地分支。它的作用是讓本地倉庫知道遠端的最新狀態。  使用範例： git fet">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Git 本機與遠端操作詳解">
 <meta property="og:url" content="https://nivek-yang.github.io/2025/05/03/Git%20%E6%9C%AC%E6%A9%9F%E8%88%87%E9%81%A0%E7%AB%AF%E6%93%8D%E4%BD%9C%E8%A9%B3%E8%A7%A3/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="本文詳細解釋了 Git 本機與遠端操作的常見指令及其應用場景，涵蓋 git fetch、git pull、git push、Pull Request (PR) 的管理，以及如何保持 Git 圖表清晰的最佳實踐。   git fetch 與分支同步git fetch 是用來從遠端倉庫抓取最新的更新，但不會自動合併到本地分支。它的作用是讓本地倉庫知道遠端的最新狀態。 使用範例：1git fetch">
+<meta property="og:description" content="本文詳細解釋了 Git 本機與遠端操作的常見指令及其應用場景，涵蓋 git fetch、git pull、git push、Pull Request (PR) 的管理，以及如何保持 Git 圖表清晰的最佳實踐。    git fetch 與分支同步 git fetch 是用來從遠端倉庫抓取最新的更新，但不會自動合併到本地分支。它的作用是讓本地倉庫知道遠端的最新狀態。  使用範例： git fet">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2025-05-02T16:00:00.000Z">
 <meta property="article:modified_time" content="2025-05-02T18:37:40.980Z">
@@ -322,7 +322,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#git-fetch-%E8%88%87%E5%88%86%E6%94%AF%E5%90%8C%E6%AD%A5"><span class="nav-number">1.</span> <span class="nav-text">git fetch 與分支同步</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%AF%84%E4%BE%8B%EF%BC%9A"><span class="nav-number">1.1.</span> <span class="nav-text">使用範例：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%AC%E6%A9%9F%E8%88%87%E9%81%A0%E7%AB%AF%E5%90%8C%E6%AD%A5%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">本機與遠端同步的方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-git-merge"><span class="nav-number">2.1.</span> <span class="nav-text">1. git merge</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-git-rebase"><span class="nav-number">2.2.</span> <span class="nav-text">2. git rebase</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-git-reset"><span class="nav-number">2.3.</span> <span class="nav-text">3. git reset</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git-push-%E7%9A%84%E9%80%B2%E9%9A%8E%E7%94%A8%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">git push 的進階用法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%8E%A8%E9%80%81%E5%88%B0%E7%9B%B8%E5%90%8C%E5%90%8D%E7%A8%B1%E7%9A%84%E5%88%86%E6%94%AF"><span class="nav-number">3.1.</span> <span class="nav-text">1. 推送到相同名稱的分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%8E%A8%E9%80%81%E5%88%B0%E4%B8%8D%E5%90%8C%E5%90%8D%E7%A8%B1%E7%9A%84%E5%88%86%E6%94%AF"><span class="nav-number">3.2.</span> <span class="nav-text">2. 推送到不同名稱的分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%88%AA%E9%99%A4%E9%81%A0%E7%AB%AF%E5%88%86%E6%94%AF"><span class="nav-number">3.3.</span> <span class="nav-text">3. 刪除遠端分支</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Pull-Request-PR-%E7%9A%84%E7%AE%A1%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text">Pull Request (PR) 的管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PR-%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AF%A6%E8%B8%90"><span class="nav-number">4.1.</span> <span class="nav-text">PR 的最佳實踐</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%9D%E6%8C%81-Git-%E5%9C%96%E8%A1%A8%E6%B8%85%E6%99%B0%E7%9A%84%E5%BB%BA%E8%AD%B0"><span class="nav-number">5.</span> <span class="nav-text">保持 Git 圖表清晰的建議</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E8%A6%8B%E6%93%8D%E4%BD%9C%E7%AF%84%E4%BE%8B"><span class="nav-number">6.</span> <span class="nav-text">常見操作範例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E6%96%B0%E5%88%86%E6%94%AF%E4%B8%A6%E6%8E%A8%E9%80%81"><span class="nav-number">6.1.</span> <span class="nav-text">建立新分支並推送</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%99%BC%E8%B5%B7-PR-%E4%B8%A6%E9%80%B2%E8%A1%8C-Code-Review"><span class="nav-number">6.2.</span> <span class="nav-text">發起 PR 並進行 Code Review</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%A2%E8%A9%A6%E4%B8%AD%E7%9A%84-Git-%E6%8A%80%E5%B7%A7"><span class="nav-number">7.</span> <span class="nav-text">面試中的 Git 技巧</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#git-fetch-%E8%88%87%E5%88%86%E6%94%AF%E5%90%8C%E6%AD%A5"><span class="nav-number">1.</span> <span class="nav-text"> git fetch 與分支同步</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%AF%84%E4%BE%8B"><span class="nav-number">1.1.</span> <span class="nav-text"> 使用範例：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%AC%E6%A9%9F%E8%88%87%E9%81%A0%E7%AB%AF%E5%90%8C%E6%AD%A5%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text"> 本機與遠端同步的方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-git-merge"><span class="nav-number">2.1.</span> <span class="nav-text"> 1. git merge</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-git-rebase"><span class="nav-number">2.2.</span> <span class="nav-text"> 2. git rebase</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-git-reset"><span class="nav-number">2.3.</span> <span class="nav-text"> 3. git reset</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git-push-%E7%9A%84%E9%80%B2%E9%9A%8E%E7%94%A8%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text"> git push 的進階用法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%8E%A8%E9%80%81%E5%88%B0%E7%9B%B8%E5%90%8C%E5%90%8D%E7%A8%B1%E7%9A%84%E5%88%86%E6%94%AF"><span class="nav-number">3.1.</span> <span class="nav-text"> 1. 推送到相同名稱的分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%8E%A8%E9%80%81%E5%88%B0%E4%B8%8D%E5%90%8C%E5%90%8D%E7%A8%B1%E7%9A%84%E5%88%86%E6%94%AF"><span class="nav-number">3.2.</span> <span class="nav-text"> 2. 推送到不同名稱的分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%88%AA%E9%99%A4%E9%81%A0%E7%AB%AF%E5%88%86%E6%94%AF"><span class="nav-number">3.3.</span> <span class="nav-text"> 3. 刪除遠端分支</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pull-request-pr-%E7%9A%84%E7%AE%A1%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text"> Pull Request (PR) 的管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#pr-%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AF%A6%E8%B8%90"><span class="nav-number">4.1.</span> <span class="nav-text"> PR 的最佳實踐</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%9D%E6%8C%81-git-%E5%9C%96%E8%A1%A8%E6%B8%85%E6%99%B0%E7%9A%84%E5%BB%BA%E8%AD%B0"><span class="nav-number">5.</span> <span class="nav-text"> 保持 Git 圖表清晰的建議</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E8%A6%8B%E6%93%8D%E4%BD%9C%E7%AF%84%E4%BE%8B"><span class="nav-number">6.</span> <span class="nav-text"> 常見操作範例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E6%96%B0%E5%88%86%E6%94%AF%E4%B8%A6%E6%8E%A8%E9%80%81"><span class="nav-number">6.1.</span> <span class="nav-text"> 建立新分支並推送</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%99%BC%E8%B5%B7-pr-%E4%B8%A6%E9%80%B2%E8%A1%8C-code-review"><span class="nav-number">6.2.</span> <span class="nav-text"> 發起 PR 並進行 Code Review</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%A2%E8%A9%A6%E4%B8%AD%E7%9A%84-git-%E6%8A%80%E5%B7%A7"><span class="nav-number">7.</span> <span class="nav-text"> 面試中的 Git 技巧</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -424,99 +424,131 @@
     <div class="post-body" itemprop="articleBody"><blockquote>
 <p>本文詳細解釋了 Git 本機與遠端操作的常見指令及其應用場景，涵蓋 <code>git fetch</code>、<code>git pull</code>、<code>git push</code>、Pull Request (PR) 的管理，以及如何保持 Git 圖表清晰的最佳實踐。</p>
 </blockquote>
-<hr>
-<h1 id="git-fetch-與分支同步"><a href="#git-fetch-與分支同步" class="headerlink" title="git fetch 與分支同步"></a><code>git fetch</code> 與分支同步</h1><p><code>git fetch</code> 是用來從遠端倉庫抓取最新的更新，但不會自動合併到本地分支。它的作用是讓本地倉庫知道遠端的最新狀態。</p>
-<h2 id="使用範例："><a href="#使用範例：" class="headerlink" title="使用範例："></a>使用範例：</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git fetch</span><br></pre></td></tr></table></figure>
+<hr />
+<h1 id="git-fetch-與分支同步"><a class="markdownIt-Anchor" href="#git-fetch-與分支同步"></a> <code>git fetch</code> 與分支同步</h1>
+<p><code>git fetch</code> 是用來從遠端倉庫抓取最新的更新，但不會自動合併到本地分支。它的作用是讓本地倉庫知道遠端的最新狀態。</p>
+<h2 id="使用範例"><a class="markdownIt-Anchor" href="#使用範例"></a> 使用範例：</h2>
+<pre class="highlight"><code class="bash">git fetch
+</code></pre>
 <ul>
 <li><strong>效果</strong>：抓取遠端的更新，並建立對應的遠端分支（如 <code>origin/master</code>）。</li>
 <li><strong>應用場景</strong>：當你想檢查遠端的最新變更，但不希望立即影響本地分支時使用。</li>
 </ul>
-<hr>
-<h1 id="本機與遠端同步的方式"><a href="#本機與遠端同步的方式" class="headerlink" title="本機與遠端同步的方式"></a>本機與遠端同步的方式</h1><p>要讓本機分支跟上遠端的進度，可以使用以下幾種方式：</p>
-<h2 id="1-git-merge"><a href="#1-git-merge" class="headerlink" title="1. git merge"></a>1. <code>git merge</code></h2><p>將遠端的變更合併到本地分支，保留本地和遠端的提交歷史。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull = git fetch + git merge</span><br></pre></td></tr></table></figure>
+<hr />
+<h1 id="本機與遠端同步的方式"><a class="markdownIt-Anchor" href="#本機與遠端同步的方式"></a> 本機與遠端同步的方式</h1>
+<p>要讓本機分支跟上遠端的進度，可以使用以下幾種方式：</p>
+<h2 id="1-git-merge"><a class="markdownIt-Anchor" href="#1-git-merge"></a> 1. <code>git merge</code></h2>
+<p>將遠端的變更合併到本地分支，保留本地和遠端的提交歷史。</p>
+<pre class="highlight"><code class="bash">git pull = git fetch + git merge
+</code></pre>
 <ul>
 <li><strong>效果</strong>：合併後會保留兩條提交記錄，適合需要完整歷史的場景。</li>
 <li><strong>缺點</strong>：可能導致 Git 圖表變得複雜。</li>
 </ul>
-<h2 id="2-git-rebase"><a href="#2-git-rebase" class="headerlink" title="2. git rebase"></a>2. <code>git rebase</code></h2><p>將遠端的變更應用到本地分支的基礎上，重新整理提交歷史。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull --rebase = git fetch + git rebase</span><br></pre></td></tr></table></figure>
+<h2 id="2-git-rebase"><a class="markdownIt-Anchor" href="#2-git-rebase"></a> 2. <code>git rebase</code></h2>
+<p>將遠端的變更應用到本地分支的基礎上，重新整理提交歷史。</p>
+<pre class="highlight"><code class="bash">git pull --rebase = git fetch + git rebase
+</code></pre>
 <ul>
 <li><strong>效果</strong>：提交歷史會變得線性，讓 Git 圖表更清晰。</li>
 <li><strong>注意</strong>：在使用 <code>rebase</code> 時，需確保沒有其他人依賴你的分支，避免衝突。</li>
 </ul>
-<h2 id="3-git-reset"><a href="#3-git-reset" class="headerlink" title="3. git reset"></a>3. <code>git reset</code></h2><p>重置本地分支到遠端分支的狀態，適合需要完全同步的情況。</p>
-<hr>
-<h1 id="git-push-的進階用法"><a href="#git-push-的進階用法" class="headerlink" title="git push 的進階用法"></a><code>git push</code> 的進階用法</h1><p><code>git push</code> 是將本地分支的變更推送到遠端分支。以下是一些進階用法：</p>
-<h2 id="1-推送到相同名稱的分支"><a href="#1-推送到相同名稱的分支" class="headerlink" title="1. 推送到相同名稱的分支"></a>1. 推送到相同名稱的分支</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin main</span><br></pre></td></tr></table></figure>
+<h2 id="3-git-reset"><a class="markdownIt-Anchor" href="#3-git-reset"></a> 3. <code>git reset</code></h2>
+<p>重置本地分支到遠端分支的狀態，適合需要完全同步的情況。</p>
+<hr />
+<h1 id="git-push-的進階用法"><a class="markdownIt-Anchor" href="#git-push-的進階用法"></a> <code>git push</code> 的進階用法</h1>
+<p><code>git push</code> 是將本地分支的變更推送到遠端分支。以下是一些進階用法：</p>
+<h2 id="1-推送到相同名稱的分支"><a class="markdownIt-Anchor" href="#1-推送到相同名稱的分支"></a> 1. 推送到相同名稱的分支</h2>
+<pre class="highlight"><code class="bash">git push origin main
+</code></pre>
 <ul>
 <li><strong>效果</strong>：將本地的 <code>main</code> 分支推送到遠端的 <code>main</code> 分支。</li>
 </ul>
-<h2 id="2-推送到不同名稱的分支"><a href="#2-推送到不同名稱的分支" class="headerlink" title="2. 推送到不同名稱的分支"></a>2. 推送到不同名稱的分支</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin main:<span class="built_in">cat</span></span><br></pre></td></tr></table></figure>
+<h2 id="2-推送到不同名稱的分支"><a class="markdownIt-Anchor" href="#2-推送到不同名稱的分支"></a> 2. 推送到不同名稱的分支</h2>
+<pre class="highlight"><code class="bash">git push origin main:<span class="hljs-built_in">cat</span>
+</code></pre>
 <ul>
 <li><strong>效果</strong>：將本地的 <code>main</code> 分支推送到遠端的 <code>cat</code> 分支。</li>
 </ul>
-<h2 id="3-刪除遠端分支"><a href="#3-刪除遠端分支" class="headerlink" title="3. 刪除遠端分支"></a>3. 刪除遠端分支</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin :<span class="built_in">cat</span></span><br></pre></td></tr></table></figure>
+<h2 id="3-刪除遠端分支"><a class="markdownIt-Anchor" href="#3-刪除遠端分支"></a> 3. 刪除遠端分支</h2>
+<pre class="highlight"><code class="bash">git push origin :<span class="hljs-built_in">cat</span>
+</code></pre>
 <ul>
 <li><strong>效果</strong>：刪除遠端的 <code>cat</code> 分支，相當於執行 <code>null:cat</code>。</li>
 </ul>
-<hr>
-<h1 id="Pull-Request-PR-的管理"><a href="#Pull-Request-PR-的管理" class="headerlink" title="Pull Request (PR) 的管理"></a>Pull Request (PR) 的管理</h1><p>Pull Request 是團隊協作中不可或缺的一部分，用於代碼審查和合併。</p>
-<h2 id="PR-的最佳實踐"><a href="#PR-的最佳實踐" class="headerlink" title="PR 的最佳實踐"></a>PR 的最佳實踐</h2><ol>
-<li><p><strong>設定審核條件</strong>：</p>
+<hr />
+<h1 id="pull-request-pr-的管理"><a class="markdownIt-Anchor" href="#pull-request-pr-的管理"></a> Pull Request (PR) 的管理</h1>
+<p>Pull Request 是團隊協作中不可或缺的一部分，用於代碼審查和合併。</p>
+<h2 id="pr-的最佳實踐"><a class="markdownIt-Anchor" href="#pr-的最佳實踐"></a> PR 的最佳實踐</h2>
+<ol>
+<li>
+<p><strong>設定審核條件</strong>：</p>
 <ul>
 <li>可以設定 6 人團隊中至少 5 人接受後才能合併。</li>
 <li>當條件滿足時，合併按鈕會亮起，任何人都可以按下合併。</li>
 </ul>
 </li>
-<li><p><strong>PR 的重要性</strong>：</p>
+<li>
+<p><strong>PR 的重要性</strong>：</p>
 <ul>
 <li>即使功能不是你開發的，參與 PR 的 Code Review 也能幫助你了解功能的運作方式。</li>
 <li>在面試中，可以提到你參與過的 Code Review，展示對系統的理解。</li>
 </ul>
 </li>
-<li><p><strong>避免 PR 堆積</strong>：</p>
+<li>
+<p><strong>避免 PR 堆積</strong>：</p>
 <ul>
 <li>PR 長時間未處理會導致難以合併，建議每週安排一次 PR 日，集中討論和處理 PR。</li>
 </ul>
 </li>
 </ol>
-<hr>
-<h1 id="保持-Git-圖表清晰的建議"><a href="#保持-Git-圖表清晰的建議" class="headerlink" title="保持 Git 圖表清晰的建議"></a>保持 Git 圖表清晰的建議</h1><ol>
-<li><p><strong>優先使用 <code>git rebase</code></strong>：</p>
+<hr />
+<h1 id="保持-git-圖表清晰的建議"><a class="markdownIt-Anchor" href="#保持-git-圖表清晰的建議"></a> 保持 Git 圖表清晰的建議</h1>
+<ol>
+<li>
+<p><strong>優先使用 <code>git rebase</code></strong>：</p>
 <ul>
 <li>在執行 <code>git fetch</code> 後，盡量使用 <code>rebase</code> 而非 <code>merge</code>，避免提交歷史過於複雜。</li>
 </ul>
 </li>
-<li><p><strong>避免強制推送到共享分支</strong>：</p>
+<li>
+<p><strong>避免強制推送到共享分支</strong>：</p>
 <ul>
 <li><code>git push origin main --force</code> 應謹慎使用，尤其是在共享分支上。</li>
 <li>如果需要整理自己的分支，可以在個人分支上使用 <code>--force</code>。</li>
 </ul>
 </li>
 </ol>
-<hr>
-<h1 id="常見操作範例"><a href="#常見操作範例" class="headerlink" title="常見操作範例"></a>常見操作範例</h1><h2 id="建立新分支並推送"><a href="#建立新分支並推送" class="headerlink" title="建立新分支並推送"></a>建立新分支並推送</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git branch issues/705</span><br><span class="line">git push origin issues/705</span><br></pre></td></tr></table></figure>
+<hr />
+<h1 id="常見操作範例"><a class="markdownIt-Anchor" href="#常見操作範例"></a> 常見操作範例</h1>
+<h2 id="建立新分支並推送"><a class="markdownIt-Anchor" href="#建立新分支並推送"></a> 建立新分支並推送</h2>
+<pre class="highlight"><code class="bash">git branch issues/705
+git push origin issues/705
+</code></pre>
 <ul>
 <li><strong>效果</strong>：建立一個名為 <code>issues/705</code> 的分支，並推送到遠端。</li>
 </ul>
-<h2 id="發起-PR-並進行-Code-Review"><a href="#發起-PR-並進行-Code-Review" class="headerlink" title="發起 PR 並進行 Code Review"></a>發起 PR 並進行 Code Review</h2><ol>
+<h2 id="發起-pr-並進行-code-review"><a class="markdownIt-Anchor" href="#發起-pr-並進行-code-review"></a> 發起 PR 並進行 Code Review</h2>
+<ol>
 <li>在遠端倉庫中發起 PR，請求其他成員進行代碼審查。</li>
 <li>通過審查後，合併到主分支。</li>
 </ol>
-<hr>
-<h1 id="面試中的-Git-技巧"><a href="#面試中的-Git-技巧" class="headerlink" title="面試中的 Git 技巧"></a>面試中的 Git 技巧</h1><p>在面試中，展示你對 Git 的理解和實踐經驗非常重要。例如：</p>
+<hr />
+<h1 id="面試中的-git-技巧"><a class="markdownIt-Anchor" href="#面試中的-git-技巧"></a> 面試中的 Git 技巧</h1>
+<p>在面試中，展示你對 Git 的理解和實踐經驗非常重要。例如：</p>
 <ul>
-<li><strong>參與 Code Review</strong>：<ul>
+<li><strong>參與 Code Review</strong>：
+<ul>
 <li>即使某功能不是你開發的，可以提到在 PR 中進行過代碼審查，並了解該功能的實現細節。</li>
 </ul>
 </li>
-<li><strong>版本控制的實踐</strong>：<ul>
+<li><strong>版本控制的實踐</strong>：
+<ul>
 <li>提到如何使用 <code>rebase</code> 保持提交歷史清晰，或如何處理衝突。</li>
 </ul>
 </li>
 </ul>
-<hr>
+<hr />
 <p>這篇文章介紹了 Git 本機與遠端操作的常見場景和實踐，適合用於團隊協作和個人開發的日常工作中。</p>
 
     </div>

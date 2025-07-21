@@ -17,14 +17,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":false,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="在現代軟體架構中，非同步處理是提升系統吞吐量和響應能力的關鍵。然而，不同的非同步技術解決的是不同層次的問題。本文旨在精確剖析三種常見的非同步原語：async&#x2F;await、Message Queue 和 setTimeout，闡明其核心差異與適用場景。 一句話總結：它們不能通用，因為它們是不同維度的工具。  async&#x2F;await：是語言層面的語法糖，用來管理單一進程內的非阻塞 I&amp;#x2">
+    <meta name="description" content="在現代軟體架構中，非同步處理是提升系統吞吐量和響應能力的關鍵。然而，不同的非同步技術解決的是不同層次的問題。本文旨在精確剖析三種常見的非同步原語：async&#x2F;await、Message Queue 和 setTimeout，闡明其核心差異與適用場景。 一句話總結：它們不能通用，因為它們是不同維度的工具。  async&#x2F;await：是語言層面的語法糖，用來管理單一進程內的非阻塞 I&#x2F;O 操作。它是「">
 <meta property="og:type" content="article">
 <meta property="og:title" content="非同步技術比較：async&#x2F;await vs. Message Queues vs. setTimeout">
 <meta property="og:url" content="https://nivek-yang.github.io/2025/07/10/%E9%9D%9E%E5%90%8C%E6%AD%A5%E6%8A%80%E8%A1%93%E6%AF%94%E8%BC%83/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="在現代軟體架構中，非同步處理是提升系統吞吐量和響應能力的關鍵。然而，不同的非同步技術解決的是不同層次的問題。本文旨在精確剖析三種常見的非同步原語：async&#x2F;await、Message Queue 和 setTimeout，闡明其核心差異與適用場景。 一句話總結：它們不能通用，因為它們是不同維度的工具。  async&#x2F;await：是語言層面的語法糖，用來管理單一進程內的非阻塞 I&amp;#x2">
+<meta property="og:description" content="在現代軟體架構中，非同步處理是提升系統吞吐量和響應能力的關鍵。然而，不同的非同步技術解決的是不同層次的問題。本文旨在精確剖析三種常見的非同步原語：async&#x2F;await、Message Queue 和 setTimeout，闡明其核心差異與適用場景。 一句話總結：它們不能通用，因為它們是不同維度的工具。  async&#x2F;await：是語言層面的語法糖，用來管理單一進程內的非阻塞 I&#x2F;O 操作。它是「">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2025-07-09T16:00:00.000Z">
 <meta property="article:modified_time" content="2025-07-10T15:29:34.155Z">
@@ -321,7 +321,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#async-await%EF%BC%9A%E4%B8%80%E4%BD%8D%E5%BB%9A%E5%B8%AB%E7%9A%84%E5%A4%9A%E5%B7%A5%E8%99%95%E7%90%86%E6%8A%80%E5%B7%A7"><span class="nav-number">1.</span> <span class="nav-text">async&#x2F;await：一位廚師的多工處理技巧</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Message-Queue-MQ-%EF%BC%9A%E4%B8%80%E5%80%8B%E5%88%86%E5%B7%A5%E6%98%8E%E7%A2%BA%E7%9A%84%E5%A4%A7%E5%9E%8B%E4%B8%AD%E5%A4%AE%E5%BB%9A%E6%88%BF"><span class="nav-number">2.</span> <span class="nav-text">Message Queue (MQ)：一個分工明確的大型中央廚房</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#setTimeout%EF%BC%9A%E4%B8%80%E5%80%8B%E7%B0%A1%E5%96%AE%E7%9A%84%E5%BB%9A%E6%88%BF%E8%A8%88%E6%99%82%E5%99%A8"><span class="nav-number">3.</span> <span class="nav-text">setTimeout：一個簡單的廚房計時器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">4.</span> <span class="nav-text">總結</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#asyncawait%E4%B8%80%E4%BD%8D%E5%BB%9A%E5%B8%AB%E7%9A%84%E5%A4%9A%E5%B7%A5%E8%99%95%E7%90%86%E6%8A%80%E5%B7%A7"><span class="nav-number">1.</span> <span class="nav-text"> async&#x2F;await：一位廚師的多工處理技巧</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#message-queue-mq%E4%B8%80%E5%80%8B%E5%88%86%E5%B7%A5%E6%98%8E%E7%A2%BA%E7%9A%84%E5%A4%A7%E5%9E%8B%E4%B8%AD%E5%A4%AE%E5%BB%9A%E6%88%BF"><span class="nav-number">2.</span> <span class="nav-text"> Message Queue (MQ)：一個分工明確的大型中央廚房</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#settimeout%E4%B8%80%E5%80%8B%E7%B0%A1%E5%96%AE%E7%9A%84%E5%BB%9A%E6%88%BF%E8%A8%88%E6%99%82%E5%99%A8"><span class="nav-number">3.</span> <span class="nav-text"> setTimeout：一個簡單的廚房計時器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">4.</span> <span class="nav-text"> 總結</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -420,16 +420,17 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>在現代軟體架構中，非同步處理是提升系統吞吐量和響應能力的關鍵。然而，不同的非同步技術解決的是不同層次的問題。本文旨在精確剖析三種常見的非同步原語：async&#x2F;await、Message Queue 和 setTimeout，闡明其核心差異與適用場景。</p>
+    <div class="post-body" itemprop="articleBody"><p>在現代軟體架構中，非同步處理是提升系統吞吐量和響應能力的關鍵。然而，不同的非同步技術解決的是不同層次的問題。本文旨在精確剖析三種常見的非同步原語：async/await、Message Queue 和 setTimeout，闡明其核心差異與適用場景。</p>
 <p><strong>一句話總結：它們不能通用，因為它們是不同維度的工具。</strong></p>
 <ul>
-<li><strong><code>async/await</code></strong>：是<strong>語言層面</strong>的語法糖，用來管理<strong>單一進程內</strong>的非阻塞 I&#x2F;O 操作。它是「微觀」的。</li>
+<li><strong><code>async/await</code></strong>：是<strong>語言層面</strong>的語法糖，用來管理<strong>單一進程內</strong>的非阻塞 I/O 操作。它是「微觀」的。</li>
 <li><strong>Message Queue</strong>：是<strong>架構層面</strong>的組件，用來解耦<strong>多個獨立進程或服務之間</strong>的通訊。它是「宏觀」的。</li>
 <li><strong><code>setTimeout</code></strong>：是<strong>執行環境提供</strong>的 API，用來將一個函式的執行<strong>延遲</strong>到未來的某個時間點，通常在<strong>單一進程內</strong>。</li>
 </ul>
 <p>讓我們用一個「餐廳廚房」的比喻來深入理解。</p>
-<hr>
-<h1 id="async-await：一位廚師的多工處理技巧"><a href="#async-await：一位廚師的多工處理技巧" class="headerlink" title="async/await：一位廚師的多工處理技巧"></a><code>async/await</code>：一位廚師的多工處理技巧</h1><p>想像廚房裡只有<strong>一位廚師 (單一執行緒)</strong>。他需要同時做三道菜：</p>
+<hr />
+<h1 id="asyncawait一位廚師的多工處理技巧"><a class="markdownIt-Anchor" href="#asyncawait一位廚師的多工處理技巧"></a> <code>async/await</code>：一位廚師的多工處理技巧</h1>
+<p>想像廚房裡只有<strong>一位廚師 (單一執行緒)</strong>。他需要同時做三道菜：</p>
 <ol>
 <li>烤箱裡的牛排（需要 20 分鐘）</li>
 <li>爐子上的湯（需要 10 分鐘）</li>
@@ -446,25 +447,27 @@
 </ul>
 <p>一個使用 <strong><code>async/await</code> (非同步)</strong> 的廚師會：</p>
 <ol>
-<li><strong><code>await</code> 烤牛排：</strong> 把牛排放進烤箱（發起一個 I&#x2F;O 操作），然後<strong>立即轉身去做別的事</strong>。</li>
-<li><strong><code>await</code> 煮湯：</strong> 把湯放上爐子（發起另一個 I&#x2F;O 操作），然後<strong>立即轉身</strong>。</li>
+<li><strong><code>await</code> 烤牛排：</strong> 把牛排放進烤箱（發起一個 I/O 操作），然後<strong>立即轉身去做別的事</strong>。</li>
+<li><strong><code>await</code> 煮湯：</strong> 把湯放上爐子（發起另一個 I/O 操作），然後<strong>立即轉身</strong>。</li>
 <li><strong>切沙拉：</strong> 這是一個 CPU 密集型操作，他現在就做。</li>
-<li>在切沙拉的過程中，他會時不時地檢查（事件循環 Event Loop）烤箱和爐子好了沒有。烤箱的計時器響了（I&#x2F;O 完成），他就去處理牛排。</li>
+<li>在切沙拉的過程中，他會時不時地檢查（事件循環 Event Loop）烤箱和爐子好了沒有。烤箱的計時器響了（I/O 完成），他就去處理牛排。</li>
 </ol>
 <ul>
 <li><strong>結果：</strong> 大約 20 分鐘後，所有菜都做好了。</li>
 </ul>
 <p><strong>總結 <code>async/await</code>:</strong></p>
 <ul>
-<li><strong>範疇：</strong> 單一進程&#x2F;執行緒內。</li>
-<li><strong>目的：</strong> 避免在等待 I&#x2F;O（網路請求、資料庫查詢、檔案讀寫）時阻塞整個執行緒，從而提高單一進程的併發處理能力。</li>
+<li><strong>範疇：</strong> 單一進程/執行緒內。</li>
+<li><strong>目的：</strong> 避免在等待 I/O（網路請求、資料庫查詢、檔案讀寫）時阻塞整個執行緒，從而提高單一進程的併發處理能力。</li>
 <li><strong>核心：</strong> 事件循環 (Event Loop)。</li>
 <li><strong>不能做什麼：</strong> 它不能讓 CPU 密集型任務（如圖像處理、複雜計算）變快，也不能讓任務在另一個伺服器上執行。它只是讓<strong>等待時間</strong>被有效利用。</li>
 </ul>
-<hr>
-<h1 id="Message-Queue-MQ-：一個分工明確的大型中央廚房"><a href="#Message-Queue-MQ-：一個分工明確的大型中央廚房" class="headerlink" title="Message Queue (MQ)：一個分工明確的大型中央廚房"></a>Message Queue (MQ)：一個分工明確的大型中央廚房</h1><p>現在想像一個大型連鎖餐廳的<strong>中央廚房 (一個服務)</strong> 和遍布全市的<strong>多家分店 (多個其他服務)</strong>。</p>
+<hr />
+<h1 id="message-queue-mq一個分工明確的大型中央廚房"><a class="markdownIt-Anchor" href="#message-queue-mq一個分工明確的大型中央廚房"></a> Message Queue (MQ)：一個分工明確的大型中央廚房</h1>
+<p>現在想像一個大型連鎖餐廳的<strong>中央廚房 (一個服務)</strong> 和遍布全市的<strong>多家分店 (多個其他服務)</strong>。</p>
 <ul>
-<li><strong>場景：</strong> 分店（例如，網頁前端）接到顧客的訂單（例如，使用者註冊）。這個註冊流程需要：<ol>
+<li><strong>場景：</strong> 分店（例如，網頁前端）接到顧客的訂單（例如，使用者註冊）。這個註冊流程需要：
+<ol>
 <li>建立使用者帳號（立即完成）。</li>
 <li>發送一封歡迎郵件（可能很慢）。</li>
 <li>為使用者初始化數據分析報告（非常耗時，可能要幾分鐘）。</li>
@@ -483,73 +486,78 @@
 <p><strong>總結 Message Queue:</strong></p>
 <ul>
 <li><strong>範疇：</strong> 跨進程、跨服務、甚至跨伺服器。</li>
-<li><strong>目的：</strong><ul>
+<li><strong>目的：</strong>
+<ul>
 <li><strong>解耦：</strong> 分店不需要知道後廚在哪，也不需要關心他們怎麼工作。</li>
 <li><strong>非同步執行：</strong> 將耗時的、非核心的任務交給背景去處理，讓主應用程式快速響應。</li>
-<li><strong>削峰填谷&#x2F;可靠性：</strong> 即使後廚很忙，工作單也可以在傳送帶上排隊，不會丟失。</li>
+<li><strong>削峰填谷/可靠性：</strong> 即使後廚很忙，工作單也可以在傳送帶上排隊，不會丟失。</li>
 </ul>
 </li>
 <li><strong>核心：</strong> 一個獨立的中介軟體 (Broker)，如 RabbitMQ, Kafka, Redis。</li>
 </ul>
-<hr>
-<h1 id="setTimeout：一個簡單的廚房計時器"><a href="#setTimeout：一個簡單的廚房計時器" class="headerlink" title="setTimeout：一個簡單的廚房計時器"></a><code>setTimeout</code>：一個簡單的廚房計時器</h1><p><code>setTimeout</code> 是最簡單的非同步形式。</p>
+<hr />
+<h1 id="settimeout一個簡單的廚房計時器"><a class="markdownIt-Anchor" href="#settimeout一個簡單的廚房計時器"></a> <code>setTimeout</code>：一個簡單的廚房計時器</h1>
+<p><code>setTimeout</code> 是最簡單的非同步形式。</p>
 <ul>
 <li><strong>場景：</strong> 廚師把麵包放進烤箱，他需要 5 分鐘後回來檢查。</li>
 <li><strong>流程：</strong> 他設定了一個<strong>計時器 (<code>setTimeout</code>)</strong>，告訴計時器：「5 分鐘後提醒我（執行一個回呼函式）」。然後他就去做別的事了。5 分鐘後，計時器響了，他就回來處理麵包。</li>
 </ul>
 <p><strong>總結 <code>setTimeout</code>:</strong></p>
 <ul>
-<li><strong>範疇：</strong> 單一進程&#x2F;執行緒內。</li>
+<li><strong>範疇：</strong> 單一進程/執行緒內。</li>
 <li><strong>目的：</strong> 將一個函式的執行<strong>延遲</strong>到一個確定的未來時間點。它只是推遲執行，不涉及併發或跨進程通訊。</li>
 <li><strong>核心：</strong> 由執行環境（瀏覽器、Node.js）提供的計時器功能。</li>
 </ul>
-<hr>
-<h1 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h1><table>
+<hr />
+<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
+<table>
 <thead>
 <tr>
-<th align="left">特性</th>
-<th align="left"><code>async/await</code></th>
-<th align="left">Message Queue (e.g., Celery)</th>
-<th align="left"><code>setTimeout</code></th>
+<th style="text-align:left">特性</th>
+<th style="text-align:left"><code>async/await</code></th>
+<th style="text-align:left">Message Queue (e.g., Celery)</th>
+<th style="text-align:left"><code>setTimeout</code></th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="left"><strong>層次</strong></td>
-<td align="left"><strong>語言語法</strong></td>
-<td align="left"><strong>系統架構</strong></td>
-<td align="left"><strong>環境 API</strong></td>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>層次</strong></td>
+<td style="text-align:left"><strong>語言語法</strong></td>
+<td style="text-align:left"><strong>系統架構</strong></td>
+<td style="text-align:left"><strong>環境 API</strong></td>
 </tr>
 <tr>
-<td align="left"><strong>尺度</strong></td>
-<td align="left"><strong>進程內</strong> (微觀)</td>
-<td align="left"><strong>跨進程&#x2F;跨服務</strong> (宏觀)</td>
-<td align="left"><strong>進程內</strong> (微觀)</td>
+<td style="text-align:left"><strong>尺度</strong></td>
+<td style="text-align:left"><strong>進程內</strong> (微觀)</td>
+<td style="text-align:left"><strong>跨進程/跨服務</strong> (宏觀)</td>
+<td style="text-align:left"><strong>進程內</strong> (微觀)</td>
 </tr>
 <tr>
-<td align="left"><strong>解決問題</strong></td>
-<td align="left">管理非阻塞 I&#x2F;O，提高單進程併發</td>
-<td align="left">解耦服務，處理耗時&#x2F;可靠的背景任務</td>
-<td align="left">延遲執行函式</td>
+<td style="text-align:left"><strong>解決問題</strong></td>
+<td style="text-align:left">管理非阻塞 I/O，提高單進程併發</td>
+<td style="text-align:left">解耦服務，處理耗時/可靠的背景任務</td>
+<td style="text-align:left">延遲執行函式</td>
 </tr>
 <tr>
-<td align="left"><strong>持久性</strong></td>
-<td align="left"><strong>無</strong> (進程結束任務消失)</td>
-<td align="left"><strong>有</strong> (Broker 持久化訊息)</td>
-<td align="left"><strong>無</strong> (進程結束任務消失)</td>
+<td style="text-align:left"><strong>持久性</strong></td>
+<td style="text-align:left"><strong>無</strong> (進程結束任務消失)</td>
+<td style="text-align:left"><strong>有</strong> (Broker 持久化訊息)</td>
+<td style="text-align:left"><strong>無</strong> (進程結束任務消失)</td>
 </tr>
 <tr>
-<td align="left"><strong>依賴</strong></td>
-<td align="left">語言本身</td>
-<td align="left">外部中介軟體 (Broker)</td>
-<td align="left">執行環境 (瀏覽器&#x2F;Node.js)</td>
+<td style="text-align:left"><strong>依賴</strong></td>
+<td style="text-align:left">語言本身</td>
+<td style="text-align:left">外部中介軟體 (Broker)</td>
+<td style="text-align:left">執行環境 (瀏覽器/Node.js)</td>
 </tr>
 <tr>
-<td align="left"><strong>比喻</strong></td>
-<td align="left">一位廚師的多工技巧</td>
-<td align="left">大型中央廚房與分店的協作</td>
-<td align="left">一個廚房計時器</td>
+<td style="text-align:left"><strong>比喻</strong></td>
+<td style="text-align:left">一位廚師的多工技巧</td>
+<td style="text-align:left">大型中央廚房與分店的協作</td>
+<td style="text-align:left">一個廚房計時器</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p><strong>結論：它們完全不能通用。</strong></p>
 <ul>
 <li><strong>不能</strong>用 <code>async/await</code> 來代替 Message Queue，因為它無法將任務發送到另一台伺服器上的 Worker 去執行。</li>

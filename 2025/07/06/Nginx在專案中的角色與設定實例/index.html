@@ -17,14 +17,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":false,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="Nginx 是現代 Web 架構中不可或缺的高效能反向代理伺服器。它能處理靜態檔案、反向代理、負載平衡、快取與安全性強化等多種任務。以下以 Django 專案為例，說明 Nginx 的功能與設定檔設計。  Nginx 的主要功能 反向代理將外部請求轉發給後端應用（如 Gunicorn + Django），隱藏內部架構，提升安全性與彈性。  靜態檔案服務直接由 Nginx 回應 CSS、JS、圖片等">
+    <meta name="description" content="Nginx 是現代 Web 架構中不可或缺的高效能反向代理伺服器。它能處理靜態檔案、反向代理、負載平衡、快取與安全性強化等多種任務。以下以 Django 專案為例，說明 Nginx 的功能與設定檔設計。   Nginx 的主要功能   反向代理 將外部請求轉發給後端應用（如 Gunicorn + Django），隱藏內部架構，提升安全性與彈性。   靜態檔案服務 直接由 Nginx 回應 CSS、">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Nginx 在專案中的角色與設定實例">
 <meta property="og:url" content="https://nivek-yang.github.io/2025/07/06/Nginx%E5%9C%A8%E5%B0%88%E6%A1%88%E4%B8%AD%E7%9A%84%E8%A7%92%E8%89%B2%E8%88%87%E8%A8%AD%E5%AE%9A%E5%AF%A6%E4%BE%8B/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="Nginx 是現代 Web 架構中不可或缺的高效能反向代理伺服器。它能處理靜態檔案、反向代理、負載平衡、快取與安全性強化等多種任務。以下以 Django 專案為例，說明 Nginx 的功能與設定檔設計。  Nginx 的主要功能 反向代理將外部請求轉發給後端應用（如 Gunicorn + Django），隱藏內部架構，提升安全性與彈性。  靜態檔案服務直接由 Nginx 回應 CSS、JS、圖片等">
+<meta property="og:description" content="Nginx 是現代 Web 架構中不可或缺的高效能反向代理伺服器。它能處理靜態檔案、反向代理、負載平衡、快取與安全性強化等多種任務。以下以 Django 專案為例，說明 Nginx 的功能與設定檔設計。   Nginx 的主要功能   反向代理 將外部請求轉發給後端應用（如 Gunicorn + Django），隱藏內部架構，提升安全性與彈性。   靜態檔案服務 直接由 Nginx 回應 CSS、">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2025-07-05T16:00:00.000Z">
 <meta property="article:modified_time" content="2025-07-06T15:17:54.925Z">
@@ -321,7 +321,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Nginx-%E7%9A%84%E4%B8%BB%E8%A6%81%E5%8A%9F%E8%83%BD"><span class="nav-number">1.</span> <span class="nav-text">Nginx 的主要功能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Nginx-%E7%94%9F%E7%94%A2%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%EF%BC%88prod-conf%EF%BC%89%E7%AF%84%E4%BE%8B"><span class="nav-number">2.</span> <span class="nav-text">Nginx 生產環境設定（prod.conf）範例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A8%AD%E5%AE%9A%E9%87%8D%E9%BB%9E%E8%AA%AA%E6%98%8E"><span class="nav-number">2.1.</span> <span class="nav-text">設定重點說明</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Nginx-%E9%96%8B%E7%99%BC%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%EF%BC%88dev-conf%EF%BC%89%E7%AF%84%E4%BE%8B"><span class="nav-number">3.</span> <span class="nav-text">Nginx 開發環境設定（dev.conf）範例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AA%AA%E6%98%8E"><span class="nav-number">3.1.</span> <span class="nav-text">說明</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Nginx-%E8%B2%A0%E8%BC%89%E5%B9%B3%E8%A1%A1%E8%A8%AD%E5%AE%9A%E7%AF%84%E4%BE%8B"><span class="nav-number">4.</span> <span class="nav-text">Nginx 負載平衡設定範例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%A6%E5%8B%99%E5%BB%BA%E8%AD%B0"><span class="nav-number">5.</span> <span class="nav-text">實務建議</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">6.</span> <span class="nav-text">結論</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#nginx-%E7%9A%84%E4%B8%BB%E8%A6%81%E5%8A%9F%E8%83%BD"><span class="nav-number">1.</span> <span class="nav-text"> Nginx 的主要功能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nginx-%E7%94%9F%E7%94%A2%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9Aprodconf%E7%AF%84%E4%BE%8B"><span class="nav-number">2.</span> <span class="nav-text"> Nginx 生產環境設定（prod.conf）範例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A8%AD%E5%AE%9A%E9%87%8D%E9%BB%9E%E8%AA%AA%E6%98%8E"><span class="nav-number">2.1.</span> <span class="nav-text"> 設定重點說明</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nginx-%E9%96%8B%E7%99%BC%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9Adevconf%E7%AF%84%E4%BE%8B"><span class="nav-number">3.</span> <span class="nav-text"> Nginx 開發環境設定（dev.conf）範例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AA%AA%E6%98%8E"><span class="nav-number">3.1.</span> <span class="nav-text"> 說明</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nginx-%E8%B2%A0%E8%BC%89%E5%B9%B3%E8%A1%A1%E8%A8%AD%E5%AE%9A%E7%AF%84%E4%BE%8B"><span class="nav-number">4.</span> <span class="nav-text"> Nginx 負載平衡設定範例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%A6%E5%8B%99%E5%BB%BA%E8%AD%B0"><span class="nav-number">5.</span> <span class="nav-text"> 實務建議</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">6.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -421,74 +421,159 @@
     
     
     <div class="post-body" itemprop="articleBody"><p>Nginx 是現代 Web 架構中不可或缺的高效能反向代理伺服器。它能處理靜態檔案、反向代理、負載平衡、快取與安全性強化等多種任務。以下以 Django 專案為例，說明 Nginx 的功能與設定檔設計。</p>
-<hr>
-<h1 id="Nginx-的主要功能"><a href="#Nginx-的主要功能" class="headerlink" title="Nginx 的主要功能"></a>Nginx 的主要功能</h1><ol>
-<li><p><strong>反向代理</strong><br>將外部請求轉發給後端應用（如 Gunicorn + Django），隱藏內部架構，提升安全性與彈性。</p>
+<hr />
+<h1 id="nginx-的主要功能"><a class="markdownIt-Anchor" href="#nginx-的主要功能"></a> Nginx 的主要功能</h1>
+<ol>
+<li>
+<p><strong>反向代理</strong><br />
+將外部請求轉發給後端應用（如 Gunicorn + Django），隱藏內部架構，提升安全性與彈性。</p>
 </li>
-<li><p><strong>靜態檔案服務</strong><br>直接由 Nginx 回應 CSS、JS、圖片等靜態檔案，減輕後端負擔，加速回應速度。</p>
+<li>
+<p><strong>靜態檔案服務</strong><br />
+直接由 Nginx 回應 CSS、JS、圖片等靜態檔案，減輕後端負擔，加速回應速度。</p>
 </li>
-<li><p><strong>快取與壓縮</strong><br>可設定快取策略（如 Cache-Control、expires），提升效能並減少頻寬消耗。</p>
+<li>
+<p><strong>快取與壓縮</strong><br />
+可設定快取策略（如 Cache-Control、expires），提升效能並減少頻寬消耗。</p>
 </li>
-<li><p><strong>負載平衡</strong><br>將請求分配到多個後端服務，提升可用性與擴展性。</p>
+<li>
+<p><strong>負載平衡</strong><br />
+將請求分配到多個後端服務，提升可用性與擴展性。</p>
 </li>
-<li><p><strong>安全性強化</strong><br>可設定防火牆、限制來源、阻擋惡意請求、加強 HTTP 標頭等。</p>
+<li>
+<p><strong>安全性強化</strong><br />
+可設定防火牆、限制來源、阻擋惡意請求、加強 HTTP 標頭等。</p>
 </li>
 </ol>
-<hr>
-<h1 id="Nginx-生產環境設定（prod-conf）範例"><a href="#Nginx-生產環境設定（prod-conf）範例" class="headerlink" title="Nginx 生產環境設定（prod.conf）範例"></a>Nginx 生產環境設定（prod.conf）範例</h1><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">server_name</span> shr.today www.shr.today;</span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> /static/ &#123;</span><br><span class="line">        <span class="attribute">alias</span> /staticfiles/;</span><br><span class="line">        <span class="attribute">expires</span> <span class="number">7d</span>;</span><br><span class="line">        <span class="attribute">add_header</span> Cache-Control <span class="string">&quot;public&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> / &#123;</span><br><span class="line">        <span class="attribute">proxy_pass</span> http://backend:8000;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> Host <span class="variable">$host</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-Proto <span class="variable">$http_x_forwarded_proto</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr />
+<h1 id="nginx-生產環境設定prodconf範例"><a class="markdownIt-Anchor" href="#nginx-生產環境設定prodconf範例"></a> Nginx 生產環境設定（prod.conf）範例</h1>
+<pre class="highlight"><code class="nginx"><span class="hljs-section">server</span> &#123;
+    <span class="hljs-attribute">listen</span> <span class="hljs-number">80</span>;
+    <span class="hljs-attribute">server_name</span> shr.today www.shr.today;
 
-<h2 id="設定重點說明"><a href="#設定重點說明" class="headerlink" title="設定重點說明"></a>設定重點說明</h2><ul>
-<li><p><code>listen 80;</code><br>監聽 80 port，處理 HTTP 請求。</p>
+    <span class="hljs-section">location</span> /static/ &#123;
+        <span class="hljs-attribute">alias</span> /staticfiles/;
+        <span class="hljs-attribute">expires</span> <span class="hljs-number">7d</span>;
+        <span class="hljs-attribute">add_header</span> Cache-Control <span class="hljs-string">&quot;public&quot;</span>;
+    &#125;
+
+    <span class="hljs-section">location</span> / &#123;
+        <span class="hljs-attribute">proxy_pass</span> http://backend:8000;
+        <span class="hljs-attribute">proxy_set_header</span> Host <span class="hljs-variable">$host</span>;
+        <span class="hljs-attribute">proxy_set_header</span> X-Real-IP <span class="hljs-variable">$remote_addr</span>;
+        <span class="hljs-attribute">proxy_set_header</span> X-Forwarded-For <span class="hljs-variable">$proxy_add_x_forwarded_for</span>;
+        <span class="hljs-attribute">proxy_set_header</span> X-Forwarded-Proto <span class="hljs-variable">$http_x_forwarded_proto</span>;
+    &#125;
+&#125;
+</code></pre>
+<h2 id="設定重點說明"><a class="markdownIt-Anchor" href="#設定重點說明"></a> 設定重點說明</h2>
+<ul>
+<li>
+<p><code>listen 80;</code><br />
+監聽 80 port，處理 HTTP 請求。</p>
 </li>
-<li><p><code>server_name shr.today www.shr.today;</code><br>指定服務的網域名稱。</p>
+<li>
+<p><code>server_name shr.today www.shr.today;</code><br />
+指定服務的網域名稱。</p>
 </li>
-<li><p><code>location /static/ &#123; ... &#125;</code>  </p>
+<li>
+<p><code>location /static/ &#123; ... &#125;</code></p>
 <ul>
 <li><code>alias /staticfiles/;</code>：將 <code>/static/</code> 路徑對應到伺服器上的 <code>/staticfiles/</code> 目錄（通常由 Django collectstatic 輸出）。</li>
 <li><code>expires 7d;</code>：設定瀏覽器快取靜態檔案 7 天。</li>
 <li><code>add_header Cache-Control &quot;public&quot;;</code>：允許快取。</li>
 </ul>
 </li>
-<li><p><code>location / &#123; ... &#125;</code>  </p>
+<li>
+<p><code>location / &#123; ... &#125;</code></p>
 <ul>
 <li><code>proxy_pass http://backend:8000;</code>：反向代理所有非靜態請求到後端 Django 服務（如 Gunicorn）。</li>
 <li>其他 <code>proxy_set_header</code>：傳遞原始請求資訊給後端，方便日誌與安全性判斷。</li>
 </ul>
 </li>
 </ul>
-<hr>
-<h1 id="Nginx-開發環境設定（dev-conf）範例"><a href="#Nginx-開發環境設定（dev-conf）範例" class="headerlink" title="Nginx 開發環境設定（dev.conf）範例"></a>Nginx 開發環境設定（dev.conf）範例</h1><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">server_name</span> localhost <span class="number">127.0.0.1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> / &#123;</span><br><span class="line">        <span class="attribute">proxy_pass</span> http://backend:8000;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> Host <span class="variable">$host</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-Proto <span class="variable">$scheme</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr />
+<h1 id="nginx-開發環境設定devconf範例"><a class="markdownIt-Anchor" href="#nginx-開發環境設定devconf範例"></a> Nginx 開發環境設定（dev.conf）範例</h1>
+<pre class="highlight"><code class="nginx"><span class="hljs-section">server</span> &#123;
+    <span class="hljs-attribute">listen</span> <span class="hljs-number">80</span>;
+    <span class="hljs-attribute">server_name</span> localhost <span class="hljs-number">127.0.0.1</span>;
 
-<h2 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h2><ul>
-<li><p><code>listen 80;</code><br>監聽本機 80 port，處理 HTTP 請求。</p>
-</li>
-<li><p><code>server_name localhost 127.0.0.1;</code><br>僅允許本機或 127.0.0.1 的請求，適合開發測試。</p>
-</li>
-<li><p><code>location / &#123; ... &#125;</code>  </p>
+    <span class="hljs-section">location</span> / &#123;
+        <span class="hljs-attribute">proxy_pass</span> http://backend:8000;
+        <span class="hljs-attribute">proxy_set_header</span> Host <span class="hljs-variable">$host</span>;
+        <span class="hljs-attribute">proxy_set_header</span> X-Real-IP <span class="hljs-variable">$remote_addr</span>;
+        <span class="hljs-attribute">proxy_set_header</span> X-Forwarded-For <span class="hljs-variable">$proxy_add_x_forwarded_for</span>;
+        <span class="hljs-attribute">proxy_set_header</span> X-Forwarded-Proto <span class="hljs-variable">$scheme</span>;
+    &#125;
+&#125;
+</code></pre>
+<h2 id="說明"><a class="markdownIt-Anchor" href="#說明"></a> 說明</h2>
 <ul>
-<li><code>proxy_pass http://backend:8000;</code><br>將所有請求轉發到本機的 Django 服務（通常由 Gunicorn 或 runserver 啟動）。</li>
-<li>其他 <code>proxy_set_header</code><br>傳遞原始請求資訊給後端，方便日誌與除錯。</li>
+<li>
+<p><code>listen 80;</code><br />
+監聽本機 80 port，處理 HTTP 請求。</p>
+</li>
+<li>
+<p><code>server_name localhost 127.0.0.1;</code><br />
+僅允許本機或 127.0.0.1 的請求，適合開發測試。</p>
+</li>
+<li>
+<p><code>location / &#123; ... &#125;</code></p>
+<ul>
+<li><code>proxy_pass http://backend:8000;</code><br />
+將所有請求轉發到本機的 Django 服務（通常由 Gunicorn 或 runserver 啟動）。</li>
+<li>其他 <code>proxy_set_header</code><br />
+傳遞原始請求資訊給後端，方便日誌與除錯。</li>
 </ul>
 </li>
-<li><p><strong>未設定靜態檔案服務</strong><br>開發時通常由 Django 直接服務 static 檔案，Nginx 不需額外處理。</p>
+<li>
+<p><strong>未設定靜態檔案服務</strong><br />
+開發時通常由 Django 直接服務 static 檔案，Nginx 不需額外處理。</p>
 </li>
 </ul>
-<hr>
-<h1 id="Nginx-負載平衡設定範例"><a href="#Nginx-負載平衡設定範例" class="headerlink" title="Nginx 負載平衡設定範例"></a>Nginx 負載平衡設定範例</h1><p>當網站流量增加時，可用 Nginx 的負載平衡功能，將請求分散到多個 Django 應用實例：</p>
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">upstream</span> django_app &#123;</span><br><span class="line">    <span class="attribute">server</span> backend1:<span class="number">8000</span>;</span><br><span class="line">    <span class="attribute">server</span> backend2:<span class="number">8000</span>;</span><br><span class="line">    <span class="attribute">server</span> backend3:<span class="number">8000</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">server_name</span> shr.today www.shr.today;</span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> /static/ &#123;</span><br><span class="line">        <span class="attribute">alias</span> /staticfiles/;</span><br><span class="line">        <span class="attribute">expires</span> <span class="number">7d</span>;</span><br><span class="line">        <span class="attribute">add_header</span> Cache-Control <span class="string">&quot;public&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> / &#123;</span><br><span class="line">        <span class="attribute">proxy_pass</span> http://django_app;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> Host <span class="variable">$host</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-Proto <span class="variable">$http_x_forwarded_proto</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr />
+<h1 id="nginx-負載平衡設定範例"><a class="markdownIt-Anchor" href="#nginx-負載平衡設定範例"></a> Nginx 負載平衡設定範例</h1>
+<p>當網站流量增加時，可用 Nginx 的負載平衡功能，將請求分散到多個 Django 應用實例：</p>
+<pre class="highlight"><code class="nginx"><span class="hljs-section">upstream</span> django_app &#123;
+    <span class="hljs-attribute">server</span> backend1:<span class="hljs-number">8000</span>;
+    <span class="hljs-attribute">server</span> backend2:<span class="hljs-number">8000</span>;
+    <span class="hljs-attribute">server</span> backend3:<span class="hljs-number">8000</span>;
+&#125;
 
+<span class="hljs-section">server</span> &#123;
+    <span class="hljs-attribute">listen</span> <span class="hljs-number">80</span>;
+    <span class="hljs-attribute">server_name</span> shr.today www.shr.today;
+
+    <span class="hljs-section">location</span> /static/ &#123;
+        <span class="hljs-attribute">alias</span> /staticfiles/;
+        <span class="hljs-attribute">expires</span> <span class="hljs-number">7d</span>;
+        <span class="hljs-attribute">add_header</span> Cache-Control <span class="hljs-string">&quot;public&quot;</span>;
+    &#125;
+
+    <span class="hljs-section">location</span> / &#123;
+        <span class="hljs-attribute">proxy_pass</span> http://django_app;
+        <span class="hljs-attribute">proxy_set_header</span> Host <span class="hljs-variable">$host</span>;
+        <span class="hljs-attribute">proxy_set_header</span> X-Real-IP <span class="hljs-variable">$remote_addr</span>;
+        <span class="hljs-attribute">proxy_set_header</span> X-Forwarded-For <span class="hljs-variable">$proxy_add_x_forwarded_for</span>;
+        <span class="hljs-attribute">proxy_set_header</span> X-Forwarded-Proto <span class="hljs-variable">$http_x_forwarded_proto</span>;
+    &#125;
+&#125;
+</code></pre>
 <ul>
 <li><code>upstream django_app &#123; ... &#125;</code>：定義多個後端服務，Nginx 會自動分配請求。</li>
 <li><code>proxy_pass http://django_app;</code>：將請求分流到多個後端。</li>
 </ul>
-<hr>
-<h1 id="實務建議"><a href="#實務建議" class="headerlink" title="實務建議"></a>實務建議</h1><ul>
+<hr />
+<h1 id="實務建議"><a class="markdownIt-Anchor" href="#實務建議"></a> 實務建議</h1>
+<ul>
 <li><strong>生產環境</strong>：靜態檔案務必交給 Nginx 處理，並設定合理快取。高流量時建議啟用負載平衡。</li>
 <li><strong>開發環境</strong>：可簡化設定，讓 Django 直接服務 static，方便開發測試。</li>
 <li><strong>安全性</strong>：可進一步加上 HTTPS、限制來源、加強 header 等。</li>
 </ul>
-<hr>
-<h1 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h1><p>Nginx 能大幅提升專案的效能、可用性與安全性。<br>理解設定檔的每一段功能，包含靜態檔案服務、反向代理與負載平衡，有助於打造穩定、可維護且可擴展的生產環境。</p>
+<hr />
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>Nginx 能大幅提升專案的效能、可用性與安全性。<br />
+理解設定檔的每一段功能，包含靜態檔案服務、反向代理與負載平衡，有助於打造穩定、可維護且可擴展的生產環境。</p>
 
     </div>
 

@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":false,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
     <meta name="description" content="在現代軟體開發中，持續整合（Continuous Integration, CI）已經不是一個「選項」，而是一個「必需品」。它能確保我們每次提交的程式碼都經過自動化測試，及早發現問題，從而提升整個團隊的開發品質與效率。對於專案來說，一個好的 CI 流程更是不可或缺。 我們將深入解析一個為 Django 專案設計的 GitHub Actions 工作流程。這個流程不僅涵蓋了基本的測試，還巧妙地結合了">
 <meta property="og:type" content="article">
@@ -322,7 +322,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#GitHub-Actions-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">GitHub Actions 核心概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%E6%AA%94%E6%A1%88%E8%A7%A3%E6%9E%90-Django-CI-Tests"><span class="nav-number">2.</span> <span class="nav-text">工作流程檔案解析 (Django CI Tests)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%BB%E5%8B%99%E4%B8%80%EF%BC%9Anative-pytest-%E8%BF%BD%E6%B1%82%E6%A5%B5%E9%80%9F%E7%9A%84%E5%8E%9F%E7%94%9F-Python-%E6%B8%AC%E8%A9%A6"><span class="nav-number">3.</span> <span class="nav-text">任務一：native-pytest - 追求極速的原生 Python 測試</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%86%E8%A7%A3%E6%AD%A5%E9%A9%9F%EF%BC%9A"><span class="nav-number">3.1.</span> <span class="nav-text">拆解步驟：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%BB%E5%8B%99%E4%BA%8C%EF%BC%9Adocker-compose-pytest-%E6%A8%A1%E6%93%AC%E7%94%9F%E7%94%A2%E7%92%B0%E5%A2%83%E7%9A%84%E9%AB%98%E6%93%AC%E7%9C%9F%E5%BA%A6%E6%B8%AC%E8%A9%A6"><span class="nav-number">4.</span> <span class="nav-text">任務二：docker-compose-pytest - 模擬生產環境的高擬真度測試</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%86%E8%A7%A3%E6%AD%A5%E9%A9%9F%EF%BC%9A-1"><span class="nav-number">4.1.</span> <span class="nav-text">拆解步驟：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9C%80%E8%A6%81%E5%85%A9%E7%A8%AE%E6%B8%AC%E8%A9%A6%E7%AD%96%E7%95%A5%EF%BC%9F"><span class="nav-number">5.</span> <span class="nav-text">為什麼需要兩種測試策略？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">6.</span> <span class="nav-text">總結</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#github-actions-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text"> GitHub Actions 核心概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%E6%AA%94%E6%A1%88%E8%A7%A3%E6%9E%90-django-ci-tests"><span class="nav-number">2.</span> <span class="nav-text"> 工作流程檔案解析 (Django CI Tests)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%BB%E5%8B%99%E4%B8%80native-pytest-%E8%BF%BD%E6%B1%82%E6%A5%B5%E9%80%9F%E7%9A%84%E5%8E%9F%E7%94%9F-python-%E6%B8%AC%E8%A9%A6"><span class="nav-number">3.</span> <span class="nav-text"> 任務一：native-pytest - 追求極速的原生 Python 測試</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%86%E8%A7%A3%E6%AD%A5%E9%A9%9F"><span class="nav-number">3.1.</span> <span class="nav-text"> 拆解步驟：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%BB%E5%8B%99%E4%BA%8Cdocker-compose-pytest-%E6%A8%A1%E6%93%AC%E7%94%9F%E7%94%A2%E7%92%B0%E5%A2%83%E7%9A%84%E9%AB%98%E6%93%AC%E7%9C%9F%E5%BA%A6%E6%B8%AC%E8%A9%A6"><span class="nav-number">4.</span> <span class="nav-text"> 任務二：docker-compose-pytest - 模擬生產環境的高擬真度測試</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%86%E8%A7%A3%E6%AD%A5%E9%A9%9F-2"><span class="nav-number">4.1.</span> <span class="nav-text"> 拆解步驟：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9C%80%E8%A6%81%E5%85%A9%E7%A8%AE%E6%B8%AC%E8%A9%A6%E7%AD%96%E7%95%A5"><span class="nav-number">5.</span> <span class="nav-text"> 為什麼需要兩種測試策略？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">6.</span> <span class="nav-text"> 總結</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -423,7 +423,8 @@
     
     <div class="post-body" itemprop="articleBody"><p>在現代軟體開發中，持續整合（Continuous Integration, CI）已經不是一個「選項」，而是一個「必需品」。它能確保我們每次提交的程式碼都經過自動化測試，及早發現問題，從而提升整個團隊的開發品質與效率。對於專案來說，一個好的 CI 流程更是不可或缺。</p>
 <p>我們將深入解析一個為 Django 專案設計的 GitHub Actions 工作流程。這個流程不僅涵蓋了基本的測試，還巧妙地結合了原生 Python 環境與 Docker Compose 環境，實現了快速回饋與高擬真度測試的雙重保障。</p>
-<h1 id="GitHub-Actions-核心概念"><a href="#GitHub-Actions-核心概念" class="headerlink" title="GitHub Actions 核心概念"></a>GitHub Actions 核心概念</h1><p>在深入程式碼之前，先快速了解幾個 GitHub Actions 的核心概念：</p>
+<h1 id="github-actions-核心概念"><a class="markdownIt-Anchor" href="#github-actions-核心概念"></a> GitHub Actions 核心概念</h1>
+<p>在深入程式碼之前，先快速了解幾個 GitHub Actions 的核心概念：</p>
 <ul>
 <li><strong>Workflow（工作流程）</strong>: 由一個或多個 <code>job</code> 組成，定義了整個自動化過程。通常以 YAML 檔案形式存放在專案的 <code>.github/workflows/</code> 目錄下。</li>
 <li><strong>Event（事件）</strong>: 觸發工作流程的特定活動，例如 <code>push</code>（推送到儲存庫）或 <code>pull_request</code>（發起拉取請求）。</li>
@@ -431,39 +432,84 @@
 <li><strong>Step（步驟）</strong>: 任務中的一個獨立指令或動作。一個任務由多個步驟組成。</li>
 <li><strong>Action（動作）</strong>: 可重用的程式碼單元，是建構步驟的積木。例如 <code>actions/checkout</code> 就是一個官方提供的 Action，用來拉取你的程式碼。</li>
 </ul>
-<h1 id="工作流程檔案解析-Django-CI-Tests"><a href="#工作流程檔案解析-Django-CI-Tests" class="headerlink" title="工作流程檔案解析 (Django CI Tests)"></a>工作流程檔案解析 (<code>Django CI Tests</code>)</h1><p>讓我們來看看這次的主角，這個精心設計的 <code>Django CI Tests</code> 工作流程。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">Django</span> <span class="string">CI</span> <span class="string">Tests</span></span><br><span class="line"></span><br><span class="line"><span class="attr">on:</span> [<span class="string">push</span>, <span class="string">pull_request</span>]</span><br><span class="line"></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="comment"># ... 兩個 jobs 的定義將在下面詳細解說 ...</span></span><br></pre></td></tr></table></figure>
+<h1 id="工作流程檔案解析-django-ci-tests"><a class="markdownIt-Anchor" href="#工作流程檔案解析-django-ci-tests"></a> 工作流程檔案解析 (<code>Django CI Tests</code>)</h1>
+<p>讓我們來看看這次的主角，這個精心設計的 <code>Django CI Tests</code> 工作流程。</p>
+<pre class="highlight"><code class="yaml"><span class="hljs-attr">name:</span> <span class="hljs-string">Django</span> <span class="hljs-string">CI</span> <span class="hljs-string">Tests</span>
 
+<span class="hljs-attr">on:</span> [<span class="hljs-string">push</span>, <span class="hljs-string">pull_request</span>]
+
+<span class="hljs-attr">jobs:</span>
+  <span class="hljs-comment"># ... 兩個 jobs 的定義將在下面詳細解說 ...</span>
+</code></pre>
 <ul>
 <li><code>name: Django CI Tests</code>：為這個工作流程取一個易於辨識的名字。</li>
 <li><code>on: [push, pull_request]</code>：這行是關鍵！它定義了觸發條件。這意味著，<strong>每當有新的程式碼被推送到任何分支，或者當有人發起一個 Pull Request 時</strong>，這個自動化測試流程就會被啟動。</li>
 </ul>
 <p>這個工作流程包含了兩個並行執行的任務（Jobs）：<code>native-pytest</code> 和 <code>docker-compose-pytest</code>。讓我們逐一拆解它們的設計理念與實現細節。</p>
-<hr>
-<h1 id="任務一：native-pytest-追求極速的原生-Python-測試"><a href="#任務一：native-pytest-追求極速的原生-Python-測試" class="headerlink" title="任務一：native-pytest - 追求極速的原生 Python 測試"></a>任務一：<code>native-pytest</code> - 追求極速的原生 Python 測試</h1><p>第一個任務的目標是「快」。它在一個乾淨的 Ubuntu 環境中直接設定 Python，並執行測試。這適用於那些不依賴外部服務（如資料庫、快取）的單元測試，能夠在最短時間內給予開發者回饋。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">native-pytest:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">Native</span> <span class="string">Python</span> <span class="string">Pytest</span></span><br><span class="line">  <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line">  <span class="attr">defaults:</span></span><br><span class="line">    <span class="attr">run:</span></span><br><span class="line">      <span class="attr">working-directory:</span> <span class="string">backend</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">env:</span></span><br><span class="line">    <span class="attr">SECRET_KEY:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.SECRET_KEY</span> <span class="string">&#125;&#125;</span></span><br><span class="line">    <span class="attr">DEBUG:</span> <span class="string">&quot;True&quot;</span></span><br><span class="line">    <span class="attr">USE_POSTGRES:</span> <span class="string">&quot;False&quot;</span> <span class="comment"># 關鍵點：不使用 PostgreSQL</span></span><br><span class="line">    <span class="attr">ALLOWED_HOSTS:</span> <span class="string">localhost,127.0.0.1</span></span><br><span class="line">    <span class="attr">SOCIAL_AUTH_GOOGLE_CLIENT_ID:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.SOCIAL_AUTH_GOOGLE_CLIENT_ID</span> <span class="string">&#125;&#125;</span></span><br><span class="line">    <span class="attr">SOCIAL_AUTH_GOOGLE_CLIENT_SECRET:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.SOCIAL_AUTH_GOOGLE_CLIENT_SECRET</span> <span class="string">&#125;&#125;</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">steps:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/checkout@v4</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Set</span> <span class="string">up</span> <span class="string">Python</span></span><br><span class="line">      <span class="attr">uses:</span> <span class="string">actions/setup-python@v5</span></span><br><span class="line">      <span class="attr">with:</span></span><br><span class="line">        <span class="attr">python-version:</span> <span class="string">&quot;3.13&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Install</span> <span class="string">uv</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">pip</span> <span class="string">install</span> <span class="string">uv</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Install</span> <span class="string">backend</span> <span class="string">dependencies</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">uv</span> <span class="string">sync</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Run</span> <span class="string">migrations</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">uv</span> <span class="string">run</span> <span class="string">python</span> <span class="string">manage.py</span> <span class="string">migrate</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Run</span> <span class="string">pytest</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">uv</span> <span class="string">run</span> <span class="string">pytest</span> <span class="string">-v</span> <span class="string">--tb=short</span> <span class="string">--maxfail=5</span> <span class="string">--disable-warnings</span></span><br></pre></td></tr></table></figure>
+<hr />
+<h1 id="任務一native-pytest-追求極速的原生-python-測試"><a class="markdownIt-Anchor" href="#任務一native-pytest-追求極速的原生-python-測試"></a> 任務一：<code>native-pytest</code> - 追求極速的原生 Python 測試</h1>
+<p>第一個任務的目標是「快」。它在一個乾淨的 Ubuntu 環境中直接設定 Python，並執行測試。這適用於那些不依賴外部服務（如資料庫、快取）的單元測試，能夠在最短時間內給予開發者回饋。</p>
+<pre class="highlight"><code class="yaml">  <span class="hljs-attr">native-pytest:</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">Native</span> <span class="hljs-string">Python</span> <span class="hljs-string">Pytest</span>
+    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
+    <span class="hljs-attr">defaults:</span>
+      <span class="hljs-attr">run:</span>
+        <span class="hljs-attr">working-directory:</span> <span class="hljs-string">backend</span>
 
-<h2 id="拆解步驟："><a href="#拆解步驟：" class="headerlink" title="拆解步驟："></a>拆解步驟：</h2><ol>
-<li><p><strong>基本設定</strong>:</p>
+    <span class="hljs-attr">env:</span>
+      <span class="hljs-attr">SECRET_KEY:</span> <span class="hljs-string">$&#123;&#123; secrets.SECRET_KEY &#125;&#125;</span>
+      <span class="hljs-attr">DEBUG:</span> <span class="hljs-string">&quot;True&quot;</span>
+      <span class="hljs-attr">USE_POSTGRES:</span> <span class="hljs-string">&quot;False&quot;</span> <span class="hljs-comment"># 關鍵點：不使用 PostgreSQL</span>
+      <span class="hljs-attr">ALLOWED_HOSTS:</span> <span class="hljs-string">localhost,127.0.0.1</span>
+      <span class="hljs-attr">SOCIAL_AUTH_GOOGLE_CLIENT_ID:</span> <span class="hljs-string">$&#123;&#123; secrets.SOCIAL_AUTH_GOOGLE_CLIENT_ID &#125;&#125;</span>
+      <span class="hljs-attr">SOCIAL_AUTH_GOOGLE_CLIENT_SECRET:</span> <span class="hljs-string">$&#123;&#123; secrets.SOCIAL_AUTH_GOOGLE_CLIENT_SECRET &#125;&#125;</span>
+
+    <span class="hljs-attr">steps:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Set</span> <span class="hljs-string">up</span> <span class="hljs-string">Python</span>
+        <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/setup-python@v5</span>
+        <span class="hljs-attr">with:</span>
+          <span class="hljs-attr">python-version:</span> <span class="hljs-string">&quot;3.13&quot;</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Install</span> <span class="hljs-string">uv</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">pip</span> <span class="hljs-string">install</span> <span class="hljs-string">uv</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Install</span> <span class="hljs-string">backend</span> <span class="hljs-string">dependencies</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">uv</span> <span class="hljs-string">sync</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Run</span> <span class="hljs-string">migrations</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">uv</span> <span class="hljs-string">run</span> <span class="hljs-string">python</span> <span class="hljs-string">manage.py</span> <span class="hljs-string">migrate</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Run</span> <span class="hljs-string">pytest</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">uv</span> <span class="hljs-string">run</span> <span class="hljs-string">pytest</span> <span class="hljs-string">-v</span> <span class="hljs-string">--tb=short</span> <span class="hljs-string">--maxfail=5</span> <span class="hljs-string">--disable-warnings</span>
+</code></pre>
+<h2 id="拆解步驟"><a class="markdownIt-Anchor" href="#拆解步驟"></a> 拆解步驟：</h2>
+<ol>
+<li>
+<p><strong>基本設定</strong>:</p>
 <ul>
 <li><code>runs-on: ubuntu-latest</code>: 指定任務運行在最新版的 Ubuntu 虛擬機上。</li>
 <li><code>defaults.run.working-directory: backend</code>: 這是一個很方便的設定，它將後續所有 <code>run</code> 指令的預設工作目錄都設定為 <code>backend</code>，省去了在每個步驟中都 <code>cd backend</code> 的麻煩。</li>
 </ul>
 </li>
-<li><p><strong>環境變數 (<code>env</code>)</strong>:</p>
+<li>
+<p><strong>環境變數 (<code>env</code>)</strong>:</p>
 <ul>
 <li>這裡設定了 Django 運作所需的環境變數。</li>
 <li><code>SECRET_KEY</code> 等敏感資訊透過 <code>$&#123;&#123; secrets.SECRET_KEY &#125;&#125;</code> 從 GitHub 的 Secrets 中安全地讀取，避免了硬編碼在程式碼中。</li>
 <li><strong>最重要的設定是 <code>USE_POSTGRES: &quot;False&quot;</code></strong>。這通常會告訴 Django 的 <code>settings.py</code> 使用輕量級的 SQLite 作為測試資料庫，因為它不需要額外的服務，啟動速度極快。</li>
 </ul>
 </li>
-<li><p><strong>執行步驟 (<code>steps</code>)</strong>:</p>
+<li>
+<p><strong>執行步驟 (<code>steps</code>)</strong>:</p>
 <ul>
 <li><code>actions/checkout@v4</code>: 第一步總是它！這個 Action 會將你的專案程式碼拉取到虛擬機中。</li>
 <li><code>setup-python@v5</code>: 設定指定的 Python 版本（這裡用了最新的 3.13！）。</li>
 <li><code>Install uv</code> &amp; <code>uv sync</code>: 這裡使用 <code>uv</code> 這個新一代的超高速 Python 套件管理器來取代傳統的 <code>pip</code>。<code>uv sync</code> 會根據 <code>pyproject.toml</code> 或 <code>requirements.txt</code> 檔案來安裝所有依賴，速度飛快。</li>
 <li><code>uv run python manage.py migrate</code>: 在執行測試前，先執行資料庫遷移。對於 SQLite 來說，這會在記憶體或一個暫存檔案中建立資料庫結構。</li>
-<li><code>uv run pytest ...</code>: 核心步驟！<code>uv run</code> 會在 <code>uv</code> 管理的虛擬環境中執行 <code>pytest</code>。<ul>
+<li><code>uv run pytest ...</code>: 核心步驟！<code>uv run</code> 會在 <code>uv</code> 管理的虛擬環境中執行 <code>pytest</code>。
+<ul>
 <li><code>-v</code>: 顯示詳細的測試結果。</li>
 <li><code>--tb=short</code>: 使用簡潔的錯誤追蹤格式。</li>
 <li><code>--maxfail=5</code>: 當有 5 個測試失敗時就立即停止，節省時間。</li>
@@ -474,22 +520,53 @@
 </li>
 </ol>
 <p><strong>小結：<code>native-pytest</code> 的優勢是速度快、設定簡單，適合快速驗證程式碼邏輯。</strong></p>
-<hr>
-<h1 id="任務二：docker-compose-pytest-模擬生產環境的高擬真度測試"><a href="#任務二：docker-compose-pytest-模擬生產環境的高擬真度測試" class="headerlink" title="任務二：docker-compose-pytest - 模擬生產環境的高擬真度測試"></a>任務二：<code>docker-compose-pytest</code> - 模擬生產環境的高擬真度測試</h1><p>第二個任務的目標是「擬真」。它使用 Docker Compose 來啟動整個應用程式環境，包括 Django 應用本身和 PostgreSQL 資料庫。這確保了測試環境與你的開發環境，甚至生產環境，都盡可能地保持一致。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">docker-compose-pytest:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">Docker</span> <span class="string">Compose</span> <span class="string">Pytest</span></span><br><span class="line">  <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">steps:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/checkout@v4</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Create</span> <span class="string">backend</span> <span class="string">.env</span> <span class="string">file</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">        echo &quot;SECRET_KEY=$&#123;&#123; secrets.SECRET_KEY &#125;&#125;&quot; &gt; backend/.env</span></span><br><span class="line"><span class="string">        # ... 其他 echo 指令 ...</span></span><br><span class="line"><span class="string">        echo &quot;USE_POSTGRES=True&quot; &gt;&gt; backend/.env</span></span><br><span class="line"><span class="string">        echo &quot;POSTGRES_HOST=db&quot; &gt;&gt; backend/.env</span></span><br><span class="line"><span class="string">        # ...</span></span><br><span class="line"><span class="string"></span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Build</span> <span class="string">docker-compose</span> <span class="string">services</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">docker</span> <span class="string">compose</span> <span class="string">-f</span> <span class="string">docker-compose.dev.yml</span> <span class="string">build</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Run</span> <span class="string">pytest</span> <span class="string">in</span> <span class="string">docker-compose</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">docker</span> <span class="string">compose</span> <span class="string">-f</span> <span class="string">docker-compose.dev.yml</span> <span class="string">run</span> <span class="string">--rm</span> <span class="string">backend</span> <span class="string">uv</span> <span class="string">run</span> <span class="string">pytest</span> <span class="string">-v</span> <span class="string">--tb=short</span> <span class="string">--maxfail=5</span> <span class="string">--disable-warnings</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Check</span> <span class="string">container</span> <span class="string">logs</span> <span class="string">on</span> <span class="string">failure</span></span><br><span class="line">      <span class="attr">if:</span> <span class="string">failure()</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">docker</span> <span class="string">compose</span> <span class="string">-f</span> <span class="string">docker-compose.dev.yml</span> <span class="string">logs</span> <span class="string">backend</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Shutdown</span> <span class="string">docker-compose</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">docker</span> <span class="string">compose</span> <span class="string">-f</span> <span class="string">docker-compose.dev.yml</span> <span class="string">down</span> <span class="string">-v</span></span><br></pre></td></tr></table></figure>
+<hr />
+<h1 id="任務二docker-compose-pytest-模擬生產環境的高擬真度測試"><a class="markdownIt-Anchor" href="#任務二docker-compose-pytest-模擬生產環境的高擬真度測試"></a> 任務二：<code>docker-compose-pytest</code> - 模擬生產環境的高擬真度測試</h1>
+<p>第二個任務的目標是「擬真」。它使用 Docker Compose 來啟動整個應用程式環境，包括 Django 應用本身和 PostgreSQL 資料庫。這確保了測試環境與你的開發環境，甚至生產環境，都盡可能地保持一致。</p>
+<pre class="highlight"><code class="yaml">  <span class="hljs-attr">docker-compose-pytest:</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">Docker</span> <span class="hljs-string">Compose</span> <span class="hljs-string">Pytest</span>
+    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
 
-<h2 id="拆解步驟：-1"><a href="#拆解步驟：-1" class="headerlink" title="拆解步驟："></a>拆解步驟：</h2><ol>
-<li><p><strong>建立 <code>.env</code> 檔案</strong>:</p>
+    <span class="hljs-attr">steps:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Create</span> <span class="hljs-string">backend</span> <span class="hljs-string">.env</span> <span class="hljs-string">file</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">|
+          echo &quot;SECRET_KEY=$&#123;&#123; secrets.SECRET_KEY &#125;&#125;&quot; &gt; backend/.env
+          # ... 其他 echo 指令 ...
+          echo &quot;USE_POSTGRES=True&quot; &gt;&gt; backend/.env
+          echo &quot;POSTGRES_HOST=db&quot; &gt;&gt; backend/.env
+          # ...
+</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Build</span> <span class="hljs-string">docker-compose</span> <span class="hljs-string">services</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">docker</span> <span class="hljs-string">compose</span> <span class="hljs-string">-f</span> <span class="hljs-string">docker-compose.dev.yml</span> <span class="hljs-string">build</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Run</span> <span class="hljs-string">pytest</span> <span class="hljs-string">in</span> <span class="hljs-string">docker-compose</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">docker</span> <span class="hljs-string">compose</span> <span class="hljs-string">-f</span> <span class="hljs-string">docker-compose.dev.yml</span> <span class="hljs-string">run</span> <span class="hljs-string">--rm</span> <span class="hljs-string">backend</span> <span class="hljs-string">uv</span> <span class="hljs-string">run</span> <span class="hljs-string">pytest</span> <span class="hljs-string">-v</span> <span class="hljs-string">--tb=short</span> <span class="hljs-string">--maxfail=5</span> <span class="hljs-string">--disable-warnings</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Check</span> <span class="hljs-string">container</span> <span class="hljs-string">logs</span> <span class="hljs-string">on</span> <span class="hljs-string">failure</span>
+        <span class="hljs-attr">if:</span> <span class="hljs-string">failure()</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">docker</span> <span class="hljs-string">compose</span> <span class="hljs-string">-f</span> <span class="hljs-string">docker-compose.dev.yml</span> <span class="hljs-string">logs</span> <span class="hljs-string">backend</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Shutdown</span> <span class="hljs-string">docker-compose</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">docker</span> <span class="hljs-string">compose</span> <span class="hljs-string">-f</span> <span class="hljs-string">docker-compose.dev.yml</span> <span class="hljs-string">down</span> <span class="hljs-string">-v</span>
+</code></pre>
+<h2 id="拆解步驟-2"><a class="markdownIt-Anchor" href="#拆解步驟-2"></a> 拆解步驟：</h2>
+<ol>
+<li>
+<p><strong>建立 <code>.env</code> 檔案</strong>:</p>
 <ul>
 <li>這是此任務中最巧妙的一步。Docker Compose 通常會讀取一個 <code>.env</code> 檔案來設定容器的環境變數。</li>
 <li>這個步驟動態地建立了一個 <code>backend/.env</code> 檔案，並將 GitHub Secrets 和其他設定值寫入其中。</li>
 <li><strong>注意這裡的關鍵差異</strong>：<code>USE_POSTGRES</code> 被設為 <code>&quot;True&quot;</code>，並且新增了所有 <code>POSTGRES_*</code> 相關的變數，例如資料庫主機 <code>POSTGRES_HOST=db</code>（<code>db</code> 是 <code>docker-compose.dev.yml</code> 中定義的資料庫服務名稱）。</li>
 </ul>
 </li>
-<li><p><strong>建置與執行 Docker Compose</strong>:</p>
+<li>
+<p><strong>建置與執行 Docker Compose</strong>:</p>
 <ul>
 <li><code>docker compose ... build</code>: 根據 <code>docker-compose.dev.yml</code> 和相關的 <code>Dockerfile</code> 來建置服務的映像檔。</li>
-<li><code>docker compose ... run --rm backend ...</code>: 這是執行測試的核心指令。<ul>
+<li><code>docker compose ... run --rm backend ...</code>: 這是執行測試的核心指令。
+<ul>
 <li><code>run backend</code>: 告訴 Docker Compose 啟動 <code>backend</code> 服務（以及它所依賴的 <code>db</code> 服務），並在 <code>backend</code> 容器內執行後續的指令。</li>
 <li><code>--rm</code>: 表示指令執行完畢後，自動刪除這個臨時建立的容器，保持環境乾淨。</li>
 <li>後面的 <code>uv run pytest ...</code> 指令與任務一相同，但這次，它是在一個<strong>包含完整資料庫連線的 Docker 容器內</strong>執行的。</li>
@@ -497,7 +574,8 @@
 </li>
 </ul>
 </li>
-<li><p><strong>偵錯與清理</strong>:</p>
+<li>
+<p><strong>偵錯與清理</strong>:</p>
 <ul>
 <li><code>if: failure()</code>: 這是 GitHub Actions 的一個強大功能。這個步驟<strong>只會在前面的步驟失敗時</strong>才會執行。</li>
 <li><code>docker compose ... logs backend</code>: 如果測試失敗，這個指令會印出 <code>backend</code> 容器的日誌，這對於排查連線問題或環境錯誤非常有幫助。</li>
@@ -506,13 +584,15 @@
 </li>
 </ol>
 <p><strong>小結：<code>docker-compose-pytest</code> 的優勢是環境擬真度高，能測試應用與資料庫等外部服務的整合，確保程式碼在類生產環境下也能正常運作。</strong></p>
-<h1 id="為什麼需要兩種測試策略？"><a href="#為什麼需要兩種測試策略？" class="headerlink" title="為什麼需要兩種測試策略？"></a>為什麼需要兩種測試策略？</h1><p>這個工作流程最精彩的設計，就是同時採用了這兩種策略：</p>
+<h1 id="為什麼需要兩種測試策略"><a class="markdownIt-Anchor" href="#為什麼需要兩種測試策略"></a> 為什麼需要兩種測試策略？</h1>
+<p>這個工作流程最精彩的設計，就是同時採用了這兩種策略：</p>
 <ul>
 <li><strong>快速回饋</strong>：開發者推送一個小修改後，<code>native-pytest</code> 會在 1-2 分鐘內給出結果。如果只是修改了一個不涉及資料庫的函式，可以很快知道有沒有改壞。</li>
 <li><strong>深度驗證</strong>：<code>docker-compose-pytest</code> 雖然慢一些（可能需要 3-5 分鐘），但它提供了更全面的保障。它能捕捉到原生測試無法發現的問題，例如錯誤的資料庫查詢、環境變數設定錯誤等。</li>
 </ul>
 <p>當你在 GitHub 上看到一個 Pull Request 時，這兩個任務會並行執行。你將會看到兩個綠色的勾勾，這代表你的程式碼不僅通過了快速的單元測試，也通過了嚴苛的整合測試，讓你有十足的信心去合併它。</p>
-<h1 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h1><p>透過這個 <code>Django CI Tests</code> 工作流程，學習到如何利用 GitHub Actions 建立一個高效且可靠的自動化測試流程。它結合了：</p>
+<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
+<p>透過這個 <code>Django CI Tests</code> 工作流程，學習到如何利用 GitHub Actions 建立一個高效且可靠的自動化測試流程。它結合了：</p>
 <ol>
 <li><strong>事件驅動</strong>的自動化 (<code>on: [push, pull_request]</code>)。</li>
 <li>使用 <strong>GitHub Secrets</strong> 安全管理敏感資訊。</li>
