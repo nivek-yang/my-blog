@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":false,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="在軟體工程的世界裡，當我們準備打造一個新的應用程式或服務時，第一個浮上心頭的重大決策就是：「系統架構該怎麼設計？」這個問題的核心，往往回歸到兩種最基本的架構模型：集中式系統 (Centralized System) 與 分散式系統 (Distributed System)。 這不只是一個技術術語的選擇，它將深刻影響系統的擴展性、可靠性、開發複雜度，甚至是最終的維運成本。 用一個簡單的比喻：   集">
+<meta property="og:type" content="article">
+<meta property="og:title" content="系統設計基石：集中式 vs. 分散式系統，該選擇哪一個？">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/07/22/%E9%9B%86%E4%B8%AD%E5%BC%8F%E8%88%87%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1%E5%B7%AE%E5%88%A5/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="在軟體工程的世界裡，當我們準備打造一個新的應用程式或服務時，第一個浮上心頭的重大決策就是：「系統架構該怎麼設計？」這個問題的核心，往往回歸到兩種最基本的架構模型：集中式系統 (Centralized System) 與 分散式系統 (Distributed System)。 這不只是一個技術術語的選擇，它將深刻影響系統的擴展性、可靠性、開發複雜度，甚至是最終的維運成本。 用一個簡單的比喻：   集">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-07-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-07-22T14:09:02.325Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Distributed System">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/07/22/%E9%9B%86%E4%B8%AD%E5%BC%8F%E8%88%87%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1%E5%B7%AE%E5%88%A5/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/07/22/%E9%9B%86%E4%B8%AD%E5%BC%8F%E8%88%87%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1%E5%B7%AE%E5%88%A5/","path":"2025/07/22/集中式與分散式系統差別/","title":"系統設計基石：集中式 vs. 分散式系統，該選擇哪一個？"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>系統設計基石：集中式 vs. 分散式系統，該選擇哪一個？ | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">37</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">27</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(6)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(13)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF%E9%9B%86%E4%B8%AD%E5%BC%8F%E7%B3%BB%E7%B5%B1the-super-brain"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是集中式系統？(The Super Brain)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%84%AA%E9%BB%9E"><span class="nav-number">1.1.</span> <span class="nav-text"> 優點</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%BA%E9%BB%9E"><span class="nav-number">1.2.</span> <span class="nav-text"> 缺點</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1the-expert-team"><span class="nav-number">2.</span> <span class="nav-text"> 什麼是分散式系統？(The Expert Team)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%84%AA%E9%BB%9E-2"><span class="nav-number">2.1.</span> <span class="nav-text"> 優點</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%BA%E9%BB%9E-2"><span class="nav-number">2.2.</span> <span class="nav-text"> 缺點</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%B7%AE%E7%95%B0"><span class="nav-number">3.</span> <span class="nav-text"> 核心差異</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%81%B8%E6%93%87"><span class="nav-number">4.</span> <span class="nav-text"> 如何選擇？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/22/%E9%9B%86%E4%B8%AD%E5%BC%8F%E8%88%87%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1%E5%B7%AE%E5%88%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="系統設計基石：集中式 vs. 分散式系統，該選擇哪一個？ | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          系統設計基石：集中式 vs. 分散式系統，該選擇哪一個？
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-07-22 00:00:00 / 修改時間：22:09:02" itemprop="dateCreated datePublished" datetime="2025-07-22T00:00:00+08:00">2025-07-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在軟體工程的世界裡，當我們準備打造一個新的應用程式或服務時，第一個浮上心頭的重大決策就是：「系統架構該怎麼設計？」這個問題的核心，往往回歸到兩種最基本的架構模型：<strong>集中式系統 (Centralized System)</strong> 與 <strong>分散式系統 (Distributed System)</strong>。</p>
+<p>這不只是一個技術術語的選擇，它將深刻影響系統的擴展性、可靠性、開發複雜度，甚至是最終的維運成本。</p>
+<p>用一個簡單的比喻：</p>
+<blockquote>
+<ul>
+<li><strong>集中式系統</strong> 就像一個組織裡的「超級大腦」🧠。所有資訊的處理、決策和儲存都由它一手包辦。它非常強大，但一旦它累了或生病了，整個組織就停擺了。</li>
+<li><strong>分散式系統</strong> 則像一個「專家團隊」🤝。團隊裡有多位專家，每人負責一部分工作，他們透過密切溝通協同合作。即使某位專家請假，其他人也能頂上，團隊依然能完成任務。</li>
+</ul>
+</blockquote>
+<p>讓我們深入挖掘這兩種架構的根本差別。</p>
+<hr />
+<h1 id="什麼是集中式系統the-super-brain"><a class="markdownIt-Anchor" href="#什麼是集中式系統the-super-brain"></a> 什麼是集中式系統？(The Super Brain)</h1>
+<p>集中式系統是最直覺的架構。它的核心理念是將所有的計算、資料和控制權限都放在一個<strong>單一的中央節點</strong>上，通常是一台或一組緊密耦合的高效能伺服器。</p>
+<pre class="highlight"><code class="mermaid">graph TD
+    subgraph Clients
+        C1[Client 1]
+        C2[Client 2]
+        C3[Client 3]
+        C4[...]
+    end
+
+    S[&lt;b style='font-size:16px'&gt;Central Server&lt;/b&gt;&lt;br/&gt;All Logic &amp; Data Here]
+
+    C1 --&gt; S
+    C2 --&gt; S
+    C3 --&gt; S
+    C4 --&gt; S
+</code></pre>
+<h2 id="優點"><a class="markdownIt-Anchor" href="#優點"></a> 優點</h2>
+<ul>
+<li><strong>開發與管理簡單</strong>：所有邏輯都在一個地方，開發、部署和偵錯相對直接。</li>
+<li><strong>資料強一致性</strong>：由於只有一個資料來源，所以非常容易實現 ACID 事務，確保資料總是即時、一致的。</li>
+<li><strong>成本可控（初期）</strong>：對於小型應用，一台強大的伺服器成本可能比維護一個複雜的分散式系統來得低。</li>
+</ul>
+<h2 id="缺點"><a class="markdownIt-Anchor" href="#缺點"></a> 缺點</h2>
+<ul>
+<li><strong>單點故障 (Single Point of Failure, SPOF)</strong>：這是它最致命的弱點。如果中央伺服器當機，整個系統就完全癱瘓。</li>
+<li><strong>擴展性瓶頸</strong>：當使用者和流量增加時，只能進行<strong>垂直擴展 (Vertical Scaling)</strong>，也就是不斷升級中央伺服器的硬體（更強的 CPU、更多的 RAM）。這種方式成本昂貴，且有物理上限。</li>
+<li><strong>效能瓶頸</strong>：所有請求都湧向同一個伺服器，當負載過高時，它會成為整個系統的效能瓶頸，導致延遲增加。</li>
+</ul>
+<hr />
+<h1 id="什麼是分散式系統the-expert-team"><a class="markdownIt-Anchor" href="#什麼是分散式系統the-expert-team"></a> 什麼是分散式系統？(The Expert Team)</h1>
+<p>分散式系統將一個大型任務拆解，分配給多個獨立、透過網路連接的電腦（稱為<strong>節點</strong>）來協同完成。每個節點都有自己的資源（CPU、記憶體），並共同為整個系統的目標服務。</p>
+<p>當今我們所熟知的網際網路服務，幾乎都是分散式系統的典範。</p>
+<pre class="highlight"><code class="mermaid">graph LR
+    subgraph Users
+        C1[Client 1]
+        C2[Client 2]
+    end
+
+    LB[Load Balancer]
+
+    subgraph Service Cluster
+        direction TB
+        N1[Node 1]
+        N2[Node 2]
+        N3[Node 3]
+        N4[Node 4]
+    end
+    
+    %% Client to Load Balancer Flow
+    C1 --&gt; LB
+    C2 --&gt; LB
+
+    %% Load Balancer to Nodes
+    LB --&gt; N1
+    LB --&gt; N2
+    LB --&gt; N3
+    LB --&gt; N4
+
+    %% Inter-node Communication
+    N1 &lt;--&gt; N2
+    N2 &lt;--&gt; N3
+    N3 &lt;--&gt; N4
+    N4 &lt;--&gt; N1
+</code></pre>
+<h2 id="優點-2"><a class="markdownIt-Anchor" href="#優點-2"></a> 優點</h2>
+<ul>
+<li><strong>高可用性與容錯性</strong>：透過冗餘設計，單一或多個節點的故障不會導致整個系統崩潰。系統可以自動將流量導向健康的節點。再見了，單點故障！</li>
+<li><strong>卓越的擴展性</strong>：當流量增加時，可以輕鬆地進行<strong>水平擴展 (Horizontal Scaling)</strong>，也就是增加更多普通的伺服器節點。理論上，擴展性沒有上限。</li>
+<li><strong>高效能與高吞吐量</strong>：能夠同時並行處理大量請求，極大地提升了系統的總體處理能力（吞吐量）。</li>
+</ul>
+<h2 id="缺點-2"><a class="markdownIt-Anchor" href="#缺點-2"></a> 缺點</h2>
+<ul>
+<li><strong>極高的複雜性</strong>：這是最大的挑戰。需要處理節點間的網路通訊、資料同步、狀態一致性、故障檢測與恢復等棘手問題。偵錯就像在一個龐大的迷宮裡找一隻會瞬間移動的蟲子。</li>
+<li><strong>一致性挑戰</strong>：在分散式系統中，實現強一致性非常困難且代價高昂（可參考 <strong>CAP 理論</strong>）。系統通常需要在一致性、可用性和分區容忍性之間做取捨，<strong>最終一致性 (Eventual Consistency)</strong> 是更常見的選擇。</li>
+<li><strong>網路依賴與延遲</strong>：節點間的通訊完全依賴網路。網路延遲或不穩定會直接影響系統的效能和可靠性。</li>
+</ul>
+<hr />
+<h1 id="核心差異"><a class="markdownIt-Anchor" href="#核心差異"></a> 核心差異</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">維度</th>
+<th style="text-align:left">集中式系統 (Centralized)</th>
+<th style="text-align:left">分散式系統 (Distributed)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>核心架構</strong></td>
+<td style="text-align:left">單一中央控制節點</td>
+<td style="text-align:left">多個獨立協作節點</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>擴展性</strong></td>
+<td style="text-align:left">垂直擴展 (增強單機)</td>
+<td style="text-align:left">水平擴展 (增加機器)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>可靠性</strong></td>
+<td style="text-align:left">低 (有單點故障)</td>
+<td style="text-align:left">高 (透過冗餘實現容錯)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>資料一致性</strong></td>
+<td style="text-align:left"><strong>強一致性</strong> (Strong Consistency)</td>
+<td style="text-align:left">通常為<strong>最終一致性</strong> (Eventual Consistency)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>開發複雜度</strong></td>
+<td style="text-align:left">相對簡單</td>
+<td style="text-align:left">非常複雜</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>效能</strong></td>
+<td style="text-align:left">易成瓶頸</td>
+<td style="text-align:left">高吞吐量，但有網路延遲</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>代表範例</strong></td>
+<td style="text-align:left">傳統企業主機、單機資料庫</td>
+<td style="text-align:left">Google Search, Netflix, AWS, 微服務架構</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="如何選擇"><a class="markdownIt-Anchor" href="#如何選擇"></a> 如何選擇？</h1>
+<p>這個問題沒有標準答案，完全取決於業務需求：</p>
+<p>✅ <strong>選擇集中式系統</strong></p>
+<ul>
+<li>應用規模較小，使用者量可預測。</li>
+<li>對資料的<strong>即時強一致性</strong>有極高要求（例如：傳統的金融交易核心）。</li>
+<li>開發時間和資源有限，希望快速上線。</li>
+<li>可以容忍短暫的停機時間。</li>
+</ul>
+<p>🚀 <strong>選擇分散式系統</strong></p>
+<ul>
+<li>預期會有海量使用者和高流量（例如：電商、社群媒體）。</li>
+<li>系統需要 7x24 小時不間斷服務，對<strong>高可用性</strong>有嚴格要求。</li>
+<li>需要為全球使用者提供低延遲的服務。</li>
+<li>應用非常龐大，希望透過<strong>微服務 (Microservices)</strong> 架構來解耦。</li>
+</ul>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>從單一的超級大腦到協同合作的專家團隊，集中式與分散式系統代表了兩種截然不同的設計哲學。</p>
+<ul>
+<li><strong>集中式</strong>以其<strong>簡單性</strong>和<strong>強一致性</strong>在特定场景下依然佔有一席之地。</li>
+<li><strong>分散式</strong>則以其<strong>擴展性</strong>和<strong>可靠性</strong>成為了現代大規模網際網路服務的基石。</li>
+</ul>
+<p>許多成功的系統都是從一個簡單的集中式架構（或單體應用 Monolith）開始，隨著業務成長，再逐步演進為複雜但強大的分散式系統。</p>
+<p>理解這兩者的核心權衡，是作為一名軟體工程師，在建立穩固、可擴展系統的道路上，必須掌握的關鍵第一步。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Distributed-System/" rel="tag"># Distributed System</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/07/21/%E8%A7%A3%E6%9E%90%20Message%20Queues%20%E8%88%87%20PubSub%20%E7%9A%84%E5%B7%AE%E5%88%A5/" rel="prev" title="解析 Message Queues 與 Pub&#x2F;Sub 的差別">
+                  <i class="fa fa-angle-left"></i> 解析 Message Queues 與 Pub/Sub 的差別
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

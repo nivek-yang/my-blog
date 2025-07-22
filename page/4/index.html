@@ -105,8 +105,8 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">36</span></a>
-  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">26</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">37</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">27</span></a>
       <ul class="sub-menu">
   
   
@@ -149,6 +149,13 @@
       <a href="/my-blog/tags/Database/">
         Database
         <span class="post-count">(6)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
       </a>
     </li>
   
@@ -331,7 +338,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-count">37</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -339,7 +346,7 @@
     
       <div class="site-state-item site-state-tags">
           <a href="/my-blog/tags/">
-        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-count">27</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -356,6 +363,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/22/TimeTracker%E6%99%82%E9%96%93%E8%BF%BD%E8%B9%A4%E5%B7%A5%E5%85%B7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/04/22/TimeTracker%E6%99%82%E9%96%93%E8%BF%BD%E8%B9%A4%E5%B7%A5%E5%85%B7/" class="post-title-link" itemprop="url">
+              個人開發：TimeTracker 時間追蹤工具
+            </a>
+            <a href="/my-blog/2025/04/22/TimeTracker%E6%99%82%E9%96%93%E8%BF%BD%E8%B9%A4%E5%B7%A5%E5%85%B7/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-04-22 00:00:00 / 修改時間：22:34:03" itemprop="dateCreated datePublished" datetime="2025-04-22T00:00:00+08:00">2025-04-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">這份筆記記錄了 TimeTracker 工具的設計與實現過程，該工具用於追蹤專案和功能的開發時間，並將數據保存為 JSON 格式，以便後續分析與展示。 一、專案目標 記錄專案開始與結束時間 紀錄每個功能（feature）的開發時間 自動計算持續時間 將數據存儲為 JSON，方便持久化與後續處理 提供命令列介面與 Makefile 支援，簡化操作流程 二、使用技術 datetime：記錄時間戳並計算時間差 json：將追蹤數據序列化為 JSON os：檢查檔案存在性，確保初始化與讀寫流程穩定 sys：處理命令列參數，實現靈活的命令操作 Makefile：簡化常用命令的執行 三、程式架構 my_project/ ├── time_tracking/ │ ├── main.py # 命令列介面入口 │ ├── time_tracker.py # 核心邏輯，負責時間記錄與計算 ├── Makefile # 提供簡化操作的命令 3.1 類別與方法概覽 time_tracker.py 物件導向設計：TimeTracker 類封裝了所有時間追蹤的邏輯。 方法： _load_data()：讀取或初始化 JSON 檔案數據 _save_data()：將當前數據寫入 JSON 檔案 _current_time()：取得當前時間字串 ('%Y-%m-%d %H:%M:%S') _calc_duration(start, end)：計算並返回時間差字串 start_project()/end_project()：記錄專案整體時間 start_feature(name)/end_feature(name)：記錄單一功能的時間 main.py 提供命令列介面，支援以下命令： start_project：開始專案 end_project：結束專案 start_feature &lt;feature_name&gt;：開始功能 end_feature &lt;feature_name&gt;：結束功能 Makefile 提供簡化操作的命令： make start_project：開始專案 make end_project：結束專案 make start_feature feature=&lt;feature_name&gt;：開始功能 make end_feature feature=&lt;feature_name&gt;：結束功能 四、核心實現 4.1 time_tracker.py 的物件導向設計 初始化與數據管理 class TimeTracker: def __init__(self, filename=&#x27;time_log.json&#x27;): self.filename = filename self.data = self._load_data() def _load_data(self): if os.path.exists(self.filename): with open(self.filename, &#x27;r&#x27;) as f: return json.load(f) return &#123;&quot;project&quot;: &#123;&#125;, &quot;features&quot;: &#123;&#125;&#125; def _save_data(self): with open(self.filename, &#x27;w&#x27;) as f: json.dump(self.data, f, indent=4) __init__：初始化 TimeTracker 物件，並讀取或初始化數據。 _load_data()：若檔案存在，載入 JSON；否則回傳預設空結構。 _save_data()：將當前內存中的 self.data 寫回檔案，保持持久化。 時間處理 def _current_time(self): return datetime.now().strftime(&#x27;%Y-%m-%d %H:%M:%S&#x27;) def _calc_duration(self, start, end): start_dt = datetime.strptime(start, &#x27;%Y-%m-%d %H:%M:%S&#x27;) end_dt = datetime.strptime(end, &#x27;%Y-%m-%d %H:%M:%S&#x27;) return str(end_dt - start_dt) _current_time()：取得格式化的當前時間。 _calc_duration()：計算起訖時間差，並轉為字串。 專案與功能時間追蹤 def start_project(self): self.data[&#x27;project&#x27;][&#x27;start_time&#x27;] = self._current_time() self._save_data() print(&quot;Project started.&quot;) def end_project(self): self.data[&#x27;project&#x27;][&#x27;end_time&#x27;] = self._current_time() self.data[&#x27;project&#x27;][&#x27;duration&#x27;] = self._calc_duration( self.data[&#x27;project&#x27;][&#x27;start_time&#x27;], self.data[&#x27;project&#x27;][&#x27;end_time&#x27;] ) self._save_data() print(&quot;Project ended.&quot;) def start_feature(self, name): if name not in self.data[&#x27;features&#x27;]: self.data[&#x27;features&#x27;][name] = &#123;&#125; self.data[&#x27;features&#x27;][name][&#x27;start_time&#x27;] = self._current_time() self._save_data() print(f&quot;Feature &#x27;&#123;name&#125;&#x27; started.&quot;) def end_feature(self, name): feat = self.data[&#x27;features&#x27;].get(name) if feat and &#x27;start_time&#x27; in feat: feat[&#x27;end_time&#x27;] = self._current_time() feat[&#x27;duration&#x27;] = self._calc_duration( feat[&#x27;start_time&#x27;], feat[&#x27;end_time&#x27;] ) self._save_data() print(f&quot;Feature &#x27;&#123;name&#125;&#x27; ended.&quot;) else: print(f&quot;Feature &#x27;&#123;name&#125;&#x27; has not been started.&quot;) start_project()/end_project()：記錄專案的開始與結束時間，並計算總持續時間。 start_feature(name)/end_feature(name)：記錄功能的開始與結束時間，並計算功能持續時間。 4.2 main.py 的命令列介面 import sys from time_tracking.time_tracker import TimeTracker tracker = TimeTracker() def main(): if len(sys.argv) &lt; 2: print(&quot;Usage: python main.py [command] [feature_name (optional)]&quot;) sys.exit(1) command = sys.argv[1] feature = sys.argv[2] if len(sys.argv) &gt;= 3 else None if command == &quot;start_project&quot;: tracker.start_project() elif command == &quot;end_project&quot;: tracker.end_project() elif command == &quot;start_feature&quot; and feature: tracker.start_feature(feature) elif command == &quot;end_feature&quot; and feature: tracker.end_feature(feature) else: print(&quot;Invalid command or missing feature name.&quot;) if __name__ == &quot;__main__&quot;: main() 命令列支援： start_project：開始專案。 end_project：結束專案。 start_feature &lt;feature_name&gt;：開始功能。 end_feature &lt;feature_name&gt;：結束功能。 4.3 Makefile 的簡化操作 (用 uv 建置環境) start_project: uv run python -m time_tracking.main start_project end_project: uv run python -m time_tracking.main end_project start_feature: uv run python -m time_tracking.main start_feature $(feature) end_feature: uv run python -m time_tracking.main end_feature $(feature) make start_project：執行 start_project 命令。 make end_project：執行 end_project 命令。 make start_feature feature=&lt;feature_name&gt;：開始功能。 make end_feature feature=&lt;feature_name&gt;：結束功能。 五、改進建議 加入檔案讀寫錯誤處理，提升穩定性。 提供更詳細的狀態檢視功能（如顯示所有功能的持續時間）。 考慮輸出 CSV 或 HTML 報表，便於後續分析。 整合可視化模組（matplotlib, plotly）展示時間分佈圖。 支援更多命令列參數（如自定義輸出檔案名稱）。 六、結語 TimeTracker 是一個輕量且實用的時間追蹤工具，適合個人或小團隊使用。透過物件導向設計與命令列支援，開發者可以輕鬆掌握開發進度並進行效率分析。同時，結合 Makefile 的支援，進一步簡化了操作流程。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/04/22/TimeTracker%E6%99%82%E9%96%93%E8%BF%BD%E8%B9%A4%E5%B7%A5%E5%85%B7/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
