@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">38</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">39</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">28</span></a>
       <ul class="sub-menu">
   
@@ -246,7 +246,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Pub-Sub/">
         Pub/Sub
-        <span class="post-count">(1)</span>
+        <span class="post-count">(2)</span>
       </a>
     </li>
   
@@ -274,7 +274,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/SSE/">
         SSE
-        <span class="post-count">(1)</span>
+        <span class="post-count">(2)</span>
       </a>
     </li>
   
@@ -345,7 +345,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-count">39</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -370,6 +370,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/23/PubSub%20vs%20SSE%20%E5%88%A5%E5%86%8D%E6%90%9E%E6%B7%B7%E4%BA%86%20%E4%B8%80%E5%80%8B%E6%98%AF%E5%BE%8C%E7%AB%AF%E6%9E%B6%E6%A7%8B%E4%B8%80%E5%80%8B%E6%98%AF%E5%89%8D%E7%AB%AF%E5%8D%94%E5%AE%9A/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/07/23/PubSub%20vs%20SSE%20%E5%88%A5%E5%86%8D%E6%90%9E%E6%B7%B7%E4%BA%86%20%E4%B8%80%E5%80%8B%E6%98%AF%E5%BE%8C%E7%AB%AF%E6%9E%B6%E6%A7%8B%E4%B8%80%E5%80%8B%E6%98%AF%E5%89%8D%E7%AB%AF%E5%8D%94%E5%AE%9A/" class="post-title-link" itemprop="url">
+              Pub/Sub vs SSE：別再搞混了！一個是後端架構，一個是前端協定
+            </a>
+            <a href="/my-blog/2025/07/23/PubSub%20vs%20SSE%20%E5%88%A5%E5%86%8D%E6%90%9E%E6%B7%B7%E4%BA%86%20%E4%B8%80%E5%80%8B%E6%98%AF%E5%BE%8C%E7%AB%AF%E6%9E%B6%E6%A7%8B%E4%B8%80%E5%80%8B%E6%98%AF%E5%89%8D%E7%AB%AF%E5%8D%94%E5%AE%9A/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-07-23 00:00:00 / 修改時間：14:40:31" itemprop="dateCreated datePublished" datetime="2025-07-23T00:00:00+08:00">2025-07-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">在現代應用開發中，「即時」和「事件驅動」已經成為標配。當討論這些技術時，Pub/Sub 和 SSE (Server-Sent Events) 這兩個名詞經常被提及，也因此常常被混淆。許多開發者會問：「應該用 Pub/Sub 還是 SSE 來實現即時功能？」 這個問題的答案是：可能兩個都需要。 因為它們根本不是競爭關係，而是在軟體架構中扮演不同角色的合作夥伴。本文將徹底釐清這兩者的差異，並展示它們如何協同工作，打造出強大、可擴展的即時系統。 Pub/Sub - 系統後台的「中央郵政系統」 想像一下訂閱 YouTube 頻道。作為一個訂閱者，只關心訂閱的頻道有沒有發布新影片。不需要認識影片創作者，更不用關心他什麼時候上傳。反過來，創作者也只需要將影片發布到他的頻道，完全不用理會是誰訂閱了他。 這就是 發布/訂閱 (Publish/Subscribe, or Pub/Sub) 模式的精髓。 Pub/Sub 是一種非同步訊息傳遞的設計模式，主要用於實現後端服務之間的解耦。 它由三個核心角色組成： 發布者 (Publisher)：事件的產生者（例如：訂單服務、用戶註冊服務）。它只負責將訊息發布到一個特定的「主題」。 主題 (Topic)：一個訊息分類的頻道或中介（例如：一個名為 order-created 的主題）。 訂閱者 (Subscriber)：事件的消費者（例如：庫存服務、通知服務）。它對特定主題感興趣，並接收來自該主題的所有訊息。 為什麼要用 Pub/Sub？ 核心目的只有一個：解耦 (Decoupling)！ 位置解耦：發布者和訂閱者不需要知道對方的網路位置。 時間解耦：發布者和訂閱者不需要同時在線。發布者發送訊息後，訂閱者可以在稍後有空時再去處理。 同步解耦：兩者之間的通訊是非同步的，發布者發送訊息後可以立即去做其他事，不必等待訂閱者回應。 這在哪裡使用？ 幾乎完全在後端服務之間。需要一個稱為訊息中介 (Message Broker) 的工具來實現它。 常見工具：Apache Kafka, RabbitMQ, Google Cloud Pub/Sub, Redis Pub/Sub。 ** Pub/Sub 是一個強大的後端架構模式，用於打造可擴展、有彈性的分散式系統。** SSE - 對瀏覽器的「即時廣播電台」 現在，想像在網頁上追蹤一場體育比賽的比分。不需要手動刷新頁面，比分、安打、出局數都會自動更新。 這就是 伺服器發送事件 (Server-Sent Events, or SSE) 的典型場景。 SSE 是一種基於標準 HTTP 的網頁通訊協定，允許伺服器單向地、即時地向客戶端（瀏覽器）推送數據。 它的運作方式非常簡單： 瀏覽器向伺服器的某個端點發起一個普通的 HTTP GET 請求。 伺服器「抓住」這個請求不放，保持連線開啟。 伺服器的 Content-Type 回應標頭設為 text/event-stream。 每當有新事件發生時，伺服器就沿著這條開啟的連線，將格式化好的文字數據（data: ...\n\n）推送給瀏覽器。 為什麼要用 SSE？ 簡單：前端只需使用內建的 EventSource API，後端也只需遵循簡單的文本格式。 標準與相容：它就是 HTTP，可以無縫通過各種防火牆和代理。 自動重連：這是 SSE 的一大殺手級特性。如果連線意外中斷（例如網路切換），瀏覽器的 EventSource 會自動嘗試重新連線。 這在哪裡使用？ 在伺服器 (Server) 和前端瀏覽器 (Client) 之間。 典型場景：即時新聞、股票行情更新、訂單狀態追蹤、進度條顯示。 SSE 是一種輕量、可靠、專為「伺服器到客戶端」單向數據推送而生的網頁技術。 Pub/Sub vs SSE 用一張表格來清晰地對比它們： 特性 / 方面 Pub/Sub (發布/訂閱) SSE (伺服器發送事件) 類型 後端架構模式 前端通訊協定 參與者 後端服務 ↔ 訊息中介 ↔ 後端服務 後端伺服器 → 前端瀏覽器 通訊方向 由中介管理的多對多 (Many-to-Many) 嚴格的單向 (One-Way) 核心目的 服務解耦，系統彈性 向網頁推送即時更新 比喻 訂閱雜誌/YouTube 頻道 廣播電台 / P.A. 系統 實戰場景：即時物流追蹤系統 讓我們看看它們如何協同工作。為了讓這個流程更加視覺化，讓我們用一張圖來表示一個即時物流追蹤系統的數據流： graph TD; subgraph &quot;後端架構 (Pub/Sub 模式)&quot; A[&quot;貨車 GPS 裝置&quot;] --&gt; B[&quot;位置服務 (Publisher)&quot;]; B -- &quot;發布事件&quot; --&gt; C&#123;&quot;Pub/Sub 主題&lt;br&gt;location-updates&quot;&#125;; C -- &quot;分發給訂閱者&quot; --&gt; D[&quot;數據庫存檔服務 (Subscriber)&quot;]; C -- &quot;分發給訂閱者&quot; --&gt; E[&quot;即時分發服務 (Subscriber)&quot;]; D --&gt; F[(&quot;歷史軌跡數據庫&quot;)]; end subgraph &quot;前端通訊&quot; G[&quot;使用者瀏覽器&quot;]; end E -- &quot;即時推送&lt;br&gt;(SSE 連線)&quot; --&gt; G; %% Styling style C fill:#FFE3E3,stroke:#B40000,stroke-width:2px; style E fill:#D6E8FF,stroke:#0042A3,stroke-width:2px; 流程： 事件產生 (Publisher)：貨車的 GPS 裝置上報位置給「位置服務」。該服務處理後，將訊息**發布(Publish)**到 location-updates 這個主題上。 後端處理 (Subscribers)： Pub/Sub 主題（如 Kafka 或 RabbitMQ）將事件分發給所有訂閱者。 「數據庫存檔服務」收到事件，將其存入資料庫備份。 「即時分發服務」也收到同一個事件，準備將其推送給前端。 以上所有後端內部的通訊，都由 Pub/Sub 模式完成，服務之間互不干擾。 前端推送 (SSE 連線)： 當使用者打開追蹤頁面時，他的瀏覽器會與「即時分發服務」建立一條 SSE 連線。 「即時分發服務」收到來自 Pub/Sub 的新位置後，立刻透過這條 SSE 連線，將新座標推送給對應的使用者瀏覽器。 這最後一哩路，從後端到前端的即時數據傳遞，由 SSE 完美勝任。 在這個架構中，Pub/Sub 完美地解耦了後端複雜的業務邏輯，而 SSE 則作為最後一哩路，高效、可靠地將最終結果呈現在使用者面前。 結論 不要再問「Pub/Sub 和 SSE 哪個好？」，而應該問「在系統中，哪部分應該用 Pub/Sub，哪部分適合用 SSE？」。 當需要在系統內部（後端）進行非同步、一對多或多對多的服務通訊時，請使用 Pub/Sub 模式。 當需要將後端的事件結果，單向、即時地推送給網頁前端時，請使用 SSE 協定。 理解它們各自的定位和職責，就能設計出更清晰、更強大、更具擴展性的現代化應用程式。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/07/23/PubSub%20vs%20SSE%20%E5%88%A5%E5%86%8D%E6%90%9E%E6%B7%B7%E4%BA%86%20%E4%B8%80%E5%80%8B%E6%98%AF%E5%BE%8C%E7%AB%AF%E6%9E%B6%E6%A7%8B%E4%B8%80%E5%80%8B%E6%98%AF%E5%89%8D%E7%AB%AF%E5%8D%94%E5%AE%9A/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1152,92 +1238,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/07/09/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20CSRF%20%E8%B7%A8%E7%AB%99%E8%AB%8B%E6%B1%82%E5%81%BD%E9%80%A0%E6%94%BB%E6%93%8A/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/08/GitHub%20Actions%20%E8%87%AA%E5%8B%95%E5%8C%96%E6%B8%AC%E8%A9%A6%E6%B5%81%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/07/08/GitHub%20Actions%20%E8%87%AA%E5%8B%95%E5%8C%96%E6%B8%AC%E8%A9%A6%E6%B5%81%E7%A8%8B/" class="post-title-link" itemprop="url">
-              GitHub Actions 自動化測試流程
-            </a>
-            <a href="/my-blog/2025/07/08/GitHub%20Actions%20%E8%87%AA%E5%8B%95%E5%8C%96%E6%B8%AC%E8%A9%A6%E6%B5%81%E7%A8%8B/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-07-08 00:00:00 / 修改時間：23:50:40" itemprop="dateCreated datePublished" datetime="2025-07-08T00:00:00+08:00">2025-07-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">在現代軟體開發中，持續整合（Continuous Integration, CI）已經不是一個「選項」，而是一個「必需品」。它能確保我們每次提交的程式碼都經過自動化測試，及早發現問題，從而提升整個團隊的開發品質與效率。對於專案來說，一個好的 CI 流程更是不可或缺。 我們將深入解析一個為 Django 專案設計的 GitHub Actions 工作流程。這個流程不僅涵蓋了基本的測試，還巧妙地結合了原生 Python 環境與 Docker Compose 環境，實現了快速回饋與高擬真度測試的雙重保障。 GitHub Actions 核心概念 在深入程式碼之前，先快速了解幾個 GitHub Actions 的核心概念： Workflow（工作流程）: 由一個或多個 job 組成，定義了整個自動化過程。通常以 YAML 檔案形式存放在專案的 .github/workflows/ 目錄下。 Event（事件）: 觸發工作流程的特定活動，例如 push（推送到儲存庫）或 pull_request（發起拉取請求）。 Job（任務）: 工作流程中的一個執行單元，會在一台虛擬機（runner）上執行。一個工作流程可以有多個任務，它們可以並行或依序執行。 Step（步驟）: 任務中的一個獨立指令或動作。一個任務由多個步驟組成。 Action（動作）: 可重用的程式碼單元，是建構步驟的積木。例如 actions/checkout 就是一個官方提供的 Action，用來拉取你的程式碼。 工作流程檔案解析 (Django CI Tests) 讓我們來看看這次的主角，這個精心設計的 Django CI Tests 工作流程。 name: Django CI Tests on: [push, pull_request] jobs: # ... 兩個 jobs 的定義將在下面詳細解說 ... name: Django CI Tests：為這個工作流程取一個易於辨識的名字。 on: [push, pull_request]：這行是關鍵！它定義了觸發條件。這意味著，每當有新的程式碼被推送到任何分支，或者當有人發起一個 Pull Request 時，這個自動化測試流程就會被啟動。 這個工作流程包含了兩個並行執行的任務（Jobs）：native-pytest 和 docker-compose-pytest。讓我們逐一拆解它們的設計理念與實現細節。 任務一：native-pytest - 追求極速的原生 Python 測試 第一個任務的目標是「快」。它在一個乾淨的 Ubuntu 環境中直接設定 Python，並執行測試。這適用於那些不依賴外部服務（如資料庫、快取）的單元測試，能夠在最短時間內給予開發者回饋。 native-pytest: name: Native Python Pytest runs-on: ubuntu-latest defaults: run: working-directory: backend env: SECRET_KEY: $&#123;&#123; secrets.SECRET_KEY &#125;&#125; DEBUG: &quot;True&quot; USE_POSTGRES: &quot;False&quot; # 關鍵點：不使用 PostgreSQL ALLOWED_HOSTS: localhost,127.0.0.1 SOCIAL_AUTH_GOOGLE_CLIENT_ID: $&#123;&#123; secrets.SOCIAL_AUTH_GOOGLE_CLIENT_ID &#125;&#125; SOCIAL_AUTH_GOOGLE_CLIENT_SECRET: $&#123;&#123; secrets.SOCIAL_AUTH_GOOGLE_CLIENT_SECRET &#125;&#125; steps: - uses: actions/checkout@v4 - name: Set up Python uses: actions/setup-python@v5 with: python-version: &quot;3.13&quot; - name: Install uv run: pip install uv - name: Install backend dependencies run: uv sync - name: Run migrations run: uv run python manage.py migrate - name: Run pytest run: uv run pytest -v --tb=short --maxfail=5 --disable-warnings 拆解步驟： 基本設定: runs-on: ubuntu-latest: 指定任務運行在最新版的 Ubuntu 虛擬機上。 defaults.run.working-directory: backend: 這是一個很方便的設定，它將後續所有 run 指令的預設工作目錄都設定為 backend，省去了在每個步驟中都 cd backend 的麻煩。 環境變數 (env): 這裡設定了 Django 運作所需的環境變數。 SECRET_KEY 等敏感資訊透過 $&#123;&#123; secrets.SECRET_KEY &#125;&#125; 從 GitHub 的 Secrets 中安全地讀取，避免了硬編碼在程式碼中。 最重要的設定是 USE_POSTGRES: &quot;False&quot;。這通常會告訴 Django 的 settings.py 使用輕量級的 SQLite 作為測試資料庫，因為它不需要額外的服務，啟動速度極快。 執行步驟 (steps): actions/checkout@v4: 第一步總是它！這個 Action 會將你的專案程式碼拉取到虛擬機中。 setup-python@v5: 設定指定的 Python 版本（這裡用了最新的 3.13！）。 Install uv &amp; uv sync: 這裡使用 uv 這個新一代的超高速 Python 套件管理器來取代傳統的 pip。uv sync 會根據 pyproject.toml 或 requirements.txt 檔案來安裝所有依賴，速度飛快。 uv run python manage.py migrate: 在執行測試前，先執行資料庫遷移。對於 SQLite 來說，這會在記憶體或一個暫存檔案中建立資料庫結構。 uv run pytest ...: 核心步驟！uv run 會在 uv 管理的虛擬環境中執行 pytest。 -v: 顯示詳細的測試結果。 --tb=short: 使用簡潔的錯誤追蹤格式。 --maxfail=5: 當有 5 個測試失敗時就立即停止，節省時間。 --disable-warnings: 隱藏不影響功能的警告，讓輸出更乾淨。 小結：native-pytest 的優勢是速度快、設定簡單，適合快速驗證程式碼邏輯。 任務二：docker-compose-pytest - 模擬生產環境的高擬真度測試 第二個任務的目標是「擬真」。它使用 Docker Compose 來啟動整個應用程式環境，包括 Django 應用本身和 PostgreSQL 資料庫。這確保了測試環境與你的開發環境，甚至生產環境，都盡可能地保持一致。 docker-compose-pytest: name: Docker Compose Pytest runs-on: ubuntu-latest steps: - uses: actions/checkout@v4 - name: Create backend .env file run: | echo &quot;SECRET_KEY=$&#123;&#123; secrets.SECRET_KEY &#125;&#125;&quot; &gt; backend/.env # ... 其他 echo 指令 ... echo &quot;USE_POSTGRES=True&quot; &gt;&gt; backend/.env echo &quot;POSTGRES_HOST=db&quot; &gt;&gt; backend/.env # ... - name: Build docker-compose services run: docker compose -f docker-compose.dev.yml build - name: Run pytest in docker-compose run: docker compose -f docker-compose.dev.yml run --rm backend uv run pytest -v --tb=short --maxfail=5 --disable-warnings - name: Check container logs on failure if: failure() run: docker compose -f docker-compose.dev.yml logs backend - name: Shutdown docker-compose run: docker compose -f docker-compose.dev.yml down -v 拆解步驟： 建立 .env 檔案: 這是此任務中最巧妙的一步。Docker Compose 通常會讀取一個 .env 檔案來設定容器的環境變數。 這個步驟動態地建立了一個 backend/.env 檔案，並將 GitHub Secrets 和其他設定值寫入其中。 注意這裡的關鍵差異：USE_POSTGRES 被設為 &quot;True&quot;，並且新增了所有 POSTGRES_* 相關的變數，例如資料庫主機 POSTGRES_HOST=db（db 是 docker-compose.dev.yml 中定義的資料庫服務名稱）。 建置與執行 Docker Compose: docker compose ... build: 根據 docker-compose.dev.yml 和相關的 Dockerfile 來建置服務的映像檔。 docker compose ... run --rm backend ...: 這是執行測試的核心指令。 run backend: 告訴 Docker Compose 啟動 backend 服務（以及它所依賴的 db 服務），並在 backend 容器內執行後續的指令。 --rm: 表示指令執行完畢後，自動刪除這個臨時建立的容器，保持環境乾淨。 後面的 uv run pytest ... 指令與任務一相同，但這次，它是在一個包含完整資料庫連線的 Docker 容器內執行的。 偵錯與清理: if: failure(): 這是 GitHub Actions 的一個強大功能。這個步驟只會在前面的步驟失敗時才會執行。 docker compose ... logs backend: 如果測試失敗，這個指令會印出 backend 容器的日誌，這對於排查連線問題或環境錯誤非常有幫助。 docker compose ... down -v: 無論成功或失敗，最後都要執行清理工作。down 會關閉並移除所有容器和網路，-v 則會一併刪除相關的 volumes（例如資料庫數據），確保每次執行都是從零開始的乾淨狀態。 小結：docker-compose-pytest 的優勢是環境擬真度高，能測試應用與資料庫等外部服務的整合，確保程式碼在類生產環境下也能正常運作。 為什麼需要兩種測試策略？ 這個工作流程最精彩的設計，就是同時採用了這兩種策略： 快速回饋：開發者推送一個小修改後，native-pytest 會在 1-2 分鐘內給出結果。如果只是修改了一個不涉及資料庫的函式，可以很快知道有沒有改壞。 深度驗證：docker-compose-pytest 雖然慢一些（可能需要 3-5 分鐘），但它提供了更全面的保障。它能捕捉到原生測試無法發現的問題，例如錯誤的資料庫查詢、環境變數設定錯誤等。 當你在 GitHub 上看到一個 Pull Request 時，這兩個任務會並行執行。你將會看到兩個綠色的勾勾，這代表你的程式碼不僅通過了快速的單元測試，也通過了嚴苛的整合測試，讓你有十足的信心去合併它。 總結 透過這個 Django CI Tests 工作流程，學習到如何利用 GitHub Actions 建立一個高效且可靠的自動化測試流程。它結合了： 事件驅動的自動化 (on: [push, pull_request])。 使用 GitHub Secrets 安全管理敏感資訊。 利用原生環境實現快速測試。 利用 Docker Compose 模擬生產環境進行整合測試。 巧妙的條件執行 (if: failure()) 來輔助偵錯。 將這樣的 CI 流程整合到專案中，無疑會大大提升開發品質與部署信心！</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/07/08/GitHub%20Actions%20%E8%87%AA%E5%8B%95%E5%8C%96%E6%B8%AC%E8%A9%A6%E6%B5%81%E7%A8%8B/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>

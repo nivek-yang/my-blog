@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="在現代應用開發中，「即時」和「事件驅動」已經成為標配。當討論這些技術時，Pub&#x2F;Sub 和 SSE (Server-Sent Events) 這兩個名詞經常被提及，也因此常常被混淆。許多開發者會問：「應該用 Pub&#x2F;Sub 還是 SSE 來實現即時功能？」 這個問題的答案是：可能兩個都需要。 因為它們根本不是競爭關係，而是在軟體架構中扮演不同角色的合作夥伴。本文將徹底釐清這兩者的差異，並展示它們如">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pub&#x2F;Sub vs SSE：別再搞混了！一個是後端架構，一個是前端協定">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/07/23/PubSub%20vs%20SSE%20%E5%88%A5%E5%86%8D%E6%90%9E%E6%B7%B7%E4%BA%86%20%E4%B8%80%E5%80%8B%E6%98%AF%E5%BE%8C%E7%AB%AF%E6%9E%B6%E6%A7%8B%E4%B8%80%E5%80%8B%E6%98%AF%E5%89%8D%E7%AB%AF%E5%8D%94%E5%AE%9A/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="在現代應用開發中，「即時」和「事件驅動」已經成為標配。當討論這些技術時，Pub&#x2F;Sub 和 SSE (Server-Sent Events) 這兩個名詞經常被提及，也因此常常被混淆。許多開發者會問：「應該用 Pub&#x2F;Sub 還是 SSE 來實現即時功能？」 這個問題的答案是：可能兩個都需要。 因為它們根本不是競爭關係，而是在軟體架構中扮演不同角色的合作夥伴。本文將徹底釐清這兩者的差異，並展示它們如">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-07-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-07-23T06:40:31.935Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Pub&#x2F;Sub">
+<meta property="article:tag" content="SSE">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/07/23/PubSub%20vs%20SSE%20%E5%88%A5%E5%86%8D%E6%90%9E%E6%B7%B7%E4%BA%86%20%E4%B8%80%E5%80%8B%E6%98%AF%E5%BE%8C%E7%AB%AF%E6%9E%B6%E6%A7%8B%E4%B8%80%E5%80%8B%E6%98%AF%E5%89%8D%E7%AB%AF%E5%8D%94%E5%AE%9A/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/07/23/PubSub%20vs%20SSE%20%E5%88%A5%E5%86%8D%E6%90%9E%E6%B7%B7%E4%BA%86%20%E4%B8%80%E5%80%8B%E6%98%AF%E5%BE%8C%E7%AB%AF%E6%9E%B6%E6%A7%8B%E4%B8%80%E5%80%8B%E6%98%AF%E5%89%8D%E7%AB%AF%E5%8D%94%E5%AE%9A/","path":"2025/07/23/PubSub vs SSE 別再搞混了 一個是後端架構一個是前端協定/","title":"Pub/Sub vs SSE：別再搞混了！一個是後端架構，一個是前端協定"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Pub/Sub vs SSE：別再搞混了！一個是後端架構，一個是前端協定 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">39</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">28</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(6)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(13)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#pubsub-%E7%B3%BB%E7%B5%B1%E5%BE%8C%E5%8F%B0%E7%9A%84%E4%B8%AD%E5%A4%AE%E9%83%B5%E6%94%BF%E7%B3%BB%E7%B5%B1"><span class="nav-number">1.</span> <span class="nav-text"> Pub&#x2F;Sub - 系統後台的「中央郵政系統」</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E8%A6%81%E7%94%A8-pubsub"><span class="nav-number">1.1.</span> <span class="nav-text"> 為什麼要用 Pub&#x2F;Sub？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sse-%E5%B0%8D%E7%80%8F%E8%A6%BD%E5%99%A8%E7%9A%84%E5%8D%B3%E6%99%82%E5%BB%A3%E6%92%AD%E9%9B%BB%E5%8F%B0"><span class="nav-number">2.</span> <span class="nav-text"> SSE - 對瀏覽器的「即時廣播電台」</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E8%A6%81%E7%94%A8-sse"><span class="nav-number">2.1.</span> <span class="nav-text"> 為什麼要用 SSE？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pubsub-vs-sse"><span class="nav-number">3.</span> <span class="nav-text"> Pub&#x2F;Sub vs SSE</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%A6%E6%88%B0%E5%A0%B4%E6%99%AF%E5%8D%B3%E6%99%82%E7%89%A9%E6%B5%81%E8%BF%BD%E8%B9%A4%E7%B3%BB%E7%B5%B1"><span class="nav-number">4.</span> <span class="nav-text"> 實戰場景：即時物流追蹤系統</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/23/PubSub%20vs%20SSE%20%E5%88%A5%E5%86%8D%E6%90%9E%E6%B7%B7%E4%BA%86%20%E4%B8%80%E5%80%8B%E6%98%AF%E5%BE%8C%E7%AB%AF%E6%9E%B6%E6%A7%8B%E4%B8%80%E5%80%8B%E6%98%AF%E5%89%8D%E7%AB%AF%E5%8D%94%E5%AE%9A/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Pub&#x2F;Sub vs SSE：別再搞混了！一個是後端架構，一個是前端協定 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Pub/Sub vs SSE：別再搞混了！一個是後端架構，一個是前端協定
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-07-23 00:00:00 / 修改時間：14:40:31" itemprop="dateCreated datePublished" datetime="2025-07-23T00:00:00+08:00">2025-07-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在現代應用開發中，「即時」和「事件驅動」已經成為標配。當討論這些技術時，Pub/Sub 和 SSE (Server-Sent Events) 這兩個名詞經常被提及，也因此常常被混淆。許多開發者會問：「應該用 Pub/Sub 還是 SSE 來實現即時功能？」</p>
+<p>這個問題的答案是：<strong>可能兩個都需要。</strong></p>
+<p>因為它們根本不是競爭關係，而是在軟體架構中扮演不同角色的合作夥伴。本文將徹底釐清這兩者的差異，並展示它們如何協同工作，打造出強大、可擴展的即時系統。</p>
+<hr />
+<h1 id="pubsub-系統後台的中央郵政系統"><a class="markdownIt-Anchor" href="#pubsub-系統後台的中央郵政系統"></a> Pub/Sub - 系統後台的「中央郵政系統」</h1>
+<p>想像一下訂閱 YouTube 頻道。作為一個訂閱者，只關心訂閱的頻道有沒有發布新影片。不需要認識影片創作者，更不用關心他什麼時候上傳。反過來，創作者也只需要將影片發布到他的頻道，完全不用理會是誰訂閱了他。</p>
+<p>這就是 <strong>發布/訂閱 (Publish/Subscribe, or Pub/Sub)</strong> 模式的精髓。</p>
+<blockquote>
+<p><strong>Pub/Sub 是一種非同步訊息傳遞的設計模式，主要用於實現後端服務之間的解耦。</strong></p>
+</blockquote>
+<p>它由三個核心角色組成：</p>
+<ul>
+<li><strong>發布者 (Publisher)</strong>：事件的產生者（例如：訂單服務、用戶註冊服務）。它只負責將訊息發布到一個特定的「主題」。</li>
+<li><strong>主題 (Topic)</strong>：一個訊息分類的頻道或中介（例如：一個名為 <code>order-created</code> 的主題）。</li>
+<li><strong>訂閱者 (Subscriber)</strong>：事件的消費者（例如：庫存服務、通知服務）。它對特定主題感興趣，並接收來自該主題的所有訊息。</li>
+</ul>
+<h2 id="為什麼要用-pubsub"><a class="markdownIt-Anchor" href="#為什麼要用-pubsub"></a> 為什麼要用 Pub/Sub？</h2>
+<p>核心目的只有一個：<strong>解耦 (Decoupling)！</strong></p>
+<ul>
+<li><strong>位置解耦</strong>：發布者和訂閱者不需要知道對方的網路位置。</li>
+<li><strong>時間解耦</strong>：發布者和訂閱者不需要同時在線。發布者發送訊息後，訂閱者可以在稍後有空時再去處理。</li>
+<li><strong>同步解耦</strong>：兩者之間的通訊是非同步的，發布者發送訊息後可以立即去做其他事，不必等待訂閱者回應。</li>
+</ul>
+<p><strong>這在哪裡使用？</strong><br />
+幾乎完全在<strong>後端服務之間</strong>。需要一個稱為<strong>訊息中介 (Message Broker)</strong> 的工具來實現它。</p>
+<ul>
+<li><strong>常見工具</strong>：Apache Kafka, RabbitMQ, Google Cloud Pub/Sub, Redis Pub/Sub。</li>
+</ul>
+<p>** Pub/Sub 是一個強大的後端架構模式，用於打造可擴展、有彈性的分散式系統。**</p>
+<hr />
+<h1 id="sse-對瀏覽器的即時廣播電台"><a class="markdownIt-Anchor" href="#sse-對瀏覽器的即時廣播電台"></a> SSE - 對瀏覽器的「即時廣播電台」</h1>
+<p>現在，想像在網頁上追蹤一場體育比賽的比分。不需要手動刷新頁面，比分、安打、出局數都會自動更新。</p>
+<p>這就是 <strong>伺服器發送事件 (Server-Sent Events, or SSE)</strong> 的典型場景。</p>
+<blockquote>
+<p><strong>SSE 是一種基於標準 HTTP 的網頁通訊協定，允許伺服器單向地、即時地向客戶端（瀏覽器）推送數據。</strong></p>
+</blockquote>
+<p>它的運作方式非常簡單：</p>
+<ol>
+<li>瀏覽器向伺服器的某個端點發起一個普通的 HTTP GET 請求。</li>
+<li>伺服器「抓住」這個請求不放，保持連線開啟。</li>
+<li>伺服器的 <code>Content-Type</code> 回應標頭設為 <code>text/event-stream</code>。</li>
+<li>每當有新事件發生時，伺服器就沿著這條開啟的連線，將格式化好的文字數據（<code>data: ...\n\n</code>）推送給瀏覽器。</li>
+</ol>
+<h2 id="為什麼要用-sse"><a class="markdownIt-Anchor" href="#為什麼要用-sse"></a> 為什麼要用 SSE？</h2>
+<ul>
+<li><strong>簡單</strong>：前端只需使用內建的 <code>EventSource</code> API，後端也只需遵循簡單的文本格式。</li>
+<li><strong>標準與相容</strong>：它就是 HTTP，可以無縫通過各種防火牆和代理。</li>
+<li><strong>自動重連</strong>：這是 SSE 的一大殺手級特性。如果連線意外中斷（例如網路切換），瀏覽器的 <code>EventSource</code> 會自動嘗試重新連線。</li>
+</ul>
+<p><strong>這在哪裡使用？</strong><br />
+在<strong>伺服器 (Server) 和前端瀏覽器 (Client)</strong> 之間。</p>
+<ul>
+<li><strong>典型場景</strong>：即時新聞、股票行情更新、訂單狀態追蹤、進度條顯示。</li>
+</ul>
+<p><strong>SSE 是一種輕量、可靠、專為「伺服器到客戶端」單向數據推送而生的網頁技術。</strong></p>
+<hr />
+<h1 id="pubsub-vs-sse"><a class="markdownIt-Anchor" href="#pubsub-vs-sse"></a> Pub/Sub vs SSE</h1>
+<p>用一張表格來清晰地對比它們：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">特性 / 方面</th>
+<th style="text-align:left">Pub/Sub (發布/訂閱)</th>
+<th style="text-align:left">SSE (伺服器發送事件)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>類型</strong></td>
+<td style="text-align:left"><strong>後端架構模式</strong></td>
+<td style="text-align:left"><strong>前端通訊協定</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>參與者</strong></td>
+<td style="text-align:left">後端服務 ↔ 訊息中介 ↔ 後端服務</td>
+<td style="text-align:left">後端伺服器 → 前端瀏覽器</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>通訊方向</strong></td>
+<td style="text-align:left">由中介管理的多對多 (Many-to-Many)</td>
+<td style="text-align:left">嚴格的單向 (One-Way)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>核心目的</strong></td>
+<td style="text-align:left">服務解耦，系統彈性</td>
+<td style="text-align:left">向網頁推送即時更新</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>比喻</strong></td>
+<td style="text-align:left"><strong>訂閱雜誌/YouTube 頻道</strong></td>
+<td style="text-align:left"><strong>廣播電台 / P.A. 系統</strong></td>
+</tr>
+</tbody>
+</table>
+<h1 id="實戰場景即時物流追蹤系統"><a class="markdownIt-Anchor" href="#實戰場景即時物流追蹤系統"></a> 實戰場景：即時物流追蹤系統</h1>
+<p>讓我們看看它們如何協同工作。為了讓這個流程更加視覺化，讓我們用一張圖來表示一個即時物流追蹤系統的數據流：</p>
+<pre class="highlight"><code class="mermaid">graph TD;
+    subgraph &quot;後端架構 (Pub/Sub 模式)&quot;
+        A[&quot;貨車 GPS 裝置&quot;] --&gt; B[&quot;位置服務 (Publisher)&quot;];
+        B -- &quot;發布事件&quot; --&gt; C&#123;&quot;Pub/Sub 主題&lt;br&gt;location-updates&quot;&#125;;
+        C -- &quot;分發給訂閱者&quot; --&gt; D[&quot;數據庫存檔服務 (Subscriber)&quot;];
+        C -- &quot;分發給訂閱者&quot; --&gt; E[&quot;即時分發服務 (Subscriber)&quot;];
+        D --&gt; F[(&quot;歷史軌跡數據庫&quot;)];
+    end
+
+    subgraph &quot;前端通訊&quot;
+        G[&quot;使用者瀏覽器&quot;];
+    end
+
+    E -- &quot;即時推送&lt;br&gt;(SSE 連線)&quot; --&gt; G;
+
+    %% Styling
+    style C fill:#FFE3E3,stroke:#B40000,stroke-width:2px;
+    style E fill:#D6E8FF,stroke:#0042A3,stroke-width:2px;
+
+</code></pre>
+<p>流程：</p>
+<ol>
+<li>
+<p><strong>事件產生 (Publisher)</strong>：貨車的 GPS 裝置上報位置給「位置服務」。該服務處理後，將訊息**發布(Publish)**到 <code>location-updates</code> 這個主題上。</p>
+</li>
+<li>
+<p><strong>後端處理 (Subscribers)</strong>：</p>
+<ul>
+<li><code>Pub/Sub 主題</code>（如 Kafka 或 RabbitMQ）將事件分發給所有訂閱者。</li>
+<li>「數據庫存檔服務」收到事件，將其存入資料庫備份。</li>
+<li>「即時分發服務」也收到同一個事件，準備將其推送給前端。</li>
+<li><strong>以上所有後端內部的通訊，都由 Pub/Sub 模式完成，服務之間互不干擾。</strong></li>
+</ul>
+</li>
+<li>
+<p><strong>前端推送 (SSE 連線)</strong>：</p>
+<ul>
+<li>當使用者打開追蹤頁面時，他的瀏覽器會與「即時分發服務」建立一條 SSE 連線。</li>
+<li>「即時分發服務」收到來自 Pub/Sub 的新位置後，立刻透過這條 SSE 連線，將新座標推送給對應的使用者瀏覽器。</li>
+<li><strong>這最後一哩路，從後端到前端的即時數據傳遞，由 SSE 完美勝任。</strong></li>
+</ul>
+</li>
+</ol>
+<p>在這個架構中，Pub/Sub 完美地解耦了後端複雜的業務邏輯，而 SSE 則作為最後一哩路，高效、可靠地將最終結果呈現在使用者面前。</p>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>不要再問「Pub/Sub 和 SSE 哪個好？」，而應該問「在系統中，哪部分應該用 Pub/Sub，哪部分適合用 SSE？」。</p>
+<ul>
+<li>當需要<strong>在系統內部（後端）進行非同步、一對多或多對多的服務通訊</strong>時，請使用 <strong>Pub/Sub</strong> 模式。</li>
+<li>當需要<strong>將後端的事件結果，單向、即時地推送給網頁前端</strong>時，請使用 <strong>SSE</strong> 協定。</li>
+</ul>
+<p>理解它們各自的定位和職責，就能設計出更清晰、更強大、更具擴展性的現代化應用程式。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Pub-Sub/" rel="tag"># Pub/Sub</a>
+              <a href="/my-blog/tags/SSE/" rel="tag"># SSE</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/07/23/%E7%94%A8%20Server-Sent%20Events%20%E6%89%93%E9%80%A0%E5%8D%B3%E6%99%82%E9%80%8F%E6%98%8E%E7%9A%84%E5%BE%8C%E7%AB%AF%E4%BB%BB%E5%8B%99%E9%AB%94%E9%A9%97/" rel="prev" title="告別無盡的轉圈圈：用 Server-Sent Events (SSE) 打造即時、透明的後端任務體驗">
+                  <i class="fa fa-angle-left"></i> 告別無盡的轉圈圈：用 Server-Sent Events (SSE) 打造即時、透明的後端任務體驗
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
