@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="Celery 是一套成熟的 Distributed Task Queue（分散式任務佇列）解決方案，讓開發者可以非同步地執行任務。在 Web 開發中，當遇到需要長時間執行的任務，例如匯出龐大的資料報表，我們無法要求使用者一直停留在網頁上等待。這時，Celery 就能派上用場，將這些耗時的任務移至背景執行，完成後再透過 Email 或其他方式通知使用者，大幅改善使用者體驗。   Celery 與 M">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python Celery 入門：非同步任務的得力助手">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/07/24/celery/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="Celery 是一套成熟的 Distributed Task Queue（分散式任務佇列）解決方案，讓開發者可以非同步地執行任務。在 Web 開發中，當遇到需要長時間執行的任務，例如匯出龐大的資料報表，我們無法要求使用者一直停留在網頁上等待。這時，Celery 就能派上用場，將這些耗時的任務移至背景執行，完成後再透過 Email 或其他方式通知使用者，大幅改善使用者體驗。   Celery 與 M">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-07-23T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-07-24T15:43:25.071Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Celery">
+<meta property="article:tag" content="Async">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/07/24/celery/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/07/24/celery/","path":"2025/07/24/celery/","title":"Python Celery 入門：非同步任務的得力助手"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Python Celery 入門：非同步任務的得力助手 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">40</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">29</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(6)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(6)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#celery-%E8%88%87-message-queue-%E7%9A%84%E9%97%9C%E4%BF%82"><span class="nav-number">1.</span> <span class="nav-text"> Celery 與 Message Queue 的關係</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E9%81%8B%E4%BD%9C%E6%B5%81%E7%A8%8B%E5%9C%96"><span class="nav-number">2.</span> <span class="nav-text"> 核心運作流程圖</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#celery-%E4%BB%BB%E5%8B%99%E7%94%9F%E5%91%BD%E9%80%B1%E6%9C%9F"><span class="nav-number">3.</span> <span class="nav-text"> Celery 任務生命週期</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%A7%B8%E7%99%BC%E4%BB%BB%E5%8B%99-client-celery-app"><span class="nav-number">3.1.</span> <span class="nav-text"> 1. 觸發任務 (Client → Celery App)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%99%BC%E9%80%81%E4%BB%BB%E5%8B%99%E5%88%B0%E4%B8%AD%E4%BB%8B%E8%80%85-celery-app-broker"><span class="nav-number">3.2.</span> <span class="nav-text"> 2. 發送任務到中介者 (Celery App → Broker)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%AB%8B%E5%8D%B3%E8%BF%94%E5%9B%9E%E6%86%91%E8%AD%89-celery-app-client"><span class="nav-number">3.3.</span> <span class="nav-text"> 3. 立即返回憑證 (Celery App → Client)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E8%83%8C%E6%99%AF%E5%B7%A5%E4%BD%9C%E8%80%85%E9%A0%98%E5%8F%96%E4%B8%A6%E5%9F%B7%E8%A1%8C%E4%BB%BB%E5%8B%99-worker-broker-worker"><span class="nav-number">3.4.</span> <span class="nav-text"> 4. 背景工作者領取並執行任務 (Worker → Broker → Worker)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E5%AF%AB%E5%85%A5%E5%9F%B7%E8%A1%8C%E7%B5%90%E6%9E%9C-worker-result-backend"><span class="nav-number">3.5.</span> <span class="nav-text"> 5. 寫入執行結果 (Worker → Result Backend)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E5%8F%AF%E9%81%B8%E6%9F%A5%E8%A9%A2%E4%BB%BB%E5%8B%99%E7%B5%90%E6%9E%9C-client-result-backend"><span class="nav-number">3.6.</span> <span class="nav-text"> 6. （可選）查詢任務結果 (Client → Result Backend)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%87%89%E7%94%A8-celery"><span class="nav-number">4.</span> <span class="nav-text"> 如何應用 Celery</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%90%8D%E8%A9%9E"><span class="nav-number">4.1.</span> <span class="nav-text"> 核心名詞</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%A6%E4%BD%9C%E6%AD%A5%E9%A9%9F"><span class="nav-number">4.2.</span> <span class="nav-text"> 實作步驟</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">5.</span> <span class="nav-text"> 總結</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">40</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/24/celery/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Python Celery 入門：非同步任務的得力助手 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python Celery 入門：非同步任務的得力助手
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-07-24 00:00:00 / 修改時間：23:43:25" itemprop="dateCreated datePublished" datetime="2025-07-24T00:00:00+08:00">2025-07-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>Celery 是一套成熟的 Distributed Task Queue（分散式任務佇列）解決方案，讓開發者可以非同步地執行任務。在 Web 開發中，當遇到需要長時間執行的任務，例如匯出龐大的資料報表，我們無法要求使用者一直停留在網頁上等待。這時，Celery 就能派上用場，將這些耗時的任務移至背景執行，完成後再透過 Email 或其他方式通知使用者，大幅改善使用者體驗。</p>
+<hr />
+<h1 id="celery-與-message-queue-的關係"><a class="markdownIt-Anchor" href="#celery-與-message-queue-的關係"></a> Celery 與 Message Queue 的關係</h1>
+<p>Celery 的運作核心與 <strong>Message Queue（訊息佇列）</strong> 密不可分。 事實上，Celery 本身不負責傳遞任務訊息，而是依賴一個稱為 <strong>Broker</strong> 的中介者來傳遞。 這個 Broker 就是所謂的 Message Queue 服務，例如常見的 RabbitMQ 或 Redis。</p>
+<p>整個流程如下：</p>
+<ol>
+<li><strong>發布任務</strong>：當我們在應用程式中呼叫一個 Celery 任務時，Celery 會將這個任務的資訊（例如要執行的函式名稱、參數等）打包成一則<strong>任務訊息 (Task Message)</strong>。</li>
+<li><strong>訊息傳遞</strong>：這則任務訊息會被發送到指定的 Broker (Message Queue)。</li>
+<li><strong>背景執行</strong>：在背景運行的 <strong>Worker</strong> 會持續監聽 Message Queue，一旦收到新的任務訊息，便會取出並執行對應的任務。</li>
+</ol>
+<p>透過這樣的架構，Celery 將任務的「發布」與「執行」解耦，讓主應用程式在發布任務後可以立即回應使用者，無需等待任務完成。</p>
+<h1 id="核心運作流程圖"><a class="markdownIt-Anchor" href="#核心運作流程圖"></a> 核心運作流程圖</h1>
+<p>用序列圖 (Sequence Diagram) 來視覺化整個流程：</p>
+<pre class="highlight"><code class="mermaid">sequenceDiagram
+    participant Client as (主應用程式)
+    participant Celery App as (Celery 實例)
+    participant Broker as (訊息中介者 Redis)
+    participant Worker as (背景工作者)
+    participant Result Backend as (結果儲存 Redis)
+
+    Client-&gt;&gt;+Celery App: 呼叫 task.delay()
+    Celery App-&gt;&gt;Broker: 發送任務訊息
+    Celery App--&gt;&gt;-Client: 立即返回 AsyncResult 物件
+    
+    Note right of Worker: Worker 持續監聽 Broker
+    Worker-&gt;&gt;Broker: 取得任務訊息
+    Worker-&gt;&gt;Worker: 執行任務
+    Worker-&gt;&gt;+Result Backend: 將執行狀態/結果寫入
+    Note left of Client: Client 可用 AsyncResult&lt;br/&gt;向 Result Backend 查詢結果
+</code></pre>
+<h1 id="celery-任務生命週期"><a class="markdownIt-Anchor" href="#celery-任務生命週期"></a> Celery 任務生命週期</h1>
+<h2 id="1-觸發任務-client-celery-app"><a class="markdownIt-Anchor" href="#1-觸發任務-client-celery-app"></a> 1. <strong>觸發任務 (Client → Celery App)</strong></h2>
+<ul>
+<li><strong>動作</strong>：主應用程式 (Client) 呼叫一個被 <code>@app.task</code> 裝飾的函式，並在其後附加 <code>.delay()</code> 或 <code>.apply_async()</code>。</li>
+<li><strong>說明</strong>：這是整個流程的起點。主應用程式決定將一個耗時的操作（例如發送郵件、生成報表）交給背景處理，而不是自己執行，以避免阻塞主執行緒。</li>
+</ul>
+<h2 id="2-發送任務到中介者-celery-app-broker"><a class="markdownIt-Anchor" href="#2-發送任務到中介者-celery-app-broker"></a> 2. <strong>發送任務到中介者 (Celery App → Broker)</strong></h2>
+<ul>
+<li><strong>動作</strong>：Celery 實例 (Celery App) 將任務的相關資訊（函式名稱、參數等）序列化成一條訊息，然後發送到設定好的訊息中介者 (Broker)，在此例中是 Redis。</li>
+<li><strong>說明</strong>：Broker 就像一個任務的「待辦清單」或「郵箱」。任務被安全地存放在這裡，等待有空的 Worker 來領取。這一步是實現非同步的關鍵，因為主應用程式把任務「扔」進 Broker 後就不用再管了。</li>
+</ul>
+<h2 id="3-立即返回憑證-celery-app-client"><a class="markdownIt-Anchor" href="#3-立即返回憑證-celery-app-client"></a> 3. <strong>立即返回憑證 (Celery App → Client)</strong></h2>
+<ul>
+<li><strong>動作</strong>：在將任務訊息成功發送到 Broker 後，Celery 幾乎是<strong>立即</strong>返回一個 <code>AsyncResult</code> 物件給主應用程式。</li>
+<li><strong>說明</strong>：這是非同步的核心優勢。主應用程式<strong>不會等待</strong>任務執行完成。它得到的是一個「任務憑證」或「追蹤號」（<code>AsyncResult</code>），裡面包含了獨一無二的 <code>task_id</code>。主應用程式可以繼續執行其他程式碼，使用者介面也能保持回應。</li>
+</ul>
+<h2 id="4-背景工作者領取並執行任務-worker-broker-worker"><a class="markdownIt-Anchor" href="#4-背景工作者領取並執行任務-worker-broker-worker"></a> 4. <strong>背景工作者領取並執行任務 (Worker → Broker → Worker)</strong></h2>
+<ul>
+<li><strong>動作</strong>：一個或多個獨立運行的 Worker 行程持續監聽 (Polling) Broker。一旦發現有新的任務訊息，其中一個 Worker 就會領取它。</li>
+<li><strong>說明</strong>：Worker 是真正執行工作的角色。它從 Broker 取得訊息後，會反序列化內容，了解需要執行哪個函式以及使用什麼參數，然後在自己的行程中執行該函式。</li>
+</ul>
+<h2 id="5-寫入執行結果-worker-result-backend"><a class="markdownIt-Anchor" href="#5-寫入執行結果-worker-result-backend"></a> 5. <strong>寫入執行結果 (Worker → Result Backend)</strong></h2>
+<ul>
+<li><strong>動作</strong>：任務執行完成後（無論成功或失敗），Worker 會將執行結果或狀態（例如 <code>'SUCCESS'</code>、<code>'FAILURE'</code>、回傳值、錯誤堆疊等）寫入到設定好的結果儲存 (Result Backend) 中。</li>
+<li><strong>說明</strong>：Result Backend 是一個用來儲存任務最終狀態的地方，它讓主應用程式有辦法查詢任務的執行情況。注意，它和 Broker 可以是同一個資料庫（如 Redis），但它們的角色和儲存的資料結構是完全不同的。Result Backend 是選用的，如果你的任務不需要回傳結果，可以不設定它。</li>
+</ul>
+<h2 id="6-可選查詢任務結果-client-result-backend"><a class="markdownIt-Anchor" href="#6-可選查詢任務結果-client-result-backend"></a> 6. <strong>（可選）查詢任務結果 (Client → Result Backend)</strong></h2>
+<ul>
+<li><strong>動作</strong>：主應用程式可以在任何時候，使用第 3 步中得到的 <code>AsyncResult</code> 物件，來查詢任務的狀態或獲取結果。</li>
+<li><strong>說明</strong>：當主應用程式呼叫 <code>async_result.get()</code> 或檢查 <code>async_result.state</code> 時，它會拿著 <code>task_id</code> 去 Result Backend 查詢對應的結果。這一步是選擇性的，但對於需要知道任務是否完成、是否成功或需要取得回傳值的場景至關重要。</li>
+</ul>
+<h1 id="如何應用-celery"><a class="markdownIt-Anchor" href="#如何應用-celery"></a> 如何應用 Celery</h1>
+<p>以下將以 Redis 作為 Broker 與 Result Backend，示範一個簡單的 Celery 應用。</p>
+<h2 id="核心名詞"><a class="markdownIt-Anchor" href="#核心名詞"></a> 核心名詞</h2>
+<p>在開始之前，先了解幾個 Celery 的核心名詞：</p>
+<ul>
+<li><strong>Application (app)</strong>：Celery 的實例，是使用 Celery 的起點。</li>
+<li><strong>Task</strong>：Celery 執行的最小工作單元，通常是一個 Python 函式。</li>
+<li><strong>Worker</strong>：負責執行 Task 的背景進程。</li>
+<li><strong>Broker</strong>：訊息中介者，負責傳遞 Task Message，例如 RabbitMQ, Redis。</li>
+<li><strong>Result Backend</strong>：用於儲存 Task 的執行狀態與結果，例如 Redis。</li>
+</ul>
+<h2 id="實作步驟"><a class="markdownIt-Anchor" href="#實作步驟"></a> 實作步驟</h2>
+<p><strong>1. 環境準備與安裝</strong></p>
+<p>首先，確保已經安裝了 Python 與 Redis。 接著透過 pip 安裝 Celery 及 Redis 相關套件：</p>
+<pre class="highlight"><code class="bash">pip install celery
+pip install <span class="hljs-string">&quot;celery[redis]&quot;</span>
+</code></pre>
+<p><strong>2. 撰寫 Celery 應用</strong></p>
+<p>建立一個名為 <code>tasks.py</code> 的檔案，內容如下：</p>
+<pre class="highlight"><code class="python"><span class="hljs-comment"># tasks.py</span>
+<span class="hljs-keyword">from</span> celery <span class="hljs-keyword">import</span> Celery
+
+<span class="hljs-comment"># 實例化 Celery，設定 Broker 和 Backend</span>
+app = Celery(
+    <span class="hljs-string">&#x27;tasks&#x27;</span>,
+    broker=<span class="hljs-string">&#x27;redis://127.0.0.1:6379/0&#x27;</span>,
+    backend=<span class="hljs-string">&#x27;redis://127.0.0.1:6379/1&#x27;</span>,
+)
+
+<span class="hljs-comment"># 定義一個 Task</span>
+<span class="hljs-meta">@app.task</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">say_hello</span>():
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Hello, Celery!&#x27;</span>)
+</code></pre>
+<p>在這段程式碼中：</p>
+<ul>
+<li>建立了一個名為 <code>tasks</code> 的 Celery Application。</li>
+<li>將 Broker 設定為本機 Redis 的 0 號資料庫。</li>
+<li>將 Result Backend 設定為本機 Redis 的 1 號資料庫。</li>
+<li>使用 <code>@app.task</code> 裝飾器將 <code>say_hello</code> 函式定義為一個 Celery Task。</li>
+</ul>
+<p><strong>3. 啟動 Worker</strong></p>
+<p>接著，開啟一個終端機，在 <code>tasks.py</code> 所在的目錄下執行以下指令來啟動 Worker：</p>
+<pre class="highlight"><code class="bash">celery -A tasks worker --loglevel=info
+</code></pre>
+<p>會看到 Worker 成功啟動並等待接收任務的畫面。</p>
+<p><strong>4. 非同步執行任務</strong></p>
+<p>現在，另開一個終端機，進入 Python 直譯器來實際執行任務：</p>
+<pre class="highlight"><code class="python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">from</span> tasks <span class="hljs-keyword">import</span> say_hello
+
+<span class="hljs-comment"># 使用 .delay() 來非同步執行任務</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>result = say_hello.delay()
+
+<span class="hljs-meta">&gt;&gt;&gt; </span>result
+&lt;AsyncResult: e8af98f2-920c-<span class="hljs-number">43e2</span>-a8e8-175bb8cd88cb&gt;
+</code></pre>
+<p>執行 <code>.delay()</code> 後，會立即得到一個 <code>AsyncResult</code> 物件，這代表任務已經成功發送。 此時，可以回到 Worker 的終端機視窗，會發現 <code>Hello, Celery!</code> 的訊息已經被印出，代表 Worker 已經接收並執行了任務。</p>
+<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
+<p>透過以上步驟，便成功地利用 Celery 與 Redis 完成了一個非同步任務的執行。這只是 Celery 的初步應用，它還包含了任務排程、工作流設計（Workflow）等更進階的功能，是 Python 開發者處理非同步任務時非常值得學習的工具。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Python/" rel="tag"># Python</a>
+              <a href="/my-blog/tags/Celery/" rel="tag"># Celery</a>
+              <a href="/my-blog/tags/Async/" rel="tag"># Async</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/07/23/PubSub%20vs%20SSE%20%E5%88%A5%E5%86%8D%E6%90%9E%E6%B7%B7%E4%BA%86%20%E4%B8%80%E5%80%8B%E6%98%AF%E5%BE%8C%E7%AB%AF%E6%9E%B6%E6%A7%8B%E4%B8%80%E5%80%8B%E6%98%AF%E5%89%8D%E7%AB%AF%E5%8D%94%E5%AE%9A/" rel="prev" title="Pub&#x2F;Sub vs SSE：別再搞混了！一個是後端架構，一個是前端協定">
+                  <i class="fa fa-angle-left"></i> Pub/Sub vs SSE：別再搞混了！一個是後端架構，一個是前端協定
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
