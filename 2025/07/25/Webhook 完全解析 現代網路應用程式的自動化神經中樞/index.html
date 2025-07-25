@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="在現今快速迭代的網路世界中，應用程式之間的即時通訊與資料同步至關重要。想像一下，當在購物網站完成一筆訂單後，幾乎是瞬間就收到了銀行的扣款通知和商家的訂單確認 Email。或是當將程式碼推送到 GitHub 後，自動化測試和部署流程便立刻啟動。 這些看似神奇的即時反應，背後的核心功臣之一，就是我們今天的主角——Webhook。 這篇文章將帶你深入淺出地了解：  Webhook 是什麼？ 一個簡單易懂">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Webhook 完全解析：現代網路應用程式的自動化神經中樞">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/07/25/Webhook%20%E5%AE%8C%E5%85%A8%E8%A7%A3%E6%9E%90%20%E7%8F%BE%E4%BB%A3%E7%B6%B2%E8%B7%AF%E6%87%89%E7%94%A8%E7%A8%8B%E5%BC%8F%E7%9A%84%E8%87%AA%E5%8B%95%E5%8C%96%E7%A5%9E%E7%B6%93%E4%B8%AD%E6%A8%9E/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="在現今快速迭代的網路世界中，應用程式之間的即時通訊與資料同步至關重要。想像一下，當在購物網站完成一筆訂單後，幾乎是瞬間就收到了銀行的扣款通知和商家的訂單確認 Email。或是當將程式碼推送到 GitHub 後，自動化測試和部署流程便立刻啟動。 這些看似神奇的即時反應，背後的核心功臣之一，就是我們今天的主角——Webhook。 這篇文章將帶你深入淺出地了解：  Webhook 是什麼？ 一個簡單易懂">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-07-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-07-25T15:45:26.201Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Async">
+<meta property="article:tag" content="Webhook">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/07/25/Webhook%20%E5%AE%8C%E5%85%A8%E8%A7%A3%E6%9E%90%20%E7%8F%BE%E4%BB%A3%E7%B6%B2%E8%B7%AF%E6%87%89%E7%94%A8%E7%A8%8B%E5%BC%8F%E7%9A%84%E8%87%AA%E5%8B%95%E5%8C%96%E7%A5%9E%E7%B6%93%E4%B8%AD%E6%A8%9E/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/07/25/Webhook%20%E5%AE%8C%E5%85%A8%E8%A7%A3%E6%9E%90%20%E7%8F%BE%E4%BB%A3%E7%B6%B2%E8%B7%AF%E6%87%89%E7%94%A8%E7%A8%8B%E5%BC%8F%E7%9A%84%E8%87%AA%E5%8B%95%E5%8C%96%E7%A5%9E%E7%B6%93%E4%B8%AD%E6%A8%9E/","path":"2025/07/25/Webhook 完全解析 現代網路應用程式的自動化神經中樞/","title":"Webhook 完全解析：現代網路應用程式的自動化神經中樞"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Webhook 完全解析：現代網路應用程式的自動化神經中樞 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">41</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">30</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(6)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#webhook-%E6%98%AF%E4%BB%80%E9%BA%BC-%E7%B5%A6%E4%BC%BA%E6%9C%8D%E5%99%A8%E7%9A%84push-notification"><span class="nav-number">1.</span> <span class="nav-text"> Webhook 是什麼？ 給伺服器的「Push Notification」</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E8%A6%81%E7%94%A8-webhook%E6%A0%B8%E5%BF%83%E5%84%AA%E5%8B%A2%E5%9C%A8%E5%93%AA"><span class="nav-number">2.</span> <span class="nav-text"> 為什麼要用 Webhook？核心優勢在哪？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#webhook-vs-polling"><span class="nav-number">3.</span> <span class="nav-text"> Webhook vs. Polling</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#polling-%E7%9A%84%E9%81%8B%E4%BD%9C%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.1.</span> <span class="nav-text"> Polling 的運作模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#webhook-%E7%9A%84%E9%81%8B%E4%BD%9C%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.2.</span> <span class="nav-text"> Webhook 的運作模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%83%85%E5%A2%83%E4%B8%8B%E4%BD%BF%E7%94%A8-webhook%E5%B8%B8%E8%A6%8B%E6%87%89%E7%94%A8%E5%A0%B4%E6%99%AF"><span class="nav-number">4.</span> <span class="nav-text"> 什麼情境下使用 Webhook？常見應用場景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%87%89%E7%94%A8%E8%88%87%E4%BF%9D%E8%AD%B7-webhook"><span class="nav-number">5.</span> <span class="nav-text"> 如何應用與保護 Webhook？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F-1%E5%BB%BA%E7%AB%8B%E4%B8%80%E5%80%8B%E5%85%AC%E9%96%8B%E7%9A%84%E6%8E%A5%E6%94%B6%E7%AB%AF%E9%BB%9E-endpoint-pythonfastapi-%E7%AF%84%E4%BE%8B"><span class="nav-number">5.1.</span> <span class="nav-text"> 步驟 1：建立一個公開的接收端點 (Endpoint) - Python&#x2F;FastAPI 範例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F-2%E5%9C%A8%E6%8F%90%E4%BE%9B%E6%96%B9%E6%9C%8D%E5%8B%99%E4%B8%AD%E8%A8%BB%E5%86%8A%E4%BD%A0%E7%9A%84%E7%AB%AF%E9%BB%9E"><span class="nav-number">5.2.</span> <span class="nav-text"> 步驟 2：在提供方服務中註冊你的端點</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F-3%E4%BF%9D%E8%AD%B7%E4%BD%A0%E7%9A%84-webhook"><span class="nav-number">5.3.</span> <span class="nav-text"> 步驟 3：保護你的 Webhook</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#webhook-vs-server-sent-events-sse"><span class="nav-number">6.</span> <span class="nav-text"> Webhook vs. Server-Sent Events (SSE)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%AF%E4%BA%92%E6%96%A5%E9%82%84%E6%98%AF%E7%9B%B8%E8%BC%94%E7%9B%B8%E6%88%90%E7%AD%94%E6%A1%88%E7%B5%95%E4%BD%B3%E7%9A%84%E7%9B%9F%E5%8F%8B"><span class="nav-number">6.1.</span> <span class="nav-text"> 是互斥還是相輔相成？答案：絕佳的盟友</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%B8%E5%B0%8D%E5%B7%A5%E5%85%B7%E5%81%9A%E5%B0%8D%E4%BA%8B"><span class="nav-number">6.2.</span> <span class="nav-text"> 選對工具，做對事</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">7.</span> <span class="nav-text"> 總結</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">41</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/25/Webhook%20%E5%AE%8C%E5%85%A8%E8%A7%A3%E6%9E%90%20%E7%8F%BE%E4%BB%A3%E7%B6%B2%E8%B7%AF%E6%87%89%E7%94%A8%E7%A8%8B%E5%BC%8F%E7%9A%84%E8%87%AA%E5%8B%95%E5%8C%96%E7%A5%9E%E7%B6%93%E4%B8%AD%E6%A8%9E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Webhook 完全解析：現代網路應用程式的自動化神經中樞 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Webhook 完全解析：現代網路應用程式的自動化神經中樞
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-07-25 00:00:00 / 修改時間：23:45:26" itemprop="dateCreated datePublished" datetime="2025-07-25T00:00:00+08:00">2025-07-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在現今快速迭代的網路世界中，應用程式之間的即時通訊與資料同步至關重要。想像一下，當在購物網站完成一筆訂單後，幾乎是瞬間就收到了銀行的扣款通知和商家的訂單確認 Email。或是當將程式碼推送到 GitHub 後，自動化測試和部署流程便立刻啟動。</p>
+<p>這些看似神奇的即時反應，背後的核心功臣之一，就是我們今天的主角——<strong>Webhook</strong>。</p>
+<p>這篇文章將帶你深入淺出地了解：</p>
+<ul>
+<li><strong>Webhook 是什麼？</strong> 一個簡單易懂的譬喻。</li>
+<li><strong>為什麼要用 Webhook？</strong> 核心優勢在哪裡。</li>
+<li><strong>經典對決：Webhook vs. Polling</strong>，用序列圖（Sequence Diagram）了解差異。</li>
+<li><strong>常見應用場景</strong>：看看 Webhook 如何在真實世界中大展身手。</li>
+<li><strong>如何應用與保護</strong>：實作 Webhook 的關鍵步驟與安全考量。</li>
+</ul>
+<hr />
+<h1 id="webhook-是什麼-給伺服器的push-notification"><a class="markdownIt-Anchor" href="#webhook-是什麼-給伺服器的push-notification"></a> Webhook 是什麼？ 給伺服器的「Push Notification」</h1>
+<ul>
+<li><strong>標準 API 運作方式</strong>：應用程式（客戶端）主動去「詢問」另一個服務（伺服器）：「嗨，有新資料嗎？」這是一個「拉取」（Pull）的過程。</li>
+<li><strong>Webhook 運作方式</strong>：先告訴另一個服務：「嗨，當某件事發生時，請用這個網址通知我。」於是，當事件真的發生時，該服務會主動「推送」（Push）一個訊息到你指定的網址。</li>
+</ul>
+<p>所以，很多人稱 Webhook 為「<strong>反向 API</strong>」（Reverse API）或「<strong>HTTP Push API</strong>」，<strong>Webhook 就是專屬於伺服器和應用程式的「推播通知」（Push Notification）。</strong></p>
+<p>就像手機 App 不會每秒都去問 Twitter：「有新動態嗎？」，而是由 Twitter 的伺服器在有新動態時，主動推播通知到你的手機。Webhook 就是在做完全一樣的事情，只是通訊的對象從使用者變成了應用程式。</p>
+<h1 id="為什麼要用-webhook核心優勢在哪"><a class="markdownIt-Anchor" href="#為什麼要用-webhook核心優勢在哪"></a> 為什麼要用 Webhook？核心優勢在哪？</h1>
+<p>採用 Webhook 架構能帶來幾個顯而易見的好處：</p>
+<ol>
+<li><strong>即時性（Real-time）</strong>: 資料是事件驅動的，一旦事件發生，通知會立即發送。這對於需要快速反應的場景（如：支付成功、監控警報）至關重要。</li>
+<li><strong>高效率（Efficiency）</strong>: 相較於不斷輪詢（Polling）的作法，Webhook 大幅減少了不必要的網路請求。應用程式不必再浪費 CPU 和網路資源去做那些 99% 時間都得到「沒事發生」的回應。伺服器端也因此減輕了負擔。</li>
+<li><strong>自動化（Automation）</strong>: Webhook 是串連不同系統、實現自動化工作流的黏著劑。例如，將程式碼推送到 Git 倉儲後，自動觸發 CI/CD 流程；在 CRM 系統新增客戶後，自動將其 Email 加入電子報發送列表。</li>
+</ol>
+<h1 id="webhook-vs-polling"><a class="markdownIt-Anchor" href="#webhook-vs-polling"></a> Webhook vs. Polling</h1>
+<p>為了更深刻地理解 Webhook 的價值，必須把它和最傳統的替代方案——<strong>輪詢（Polling）</strong>——放在一起比較。</p>
+<ul>
+<li>
+<p><strong>輪詢 (Polling)</strong>：就像一個沒耐心的孩子在後座不停地問：「到了沒？到了沒？」。客戶端應用程式需要設定一個計時器，每隔一段時間（例如 5 秒）就向伺服器發送一次請求，詢問是否有新狀態。</p>
+</li>
+<li>
+<p><strong>Webhook</strong>：就像你上車前告訴司機：「快到目的地時叫我一聲。」然後就可以安心地在車上睡覺、滑手機，直到司機通知你。你的應用程式只需提供一個端點（Endpoint），靜靜等待伺服器在事件發生時主動通知。</p>
+</li>
+</ul>
+<p>用 Mermaid 序列圖來視覺化這個過程：</p>
+<h2 id="polling-的運作模式"><a class="markdownIt-Anchor" href="#polling-的運作模式"></a> Polling 的運作模式</h2>
+<pre class="highlight"><code class="mermaid">sequenceDiagram
+    participant Client as 客戶端應用
+    participant Server as 伺服器
+
+    loop 每隔 5 秒
+        Client-&gt;&gt;Server: 請問訂單 (ID: 123) 出貨了嗎？
+        Server--&gt;&gt;Client: 還沒喔。
+    end
+
+    Note right of Server: ...時間經過，後台更新了狀態...
+
+    Client-&gt;&gt;Server: 請問訂單 (ID: 123) 出貨了嗎？
+    Server--&gt;&gt;Client: 出了！這是物流編號：XYZ789
+</code></pre>
+<h2 id="webhook-的運作模式"><a class="markdownIt-Anchor" href="#webhook-的運作模式"></a> Webhook 的運作模式</h2>
+<pre class="highlight"><code class="mermaid">sequenceDiagram
+    participant Client as 你的應用 (接收方)
+    participant Server as 外部服務 (發送方)
+
+    Client-&gt;&gt;Server: 當訂單 (ID: 123) 出貨時，請通知我這個 URL。
+    Server--&gt;&gt;Client: 好的，已登記。
+
+    Note right of Server: ...時間經過，後台更新了狀態...
+
+    Server-&gt;&gt;Client: (POST /webhook/order_shipped) 哈囉，訂單 123 已出貨，物流編號是 XYZ789。
+    Client--&gt;&gt;Server: (200 OK) 收到，感謝通知！
+</code></pre>
+<p>差異一目了然：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">特性</th>
+<th style="text-align:left">Webhook</th>
+<th style="text-align:left">Polling</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>即時性</strong></td>
+<td style="text-align:left"><strong>高</strong> (事件發生時立即通知)</td>
+<td style="text-align:left"><strong>低</strong> (有延遲，取決於輪詢頻率)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>資源消耗</strong></td>
+<td style="text-align:left"><strong>低</strong> (僅在事件發生時請求)</td>
+<td style="text-align:left"><strong>高</strong> (持續發送大量請求)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>架構複雜度</strong></td>
+<td style="text-align:left">前期需設定接收端點，但長期簡單</td>
+<td style="text-align:left">實作簡單，但隨規模擴大而變複雜</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>擴展性</strong></td>
+<td style="text-align:left"><strong>優</strong> (伺服器負擔小)</td>
+<td style="text-align:left"><strong>差</strong> (客戶端越多，伺服器壓力越大)</td>
+</tr>
+</tbody>
+</table>
+<h1 id="什麼情境下使用-webhook常見應用場景"><a class="markdownIt-Anchor" href="#什麼情境下使用-webhook常見應用場景"></a> 什麼情境下使用 Webhook？常見應用場景</h1>
+<p>Webhook 幾乎無處不在，以下是一些典型的例子：</p>
+<ul>
+<li><strong>支付閘道</strong>：當使用者透過第三方支付完成付款後，支付平台會透過 Webhook 將付款成功或失敗的結果即時通知到電商系統，以便更新訂單狀態。</li>
+<li><strong>版本控制與 CI/CD</strong>：開發者將程式碼 <code>push</code>到 GitHub 或 GitLab 後，會觸發一個 Webhook，通知 Jenkins 或 CircleCI 伺服器開始進行自動化建置、測試和部署。</li>
+<li><strong>通訊與協作</strong>：Slack 或 Discord 的聊天機器人。當在特定頻道提到關鍵字時，觸發 Webhook，將訊息傳送給監控系統，實現即時警報。</li>
+<li><strong>內容管理系統 (CMS)</strong>：當文章在 Headless CMS (如 Contentful) 中被發布或更新時，觸發 Webhook 通知前端網站重新建置（Rebuild），以顯示最新內容。</li>
+<li><strong>SaaS 服務整合</strong>：使用 Zapier 或 N8N 這類自動化平台，你可以串連數千種支援 Webhook 的服務。例如，「當收到一封來自特定寄件者的 Gmail 時，透過 Webhook 在 Trello 新增一張卡片。」</li>
+</ul>
+<h1 id="如何應用與保護-webhook"><a class="markdownIt-Anchor" href="#如何應用與保護-webhook"></a> 如何應用與保護 Webhook？</h1>
+<p>實作一個 Webhook 主要包含兩個部分：<strong>提供方</strong>（如 GitHub、Stripe）和<strong>接收方</strong>（你的應用程式）。我們主要關注的是如何在自己的應用程式中<strong>接收</strong>一個 Webhook。</p>
+<h2 id="步驟-1建立一個公開的接收端點-endpoint-pythonfastapi-範例"><a class="markdownIt-Anchor" href="#步驟-1建立一個公開的接收端點-endpoint-pythonfastapi-範例"></a> 步驟 1：建立一個公開的接收端點 (Endpoint) - Python/FastAPI 範例</h2>
+<p>需要在應用程式中建立一個可以從外部網路存取的 URL，它通常是一個能處理 HTTP POST 請求的 API 端點。</p>
+<pre class="highlight"><code class="bash">pip install <span class="hljs-string">&quot;fastapi[all]&quot;</span>
+</code></pre>
+<p><code>fastapi[all]</code> 會一併安裝 ASGI 伺服器 <code>uvicorn</code>，方便我們運行程式。</p>
+<p>接著，建立一個名為 <code>main.py</code> 的檔案，內容如下：</p>
+<pre class="highlight"><code class="python"><span class="hljs-comment"># main.py</span>
+<span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> FastAPI, Request, Response, status
+
+<span class="hljs-comment"># 建立一個 FastAPI 應用實例</span>
+app = FastAPI()
+
+<span class="hljs-comment"># 你的 Webhook 接收端點</span>
+<span class="hljs-comment"># 使用 @app.post 裝飾器來指定這個函式處理 /webhook/github-event 的 POST 請求</span>
+<span class="hljs-meta">@app.post(<span class="hljs-params"><span class="hljs-string">&quot;/webhook/github-event&quot;</span></span>)</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">def</span> <span class="hljs-title function_">github_webhook_receiver</span>(<span class="hljs-params">request: Request</span>):
+    <span class="hljs-string">&quot;&quot;&quot;
+    接收來自 GitHub 的 Webhook 事件。
+    FastAPI 會自動處理傳入的請求。
+    &quot;&quot;&quot;</span>
+    <span class="hljs-comment"># 使用 request.json() 來非同步地獲取請求的 JSON payload</span>
+    payload = <span class="hljs-keyword">await</span> request.json()
+    
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Received a GitHub webhook event:&quot;</span>)
+    <span class="hljs-comment"># 為了方便除錯，將收到的 payload 印出來</span>
+    <span class="hljs-built_in">print</span>(payload)
+
+    <span class="hljs-comment"># --- 業務邏輯寫在這裡 ---</span>
+    <span class="hljs-comment"># 例如：</span>
+    <span class="hljs-comment"># 1. 驗證簽章 (極其重要，會在步驟 3 討論)</span>
+    <span class="hljs-comment"># 2. 根據 payload[&#x27;X-GitHub-Event&#x27;] 的事件類型進行處理</span>
+    <span class="hljs-comment"># 3. 觸發 CI/CD 流程、更新資料庫或發送 Slack 通知等</span>
+    <span class="hljs-comment"># ---------------------------</span>
+
+    <span class="hljs-comment"># 回應一個 200 OK 狀態碼，告訴 GitHub 已成功收到事件。</span>
+    <span class="hljs-comment"># 這一步非常重要，否則 GitHub 會認為發送失敗並重試。</span>
+    <span class="hljs-keyword">return</span> Response(content=<span class="hljs-string">&quot;Event received&quot;</span>, status_code=status.HTTP_200_OK)
+
+<span class="hljs-meta">@app.get(<span class="hljs-params"><span class="hljs-string">&quot;/&quot;</span></span>)</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">read_root</span>():
+    <span class="hljs-keyword">return</span> &#123;<span class="hljs-string">&quot;Status&quot;</span>: <span class="hljs-string">&quot;API is running&quot;</span>&#125;
+</code></pre>
+<p><strong>如何運行這個服務？</strong></p>
+<p>在終端機中，切換到 <code>main.py</code> 所在的目錄，然後執行以下命令：</p>
+<pre class="highlight"><code class="bash">uvicorn main:app --reload
+</code></pre>
+<ul>
+<li><code>main</code>: 指的是 <code>main.py</code> 檔案。</li>
+<li><code>app</code>: 指的是在 <code>main.py</code> 中建立的 <code>FastAPI()</code> 物件。</li>
+<li><code>--reload</code>: 這個參數會讓伺服器在程式碼變更後自動重啟，非常適合開發階段。</li>
+</ul>
+<p>現在，FastAPI 應用程式就會在本地端運行（通常是 <code>http://127.0.0.1:8000</code>）。你需要使用 ngrok 這類的工具將這個本地端點暴露到公網上，才能從 GitHub 這類外部服務接收到 Webhook。</p>
+<h2 id="步驟-2在提供方服務中註冊你的端點"><a class="markdownIt-Anchor" href="#步驟-2在提供方服務中註冊你的端點"></a> 步驟 2：在提供方服務中註冊你的端點</h2>
+<p>需要登入到 GitHub、Stripe 或其他服務的後台，找到 Webhook 設定區塊，然後將你剛剛建立的 URL (<code>https://your-domain.com/webhook/github-event</code>) 填入，並選擇感興趣的事件（例如 <code>push</code> 事件）。</p>
+<h2 id="步驟-3保護你的-webhook"><a class="markdownIt-Anchor" href="#步驟-3保護你的-webhook"></a> 步驟 3：保護你的 Webhook</h2>
+<p>由於端點是公開的，任何人都可以向它發送請求。如果沒有保護措施，惡意行為者可能會偽造請求，對你的系統造成破壞。</p>
+<p><strong>最重要的安全機制是「簽章驗證」（Signature Verification）。</strong></p>
+<p>運作方式如下：</p>
+<ol>
+<li><strong>設定 Secret</strong>：在提供方服務（如 GitHub）設定 Webhook 時，你會提供一個「Secret Token」（一組隨機、複雜的字串），這個 Secret 只有你和提供方知道。</li>
+<li><strong>產生簽章</strong>：當提供方要發送 Webhook 時，它會用這個 Secret 和請求的內容（Payload）透過 HMAC 演算法產生一個簽章（Signature）。這個簽章通常會放在 HTTP 標頭（Header）中，例如 <code>X-Hub-Signature-256</code>。</li>
+<li><strong>驗證簽章</strong>：應用程式在收到請求後，<strong>用同樣的 Secret 和收到的 Payload，以完全相同的演算法重新計算一次簽章</strong>。</li>
+<li><strong>比對結果</strong>：如果計算結果和請求標頭中的簽章完全一致，就證明這個請求確實來自可信的提供方，且內容未被竄改。如果不一致，則應直接拒絕該請求 (回應 <code>403 Forbidden</code>)。</li>
+</ol>
+<p>這一步至關重要，<strong>絕對不能省略</strong>，否則 Webhook 端點將成為一個巨大的安全漏洞。</p>
+<h1 id="webhook-vs-server-sent-events-sse"><a class="markdownIt-Anchor" href="#webhook-vs-server-sent-events-sse"></a> Webhook vs. Server-Sent Events (SSE)</h1>
+<p>當談論伺服器主動「推送」資料時，除了 Webhook，另一個常被提及的技術是 <strong>Server-Sent Events (SSE)</strong>。雖然兩者都實現了伺服器到客戶端的單向通訊，但它們的<strong>目標、運作方式和應用場景截然不同</strong>。</p>
+<p>把這兩者搞混，就像把「私人簡訊」和「電台廣播」當成一回事。</p>
+<ul>
+<li><strong>Webhook 就像是私人簡訊</strong>：一個伺服器（A）有特定事情要告訴另一個<strong>伺服器</strong>（B）。A 會直接「打電話」或「發簡訊」（發送 HTTP POST）給 B，這是一次性的、針對特定接收者的通訊。</li>
+<li><strong>SSE 就像是電台廣播</strong>：一個伺服器持續地向所有「收聽」它的<strong>客戶端（主要是瀏覽器）</strong> 廣播即時訊息。只要聽眾（瀏覽器）不關掉收音機（斷開連線），就能持續收到新消息。</li>
+</ul>
+<p>讓我們深入細看其中的差異：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">特性</th>
+<th style="text-align:left">Webhook</th>
+<th style="text-align:left">Server-Sent Events (SSE)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>通訊對象</strong></td>
+<td style="text-align:left"><strong>伺服器 ↔ 伺服器 (Server-to-Server)</strong></td>
+<td style="text-align:left"><strong>伺服器 → 客戶端 (Server-to-Client/Browser)</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>主要用途</strong></td>
+<td style="text-align:left">後端系統整合、觸發自動化流程</td>
+<td style="text-align:left">向使用者介面 (UI) 推送即時更新</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>HTTP 方法</strong></td>
+<td style="text-align:left"><code>POST</code> (攜帶 Payload)</td>
+<td style="text-align:left"><code>GET</code> (客戶端發起請求，伺服器保持連線)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>連線類型</strong></td>
+<td style="text-align:left"><strong>短連線、無狀態</strong> (每次事件都是一次新的請求)</td>
+<td style="text-align:left"><strong>長連線、有狀態</strong> (單一連線保持開啟，用於傳輸多個事件)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>客戶端實現</strong></td>
+<td style="text-align:left">接收方是一個後端 API 端點</td>
+<td style="text-align:left">瀏覽器端的 <code>EventSource</code> JavaScript API</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>使用情境</strong></td>
+<td style="text-align:left">支付成功通知、CI/CD 觸發、SaaS 整合</td>
+<td style="text-align:left">股票即時報價、社群動態更新、線上聊天室訊息、即時儀表板</td>
+</tr>
+</tbody>
+</table>
+<h2 id="是互斥還是相輔相成答案絕佳的盟友"><a class="markdownIt-Anchor" href="#是互斥還是相輔相成答案絕佳的盟友"></a> 是互斥還是相輔相成？答案：絕佳的盟友</h2>
+<p>從上面的比較可以看出，Webhook 和 SSE <strong>幾乎不是競爭關係，而是完美的相輔相成關係</strong>。它們在一個複雜的系統中各司其職，共同打造流暢的即時體驗。</p>
+<p><strong>一個典型的協作場景：電商訂單即時追蹤</strong></p>
+<p>想像一下，使用者在電商網站上下單後，停留在「訂單狀態」頁面，希望能即時看到物流進度。</p>
+<p>這個場景可以同時利用 SSE 和 Webhook：</p>
+<ol>
+<li><strong>UI 即時更新 (SSE)</strong>：使用者的瀏覽器透過 <strong>SSE</strong> 與電商後端伺服器建立一個長連線。電商伺服器可以隨時透過這個連線，向使用者頁面推送「已接單」、「理貨中」等狀態更新。</li>
+<li><strong>後端系統整合 (Webhook)</strong>：當電商系統將訂單資訊傳送給倉儲物流系統後，任務就交給了後端。當倉庫完成打包，並將貨物交給快遞公司後，倉儲系統會透過 <strong>Webhook</strong> 將「已出貨」的狀態以及「物流單號」非同步地通知給你的電商後端伺服器。</li>
+<li><strong>串連兩者</strong>：電商後端在收到來自倉儲系統的 Webhook 後，更新資料庫中的訂單狀態，然後<strong>立即透過已經建立好的 SSE 連線</strong>，將「您的訂單已出貨！物流單號為 XXX」這個最終狀態推送到使用者的瀏覽器上。</li>
+</ol>
+<p>用序列圖來視覺化這個完美的合作：</p>
+<pre class="highlight"><code class="mermaid">sequenceDiagram
+    participant Browser as 使用者瀏覽器
+    participant Ecommerce as 電商後端
+    participant Warehouse as 倉儲系統
+
+    Browser-&gt;&gt;Ecommerce: (SSE) 我要訂閱訂單 (ID: 123) 的即時狀態
+    activate Ecommerce
+    Ecommerce--&gt;&gt;Browser: (SSE) 好的，連線已建立。目前狀態：理貨中
+  
+    Note over Ecommerce, Warehouse: ...時間經過，倉庫完成出貨...
+
+    Warehouse-&gt;&gt;Ecommerce: (Webhook POST) 訂單 123 已出貨，單號：XYZ789
+    activate Warehouse
+    Ecommerce--&gt;&gt;Warehouse: (200 OK) 收到通知
+    deactivate Warehouse
+  
+    Note right of Ecommerce: 電商後端更新資料庫...
+  
+    Ecommerce--&gt;&gt;Browser: (SSE) 訂單 123 狀態更新：【已出貨】，單號：XYZ789
+    deactivate Ecommerce
+
+</code></pre>
+<h2 id="選對工具做對事"><a class="markdownIt-Anchor" href="#選對工具做對事"></a> 選對工具，做對事</h2>
+<ul>
+<li>當需要讓<strong>伺服器之間</strong>非同步地對話時，請使用 <strong>Webhook</strong>。</li>
+<li>當需要從<strong>伺服器</strong>向<strong>使用者瀏覽器</strong>即時推送更新時，請使用 <strong>Server-Sent Events (SSE)</strong>。（或是它的重量級親戚 WebSocket，如果需要雙向通訊的話）</li>
+</ul>
+<p>理解了它們各自的戰場，就能在架構設計時做出最精準的選擇，讓系統的每個部分都高效運作。</p>
+<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
+<p>Webhook 是構成現代網路應用生態系的基礎設施。它憑藉其<strong>即時、高效、自動化</strong>的特性，成為了串連異質系統、打造流暢工作流的首選方案。</p>
+<p>從輪詢的被動等待，到 Webhook 的主動通知，這不僅是技術架構的演進，更是思維模式的轉變: 從「不斷檢查」變為「信任通知」。當下一次規劃系統間的通訊時，問問自己：「需要的是不斷敲門，還是等待一通隨時會響起的電話？」</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Async/" rel="tag"># Async</a>
+              <a href="/my-blog/tags/Webhook/" rel="tag"># Webhook</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/07/24/Python%20Celery%20%E5%85%A5%E9%96%80%20%E9%9D%9E%E5%90%8C%E6%AD%A5%E4%BB%BB%E5%8B%99%E7%9A%84%E5%BE%97%E5%8A%9B%E5%8A%A9%E6%89%8B/" rel="prev" title="Python Celery 入門：非同步任務的得力助手">
+                  <i class="fa fa-angle-left"></i> Python Celery 入門：非同步任務的得力助手
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
