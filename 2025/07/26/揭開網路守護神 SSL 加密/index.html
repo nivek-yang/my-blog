@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="在網路購物、登入信箱，或是在任何網站填寫個人資料時，可能常常看到這句話：「本系統交易透過SSL加密認證，您的資料將被安全保護」。 這句話聽起來讓人很安心，但是否曾好奇，它背後到底是什麼樣的原理在運作？它如何像一位忠誠的騎士，守護著數位世界中的每一個秘密？ 就讓我們一起來認識這位不可或缺的網路守護神—— SSL 加密。   什麼是 SSL 加密？一位隱形的翻譯官與保險箱 SSL 的全名是「安全通訊端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="『您的資料將被安全保護』—— 揭開網路守護神：SSL 加密">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/07/26/%E6%8F%AD%E9%96%8B%E7%B6%B2%E8%B7%AF%E5%AE%88%E8%AD%B7%E7%A5%9E%20SSL%20%E5%8A%A0%E5%AF%86/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="在網路購物、登入信箱，或是在任何網站填寫個人資料時，可能常常看到這句話：「本系統交易透過SSL加密認證，您的資料將被安全保護」。 這句話聽起來讓人很安心，但是否曾好奇，它背後到底是什麼樣的原理在運作？它如何像一位忠誠的騎士，守護著數位世界中的每一個秘密？ 就讓我們一起來認識這位不可或缺的網路守護神—— SSL 加密。   什麼是 SSL 加密？一位隱形的翻譯官與保險箱 SSL 的全名是「安全通訊端">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-07-25T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-07-26T09:31:09.681Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="SSL&#x2F;TLS">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/07/26/%E6%8F%AD%E9%96%8B%E7%B6%B2%E8%B7%AF%E5%AE%88%E8%AD%B7%E7%A5%9E%20SSL%20%E5%8A%A0%E5%AF%86/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/07/26/%E6%8F%AD%E9%96%8B%E7%B6%B2%E8%B7%AF%E5%AE%88%E8%AD%B7%E7%A5%9E%20SSL%20%E5%8A%A0%E5%AF%86/","path":"2025/07/26/揭開網路守護神 SSL 加密/","title":"『您的資料將被安全保護』—— 揭開網路守護神：SSL 加密"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>『您的資料將被安全保護』—— 揭開網路守護神：SSL 加密 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">42</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">31</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(6)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-ssl-%E5%8A%A0%E5%AF%86%E4%B8%80%E4%BD%8D%E9%9A%B1%E5%BD%A2%E7%9A%84%E7%BF%BB%E8%AD%AF%E5%AE%98%E8%88%87%E4%BF%9D%E9%9A%AA%E7%AE%B1"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是 SSL 加密？一位隱形的翻譯官與保險箱</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8%E4%B8%80%E5%BC%B5%E5%9C%96%E7%9C%8B%E6%87%82-ssl-%E7%9A%84%E6%95%B8%E4%BD%8D%E6%8F%A1%E6%89%8B"><span class="nav-number">2.</span> <span class="nav-text"> 用一張圖看懂 SSL 的「數位握手」</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9D%9E%E7%94%A8-ssl-%E4%B8%8D%E5%8F%AF%E4%B8%89%E5%A4%A7%E6%A0%B8%E5%BF%83%E7%90%86%E7%94%B1"><span class="nav-number">3.</span> <span class="nav-text"> 為什麼非用 SSL 不可？三大核心理由</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ssl-%E5%A6%82%E4%BD%95%E5%9C%A8%E7%94%9F%E6%B4%BB%E4%B8%AD%E5%AF%A6%E9%9A%9B%E6%87%89%E7%94%A8"><span class="nav-number">4.</span> <span class="nav-text"> SSL 如何在生活中實際應用？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/26/%E6%8F%AD%E9%96%8B%E7%B6%B2%E8%B7%AF%E5%AE%88%E8%AD%B7%E7%A5%9E%20SSL%20%E5%8A%A0%E5%AF%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="『您的資料將被安全保護』—— 揭開網路守護神：SSL 加密 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          『您的資料將被安全保護』—— 揭開網路守護神：SSL 加密
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-07-26 00:00:00 / 修改時間：17:31:09" itemprop="dateCreated datePublished" datetime="2025-07-26T00:00:00+08:00">2025-07-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在網路購物、登入信箱，或是在任何網站填寫個人資料時，可能常常看到這句話：「本系統交易透過SSL加密認證，您的資料將被安全保護」。</p>
+<p>這句話聽起來讓人很安心，但是否曾好奇，它背後到底是什麼樣的原理在運作？它如何像一位忠誠的騎士，守護著數位世界中的每一個秘密？</p>
+<p>就讓我們一起來認識這位不可或缺的網路守護神—— SSL 加密。</p>
+<hr />
+<h1 id="什麼是-ssl-加密一位隱形的翻譯官與保險箱"><a class="markdownIt-Anchor" href="#什麼是-ssl-加密一位隱形的翻譯官與保險箱"></a> 什麼是 SSL 加密？一位隱形的翻譯官與保險箱</h1>
+<p>SSL 的全名是「安全通訊端層」（Secure Sockets Layer），可以把它想像成一位兼具「加密翻譯官」與「超強保險箱」功能的專家。現在更進階的版本稱為 TLS (Transport Layer Security)，但習慣上仍稱之為 SSL。</p>
+<p>它的核心任務只有一個：<strong>在瀏覽器（例如 Chrome、Safari）和網站的伺服器之間，建立一條只有雙方能夠看懂的秘密通道。</strong></p>
+<p>用一個生活化的比喻來理解：</p>
+<ul>
+<li>
+<p><strong>沒有 SSL 的情況（HTTP）：</strong> 就像在寄一張「明信片」。從家寄到朋友家，中間經過的郵差、分揀員，任何人只要拿到這張明信片，都能清楚看到寫的內容。如果上面寫的是銀行密碼或身分證號碼，那可就太危險了！</p>
+</li>
+<li>
+<p><strong>有 SSL 的情況（HTTPS）：</strong> 這就像把信放進一個特製的「密碼保險箱」裡。這個保險箱只有你和朋友擁有鑰匙。即使在運送過程中被任何人攔截，沒有鑰匙的他們看到的只是一個堅固的鐵盒子，完全無法得知裡面的內容。這就是「加密」。</p>
+</li>
+</ul>
+<p>所以，SSL 就是那個負責將資料（如密碼、信用卡號）變成一串亂碼（加密），然後安全地送到目的地，再由對方用唯一的鑰匙解開（解密）的技術。</p>
+<h1 id="用一張圖看懂-ssl-的數位握手"><a class="markdownIt-Anchor" href="#用一張圖看懂-ssl-的數位握手"></a> 用一張圖看懂 SSL 的「數位握手」</h1>
+<p>SSL 加密的核心在於一次精密的「數位握手 (Handshake)」，這個過程確保了雙方的身分與接下來的通訊安全。</p>
+<p>讓我們用這張時序圖，來看看在按下 Enter 鍵後的毫秒之間，到底發生了什麼神奇的事：</p>
+<pre class="highlight"><code class="mermaid">sequenceDiagram
+    participant Client as User's Browser (使用者瀏覽器)
+    participant Server as Website Server (網站伺服器)
+    participant CA as Certificate Authority (憑證頒發機構)
+
+    %% --- 1. 建立信任的「握手」階段 ---
+    Note over Client,Server: 1. 建立信任的「握手」階段
+    Client-&gt;&gt;Server: Client Hello (你好，我想建立安全連線)
+    Server--&gt;&gt;Client: Server Hello + SSL憑證 (好的，這是我的身分證，內含「公鑰」)
+    
+    %% --- 2. 驗證身分的「查核」階段 ---
+    Note over Client,Server: 2. 驗證身分的「查核」階段
+    Client-&gt;&gt;CA: 向CA驗證這張憑證的真偽
+    CA--&gt;&gt;Client: 確認憑證有效！(蓋章認證)
+
+    %% --- 3. 交換秘密的「鑰匙」階段 ---
+    Note over Client,Server: 3. 交換秘密的「鑰匙」階段
+    Client-&gt;&gt;Client: 產生一把本次專用的「對話金鑰」(Session Key)
+    Client-&gt;&gt;Server: 用伺服器的「公鑰」將「對話金鑰」加密後傳送
+    Server-&gt;&gt;Server: 用只有自己有的「私鑰」解密，取得「對話金鑰」
+
+    %% --- 4. 安全通訊開始 ---
+    Note over Client,Server: 🎉 安全通道建立完成！雙方現在擁有同一把「對話金鑰」 🎉
+    Client-&gt;&gt;Server: (用「對話金鑰」加密) 請給我首頁資料 username=...
+    Server--&gt;&gt;Client: (用「對話金鑰」加密) 好的，這是你的首頁資料 &lt;HTML&gt;...
+</code></pre>
+<ol>
+<li>
+<p><strong>建立信任的「握手」階段 (Client Hello / Server Hello)</strong></p>
+<ul>
+<li><strong>第一步</strong>：瀏覽器 (Client) 向網站伺服器 (Server) 發出請求：「你好，我想和你安全地說話！」</li>
+<li><strong>第二步</strong>：伺服器回應：「沒問題！」，並附上自己的 <strong>SSL 憑證</strong>。這張憑證就像網站的身分證，裡面包含了網站資訊以及一把**「公鑰 (Public Key)」**。這把公鑰是公開的，任何人都可以拿到。</li>
+</ul>
+</li>
+<li>
+<p><strong>驗證身分的「查核」階段 (Certificate Verification)</strong></p>
+<ul>
+<li><strong>第三、四步</strong>：瀏覽器拿到憑證後，並不會馬上相信它。它會去聯繫一個權威的第三方——<strong>憑證頒發機構 (CA)</strong>，像是 Google Trust Services 或 Let’s Encrypt，去查證這張「身分證」是不是真的、有沒有過期、有沒有被偽造。CA 確認無誤後，瀏覽器才會真正信任這個網站。</li>
+</ul>
+</li>
+<li>
+<p><strong>交換秘密的「鑰匙」階段 (Key Exchange)</strong></p>
+<ul>
+<li><strong>第五步</strong>：確認對方身分後，瀏覽器會在內部自己隨機產生一把**「對話金鑰 (Session Key)」**。這把金鑰將是接下來雙方加密所有通訊內容的「共同密碼」。</li>
+<li><strong>第六步</strong>：瀏覽器使用從伺服器那裡拿到的**「公鑰」**，將這把「對話金鑰」鎖起來，變成一串誰也看不懂的亂碼，然後傳送給伺服器。</li>
+<li><strong>第七步</strong>：伺服器收到後，使用自己從未對外洩漏的**「私鑰 (Private Key)」**來解鎖。**這是最關鍵的一步！**因為只有伺服器手上的這把私鑰，才能解開對應公鑰鎖上的東西。這樣就確保了只有伺服器本人才能拿到這把「對話金鑰」。</li>
+</ul>
+</li>
+<li>
+<p><strong>安全通訊開始 (Encrypted Communication)</strong></p>
+<ul>
+<li><strong>握手完成！</strong> 此刻，瀏覽器和網站伺服器都擁有了一模一樣、且只有你們倆知道的「對話金鑰」。</li>
+<li><strong>第八、九步</strong>：從這一刻起，所有的來往資料（提交的表單、網站回傳的網頁內容等）都會用這把「對話金鑰」進行<strong>對稱加密</strong>。因為這種加密方式比公鑰/私鑰加密更快速，適合用來傳輸大量資料。</li>
+</ul>
+</li>
+</ol>
+<hr />
+<p>就這樣，在眨眼瞬間，SSL 完成了這個精巧又安全的數位儀式。它不僅驗證了對方的身分，還安全地協商出了一把只有雙方知道的密碼，為接下來的每一次點擊、每一次輸入，都提供了堅實的保護。</p>
+<h1 id="為什麼非用-ssl-不可三大核心理由"><a class="markdownIt-Anchor" href="#為什麼非用-ssl-不可三大核心理由"></a> 為什麼非用 SSL 不可？三大核心理由</h1>
+<p>可能會問，只是逛逛網站，真的有這麼嚴重嗎？答案是：絕對有必要。使用 SSL 主要有三大理由，每一項都與安全感和信任感息息相關。</p>
+<ol>
+<li>
+<p><strong>【資料加密】：保護隱私，防止竊聽</strong><br />
+這是 SSL 最基本也最重要的功能。在登入帳號、輸入信用卡號時，SSL 能確保這些極度敏感的資訊在傳輸過程中不會被駭客等第三方竊取。它為數位生活加上了一道最堅實的鎖。</p>
+</li>
+<li>
+<p><strong>【身分認證】：確認「你就是你」，防止詐騙</strong><br />
+這點經常被忽略，但卻至關重要。SSL 憑證不只會加密資料，它還會「驗明正身」。一個合法的 SSL 憑證，是由受信任的第三方機構（憑證頒發機構）簽發的，它能證明正在瀏覽的網站，確實是它所聲稱的那個網站（例如，您連上的是真正的網路銀行，而非駭客製作的假網站）。這就像在網路世界中出示一張無法偽造的「官方身分證」，大大降低了釣魚網站的風險。</p>
+</li>
+<li>
+<p><strong>【建立信任】：給使用者最直接的安全感</strong><br />
+當網站安裝了 SSL，會在瀏覽器的網址列看到兩個明顯的變化：</p>
+<ul>
+<li>網址開頭從 <code>http://</code> 變成 <code>https://</code>（多出來的 “s” 代表 “Secure” 安全）。</li>
+<li>網址列旁邊會出現一個「<strong>鎖頭</strong>」圖示。</li>
+</ul>
+<p>這個鎖頭告訴我們：「別擔心，在這裡可以放心地瀏覽與互動。」如今，像 Google 等主流搜尋引擎，也會優先推薦使用 HTTPS 的網站，因為它們更值得信賴。</p>
+</li>
+</ol>
+<h1 id="ssl-如何在生活中實際應用"><a class="markdownIt-Anchor" href="#ssl-如何在生活中實際應用"></a> SSL 如何在生活中實際應用？</h1>
+<p>其實，SSL 已經無聲無息地融入了我們數位生活的每一天：</p>
+<ul>
+<li><strong>線上購物</strong>：當在 Amazon、PChome 等電商平台結帳時，SSL 正在保護你的信用卡號與地址。</li>
+<li><strong>網路銀行</strong>：登入網銀的每一步操作，從帳號密碼到轉帳資訊，都受到 SSL 的嚴密保護。</li>
+<li><strong>社群媒體與電子郵件</strong>：登入 Facebook、Instagram 或 Gmail 時，SSL 確保帳號密碼和私人訊息不被窺探。</li>
+<li><strong>任何需要填寫個人資料的網站</strong>：無論是註冊會員、填寫問卷，只要有 SSL，資料就能安全地送達。</li>
+</ul>
+<hr />
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>現在，當再次看到「本系統交易透過SSL加密認證」這句話時，知道這不再只是一句口號，而是一個鄭重的承諾。</p>
+<p>它背後有一套精密的技術，像一位隱形的保鑣，為每一次點擊、每一次輸入，建立起一道安全的橋樑，驗證對方的身分，並將資料安全地送達。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/SSL-TLS/" rel="tag"># SSL/TLS</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/07/25/Webhook%20%E5%AE%8C%E5%85%A8%E8%A7%A3%E6%9E%90%20%E7%8F%BE%E4%BB%A3%E7%B6%B2%E8%B7%AF%E6%87%89%E7%94%A8%E7%A8%8B%E5%BC%8F%E7%9A%84%E8%87%AA%E5%8B%95%E5%8C%96%E7%A5%9E%E7%B6%93%E4%B8%AD%E6%A8%9E/" rel="prev" title="Webhook 完全解析：現代網路應用程式的自動化神經中樞">
+                  <i class="fa fa-angle-left"></i> Webhook 完全解析：現代網路應用程式的自動化神經中樞
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
