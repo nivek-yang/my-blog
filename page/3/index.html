@@ -105,8 +105,8 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">44</span></a>
-  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">33</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">45</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">34</span></a>
       <ul class="sub-menu">
   
   
@@ -272,6 +272,13 @@
     </li>
   
     <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
       <a href="/my-blog/tags/Ruff/">
         Ruff
         <span class="post-count">(1)</span>
@@ -380,7 +387,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-count">45</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -388,7 +395,7 @@
     
       <div class="site-state-item site-state-tags">
           <a href="/my-blog/tags/">
-        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-count">34</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -405,6 +412,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/04/Django%20%E9%9D%9C%E6%85%8B%E6%AA%94%E6%A1%88%E9%83%A8%E7%BD%B2%E7%88%86%E7%89%88%E5%95%8F%E9%A1%8C%E6%8E%92%E6%9F%A5%E8%88%87%E8%A7%A3%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/07/04/Django%20%E9%9D%9C%E6%85%8B%E6%AA%94%E6%A1%88%E9%83%A8%E7%BD%B2%E7%88%86%E7%89%88%E5%95%8F%E9%A1%8C%E6%8E%92%E6%9F%A5%E8%88%87%E8%A7%A3%E6%B3%95/" class="post-title-link" itemprop="url">
+              Django 靜態檔案部署爆版問題排查與解法
+            </a>
+            <a href="/my-blog/2025/07/04/Django%20%E9%9D%9C%E6%85%8B%E6%AA%94%E6%A1%88%E9%83%A8%E7%BD%B2%E7%88%86%E7%89%88%E5%95%8F%E9%A1%8C%E6%8E%92%E6%9F%A5%E8%88%87%E8%A7%A3%E6%B3%95/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-07-04 00:00:00 / 修改時間：23:10:32" itemprop="dateCreated datePublished" datetime="2025-07-04T00:00:00+08:00">2025-07-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">部署 Django 專案時，常見「靜態檔案爆版」問題：明明已經更新了 CSS/JS，使用者卻還是看到舊版畫面。這篇文章將帶你找出問題核心，並給出最佳解法。 問題現象 前端樣式或 JS 更新後，使用者端仍然載入舊檔案 清除瀏覽器快取後才會看到新內容 CDN 或 Nginx 設定了長時間快取 問題核心 Django 預設的 collectstatic 只會把檔案複製到 STATIC_ROOT，檔名不變。如果 Nginx 或 CDN 設定了 cache-control/expires，檔案內容變了但檔名沒變，使用者端就會一直拿到舊檔案。 關鍵： 只要檔名沒變，快取就不會重新抓新檔案。 解決方法 1. 啟用 ManifestStaticFilesStorage Django 內建的 ManifestStaticFilesStorage 會在檔名自動加上 hash，只要內容有變，檔名就會變，快取自然失效。 設定方式 在 settings.py 加入： STATICFILES_STORAGE = &quot;django.contrib.staticfiles.storage.ManifestStaticFilesStorage&quot; 2. 正確執行 collectstatic 每次部署靜態檔案有變動時，務必執行： python manage.py collectstatic 這會自動產生帶 hash 的檔案，例如： style.1a2b3c4d.css 3. 模板引用方式 確保模板都用 &#123;% static 'path/to/file.css' %&#125;，Django 會自動引用帶 hash 的檔名。 4. Nginx / CDN 快取設定 可以放心設定長快取，例如： location /static/ &#123; alias /staticfiles/; expires 7d; add_header Cache-Control &quot;public&quot;; &#125; 因為檔名有 hash，內容變了檔名也會變，快取不會爆版。 排查流程 確認 collectstatic 是否有執行 檢查 staticfiles 目錄下檔名是否有 hash 檢查模板是否正確用 static 標籤 檢查 Nginx/CDN 是否有快取設定 檢查瀏覽器載入的檔案路徑是否為新檔名 結論 只要啟用 ManifestStaticFilesStorage 並正確部署，Django 靜態檔案快取問題就能徹底解決。 這是現代 Django 專案部署的最佳實踐！</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/07/04/Django%20%E9%9D%9C%E6%85%8B%E6%AA%94%E6%A1%88%E9%83%A8%E7%BD%B2%E7%88%86%E7%89%88%E5%95%8F%E9%A1%8C%E6%8E%92%E6%9F%A5%E8%88%87%E8%A7%A3%E6%B3%95/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1181,92 +1274,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/04/29/HTMX%E7%B0%A1%E4%BB%8B/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/29/HTMX%E5%92%8CDjango%E5%AF%A6%E7%8F%BE%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E8%88%87%E5%BE%8C%E7%AB%AF%E6%B8%B2%E6%9F%93/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/04/29/HTMX%E5%92%8CDjango%E5%AF%A6%E7%8F%BE%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E8%88%87%E5%BE%8C%E7%AB%AF%E6%B8%B2%E6%9F%93/" class="post-title-link" itemprop="url">
-              HTMX 與 Django 實現局部更新與後端渲染
-            </a>
-            <a href="/my-blog/2025/04/29/HTMX%E5%92%8CDjango%E5%AF%A6%E7%8F%BE%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E8%88%87%E5%BE%8C%E7%AB%AF%E6%B8%B2%E6%9F%93/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-04-29 00:00:00 / 修改時間：23:00:19" itemprop="dateCreated datePublished" datetime="2025-04-29T00:00:00+08:00">2025-04-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">功能概述 此功能實現了一個按讚（收藏）按鈕，使用者可以對特定的項目（如面試記錄）進行按讚或取消按讚操作。按鈕的狀態（已收藏或收藏）由後端決定，並通過 HTMX 局部更新頁面。 技術細節 1. 前端模板設計 favorite.html 這個模板負責渲染按讚按鈕，按鈕的狀態根據使用者是否已經按讚來決定。 &#123;% if user in interview.favorited_by.all %&#125; 已收藏 &#123;% else %&#125; 收藏 &#123;% endif %&#125; hx-post: 當按鈕被點擊時，發送一個 POST 請求到指定的 URL。 hx-swap=&quot;outerHTML&quot;: 指定 HTMX 替換整個按鈕的 HTML，而不僅僅是按鈕內的內容。 按鈕狀態: 使用 Django 模板語法 `</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/04/29/HTMX%E5%92%8CDjango%E5%AF%A6%E7%8F%BE%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E8%88%87%E5%BE%8C%E7%AB%AF%E6%B8%B2%E6%9F%93/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>

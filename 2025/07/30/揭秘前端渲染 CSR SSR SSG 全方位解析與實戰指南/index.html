@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="當我們談論現代網頁應用時，「渲染（Rendering）」是一個繞不開的核心議題。使用者按下 Enter 鍵後，從看到第一個像素到頁面可以互動，這中間究竟發生了什麼事？這不僅決定了使用者體驗的順暢度，更直接影響了網站的 SEO 表現與維護成本。 這篇文章將會用清晰易懂的方式，帶你一次搞懂 CSR、SSR、SSG 這些渲染模式的原理、優缺點，並提供一份實戰指南，幫助你在下一個專案中，自信地選擇最適合的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="揭秘前端渲染：CSR、SSR、SSG 全方位解析與實戰指南">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/07/30/%E6%8F%AD%E7%A7%98%E5%89%8D%E7%AB%AF%E6%B8%B2%E6%9F%93%20CSR%20SSR%20SSG%20%E5%85%A8%E6%96%B9%E4%BD%8D%E8%A7%A3%E6%9E%90%E8%88%87%E5%AF%A6%E6%88%B0%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="當我們談論現代網頁應用時，「渲染（Rendering）」是一個繞不開的核心議題。使用者按下 Enter 鍵後，從看到第一個像素到頁面可以互動，這中間究竟發生了什麼事？這不僅決定了使用者體驗的順暢度，更直接影響了網站的 SEO 表現與維護成本。 這篇文章將會用清晰易懂的方式，帶你一次搞懂 CSR、SSR、SSG 這些渲染模式的原理、優缺點，並提供一份實戰指南，幫助你在下一個專案中，自信地選擇最適合的">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-07-29T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-07-30T15:25:09.276Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Rendering">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/07/30/%E6%8F%AD%E7%A7%98%E5%89%8D%E7%AB%AF%E6%B8%B2%E6%9F%93%20CSR%20SSR%20SSG%20%E5%85%A8%E6%96%B9%E4%BD%8D%E8%A7%A3%E6%9E%90%E8%88%87%E5%AF%A6%E6%88%B0%E6%8C%87%E5%8D%97/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/07/30/%E6%8F%AD%E7%A7%98%E5%89%8D%E7%AB%AF%E6%B8%B2%E6%9F%93%20CSR%20SSR%20SSG%20%E5%85%A8%E6%96%B9%E4%BD%8D%E8%A7%A3%E6%9E%90%E8%88%87%E5%AF%A6%E6%88%B0%E6%8C%87%E5%8D%97/","path":"2025/07/30/揭秘前端渲染 CSR SSR SSG 全方位解析與實戰指南/","title":"揭秘前端渲染：CSR、SSR、SSG 全方位解析與實戰指南"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>揭秘前端渲染：CSR、SSR、SSG 全方位解析與實戰指南 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">45</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">34</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(6)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF%E7%B6%B2%E9%A0%81%E6%B8%B2%E6%9F%93"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是網頁渲染？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E5%A4%A7%E6%B8%B2%E6%9F%93%E6%A8%A1%E5%BC%8F%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text"> 三大渲染模式深度解析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-client-side-rendering-csr-%E5%AE%A2%E6%88%B6%E7%AB%AF%E6%B8%B2%E6%9F%93"><span class="nav-number">2.1.</span> <span class="nav-text"> 1. Client-Side Rendering (CSR) - 客戶端渲染</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%84%AA%E9%BB%9E"><span class="nav-number">2.1.1.</span> <span class="nav-text"> 優點</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%BA%E9%BB%9E"><span class="nav-number">2.1.2.</span> <span class="nav-text"> 缺點</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-server-side-rendering-ssr-%E4%BC%BA%E6%9C%8D%E5%99%A8%E7%AB%AF%E6%B8%B2%E6%9F%93"><span class="nav-number">2.2.</span> <span class="nav-text"> 2. Server-Side Rendering (SSR) - 伺服器端渲染</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%84%AA%E9%BB%9E-2"><span class="nav-number">2.2.1.</span> <span class="nav-text"> 優點</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%BA%E9%BB%9E-2"><span class="nav-number">2.2.2.</span> <span class="nav-text"> 缺點</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-static-site-generation-ssg-%E9%9D%9C%E6%85%8B%E7%B6%B2%E7%AB%99%E7%94%9F%E6%88%90"><span class="nav-number">2.3.</span> <span class="nav-text"> 3. Static Site Generation (SSG) - 靜態網站生成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%84%AA%E9%BB%9E-3"><span class="nav-number">2.3.1.</span> <span class="nav-text"> 優點</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%BA%E9%BB%9E-3"><span class="nav-number">2.3.2.</span> <span class="nav-text"> 缺點</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%96%E8%A7%A3%E6%B8%B2%E6%9F%93%E6%B5%81%E7%A8%8B%E5%B7%AE%E7%95%B0"><span class="nav-number">3.</span> <span class="nav-text"> 圖解渲染流程差異</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E6%AF%94%E8%BC%83%E8%A1%A8"><span class="nav-number">4.</span> <span class="nav-text"> 快速比較表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%A6%E5%8B%99%E4%B8%8A%E8%A9%B2%E5%A6%82%E4%BD%95%E9%81%B8%E6%93%87"><span class="nav-number">5.</span> <span class="nav-text"> 實務上，該如何選擇？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8F%BE%E4%BB%A3%E6%A1%86%E6%9E%B6%E7%9A%84%E6%B7%B7%E5%90%88%E6%96%B9%E6%A1%88"><span class="nav-number">5.1.</span> <span class="nav-text"> 現代框架的混合方案</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">6.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/30/%E6%8F%AD%E7%A7%98%E5%89%8D%E7%AB%AF%E6%B8%B2%E6%9F%93%20CSR%20SSR%20SSG%20%E5%85%A8%E6%96%B9%E4%BD%8D%E8%A7%A3%E6%9E%90%E8%88%87%E5%AF%A6%E6%88%B0%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="揭秘前端渲染：CSR、SSR、SSG 全方位解析與實戰指南 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          揭秘前端渲染：CSR、SSR、SSG 全方位解析與實戰指南
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-07-30 00:00:00 / 修改時間：23:25:09" itemprop="dateCreated datePublished" datetime="2025-07-30T00:00:00+08:00">2025-07-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>當我們談論現代網頁應用時，「渲染（Rendering）」是一個繞不開的核心議題。使用者按下 Enter 鍵後，從看到第一個像素到頁面可以互動，這中間究竟發生了什麼事？這不僅決定了使用者體驗的順暢度，更直接影響了網站的 SEO 表現與維護成本。</p>
+<p>這篇文章將會用清晰易懂的方式，帶你一次搞懂 CSR、SSR、SSG 這些渲染模式的原理、優缺點，並提供一份實戰指南，幫助你在下一個專案中，自信地選擇最適合的渲染策略。</p>
+<h1 id="什麼是網頁渲染"><a class="markdownIt-Anchor" href="#什麼是網頁渲染"></a> 什麼是網頁渲染？</h1>
+<p>簡單來說，渲染就是<strong>瀏覽器將我們寫的程式碼（HTML, CSS, JavaScript）轉換為使用者在螢幕上看到的、可互動的畫面的過程</strong>。這個過程的核心在於：<strong>HTML 是在哪裡被構建出來的？</strong> 是在<strong>使用者端的瀏覽器（Client）</strong> 還是<strong>遠端的伺服器（Server）</strong>？這個問題的答案，就決定了將要探討的各種渲染模式。</p>
+<h1 id="三大渲染模式深度解析"><a class="markdownIt-Anchor" href="#三大渲染模式深度解析"></a> 三大渲染模式深度解析</h1>
+<h2 id="1-client-side-rendering-csr-客戶端渲染"><a class="markdownIt-Anchor" href="#1-client-side-rendering-csr-客戶端渲染"></a> 1. Client-Side Rendering (CSR) - 客戶端渲染</h2>
+<p>CSR 是現代 <strong>單頁式應用（Single-Page Application, SPA）</strong> 最常採用的模式。像是 React, Vue, Angular 建立的專案，預設情況下就是 CSR。</p>
+<p><strong>它是如何運作的？</strong></p>
+<ol>
+<li>瀏覽器向伺服器發送請求。</li>
+<li>伺服器回傳一個幾乎空白的 HTML 檔案，裡面只包含一個 <code>&lt;div id=&quot;root&quot;&gt;&lt;/div&gt;</code> 的空殼，以及一個巨大的 JavaScript 檔案連結。</li>
+<li>瀏覽器下載並執行這個 JavaScript 檔案。</li>
+<li>JavaScript 在瀏覽器中執行，向 API 伺服器請求資料，然後動態生成所有 HTML 內容，並將其「掛載」到那個空殼 <code>&lt;div&gt;</code> 上。</li>
+<li>頁面完整顯示，並具備互動性。</li>
+</ol>
+<blockquote>
+<p><strong>一個生動的比喻：</strong><br />
+CSR 就像去 IKEA 買家具。從倉庫（伺服器）拿到的是一堆扁平的零件包（JavaScript Bundle）和一本說明書。你必須自己回家（在瀏覽器裡）花時間組裝，才能得到一張完整的桌子（網頁）。</p>
+</blockquote>
+<h3 id="優點"><a class="markdownIt-Anchor" href="#優點"></a> 優點</h3>
+<ul>
+<li><strong>豐富的互動性與流暢的體驗</strong>：首頁載入後，後續的頁面切換都只是在客戶端進行資料交換和 DOM 更新，無需重新向伺服器請求整個頁面，速度極快，感覺就像桌面應用程式一樣。</li>
+<li><strong>伺服器壓力小</strong>：伺服器只負責提供靜態資源和作為 API 端點，大部分的渲染運算都轉移到了使用者端，大大減輕了伺服器的負擔。</li>
+<li><strong>前後端分離</strong>：開發模式清晰，前端專注於 UI/UX，後端專注於業務邏輯與資料接口（API）。</li>
+</ul>
+<h3 id="缺點"><a class="markdownIt-Anchor" href="#缺點"></a> 缺點</h3>
+<ul>
+<li><strong>首次載入速度慢（FCP/TTI 慢）</strong>：使用者需要等待巨大的 JavaScript 檔下載、解析、執行完畢後才能看到內容，這導致<strong>首次內容繪製（First Contentful Paint, FCP）</strong> 時間很長，俗稱「白屏時間」。</li>
+<li><strong>對 SEO 不友善</strong>：雖然 Google 的爬蟲已經能執行部分 JavaScript，但並非所有搜尋引擎都如此。爬蟲收到的初始 HTML 是一個空殼，可能無法正確索引網站內容，對 SEO 造成負面影響。</li>
+<li><strong>對裝置性能有要求</strong>：運算壓力都在使用者端，如果使用者的裝置性能較差，可能會感到卡頓。</li>
+</ul>
+<h2 id="2-server-side-rendering-ssr-伺服器端渲染"><a class="markdownIt-Anchor" href="#2-server-side-rendering-ssr-伺服器端渲染"></a> 2. Server-Side Rendering (SSR) - 伺服器端渲染</h2>
+<p>SSR 是一種更傳統的渲染模式，但近年來在現代框架（如 Next.js, Nuxt.js）的加持下重獲新生。</p>
+<p><strong>它是如何運作的？</strong></p>
+<ol>
+<li>瀏覽器向伺服器發送請求。</li>
+<li>伺服器接收到請求後，在後端環境執行 JavaScript，獲取所需資料，將頁面內容<strong>完整地生成為 HTML 字串</strong>。</li>
+<li>伺服器將這個包含完整內容的 HTML 檔案回傳給瀏覽器。</li>
+<li>瀏覽器接收到後立刻就能顯示頁面內容。</li>
+<li>與此同時，瀏覽器會下載對應的 JavaScript 檔案，並在背景執行一個稱為「<strong>Hydration（注水）</strong>」的過程，為靜態的 HTML 綁定事件，使其具備互動性。</li>
+</ol>
+<blockquote>
+<p><strong>一個生動的比喻：</strong><br />
+SSR 就像去家具店直接買一張組裝好的桌子。店家（伺服器）在你下單後，把桌子完完整整地送到你家。你立刻就能看到並使用它，只是上面的一些精巧機關（互動性）需要等送來的電池（JavaScript）裝好後才能啟動。</p>
+</blockquote>
+<h3 id="優點-2"><a class="markdownIt-Anchor" href="#優點-2"></a> 優點</h3>
+<ul>
+<li><strong>極佳的 SEO 表現</strong>：搜尋引擎爬蟲直接就能收到包含完整內容的 HTML，有利於網站的索引和排名。</li>
+<li><strong>首頁載入速度快（FCP 快）</strong>：使用者能非常快地看到頁面內容，大大減少了白屏時間，提升了使用者感知效能。</li>
+<li><strong>對所有裝置友好</strong>：渲染壓力在伺服器端，使用者端只需負責顯示，對低階裝置更友好。</li>
+</ul>
+<h3 id="缺點-2"><a class="markdownIt-Anchor" href="#缺點-2"></a> 缺點</h3>
+<ul>
+<li><strong>伺服器壓力大</strong>：每個使用者的請求都需要在伺服器端即時進行一次完整的渲染，對伺服器運算能力和 QPS 都是考驗。</li>
+<li><strong>互動延遲（TTI 較慢）</strong>：雖然使用者很快看到了內容（FCP 快），但頁面要等到 JavaScript 下載並完成 Hydration 後才能進行互動（<strong>可互動時間 Time to Interactive, TTI</strong> 較晚）。</li>
+<li><strong>開發複雜度較高</strong>：需要處理伺服器端和客戶端的環境差異，專案架構更複雜。</li>
+</ul>
+<h2 id="3-static-site-generation-ssg-靜態網站生成"><a class="markdownIt-Anchor" href="#3-static-site-generation-ssg-靜態網站生成"></a> 3. Static Site Generation (SSG) - 靜態網站生成</h2>
+<p>SSG 是近年來越來越流行的一種模式，可以看作是 SSR 的一種極致優化。</p>
+<p><strong>它是如何運作的？</strong></p>
+<ol>
+<li><strong>在建置階段（Build Time）</strong>，而不是請求階段（Request Time），開發者就執行程式，抓取所有需要的資料。</li>
+<li>針對網站的<strong>每一個頁面</strong>，都預先生成一個完整的、純靜態的 HTML 檔案。</li>
+<li>將所有這些 HTML、CSS、JS 檔案部署到 CDN 或靜態主機上。</li>
+<li>當使用者請求時，伺服器（或 CDN）不需做任何運算，直接將對應的靜態 HTML 檔案回傳給瀏覽器。</li>
+</ol>
+<blockquote>
+<p><strong>一個生動的比喻：</strong><br />
+SSG 就像是大規模印刷書籍。出版社（開發者在建置階段）在書籍上市前就把成千上萬本書全部印刷、裝訂好，放在各地倉庫（CDN）。讀者想買書時，直接從最近的倉庫拿一本現成的就行了，速度快得驚人。</p>
+</blockquote>
+<h3 id="優點-3"><a class="markdownIt-Anchor" href="#優點-3"></a> 優點</h3>
+<ul>
+<li><strong>極致的效能</strong>：由於提供的是純靜態檔案，載入速度無與倫比。搭配 CDN 使用，全球使用者都能享受飛快的存取體驗。</li>
+<li><strong>絕佳的安全性與可靠性</strong>：沒有資料庫、沒有伺服器端即時運算，攻擊面極小，網站極其穩定。</li>
+<li><strong>成本極低</strong>：可以託管在非常便宜甚至免費的靜態主機或 CDN 服務上。</li>
+<li><strong>完美的 SEO</strong>：跟 SSR 一樣，每個頁面都有完整的 HTML 內容。</li>
+</ul>
+<h3 id="缺點-3"><a class="markdownIt-Anchor" href="#缺點-3"></a> 缺點</h3>
+<ul>
+<li><strong>內容更新延遲</strong>：每次內容有變動（例如發布一篇新文章），都必須<strong>重新建置（Rebuild）</strong> 整個網站並重新部署，無法做到即時更新。</li>
+<li><strong>建置時間可能很長</strong>：如果網站有數千甚至數萬個頁面，建置時間可能會非常可觀。</li>
+<li><strong>不適用於高度動態內容</strong>：無法處理個人化、即時性的內容（例如使用者儀表板、即時聊天等）。</li>
+</ul>
+<h1 id="圖解渲染流程差異"><a class="markdownIt-Anchor" href="#圖解渲染流程差異"></a> 圖解渲染流程差異</h1>
+<p>讓我們用時序圖（Sequence Diagram）來視覺化這三種模式的差異。</p>
+<pre class="highlight"><code class="mermaid">sequenceDiagram
+    participant User as 使用者
+    participant Browser as 瀏覽器
+    participant Server as 網頁伺服器
+    participant APIServer as API 伺服器
+    participant CDN as CDN（SSG 使用）
+
+    %% 客戶端渲染 CSR
+    Note over User,Browser: 客戶端渲染 (CSR)
+    User-&gt;&gt;Browser: 訪問網站
+    Browser-&gt;&gt;Server: 請求 HTML
+    Server-&gt;&gt;Browser: 回傳幾乎空白的 HTML + JS 連結
+    Browser-&gt;&gt;Browser: 執行 JS
+    Browser-&gt;&gt;APIServer: 請求資料 (fetch/axios)
+    APIServer-&gt;&gt;Browser: 回傳 JSON 資料
+    Browser-&gt;&gt;Browser: 渲染完整頁面
+
+    %% 伺服器端渲染 SSR
+    Note over User,Browser: 伺服器端渲染 (SSR)
+    User-&gt;&gt;Browser: 訪問網站
+    Browser-&gt;&gt;Server: 請求頁面
+    Server-&gt;&gt;Server: 抓取資料並渲染 HTML
+    Server-&gt;&gt;Browser: 回傳包含內容的完整 HTML
+    Browser-&gt;&gt;Browser: 顯示頁面 (內容可見)
+    Browser-&gt;&gt;Server: 下載 JS 檔案
+    Browser-&gt;&gt;Browser: 執行 JS (Hydration)
+
+    %% 靜態網站生成 SSG
+    Note over User,CDN: 靜態網站生成 (SSG)
+    User-&gt;&gt;CDN: 請求頁面
+    Note over CDN: 頁面在建置時已生成並存放在此
+    CDN-&gt;&gt;User: 回傳靜態 HTML
+    User-&gt;&gt;User: 立即顯示頁面
+</code></pre>
+<h1 id="快速比較表"><a class="markdownIt-Anchor" href="#快速比較表"></a> 快速比較表</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">特性</th>
+<th style="text-align:left">Client-Side Rendering (CSR)</th>
+<th style="text-align:left">Server-Side Rendering (SSR)</th>
+<th style="text-align:left">Static Site Generation (SSG)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>渲染地點</strong></td>
+<td style="text-align:left">使用者瀏覽器</td>
+<td style="text-align:left">網頁伺服器</td>
+<td style="text-align:left">建置伺服器（Build Time）</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>首次載入速度 (FCP)</strong></td>
+<td style="text-align:left">慢</td>
+<td style="text-align:left">快</td>
+<td style="text-align:left">極快</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>頁面切換速度</strong></td>
+<td style="text-align:left">極快</td>
+<td style="text-align:left">較慢 (需請求伺服器)</td>
+<td style="text-align:left">極快</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SEO 友善度</strong></td>
+<td style="text-align:left">較差</td>
+<td style="text-align:left">極佳</td>
+<td style="text-align:left">極佳</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>伺服器負擔</strong></td>
+<td style="text-align:left">低</td>
+<td style="text-align:left">高</td>
+<td style="text-align:left">幾乎為零</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>開發複雜度</strong></td>
+<td style="text-align:left">相對簡單</td>
+<td style="text-align:left">高</td>
+<td style="text-align:left">中等</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>適用場景</strong></td>
+<td style="text-align:left">高度互動的 Web App、管理後台</td>
+<td style="text-align:left">重視 SEO 的內容網站、電商網站</td>
+<td style="text-align:left">部落格、文件站、行銷頁面、作品集</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="實務上該如何選擇"><a class="markdownIt-Anchor" href="#實務上該如何選擇"></a> 實務上，該如何選擇？</h1>
+<p>沒有最好的技術，只有最適合的場景。可以問自己以下幾個問題來做決定：</p>
+<ol>
+<li>
+<p><strong>網站的 SEO 重要嗎？</strong></p>
+<ul>
+<li><strong>是，非常重要</strong>：優先考慮 <strong>SSR</strong> 或 <strong>SSG</strong>。這是內容型網站、新聞媒體、電商平台的首選。</li>
+<li><strong>否，不重要</strong>：<strong>CSR</strong> 完全可以。例如，內部管理系統、需要登入才能使用的 Web App 等，SEO 不是主要考量。</li>
+</ul>
+</li>
+<li>
+<p><strong>內容是高度動態的，還是相對靜態的？</strong></p>
+<ul>
+<li><strong>高度動態且個人化</strong>：例如社群媒體的動態牆、股票看板。這種情況下 <strong>SSR</strong> 是個好選擇，因為內容因人而異且即時變化。<strong>CSR</strong> 搭配 SWR 或 React Query 等資料快取策略也很適合。</li>
+<li><strong>相對靜態</strong>：例如部落格文章、產品介紹頁、公司官網。內容不常變動。<strong>SSG</strong> 是完美選擇，能提供極致的效能和安全性。</li>
+</ul>
+</li>
+<li>
+<p><strong>使用者體驗的哪個環節最重要？</strong></p>
+<ul>
+<li><strong>希望使用者盡快看到內容</strong>：選擇 <strong>SSR</strong> 或 <strong>SSG</strong>，它們的 FCP 表現優異。</li>
+<li><strong>希望首次載入後，後續操作如絲般順滑</strong>：選擇 <strong>CSR</strong>，它能提供最佳的 App-like 體驗。</li>
+</ul>
+</li>
+<li>
+<p><strong>團隊和伺服器資源如何？</strong></p>
+<ul>
+<li><strong>伺服器預算有限，團隊希望快速開發</strong>：<strong>CSR</strong> 或 <strong>SSG</strong> 是更經濟實惠的選擇。SSG 可以部署在免費的平台上（如 Vercel, Netlify, GitHub Pages）。</li>
+<li><strong>有足夠的伺服器資源和維運能力</strong>：<strong>SSR</strong> 可以納入考量，它雖然成本較高，但能靈活應對各種需求。</li>
+</ul>
+</li>
+</ol>
+<h2 id="現代框架的混合方案"><a class="markdownIt-Anchor" href="#現代框架的混合方案"></a> 現代框架的混合方案</h2>
+<p>值得一提的是，像 <strong>Next.js</strong> 和 <strong>Nuxt.js</strong> 這樣的現代框架已經模糊了這些模式的界線。它們允許在<strong>同一個專案中，為不同的頁面選擇不同的渲染策略</strong>。</p>
+<ul>
+<li>可以將行銷頁面設為 <strong>SSG</strong>。</li>
+<li>將部落格文章設為 <strong>SSR</strong>（或使用 <strong>ISR - 增量靜態再生</strong>，一種 SSG 的進化版，可以定期更新靜態頁面而無需重建整個網站）。</li>
+<li>將使用者儀表板設為 <strong>CSR</strong>。</li>
+</ul>
+<p>這種靈活性，讓開發者能夠針對每個頁面的特性做出最優化的選擇。</p>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>理解 CSR、SSR 和 SSG 不再是一件困難的事。它們各自代表了在效能、SEO、開發體驗和成本之間的不同權衡。</p>
+<ul>
+<li><strong>CSR</strong>：為互動而生，適合內部應用。</li>
+<li><strong>SSR</strong>：為 SEO 和快速首屏而生，適合動態內容網站。</li>
+<li><strong>SSG</strong>：為極致效能和低成本而生，是靜態內容的王者。</li>
+</ul>
+<p>希望這篇文章能為你撥開前端渲染的迷霧。下一次啟動新專案時，將能更有信心地說出：「根據我們的需求，我選擇…」，並為使用者打造出更快、更棒的網路體驗。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Rendering/" rel="tag"># Rendering</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/07/29/%E7%B3%BB%E7%B5%B1%E5%88%86%E6%9E%90%E7%9A%84%E6%A0%B8%E5%BF%83%E4%BA%94%E5%A4%A7%E6%AD%A5%E9%A9%9F/" rel="prev" title="解構數位藍圖：系統分析的核心五大步驟">
+                  <i class="fa fa-angle-left"></i> 解構數位藍圖：系統分析的核心五大步驟
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
