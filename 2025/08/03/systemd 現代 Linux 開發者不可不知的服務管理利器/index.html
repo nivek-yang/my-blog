@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="在軟體開發中，時常需要讓應用程式在背景穩定運行、開機時自動啟動，或是在意外崩潰後自動重啟。過去，我們可能需要撰寫複雜的 shell script 來處理這些「維運」任務，本篇文章將分享一個更現代、更強大也更優雅的解決方案：systemd。   為什麼需要 systemd？來自開發者的三個靈魂拷問 在深入探討 systemd 是什麼之前，先回想一下在部署應用時常遇到的情境：  「服務掛了，怎麼辦？」">
+<meta property="og:type" content="article">
+<meta property="og:title" content="解鎖 systemd：現代 Linux 開發者不可不知的服務管理利器">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/08/03/systemd%20%E7%8F%BE%E4%BB%A3%20Linux%20%E9%96%8B%E7%99%BC%E8%80%85%E4%B8%8D%E5%8F%AF%E4%B8%8D%E7%9F%A5%E7%9A%84%E6%9C%8D%E5%8B%99%E7%AE%A1%E7%90%86%E5%88%A9%E5%99%A8/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="在軟體開發中，時常需要讓應用程式在背景穩定運行、開機時自動啟動，或是在意外崩潰後自動重啟。過去，我們可能需要撰寫複雜的 shell script 來處理這些「維運」任務，本篇文章將分享一個更現代、更強大也更優雅的解決方案：systemd。   為什麼需要 systemd？來自開發者的三個靈魂拷問 在深入探討 systemd 是什麼之前，先回想一下在部署應用時常遇到的情境：  「服務掛了，怎麼辦？」">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-08-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-03T15:11:26.419Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="systemd">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/08/03/systemd%20%E7%8F%BE%E4%BB%A3%20Linux%20%E9%96%8B%E7%99%BC%E8%80%85%E4%B8%8D%E5%8F%AF%E4%B8%8D%E7%9F%A5%E7%9A%84%E6%9C%8D%E5%8B%99%E7%AE%A1%E7%90%86%E5%88%A9%E5%99%A8/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/08/03/systemd%20%E7%8F%BE%E4%BB%A3%20Linux%20%E9%96%8B%E7%99%BC%E8%80%85%E4%B8%8D%E5%8F%AF%E4%B8%8D%E7%9F%A5%E7%9A%84%E6%9C%8D%E5%8B%99%E7%AE%A1%E7%90%86%E5%88%A9%E5%99%A8/","path":"2025/08/03/systemd 現代 Linux 開發者不可不知的服務管理利器/","title":"解鎖 systemd：現代 Linux 開發者不可不知的服務管理利器"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>解鎖 systemd：現代 Linux 開發者不可不知的服務管理利器 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">48</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">39</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(6)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9C%80%E8%A6%81-systemd%E4%BE%86%E8%87%AA%E9%96%8B%E7%99%BC%E8%80%85%E7%9A%84%E4%B8%89%E5%80%8B%E9%9D%88%E9%AD%82%E6%8B%B7%E5%95%8F"><span class="nav-number">1.</span> <span class="nav-text"> 為什麼需要 systemd？來自開發者的三個靈魂拷問</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-systemd%E5%AE%83%E4%B8%8D%E5%8F%AA%E6%98%AF%E4%B8%80%E5%80%8B-init-%E7%B3%BB%E7%B5%B1"><span class="nav-number">2.</span> <span class="nav-text"> 什麼是 systemd？它不只是一個 init 系統</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%96%8B%E7%99%BC%E8%80%85%E8%A9%B2%E5%A6%82%E4%BD%95%E6%87%89%E7%94%A8-systemd%E4%B8%89%E5%A4%A7%E6%A0%B8%E5%BF%83%E5%84%AA%E5%8B%A2"><span class="nav-number">3.</span> <span class="nav-text"> 開發者該如何應用 systemd？三大核心優勢</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%A8%99%E6%BA%96%E5%8C%96%E7%9A%84%E6%9C%8D%E5%8B%99%E7%AE%A1%E7%90%86"><span class="nav-number">3.1.</span> <span class="nav-text"> 1. 標準化的服務管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%BC%B7%E5%A4%A7%E7%9A%84%E5%8F%AF%E9%9D%A0%E6%80%A7%E8%88%87%E4%BE%9D%E8%B3%B4%E7%AE%A1%E7%90%86"><span class="nav-number">3.2.</span> <span class="nav-text"> 2. 強大的可靠性與依賴管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%B5%B1%E4%B8%80%E7%9A%84%E6%97%A5%E8%AA%8C%E7%B3%BB%E7%B5%B1-journald"><span class="nav-number">3.3.</span> <span class="nav-text"> 3. 統一的日誌系統 (journald)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%A6%E6%88%B0%E6%95%99%E5%AD%B8%E7%94%A8-systemd-%E7%AE%A1%E7%90%86%E4%B8%80%E5%80%8B-python-web-%E6%87%89%E7%94%A8"><span class="nav-number">4.</span> <span class="nav-text"> 實戰教學：用 systemd 管理一個 Python Web 應用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F-1%E6%BA%96%E5%82%99%E6%87%89%E7%94%A8%E7%A8%8B%E5%BC%8F"><span class="nav-number">4.1.</span> <span class="nav-text"> 步驟 1：準備應用程式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F-2%E6%92%B0%E5%AF%AB-service-unit-%E6%AA%94%E6%A1%88"><span class="nav-number">4.2.</span> <span class="nav-text"> 步驟 2：撰寫 .service Unit 檔案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F-3%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8B%99"><span class="nav-number">4.3.</span> <span class="nav-text"> 步驟 3：管理服務</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F-4%E6%9F%A5%E7%9C%8B%E6%97%A5%E8%AA%8C"><span class="nav-number">4.4.</span> <span class="nav-text"> 步驟 4：查看日誌</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/03/systemd%20%E7%8F%BE%E4%BB%A3%20Linux%20%E9%96%8B%E7%99%BC%E8%80%85%E4%B8%8D%E5%8F%AF%E4%B8%8D%E7%9F%A5%E7%9A%84%E6%9C%8D%E5%8B%99%E7%AE%A1%E7%90%86%E5%88%A9%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="解鎖 systemd：現代 Linux 開發者不可不知的服務管理利器 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          解鎖 systemd：現代 Linux 開發者不可不知的服務管理利器
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-08-03 00:00:00 / 修改時間：23:11:26" itemprop="dateCreated datePublished" datetime="2025-08-03T00:00:00+08:00">2025-08-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在軟體開發中，時常需要讓應用程式在背景穩定運行、開機時自動啟動，或是在意外崩潰後自動重啟。過去，我們可能需要撰寫複雜的 shell script 來處理這些「維運」任務，本篇文章將分享一個更現代、更強大也更優雅的解決方案：<code>systemd</code>。</p>
+<hr />
+<h1 id="為什麼需要-systemd來自開發者的三個靈魂拷問"><a class="markdownIt-Anchor" href="#為什麼需要-systemd來自開發者的三個靈魂拷問"></a> 為什麼需要 <code>systemd</code>？來自開發者的三個靈魂拷問</h1>
+<p>在深入探討 <code>systemd</code> 是什麼之前，先回想一下在部署應用時常遇到的情境：</p>
+<ol>
+<li><strong>「服務掛了，怎麼辦？」</strong>：用 <code>nohup a.out &amp;</code> 啟動了程式，但某天它因為一個未處理的例外而崩潰了。在有人發現之前，服務已經中斷了數小時。</li>
+<li><strong>「伺服器重啟了，誰來啟動我的應用？」</strong>：系統維護、更新核心或是意外斷電導致伺服器重啟。是否記得上去手動重新執行所有必要的服務？它們之間的啟動順序又該如何保證？</li>
+<li><strong>「Log 檔在哪裡？為什麼這麼亂？」</strong>：每個應用程式都將日誌輸出到不同的檔案，格式五花八門，追蹤問題時需要在多個檔案之間來回切換，讓人心力交瘁。</li>
+</ol>
+<p>如果對以上任何一個問題感到熟悉，那麼恭喜你，<code>systemd</code> 正是為了解決這些痛點而生。</p>
+<h1 id="什麼是-systemd它不只是一個-init-系統"><a class="markdownIt-Anchor" href="#什麼是-systemd它不只是一個-init-系統"></a> 什麼是 <code>systemd</code>？它不只是一個 <code>init</code> 系統</h1>
+<p>簡單來說，<code>systemd</code> 是現代 Linux 作業系統的<strong>系統與服務管理器 (System and Service Manager)</strong>。它取代了傳統的 <code>SysVinit</code> 或 <code>Upstart</code>，成為了開機時執行的第一個程序（PID 1），並負責啟動、停止和管理系統上所有的背景服務（daemons）。</p>
+<p><code>systemd</code> 的核心概念是 <strong>Unit (單元)</strong>。Unit 是 <code>systemd</code> 管理的資源配置檔案，它們描述了系統中的一個服務、一個掛載點、一個設備或是一個 socket。對於開發者而言，最常用也最重要的就是 <code>.service</code> 單元。</p>
+<h1 id="開發者該如何應用-systemd三大核心優勢"><a class="markdownIt-Anchor" href="#開發者該如何應用-systemd三大核心優勢"></a> 開發者該如何應用 <code>systemd</code>？三大核心優勢</h1>
+<p><code>systemd</code> 不僅是系統管理員的工具，更是開發者的好朋友。它能將繁瑣的服務管理工作標準化、自動化，讓我們可以更專注於程式碼本身。</p>
+<h2 id="1-標準化的服務管理"><a class="markdownIt-Anchor" href="#1-標準化的服務管理"></a> 1. 標準化的服務管理</h2>
+<p>告別手動撰寫 <code>start.sh</code>, <code>stop.sh</code> 的日子。 <code>systemd</code> 提供了一套標準的 <code>.service</code> 檔案格式來定義應用程式如何啟動、停止、重啟。</p>
+<h2 id="2-強大的可靠性與依賴管理"><a class="markdownIt-Anchor" href="#2-強大的可靠性與依賴管理"></a> 2. 強大的可靠性與依賴管理</h2>
+<ul>
+<li><strong>自動重啟 (Auto-Restart)</strong>：可以簡單地設定一行配置，讓 <code>systemd</code> 在應用程式崩潰時自動將其拉起。</li>
+<li><strong>依賴管理 (Dependency Management)</strong>：Web 應用需要在資料庫啟動後才能正常工作？沒問題，<code>systemd</code> 可以確保服務之間的啟動順序。</li>
+</ul>
+<h2 id="3-統一的日誌系統-journald"><a class="markdownIt-Anchor" href="#3-統一的日誌系統-journald"></a> 3. 統一的日誌系統 (<code>journald</code>)</h2>
+<p><code>systemd</code> 會自動捕獲所有由它管理的服務所產生的標準輸出 (<code>stdout</code>) 和標準錯誤 (<code>stderr</code>)，並將它們彙整到一個稱為 <code>journal</code> 的中央日誌系統中。可以使用 <code>journalctl</code> 這一個指令，輕鬆地查詢、過濾和追蹤任何服務的日誌，無需再到處 <code>grep</code> Log 檔。</p>
+<h1 id="實戰教學用-systemd-管理一個-python-web-應用"><a class="markdownIt-Anchor" href="#實戰教學用-systemd-管理一個-python-web-應用"></a> 實戰教學：用 <code>systemd</code> 管理一個 Python Web 應用</h1>
+<p>理論說了這麼多，讓我們來動手實作吧！假設有一個簡單的 Python Flask 應用程式。</p>
+<h2 id="步驟-1準備應用程式"><a class="markdownIt-Anchor" href="#步驟-1準備應用程式"></a> 步驟 1：準備應用程式</h2>
+<p>應用程式 <code>main.py</code> 如下，它會在 <code>8000</code> port 啟動一個簡單的 web server。</p>
+<pre class="highlight"><code class="python"><span class="hljs-comment"># main.py</span>
+<span class="hljs-keyword">from</span> flask <span class="hljs-keyword">import</span> Flask
+<span class="hljs-keyword">import</span> time
+<span class="hljs-keyword">import</span> os
+
+app = Flask(__name__)
+
+<span class="hljs-meta">@app.route(<span class="hljs-params"><span class="hljs-string">&#x27;/&#x27;</span></span>)</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">hello</span>():
+    <span class="hljs-keyword">return</span> <span class="hljs-string">f&quot;Hello from process <span class="hljs-subst">&#123;os.getpid()&#125;</span>!&quot;</span>
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:
+    app.run(host=<span class="hljs-string">&#x27;0.0.0.0&#x27;</span>, port=<span class="hljs-number">8000</span>)
+</code></pre>
+<p>可以將它放在 <code>/home/user/my_app/</code> 目錄下。</p>
+<h2 id="步驟-2撰寫-service-unit-檔案"><a class="markdownIt-Anchor" href="#步驟-2撰寫-service-unit-檔案"></a> 步驟 2：撰寫 <code>.service</code> Unit 檔案</h2>
+<p>這是最核心的一步。需要在 <code>/etc/systemd/system/</code> 目錄下建立一個 <code>myapp.service</code> 檔案。</p>
+<blockquote>
+<p><strong>提示</strong>：需要 <code>sudo</code> 權限來在這個目錄下建立檔案。</p>
+</blockquote>
+<pre class="highlight"><code class="ini"><span class="hljs-comment"># /etc/systemd/system/myapp.service</span>
+
+<span class="hljs-section">[Unit]</span>
+<span class="hljs-attr">Description</span>=My Simple Python Web App
+<span class="hljs-comment"># 表示我們的服務應該在網路服務啟動後才啟動</span>
+<span class="hljs-attr">After</span>=network.target
+
+<span class="hljs-section">[Service]</span>
+<span class="hljs-comment"># 假設你的使用者是 myuser</span>
+<span class="hljs-attr">User</span>=myuser
+<span class="hljs-comment"># 應用程式的工作目錄</span>
+<span class="hljs-attr">WorkingDirectory</span>=/home/myuser/my_app
+<span class="hljs-comment"># 啟動服務的指令，建議使用絕對路徑</span>
+<span class="hljs-attr">ExecStart</span>=/usr/bin/python3 /home/myuser/my_app/main.py
+<span class="hljs-comment"># 設定服務在失敗時自動重啟</span>
+<span class="hljs-attr">Restart</span>=<span class="hljs-literal">on</span>-failure
+<span class="hljs-comment"># 重啟間隔秒數</span>
+<span class="hljs-attr">RestartSec</span>=<span class="hljs-number">5</span>s
+
+<span class="hljs-section">[Install]</span>
+<span class="hljs-comment"># 表示這個服務應該在多使用者模式下被啟用</span>
+<span class="hljs-attr">WantedBy</span>=multi-user.target
+</code></pre>
+<p>解析這個檔案的內容：</p>
+<ul>
+<li><code>[Unit]</code>：定義了這個單元的基本資訊和依賴關係。<code>Description</code> 只是方便人類閱讀的描述。</li>
+<li><code>[Service]</code>：定義了服務的行為。
+<ul>
+<li><code>User</code>：指定用哪個使用者身份執行程式，增加安全性。</li>
+<li><code>WorkingDirectory</code>：設定程式的執行目錄。</li>
+<li><code>ExecStart</code>：<strong>核心指令</strong>，定義如何啟動你的服務。</li>
+<li><code>Restart</code>：設定重啟策略，<code>on-failure</code> 表示只有在程式異常退出時（exit code 非 0）才會重啟。</li>
+</ul>
+</li>
+<li><code>[Install]</code>：定義了當 <code>enable</code> 這個服務時，它應該被連結到哪個系統目標（target）下。</li>
+</ul>
+<h2 id="步驟-3管理服務"><a class="markdownIt-Anchor" href="#步驟-3管理服務"></a> 步驟 3：管理服務</h2>
+<p>寫好 <code>.service</code> 檔後，就可以用 <code>systemctl</code> 指令來掌控應用程式了！</p>
+<ol>
+<li>
+<p><strong>重載 <code>systemd</code> 配置</strong>：<br />
+每次新增或修改 <code>.service</code> 檔後，都需要執行此命令讓 <code>systemd</code> 重新讀取設定。</p>
+<pre class="highlight"><code class="bash"><span class="hljs-built_in">sudo</span> systemctl daemon-reload
+</code></pre>
+</li>
+<li>
+<p><strong>啟動服務</strong>：</p>
+<pre class="highlight"><code class="bash"><span class="hljs-built_in">sudo</span> systemctl start myapp.service
+</code></pre>
+</li>
+<li>
+<p><strong>查看服務狀態</strong>：<br />
+這是個非常有用的指令，可以看到服務是否正在運行、PID 是多少、以及最新的幾行日誌。</p>
+<pre class="highlight"><code class="bash"><span class="hljs-built_in">sudo</span> systemctl status myapp.service
+</code></pre>
+<p>會看到類似這樣的綠色輸出，代表服務運行正常：</p>
+<pre class="highlight"><code class="">● myapp.service - My Simple Python Web App
+   Loaded: loaded (/etc/systemd/system/myapp.service; disabled; vendor preset: enabled)
+   Active: active (running) since Tue 2023-10-27 10:30:00 UTC; 5s ago
+ Main PID: 12345 (python3)
+    Tasks: 1 (limit: 4915)
+   Memory: 10.1M
+   CGroup: /system.slice/myapp.service
+           └─12345 /usr/bin/python3 /home/myuser/my_app/main.py
+</code></pre>
+</li>
+<li>
+<p><strong>設定開機自啟</strong>：</p>
+<pre class="highlight"><code class="bash"><span class="hljs-built_in">sudo</span> systemctl <span class="hljs-built_in">enable</span> myapp.service
+</code></pre>
+<p>現在，即使伺服器重啟，<code>systemd</code> 也會自動幫你啟動 <code>myapp.service</code>！</p>
+</li>
+<li>
+<p><strong>停止與重啟</strong>：</p>
+<pre class="highlight"><code class="bash"><span class="hljs-built_in">sudo</span> systemctl stop myapp.service
+<span class="hljs-built_in">sudo</span> systemctl restart myapp.service
+</code></pre>
+</li>
+</ol>
+<h2 id="步驟-4查看日誌"><a class="markdownIt-Anchor" href="#步驟-4查看日誌"></a> 步驟 4：查看日誌</h2>
+<p>忘掉 <code>tail -f /path/to/logfile</code> 吧！現在可以這樣做：</p>
+<pre class="highlight"><code class="bash"><span class="hljs-comment"># 查看 myapp 服務的所有日誌</span>
+<span class="hljs-built_in">sudo</span> journalctl -u myapp.service
+
+<span class="hljs-comment"># 即時追蹤新的日誌（類似 tail -f）</span>
+<span class="hljs-built_in">sudo</span> journalctl -u myapp.service -f
+
+<span class="hljs-comment"># 查看從一小時前到現在的日誌</span>
+<span class="hljs-built_in">sudo</span> journalctl -u myapp.service --since <span class="hljs-string">&quot;1 hour ago&quot;</span>
+</code></pre>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p><code>systemd</code> 乍看之下可能有些複雜，但一旦掌握了 <code>.service</code> 單元的基本用法，會發現它為開發和部署工作帶來了前所未有的便利性與可靠性。它將服務管理的最佳實踐內建其中，讓我們能夠：</p>
+<ul>
+<li>用<strong>標準化</strong>的方式管理應用。</li>
+<li>透過<strong>自動重啟</strong>提升服務的可用性。</li>
+<li>用<strong>統一的日誌</strong>系統簡化問題排查。</li>
+</ul>
+<p>希望這篇文章能幫助揭開 <code>systemd</code> 的神秘面紗。試著在下一個部署在 Linux 上的專案中用 <code>systemd</code> 來管理它吧！</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/systemd/" rel="tag"># systemd</a>
+              <a href="/my-blog/tags/Linux/" rel="tag"># Linux</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/08/01/%E6%95%8F%E6%8D%B7%E9%96%8B%E7%99%BC%20%E7%94%A8%20Scrum%20%E8%88%87%20Kanban%20%E6%89%93%E9%80%A0%E9%AB%98%E6%95%88%E5%8D%94%E4%BD%9C%E7%9A%84%E5%9C%98%E9%9A%8A/" rel="prev" title="敏捷開發：用 Scrum 與 Kanban 打造高效協作的團隊">
+                  <i class="fa fa-angle-left"></i> 敏捷開發：用 Scrum 與 Kanban 打造高效協作的團隊
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
