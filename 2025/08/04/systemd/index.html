@@ -19,28 +19,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="Django ModelForm 筆記  ✅ ModelForm 的目的與用途 Django 的 ModelForm 提供了一個方便的方法，讓我們可以快速根據模型創建表單。它自動從模型推導表單欄位，並進行表單驗證與資料處理。使用 ModelForm 可以減少手動創建表單類別的工作，提高開發效率。  📝 ModelForm 的常用設定  1. fields &#x2F; exclude  model: 指">
+    <meta name="description" content="在上一篇文章《解鎖 systemd：現代 Linux 開發者不可不知的服務管理利器》中，探討了如何利用 systemd 來優雅地管理應用程式。一個非常核心且重要的問題：「既然有了 Docker 和 Docker Compose，為什麼還需要 systemd 呢？ 如果用了 Docker，還需要 systemd 嗎？」 讓我們來深入剖析這兩者之間的關係，會發現，它們並非互相取代的競爭對手，而是一對相">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Django ModelForm 筆記">
-<meta property="og:url" content="https://nivek-yang.github.io/2025/04/19/Django_ModelForm%E7%AD%86%E8%A8%98/index.html">
+<meta property="og:title" content="Systemd vs. Docker：是敵是友？誰來管理誰？">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/08/04/systemd/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="Django ModelForm 筆記  ✅ ModelForm 的目的與用途 Django 的 ModelForm 提供了一個方便的方法，讓我們可以快速根據模型創建表單。它自動從模型推導表單欄位，並進行表單驗證與資料處理。使用 ModelForm 可以減少手動創建表單類別的工作，提高開發效率。  📝 ModelForm 的常用設定  1. fields &#x2F; exclude  model: 指">
+<meta property="og:description" content="在上一篇文章《解鎖 systemd：現代 Linux 開發者不可不知的服務管理利器》中，探討了如何利用 systemd 來優雅地管理應用程式。一個非常核心且重要的問題：「既然有了 Docker 和 Docker Compose，為什麼還需要 systemd 呢？ 如果用了 Docker，還需要 systemd 嗎？」 讓我們來深入剖析這兩者之間的關係，會發現，它們並非互相取代的競爭對手，而是一對相">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2025-04-18T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-04-19T17:12:54.245Z">
+<meta property="article:published_time" content="2025-08-03T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-04T14:31:29.925Z">
 <meta property="article:author" content="Kaiwii">
-<meta property="article:tag" content="Python">
-<meta property="article:tag" content="Django">
+<meta property="article:tag" content="systemd">
+<meta property="article:tag" content="Docker">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://nivek-yang.github.io/2025/04/19/Django_ModelForm%E7%AD%86%E8%A8%98/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/08/04/systemd/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/04/19/Django_ModelForm%E7%AD%86%E8%A8%98/","path":"2025/04/19/Django_ModelForm筆記/","title":"Django ModelForm 筆記"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/08/04/systemd/","path":"2025/08/04/systemd/","title":"Systemd vs. Docker：是敵是友？誰來管理誰？"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Django ModelForm 筆記 | 我的技術部落格</title>
+<title>Systemd vs. Docker：是敵是友？誰來管理誰？ | 我的技術部落格</title>
   
 
 
@@ -420,7 +420,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#django-modelform-%E7%AD%86%E8%A8%98"><span class="nav-number">1.</span> <span class="nav-text"> Django ModelForm 筆記</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#modelform-%E7%9A%84%E7%9B%AE%E7%9A%84%E8%88%87%E7%94%A8%E9%80%94"><span class="nav-number">1.1.</span> <span class="nav-text"> ✅ ModelForm 的目的與用途</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#modelform-%E7%9A%84%E5%B8%B8%E7%94%A8%E8%A8%AD%E5%AE%9A"><span class="nav-number">1.2.</span> <span class="nav-text"> 📝 ModelForm 的常用設定</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-fields-exclude"><span class="nav-number">1.2.1.</span> <span class="nav-text"> 1. fields &#x2F; exclude</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-labels"><span class="nav-number">1.2.2.</span> <span class="nav-text"> 2. labels</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-widgets"><span class="nav-number">1.2.3.</span> <span class="nav-text"> 3. widgets</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8-views-%E4%B8%AD%E4%BD%BF%E7%94%A8"><span class="nav-number">1.3.</span> <span class="nav-text"> 💡 在 Views 中使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B0%E5%A2%9E%E8%B3%87%E6%96%99"><span class="nav-number">1.3.1.</span> <span class="nav-text"> 新增資料</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B7%A8%E8%BC%AF%E8%B3%87%E6%96%99"><span class="nav-number">1.3.2.</span> <span class="nav-text"> 編輯資料</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A0%90%E5%A1%AB%E8%A1%A8%E5%96%AE%E7%B7%A8%E8%BC%AF%E9%A0%81%E9%9D%A2"><span class="nav-number">1.3.3.</span> <span class="nav-text"> 預填表單（編輯頁面）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%B5%E5%BB%BA-vs-%E6%9B%B4%E6%96%B0%E8%B3%87%E6%96%99"><span class="nav-number">1.4.</span> <span class="nav-text"> 🔄 創建 vs 更新資料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EF%B8%8F-%E5%9C%A8-templates-%E4%B8%AD%E4%BD%BF%E7%94%A8"><span class="nav-number">1.5.</span> <span class="nav-text"> 🖥️ 在 Templates 中使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#modelform-%E7%9A%84%E5%84%AA%E5%8B%A2"><span class="nav-number">1.6.</span> <span class="nav-text"> 🎯 ModelForm 的優勢</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%90%86%E8%A7%A3%E5%90%84%E8%87%AA%E7%9A%84%E8%81%B7%E8%B2%AC%E5%88%86%E5%B1%A4%E7%9A%84%E8%97%9D%E8%A1%93"><span class="nav-number">1.</span> <span class="nav-text"> 理解各自的職責：分層的藝術</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E4%B8%8D%E7%9B%B4%E6%8E%A5%E7%94%A8-docker-%E5%B0%B1%E5%A5%BD"><span class="nav-number">2.</span> <span class="nav-text"> 為什麼不直接用 Docker 就好？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%AA%B0%E4%BE%86%E7%AE%A1%E7%90%86-docker-%E8%87%AA%E5%B7%B1"><span class="nav-number">2.1.</span> <span class="nav-text"> 1. 誰來管理 Docker 自己？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%BF%BD%E6%B1%82%E7%9A%84%E6%98%AF%E7%B5%82%E6%A5%B5%E5%8F%AF%E9%9D%A0%E6%80%A7"><span class="nav-number">2.2.</span> <span class="nav-text"> 2. 追求的是終極可靠性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8-systemd-%E4%BE%86%E7%AE%A1%E7%90%86-docker-compose"><span class="nav-number">3.</span> <span class="nav-text"> 用 systemd 來管理 Docker Compose</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%A6%E6%88%B0%E7%82%BA-docker-compose-%E5%BB%BA%E7%AB%8B%E4%B8%80%E5%80%8B-systemd-%E6%9C%8D%E5%8B%99"><span class="nav-number">3.1.</span> <span class="nav-text"> 實戰：為 Docker Compose 建立一個 systemd 服務</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">4.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -468,7 +468,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/19/Django_ModelForm%E7%AD%86%E8%A8%98/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/04/systemd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -481,12 +481,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Django ModelForm 筆記 | 我的技術部落格">
+      <meta itemprop="name" content="Systemd vs. Docker：是敵是友？誰來管理誰？ | 我的技術部落格">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Django ModelForm 筆記
+          Systemd vs. Docker：是敵是友？誰來管理誰？
         </h1>
 
         <div class="post-meta-container">
@@ -496,15 +496,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">發表於</span>
+      
 
-      <time title="創建時間：2025-04-19 00:00:00" itemprop="dateCreated datePublished" datetime="2025-04-19T00:00:00+08:00">2025-04-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新於</span>
-      <time title="修改時間：2025-04-20 01:12:54" itemprop="dateModified" datetime="2025-04-20T01:12:54+08:00">2025-04-20</time>
+      <time title="創建時間：2025-08-04 00:00:00 / 修改時間：22:31:29" itemprop="dateCreated datePublished" datetime="2025-08-04T00:00:00+08:00">2025-08-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -525,111 +519,101 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="django-modelform-筆記"><a class="markdownIt-Anchor" href="#django-modelform-筆記"></a> Django ModelForm 筆記</h1>
-<h2 id="modelform-的目的與用途"><a class="markdownIt-Anchor" href="#modelform-的目的與用途"></a> ✅ ModelForm 的目的與用途</h2>
-<p>Django 的 <code>ModelForm</code> 提供了一個方便的方法，讓我們可以快速根據模型創建表單。它自動從模型推導表單欄位，並進行表單驗證與資料處理。使用 <code>ModelForm</code> 可以減少手動創建表單類別的工作，提高開發效率。</p>
-<h2 id="modelform-的常用設定"><a class="markdownIt-Anchor" href="#modelform-的常用設定"></a> 📝 ModelForm 的常用設定</h2>
-<h3 id="1-fields-exclude"><a class="markdownIt-Anchor" href="#1-fields-exclude"></a> 1. <code>fields</code> / <code>exclude</code></h3>
+    <div class="post-body" itemprop="articleBody"><p>在上一篇文章《解鎖 systemd：現代 Linux 開發者不可不知的服務管理利器》中，探討了如何利用 <code>systemd</code> 來優雅地管理應用程式。一個非常核心且重要的問題：「<strong>既然有了 Docker 和 Docker Compose，為什麼還需要 <code>systemd</code> 呢？ 如果用了 Docker，還需要 <code>systemd</code> 嗎？</strong>」</p>
+<p>讓我們來深入剖析這兩者之間的關係，會發現，它們並非互相取代的競爭對手，而是一對相輔相成的黃金搭檔。</p>
+<hr />
+<h1 id="理解各自的職責分層的藝術"><a class="markdownIt-Anchor" href="#理解各自的職責分層的藝術"></a> 理解各自的職責：分層的藝術</h1>
+<p>要理解 <code>systemd</code> 和 <code>Docker</code> 的關係，最關鍵的一點是：<strong>它們解決的是不同層面的問題</strong>。</p>
+<p>用一個生動的比喻來理解：</p>
 <ul>
-<li><strong><code>model</code></strong>: 指定是哪個 model</li>
-<li><strong><code>fields</code></strong>: 指定哪些欄位會被包含在表單中。</li>
-<li><strong><code>exclude</code></strong>: 排除某些欄位，不會顯示在表單中。</li>
+<li><strong><code>Linux 作業系統</code></strong>：就像一棟<strong>辦公大樓</strong>，提供了基礎設施（水、電、空間）。</li>
+<li><strong><code>systemd</code></strong>：是這棟大樓的<strong>總務與保全系統</strong>。它的職責是確保大樓的基礎服務正常運轉，比如確保電力系統 (<code>network.target</code>) 在上班前就已啟動，並在伺服器（大樓）重啟時，自動化地讓各個辦公室（服務）恢復運作。它關心的是「<strong>程序是否在作業系統層級上運行</strong>」。</li>
+<li><strong><code>Docker</code></strong>：則像是一個個**「拎包入住」的模組化辦公室**。每個辦公室（Container）都自帶了所有必需的辦公用品、裝潢和特定環境（應用程式的函式庫、依賴、配置），與隔壁辦公室完全隔離。<code>Docker</code> 關心的是「<strong>應用程式能否在一個隔離且一致的環境中運行</strong>」。</li>
+<li><strong><code>Docker Compose</code></strong>：是<strong>部門規劃師</strong>。他拿著一張藍圖 (<code>docker-compose.yml</code>)，規劃：「這個部門需要三個辦公室，一個是前端，一個是後端，一個是資料庫，而且它們之間可以用內線電話（虛擬網路）溝通。」</li>
 </ul>
-<p><a target="_blank" rel="noopener" href="http://forms.py">forms.py</a></p>
-<pre class="highlight"><code class="python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">InterviewForm</span>(<span class="hljs-title class_ inherited__">ModelForm</span>):
-    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Meta</span>:
-        model = Interview
-        fields = [<span class="hljs-string">&#x27;company_name&#x27;</span>, <span class="hljs-string">&#x27;position&#x27;</span>, <span class="hljs-string">&#x27;interview_date&#x27;</span>, <span class="hljs-string">&#x27;review&#x27;</span>, <span class="hljs-string">&#x27;rating&#x27;</span>, <span class="hljs-string">&#x27;result&#x27;</span>]
-        <span class="hljs-comment"># exclude = [&#x27;is_admin&#x27;]  # 不想包含的欄位</span>
-        <span class="hljs-comment"># fields = &quot;__all__&quot; 接受所有欄位，不建議這麼做</span>
+<p>從這個比喻中，可以清楚地了解：<code>systemd</code> 負責管理<strong>整棟大樓的運轉</strong>，而 <code>Docker</code> 則負責管理<strong>每個辦公室內部的環境</strong>。</p>
+<h1 id="為什麼不直接用-docker-就好"><a class="markdownIt-Anchor" href="#為什麼不直接用-docker-就好"></a> 為什麼不直接用 Docker 就好？</h1>
+<p>可能會想說：「應用程式和它的所有依賴都在 Docker Compose 裡定義好了，只要 <code>docker compose up -d</code> 就能跑起來，為什麼還需要 <code>systemd</code> 這個『大樓管理員』呢？」</p>
+<p>原因有二：</p>
+<h2 id="1-誰來管理-docker-自己"><a class="markdownIt-Anchor" href="#1-誰來管理-docker-自己"></a> 1. 誰來管理 Docker 自己？</h2>
+<p>Docker Engine (即 <code>dockerd</code> 服務) 本身就是一個需要在作業系統上運行的背景程序。當伺服器開機時，是什麼東西自動啟動了 <code>dockerd</code> 服務，讓你可以使用 <code>docker</code> 指令？</p>
+<p>答案正是 <code>systemd</code>！</p>
+<p>可以隨時在 Linux 伺服器上執行這個指令來驗證：</p>
+<pre class="highlight"><code class="bash"><span class="hljs-built_in">sudo</span> systemctl status docker.service
 </code></pre>
-<h3 id="2-labels"><a class="markdownIt-Anchor" href="#2-labels"></a> 2. <code>labels</code></h3>
-<p>可以自定義欄位顯示名稱：</p>
-<pre class="highlight"><code class="python">labels = &#123;
-    <span class="hljs-string">&#x27;company_name&#x27;</span>: <span class="hljs-string">&#x27;公司名稱&#x27;</span>,
-    <span class="hljs-string">&#x27;position&#x27;</span>: <span class="hljs-string">&#x27;職位&#x27;</span>,
-    <span class="hljs-string">&#x27;interview_date&#x27;</span>: <span class="hljs-string">&#x27;面試日期&#x27;</span>,
-    <span class="hljs-string">&#x27;review&#x27;</span>: <span class="hljs-string">&#x27;心得&#x27;</span>,
-    <span class="hljs-string">&#x27;rating&#x27;</span>: <span class="hljs-string">&#x27;評分&#x27;</span>,
-    <span class="hljs-string">&#x27;result&#x27;</span>: <span class="hljs-string">&#x27;面試結果&#x27;</span>
-&#125;
+<p>會看到 <code>docker.service</code> 正在被 <code>systemd</code> 管理著。<code>systemd</code> 確保了 Docker 這個「模組化辦公室的供應商」在伺服器啟動時就已經準備就緒。</p>
+<h2 id="2-追求的是終極可靠性"><a class="markdownIt-Anchor" href="#2-追求的是終極可靠性"></a> 2. 追求的是終極可靠性</h2>
+<p><code>Docker</code> 和 <code>Docker Compose</code> 提供了優秀的內部管理機制。例如，可以在 <code>docker-compose.yml</code> 中為服務設定 <code>restart: always</code>。</p>
+<pre class="highlight"><code class="yaml"><span class="hljs-comment"># docker-compose.yml</span>
+<span class="hljs-attr">services:</span>
+  <span class="hljs-attr">my-app:</span>
+    <span class="hljs-attr">image:</span> <span class="hljs-string">my-app-image</span>
+    <span class="hljs-attr">restart:</span> <span class="hljs-string">always</span> <span class="hljs-comment"># 當容器停止時，Docker 會自動重啟它</span>
 </code></pre>
-<h3 id="3-widgets"><a class="markdownIt-Anchor" href="#3-widgets"></a> 3. <code>widgets</code></h3>
-<p>控制欄位的輸入類型，特別針對日期或其他自定義輸入：</p>
-<pre class="highlight"><code class="python"><span class="hljs-keyword">from</span> django.forms <span class="hljs-keyword">import</span> DateInput
+<p>這在大部分情況下都很好用。但是，如果發生了更嚴重的問題，例如 <strong>Docker Engine (<code>dockerd</code>) 本身崩潰了或被意外停止了呢？</strong></p>
+<p>這時，所有由它管理的容器（無論 <code>restart</code> 策略是什麼）都會停止運行，而且無法自行恢復。就像辦公室的電力總開關被關了，單個辦公室內的備用電源是沒用的。</p>
+<p>這時，就需要更高層級的管理者——<code>systemd</code>——登場了。</p>
+<h1 id="用-systemd-來管理-docker-compose"><a class="markdownIt-Anchor" href="#用-systemd-來管理-docker-compose"></a> 用 <code>systemd</code> 來管理 <code>Docker Compose</code></h1>
+<p>這就是最佳實踐的誕生：<strong>用 <code>systemd</code> 來啟動、停止和監控我們的 <code>docker-compose</code> 應用</strong>。</p>
+<p>這樣做，我們就建立了一個強大的、多層次的可靠性保障：</p>
+<ul>
+<li><strong>容器層級</strong>：Docker 負責在容器內部保持應用程式健康。</li>
+<li><strong>主機層級</strong>：<code>systemd</code> 負責確保整個 Docker Compose 應用（作為一個整體單元）在主機上始終運行。</li>
+</ul>
+<h2 id="實戰為-docker-compose-建立一個-systemd-服務"><a class="markdownIt-Anchor" href="#實戰為-docker-compose-建立一個-systemd-服務"></a> 實戰：為 Docker Compose 建立一個 <code>systemd</code> 服務</h2>
+<p>假設 <code>docker-compose.yml</code> 放在 <code>/home/user/my_docker_app/</code> 目錄下。可以像這樣為它建立一個 <code>systemd</code> 服務檔：</p>
+<pre class="highlight"><code class="ini"><span class="hljs-comment"># /etc/systemd/system/my-docker-compose-app.service</span>
 
-widgets = &#123;
-    <span class="hljs-string">&#x27;interview_date&#x27;</span>: DateInput(attrs=&#123;<span class="hljs-string">&#x27;type&#x27;</span>: <span class="hljs-string">&#x27;date&#x27;</span>&#125;)
-&#125;
-</code></pre>
-<hr />
-<h2 id="在-views-中使用"><a class="markdownIt-Anchor" href="#在-views-中使用"></a> 💡 在 Views 中使用</h2>
-<p><code>ModelForm</code> 可以幫助我們簡化新增與更新資料的邏輯：</p>
-<h3 id="新增資料"><a class="markdownIt-Anchor" href="#新增資料"></a> 新增資料</h3>
-<pre class="highlight"><code class="python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">index</span>(<span class="hljs-params">req</span>):
-    <span class="hljs-keyword">if</span> req.POST:
-        form = InterviewForm(req.POST)  <span class="hljs-comment"># 沒有傳入 instance，代表要新增資料</span>
-        interview = form.save()  <span class="hljs-comment"># 存入資料庫並回傳 instance</span>
-        <span class="hljs-keyword">return</span> redirect(<span class="hljs-string">&quot;interviews:show&quot;</span>, <span class="hljs-built_in">id</span>=interview.<span class="hljs-built_in">id</span>)
-    <span class="hljs-keyword">else</span>:
-        interviews = Interview.objects.order_by(<span class="hljs-string">&quot;-id&quot;</span>)
-        <span class="hljs-keyword">return</span> render(req, <span class="hljs-string">&quot;interviews/index.html&quot;</span>, &#123;<span class="hljs-string">&quot;interviews&quot;</span>: interviews&#125;)
-</code></pre>
-<h3 id="編輯資料"><a class="markdownIt-Anchor" href="#編輯資料"></a> 編輯資料</h3>
-<pre class="highlight"><code class="python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">show</span>(<span class="hljs-params">req, <span class="hljs-built_in">id</span></span>):
-    interview = get_object_or_404(Interview, pk=<span class="hljs-built_in">id</span>)
+<span class="hljs-section">[Unit]</span>
+<span class="hljs-attr">Description</span>=My Docker Compose Application
+<span class="hljs-comment"># 要求 docker.service 必須先啟動</span>
+<span class="hljs-attr">Requires</span>=docker.service
+<span class="hljs-comment"># 在 docker.service 啟動之後再啟動本服務</span>
+<span class="hljs-attr">After</span>=docker.service
 
-    <span class="hljs-keyword">if</span> req.POST:
-        form = InterviewForm(req.POST, instance=interview)  <span class="hljs-comment"># 有傳入 instance，代表要更新資料</span>
-        form.save()
-        <span class="hljs-keyword">return</span> redirect(<span class="hljs-string">&quot;interviews:show&quot;</span>, interview.<span class="hljs-built_in">id</span>)
-    <span class="hljs-keyword">else</span>:
-        comments = interview.comment_set.<span class="hljs-built_in">all</span>()
-        <span class="hljs-keyword">return</span> render(req, <span class="hljs-string">&quot;interviews/show.html&quot;</span>, &#123;<span class="hljs-string">&quot;interview&quot;</span>: interview, <span class="hljs-string">&quot;comments&quot;</span>: comments&#125;)
-</code></pre>
-<h3 id="預填表單編輯頁面"><a class="markdownIt-Anchor" href="#預填表單編輯頁面"></a> 預填表單（編輯頁面）</h3>
-<pre class="highlight"><code class="python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">edit</span>(<span class="hljs-params">req, <span class="hljs-built_in">id</span></span>):
-    interview = get_object_or_404(Interview, pk=<span class="hljs-built_in">id</span>)
-    form = InterviewForm(instance=interview)  <span class="hljs-comment"># 預填現有資料</span>
-    <span class="hljs-keyword">return</span> render(req, <span class="hljs-string">&quot;interviews/edit.html&quot;</span>, &#123;<span class="hljs-string">&quot;interview&quot;</span>: interview, <span class="hljs-string">&quot;form&quot;</span>: form&#125;)
-</code></pre>
-<hr />
-<h2 id="創建-vs-更新資料"><a class="markdownIt-Anchor" href="#創建-vs-更新資料"></a> 🔄 創建 vs 更新資料</h2>
-<p>在使用 <code>ModelForm</code> 時，可透過 <code>instance</code> 參數來決定是要 <strong>創建</strong> 還是 <strong>更新</strong> 資料：</p>
-<pre class="highlight"><code class="python"><span class="hljs-comment"># 創建新的資料（不提供 instance）</span>
-form = InterviewForm(request.POST)
-<span class="hljs-keyword">if</span> form.is_valid():
-    form.save()  <span class="hljs-comment"># 會建立一筆新的 Interview 紀錄</span>
+<span class="hljs-section">[Service]</span>
+<span class="hljs-comment"># 使用你的使用者</span>
+<span class="hljs-attr">User</span>=myuser
+<span class="hljs-comment"># Docker Compose 檔案所在的目錄</span>
+<span class="hljs-attr">WorkingDirectory</span>=/home/myuser/my_docker_app
 
-<span class="hljs-comment"># 更新既有資料（提供 instance）</span>
-form = InterviewForm(request.POST, instance=interview)
-<span class="hljs-keyword">if</span> form.is_valid():
-    form.save()  <span class="hljs-comment"># 會更新傳入的 interview 物件</span>
+<span class="hljs-comment"># 啟動指令：在背景中啟動 compose</span>
+<span class="hljs-comment"># 注意：我們不再使用 -d 參數，因為 systemd 會處理背景化</span>
+<span class="hljs-attr">ExecStart</span>=/usr/local/bin/docker-compose up
+<span class="hljs-comment"># 停止指令</span>
+<span class="hljs-attr">ExecStop</span>=/usr/local/bin/docker-compose down
+
+<span class="hljs-comment"># 讓 systemd 自動重啟我們的服務</span>
+<span class="hljs-attr">Restart</span>=always
+<span class="hljs-attr">RestartSec</span>=<span class="hljs-number">10</span>s
+
+<span class="hljs-section">[Install]</span>
+<span class="hljs-attr">WantedBy</span>=multi-user.target
 </code></pre>
+<p><strong>注意</strong>：<code>docker-compose</code> 的路徑可能是 <code>/usr/bin/docker-compose</code> 或 <code>/usr/local/bin/docker-compose</code>，請用 <code>which docker-compose</code> 確認。</p>
+<p><strong>這樣做的好處是什麼？</strong></p>
+<ol>
+<li><strong>開機自啟</strong>：執行 <code>sudo systemctl enable my-docker-compose-app.service</code>，整個應用集群就會在伺服器啟動時自動運行。</li>
+<li><strong>終極守護</strong>：如果 Docker Engine 崩潰後重啟，<code>systemd</code> 會因為依賴關係（<code>Requires</code> 和 <code>After</code>）自動地重新啟動 <code>my-docker-compose-app</code> 服務。</li>
+<li><strong>統一管理介面</strong>：可以像管理普通系統服務一樣管理 Docker 應用，使用 <code>systemctl start</code>, <code>systemctl stop</code>, <code>systemctl status</code>。</li>
+<li><strong>集中日誌</strong>：<code>docker-compose</code> 的所有輸出（包含所有容器的 log）都會被 <code>journald</code> 捕獲。只需執行 <code>sudo journalctl -u my-docker-compose-app.service -f</code> 就可以查看應用集群的所有日誌，極其方便！</li>
+</ol>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
 <ul>
-<li><strong>不提供 <code>instance</code></strong>：<code>form.save()</code> 會執行 <code>INSERT</code>，新增一筆資料。</li>
-<li><strong>提供 <code>instance</code></strong>：<code>form.save()</code> 會執行 <code>UPDATE</code>，更新該物件的欄位。</li>
+<li>
+<p><strong>要管理一個獨立的、非容器化的程式嗎？</strong><br />
+👉 直接使用 <strong><code>systemd</code></strong>，如上一篇文章所示。</p>
+</li>
+<li>
+<p><strong>要打包一個含有多個組件、複雜依賴的應用程式，並確保它在任何地方都能一致地運行嗎？</strong><br />
+👉 使用 <strong><code>Docker</code> 和 <code>Docker Compose</code></strong> 來進行封裝。</p>
+</li>
+<li>
+<p><strong>希望將這個打包好的 Docker 應用，在生產環境的 Linux 伺服器上進行可靠、穩定、可維護的部署嗎？</strong><br />
+👉 將 <code>Docker Compose</code> 作為一個整體，用 <strong><code>systemd</code></strong> 來管理它。</p>
+</li>
 </ul>
-<hr />
-<h2 id="️-在-templates-中使用"><a class="markdownIt-Anchor" href="#️-在-templates-中使用"></a> 🖥️ 在 Templates 中使用</h2>
-<pre class="highlight"><code class="html"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">method</span>=<span class="hljs-string">&quot;post&quot;</span>&gt;</span>
-  <span class="hljs-comment">&#123;% csrf_token %&#125;</span>
-  <span class="hljs-comment">&#123;&#123; form.as_p &#125;&#125;</span>  <span class="hljs-comment">&lt;!-- 將表單欄位渲染為段落 --&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span>&gt;</span>提交<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
-</code></pre>
-<ul>
-<li><code>&#123;&#123; form.as_p &#125;&#125;</code>：快捷渲染</li>
-<li><code>csrf_token</code>：防止 CSRF 攻擊</li>
-</ul>
-<hr />
-<h2 id="modelform-的優勢"><a class="markdownIt-Anchor" href="#modelform-的優勢"></a> 🎯 ModelForm 的優勢</h2>
-<ul>
-<li><strong>自動生成表單欄位</strong>：無需手動一一定義。</li>
-<li><strong>自動資料驗證</strong>：根據模型欄位類型自動檢查輸入。</li>
-<li><strong>簡化新增與更新資料的邏輯</strong>：直接使用 <code>form.save()</code> 完成。</li>
-<li><strong>程式碼更簡潔、可維護性更高</strong>。</li>
-</ul>
+<p><code>systemd</code> 和 <code>Docker</code> 它們各自填補了現代化應用部署體系中不可或缺的一環。<code>systemd</code> 是穩固的地基，<code>Docker Compose</code> 是精美的建築。只有當地基穩固時，上面的建築才能屹立不倒。</p>
 
     </div>
 
@@ -639,22 +623,19 @@ form = InterviewForm(request.POST, instance=interview)
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/my-blog/tags/Python/" rel="tag"># Python</a>
-              <a href="/my-blog/tags/Django/" rel="tag"># Django</a>
+              <a href="/my-blog/tags/systemd/" rel="tag"># systemd</a>
+              <a href="/my-blog/tags/Docker/" rel="tag"># Docker</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/my-blog/2025/04/17/django%E7%9A%84_set%E7%94%A8%E6%B3%95/" rel="prev" title="Django &#96;_set&#96; 用法筆記（ForeignKey 反向關聯）">
-                  <i class="fa fa-angle-left"></i> Django `_set` 用法筆記（ForeignKey 反向關聯）
+                <a href="/my-blog/2025/08/03/systemd%20%E7%8F%BE%E4%BB%A3%20Linux%20%E9%96%8B%E7%99%BC%E8%80%85%E4%B8%8D%E5%8F%AF%E4%B8%8D%E7%9F%A5%E7%9A%84%E6%9C%8D%E5%8B%99%E7%AE%A1%E7%90%86%E5%88%A9%E5%99%A8/" rel="prev" title="解鎖 systemd：現代 Linux 開發者不可不知的服務管理利器">
+                  <i class="fa fa-angle-left"></i> 解鎖 systemd：現代 Linux 開發者不可不知的服務管理利器
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/my-blog/2025/04/20/%E4%BD%BF%E7%94%A8uv%E5%BB%BA%E7%AB%8BPython%E5%B0%88%E6%A1%88%E7%92%B0%E5%A2%83/" rel="next" title="使用 uv 建立 Python 專案環境">
-                  使用 uv 建立 Python 專案環境 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
