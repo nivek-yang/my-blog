@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="隨著應用程式的成功，資料量也跟著水漲船高，這本是件甜蜜的負擔。但很快地，會發現一張核心資料表（例如 orders 或 logs）變得異常肥大，查詢速度越來越慢，甚至連簡單的維護操作都變得舉步維艱。這時可能就需要祭出資料庫領域的「空間整理大師」——資料庫分割 (Database Partitioning)。   什麼是資料庫分割？為什麼需要它？ 想像一下，有一間巨大的圖書館，裡面所有的書都隨機擺放在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="資料庫分割 (Partitioning) 指南">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/08/05/%E8%B3%87%E6%96%99%E5%BA%AB%E5%88%86%E5%89%B2%20Partitioning%20%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="隨著應用程式的成功，資料量也跟著水漲船高，這本是件甜蜜的負擔。但很快地，會發現一張核心資料表（例如 orders 或 logs）變得異常肥大，查詢速度越來越慢，甚至連簡單的維護操作都變得舉步維艱。這時可能就需要祭出資料庫領域的「空間整理大師」——資料庫分割 (Database Partitioning)。   什麼是資料庫分割？為什麼需要它？ 想像一下，有一間巨大的圖書館，裡面所有的書都隨機擺放在">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-08-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-05T15:24:05.459Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Database">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/08/05/%E8%B3%87%E6%96%99%E5%BA%AB%E5%88%86%E5%89%B2%20Partitioning%20%E6%8C%87%E5%8D%97/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/08/05/%E8%B3%87%E6%96%99%E5%BA%AB%E5%88%86%E5%89%B2%20Partitioning%20%E6%8C%87%E5%8D%97/","path":"2025/08/05/資料庫分割 Partitioning 指南/","title":"資料庫分割 (Partitioning) 指南"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>資料庫分割 (Partitioning) 指南 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">50</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">40</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF%E8%B3%87%E6%96%99%E5%BA%AB%E5%88%86%E5%89%B2%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9C%80%E8%A6%81%E5%AE%83"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是資料庫分割？為什麼需要它？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E5%89%B2%E7%9A%84%E9%A1%9E%E5%9E%8B%E5%B8%B8%E8%A6%8B%E7%9A%84%E5%88%86%E5%89%B2%E7%AD%96%E7%95%A5"><span class="nav-number">2.</span> <span class="nav-text"> 分割的類型：常見的分割策略</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%AF%84%E5%9C%8D%E5%88%86%E5%89%B2-range-partitioning"><span class="nav-number">2.1.</span> <span class="nav-text"> 1. 範圍分割 (Range Partitioning)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%88%97%E8%A1%A8%E5%88%86%E5%89%B2-list-partitioning"><span class="nav-number">2.2.</span> <span class="nav-text"> 2. 列表分割 (List Partitioning)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E9%9B%9C%E6%B9%8A%E5%88%86%E5%89%B2-hash-partitioning"><span class="nav-number">2.3.</span> <span class="nav-text"> 3. 雜湊分割 (Hash Partitioning)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%87%89%E7%94%A8%E4%B8%80%E5%80%8B-sql-%E5%AF%A6%E6%88%B0%E7%AF%84%E4%BE%8B"><span class="nav-number">3.</span> <span class="nav-text"> 如何應用？一個 SQL 實戰範例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F-1%E5%BB%BA%E7%AB%8B%E4%B8%BB%E8%A1%A8-partitioned-table"><span class="nav-number">3.1.</span> <span class="nav-text"> 步驟 1：建立主表 (Partitioned Table)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F-2%E5%BB%BA%E7%AB%8B%E5%88%86%E5%89%B2%E5%8D%80-partitions"><span class="nav-number">3.2.</span> <span class="nav-text"> 步驟 2：建立分割區 (Partitions)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F-3%E6%8F%92%E5%85%A5%E8%88%87%E6%9F%A5%E8%A9%A2"><span class="nav-number">3.3.</span> <span class="nav-text"> 步驟 3：插入與查詢</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%84%AA%E7%BC%BA%E9%BB%9E%E5%A4%A7%E6%AF%94%E6%8B%BC%E4%BD%95%E6%99%82%E8%A9%B2%E7%94%A8%E5%93%AA%E7%A8%AE%E6%96%B9%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text"> 優缺點大比拼：何時該用哪種方法？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AB%96%E5%88%86%E5%89%B2%E6%98%AF%E4%B8%80%E6%8A%8A%E9%9B%99%E9%9D%A2%E5%88%83"><span class="nav-number">4.1.</span> <span class="nav-text"> 結論：分割是一把雙面刃</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/05/%E8%B3%87%E6%96%99%E5%BA%AB%E5%88%86%E5%89%B2%20Partitioning%20%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="資料庫分割 (Partitioning) 指南 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          資料庫分割 (Partitioning) 指南
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-08-05 00:00:00 / 修改時間：23:24:05" itemprop="dateCreated datePublished" datetime="2025-08-05T00:00:00+08:00">2025-08-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>隨著應用程式的成功，資料量也跟著水漲船高，這本是件甜蜜的負擔。但很快地，會發現一張核心資料表（例如 <code>orders</code> 或 <code>logs</code>）變得異常肥大，查詢速度越來越慢，甚至連簡單的維護操作都變得舉步維艱。這時可能就需要祭出資料庫領域的「空間整理大師」——<strong>資料庫分割 (Database Partitioning)</strong>。</p>
+<hr />
+<h1 id="什麼是資料庫分割為什麼需要它"><a class="markdownIt-Anchor" href="#什麼是資料庫分割為什麼需要它"></a> 什麼是資料庫分割？為什麼需要它？</h1>
+<p>想像一下，有一間巨大的圖書館，裡面所有的書都隨機擺放在同一個書架上。當要找一本書時，必須從頭到尾掃描整個書架，耗時又費力。</p>
+<p><strong>資料庫分割 (Partitioning)</strong>，就是把這個巨大的書架，按照某種規則（例如：按年份、按書籍類別）分成數個獨立的小書架。雖然從外面看，它仍然是「一個圖書館」，但當要找一本 2023 年出版的書時，你只需要去標示著「2023年」的小書架尋找即可，大大縮短了搜尋時間。</p>
+<p>在技術上，Partitioning 是指將一個龐大的資料表（或索引）在<strong>邏輯上仍然視為單一表格</strong>，但在<strong>物理上將其資料儲存到多個較小的、可獨立管理的片段（Partitions）中</strong>。</p>
+<p>採用資料庫分割主要有三大好處：</p>
+<ol>
+<li>
+<p><strong>查詢效能提升 (Query Performance)</strong>：當查詢條件包含分割鍵（Partition Key）時，資料庫優化器可以聰明地只掃描相關的分割區，這個過程稱為<strong>分割區裁剪 (Partition Pruning)</strong>。掃描 1000 萬筆資料，遠比掃描 10 億筆資料來得快。同時，更小的索引也能更快地被載入記憶體。</p>
+</li>
+<li>
+<p><strong>管理效率提升 (Manageability)</strong>：對於時間序列資料（如日誌、訂單記錄），管理變得異常輕鬆。需要封存或刪除三年前的舊資料？不再需要執行 <code>DELETE ... WHERE date &lt; '...'</code> 這種會產生大量 I/O 和交易日誌的昂貴操作，而是可以直接 <code>DROP</code> 或 <code>DETACH</code> 整個舊的分割區，操作幾乎在瞬間完成。</p>
+</li>
+<li>
+<p><strong>可用性提升 (Availability)</strong>：如果某個分割區因為硬體故障或索引損壞而出現問題，在某些情況下，其他分割區可能仍然可以正常存取，提升了整體的可用性。</p>
+</li>
+</ol>
+<h1 id="分割的類型常見的分割策略"><a class="markdownIt-Anchor" href="#分割的類型常見的分割策略"></a> 分割的類型：常見的分割策略</h1>
+<p>選擇哪種分割策略，取決於資料特性和查詢模式。以下是最常見的三種分割方法：</p>
+<h2 id="1-範圍分割-range-partitioning"><a class="markdownIt-Anchor" href="#1-範圍分割-range-partitioning"></a> 1. 範圍分割 (Range Partitioning)</h2>
+<p>這是最直觀也最常用的分割方式，它根據一個連續性的值（通常是數字或日期）來劃分資料。</p>
+<ul>
+<li><strong>應用場景</strong>：非常適合時間序列資料，如訂單記錄、日誌檔、交易資料等。</li>
+<li><strong>範例</strong>：將一張 <code>orders</code> 表格按照 <code>order_date</code> 每季一個分割區。
+<ul>
+<li><code>orders_q1</code> 分割區：儲存 1 月到 3 月的訂單。</li>
+<li><code>orders_q2</code> 分割區：儲存 4 月到 6 月的訂單。</li>
+<li>以此類推…</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-列表分割-list-partitioning"><a class="markdownIt-Anchor" href="#2-列表分割-list-partitioning"></a> 2. 列表分割 (List Partitioning)</h2>
+<p>列表分割是根據欄位中一組<strong>不連續的、離散的值</strong>來劃分資料。</p>
+<ul>
+<li><strong>應用場景</strong>：適合欄位值是可枚舉的類別資料，如地區、國家、部門、狀態碼等。</li>
+<li><strong>範例</strong>：將 <code>users</code> 表格按照所在地區 <code>region</code> 進行分割。
+<ul>
+<li><code>users_north</code> 分割區：儲存 <code>region IN ('Taipei', 'Hsinchu')</code> 的使用者。</li>
+<li><code>users_south</code> 分割區：儲存 <code>region IN ('Tainan', 'Kaohsiung')</code> 的使用者。</li>
+<li><code>users_others</code> 分割區：儲存其他地區的使用者。</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-雜湊分割-hash-partitioning"><a class="markdownIt-Anchor" href="#3-雜湊分割-hash-partitioning"></a> 3. 雜湊分割 (Hash Partitioning)</h2>
+<p>當資料沒有明顯的範圍或類別可供劃分時，雜湊分割是個好選擇。它會根據分割鍵的雜湊值，將資料均勻地分配到各個分割區。</p>
+<ul>
+<li><strong>應用場景</strong>：希望將資料均勻打散，避免資料熱點，適合透過唯一 ID 查詢的場景。</li>
+<li><strong>範例</strong>：將 <code>products</code> 表格按照 <code>product_id</code> 進行雜湊分割，以確保資料能平均分布在 4 個分割區中。資料庫會對 <code>product_id</code> 進行雜湊運算，再根據結果決定該筆資料應存入哪個分割區。</li>
+</ul>
+<blockquote>
+<p><strong>進階技巧</strong>：許多資料庫還支援<strong>複合分割 (Composite Partitioning)</strong>，例如先按 <code>order_date</code> 進行範圍分割，然後在每個月份的分割區內，再按 <code>customer_id</code> 進行雜湊分割，實現更精細的資料管理。</p>
+</blockquote>
+<h1 id="如何應用一個-sql-實戰範例"><a class="markdownIt-Anchor" href="#如何應用一個-sql-實戰範例"></a> 如何應用？一個 SQL 實戰範例</h1>
+<p>以 PostgreSQL 為例，展示如何建立一個按範圍分割的 <code>access_logs</code> 表。</p>
+<h2 id="步驟-1建立主表-partitioned-table"><a class="markdownIt-Anchor" href="#步驟-1建立主表-partitioned-table"></a> 步驟 1：建立主表 (Partitioned Table)</h2>
+<p>首先，建立一個「樣板」主表，並宣告它將以 <code>log_date</code> 進行範圍分割。</p>
+<pre class="highlight"><code class="sql"><span class="hljs-keyword">CREATE TABLE</span> access_logs (
+    log_id <span class="hljs-type">BIGINT</span> GENERATED ALWAYS <span class="hljs-keyword">AS</span> <span class="hljs-keyword">IDENTITY</span>,
+    ip_address <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">45</span>) <span class="hljs-keyword">NOT NULL</span>,
+    log_date <span class="hljs-type">DATE</span> <span class="hljs-keyword">NOT NULL</span>,
+    url TEXT <span class="hljs-keyword">NOT NULL</span>
+) <span class="hljs-keyword">PARTITION</span> <span class="hljs-keyword">BY</span> <span class="hljs-keyword">RANGE</span> (log_date);
+</code></pre>
+<p>此時，<code>access_logs</code> 表本身不能儲存任何資料，它只是一個邏輯上的容器。</p>
+<h2 id="步驟-2建立分割區-partitions"><a class="markdownIt-Anchor" href="#步驟-2建立分割區-partitions"></a> 步驟 2：建立分割區 (Partitions)</h2>
+<p>接下來，為不同的日期範圍建立實際儲存資料的子表（分割區）。</p>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 建立 2023 年 Q1 的分割區</span>
+<span class="hljs-keyword">CREATE TABLE</span> access_logs_2023_q1 
+<span class="hljs-keyword">PARTITION</span> <span class="hljs-keyword">OF</span> access_logs 
+<span class="hljs-keyword">FOR</span> <span class="hljs-keyword">VALUES</span> <span class="hljs-keyword">FROM</span> (<span class="hljs-string">&#x27;2023-01-01&#x27;</span>) <span class="hljs-keyword">TO</span> (<span class="hljs-string">&#x27;2023-04-01&#x27;</span>);
+
+<span class="hljs-comment">-- 建立 2023 年 Q2 的分割區</span>
+<span class="hljs-keyword">CREATE TABLE</span> access_logs_2023_q2 
+<span class="hljs-keyword">PARTITION</span> <span class="hljs-keyword">OF</span> access_logs
+<span class="hljs-keyword">FOR</span> <span class="hljs-keyword">VALUES</span> <span class="hljs-keyword">FROM</span> (<span class="hljs-string">&#x27;2023-04-01&#x27;</span>) <span class="hljs-keyword">TO</span> (<span class="hljs-string">&#x27;2023-07-01&#x27;</span>);
+</code></pre>
+<h2 id="步驟-3插入與查詢"><a class="markdownIt-Anchor" href="#步驟-3插入與查詢"></a> 步驟 3：插入與查詢</h2>
+<p>現在，可以像操作普通表格一樣對 <code>access_logs</code> 進行操作。資料庫會自動將資料路由到正確的分割區。</p>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 插入資料，這筆資料會自動進入 access_logs_2023_q1</span>
+<span class="hljs-keyword">INSERT INTO</span> access_logs (ip_address, log_date, url) 
+<span class="hljs-keyword">VALUES</span> (<span class="hljs-string">&#x27;192.168.1.100&#x27;</span>, <span class="hljs-string">&#x27;2023-02-15&#x27;</span>, <span class="hljs-string">&#x27;/api/products&#x27;</span>);
+</code></pre>
+<p>神奇之處在於查詢：</p>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 查詢特定日期的日誌</span>
+EXPLAIN <span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> access_logs <span class="hljs-keyword">WHERE</span> log_date <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;2023-02-15&#x27;</span>;
+</code></pre>
+<p>會在查詢計畫 (Query Plan) 中看到，資料庫只會去掃描 <code>access_logs_2023_q1</code> 這一個子表，完全忽略了其他分割區。這就是<strong>分割區裁剪</strong>的威力！</p>
+<h1 id="優缺點大比拼何時該用哪種方法"><a class="markdownIt-Anchor" href="#優缺點大比拼何時該用哪種方法"></a> 優缺點大比拼：何時該用哪種方法？</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">分割類型</th>
+<th style="text-align:left">主要應用場景</th>
+<th style="text-align:left">優點</th>
+<th style="text-align:left">缺點</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>範圍分割 (Range)</strong></td>
+<td style="text-align:left">時間序列資料（日誌、訂單）、連續性數值資料。</td>
+<td style="text-align:left">1. 非常適合基於時間範圍的查詢。<br>2. 封存/刪除舊資料極其高效（直接操作分割區）。</td>
+<td style="text-align:left">可能產生「熱點」分割區，例如所有新的寫入都集中在最新的分割區。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>列表分割 (List)</strong></td>
+<td style="text-align:left">類別資料（地區、部門、狀態碼），且類別數量有限。</td>
+<td style="text-align:left">1. 資料分佈符合業務邏輯，易於理解。<br>2. 針對特定類別的查詢非常快。</td>
+<td style="text-align:left">如果需要頻繁增減新的類別，維護成本較高（需手動新增分割區）。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>雜湊分割 (Hash)</strong></td>
+<td style="text-align:left">沒有自然的分割鍵、希望均勻分佈資料以避免熱點。</td>
+<td style="text-align:left">1. 資料分佈最均勻。<br>2. 非常適合負載均衡與平行處理。</td>
+<td style="text-align:left">1. 範圍查詢效能差（需掃描所有分割區）。<br>2. 缺乏業務邏輯上的直觀性。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="結論分割是一把雙面刃"><a class="markdownIt-Anchor" href="#結論分割是一把雙面刃"></a> 結論：分割是一把雙面刃</h2>
+<p>資料庫分割是一個強大的效能優化和資料管理工具，但它並非萬靈丹。錯誤的分割策略不僅沒有好處，反而會增加管理的複雜度。</p>
+<p>在決定採用分割之前，請務必問自己幾個問題：</p>
+<ul>
+<li><strong>痛點是什麼？</strong> 是查詢慢，還是資料管理困難？</li>
+<li><strong>主要查詢模式是什麼？</strong> 是按時間範圍查，還是按地區查？</li>
+<li><strong>資料增長模式是怎樣的？</strong></li>
+</ul>
+<p><strong>分割的精髓在於，讓資料物理儲存結構，與最頻繁的資料存取模式保持一致。</strong></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Database/" rel="tag"># Database</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/08/04/Systemd%20vs%20Docker%20%E6%98%AF%E6%95%B5%E6%98%AF%E5%8F%8B%20%E8%AA%B0%E4%BE%86%E7%AE%A1%E7%90%86%E8%AA%B0/" rel="prev" title="Systemd vs. Docker：是敵是友？誰來管理誰？">
+                  <i class="fa fa-angle-left"></i> Systemd vs. Docker：是敵是友？誰來管理誰？
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
