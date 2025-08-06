@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">50</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">51</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">40</span></a>
       <ul class="sub-menu">
   
@@ -176,7 +176,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Database/">
         Database
-        <span class="post-count">(7)</span>
+        <span class="post-count">(8)</span>
       </a>
     </li>
   
@@ -429,7 +429,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -454,6 +454,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/06/database/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/08/06/database/" class="post-title-link" itemprop="url">
+              解鎖資料庫效能：深入淺出垂直分割與水平分割 (Vertical vs. Horizontal Partitioning)
+            </a>
+            <a href="/my-blog/2025/08/06/database/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-08-06 00:00:00 / 修改時間：23:26:55" itemprop="dateCreated datePublished" datetime="2025-08-06T00:00:00+08:00">2025-08-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">當應用程式從一個小專案成長為擁有海量使用者和數據的巨獸時，最先感受到壓力的往往是資料庫。查詢變慢、寫入延遲、伺服器負載居高不下… 這些都是成長的甜蜜負荷，也是系統架構必須面對的挑戰。 這篇文章將介紹資料庫的：垂直分割 (Vertical Partitioning) 與 水平分割 (Horizontal Partitioning / Sharding)。 理解這兩種分割策略的核心思想。 透過簡單易懂的比喻，輕鬆區分它們。 分析優缺點與適用情境。 幫助在未來的技術選型中做出更明智的決策。 故事的起點：一張越來越臃腫的「使用者資料表」 想像一下，有一個 Users 資料表，隨著業務擴展，它的欄位變得越來越多： UserID Username PasswordHash Email LastLogin Bio ProfileImageURL CreateDate Country … (另外 50 個欄位) 當我們只想做一個簡單的登入驗證，查詢 Username 和 PasswordHash 時，資料庫可能需要從磁碟讀取包含 Bio (可能是長文本)、ProfileImageURL 等許多不相關欄位的整個資料列。當資料量巨大時，這種不必要的 I/O 操作會嚴重拖慢效能。 這時候，垂直分割 就該登場了。 垂直分割 (Vertical Partitioning)：依「欄位」切分 垂直分割的核心概念就像整理一個巨大的檔案櫃。與其把所有資料都塞在一個抽屜裡，不如依照資料的性質，把它們分門別類放到不同的抽屜。 簡單比喻： 將一本厚重的字典，拆分成《常用字字典》和《生僻字字典》。兩本字典包含的字（資料列）是一樣的，但內容（欄位）被分開了。 在資料庫中，將一個寬表 (Wide Table) 按照欄位 (Column) 拆分成多個窄表 (Narrow Table)。 實作範例 將 Users 表拆分為： Users_Auth (使用者認證表) - 存放頻繁存取的核心認證資訊。 UserID (PK) Username PasswordHash Email Users_Profile (使用者資料表) - 存放不常變動或查詢的個人資料。 UserID (PK/FK) Bio ProfileImageURL Country Users_Activity (使用者活動表) - 存放活動紀錄。 UserID (PK/FK) LastLogin CreateDate 現在，當使用者登入時，我們只需要查詢 Users_Auth 這個小而快的表。想看個人檔案時，再去查詢 Users_Profile。這樣就大大減少了單次查詢的 I/O 負載。 垂直分割的優點 提升查詢效能： 查詢只會讀取必要的欄位，減少 I/O。 優化快取： 熱點資料（如認證資訊）更容易被完整載入記憶體快取。 維護性佳： 更小的資料表在備份、索引重建等維護操作上更快。 垂直分割的缺點 需要 JOIN 操作： 如果需要同時獲取認證資訊和個人檔案，必須使用 JOIN 連接這兩個表，這會增加查詢的複雜度和效能開銷。 未解決單表行數過多的問題： 它只解決了「欄位過多」的問題。如果 Users_Auth 表有十億筆資料，它依然會非常慢。 應用層改動： 應用程式的程式碼需要修改，以適應新的資料表結構。 水平分割 (Horizontal Partitioning / Sharding)：依「資料列」切分 當應用程式使用者正式突破千萬、上億等級，單一伺服器無論如何優化，都無法承受如此龐大的資料列 (Row) 數量。這時，需要的是水平分割。 水平分割，更廣為人知的名字是 分片 (Sharding)。它的核心思想是將一個巨大的資料表，按照某個規則（分片鍵 - Shard Key），將資料列分散儲存到多個不同的資料庫或伺服器上。 簡單比喻： 將一本全國電話簿（A-Z），按照姓氏首字母，拆分成 26 本獨立的電話簿（A冊、B冊、C冊…）。每本電話簿的結構（欄位）完全一樣，但存放的內容（資料列）不同。 實作範例 選擇 UserID 作為 Shard Key。可以設定一個簡單的規則，例如： UserID 為奇數的資料，存放到 Shard 1 (DB1)。 UserID 為偶數的資料，存放到 Shard 2 (DB2)。 Shard 1 (DB1) - Users 表: UserID Username … 1 Alice … 3 Carol … Shard 2 (DB2) - Users 表: UserID Username … 2 Bob … 4 Dave … 這樣一來，原本集中在一台伺服器的讀寫壓力，就被有效地分散到了兩台伺服器上。理論上，可以無限增加伺服器數量來擴展系統的承載能力。 水平分割的優點 極高的擴展性： 能夠將讀寫負載分散到多台機器，解決單機效能瓶頸，實現理論上的無限擴展。 提升效能與併發能力： 每個分片都更小，索引更有效率，查詢和寫入更快。 提高可用性： 如果一個分片故障，只會影響到部分使用者，而不會導致整個系統癱瘓（需要良好的架構設計配合）。 水平分割的缺點 架構極其複雜： 這是最大的挑戰。如何選擇 Shard Key、如何處理跨分片查詢、如何應對資料擴容（Re-sharding）、如何保證事務一致性，每一步都充滿了挑戰。 跨分片查詢困難： 比如，想查詢 Username 為 David 的使用者，不知道他在哪個分片，可能需要查詢所有分片，效率極低。 資料傾斜 (Hot Spot)： 如果 Shard Key 選擇不當（例如按國家分，但 80% 的使用者都在同一個國家），會導致某個分片負載極高，失去了負載均衡的意義。 垂直分割 vs. 水平分割 特性 垂直分割 (Vertical Partitioning) 水平分割 (Horizontal Partitioning / Sharding) 分割基礎 欄位 (Column) 資料列 (Row) 主要目標 減少單次查詢的 I/O，處理「寬表」問題 分散讀寫壓力到多台伺服器，處理「海量資料列」問題 分割後結構 多個結構不同的表，通常在同一資料庫 多個結構相同的表（分片），通常分布在不同伺服器 主要挑戰 JOIN 的複雜度和效能開銷 整體架構的複雜性、跨分片查詢、資料均衡 適用情境 表欄位過多、部分欄位存取頻率差異大 資料量巨大、讀寫請求頻繁，單機無法承受 結論 垂直分割與水平分割並非互相排斥，它們是資料庫架構工具箱中針對不同問題的解決方案。 當發現資料表欄位過多，且不同欄位的存取模式差異巨大時，可以考慮垂直分割。它相對簡單，能快速見效。 當應用程式資料量（行數）和請求量達到了單機極限時，水平分割 (Sharding) 雖然複雜，卻是實現大規模擴展的必經之路。 在實際的複雜系統中，甚至可能同時使用這兩種策略。例如，先對使用者表進行水平分割，然後在每個分片內部，再對使用者資料進行垂直分割。 希望這篇文章能幫助你更清晰地理解這兩個重要的資料庫擴展概念。技術的選擇始終源於對業務需求的深刻理解。先分析瓶頸，再選擇最適合的策略。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/08/06/database/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1229,94 +1315,8 @@
 
 
 
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/25/Webhook%20%E5%AE%8C%E5%85%A8%E8%A7%A3%E6%9E%90%20%E7%8F%BE%E4%BB%A3%E7%B6%B2%E8%B7%AF%E6%87%89%E7%94%A8%E7%A8%8B%E5%BC%8F%E7%9A%84%E8%87%AA%E5%8B%95%E5%8C%96%E7%A5%9E%E7%B6%93%E4%B8%AD%E6%A8%9E/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/07/25/Webhook%20%E5%AE%8C%E5%85%A8%E8%A7%A3%E6%9E%90%20%E7%8F%BE%E4%BB%A3%E7%B6%B2%E8%B7%AF%E6%87%89%E7%94%A8%E7%A8%8B%E5%BC%8F%E7%9A%84%E8%87%AA%E5%8B%95%E5%8C%96%E7%A5%9E%E7%B6%93%E4%B8%AD%E6%A8%9E/" class="post-title-link" itemprop="url">
-              Webhook 完全解析：現代網路應用程式的自動化神經中樞
-            </a>
-            <a href="/my-blog/2025/07/25/Webhook%20%E5%AE%8C%E5%85%A8%E8%A7%A3%E6%9E%90%20%E7%8F%BE%E4%BB%A3%E7%B6%B2%E8%B7%AF%E6%87%89%E7%94%A8%E7%A8%8B%E5%BC%8F%E7%9A%84%E8%87%AA%E5%8B%95%E5%8C%96%E7%A5%9E%E7%B6%93%E4%B8%AD%E6%A8%9E/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-07-25 00:00:00 / 修改時間：23:45:26" itemprop="dateCreated datePublished" datetime="2025-07-25T00:00:00+08:00">2025-07-25</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">在現今快速迭代的網路世界中，應用程式之間的即時通訊與資料同步至關重要。想像一下，當在購物網站完成一筆訂單後，幾乎是瞬間就收到了銀行的扣款通知和商家的訂單確認 Email。或是當將程式碼推送到 GitHub 後，自動化測試和部署流程便立刻啟動。 這些看似神奇的即時反應，背後的核心功臣之一，就是我們今天的主角——Webhook。 這篇文章將帶你深入淺出地了解： Webhook 是什麼？ 一個簡單易懂的譬喻。 為什麼要用 Webhook？ 核心優勢在哪裡。 經典對決：Webhook vs. Polling，用序列圖（Sequence Diagram）了解差異。 常見應用場景：看看 Webhook 如何在真實世界中大展身手。 如何應用與保護：實作 Webhook 的關鍵步驟與安全考量。 Webhook 是什麼？ 給伺服器的「Push Notification」 標準 API 運作方式：應用程式（客戶端）主動去「詢問」另一個服務（伺服器）：「嗨，有新資料嗎？」這是一個「拉取」（Pull）的過程。 Webhook 運作方式：先告訴另一個服務：「嗨，當某件事發生時，請用這個網址通知我。」於是，當事件真的發生時，該服務會主動「推送」（Push）一個訊息到你指定的網址。 所以，很多人稱 Webhook 為「反向 API」（Reverse API）或「HTTP Push API」，Webhook 就是專屬於伺服器和應用程式的「推播通知」（Push Notification）。 就像手機 App 不會每秒都去問 Twitter：「有新動態嗎？」，而是由 Twitter 的伺服器在有新動態時，主動推播通知到你的手機。Webhook 就是在做完全一樣的事情，只是通訊的對象從使用者變成了應用程式。 為什麼要用 Webhook？核心優勢在哪？ 採用 Webhook 架構能帶來幾個顯而易見的好處： 即時性（Real-time）: 資料是事件驅動的，一旦事件發生，通知會立即發送。這對於需要快速反應的場景（如：支付成功、監控警報）至關重要。 高效率（Efficiency）: 相較於不斷輪詢（Polling）的作法，Webhook 大幅減少了不必要的網路請求。應用程式不必再浪費 CPU 和網路資源去做那些 99% 時間都得到「沒事發生」的回應。伺服器端也因此減輕了負擔。 自動化（Automation）: Webhook 是串連不同系統、實現自動化工作流的黏著劑。例如，將程式碼推送到 Git 倉儲後，自動觸發 CI/CD 流程；在 CRM 系統新增客戶後，自動將其 Email 加入電子報發送列表。 Webhook vs. Polling 為了更深刻地理解 Webhook 的價值，必須把它和最傳統的替代方案——輪詢（Polling）——放在一起比較。 輪詢 (Polling)：就像一個沒耐心的孩子在後座不停地問：「到了沒？到了沒？」。客戶端應用程式需要設定一個計時器，每隔一段時間（例如 5 秒）就向伺服器發送一次請求，詢問是否有新狀態。 Webhook：就像你上車前告訴司機：「快到目的地時叫我一聲。」然後就可以安心地在車上睡覺、滑手機，直到司機通知你。你的應用程式只需提供一個端點（Endpoint），靜靜等待伺服器在事件發生時主動通知。 用 Mermaid 序列圖來視覺化這個過程： Polling 的運作模式 sequenceDiagram participant Client as 客戶端應用 participant Server as 伺服器 loop 每隔 5 秒 Client-&gt;&gt;Server: 請問訂單 (ID: 123) 出貨了嗎？ Server--&gt;&gt;Client: 還沒喔。 end Note right of Server: ...時間經過，後台更新了狀態... Client-&gt;&gt;Server: 請問訂單 (ID: 123) 出貨了嗎？ Server--&gt;&gt;Client: 出了！這是物流編號：XYZ789 Webhook 的運作模式 sequenceDiagram participant Client as 你的應用 (接收方) participant Server as 外部服務 (發送方) Client-&gt;&gt;Server: 當訂單 (ID: 123) 出貨時，請通知我這個 URL。 Server--&gt;&gt;Client: 好的，已登記。 Note right of Server: ...時間經過，後台更新了狀態... Server-&gt;&gt;Client: (POST /webhook/order_shipped) 哈囉，訂單 123 已出貨，物流編號是 XYZ789。 Client--&gt;&gt;Server: (200 OK) 收到，感謝通知！ 差異一目了然： 特性 Webhook Polling 即時性 高 (事件發生時立即通知) 低 (有延遲，取決於輪詢頻率) 資源消耗 低 (僅在事件發生時請求) 高 (持續發送大量請求) 架構複雜度 前期需設定接收端點，但長期簡單 實作簡單，但隨規模擴大而變複雜 擴展性 優 (伺服器負擔小) 差 (客戶端越多，伺服器壓力越大) 什麼情境下使用 Webhook？常見應用場景 Webhook 幾乎無處不在，以下是一些典型的例子： 支付閘道：當使用者透過第三方支付完成付款後，支付平台會透過 Webhook 將付款成功或失敗的結果即時通知到電商系統，以便更新訂單狀態。 版本控制與 CI/CD：開發者將程式碼 push到 GitHub 或 GitLab 後，會觸發一個 Webhook，通知 Jenkins 或 CircleCI 伺服器開始進行自動化建置、測試和部署。 通訊與協作：Slack 或 Discord 的聊天機器人。當在特定頻道提到關鍵字時，觸發 Webhook，將訊息傳送給監控系統，實現即時警報。 內容管理系統 (CMS)：當文章在 Headless CMS (如 Contentful) 中被發布或更新時，觸發 Webhook 通知前端網站重新建置（Rebuild），以顯示最新內容。 SaaS 服務整合：使用 Zapier 或 N8N 這類自動化平台，你可以串連數千種支援 Webhook 的服務。例如，「當收到一封來自特定寄件者的 Gmail 時，透過 Webhook 在 Trello 新增一張卡片。」 如何應用與保護 Webhook？ 實作一個 Webhook 主要包含兩個部分：提供方（如 GitHub、Stripe）和接收方（你的應用程式）。我們主要關注的是如何在自己的應用程式中接收一個 Webhook。 步驟 1：建立一個公開的接收端點 (Endpoint) - Python/FastAPI 範例 需要在應用程式中建立一個可以從外部網路存取的 URL，它通常是一個能處理 HTTP POST 請求的 API 端點。 pip install &quot;fastapi[all]&quot; fastapi[all] 會一併安裝 ASGI 伺服器 uvicorn，方便我們運行程式。 接著，建立一個名為 main.py 的檔案，內容如下： # main.py from fastapi import FastAPI, Request, Response, status # 建立一個 FastAPI 應用實例 app = FastAPI() # 你的 Webhook 接收端點 # 使用 @app.post 裝飾器來指定這個函式處理 /webhook/github-event 的 POST 請求 @app.post(&quot;/webhook/github-event&quot;) async def github_webhook_receiver(request: Request): &quot;&quot;&quot; 接收來自 GitHub 的 Webhook 事件。 FastAPI 會自動處理傳入的請求。 &quot;&quot;&quot; # 使用 request.json() 來非同步地獲取請求的 JSON payload payload = await request.json() print(&quot;Received a GitHub webhook event:&quot;) # 為了方便除錯，將收到的 payload 印出來 print(payload) # --- 業務邏輯寫在這裡 --- # 例如： # 1. 驗證簽章 (極其重要，會在步驟 3 討論) # 2. 根據 payload[&#x27;X-GitHub-Event&#x27;] 的事件類型進行處理 # 3. 觸發 CI/CD 流程、更新資料庫或發送 Slack 通知等 # --------------------------- # 回應一個 200 OK 狀態碼，告訴 GitHub 已成功收到事件。 # 這一步非常重要，否則 GitHub 會認為發送失敗並重試。 return Response(content=&quot;Event received&quot;, status_code=status.HTTP_200_OK) @app.get(&quot;/&quot;) def read_root(): return &#123;&quot;Status&quot;: &quot;API is running&quot;&#125; 如何運行這個服務？ 在終端機中，切換到 main.py 所在的目錄，然後執行以下命令： uvicorn main:app --reload main: 指的是 main.py 檔案。 app: 指的是在 main.py 中建立的 FastAPI() 物件。 --reload: 這個參數會讓伺服器在程式碼變更後自動重啟，非常適合開發階段。 現在，FastAPI 應用程式就會在本地端運行（通常是 http://127.0.0.1:8000）。你需要使用 ngrok 這類的工具將這個本地端點暴露到公網上，才能從 GitHub 這類外部服務接收到 Webhook。 步驟 2：在提供方服務中註冊你的端點 需要登入到 GitHub、Stripe 或其他服務的後台，找到 Webhook 設定區塊，然後將你剛剛建立的 URL (https://your-domain.com/webhook/github-event) 填入，並選擇感興趣的事件（例如 push 事件）。 步驟 3：保護你的 Webhook 由於端點是公開的，任何人都可以向它發送請求。如果沒有保護措施，惡意行為者可能會偽造請求，對你的系統造成破壞。 最重要的安全機制是「簽章驗證」（Signature Verification）。 運作方式如下： 設定 Secret：在提供方服務（如 GitHub）設定 Webhook 時，你會提供一個「Secret Token」（一組隨機、複雜的字串），這個 Secret 只有你和提供方知道。 產生簽章：當提供方要發送 Webhook 時，它會用這個 Secret 和請求的內容（Payload）透過 HMAC 演算法產生一個簽章（Signature）。這個簽章通常會放在 HTTP 標頭（Header）中，例如 X-Hub-Signature-256。 驗證簽章：應用程式在收到請求後，用同樣的 Secret 和收到的 Payload，以完全相同的演算法重新計算一次簽章。 比對結果：如果計算結果和請求標頭中的簽章完全一致，就證明這個請求確實來自可信的提供方，且內容未被竄改。如果不一致，則應直接拒絕該請求 (回應 403 Forbidden)。 這一步至關重要，絕對不能省略，否則 Webhook 端點將成為一個巨大的安全漏洞。 Webhook vs. Server-Sent Events (SSE) 當談論伺服器主動「推送」資料時，除了 Webhook，另一個常被提及的技術是 Server-Sent Events (SSE)。雖然兩者都實現了伺服器到客戶端的單向通訊，但它們的目標、運作方式和應用場景截然不同。 把這兩者搞混，就像把「私人簡訊」和「電台廣播」當成一回事。 Webhook 就像是私人簡訊：一個伺服器（A）有特定事情要告訴另一個伺服器（B）。A 會直接「打電話」或「發簡訊」（發送 HTTP POST）給 B，這是一次性的、針對特定接收者的通訊。 SSE 就像是電台廣播：一個伺服器持續地向所有「收聽」它的客戶端（主要是瀏覽器） 廣播即時訊息。只要聽眾（瀏覽器）不關掉收音機（斷開連線），就能持續收到新消息。 讓我們深入細看其中的差異： 特性 Webhook Server-Sent Events (SSE) 通訊對象 伺服器 ↔ 伺服器 (Server-to-Server) 伺服器 → 客戶端 (Server-to-Client/Browser) 主要用途 後端系統整合、觸發自動化流程 向使用者介面 (UI) 推送即時更新 HTTP 方法 POST (攜帶 Payload) GET (客戶端發起請求，伺服器保持連線) 連線類型 短連線、無狀態 (每次事件都是一次新的請求) 長連線、有狀態 (單一連線保持開啟，用於傳輸多個事件) 客戶端實現 接收方是一個後端 API 端點 瀏覽器端的 EventSource JavaScript API 使用情境 支付成功通知、CI/CD 觸發、SaaS 整合 股票即時報價、社群動態更新、線上聊天室訊息、即時儀表板 是互斥還是相輔相成？答案：絕佳的盟友 從上面的比較可以看出，Webhook 和 SSE 幾乎不是競爭關係，而是完美的相輔相成關係。它們在一個複雜的系統中各司其職，共同打造流暢的即時體驗。 一個典型的協作場景：電商訂單即時追蹤 想像一下，使用者在電商網站上下單後，停留在「訂單狀態」頁面，希望能即時看到物流進度。 這個場景可以同時利用 SSE 和 Webhook： UI 即時更新 (SSE)：使用者的瀏覽器透過 SSE 與電商後端伺服器建立一個長連線。電商伺服器可以隨時透過這個連線，向使用者頁面推送「已接單」、「理貨中」等狀態更新。 後端系統整合 (Webhook)：當電商系統將訂單資訊傳送給倉儲物流系統後，任務就交給了後端。當倉庫完成打包，並將貨物交給快遞公司後，倉儲系統會透過 Webhook 將「已出貨」的狀態以及「物流單號」非同步地通知給你的電商後端伺服器。 串連兩者：電商後端在收到來自倉儲系統的 Webhook 後，更新資料庫中的訂單狀態，然後立即透過已經建立好的 SSE 連線，將「您的訂單已出貨！物流單號為 XXX」這個最終狀態推送到使用者的瀏覽器上。 用序列圖來視覺化這個完美的合作： sequenceDiagram participant Browser as 使用者瀏覽器 participant Ecommerce as 電商後端 participant Warehouse as 倉儲系統 Browser-&gt;&gt;Ecommerce: (SSE) 我要訂閱訂單 (ID: 123) 的即時狀態 activate Ecommerce Ecommerce--&gt;&gt;Browser: (SSE) 好的，連線已建立。目前狀態：理貨中 Note over Ecommerce, Warehouse: ...時間經過，倉庫完成出貨... Warehouse-&gt;&gt;Ecommerce: (Webhook POST) 訂單 123 已出貨，單號：XYZ789 activate Warehouse Ecommerce--&gt;&gt;Warehouse: (200 OK) 收到通知 deactivate Warehouse Note right of Ecommerce: 電商後端更新資料庫... Ecommerce--&gt;&gt;Browser: (SSE) 訂單 123 狀態更新：【已出貨】，單號：XYZ789 deactivate Ecommerce 選對工具，做對事 當需要讓伺服器之間非同步地對話時，請使用 Webhook。 當需要從伺服器向使用者瀏覽器即時推送更新時，請使用 Server-Sent Events (SSE)。（或是它的重量級親戚 WebSocket，如果需要雙向通訊的話） 理解了它們各自的戰場，就能在架構設計時做出最精準的選擇，讓系統的每個部分都高效運作。 總結 Webhook 是構成現代網路應用生態系的基礎設施。它憑藉其即時、高效、自動化的特性，成為了串連異質系統、打造流暢工作流的首選方案。 從輪詢的被動等待，到 Webhook 的主動通知，這不僅是技術架構的演進，更是思維模式的轉變: 從「不斷檢查」變為「信任通知」。當下一次規劃系統間的通訊時，問問自己：「需要的是不斷敲門，還是等待一通隨時會響起的電話？」</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/07/25/Webhook%20%E5%AE%8C%E5%85%A8%E8%A7%A3%E6%9E%90%20%E7%8F%BE%E4%BB%A3%E7%B6%B2%E8%B7%AF%E6%87%89%E7%94%A8%E7%A8%8B%E5%BC%8F%E7%9A%84%E8%87%AA%E5%8B%95%E5%8C%96%E7%A5%9E%E7%B6%93%E4%B8%AD%E6%A8%9E/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/my-blog/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/my-blog/page/5/">5</a><a class="extend next" rel="next" title="下一頁" aria-label="下一頁" href="/my-blog/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/my-blog/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/my-blog/page/6/">6</a><a class="extend next" rel="next" title="下一頁" aria-label="下一頁" href="/my-blog/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

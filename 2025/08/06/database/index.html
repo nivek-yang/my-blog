@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="當應用程式從一個小專案成長為擁有海量使用者和數據的巨獸時，最先感受到壓力的往往是資料庫。查詢變慢、寫入延遲、伺服器負載居高不下… 這些都是成長的甜蜜負荷，也是系統架構必須面對的挑戰。 這篇文章將介紹資料庫的：垂直分割 (Vertical Partitioning) 與 水平分割 (Horizontal Partitioning &#x2F; Sharding)。  理解這兩種分割策略的核心思想。 透過簡單易">
+<meta property="og:type" content="article">
+<meta property="og:title" content="解鎖資料庫效能：深入淺出垂直分割與水平分割 (Vertical vs. Horizontal Partitioning)">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/08/06/database/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="當應用程式從一個小專案成長為擁有海量使用者和數據的巨獸時，最先感受到壓力的往往是資料庫。查詢變慢、寫入延遲、伺服器負載居高不下… 這些都是成長的甜蜜負荷，也是系統架構必須面對的挑戰。 這篇文章將介紹資料庫的：垂直分割 (Vertical Partitioning) 與 水平分割 (Horizontal Partitioning &#x2F; Sharding)。  理解這兩種分割策略的核心思想。 透過簡單易">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-08-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-06T15:26:55.496Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Database">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/08/06/database/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/08/06/database/","path":"2025/08/06/database/","title":"解鎖資料庫效能：深入淺出垂直分割與水平分割 (Vertical vs. Horizontal Partitioning)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>解鎖資料庫效能：深入淺出垂直分割與水平分割 (Vertical vs. Horizontal Partitioning) | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">51</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">40</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(8)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%85%E4%BA%8B%E7%9A%84%E8%B5%B7%E9%BB%9E%E4%B8%80%E5%BC%B5%E8%B6%8A%E4%BE%86%E8%B6%8A%E8%87%83%E8%85%AB%E7%9A%84%E4%BD%BF%E7%94%A8%E8%80%85%E8%B3%87%E6%96%99%E8%A1%A8"><span class="nav-number">1.</span> <span class="nav-text"> 故事的起點：一張越來越臃腫的「使用者資料表」</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9E%82%E7%9B%B4%E5%88%86%E5%89%B2-vertical-partitioning%E4%BE%9D%E6%AC%84%E4%BD%8D%E5%88%87%E5%88%86"><span class="nav-number">2.</span> <span class="nav-text"> 垂直分割 (Vertical Partitioning)：依「欄位」切分</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%A6%E4%BD%9C%E7%AF%84%E4%BE%8B"><span class="nav-number">2.1.</span> <span class="nav-text"> 實作範例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9E%82%E7%9B%B4%E5%88%86%E5%89%B2%E7%9A%84%E5%84%AA%E9%BB%9E"><span class="nav-number">2.2.</span> <span class="nav-text"> 垂直分割的優點</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9E%82%E7%9B%B4%E5%88%86%E5%89%B2%E7%9A%84%E7%BC%BA%E9%BB%9E"><span class="nav-number">2.3.</span> <span class="nav-text"> 垂直分割的缺點</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B0%B4%E5%B9%B3%E5%88%86%E5%89%B2-horizontal-partitioning-sharding%E4%BE%9D%E8%B3%87%E6%96%99%E5%88%97%E5%88%87%E5%88%86"><span class="nav-number">3.</span> <span class="nav-text"> 水平分割 (Horizontal Partitioning &#x2F; Sharding)：依「資料列」切分</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%A6%E4%BD%9C%E7%AF%84%E4%BE%8B-2"><span class="nav-number">3.1.</span> <span class="nav-text"> 實作範例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B0%B4%E5%B9%B3%E5%88%86%E5%89%B2%E7%9A%84%E5%84%AA%E9%BB%9E"><span class="nav-number">3.2.</span> <span class="nav-text"> 水平分割的優點</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B0%B4%E5%B9%B3%E5%88%86%E5%89%B2%E7%9A%84%E7%BC%BA%E9%BB%9E"><span class="nav-number">3.3.</span> <span class="nav-text"> 水平分割的缺點</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9E%82%E7%9B%B4%E5%88%86%E5%89%B2-vs-%E6%B0%B4%E5%B9%B3%E5%88%86%E5%89%B2"><span class="nav-number">4.</span> <span class="nav-text"> 垂直分割 vs. 水平分割</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/06/database/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="解鎖資料庫效能：深入淺出垂直分割與水平分割 (Vertical vs. Horizontal Partitioning) | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          解鎖資料庫效能：深入淺出垂直分割與水平分割 (Vertical vs. Horizontal Partitioning)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-08-06 00:00:00 / 修改時間：23:26:55" itemprop="dateCreated datePublished" datetime="2025-08-06T00:00:00+08:00">2025-08-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>當應用程式從一個小專案成長為擁有海量使用者和數據的巨獸時，最先感受到壓力的往往是資料庫。查詢變慢、寫入延遲、伺服器負載居高不下… 這些都是成長的甜蜜負荷，也是系統架構必須面對的挑戰。</p>
+<p>這篇文章將介紹資料庫的：<strong>垂直分割 (Vertical Partitioning)</strong> 與 <strong>水平分割 (Horizontal Partitioning / Sharding)</strong>。</p>
+<ul>
+<li>理解這兩種分割策略的核心思想。</li>
+<li>透過簡單易懂的比喻，輕鬆區分它們。</li>
+<li>分析優缺點與適用情境。</li>
+<li>幫助在未來的技術選型中做出更明智的決策。</li>
+</ul>
+<h1 id="故事的起點一張越來越臃腫的使用者資料表"><a class="markdownIt-Anchor" href="#故事的起點一張越來越臃腫的使用者資料表"></a> 故事的起點：一張越來越臃腫的「使用者資料表」</h1>
+<p>想像一下，有一個 <code>Users</code> 資料表，隨著業務擴展，它的欄位變得越來越多：</p>
+<table>
+<thead>
+<tr>
+<th>UserID</th>
+<th>Username</th>
+<th>PasswordHash</th>
+<th>Email</th>
+<th>LastLogin</th>
+<th>Bio</th>
+<th>ProfileImageURL</th>
+<th>CreateDate</th>
+<th>Country</th>
+<th>… (另外 50 個欄位)</th>
+</tr>
+</thead>
+</table>
+<p>當我們只想做一個簡單的登入驗證，查詢 <code>Username</code> 和 <code>PasswordHash</code> 時，資料庫可能需要從磁碟讀取包含 <code>Bio</code> (可能是長文本)、<code>ProfileImageURL</code> 等許多不相關欄位的整個資料列。當資料量巨大時，這種不必要的 I/O 操作會嚴重拖慢效能。</p>
+<p>這時候，<strong>垂直分割</strong> 就該登場了。</p>
+<h1 id="垂直分割-vertical-partitioning依欄位切分"><a class="markdownIt-Anchor" href="#垂直分割-vertical-partitioning依欄位切分"></a> 垂直分割 (Vertical Partitioning)：依「欄位」切分</h1>
+<p>垂直分割的核心概念就像整理一個巨大的檔案櫃。與其把所有資料都塞在一個抽屜裡，不如依照資料的性質，把它們分門別類放到不同的抽屜。</p>
+<blockquote>
+<p><strong>簡單比喻：</strong> 將一本厚重的字典，拆分成《常用字字典》和《生僻字字典》。兩本字典包含的字（資料列）是一樣的，但內容（欄位）被分開了。</p>
+</blockquote>
+<p>在資料庫中，將一個<strong>寬表 (Wide Table)</strong> 按照<strong>欄位 (Column)</strong> 拆分成多個<strong>窄表 (Narrow Table)</strong>。</p>
+<h2 id="實作範例"><a class="markdownIt-Anchor" href="#實作範例"></a> 實作範例</h2>
+<p>將 <code>Users</code> 表拆分為：</p>
+<ol>
+<li>
+<p><strong><code>Users_Auth</code> (使用者認證表)</strong> - 存放頻繁存取的核心認證資訊。</p>
+<table>
+<thead>
+<tr>
+<th>UserID (PK)</th>
+<th>Username</th>
+<th>PasswordHash</th>
+<th>Email</th>
+</tr>
+</thead>
+</table>
+</li>
+<li>
+<p><strong><code>Users_Profile</code> (使用者資料表)</strong> - 存放不常變動或查詢的個人資料。</p>
+<table>
+<thead>
+<tr>
+<th>UserID (PK/FK)</th>
+<th>Bio</th>
+<th>ProfileImageURL</th>
+<th>Country</th>
+</tr>
+</thead>
+</table>
+</li>
+<li>
+<p><strong><code>Users_Activity</code> (使用者活動表)</strong> - 存放活動紀錄。</p>
+<table>
+<thead>
+<tr>
+<th>UserID (PK/FK)</th>
+<th>LastLogin</th>
+<th>CreateDate</th>
+</tr>
+</thead>
+</table>
+</li>
+</ol>
+<p>現在，當使用者登入時，我們只需要查詢 <code>Users_Auth</code> 這個小而快的表。想看個人檔案時，再去查詢 <code>Users_Profile</code>。這樣就大大減少了單次查詢的 I/O 負載。</p>
+<h2 id="垂直分割的優點"><a class="markdownIt-Anchor" href="#垂直分割的優點"></a> 垂直分割的優點</h2>
+<ul>
+<li><strong>提升查詢效能：</strong> 查詢只會讀取必要的欄位，減少 I/O。</li>
+<li><strong>優化快取：</strong> 熱點資料（如認證資訊）更容易被完整載入記憶體快取。</li>
+<li><strong>維護性佳：</strong> 更小的資料表在備份、索引重建等維護操作上更快。</li>
+</ul>
+<h2 id="垂直分割的缺點"><a class="markdownIt-Anchor" href="#垂直分割的缺點"></a> 垂直分割的缺點</h2>
+<ul>
+<li><strong>需要 JOIN 操作：</strong> 如果需要同時獲取認證資訊和個人檔案，必須使用 <code>JOIN</code> 連接這兩個表，這會增加查詢的複雜度和效能開銷。</li>
+<li><strong>未解決單表行數過多的問題：</strong> 它只解決了「欄位過多」的問題。如果 <code>Users_Auth</code> 表有十億筆資料，它依然會非常慢。</li>
+<li><strong>應用層改動：</strong> 應用程式的程式碼需要修改，以適應新的資料表結構。</li>
+</ul>
+<hr />
+<h1 id="水平分割-horizontal-partitioning-sharding依資料列切分"><a class="markdownIt-Anchor" href="#水平分割-horizontal-partitioning-sharding依資料列切分"></a> 水平分割 (Horizontal Partitioning / Sharding)：依「資料列」切分</h1>
+<p>當應用程式使用者正式突破千萬、上億等級，單一伺服器無論如何優化，都無法承受如此龐大的<strong>資料列 (Row)</strong> 數量。這時，需要的是<strong>水平分割</strong>。</p>
+<p>水平分割，更廣為人知的名字是 <strong>分片 (Sharding)</strong>。它的核心思想是將一個巨大的資料表，按照某個規則（<strong>分片鍵 - Shard Key</strong>），將<strong>資料列</strong>分散儲存到多個不同的資料庫或伺服器上。</p>
+<blockquote>
+<p><strong>簡單比喻：</strong> 將一本全國電話簿（A-Z），按照姓氏首字母，拆分成 26 本獨立的電話簿（A冊、B冊、C冊…）。每本電話簿的結構（欄位）完全一樣，但存放的內容（資料列）不同。</p>
+</blockquote>
+<h2 id="實作範例-2"><a class="markdownIt-Anchor" href="#實作範例-2"></a> 實作範例</h2>
+<p>選擇 <code>UserID</code> 作為 <strong>Shard Key</strong>。可以設定一個簡單的規則，例如：</p>
+<ul>
+<li><code>UserID</code> 為奇數的資料，存放到 <strong>Shard 1 (DB1)</strong>。</li>
+<li><code>UserID</code> 為偶數的資料，存放到 <strong>Shard 2 (DB2)</strong>。</li>
+</ul>
+<p><strong>Shard 1 (DB1) - <code>Users</code> 表:</strong></p>
+<table>
+<thead>
+<tr>
+<th>UserID</th>
+<th>Username</th>
+<th>…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Alice</td>
+<td>…</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Carol</td>
+<td>…</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Shard 2 (DB2) - <code>Users</code> 表:</strong></p>
+<table>
+<thead>
+<tr>
+<th>UserID</th>
+<th>Username</th>
+<th>…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>Bob</td>
+<td>…</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Dave</td>
+<td>…</td>
+</tr>
+</tbody>
+</table>
+<p>這樣一來，原本集中在一台伺服器的讀寫壓力，就被有效地分散到了兩台伺服器上。理論上，可以無限增加伺服器數量來擴展系統的承載能力。</p>
+<h2 id="水平分割的優點"><a class="markdownIt-Anchor" href="#水平分割的優點"></a> 水平分割的優點</h2>
+<ul>
+<li><strong>極高的擴展性：</strong> 能夠將讀寫負載分散到多台機器，解決單機效能瓶頸，實現理論上的無限擴展。</li>
+<li><strong>提升效能與併發能力：</strong> 每個分片都更小，索引更有效率，查詢和寫入更快。</li>
+<li><strong>提高可用性：</strong> 如果一個分片故障，只會影響到部分使用者，而不會導致整個系統癱瘓（需要良好的架構設計配合）。</li>
+</ul>
+<h2 id="水平分割的缺點"><a class="markdownIt-Anchor" href="#水平分割的缺點"></a> 水平分割的缺點</h2>
+<ul>
+<li><strong>架構極其複雜：</strong> 這是最大的挑戰。如何選擇 Shard Key、如何處理跨分片查詢、如何應對資料擴容（Re-sharding）、如何保證事務一致性，每一步都充滿了挑戰。</li>
+<li><strong>跨分片查詢困難：</strong> 比如，想查詢 <code>Username</code> 為 <code>David</code> 的使用者，不知道他在哪個分片，可能需要查詢所有分片，效率極低。</li>
+<li><strong>資料傾斜 (Hot Spot)：</strong> 如果 Shard Key 選擇不當（例如按國家分，但 80% 的使用者都在同一個國家），會導致某個分片負載極高，失去了負載均衡的意義。</li>
+</ul>
+<h1 id="垂直分割-vs-水平分割"><a class="markdownIt-Anchor" href="#垂直分割-vs-水平分割"></a> 垂直分割 vs. 水平分割</h1>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>垂直分割 (Vertical Partitioning)</th>
+<th>水平分割 (Horizontal Partitioning / Sharding)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>分割基礎</strong></td>
+<td>欄位 (Column)</td>
+<td>資料列 (Row)</td>
+</tr>
+<tr>
+<td><strong>主要目標</strong></td>
+<td>減少單次查詢的 I/O，處理「寬表」問題</td>
+<td>分散讀寫壓力到多台伺服器，處理「海量資料列」問題</td>
+</tr>
+<tr>
+<td><strong>分割後結構</strong></td>
+<td>多個結構不同的表，通常在同一資料庫</td>
+<td>多個結構相同的表（分片），通常分布在不同伺服器</td>
+</tr>
+<tr>
+<td><strong>主要挑戰</strong></td>
+<td><code>JOIN</code> 的複雜度和效能開銷</td>
+<td>整體架構的複雜性、跨分片查詢、資料均衡</td>
+</tr>
+<tr>
+<td><strong>適用情境</strong></td>
+<td>表欄位過多、部分欄位存取頻率差異大</td>
+<td>資料量巨大、讀寫請求頻繁，單機無法承受</td>
+</tr>
+</tbody>
+</table>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>垂直分割與水平分割並非互相排斥，它們是資料庫架構工具箱中針對不同問題的解決方案。</p>
+<ul>
+<li>當發現資料表欄位過多，且不同欄位的存取模式差異巨大時，可以考慮<strong>垂直分割</strong>。它相對簡單，能快速見效。</li>
+<li>當應用程式資料量（行數）和請求量達到了單機極限時，<strong>水平分割 (Sharding)</strong> 雖然複雜，卻是實現大規模擴展的必經之路。</li>
+</ul>
+<p>在實際的複雜系統中，甚至可能<strong>同時使用</strong>這兩種策略。例如，先對使用者表進行水平分割，然後在每個分片內部，再對使用者資料進行垂直分割。</p>
+<p>希望這篇文章能幫助你更清晰地理解這兩個重要的資料庫擴展概念。技術的選擇始終源於對業務需求的深刻理解。先分析瓶頸，再選擇最適合的策略。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Database/" rel="tag"># Database</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/08/05/%E8%B3%87%E6%96%99%E5%BA%AB%E5%88%86%E5%89%B2%20Partitioning%20%E6%8C%87%E5%8D%97/" rel="prev" title="資料庫分割 (Partitioning) 指南">
+                  <i class="fa fa-angle-left"></i> 資料庫分割 (Partitioning) 指南
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
