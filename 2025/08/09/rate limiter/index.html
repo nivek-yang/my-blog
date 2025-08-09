@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="在上一篇文章 《深入淺出 Rate Limiter：打造穩固、公平且安全的系統防線》 中，探討了 Rate Limiter 的核心概念與多種經典演算法。理論知識為我們打下了堅固的基礎，但真正的挑戰在於如何將這些理論轉化為線上環境中穩定、高效的程式碼與架構。 現在，讓我們更進一步，深入到工程師最關心的部分：「在實務上，Rate Limiter 究竟是如何達成與部署的？」 這篇文章將帶你了解：  核心">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rate Limiter 從理論到實戰：三大主流實作方案詳解">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/08/09/rate%20limiter/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="在上一篇文章 《深入淺出 Rate Limiter：打造穩固、公平且安全的系統防線》 中，探討了 Rate Limiter 的核心概念與多種經典演算法。理論知識為我們打下了堅固的基礎，但真正的挑戰在於如何將這些理論轉化為線上環境中穩定、高效的程式碼與架構。 現在，讓我們更進一步，深入到工程師最關心的部分：「在實務上，Rate Limiter 究竟是如何達成與部署的？」 這篇文章將帶你了解：  核心">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-08-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-09T15:32:15.233Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="System Design">
+<meta property="article:tag" content="Rate Limiter">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/08/09/rate%20limiter/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/08/09/rate%20limiter/","path":"2025/08/09/rate limiter/","title":"Rate Limiter 從理論到實戰：三大主流實作方案詳解"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Rate Limiter 從理論到實戰：三大主流實作方案詳解 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">54</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">43</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%9F%BA%E7%9F%B3%E7%82%BA%E4%BB%80%E9%BA%BC%E6%98%AF-redis"><span class="nav-number">1.</span> <span class="nav-text"> 核心基石：為什麼是 Redis？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%A6%E4%BD%9C%E6%96%B9%E6%A1%88%E4%B8%80%E6%87%89%E7%94%A8%E7%A8%8B%E5%BC%8F%E5%B1%A4%E7%B4%9A-application-level"><span class="nav-number">2.</span> <span class="nav-text"> 實作方案一：應用程式層級 (Application-Level)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%A6%E4%BD%9C%E6%96%B9%E6%A1%88%E4%BA%8Capi-%E9%96%98%E9%81%93-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B1%A4%E7%B4%9A-api-gateway-proxy-level"><span class="nav-number">3.</span> <span class="nav-text"> 實作方案二：API 閘道 &#x2F; 反向代理層級 (API Gateway &#x2F; Proxy Level)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%A6%E4%BD%9C%E6%96%B9%E6%A1%88%E4%B8%89%E9%9B%B2%E7%AB%AF%E5%B9%B3%E5%8F%B0%E8%88%87-cdn-%E6%9C%8D%E5%8B%99-cloud-cdn-level"><span class="nav-number">4.</span> <span class="nav-text"> 實作方案三：雲端平台與 CDN 服務 (Cloud &amp; CDN Level)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AF%A6%E8%B8%90%E5%A4%9A%E5%B1%A4%E6%AC%A1%E9%98%B2%E7%A6%A6%E7%AD%96%E7%95%A5-layered-defense"><span class="nav-number">5.</span> <span class="nav-text"> 最佳實踐：多層次防禦策略 (Layered Defense)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">6.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/09/rate%20limiter/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Rate Limiter 從理論到實戰：三大主流實作方案詳解 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Rate Limiter 從理論到實戰：三大主流實作方案詳解
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-08-09 00:00:00 / 修改時間：23:32:15" itemprop="dateCreated datePublished" datetime="2025-08-09T00:00:00+08:00">2025-08-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在上一篇文章 《深入淺出 Rate Limiter：打造穩固、公平且安全的系統防線》 中，探討了 Rate Limiter 的核心概念與多種經典演算法。理論知識為我們打下了堅固的基礎，但真正的挑戰在於如何將這些理論轉化為線上環境中穩定、高效的程式碼與架構。</p>
+<p>現在，讓我們更進一步，深入到工程師最關心的部分：<strong>「在實務上，Rate Limiter 究竟是如何達成與部署的？」</strong></p>
+<p>這篇文章將帶你了解：</p>
+<ul>
+<li><strong>核心基石</strong>：為什麼 Redis 是分散式限流的完美夥伴？</li>
+<li><strong>三大實作層級</strong>：從應用程式內、API 閘道到雲端邊緣，該如何選擇？</li>
+<li><strong>程式碼範例</strong>：如何用 Python + Redis 快速實現一個有效的限流器？</li>
+<li><strong>最佳實踐</strong>：如何打造多層次的防禦策略？</li>
+</ul>
+<h1 id="核心基石為什麼是-redis"><a class="markdownIt-Anchor" href="#核心基石為什麼是-redis"></a> 核心基石：為什麼是 Redis？</h1>
+<p>無論採用哪種演算法，在分散式系統中實現 Rate Limiter 都繞不開一個核心問題：<strong>如何讓多台伺服器共享同一個計數器狀態？</strong></p>
+<p>答案幾乎是唯一的：<strong>使用一個集中式的、高效能的記憶體資料庫</strong>。而在這個領域，<strong>Redis</strong> 脫穎而出，成為業界的標準選擇。</p>
+<p>Redis 之所以如此適合這個場景，得益於它以下幾個關鍵特性：</p>
+<ol>
+<li><strong>極致的效能</strong>：基於記憶體的操作，讀寫速度極快 (R/W &gt; 100k ops/sec)，不會成為限流邏輯的效能瓶頸。</li>
+<li><strong>原子操作 (Atomic Operations)</strong>：像 <code>INCR</code>、<code>SADD</code> 這樣的命令是原子性的。這意味著即使在極高併發下，也不用擔心「讀取-修改-寫入」的競態條件（Race Condition）問題。</li>
+<li><strong>豐富的資料結構</strong>：
+<ul>
+<li><code>STRING</code> / <code>HASH</code>: 非常適合實現各類計數器。</li>
+<li><code>ZSET</code> (Sorted Set): 適合實現「滑動視窗日誌」，可以根據時間戳分數來快速移除過期的記錄。</li>
+</ul>
+</li>
+<li><strong>內建的 TTL (Time-To-Live)</strong>：可以使用 <code>EXPIRE</code> 命令為 Key 設定自動過期時間，完美對應「時間視窗」的概念，無需手動清理過期資料。</li>
+<li><strong>Lua 腳本支援</strong>：允許將多個命令組合在一個腳本中，並以原子方式在伺服器端執行。這對於實現複雜的限流邏輯（如令牌桶、滑動視窗）至關重要，可以避免多次網路來回的延遲。</li>
+</ol>
+<h1 id="實作方案一應用程式層級-application-level"><a class="markdownIt-Anchor" href="#實作方案一應用程式層級-application-level"></a> 實作方案一：應用程式層級 (Application-Level)</h1>
+<p>這是最直接、最靈活的實作方式。限流邏輯作為一個模組、中介軟體 (Middleware) 或裝飾器 (Decorator) 直接嵌入在應用程式程式碼中。</p>
+<ul>
+<li>
+<p><strong>運作方式</strong>：</p>
+<ol>
+<li>請求到達應用程式。</li>
+<li>中介軟體或裝飾器攔截請求，取得識別符（如 IP 位址、用戶 ID）。</li>
+<li>程式碼連接到 Redis，執行限流演算法邏輯（例如，對 <code>user:123:api_count</code> 這個 Key 執行 <code>INCR</code>）。</li>
+<li>如果請求被允許，則繼續執行業務邏輯；否則，直接返回 <code>429 Too Many Requests</code> 錯誤。</li>
+</ol>
+</li>
+<li>
+<p><strong>程式碼範例 (Python + Flask + Redis)</strong>：<br />
+這是一個使用「固定視窗計數器」演算法的簡單範例。</p>
+<pre class="highlight"><code class="python"><span class="hljs-keyword">import</span> redis
+<span class="hljs-keyword">from</span> flask <span class="hljs-keyword">import</span> Flask, request, jsonify
+<span class="hljs-keyword">from</span> functools <span class="hljs-keyword">import</span> wraps
+
+app = Flask(__name__)
+<span class="hljs-comment"># 假設 Redis 運行在本地</span>
+redis_client = redis.Redis(host=<span class="hljs-string">&#x27;localhost&#x27;</span>, port=<span class="hljs-number">6379</span>, decode_responses=<span class="hljs-literal">True</span>)
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">rate_limit</span>(<span class="hljs-params">limit: <span class="hljs-built_in">int</span>, per: <span class="hljs-built_in">int</span>, scope_func</span>):
+    <span class="hljs-string">&quot;&quot;&quot;
+    一個簡單的速率限制裝飾器
+    :param limit: 請求次數限制
+    :param per: 時間窗口（秒）
+    :param scope_func: 用於生成唯一識別符的函數 (e.g., 取得 IP)
+    &quot;&quot;&quot;</span>
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">decorator</span>(<span class="hljs-params">f</span>):
+<span class="hljs-meta">        @wraps(<span class="hljs-params">f</span>)</span>
+        <span class="hljs-keyword">def</span> <span class="hljs-title function_">decorated_function</span>(<span class="hljs-params">*args, **kwargs</span>):
+            key = <span class="hljs-string">f&quot;rate_limit:<span class="hljs-subst">&#123;scope_func(request)&#125;</span>:<span class="hljs-subst">&#123;request.path&#125;</span>&quot;</span>
+          
+            <span class="hljs-comment"># 使用 Redis 的 Pipeline 確保原子性</span>
+            p = redis_client.pipeline()
+            p.incr(key, <span class="hljs-number">1</span>)
+            p.expire(key, per)
+            count, _ = p.execute()
+
+            <span class="hljs-keyword">if</span> count &gt; limit:
+                <span class="hljs-keyword">return</span> jsonify(&#123;<span class="hljs-string">&quot;error&quot;</span>: <span class="hljs-string">&quot;Too Many Requests&quot;</span>&#125;), <span class="hljs-number">429</span>
+          
+            <span class="hljs-keyword">return</span> f(*args, **kwargs)
+        <span class="hljs-keyword">return</span> decorated_function
+    <span class="hljs-keyword">return</span> decorator
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">get_remote_address</span>(<span class="hljs-params">req</span>):
+    <span class="hljs-keyword">return</span> req.remote_addr
+
+<span class="hljs-meta">@app.route(<span class="hljs-params"><span class="hljs-string">&#x27;/api/resource&#x27;</span></span>)</span>
+<span class="hljs-meta">@rate_limit(<span class="hljs-params">limit=<span class="hljs-number">5</span>, per=<span class="hljs-number">60</span>, scope_func=get_remote_address</span>) </span><span class="hljs-comment"># 每 60 秒限制 5 次請求</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">get_resource</span>():
+    <span class="hljs-keyword">return</span> jsonify(&#123;<span class="hljs-string">&quot;data&quot;</span>: <span class="hljs-string">&quot;This is a protected resource.&quot;</span>&#125;)
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:
+    app.run()
+</code></pre>
+</li>
+<li>
+<p><strong>優點</strong>：靈活性最高，可以針對特定路由、特定業務邏輯做非常精細的控制。</p>
+</li>
+<li>
+<p><strong>缺點</strong>：</p>
+<ul>
+<li><strong>重複工作</strong>：每個需要限流的服務都需要各自實現或引入相關程式庫。</li>
+<li><strong>資源消耗</strong>：惡意請求依然會穿透到應用程式層，消耗伺服器的 CPU 和記憶體資源。</li>
+</ul>
+</li>
+<li>
+<p><strong>現成函式庫</strong>：實務上，很少需要從頭手寫。各大語言生態都有成熟的函式庫，例如：<code>flask-limiter</code> (Python), <code>express-rate-limit</code> (Node.js), <code>resilience4j</code> (Java)。</p>
+</li>
+</ul>
+<h1 id="實作方案二api-閘道-反向代理層級-api-gateway-proxy-level"><a class="markdownIt-Anchor" href="#實作方案二api-閘道-反向代理層級-api-gateway-proxy-level"></a> 實作方案二：API 閘道 / 反向代理層級 (API Gateway / Proxy Level)</h1>
+<p>這是一種更通用、更高效的做法。將限流邏輯從應用程式中抽離出來，放到更前端的 API 閘道或反向代理伺服器上。</p>
+<ul>
+<li>
+<p><strong>運作方式</strong>：請求首先到達 API 閘道（如 Nginx, Kong, Traefik）。閘道會根據預設規則進行速率限制檢查。只有通過檢查的請求，才會被轉發到後端的應用程式。</p>
+</li>
+<li>
+<p><strong>代表工具</strong>：</p>
+<ul>
+<li>
+<p><strong>Nginx</strong>：透過內建的 <code>limit_req_module</code> 模組，可以輕鬆實現基於 IP 的速率限制（預設使用漏桶演算法）。</p>
+<pre class="highlight"><code class="nginx"><span class="hljs-comment"># 定義一個名為 mylimit 的限流區域</span>
+<span class="hljs-comment"># key 是客戶端 IP，zone 分配 10m 記憶體，rate 是每秒 1 個請求</span>
+<span class="hljs-attribute">limit_req_zone</span> <span class="hljs-variable">$binary_remote_addr</span> zone=mylimit:<span class="hljs-number">10m</span> rate=1r/s;
+
+<span class="hljs-section">server</span> &#123;
+    <span class="hljs-section">location</span> /api/ &#123;
+        <span class="hljs-comment"># 在此 location 套用 mylimit 規則</span>
+        <span class="hljs-attribute">limit_req</span> zone=mylimit burst=<span class="hljs-number">5</span> nodelay; 
+
+        <span class="hljs-attribute">proxy_pass</span> http://my_backend_app;
+    &#125;
+&#125;
+</code></pre>
+</li>
+<li>
+<p><strong>Kong / Traefik / Envoy</strong>：這些現代雲原生的 API 閘道通常都提供強大的 Rate Limiting 插件。它們可以與 Redis 整合，從而實現跨多個閘道實例的分散式限流，功能遠比 Nginx 的單機限流強大。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>優點</strong>：</p>
+<ul>
+<li><strong>關注點分離</strong>：應用程式開發者專注於業務邏輯，基礎設施團隊負責流量管理。</li>
+<li><strong>效能更佳</strong>：在流量到達應用程式之前就攔截了無效請求，節省了後端資源。</li>
+<li><strong>集中管理</strong>：可以在一個地方為所有微服務配置和管理限流規則。</li>
+</ul>
+</li>
+<li>
+<p><strong>缺點</strong>：相較於應用程式層，靈活性稍低，難以實現與複雜業務邏輯緊密耦合的限流策略。</p>
+</li>
+</ul>
+<h1 id="實作方案三雲端平台與-cdn-服務-cloud-cdn-level"><a class="markdownIt-Anchor" href="#實作方案三雲端平台與-cdn-服務-cloud-cdn-level"></a> 實作方案三：雲端平台與 CDN 服務 (Cloud &amp; CDN Level)</h1>
+<p>對於大型系統或需要抵禦全球性攻擊的場景，最可靠的做法是將限流功能部署在網路的「邊緣 (Edge)」。</p>
+<ul>
+<li>
+<p><strong>運作方式</strong>：用戶的請求在到達伺服器之前，首先會經過雲端服務商的全球網路節點（如 CDN 或 WAF）。這些節點會執行速率限制，來自全球的惡意流量在第一時間就會被清洗掉。</p>
+</li>
+<li>
+<p><strong>代表服務</strong>：</p>
+<ul>
+<li><strong>AWS WAF</strong>：提供基於速率的規則 (Rate-based rules)，可以根據 IP 位址在 5 分鐘的時間窗口內限制請求。</li>
+<li><strong>Cloudflare</strong>：提供非常強大且易於配置的 Rate Limiting 功能，可以自訂規則、時間窗口和回應行為。</li>
+<li><strong>Google Cloud Armor</strong>：提供速率限制和請求過濾功能，保護後端服務安全。</li>
+</ul>
+</li>
+<li>
+<p><strong>優點</strong>：</p>
+<ul>
+<li><strong>極致的防禦能力</strong>：能夠抵禦大規模的分散式阻斷服務 (DDoS) 攻擊。</li>
+<li><strong>無伺服器負擔</strong>：所有限流計算都在雲端服務商的基礎設施上完成，你的伺服器完全無感。</li>
+<li><strong>全託管服務</strong>：無需自行部署和維護 Redis 或閘道叢集，透過控制台點擊幾下即可完成配置。</li>
+</ul>
+</li>
+<li>
+<p><strong>缺點</strong>：</p>
+<ul>
+<li><strong>成本較高</strong>：通常是按請求量或規則數量收費。</li>
+<li><strong>靈活性最低</strong>：一般只能基於 IP、Header、URL 等基本請求特徵來限流，無法感知內部用戶 ID 或業務狀態。</li>
+</ul>
+</li>
+</ul>
+<h1 id="最佳實踐多層次防禦策略-layered-defense"><a class="markdownIt-Anchor" href="#最佳實踐多層次防禦策略-layered-defense"></a> 最佳實踐：多層次防禦策略 (Layered Defense)</h1>
+<p>那麼，到底該選哪一種？在真實世界的複雜系統中，答案往往是：<strong>「我全都要！」</strong></p>
+<p>最穩健的架構通常會採用多層次的防禦策略：</p>
+<ol>
+<li><strong>第一層 (Edge)</strong>：使用 Cloudflare 或 AWS WAF，針對 IP 設定寬鬆但強力的規則（例如，單一 IP 每分鐘不超過 1000 次請求），用於抵禦大規模的洪水攻擊。</li>
+<li><strong>第二層 (Gateway)</strong>：在 API 閘道（如 Kong）層，設定更精細的全局規則（例如，所有對 <code>/api/v1/</code> 的請求，總速率不超過 5000 QPS）和針對 API Key 的規則（例如，免費方案用戶每小時 1000 次）。</li>
+<li><strong>第三層 (Application)</strong>：在應用程式內部，針對最核心、最敏感的業務邏輯實現最精細的規則（例如，用戶 <code>A</code> 對文章 <code>B</code> 每 30 秒只能評論一次）。</li>
+</ol>
+<p>三層防禦結構的架構圖:</p>
+<pre class="highlight"><code class="mermaid">graph TD
+    subgraph &quot;用戶端&quot;
+        User[&quot;用戶/攻擊者&quot;]
+    end
+ 
+    subgraph &quot;Layer 1: Edge (網路邊緣)&quot;
+        Edge[&quot;Cloudflare / AWS WAF&quot;]
+    end
+ 
+    subgraph &quot;Layer 2: Gateway (API 閘道)&quot;
+        Gateway[&quot;API Gateway (Kong / Nginx)&quot;]
+    end
+ 
+    subgraph &quot;Layer 3: Application (應用程式層)&quot;
+        AppA[&quot;微服務 A&quot;]
+        AppB[&quot;微服務 B&quot;]
+    end
+    
+    subgraph &quot;共享資源&quot;
+      SharedRedis[&quot;Redis (集中式狀態儲存)&quot;]
+      DB[&quot;資料庫 / 後端資源&quot;]
+    end
+ 
+    User -- &quot;請求&quot; --&gt; Edge
+    Edge -- &quot;阻擋惡意攻擊 (IP黑名單、DDoS)&quot; --&gt; Blocked1((X))
+    Edge -- &quot;第一層過濾後&quot; --&gt; Gateway
+    Gateway -- &quot;檢查API Key、全局速率等&quot; --&gt; SharedRedis
+    Gateway -- &quot;阻擋超額請求&quot; --&gt; Blocked2((X))
+    Gateway -- &quot;第二層過濾後&quot; --&gt; AppA
+    Gateway -- &quot;第二層過濾後&quot; --&gt; AppB
+    AppA -- &quot;檢查特定業務邏輯&quot; --&gt; SharedRedis
+    AppB -- &quot;檢查特定業務邏輯&quot; --&gt; SharedRedis
+    AppA -- &quot;阻擋細緻操作&quot; --&gt; Blocked3((X))
+    AppA -- &quot;通過所有檢查&quot; --&gt; DB
+    AppB -- &quot;通過所有檢查&quot; --&gt; DB
+ 
+    style Blocked1 fill:#ffcdd2,stroke:#c62828
+    style Blocked2 fill:#ffcdd2,stroke:#c62828
+    style Blocked3 fill:#ffcdd2,stroke:#c62828
+</code></pre>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>Rate Limiter 的實作是一個從邊緣到應用，從粗獷到精細的完整體系。實務上，並非孤立地選擇某一種方案，而是根據業務需求、系統規模和安全等級，將它們智慧地組合起來。</p>
+<ul>
+<li><strong>從應用程式層開始</strong>，可以快速驗證和實現靈活的業務邏輯。</li>
+<li><strong>演進到 API 閘道層</strong>，可以統一管理流量，提升系統效能。</li>
+<li><strong>最終擁抱雲端邊緣層</strong>，可以獲得安全性和全球擴展能力。</li>
+</ul>
+<p>掌握這些實戰方案，能為系統設計出既穩固又靈活的流量防線，從容應對各種挑戰。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/System-Design/" rel="tag"># System Design</a>
+              <a href="/my-blog/tags/Rate-Limiter/" rel="tag"># Rate Limiter</a>
+              <a href="/my-blog/tags/Redis/" rel="tag"># Redis</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/08/08/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20Rate%20Limiter%20%E6%89%93%E9%80%A0%E7%A9%A9%E5%9B%BA%E5%85%AC%E5%B9%B3%E4%B8%94%E5%AE%89%E5%85%A8%E7%9A%84%E7%B3%BB%E7%B5%B1%E9%98%B2%E7%B7%9A/" rel="prev" title="深入淺出 Rate Limiter：打造穩固、公平且安全的系統防線">
+                  <i class="fa fa-angle-left"></i> 深入淺出 Rate Limiter：打造穩固、公平且安全的系統防線
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
