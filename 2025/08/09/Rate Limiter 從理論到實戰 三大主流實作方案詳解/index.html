@@ -22,7 +22,7 @@
     <meta name="description" content="在上一篇文章 《深入淺出 Rate Limiter：打造穩固、公平且安全的系統防線》 中，探討了 Rate Limiter 的核心概念與多種經典演算法。理論知識為我們打下了堅固的基礎，但真正的挑戰在於如何將這些理論轉化為線上環境中穩定、高效的程式碼與架構。 現在，讓我們更進一步，深入到工程師最關心的部分：「在實務上，Rate Limiter 究竟是如何達成與部署的？」 這篇文章將帶你了解：  核心">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Rate Limiter 從理論到實戰：三大主流實作方案詳解">
-<meta property="og:url" content="https://nivek-yang.github.io/2025/08/09/rate%20limiter/index.html">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/08/09/Rate%20Limiter%20%E5%BE%9E%E7%90%86%E8%AB%96%E5%88%B0%E5%AF%A6%E6%88%B0%20%E4%B8%89%E5%A4%A7%E4%B8%BB%E6%B5%81%E5%AF%A6%E4%BD%9C%E6%96%B9%E6%A1%88%E8%A9%B3%E8%A7%A3/index.html">
 <meta property="og:site_name" content="我的技術部落格">
 <meta property="og:description" content="在上一篇文章 《深入淺出 Rate Limiter：打造穩固、公平且安全的系統防線》 中，探討了 Rate Limiter 的核心概念與多種經典演算法。理論知識為我們打下了堅固的基礎，但真正的挑戰在於如何將這些理論轉化為線上環境中穩定、高效的程式碼與架構。 現在，讓我們更進一步，深入到工程師最關心的部分：「在實務上，Rate Limiter 究竟是如何達成與部署的？」 這篇文章將帶你了解：  核心">
 <meta property="og:locale" content="zh_TW">
@@ -35,10 +35,10 @@
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://nivek-yang.github.io/2025/08/09/rate%20limiter/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/08/09/Rate%20Limiter%20%E5%BE%9E%E7%90%86%E8%AB%96%E5%88%B0%E5%AF%A6%E6%88%B0%20%E4%B8%89%E5%A4%A7%E4%B8%BB%E6%B5%81%E5%AF%A6%E4%BD%9C%E6%96%B9%E6%A1%88%E8%A9%B3%E8%A7%A3/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/08/09/rate%20limiter/","path":"2025/08/09/rate limiter/","title":"Rate Limiter 從理論到實戰：三大主流實作方案詳解"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/08/09/Rate%20Limiter%20%E5%BE%9E%E7%90%86%E8%AB%96%E5%88%B0%E5%AF%A6%E6%88%B0%20%E4%B8%89%E5%A4%A7%E4%B8%BB%E6%B5%81%E5%AF%A6%E4%BD%9C%E6%96%B9%E6%A1%88%E8%A9%B3%E8%A7%A3/","path":"2025/08/09/Rate Limiter 從理論到實戰 三大主流實作方案詳解/","title":"Rate Limiter 從理論到實戰：三大主流實作方案詳解"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>Rate Limiter 從理論到實戰：三大主流實作方案詳解 | 我的技術部落格</title>
@@ -109,14 +109,21 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">54</span></a>
-  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">43</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">55</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">45</span></a>
       <ul class="sub-menu">
   
   
     <li class="menu-item-child">
       <a href="/my-blog/tags/Agile-Development/">
         Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
         <span class="post-count">(1)</span>
       </a>
     </li>
@@ -272,6 +279,13 @@
       <a href="/my-blog/tags/Message-Queue/">
         Message Queue
         <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(1)</span>
       </a>
     </li>
   
@@ -455,7 +469,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-count">55</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -463,7 +477,7 @@
     
       <div class="site-state-item site-state-tags">
           <a href="/my-blog/tags/">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">45</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -490,7 +504,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/09/rate%20limiter/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/09/Rate%20Limiter%20%E5%BE%9E%E7%90%86%E8%AB%96%E5%88%B0%E5%AF%A6%E6%88%B0%20%E4%B8%89%E5%A4%A7%E4%B8%BB%E6%B5%81%E5%AF%A6%E4%BD%9C%E6%96%B9%E6%A1%88%E8%A9%B3%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -792,6 +806,9 @@ redis_client = redis.Redis(host=<span class="hljs-string">&#x27;localhost&#x27;<
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/my-blog/2025/08/10/API%20Gateway%20%E5%BE%AE%E6%9C%8D%E5%8B%99%E6%9E%B6%E6%A7%8B%E4%B8%8B%E7%9A%84%E6%B5%81%E9%87%8F%E5%AE%88%E9%96%80%E4%BA%BA/" rel="next" title="API Gateway：微服務架構下的流量守門人">
+                  API Gateway：微服務架構下的流量守門人 <i class="fa fa-angle-right"></i>
+                </a>
             </div>
           </div>
     </footer>
