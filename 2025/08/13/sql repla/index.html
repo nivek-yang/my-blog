@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="當我們擁抱微服務的彈性與獨立性時，一個經典的難題也隨之而來：資料。微服務強調「每個服務擁有自己的資料庫 (Database per Service)」，但現實世界中，總會遇到需要跨服務共享、讀取或匯總資料的情境。這時，「SQL Replication」就成了不可或缺的一把瑞士刀。  為什麼在微服務中需要 SQL Replication？  讀寫分離 (Read Replicas)：這是最常見的場景">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微服務架構下的 SQL 資料同步挑戰：跨伺服器 SQL Replication 實戰解析">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/08/13/sql%20repla/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="當我們擁抱微服務的彈性與獨立性時，一個經典的難題也隨之而來：資料。微服務強調「每個服務擁有自己的資料庫 (Database per Service)」，但現實世界中，總會遇到需要跨服務共享、讀取或匯總資料的情境。這時，「SQL Replication」就成了不可或缺的一把瑞士刀。  為什麼在微服務中需要 SQL Replication？  讀寫分離 (Read Replicas)：這是最常見的場景">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-08-12T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-13T15:20:22.648Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Microservices">
+<meta property="article:tag" content="SQL">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/08/13/sql%20repla/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/08/13/sql%20repla/","path":"2025/08/13/sql repla/","title":"微服務架構下的 SQL 資料同步挑戰：跨伺服器 SQL Replication 實戰解析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>微服務架構下的 SQL 資料同步挑戰：跨伺服器 SQL Replication 實戰解析 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">57</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">45</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E5%9C%A8%E5%BE%AE%E6%9C%8D%E5%8B%99%E4%B8%AD%E9%9C%80%E8%A6%81-sql-replication"><span class="nav-number">1.</span> <span class="nav-text"> 為什麼在微服務中需要 SQL Replication？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B7%A8%E4%BC%BA%E6%9C%8D%E5%99%A8-sql-replication-%E7%9A%84%E4%B8%BB%E6%B5%81%E7%AD%96%E7%95%A5"><span class="nav-number">2.</span> <span class="nav-text"> 跨伺服器 SQL Replication 的主流策略</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E4%B8%80%E5%8E%9F%E7%94%9F%E8%B3%87%E6%96%99%E5%BA%AB-replication-native-replication"><span class="nav-number">2.1.</span> <span class="nav-text"> 策略一：原生資料庫 Replication (Native Replication)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E4%BA%8C%E8%AE%8A%E6%9B%B4%E8%B3%87%E6%96%99%E6%8D%95%E7%8D%B2-change-data-capture-cdc-%E8%A8%8A%E6%81%AF%E4%BD%87%E5%88%97-message-queue"><span class="nav-number">2.2.</span> <span class="nav-text"> 策略二：變更資料捕獲 (Change Data Capture, CDC) + 訊息佇列 (Message Queue)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E4%B8%89etl-extract-transform-load-%E6%89%B9%E6%AC%A1%E8%99%95%E7%90%86"><span class="nav-number">2.3.</span> <span class="nav-text"> 策略三：ETL (Extract, Transform, Load) 批次處理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%9C%E9%8D%B5%E5%95%8F%E9%A1%8C%E9%9B%B2%E7%AB%AF-paassaas-%E8%B3%87%E6%96%99%E5%BA%AB%E8%83%BD%E5%81%9A-replication-%E5%97%8E"><span class="nav-number">3.</span> <span class="nav-text"> 關鍵問題：雲端 PaaS&#x2F;SaaS 資料庫能做 Replication 嗎？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%83%85%E5%A2%83%E4%B8%80%E4%BD%BF%E7%94%A8-paas-%E5%85%A7%E5%BB%BA%E7%9A%84-replication-%E5%8A%9F%E8%83%BD"><span class="nav-number">3.1.</span> <span class="nav-text"> 情境一：使用 PaaS 內建的 Replication 功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%83%85%E5%A2%83%E4%BA%8C%E5%9C%A8-paassaas-%E4%B8%8A%E5%AF%A6%E7%8F%BE-cdc-%E6%88%96-etl"><span class="nav-number">3.2.</span> <span class="nav-text"> 情境二：在 PaaS&#x2F;SaaS 上實現 CDC 或 ETL</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">4.</span> <span class="nav-text"> 總結</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/13/sql%20repla/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="微服務架構下的 SQL 資料同步挑戰：跨伺服器 SQL Replication 實戰解析 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          微服務架構下的 SQL 資料同步挑戰：跨伺服器 SQL Replication 實戰解析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-08-13 00:00:00 / 修改時間：23:20:22" itemprop="dateCreated datePublished" datetime="2025-08-13T00:00:00+08:00">2025-08-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>當我們擁抱微服務的彈性與獨立性時，一個經典的難題也隨之而來：<strong>資料</strong>。微服務強調「每個服務擁有自己的資料庫 (Database per Service)」，但現實世界中，總會遇到需要跨服務共享、讀取或匯總資料的情境。這時，「SQL Replication」就成了不可或缺的一把瑞士刀。</p>
+<h1 id="為什麼在微服務中需要-sql-replication"><a class="markdownIt-Anchor" href="#為什麼在微服務中需要-sql-replication"></a> 為什麼在微服務中需要 SQL Replication？</h1>
+<ol>
+<li><strong>讀寫分離 (Read Replicas)</strong>：這是最常見的場景。將主資料庫 (Primary) 的資料複製到一或多個唯讀資料庫 (Read Replica)，讓查詢、報表等讀取密集型的操作都去唯讀資料庫，從而大幅減輕主庫的壓力，提升整體效能。</li>
+<li><strong>資料匯總與分析 (Data Aggregation)</strong>：某個分析服務（例如報表系統、BI儀表板）需要來自多個不同微服務的資料。透過 Replication 將各服務的資料匯總到一個專用的分析資料庫中，可以避免直接查詢線上交易資料庫，影響效能。</li>
+<li><strong>提升可用性與災難恢復 (High Availability &amp; Disaster Recovery)</strong>：透過將資料即時複製到不同地理位置的備援伺服器，當主伺服器發生故障時，可以快速切換到備援伺服器，確保服務不中斷。</li>
+<li><strong>降低延遲 (Reduced Latency)</strong>：如果服務遍布全球，可以將資料複製到靠近用戶的資料中心，讓用戶能從最近的節點讀取資料，大大提升體驗。</li>
+</ol>
+<blockquote>
+<p>請務必小心，不要將 Replication 當成解決微服務之間「強耦合」問題的萬靈丹。如果一個服務頻繁需要另一個服務的「即時」資料來完成核心交易，這可能代表服務邊界劃分需要重新思考。</p>
+</blockquote>
+<h1 id="跨伺服器-sql-replication-的主流策略"><a class="markdownIt-Anchor" href="#跨伺服器-sql-replication-的主流策略"></a> 跨伺服器 SQL Replication 的主流策略</h1>
+<p>在微服務架構中，實現資料複製主要有以下三種模式：</p>
+<h2 id="策略一原生資料庫-replication-native-replication"><a class="markdownIt-Anchor" href="#策略一原生資料庫-replication-native-replication"></a> <strong>策略一：原生資料庫 Replication (Native Replication)</strong></h2>
+<p>這是最傳統也最直接的方法。幾乎所有主流的 SQL 資料庫（如 PostgreSQL, MySQL, SQL Server）都內建了強大的 Replication 功能。</p>
+<ul>
+<li><strong>如何運作</strong>：通常基於資料庫的二進位日誌 (Binary Log) 或交易日誌 (Transaction Log)。主庫上的任何資料變更（INSERT, UPDATE, DELETE）都會被記錄下來，然後傳輸到從庫 (Replica) 去重放 (Replay) 這些操作，從而達到資料同步。</li>
+<li><strong>優點</strong>：
+<ul>
+<li><strong>低延遲</strong>：接近即時，效能極高，因為是在資料庫底層實現。</li>
+<li><strong>成熟可靠</strong>：經過多年驗證，穩定性高。</li>
+<li><strong>資料一致性強</strong>：能保證主從資料的強一致性或最終一致性。</li>
+</ul>
+</li>
+<li><strong>缺點</strong>：
+<ul>
+<li><strong>緊耦合</strong>：主從資料庫之間有較強的依賴關係，版本、網路設定等需要緊密配合。</li>
+<li><strong>設定複雜</strong>：跨資料中心、跨雲平台的設定可能涉及複雜的網路配置 (如 VPN, VPC Peering)。</li>
+<li><strong>靈活性低</strong>：通常只能在同類型、同版本的資料庫之間進行。</li>
+</ul>
+</li>
+</ul>
+<h2 id="策略二變更資料捕獲-change-data-capture-cdc-訊息佇列-message-queue"><a class="markdownIt-Anchor" href="#策略二變更資料捕獲-change-data-capture-cdc-訊息佇列-message-queue"></a> <strong>策略二：變更資料捕獲 (Change Data Capture, CDC) + 訊息佇列 (Message Queue)</strong></h2>
+<p>這是更現代、更符合微服務精神的模式。</p>
+<ul>
+<li><strong>如何運作</strong>：
+<ol>
+<li><strong>捕獲 (Capture)</strong>：使用 Debezium 這類工具，或資料庫內建的 CDC 功能，監聽來源資料庫的交易日誌。</li>
+<li><strong>發布 (Publish)</strong>：將捕獲到的資料變更事件（如 <code>&#123;&quot;action&quot;: &quot;create&quot;, &quot;data&quot;: &#123;...&#125;&#125;</code>）發布到像 Kafka, RabbitMQ, 或 AWS Kinesis 這樣的訊息佇列中。</li>
+<li><strong>消費 (Consume)</strong>：需要資料的下游微服務作為消費者，訂閱相關主題 (Topic)，接收到變更事件後，再將資料寫入自己的資料庫。</li>
+</ol>
+</li>
+<li><strong>優點</strong>：
+<ul>
+<li><strong>高度解耦</strong>：來源服務完全不知道有誰在訂閱它的資料變更，新增或移除消費者都對來源無影響。</li>
+<li><strong>高彈性</strong>：一個資料變更可以被多個不同的服務消費，用於不同目的。消費者甚至可以用完全不同的資料庫技術（例如同步到 Elasticsearch 進行搜尋）。</li>
+<li><strong>高韌性</strong>：訊息佇列本身就是一個緩衝區。即使消費者服務短暫離線，上線後也能從上次的位置繼續消費，資料不會遺失。</li>
+</ul>
+</li>
+<li><strong>缺點</strong>：
+<ul>
+<li><strong>延遲較高</strong>：相比原生 Replication，中間多了訊息佇列的傳輸過程，屬於「近即時」而非「即時」。</li>
+<li><strong>架構複雜度</strong>：需要引入並維護一個訊息佇列系統。</li>
+<li><strong>最終一致性</strong>：資料同步是非同步的，需要接受短時間內的資料不一致。</li>
+</ul>
+</li>
+</ul>
+<h2 id="策略三etl-extract-transform-load-批次處理"><a class="markdownIt-Anchor" href="#策略三etl-extract-transform-load-批次處理"></a> <strong>策略三：ETL (Extract, Transform, Load) 批次處理</strong></h2>
+<p>這是一種非即時的、定時執行的複製模式。</p>
+<ul>
+<li><strong>如何運作</strong>：透過排程工具（如 Airflow, Azure Data Factory, AWS Glue），定期（例如每小時或每天）從來源資料庫「提取」資料，經過必要的「轉換」（如格式清理、欄位合併），最後「載入」到目標資料庫。</li>
+<li><strong>優點</strong>：
+<ul>
+<li><strong>適合大量資料與複雜轉換</strong>：非常適合資料倉儲、BI 分析等場景。</li>
+<li><strong>對來源系統影響小</strong>：通常在離峰時段執行，不影響線上交易。</li>
+</ul>
+</li>
+<li><strong>缺點</strong>：
+<ul>
+<li><strong>高延遲</strong>：資料不是即時的，延遲可能從幾分鐘到數小時不等。</li>
+<li><strong>不適用於交易型場景</strong>。</li>
+</ul>
+</li>
+</ul>
+<h1 id="關鍵問題雲端-paassaas-資料庫能做-replication-嗎"><a class="markdownIt-Anchor" href="#關鍵問題雲端-paassaas-資料庫能做-replication-嗎"></a> 關鍵問題：雲端 PaaS/SaaS 資料庫能做 Replication 嗎？</h1>
+<p><strong>答案是：可以！而且在很多情況下，比自己手動設定更容易。</strong></p>
+<p>雲端供應商（如 AWS, Azure, Google Cloud）提供的資料庫即服務 (Platform as a Service, PaaS) 已經將 Replication 功能做得非常成熟且易於使用。</p>
+<h2 id="情境一使用-paas-內建的-replication-功能"><a class="markdownIt-Anchor" href="#情境一使用-paas-內建的-replication-功能"></a> <strong>情境一：使用 PaaS 內建的 Replication 功能</strong></h2>
+<p>這對應前面提到的「策略一：原生 Replication」。雲端供應商將其包裝成了簡單的點擊操作。</p>
+<ul>
+<li>
+<p><strong>AWS RDS / Aurora</strong>：</p>
+<ul>
+<li><strong>Read Replicas</strong>：可以在幾分鐘內，在同區域或跨區域為你的主資料庫建立多達數個唯讀複本。AWS 會自動處理所有底層的複製設定。</li>
+<li><strong>Multi-AZ</strong>：這主要是為了高可用性，它會自動在不同可用區 (Availability Zone) 建立一個同步的備援資料庫，當主庫故障時自動切換。這也是一種 Replication。</li>
+</ul>
+</li>
+<li>
+<p><strong>Azure SQL Database</strong>：</p>
+<ul>
+<li><strong>Active Geo-Replication</strong>：允許為資料庫建立最多四個可讀的次要複本，這些複本可以分佈在任何 Azure 區域。設定非常簡單。</li>
+<li><strong>Auto-failover groups</strong>：在高可用性場景下，自動管理複本和故障轉移。</li>
+</ul>
+</li>
+<li>
+<p><strong>Google Cloud SQL</strong>：</p>
+<ul>
+<li><strong>Read Replicas</strong>：同樣支援輕鬆建立唯讀複本，可以跨區域建立。</li>
+<li><strong>High Availability Configuration</strong>：提供區域級別的故障轉移能力。</li>
+</ul>
+</li>
+</ul>
+<p><strong>結論</strong>：如果只是需要<strong>讀寫分離</strong>或<strong>高可用性</strong>，使用雲端 PaaS 內建的功能是最省心、最可靠的選擇。</p>
+<h2 id="情境二在-paassaas-上實現-cdc-或-etl"><a class="markdownIt-Anchor" href="#情境二在-paassaas-上實現-cdc-或-etl"></a> <strong>情境二：在 PaaS/SaaS 上實現 CDC 或 ETL</strong></h2>
+<p>如果需要更靈活的、解耦的「策略二」或「策略三」，雲端平台也提供了強大的支援。</p>
+<ul>
+<li>
+<p><strong>CDC 模式</strong>：</p>
+<ul>
+<li>許多 PaaS 資料庫（如 AWS RDS for PostgreSQL/MySQL, Azure SQL）都支援邏輯解碼或 CDC 功能。</li>
+<li>可以使用雲端原生的服務，如 <strong>AWS Database Migration Service (DMS)</strong> 或 <strong>Azure Data Factory</strong> 中的 CDC Connector，來捕獲資料庫變更，並將其傳輸到目標（可以是另一個資料庫，也可以是 Kafka 這類訊息佇列）。</li>
+<li><strong>Google Cloud Datastream</strong> 也是一個專門為此設計的無伺服器 CDC 和複製服務。</li>
+</ul>
+</li>
+<li>
+<p><strong>ETL 模式</strong>：</p>
+<ul>
+<li><strong>AWS Glue</strong>, <strong>Azure Data Factory</strong>, <strong>Google Cloud Dataflow/Dataproc</strong> 都是強大的、全託管的 ETL 服務。可以輕鬆設定排程，從 PaaS 資料庫中抽取資料，進行處理後，載入到資料倉儲（如 Redshift, BigQuery）或其他資料庫中。</li>
+</ul>
+</li>
+</ul>
+<p><strong>結論</strong>：即使資料庫是 PaaS/SaaS，實現 CDC 或 ETL 模式也是完全可行的。雲端供應商甚至提供了專門的託管服務，不用自己去管理 Debezium 或 Airflow 這類複雜的開源工具。</p>
+<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">需求場景</th>
+<th style="text-align:left">推薦策略</th>
+<th style="text-align:left">在 PaaS/SaaS 上的實現方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>提升讀取效能、讀寫分離</strong></td>
+<td style="text-align:left">原生 Replication</td>
+<td style="text-align:left">使用雲端平台（AWS/Azure/GCP）內建的 <strong>Read Replica</strong> 功能。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>高可用性、災難備援</strong></td>
+<td style="text-align:left">原生 Replication</td>
+<td style="text-align:left">使用雲端平台內建的 <strong>Multi-AZ / Geo-Replication</strong> 功能。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>微服務間解耦的資料同步</strong></td>
+<td style="text-align:left">CDC + Message Queue</td>
+<td style="text-align:left">使用 <strong>AWS DMS / Azure Data Factory / GCP Datastream</strong> 搭配 Kafka/Kinesis 等訊息服務。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>資料倉儲、BI報表、批次分析</strong></td>
+<td style="text-align:left">ETL</td>
+<td style="text-align:left">使用 <strong>AWS Glue / Azure Data Factory / GCP Dataflow</strong> 等託管 ETL 服務。</td>
+</tr>
+</tbody>
+</table>
+<p>資料同步是門藝術，選擇正確的工具和策略，能讓系統既健壯又靈活。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Microservices/" rel="tag"># Microservices</a>
+              <a href="/my-blog/tags/SQL/" rel="tag"># SQL</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/08/12/SQL%20Replication%20%E8%A9%B3%E8%A7%A3%20%E5%BE%9E%E5%95%8F%E9%A1%8C%E6%A0%B9%E6%BA%90%E5%88%B0%20PostgreSQL%20%E5%AF%A6%E6%88%B0%E6%BC%94%E7%B7%B4/" rel="prev" title="SQL Replication 詳解：從問題根源到 PostgreSQL 實戰演練">
+                  <i class="fa fa-angle-left"></i> SQL Replication 詳解：從問題根源到 PostgreSQL 實戰演練
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
