@@ -19,27 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="前端開發常常會遇到「跨來源請求被阻擋」的錯誤訊息，比如： Access to fetch at &#39;https:&#x2F;&#x2F;api.example.com&#x2F;data&#39; from origin &#39;http:&#x2F;&#x2F;localhost:3000&#39; has been blocked by CORS policy: No &#39;Access-Control-Allow-Origin&#39; header is present..">
+    <meta name="description" content="在軟體開發旅程中，隨著應用程式用戶量和資料量的爆炸性成長，經常會遇到一個令人頭痛卻又甜蜜的煩惱：資料庫效能瓶頸。當已經做完了所有能想到的優化，從索引調整、查詢改寫到讀寫分離，但資料庫的回應時間依然越來越慢，這或許是一個信號——資料庫需要的是結構性的擴展，而不僅僅是修補。 這篇文章就來聊聊解決這個問題的終極武器之一：資料庫分片 (Database Sharding)。  Sharding 是一個強大">
 <meta property="og:type" content="article">
-<meta property="og:title" content="什麼是 CORS（Cross-Origin Resource Sharing)？ 該怎麼解決跨來源請求問題？">
-<meta property="og:url" content="https://nivek-yang.github.io/2025/06/18/%E4%BB%80%E9%BA%BC%E6%98%AFCORS-%E8%A9%B2%E6%80%8E%E9%BA%BC%E8%A7%A3%E6%B1%BA%E8%B7%A8%E4%BE%86%E6%BA%90%E8%AB%8B%E6%B1%82%E5%95%8F%E9%A1%8C/index.html">
+<meta property="og:title" content="深入淺出資料庫分片 (Sharding)：當單一資料庫撐不住時，下一步是什麼？">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/08/15/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E8%B3%87%E6%96%99%E5%BA%AB%E5%88%86%E7%89%87%20Sharding/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="前端開發常常會遇到「跨來源請求被阻擋」的錯誤訊息，比如： Access to fetch at &#39;https:&#x2F;&#x2F;api.example.com&#x2F;data&#39; from origin &#39;http:&#x2F;&#x2F;localhost:3000&#39; has been blocked by CORS policy: No &#39;Access-Control-Allow-Origin&#39; header is present..">
+<meta property="og:description" content="在軟體開發旅程中，隨著應用程式用戶量和資料量的爆炸性成長，經常會遇到一個令人頭痛卻又甜蜜的煩惱：資料庫效能瓶頸。當已經做完了所有能想到的優化，從索引調整、查詢改寫到讀寫分離，但資料庫的回應時間依然越來越慢，這或許是一個信號——資料庫需要的是結構性的擴展，而不僅僅是修補。 這篇文章就來聊聊解決這個問題的終極武器之一：資料庫分片 (Database Sharding)。  Sharding 是一個強大">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2025-06-17T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-06-18T15:52:45.896Z">
+<meta property="article:published_time" content="2025-08-14T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-15T15:25:14.521Z">
 <meta property="article:author" content="Kaiwii">
-<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Database">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://nivek-yang.github.io/2025/06/18/%E4%BB%80%E9%BA%BC%E6%98%AFCORS-%E8%A9%B2%E6%80%8E%E9%BA%BC%E8%A7%A3%E6%B1%BA%E8%B7%A8%E4%BE%86%E6%BA%90%E8%AB%8B%E6%B1%82%E5%95%8F%E9%A1%8C/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/08/15/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E8%B3%87%E6%96%99%E5%BA%AB%E5%88%86%E7%89%87%20Sharding/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/06/18/%E4%BB%80%E9%BA%BC%E6%98%AFCORS-%E8%A9%B2%E6%80%8E%E9%BA%BC%E8%A7%A3%E6%B1%BA%E8%B7%A8%E4%BE%86%E6%BA%90%E8%AB%8B%E6%B1%82%E5%95%8F%E9%A1%8C/","path":"2025/06/18/什麼是CORS-該怎麼解決跨來源請求問題/","title":"什麼是 CORS（Cross-Origin Resource Sharing)？ 該怎麼解決跨來源請求問題？"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/08/15/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E8%B3%87%E6%96%99%E5%BA%AB%E5%88%86%E7%89%87%20Sharding/","path":"2025/08/15/深入淺出資料庫分片 Sharding/","title":"深入淺出資料庫分片 (Sharding)：當單一資料庫撐不住時，下一步是什麼？"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>什麼是 CORS（Cross-Origin Resource Sharing)？ 該怎麼解決跨來源請求問題？ | 我的技術部落格</title>
+<title>深入淺出資料庫分片 (Sharding)：當單一資料庫撐不住時，下一步是什麼？ | 我的技術部落格</title>
   
 
 
@@ -454,7 +454,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#cors-%E6%98%AF%E4%BB%80%E9%BA%BC"><span class="nav-number">1.</span> <span class="nav-text"> CORS 是什麼？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF%E8%B7%A8%E4%BE%86%E6%BA%90"><span class="nav-number">1.1.</span> <span class="nav-text"> 什麼是「跨來源」？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E6%9C%83%E5%87%BA%E7%8F%BE-cors-%E9%8C%AF%E8%AA%A4"><span class="nav-number">2.</span> <span class="nav-text"> 為什麼會出現 CORS 錯誤？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AF%84%E4%BE%8B%E6%83%85%E5%A2%83"><span class="nav-number">2.1.</span> <span class="nav-text"> 範例情境</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A3%E6%B1%BA-cors-%E5%95%8F%E9%A1%8C%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text"> 解決 CORS 問題的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BF%AE%E6%94%B9%E5%BE%8C%E7%AB%AF%E8%A8%AD%E5%AE%9A"><span class="nav-number">3.1.</span> <span class="nav-text"> 1. 修改後端設定</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AF%84%E4%BE%8B%E4%BD%BF%E7%94%A8-express"><span class="nav-number">3.1.1.</span> <span class="nav-text"> 範例：使用 Express</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AF%84%E4%BE%8B%E4%BD%BF%E7%94%A8-django-django-cors-headers"><span class="nav-number">3.1.2.</span> <span class="nav-text"> 範例：使用 Django + django-cors-headers</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8-proxy-%E9%81%BF%E9%96%8B-cors"><span class="nav-number">3.2.</span> <span class="nav-text"> 2. 使用 Proxy 避開 CORS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%BE%8C%E7%AB%AF%E8%A8%AD%E5%AE%9A-access-control-headers"><span class="nav-number">3.3.</span> <span class="nav-text"> 3. 後端設定 Access-Control Headers</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%A2%E8%A9%A6%E9%A1%8C%E7%9B%AE"><span class="nav-number">4.</span> <span class="nav-text"> 面試題目</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E7%AD%94%E7%AF%84%E4%BE%8B"><span class="nav-number">4.1.</span> <span class="nav-text"> 回答範例：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A6%8B%E9%8C%AF%E8%AA%A4"><span class="nav-number">4.1.1.</span> <span class="nav-text"> 常見錯誤：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E6%B1%BA%E6%96%B9%E5%BC%8F"><span class="nav-number">4.1.2.</span> <span class="nav-text"> 解決方式：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">5.</span> <span class="nav-text"> 總結</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%B6%E4%BC%B8%E9%96%B1%E8%AE%80"><span class="nav-number">6.</span> <span class="nav-text"> 延伸閱讀</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-sharding%E4%B8%80%E5%88%87%E5%BE%9E%E6%B0%B4%E5%B9%B3%E6%93%B4%E5%B1%95%E8%AA%AA%E8%B5%B7"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是 Sharding？一切從水平擴展說起</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9C%80%E8%A6%81-sharding%E4%B8%89%E5%A4%A7%E6%A0%B8%E5%BF%83%E5%84%AA%E5%8B%A2"><span class="nav-number">2.</span> <span class="nav-text"> 為什麼需要 Sharding？三大核心優勢</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sharding-%E6%98%AF%E5%A6%82%E4%BD%95%E9%81%8B%E4%BD%9C%E7%9A%84%E9%97%9C%E9%8D%B5%E7%9A%84%E5%88%86%E7%89%87%E9%8D%B5-shard-key"><span class="nav-number">3.</span> <span class="nav-text"> Sharding 是如何運作的？關鍵的「分片鍵 (Shard Key)」</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%AF%84%E5%9C%8D%E5%88%86%E7%89%87-range-based-sharding"><span class="nav-number">3.1.</span> <span class="nav-text"> 1. 範圍分片 (Range-Based Sharding)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%9B%9C%E6%B9%8A%E5%88%86%E7%89%87-hash-based-sharding"><span class="nav-number">3.2.</span> <span class="nav-text"> 2. 雜湊分片 (Hash-Based Sharding)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%9B%AE%E9%8C%84%E5%88%86%E7%89%87-directory-based-sharding"><span class="nav-number">3.3.</span> <span class="nav-text"> 3. 目錄分片 (Directory-Based Sharding)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sharding-%E5%BF%85%E9%A0%88%E9%9D%A2%E5%B0%8D%E7%9A%84%E6%8C%91%E6%88%B0"><span class="nav-number">4.</span> <span class="nav-text"> Sharding 必須面對的挑戰</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -502,7 +502,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/06/18/%E4%BB%80%E9%BA%BC%E6%98%AFCORS-%E8%A9%B2%E6%80%8E%E9%BA%BC%E8%A7%A3%E6%B1%BA%E8%B7%A8%E4%BE%86%E6%BA%90%E8%AB%8B%E6%B1%82%E5%95%8F%E9%A1%8C/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/15/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E8%B3%87%E6%96%99%E5%BA%AB%E5%88%86%E7%89%87%20Sharding/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -515,12 +515,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="什麼是 CORS（Cross-Origin Resource Sharing)？ 該怎麼解決跨來源請求問題？ | 我的技術部落格">
+      <meta itemprop="name" content="深入淺出資料庫分片 (Sharding)：當單一資料庫撐不住時，下一步是什麼？ | 我的技術部落格">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          什麼是 CORS（Cross-Origin Resource Sharing)？ 該怎麼解決跨來源請求問題？
+          深入淺出資料庫分片 (Sharding)：當單一資料庫撐不住時，下一步是什麼？
         </h1>
 
         <div class="post-meta-container">
@@ -532,7 +532,7 @@
       <span class="post-meta-item-text">發表於</span>
       
 
-      <time title="創建時間：2025-06-18 00:00:00 / 修改時間：23:52:45" itemprop="dateCreated datePublished" datetime="2025-06-18T00:00:00+08:00">2025-06-18</time>
+      <time title="創建時間：2025-08-15 00:00:00 / 修改時間：23:25:14" itemprop="dateCreated datePublished" datetime="2025-08-15T00:00:00+08:00">2025-08-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -553,180 +553,86 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>前端開發常常會遇到「跨來源請求被阻擋」的錯誤訊息，比如：</p>
-<pre class="highlight"><code class="">Access to fetch at 'https://api.example.com/data' from origin 'http://localhost:3000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present...
-</code></pre>
-<p>這就是著名的 CORS 問題。本篇文章將說明 CORS 是什麼、為什麼會發生，以及常見的解法。</p>
-<hr />
-<h1 id="cors-是什麼"><a class="markdownIt-Anchor" href="#cors-是什麼"></a> CORS 是什麼？</h1>
-<p>CORS（Cross-Origin Resource Sharing，跨來源資源共享）是一種<strong>瀏覽器的安全機制</strong>，用來限制「不同網域」之間的請求。簡單來說，它防止了一個網站的 JavaScript 去隨意讀取另一個網站的資料。</p>
-<h2 id="什麼是跨來源"><a class="markdownIt-Anchor" href="#什麼是跨來源"></a> 什麼是「跨來源」？</h2>
-<p>只要以下任何一個不同，就會被視為「不同來源」：</p>
-<table>
-<thead>
-<tr>
-<th>區塊</th>
-<th>範例</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>協定</td>
-<td><code>http://example.com</code> vs <code>https://example.com</code></td>
-</tr>
-<tr>
-<td>網域</td>
-<td><code>api.example.com</code> vs <code>www.example.com</code></td>
-</tr>
-<tr>
-<td>Port</td>
-<td><code>example.com:3000</code> vs <code>example.com:8000</code></td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h1 id="為什麼會出現-cors-錯誤"><a class="markdownIt-Anchor" href="#為什麼會出現-cors-錯誤"></a> 為什麼會出現 CORS 錯誤？</h1>
-<p>瀏覽器會阻擋從網頁腳本對其他來源發起的請求（例如使用 <code>fetch</code>、<code>axios</code>）。除非 <strong>伺服器端主動聲明允許該請求的來源</strong>，否則請求會被攔截。</p>
-<h2 id="範例情境"><a class="markdownIt-Anchor" href="#範例情境"></a> 範例情境</h2>
-<p>假設前端使用 React (<code>http://localhost:3000</code>)，想從後端 API (<code>http://localhost:8000</code>) 取得資料：</p>
-<pre class="highlight"><code class="js"><span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;http://localhost:8000/api/data&#x27;</span>)
-</code></pre>
-<p>這是跨來源請求，除非後端有設定 CORS header，否則會被瀏覽器擋下來。</p>
-<hr />
-<h1 id="解決-cors-問題的方法"><a class="markdownIt-Anchor" href="#解決-cors-問題的方法"></a> 解決 CORS 問題的方法</h1>
-<h2 id="1-修改後端設定"><a class="markdownIt-Anchor" href="#1-修改後端設定"></a> 1. <strong>修改後端設定</strong></h2>
-<p>CORS 問題應由「伺服器端」解決。需要在伺服器回應中加上正確的 <code>Access-Control-Allow-Origin</code> header。</p>
-<h3 id="範例使用-express"><a class="markdownIt-Anchor" href="#範例使用-express"></a> 範例：使用 Express</h3>
-<pre class="highlight"><code class="js"><span class="hljs-keyword">const</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;express&#x27;</span>);
-<span class="hljs-keyword">const</span> cors = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;cors&#x27;</span>);
-
-<span class="hljs-keyword">const</span> app = <span class="hljs-title function_">express</span>();
-app.<span class="hljs-title function_">use</span>(<span class="hljs-title function_">cors</span>()); <span class="hljs-comment">// 允許所有來源</span>
-
-<span class="hljs-comment">// 或只允許特定來源</span>
-<span class="hljs-comment">// app.use(cors(&#123; origin: &#x27;http://localhost:3000&#x27; &#125;));</span>
-
-app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/data&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> &#123;
-  res.<span class="hljs-title function_">json</span>(&#123; <span class="hljs-attr">message</span>: <span class="hljs-string">&#x27;Hello from server!&#x27;</span> &#125;);
-&#125;);
-
-app.<span class="hljs-title function_">listen</span>(<span class="hljs-number">8000</span>);
-</code></pre>
-<h3 id="範例使用-django-django-cors-headers"><a class="markdownIt-Anchor" href="#範例使用-django-django-cors-headers"></a> 範例：使用 Django + <code>django-cors-headers</code></h3>
-<pre class="highlight"><code class="bash">pip install django-cors-headers
-</code></pre>
-<pre class="highlight"><code class="python"><span class="hljs-comment"># settings.py</span>
-INSTALLED_APPS = [
-    ...
-    <span class="hljs-string">&#x27;corsheaders&#x27;</span>,
-]
-
-MIDDLEWARE = [
-    <span class="hljs-string">&#x27;corsheaders.middleware.CorsMiddleware&#x27;</span>,
-    ...
-]
-
-<span class="hljs-comment"># 允許所有網域</span>
-CORS_ALLOW_ALL_ORIGINS = <span class="hljs-literal">True</span>
-
-<span class="hljs-comment"># 或只允許特定網域</span>
-<span class="hljs-comment"># CORS_ALLOWED_ORIGINS = [</span>
-<span class="hljs-comment">#     &quot;http://localhost:3000&quot;,</span>
-<span class="hljs-comment"># ]</span>
-</code></pre>
-<hr />
-<h2 id="2-使用-proxy-避開-cors"><a class="markdownIt-Anchor" href="#2-使用-proxy-避開-cors"></a> 2. <strong>使用 Proxy 避開 CORS</strong></h2>
-<p>開發時可使用前端代理轉發請求，例如 React：</p>
-<pre class="highlight"><code class="js"><span class="hljs-comment">// vite.config.js or package.json</span>
-<span class="hljs-attr">proxy</span>: &#123;
-  <span class="hljs-string">&#x27;/api&#x27;</span>: &#123;
-    <span class="hljs-attr">target</span>: <span class="hljs-string">&#x27;http://localhost:8000&#x27;</span>,
-    <span class="hljs-attr">changeOrigin</span>: <span class="hljs-literal">true</span>,
-  &#125;,
-&#125;
-</code></pre>
-<p>這樣 <code>fetch('/api/data')</code> 實際會被代理成後端的請求，不會被視為跨來源。</p>
-<hr />
-<h2 id="3-後端設定-access-control-headers"><a class="markdownIt-Anchor" href="#3-後端設定-access-control-headers"></a> 3. <strong>後端設定 Access-Control Headers</strong></h2>
-<p>除了 <code>Access-Control-Allow-Origin</code>，有時也需要加上這些 header：</p>
-<pre class="highlight"><code class="http"><span class="hljs-attribute">Access-Control-Allow-Origin</span><span class="hljs-punctuation">: </span>http://localhost:3000
-<span class="hljs-attribute">Access-Control-Allow-Methods</span><span class="hljs-punctuation">: </span>GET, POST, PUT, DELETE
-<span class="hljs-attribute">Access-Control-Allow-Headers</span><span class="hljs-punctuation">: </span>Content-Type, Authorization
-</code></pre>
-<p>這些設定也必須在「預檢請求（Preflight Request）」中正確處理。</p>
-<hr />
-<h1 id="面試題目"><a class="markdownIt-Anchor" href="#面試題目"></a> 面試題目</h1>
+    <div class="post-body" itemprop="articleBody"><p>在軟體開發旅程中，隨著應用程式用戶量和資料量的爆炸性成長，經常會遇到一個令人頭痛卻又甜蜜的煩惱：資料庫效能瓶頸。當已經做完了所有能想到的優化，從索引調整、查詢改寫到讀寫分離，但資料庫的回應時間依然越來越慢，這或許是一個信號——資料庫需要的是結構性的擴展，而不僅僅是修補。</p>
+<p>這篇文章就來聊聊解決這個問題的終極武器之一：<strong>資料庫分片 (Database Sharding)</strong>。</p>
 <blockquote>
-<p>「請說明什麼是 CORS（Cross-Origin Resource Sharing），以及如果遇到 CORS 問題該如何解決？」</p>
+<p>Sharding 是一個強大但複雜的概念。這篇文章的目標，是帶你用最直觀的方式理解它、了解它的優缺點，並知道何時該認真考慮它。</p>
 </blockquote>
-<hr />
-<h2 id="回答範例"><a class="markdownIt-Anchor" href="#回答範例"></a> 回答範例：</h2>
-<p><strong>CORS（Cross-Origin Resource Sharing）</strong> 是一種瀏覽器的安全機制，用來限制前端從不同來源（origin）去請求資源，避免惡意網站竊取資料。當前端的 JavaScript 嘗試向不同網域、協定或 port 發送請求時，如果伺服器沒有正確設定 CORS header，瀏覽器會阻擋這個請求。</p>
-<h3 id="常見錯誤"><a class="markdownIt-Anchor" href="#常見錯誤"></a> 常見錯誤：</h3>
-<p>例如使用 fetch 或 axios 向不同來源的 API 發送請求時，會看到類似錯誤：</p>
-<pre class="highlight"><code class="">Access to fetch at 'http://api.example.com' from origin 'http://localhost:3000' has been blocked by CORS policy
-</code></pre>
-<h3 id="解決方式"><a class="markdownIt-Anchor" href="#解決方式"></a> 解決方式：</h3>
+<h1 id="什麼是-sharding一切從水平擴展說起"><a class="markdownIt-Anchor" href="#什麼是-sharding一切從水平擴展說起"></a> 什麼是 Sharding？一切從水平擴展說起</h1>
+<p>在討論 Sharding 之前，先快速了解兩種資料庫擴展方式：</p>
 <ol>
-<li>
-<p><strong>從伺服器端設定 CORS header</strong>（這是正確的做法）：</p>
-<ul>
-<li>
-<p>設定 <code>Access-Control-Allow-Origin</code>，明確允許某個前端網域。</p>
-</li>
-<li>
-<p>可搭配套件，如：</p>
-<ul>
-<li>Node.js 可用 <code>cors</code> middleware</li>
-<li>Django 可用 <code>django-cors-headers</code></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>本地開發時使用 proxy 轉發請求</strong>，避開跨域問題（開發用）：</p>
-<ul>
-<li>例如 React 可以設定 <code>vite.config.js</code> 或 <code>webpack devServer proxy</code></li>
-</ul>
-</li>
+<li><strong>垂直擴展 (Vertical Scaling)</strong>：又稱「向上擴展」(Scale-up)，就像是為伺服器升級，給它更強的 CPU、更多的 RAM、更快的 SSD。這很直接，但成本昂貴，且有物理極限。總不能無限地加記憶體吧？</li>
+<li><strong>水平擴展 (Horizontal Scaling)</strong>：又稱「向外擴展」(Scale-out)，不是讓一台伺服器變強，而是增加更多台伺服器，並將負載分散到這些伺服器上。</li>
 </ol>
-<hr />
-<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
-<table>
-<thead>
-<tr>
-<th>問題</th>
-<th>解法</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>跨來源請求被阻擋</td>
-<td>在後端加上 CORS Header</td>
-</tr>
-<tr>
-<td>特定網域允許</td>
-<td>設定 <code>Access-Control-Allow-Origin</code> 為指定來源</td>
-</tr>
-<tr>
-<td>多來源需求</td>
-<td>使用動態設定或 whitelist</td>
-</tr>
-<tr>
-<td>本地開發測試</td>
-<td>使用 Proxy 或開啟允許全部來源</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h1 id="延伸閱讀"><a class="markdownIt-Anchor" href="#延伸閱讀"></a> 延伸閱讀</h1>
+<p><strong>Sharding，本質上就是一種水平擴展的實踐。</strong></p>
+<p><strong>Sharding 就是將一個龐大的資料庫，水平切割成多個更小、更易於管理的部分，這些部分被稱為「分片 (Shards)」。</strong> 每個 Shard 都包含整體資料的一部分，並且可以被部署在獨立的伺服器上。</p>
+<p>用生活化的比喻來理解：</p>
+<blockquote>
+<p>想像一下，經營著一個擁有全國所有圖書的「中央圖書館」。當藏書越來越多，讀者也越來越多時，找書和借書的速度變得很慢，圖書館變得擁擠不堪。</p>
+<p><strong>垂直擴展</strong>，就像是把這個中央圖書館蓋得更高、更大，換上更快的圖書輸送帶。</p>
+<p><strong>水平擴展 (Sharding)</strong>，則是決定在全國各地開設「分館」。例如，A-G 開頭的書放在台北分館，H-P 的書放在台中分館，Q-Z 的書放在高雄分館。如此一來，每個分館的壓力都變小了，讀者也可以就近、更快地找到自己想要的書。</p>
+</blockquote>
+<p>在這個比喻中，每個「分館」就是一個 Shard。</p>
+<h1 id="為什麼需要-sharding三大核心優勢"><a class="markdownIt-Anchor" href="#為什麼需要-sharding三大核心優勢"></a> 為什麼需要 Sharding？三大核心優勢</h1>
+<p>當正確實施 Sharding 後，可以帶來幾個顯著的好處：</p>
 <ul>
-<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">MDN - HTTP access control (CORS)</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.w3.org/TR/cors/">CORS 官方規範 (W3C)</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/adamchainz/django-cors-headers">django-cors-headers GitHub</a></li>
+<li><strong>提升效能 (Improved Performance)</strong>：查詢不再需要掃描數十億筆資料，而是在一個規模小得多的 Shard 中進行。這大大降低了查詢延遲，提升了讀寫速度。</li>
+<li><strong>增強擴展性 (Enhanced Scalability)</strong>：當資料繼續增長時，不需要升級昂貴的單一伺服器，只需要增加更多的 Shard（也就是更多的伺服器）即可。這種擴展方式更具彈性且成本效益更高。</li>
+<li><strong>提高可用性 (Increased Availability)</strong>：如果某一個 Shard 因為硬體故障而離線，它只會影響到儲存在該 Shard 上的那部分資料。其他 Shards 仍然可以正常運作，整個系統不會完全癱瘓（相較於單一資料庫故障會導致所有服務中斷）。</li>
 </ul>
-<hr />
-<p>如果曾經在開發中遇過 CORS 錯誤，不妨回頭看看是不是跨來源造成的限制，並從伺服器端著手解決吧！</p>
+<h1 id="sharding-是如何運作的關鍵的分片鍵-shard-key"><a class="markdownIt-Anchor" href="#sharding-是如何運作的關鍵的分片鍵-shard-key"></a> Sharding 是如何運作的？關鍵的「分片鍵 (Shard Key)」</h1>
+<p>系統是如何知道「哪筆資料該存到哪個 Shard」以及「去哪個 Shard 查詢資料」的呢？答案是透過一個至關重要的元素：<strong>分片鍵 (Shard Key)</strong>。</p>
+<p>Shard Key 是資料表中的一個（或多個）欄位，它的值會經過一個分片演算法，來決定這筆資料的最終歸屬地。選擇一個好的 Shard Key 是 Sharding 成敗的關鍵。</p>
+<p>以下是幾種常見的 Sharding 策略：</p>
+<h2 id="1-範圍分片-range-based-sharding"><a class="markdownIt-Anchor" href="#1-範圍分片-range-based-sharding"></a> 1. 範圍分片 (Range-Based Sharding)</h2>
+<p>這是最直觀的方式。根據 Shard Key 的一個範圍來劃分資料。</p>
+<ul>
+<li><strong>範例</strong>：一個訂單資料表，可以用 <code>order_date</code> 作為 Shard Key。
+<ul>
+<li>Shard 1: 存放 2023 年 1 月 - 3 月的訂單。</li>
+<li>Shard 2: 存放 2023 年 4 月 - 6 月的訂單。</li>
+<li>…以此類推。</li>
+</ul>
+</li>
+<li><strong>優點</strong>：容易實現，範圍查詢（例如查詢某個月份的所有訂單）非常高效，因為資料都在同一個 Shard 裡。</li>
+<li><strong>缺點</strong>：容易產生 <strong>熱點 (Hotspot)</strong> 問題。例如，所有新的訂單都會寫入最新的 Shard，導致該 Shard 負載極高，而舊的 Shard 則相對閒置。</li>
+</ul>
+<h2 id="2-雜湊分片-hash-based-sharding"><a class="markdownIt-Anchor" href="#2-雜湊分片-hash-based-sharding"></a> 2. 雜湊分片 (Hash-Based Sharding)</h2>
+<p>這種策略是將 Shard Key 經過一個雜湊函數（例如 MD5、SHA-256）處理，然後用雜湊結果來決定 Shard。</p>
+<ul>
+<li><strong>範例</strong>：一個用戶資料表，用 <code>user_id</code> 作為 Shard Key。
+<ul>
+<li><code>shard_id = hash(user_id) % 總Shard數量</code></li>
+</ul>
+</li>
+<li><strong>優點</strong>：資料可以非常均勻地分佈到各個 Shard，有效避免了熱點問題。</li>
+<li><strong>優點</strong>：範圍查詢變得非常困難。例如，無法輕易地查詢 <code>user_id</code> 從 100 到 200 的所有用戶，因為他們的資料經過雜湊後，可能散落在所有 Shards 中。</li>
+</ul>
+<h2 id="3-目錄分片-directory-based-sharding"><a class="markdownIt-Anchor" href="#3-目錄分片-directory-based-sharding"></a> 3. 目錄分片 (Directory-Based Sharding)</h2>
+<p>這種方式需要維護一個獨立的「查詢表 (Lookup Table)」，就像書的目錄一樣，它記錄了每個 Shard Key 值與其對應 Shard 的映射關係。</p>
+<ul>
+<li><strong>範例</strong>：應用程式在寫入或讀取資料前，先去查詢這個目錄表，找到目標 Shard，然後再進行操作。</li>
+<li><strong>優點</strong>：分片邏輯非常靈活，可以隨時更改某個 Key 對應的 Shard。</li>
+<li><strong>缺點</strong>：目錄表本身可能成為新的效能瓶頸或單點故障。</li>
+</ul>
+<h1 id="sharding-必須面對的挑戰"><a class="markdownIt-Anchor" href="#sharding-必須面對的挑戰"></a> Sharding 必須面對的挑戰</h1>
+<p>聽起來 Sharding 很美好，對吧？但在決定擁抱它之前，請務必了解它帶來的複雜性：</p>
+<ol>
+<li><strong>架構複雜度劇增</strong>：應用程式、部署流程、監控系統都需要重新設計，以適應分佈式的資料庫環境。</li>
+<li><strong>跨分片查詢 (Cross-Shard Queries)</strong>：如果一個查詢需要聯合 (JOIN) 不同 Shard 的資料，將會變得非常慢且複雜。通常需要應用程式層面進行多次查詢再組合結果。</li>
+<li><strong>資料重新平衡 (Rebalancing)</strong>：當新增一個 Shard 時，需要將部分資料從舊的 Shards 遷移到新的 Shard 中，這個過程被稱為 Rebalancing。這是一個非常複雜且具風險的操作。</li>
+<li><strong>交易一致性</strong>：在單一資料庫中，有 ACID 交易來保證資料的一致性。但在分佈式環境下，要維持跨 Shard 的交易一致性是一個巨大的技術挑戰。</li>
+</ol>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>Sharding 是一個強大的工具，但它也是一把雙面刃。它通常被視為<strong>擴展的最後手段</strong>。</p>
+<p>在考慮 Sharding 之前，請先確保已經窮盡了其他所有優化方案：</p>
+<ul>
+<li><strong>垂直擴展</strong>：伺服器硬體是否還有升級空間？</li>
+<li><strong>快取 (Caching)</strong>：是否已經有效利用 Redis 或 Memcached 等工具來減少資料庫讀取壓力？</li>
+<li><strong>讀寫分離</strong>：是否已經將讀取操作導向到唯讀副本 (Read Replicas)？</li>
+<li><strong>資料庫與查詢優化</strong>：是否還有未加索引的欄位？是否有可以改寫的慢查詢？</li>
+</ul>
+<p>只有當上述方法都已無法滿足需求，且應用程式正面臨「超大規模」的資料量（通常是 TB 級別）和吞吐量時，Sharding 才應該被納入考慮範圍。</p>
 
     </div>
 
@@ -736,21 +642,18 @@ CORS_ALLOW_ALL_ORIGINS = <span class="hljs-literal">True</span>
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/my-blog/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/my-blog/tags/Database/" rel="tag"># Database</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/my-blog/2025/05/05/Supabase%20PostgreSQL%20%E9%81%A0%E7%AB%AF%E8%B3%87%E6%96%99%E5%BA%AB%E5%BB%BA%E7%AB%8B%E8%88%87%E9%80%A3%E6%8E%A5/" rel="prev" title="Supabase PostgreSQL 遠端資料庫建立與連接">
-                  <i class="fa fa-angle-left"></i> Supabase PostgreSQL 遠端資料庫建立與連接
+                <a href="/my-blog/2025/08/14/%E8%A7%A3%E9%8E%96%E5%8D%B3%E6%99%82%E8%B3%87%E6%96%99%E7%9A%84%E5%A5%A7%E7%A7%98%20%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20CDC/" rel="prev" title="解鎖即時資料的奧秘：深入淺出 CDC (Change Data Capture)">
+                  <i class="fa fa-angle-left"></i> 解鎖即時資料的奧秘：深入淺出 CDC (Change Data Capture)
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/my-blog/2025/06/19/%E4%BB%80%E9%BA%BC%E6%98%AF%20SQL%20Injection%E5%8F%88%E8%A9%B2%E5%A6%82%E4%BD%95%E9%A0%90%E9%98%B2/" rel="next" title="什麼是 SQL Injection？又該如何預防？">
-                  什麼是 SQL Injection？又該如何預防？ <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>

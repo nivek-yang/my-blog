@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">58</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">59</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">45</span></a>
       <ul class="sub-menu">
   
@@ -183,7 +183,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Database/">
         Database
-        <span class="post-count">(10)</span>
+        <span class="post-count">(11)</span>
       </a>
     </li>
   
@@ -464,7 +464,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-count">59</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -489,6 +489,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/04/Systemd%20vs%20Docker%20%E6%98%AF%E6%95%B5%E6%98%AF%E5%8F%8B%20%E8%AA%B0%E4%BE%86%E7%AE%A1%E7%90%86%E8%AA%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/08/04/Systemd%20vs%20Docker%20%E6%98%AF%E6%95%B5%E6%98%AF%E5%8F%8B%20%E8%AA%B0%E4%BE%86%E7%AE%A1%E7%90%86%E8%AA%B0/" class="post-title-link" itemprop="url">
+              Systemd vs. Docker：是敵是友？誰來管理誰？
+            </a>
+            <a href="/my-blog/2025/08/04/Systemd%20vs%20Docker%20%E6%98%AF%E6%95%B5%E6%98%AF%E5%8F%8B%20%E8%AA%B0%E4%BE%86%E7%AE%A1%E7%90%86%E8%AA%B0/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-08-04 00:00:00 / 修改時間：22:31:29" itemprop="dateCreated datePublished" datetime="2025-08-04T00:00:00+08:00">2025-08-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">在上一篇文章《解鎖 systemd：現代 Linux 開發者不可不知的服務管理利器》中，探討了如何利用 systemd 來優雅地管理應用程式。一個非常核心且重要的問題：「既然有了 Docker 和 Docker Compose，為什麼還需要 systemd 呢？ 如果用了 Docker，還需要 systemd 嗎？」 讓我們來深入剖析這兩者之間的關係，會發現，它們並非互相取代的競爭對手，而是一對相輔相成的黃金搭檔。 理解各自的職責：分層的藝術 要理解 systemd 和 Docker 的關係，最關鍵的一點是：它們解決的是不同層面的問題。 用一個生動的比喻來理解： Linux 作業系統：就像一棟辦公大樓，提供了基礎設施（水、電、空間）。 systemd：是這棟大樓的總務與保全系統。它的職責是確保大樓的基礎服務正常運轉，比如確保電力系統 (network.target) 在上班前就已啟動，並在伺服器（大樓）重啟時，自動化地讓各個辦公室（服務）恢復運作。它關心的是「程序是否在作業系統層級上運行」。 Docker：則像是一個個**「拎包入住」的模組化辦公室**。每個辦公室（Container）都自帶了所有必需的辦公用品、裝潢和特定環境（應用程式的函式庫、依賴、配置），與隔壁辦公室完全隔離。Docker 關心的是「應用程式能否在一個隔離且一致的環境中運行」。 Docker Compose：是部門規劃師。他拿著一張藍圖 (docker-compose.yml)，規劃：「這個部門需要三個辦公室，一個是前端，一個是後端，一個是資料庫，而且它們之間可以用內線電話（虛擬網路）溝通。」 從這個比喻中，可以清楚地了解：systemd 負責管理整棟大樓的運轉，而 Docker 則負責管理每個辦公室內部的環境。 為什麼不直接用 Docker 就好？ 可能會想說：「應用程式和它的所有依賴都在 Docker Compose 裡定義好了，只要 docker compose up -d 就能跑起來，為什麼還需要 systemd 這個『大樓管理員』呢？」 原因有二： 1. 誰來管理 Docker 自己？ Docker Engine (即 dockerd 服務) 本身就是一個需要在作業系統上運行的背景程序。當伺服器開機時，是什麼東西自動啟動了 dockerd 服務，讓你可以使用 docker 指令？ 答案正是 systemd！ 可以隨時在 Linux 伺服器上執行這個指令來驗證： sudo systemctl status docker.service 會看到 docker.service 正在被 systemd 管理著。systemd 確保了 Docker 這個「模組化辦公室的供應商」在伺服器啟動時就已經準備就緒。 2. 追求的是終極可靠性 Docker 和 Docker Compose 提供了優秀的內部管理機制。例如，可以在 docker-compose.yml 中為服務設定 restart: always。 # docker-compose.yml services: my-app: image: my-app-image restart: always # 當容器停止時，Docker 會自動重啟它 這在大部分情況下都很好用。但是，如果發生了更嚴重的問題，例如 Docker Engine (dockerd) 本身崩潰了或被意外停止了呢？ 這時，所有由它管理的容器（無論 restart 策略是什麼）都會停止運行，而且無法自行恢復。就像辦公室的電力總開關被關了，單個辦公室內的備用電源是沒用的。 這時，就需要更高層級的管理者——systemd——登場了。 用 systemd 來管理 Docker Compose 這就是最佳實踐的誕生：用 systemd 來啟動、停止和監控我們的 docker-compose 應用。 這樣做，我們就建立了一個強大的、多層次的可靠性保障： 容器層級：Docker 負責在容器內部保持應用程式健康。 主機層級：systemd 負責確保整個 Docker Compose 應用（作為一個整體單元）在主機上始終運行。 實戰：為 Docker Compose 建立一個 systemd 服務 假設 docker-compose.yml 放在 /home/user/my_docker_app/ 目錄下。可以像這樣為它建立一個 systemd 服務檔： # /etc/systemd/system/my-docker-compose-app.service [Unit] Description=My Docker Compose Application # 要求 docker.service 必須先啟動 Requires=docker.service # 在 docker.service 啟動之後再啟動本服務 After=docker.service [Service] # 使用你的使用者 User=myuser # Docker Compose 檔案所在的目錄 WorkingDirectory=/home/myuser/my_docker_app # 啟動指令：在背景中啟動 compose # 注意：我們不再使用 -d 參數，因為 systemd 會處理背景化 ExecStart=/usr/local/bin/docker-compose up # 停止指令 ExecStop=/usr/local/bin/docker-compose down # 讓 systemd 自動重啟我們的服務 Restart=always RestartSec=10s [Install] WantedBy=multi-user.target 注意：docker-compose 的路徑可能是 /usr/bin/docker-compose 或 /usr/local/bin/docker-compose，請用 which docker-compose 確認。 這樣做的好處是什麼？ 開機自啟：執行 sudo systemctl enable my-docker-compose-app.service，整個應用集群就會在伺服器啟動時自動運行。 終極守護：如果 Docker Engine 崩潰後重啟，systemd 會因為依賴關係（Requires 和 After）自動地重新啟動 my-docker-compose-app 服務。 統一管理介面：可以像管理普通系統服務一樣管理 Docker 應用，使用 systemctl start, systemctl stop, systemctl status。 集中日誌：docker-compose 的所有輸出（包含所有容器的 log）都會被 journald 捕獲。只需執行 sudo journalctl -u my-docker-compose-app.service -f 就可以查看應用集群的所有日誌，極其方便！ 結論 要管理一個獨立的、非容器化的程式嗎？ 👉 直接使用 systemd，如上一篇文章所示。 要打包一個含有多個組件、複雜依賴的應用程式，並確保它在任何地方都能一致地運行嗎？ 👉 使用 Docker 和 Docker Compose 來進行封裝。 希望將這個打包好的 Docker 應用，在生產環境的 Linux 伺服器上進行可靠、穩定、可維護的部署嗎？ 👉 將 Docker Compose 作為一個整體，用 systemd 來管理它。 systemd 和 Docker 它們各自填補了現代化應用部署體系中不可或缺的一環。systemd 是穩固的地基，Docker Compose 是精美的建築。只有當地基穩固時，上面的建築才能屹立不倒。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/08/04/Systemd%20vs%20Docker%20%E6%98%AF%E6%95%B5%E6%98%AF%E5%8F%8B%20%E8%AA%B0%E4%BE%86%E7%AE%A1%E7%90%86%E8%AA%B0/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1253,92 +1339,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/07/24/Python%20Celery%20%E5%85%A5%E9%96%80%20%E9%9D%9E%E5%90%8C%E6%AD%A5%E4%BB%BB%E5%8B%99%E7%9A%84%E5%BE%97%E5%8A%9B%E5%8A%A9%E6%89%8B/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/23/PubSub%20vs%20SSE%20%E5%88%A5%E5%86%8D%E6%90%9E%E6%B7%B7%E4%BA%86%20%E4%B8%80%E5%80%8B%E6%98%AF%E5%BE%8C%E7%AB%AF%E6%9E%B6%E6%A7%8B%E4%B8%80%E5%80%8B%E6%98%AF%E5%89%8D%E7%AB%AF%E5%8D%94%E5%AE%9A/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/07/23/PubSub%20vs%20SSE%20%E5%88%A5%E5%86%8D%E6%90%9E%E6%B7%B7%E4%BA%86%20%E4%B8%80%E5%80%8B%E6%98%AF%E5%BE%8C%E7%AB%AF%E6%9E%B6%E6%A7%8B%E4%B8%80%E5%80%8B%E6%98%AF%E5%89%8D%E7%AB%AF%E5%8D%94%E5%AE%9A/" class="post-title-link" itemprop="url">
-              Pub/Sub vs SSE：別再搞混了！一個是後端架構，一個是前端協定
-            </a>
-            <a href="/my-blog/2025/07/23/PubSub%20vs%20SSE%20%E5%88%A5%E5%86%8D%E6%90%9E%E6%B7%B7%E4%BA%86%20%E4%B8%80%E5%80%8B%E6%98%AF%E5%BE%8C%E7%AB%AF%E6%9E%B6%E6%A7%8B%E4%B8%80%E5%80%8B%E6%98%AF%E5%89%8D%E7%AB%AF%E5%8D%94%E5%AE%9A/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-07-23 00:00:00 / 修改時間：14:40:31" itemprop="dateCreated datePublished" datetime="2025-07-23T00:00:00+08:00">2025-07-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">在現代應用開發中，「即時」和「事件驅動」已經成為標配。當討論這些技術時，Pub/Sub 和 SSE (Server-Sent Events) 這兩個名詞經常被提及，也因此常常被混淆。許多開發者會問：「應該用 Pub/Sub 還是 SSE 來實現即時功能？」 這個問題的答案是：可能兩個都需要。 因為它們根本不是競爭關係，而是在軟體架構中扮演不同角色的合作夥伴。本文將徹底釐清這兩者的差異，並展示它們如何協同工作，打造出強大、可擴展的即時系統。 Pub/Sub - 系統後台的「中央郵政系統」 想像一下訂閱 YouTube 頻道。作為一個訂閱者，只關心訂閱的頻道有沒有發布新影片。不需要認識影片創作者，更不用關心他什麼時候上傳。反過來，創作者也只需要將影片發布到他的頻道，完全不用理會是誰訂閱了他。 這就是 發布/訂閱 (Publish/Subscribe, or Pub/Sub) 模式的精髓。 Pub/Sub 是一種非同步訊息傳遞的設計模式，主要用於實現後端服務之間的解耦。 它由三個核心角色組成： 發布者 (Publisher)：事件的產生者（例如：訂單服務、用戶註冊服務）。它只負責將訊息發布到一個特定的「主題」。 主題 (Topic)：一個訊息分類的頻道或中介（例如：一個名為 order-created 的主題）。 訂閱者 (Subscriber)：事件的消費者（例如：庫存服務、通知服務）。它對特定主題感興趣，並接收來自該主題的所有訊息。 為什麼要用 Pub/Sub？ 核心目的只有一個：解耦 (Decoupling)！ 位置解耦：發布者和訂閱者不需要知道對方的網路位置。 時間解耦：發布者和訂閱者不需要同時在線。發布者發送訊息後，訂閱者可以在稍後有空時再去處理。 同步解耦：兩者之間的通訊是非同步的，發布者發送訊息後可以立即去做其他事，不必等待訂閱者回應。 這在哪裡使用？ 幾乎完全在後端服務之間。需要一個稱為訊息中介 (Message Broker) 的工具來實現它。 常見工具：Apache Kafka, RabbitMQ, Google Cloud Pub/Sub, Redis Pub/Sub。 ** Pub/Sub 是一個強大的後端架構模式，用於打造可擴展、有彈性的分散式系統。** SSE - 對瀏覽器的「即時廣播電台」 現在，想像在網頁上追蹤一場體育比賽的比分。不需要手動刷新頁面，比分、安打、出局數都會自動更新。 這就是 伺服器發送事件 (Server-Sent Events, or SSE) 的典型場景。 SSE 是一種基於標準 HTTP 的網頁通訊協定，允許伺服器單向地、即時地向客戶端（瀏覽器）推送數據。 它的運作方式非常簡單： 瀏覽器向伺服器的某個端點發起一個普通的 HTTP GET 請求。 伺服器「抓住」這個請求不放，保持連線開啟。 伺服器的 Content-Type 回應標頭設為 text/event-stream。 每當有新事件發生時，伺服器就沿著這條開啟的連線，將格式化好的文字數據（data: ...\n\n）推送給瀏覽器。 為什麼要用 SSE？ 簡單：前端只需使用內建的 EventSource API，後端也只需遵循簡單的文本格式。 標準與相容：它就是 HTTP，可以無縫通過各種防火牆和代理。 自動重連：這是 SSE 的一大殺手級特性。如果連線意外中斷（例如網路切換），瀏覽器的 EventSource 會自動嘗試重新連線。 這在哪裡使用？ 在伺服器 (Server) 和前端瀏覽器 (Client) 之間。 典型場景：即時新聞、股票行情更新、訂單狀態追蹤、進度條顯示。 SSE 是一種輕量、可靠、專為「伺服器到客戶端」單向數據推送而生的網頁技術。 Pub/Sub vs SSE 用一張表格來清晰地對比它們： 特性 / 方面 Pub/Sub (發布/訂閱) SSE (伺服器發送事件) 類型 後端架構模式 前端通訊協定 參與者 後端服務 ↔ 訊息中介 ↔ 後端服務 後端伺服器 → 前端瀏覽器 通訊方向 由中介管理的多對多 (Many-to-Many) 嚴格的單向 (One-Way) 核心目的 服務解耦，系統彈性 向網頁推送即時更新 比喻 訂閱雜誌/YouTube 頻道 廣播電台 / P.A. 系統 實戰場景：即時物流追蹤系統 讓我們看看它們如何協同工作。為了讓這個流程更加視覺化，讓我們用一張圖來表示一個即時物流追蹤系統的數據流： graph TD; subgraph &quot;後端架構 (Pub/Sub 模式)&quot; A[&quot;貨車 GPS 裝置&quot;] --&gt; B[&quot;位置服務 (Publisher)&quot;]; B -- &quot;發布事件&quot; --&gt; C&#123;&quot;Pub/Sub 主題&lt;br&gt;location-updates&quot;&#125;; C -- &quot;分發給訂閱者&quot; --&gt; D[&quot;數據庫存檔服務 (Subscriber)&quot;]; C -- &quot;分發給訂閱者&quot; --&gt; E[&quot;即時分發服務 (Subscriber)&quot;]; D --&gt; F[(&quot;歷史軌跡數據庫&quot;)]; end subgraph &quot;前端通訊&quot; G[&quot;使用者瀏覽器&quot;]; end E -- &quot;即時推送&lt;br&gt;(SSE 連線)&quot; --&gt; G; %% Styling style C fill:#FFE3E3,stroke:#B40000,stroke-width:2px; style E fill:#D6E8FF,stroke:#0042A3,stroke-width:2px; 流程： 事件產生 (Publisher)：貨車的 GPS 裝置上報位置給「位置服務」。該服務處理後，將訊息**發布(Publish)**到 location-updates 這個主題上。 後端處理 (Subscribers)： Pub/Sub 主題（如 Kafka 或 RabbitMQ）將事件分發給所有訂閱者。 「數據庫存檔服務」收到事件，將其存入資料庫備份。 「即時分發服務」也收到同一個事件，準備將其推送給前端。 以上所有後端內部的通訊，都由 Pub/Sub 模式完成，服務之間互不干擾。 前端推送 (SSE 連線)： 當使用者打開追蹤頁面時，他的瀏覽器會與「即時分發服務」建立一條 SSE 連線。 「即時分發服務」收到來自 Pub/Sub 的新位置後，立刻透過這條 SSE 連線，將新座標推送給對應的使用者瀏覽器。 這最後一哩路，從後端到前端的即時數據傳遞，由 SSE 完美勝任。 在這個架構中，Pub/Sub 完美地解耦了後端複雜的業務邏輯，而 SSE 則作為最後一哩路，高效、可靠地將最終結果呈現在使用者面前。 結論 不要再問「Pub/Sub 和 SSE 哪個好？」，而應該問「在系統中，哪部分應該用 Pub/Sub，哪部分適合用 SSE？」。 當需要在系統內部（後端）進行非同步、一對多或多對多的服務通訊時，請使用 Pub/Sub 模式。 當需要將後端的事件結果，單向、即時地推送給網頁前端時，請使用 SSE 協定。 理解它們各自的定位和職責，就能設計出更清晰、更強大、更具擴展性的現代化應用程式。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/07/23/PubSub%20vs%20SSE%20%E5%88%A5%E5%86%8D%E6%90%9E%E6%B7%B7%E4%BA%86%20%E4%B8%80%E5%80%8B%E6%98%AF%E5%BE%8C%E7%AB%AF%E6%9E%B6%E6%A7%8B%E4%B8%80%E5%80%8B%E6%98%AF%E5%89%8D%E7%AB%AF%E5%8D%94%E5%AE%9A/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>
