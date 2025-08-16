@@ -19,27 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="使用 uv 建立 Python 專案環境：快速、乾淨、可重現 uv 是由 Astral 開發的超高速 Python 工具，可取代 pip, venv, pyenv, poetry 的安裝、建立虛擬環境、Python 版本管理、專案管理等功能，支援 pyproject.toml 的依賴管理，是現代化 Python 專案環境建置的利器。 這篇筆記整理了使用 uv 建立虛擬環境、安裝套件、管理依賴的完">
+    <meta name="description" content="在建構應用程式的旅程中，資料庫無疑是心臟般的存在。但隨著網站流量成長、用戶數增加，是否曾面臨資料庫讀取變慢、單點故障風險高的困境？ 這篇文章要來聊聊一個經典且強大的解決方案：主從式資料庫架構 (Master-Slave Replication)。它不僅是解決上述問題的利器，更是理解現代分散式系統的基石。  什麼是主從式資料庫架構？ 想像一下，開了一家圖書館。  一台主要的服務台（主資料庫 Mast">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用 uv 建立 Python 專案環境">
-<meta property="og:url" content="https://nivek-yang.github.io/2025/04/20/%E4%BD%BF%E7%94%A8uv%E5%BB%BA%E7%AB%8BPython%E5%B0%88%E6%A1%88%E7%92%B0%E5%A2%83/index.html">
+<meta property="og:title" content="搞懂主從式資料庫 (Master-Slave Replication)，提升效能與備援的關鍵第一步">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/08/16/%E6%90%9E%E6%87%82%E4%B8%BB%E5%BE%9E%E5%BC%8F%E8%B3%87%E6%96%99%E5%BA%AB%20Master-Slave%20Replication/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="使用 uv 建立 Python 專案環境：快速、乾淨、可重現 uv 是由 Astral 開發的超高速 Python 工具，可取代 pip, venv, pyenv, poetry 的安裝、建立虛擬環境、Python 版本管理、專案管理等功能，支援 pyproject.toml 的依賴管理，是現代化 Python 專案環境建置的利器。 這篇筆記整理了使用 uv 建立虛擬環境、安裝套件、管理依賴的完">
+<meta property="og:description" content="在建構應用程式的旅程中，資料庫無疑是心臟般的存在。但隨著網站流量成長、用戶數增加，是否曾面臨資料庫讀取變慢、單點故障風險高的困境？ 這篇文章要來聊聊一個經典且強大的解決方案：主從式資料庫架構 (Master-Slave Replication)。它不僅是解決上述問題的利器，更是理解現代分散式系統的基石。  什麼是主從式資料庫架構？ 想像一下，開了一家圖書館。  一台主要的服務台（主資料庫 Mast">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2025-04-19T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-04-20T18:31:35.915Z">
+<meta property="article:published_time" content="2025-08-15T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-16T15:19:43.093Z">
 <meta property="article:author" content="Kaiwii">
-<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Database">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://nivek-yang.github.io/2025/04/20/%E4%BD%BF%E7%94%A8uv%E5%BB%BA%E7%AB%8BPython%E5%B0%88%E6%A1%88%E7%92%B0%E5%A2%83/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/08/16/%E6%90%9E%E6%87%82%E4%B8%BB%E5%BE%9E%E5%BC%8F%E8%B3%87%E6%96%99%E5%BA%AB%20Master-Slave%20Replication/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/04/20/%E4%BD%BF%E7%94%A8uv%E5%BB%BA%E7%AB%8BPython%E5%B0%88%E6%A1%88%E7%92%B0%E5%A2%83/","path":"2025/04/20/使用uv建立Python專案環境/","title":"使用 uv 建立 Python 專案環境"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/08/16/%E6%90%9E%E6%87%82%E4%B8%BB%E5%BE%9E%E5%BC%8F%E8%B3%87%E6%96%99%E5%BA%AB%20Master-Slave%20Replication/","path":"2025/08/16/搞懂主從式資料庫 Master-Slave Replication/","title":"搞懂主從式資料庫 (Master-Slave Replication)，提升效能與備援的關鍵第一步"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>使用 uv 建立 Python 專案環境 | 我的技術部落格</title>
+<title>搞懂主從式資料庫 (Master-Slave Replication)，提升效能與備援的關鍵第一步 | 我的技術部落格</title>
   
 
 
@@ -454,7 +454,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-uv-%E5%BB%BA%E7%AB%8B-python-%E5%B0%88%E6%A1%88%E7%92%B0%E5%A2%83%E5%BF%AB%E9%80%9F-%E4%B9%BE%E6%B7%A8-%E5%8F%AF%E9%87%8D%E7%8F%BE"><span class="nav-number">1.</span> <span class="nav-text"> 使用 uv 建立 Python 專案環境：快速、乾淨、可重現</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-uv"><span class="nav-number">1.1.</span> <span class="nav-text"> 🛠 安裝 uv</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B-python-%E5%B0%88%E6%A1%88%E7%92%B0%E5%A2%83%E6%B5%81%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text"> 🚀 建立 Python 專案環境流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F%E8%AA%AA%E6%98%8E"><span class="nav-number">1.2.1.</span> <span class="nav-text"> 步驟說明：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8-uv-%E6%8C%87%E4%BB%A4%E7%B8%BD%E8%A6%BD"><span class="nav-number">1.3.</span> <span class="nav-text"> ✅ 常用 uv 指令總覽</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%85%E9%99%A4%E4%B8%A6%E9%87%8D%E5%BB%BA%E8%99%9B%E6%93%AC%E7%92%B0%E5%A2%83"><span class="nav-number">1.4.</span> <span class="nav-text"> 🔄 清除並重建虛擬環境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E5%AE%9A-python-%E7%89%88%E6%9C%AC%E9%81%B8%E6%93%87%E6%80%A7"><span class="nav-number">1.5.</span> <span class="nav-text"> 🐍 指定 Python 版本（選擇性）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%94%E8%BC%83-pyenv-%E8%B7%9F-uv-%E5%85%A9%E7%A8%AE-python-%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86"><span class="nav-number">1.5.1.</span> <span class="nav-text"> 比較 pyenv 跟 uv 兩種 Python 版本管理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%B7%E8%A1%8C%E8%88%87%E9%96%8B%E7%99%BC%E4%B8%8D%E7%94%A8%E6%89%8B%E5%8B%95-activate-%E8%99%9B%E6%93%AC%E7%92%B0%E5%A2%83"><span class="nav-number">1.6.</span> <span class="nav-text"> 🧪 執行與開發（不用手動 activate 虛擬環境！）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AF%84%E4%BE%8B-pyprojecttoml"><span class="nav-number">1.7.</span> <span class="nav-text"> 📌 範例 pyproject.toml</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E6%AF%94%E8%BC%83"><span class="nav-number">1.8.</span> <span class="nav-text"> 指令比較</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%B5%90"><span class="nav-number">1.9.</span> <span class="nav-text"> 🧠 小結</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF%E4%B8%BB%E5%BE%9E%E5%BC%8F%E8%B3%87%E6%96%99%E5%BA%AB%E6%9E%B6%E6%A7%8B"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是主從式資料庫架構？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9C%80%E8%A6%81%E5%AE%83%E6%A0%B8%E5%BF%83%E5%84%AA%E5%8B%A2%E8%A7%A3%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text"> 為什麼需要它？核心優勢解析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%AE%80%E5%AF%AB%E5%88%86%E9%9B%A2-readwrite-splitting"><span class="nav-number">2.1.</span> <span class="nav-text"> 1. 讀寫分離 (Read&#x2F;Write Splitting)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E8%88%87%E8%B3%87%E6%96%99%E5%82%99%E6%8F%B4-high-availability-data-redundancy"><span class="nav-number">2.2.</span> <span class="nav-text"> 2. 高可用性與資料備援 (High Availability &amp; Data Redundancy)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%95%B8%E6%93%9A%E5%88%86%E6%9E%90%E8%88%87%E5%A0%B1%E8%A1%A8-data-analysis-reporting"><span class="nav-number">2.3.</span> <span class="nav-text"> 3. 數據分析與報表 (Data Analysis &amp; Reporting)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BB%E5%BE%9E%E5%BC%8F%E8%B3%87%E6%96%99%E5%BA%AB%E6%9E%B6%E6%A7%8B%E6%98%AF%E5%A6%82%E4%BD%95%E9%81%8B%E4%BD%9C%E7%9A%84"><span class="nav-number">3.</span> <span class="nav-text"> 主從式資料庫架構是如何運作的？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E7%9A%84%E6%AC%8A%E8%A1%A1%E8%88%87%E6%8C%91%E6%88%B0"><span class="nav-number">4.</span> <span class="nav-text"> 需要注意的權衡與挑戰</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">5.</span> <span class="nav-text"> 總結</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -502,7 +502,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/20/%E4%BD%BF%E7%94%A8uv%E5%BB%BA%E7%AB%8BPython%E5%B0%88%E6%A1%88%E7%92%B0%E5%A2%83/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/16/%E6%90%9E%E6%87%82%E4%B8%BB%E5%BE%9E%E5%BC%8F%E8%B3%87%E6%96%99%E5%BA%AB%20Master-Slave%20Replication/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -515,12 +515,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="使用 uv 建立 Python 專案環境 | 我的技術部落格">
+      <meta itemprop="name" content="搞懂主從式資料庫 (Master-Slave Replication)，提升效能與備援的關鍵第一步 | 我的技術部落格">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          使用 uv 建立 Python 專案環境
+          搞懂主從式資料庫 (Master-Slave Replication)，提升效能與備援的關鍵第一步
         </h1>
 
         <div class="post-meta-container">
@@ -530,15 +530,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">發表於</span>
+      
 
-      <time title="創建時間：2025-04-20 00:00:00" itemprop="dateCreated datePublished" datetime="2025-04-20T00:00:00+08:00">2025-04-20</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新於</span>
-      <time title="修改時間：2025-04-21 02:31:35" itemprop="dateModified" datetime="2025-04-21T02:31:35+08:00">2025-04-21</time>
+      <time title="創建時間：2025-08-16 00:00:00 / 修改時間：23:19:43" itemprop="dateCreated datePublished" datetime="2025-08-16T00:00:00+08:00">2025-08-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -559,203 +553,78 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="使用-uv-建立-python-專案環境快速-乾淨-可重現"><a class="markdownIt-Anchor" href="#使用-uv-建立-python-專案環境快速-乾淨-可重現"></a> 使用 <code>uv</code> 建立 Python 專案環境：快速、乾淨、可重現</h1>
-<p><a target="_blank" rel="noopener" href="https://github.com/astral-sh/uv"><code>uv</code></a> 是由 Astral 開發的超高速 Python 工具，可取代 <code>pip</code>, <code>venv</code>, <code>pyenv</code>, <code>poetry</code> 的安裝、建立虛擬環境、Python 版本管理、專案管理等功能，支援 <code>pyproject.toml</code> 的依賴管理，是現代化 Python 專案環境建置的利器。</p>
-<p>這篇筆記整理了使用 <code>uv</code> 建立虛擬環境、安裝套件、管理依賴的完整流程，適合給想建立 <strong>快速、可重現、乾淨的 Python 開發環境</strong> 的工程師參考。</p>
-<hr />
-<h2 id="安裝-uv"><a class="markdownIt-Anchor" href="#安裝-uv"></a> 🛠 安裝 uv</h2>
-<pre class="highlight"><code class="bash">pip install uv
-</code></pre>
-<p>或使用 Homebrew (macOS/Linux)：</p>
-<pre class="highlight"><code class="bash">brew install astral-sh/tap/uv
-</code></pre>
-<hr />
-<h2 id="建立-python-專案環境流程"><a class="markdownIt-Anchor" href="#建立-python-專案環境流程"></a> 🚀 建立 Python 專案環境流程</h2>
-<pre class="highlight"><code class="bash">uv init .
-uv venv
-uv add django
-</code></pre>
-<h3 id="步驟說明"><a class="markdownIt-Anchor" href="#步驟說明"></a> 步驟說明：</h3>
-<table>
-<thead>
-<tr>
-<th>指令</th>
-<th>功能說明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>uv init .</code></td>
-<td>初始化 <code>pyproject.toml</code>，設定專案 metadata</td>
-</tr>
-<tr>
-<td><code>uv venv</code></td>
-<td>建立虛擬環境 <code>.venv</code></td>
-</tr>
-<tr>
-<td><code>uv add django</code></td>
-<td>安裝 Django 並加入 <code>pyproject.toml</code> + <code>uv.lock</code></td>
-</tr>
-</tbody>
-</table>
-<p>✅ 安裝的套件會被記錄到 <code>pyproject.toml</code> 中，並且自動鎖定到 <code>uv.lock</code>，確保環境重現性。</p>
-<hr />
-<h2 id="常用-uv-指令總覽"><a class="markdownIt-Anchor" href="#常用-uv-指令總覽"></a> ✅ 常用 uv 指令總覽</h2>
-<table>
-<thead>
-<tr>
-<th>功能</th>
-<th>指令範例</th>
-<th>說明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>安裝套件</td>
-<td><code>uv add requests</code></td>
-<td>加入正式依賴</td>
-</tr>
-<tr>
-<td>安裝 dev 套件</td>
-<td><code>uv add --dev ruff</code></td>
-<td>加入開發用依賴（如 Linter）</td>
-</tr>
-<tr>
-<td>查看已安裝套件</td>
-<td><code>uv pip list</code></td>
-<td>顯示虛擬環境內的套件</td>
-</tr>
-<tr>
-<td>執行 Python 程式</td>
-<td><code>uv run python app.py</code></td>
-<td>使用虛擬環境執行程式</td>
-</tr>
-<tr>
-<td>移除套件</td>
-<td><code>uv remove requests</code></td>
-<td>從依賴清單和虛擬環境中移除套件</td>
-</tr>
-<tr>
-<td>同步環境</td>
-<td><code>uv sync</code></td>
-<td>根據 lock 檔安裝所有依賴</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="清除並重建虛擬環境"><a class="markdownIt-Anchor" href="#清除並重建虛擬環境"></a> 🔄 清除並重建虛擬環境</h2>
-<p>如果想清除多餘的依賴或重建乾淨環境：</p>
-<pre class="highlight"><code class="bash"><span class="hljs-built_in">rm</span> -rf .venv uv.lock
-uv venv
-uv <span class="hljs-built_in">sync</span>
-</code></pre>
-<p>這會根據目前 <code>pyproject.toml</code> 重建乾淨環境，不殘留任何「孤兒套件」。</p>
-<hr />
-<h2 id="指定-python-版本選擇性"><a class="markdownIt-Anchor" href="#指定-python-版本選擇性"></a> 🐍 指定 Python 版本（選擇性）</h2>
-<p>檢查可安裝哪些 Python 版本並安裝</p>
-<pre class="highlight"><code class="sh">uv python list
-uv python install 3.12
-</code></pre>
-<p>切換 Python 版本</p>
-<pre class="highlight"><code class="sh">uv python pin 3.12
-</code></pre>
-<pre class="highlight"><code class="toml"><span class="hljs-comment"># pyproject.toml</span>
-<span class="hljs-section">[project]</span>
-<span class="hljs-attr">requires-python</span> = <span class="hljs-string">&quot;&gt;=3.10&quot;</span>
-</code></pre>
-<p>如需使用指定的 Python 安裝版本建構 <code>.venv</code>，可這樣設定：</p>
-<pre class="highlight"><code class="bash">PYTHON=/usr/local/bin/python3.10 uv venv
-</code></pre>
-<h3 id="比較-pyenv-跟-uv-兩種-python-版本管理"><a class="markdownIt-Anchor" href="#比較-pyenv-跟-uv-兩種-python-版本管理"></a> 比較 pyenv 跟 uv 兩種 Python 版本管理</h3>
-<table>
-<thead>
-<tr>
-<th>工具</th>
-<th>用途</th>
-<th>影響範圍</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>pyenv</code></td>
-<td>控制 <strong>整個系統或目錄的 Python 版本</strong></td>
-<td>全域或目錄切換</td>
-</tr>
-<tr>
-<td><code>uv</code></td>
-<td>在虛擬環境中自動管理 Python 版本</td>
-<td>只限 <code>.venv</code></td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="執行與開發不用手動-activate-虛擬環境"><a class="markdownIt-Anchor" href="#執行與開發不用手動-activate-虛擬環境"></a> 🧪 執行與開發（不用手動 activate 虛擬環境！）</h2>
-<pre class="highlight"><code class="bash">uv run python manage.py runserver  <span class="hljs-comment"># 執行 Django 開發伺服器</span>
-uv run pytest                      <span class="hljs-comment"># 執行測試</span>
-</code></pre>
-<blockquote>
-<p><code>uv run</code> 會自動使用 <code>.venv/bin/python</code>，不需手動 <code>source .venv/bin/activate</code></p>
-</blockquote>
-<hr />
-<h2 id="範例-pyprojecttoml"><a class="markdownIt-Anchor" href="#範例-pyprojecttoml"></a> 📌 範例 <code>pyproject.toml</code></h2>
-<pre class="highlight"><code class="toml"><span class="hljs-section">[project]</span>
-<span class="hljs-attr">name</span> = <span class="hljs-string">&quot;my-uv-app&quot;</span>
-<span class="hljs-attr">version</span> = <span class="hljs-string">&quot;0.1.0&quot;</span>
-<span class="hljs-attr">description</span> = <span class="hljs-string">&quot;A Python app using uv for dependency management&quot;</span>
-<span class="hljs-attr">requires-python</span> = <span class="hljs-string">&quot;&gt;=3.10&quot;</span>
-
-<span class="hljs-section">[tool.uv.dependencies]</span>
-<span class="hljs-attr">django</span> = <span class="hljs-string">&quot;*&quot;</span>
-
-<span class="hljs-section">[tool.uv.dev-dependencies]</span>
-<span class="hljs-attr">ruff</span> = <span class="hljs-string">&quot;*&quot;</span>
-</code></pre>
-<hr />
-<h2 id="指令比較"><a class="markdownIt-Anchor" href="#指令比較"></a> 指令比較</h2>
-<table>
-<thead>
-<tr>
-<th>動作</th>
-<th>會寫入 pyproject.toml</th>
-<th>會更新 uv.lock</th>
-<th>安裝到虛擬環境</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>uv add flask</code></td>
-<td>✅ 是</td>
-<td>✅ 是</td>
-<td>✅ 是</td>
-</tr>
-<tr>
-<td><code>uv pip install</code></td>
-<td>❌ 否</td>
-<td>❌ 否</td>
-<td>✅ 是</td>
-</tr>
-<tr>
-<td><code>uv lock</code></td>
-<td>❌ 否</td>
-<td>✅ 是（根據 pyproject.toml）</td>
-<td>❌ 否</td>
-</tr>
-<tr>
-<td><code>uv sync</code></td>
-<td>❌ 否</td>
-<td>❌ 否</td>
-<td>✅ 是（根據 uv.lock）</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="小結"><a class="markdownIt-Anchor" href="#小結"></a> 🧠 小結</h2>
+    <div class="post-body" itemprop="articleBody"><p>在建構應用程式的旅程中，資料庫無疑是心臟般的存在。但隨著網站流量成長、用戶數增加，是否曾面臨資料庫讀取變慢、單點故障風險高的困境？</p>
+<p>這篇文章要來聊聊一個經典且強大的解決方案：<strong>主從式資料庫架構 (Master-Slave Replication)</strong>。它不僅是解決上述問題的利器，更是理解現代分散式系統的基石。</p>
+<h1 id="什麼是主從式資料庫架構"><a class="markdownIt-Anchor" href="#什麼是主從式資料庫架構"></a> 什麼是主從式資料庫架構？</h1>
+<p>想像一下，開了一家圖書館。</p>
 <ul>
-<li><code>uv</code> 是快速又現代的 Python 專案工具。</li>
-<li>和 <code>pip</code> 不同，<code>uv add</code> 是<strong>管理專案依賴</strong>，自動記錄與鎖定。</li>
-<li>搭配 <code>pyproject.toml</code> + <code>uv.lock</code> 可以輕鬆建立 <strong>一致可重現</strong> 的環境。</li>
-<li><code>uv run</code> 取代虛擬環境的啟動/關閉流程，開發更方便。</li>
+<li><strong>一台主要的服務台（主資料庫 Master）</strong>：所有新書上架、借書還書的登記（也就是 <strong>寫入 Write</strong> 操作）都必須在這裡完成，確保館藏紀錄永遠是最新最正確的。這個服務台只有一個，以防資訊混亂。</li>
+<li><strong>數台自助影印機（從資料庫 Slaves）</strong>：為了讓讀者能快速查閱資料（也就是 <strong>讀取 Read</strong> 操作），在館內設置了多台影印機。這些影印機的資料完全複製自主服務台的館藏目錄。讀者可以分散到不同的影印機查資料，不用全都擠在主服務台。</li>
 </ul>
+<p>這就是主從式架構的核心思想：</p>
+<ul>
+<li><strong>主資料庫 (Master)</strong>：負責處理所有「寫入」和「修改」操作（<code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>）。它是資料的唯一權威來源。</li>
+<li><strong>從資料庫 (Slave)</strong>：負責同步 Master 的資料，並專門處理「讀取」操作（<code>SELECT</code>）。可以有多個 Slave 來分擔讀取壓力。</li>
+</ul>
+<p>資料流是單向的：<strong>從 Master 流向 Slave</strong>。</p>
+<hr />
+<h1 id="為什麼需要它核心優勢解析"><a class="markdownIt-Anchor" href="#為什麼需要它核心優勢解析"></a> 為什麼需要它？核心優勢解析</h1>
+<p>採用主從架構，主要能帶來三大好處：</p>
+<h2 id="1-讀寫分離-readwrite-splitting"><a class="markdownIt-Anchor" href="#1-讀寫分離-readwrite-splitting"></a> 1. 讀寫分離 (Read/Write Splitting)</h2>
+<p>這是最直接的優勢。當應用程式讀取請求遠大於寫入請求時（例如部落格、新聞網站、電商），可以將大量的 <code>SELECT</code> 查詢導向到 Slave 資料庫。</p>
+<ul>
+<li><strong>效果</strong>：大大減輕 Master 的負擔，讓它能專心處理寫入操作，從而提升整體效能和回應速度。主服務台不再被人潮擠爆了！</li>
+</ul>
+<h2 id="2-高可用性與資料備援-high-availability-data-redundancy"><a class="markdownIt-Anchor" href="#2-高可用性與資料備援-high-availability-data-redundancy"></a> 2. 高可用性與資料備援 (High Availability &amp; Data Redundancy)</h2>
+<p>如果主資料庫因為硬體故障、網路問題而突然停機怎麼辦？</p>
+<ul>
+<li><strong>備援</strong>：Slave 資料庫本身就是 Master 的一個即時備份。</li>
+<li><strong>高可用性</strong>：當 Master 發生故障時，可以手動或自動地將其中一個 Slave “晉升” (Promote) 為新的 Master，讓系統服務在短時間內恢復。這就像主服務台臨時關閉，可以立刻指定一台影印機變成新的服務台，保障圖書館持續運作。</li>
+</ul>
+<h2 id="3-數據分析與報表-data-analysis-reporting"><a class="markdownIt-Anchor" href="#3-數據分析與報表-data-analysis-reporting"></a> 3. 數據分析與報表 (Data Analysis &amp; Reporting)</h2>
+<p>有時候，需要執行一些複雜且耗時的數據分析查詢，例如產生月度報表、分析用戶行為等。這些查詢如果在 Master 上執行，可能會鎖定資料表，嚴重影響線上服務。</p>
+<ul>
+<li><strong>解法</strong>：將這些重量級的分析任務全部交給其中一個 Slave 處理。這樣既不影響主要服務的效能，又能滿足數據分析的需求。</li>
+</ul>
+<hr />
+<h1 id="主從式資料庫架構是如何運作的"><a class="markdownIt-Anchor" href="#主從式資料庫架構是如何運作的"></a> 主從式資料庫架構是如何運作的？</h1>
+<p>Master 如何將資料同步給 Slave 呢？這個過程非常巧妙，主要依賴於一個關鍵機制：<strong>二進位日誌 (Binary Log / Binlog)</strong>。</p>
+<p>可以將 Binlog 想像成是 Master 服務台的一本「<strong>操作流水帳</strong>」，它鉅細靡遺地記錄了所有會改變資料的操作（如新增一本書、修改一筆借閱紀錄）。</p>
+<p>同步過程大致如下：</p>
+<ol>
+<li><strong>Master 寫入資料</strong>：當 Master 執行一個寫入操作（<code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>）時，它會將這個「事件」記錄到自己的 Binlog 檔案中。</li>
+<li><strong>Slave 請求日誌</strong>：Slave 上有一個專門的 I/O 執行緒 (I/O Thread)，它會連接到 Master，並請求：「請把你的流水帳（Binlog）從我上次讀到的地方傳給我」</li>
+<li><strong>Slave 儲存日誌</strong>：Slave 的 I/O 執行緒收到 Binlog 事件後，會先將其寫入自己的「<strong>中繼日誌 (Relay Log)</strong>」。這就像是先把總館的流水帳抄一份回來，放在本地。</li>
+<li><strong>Slave 執行操作</strong>：Slave 上還有另一個 SQL 執行緒 (SQL Thread)，它會讀取 Relay Log 的內容，然後在自己的資料庫上「重播 (Replay)」一遍 Master 執行過的指令，從而使自己的資料與 Master 保持一致。</li>
+</ol>
+<p>流程圖：</p>
+<pre class="highlight"><code class="mermaid">graph TD
+    A[使用者寫入] --&gt; B(Master 資料庫);
+    B -- &quot;1\. 寫入資料 &amp; 產生 Binlog&quot; --&gt; C(Binary Log);
+    D(Slave 資料庫) -- &quot;2\. I/O Thread 請求&quot; --&gt; C;
+    C -- &quot;傳送 Binlog&quot; --&gt; D;
+    D -- &quot;3\. 寫入 Relay Log&quot; --&gt; E(Relay Log);
+    E -- &quot;4\. SQL Thread 讀取並執行&quot; --&gt; D;
+</code></pre>
+<hr />
+<h1 id="需要注意的權衡與挑戰"><a class="markdownIt-Anchor" href="#需要注意的權衡與挑戰"></a> 需要注意的權衡與挑戰</h1>
+<p>主從架構雖然強大，但並非萬靈丹。在導入前，需要了解它的一些挑戰：</p>
+<ul>
+<li><strong>複製延遲 (Replication Lag)</strong>：從 Master 寫入資料到 Slave 同步完成，中間存在一個微小的時間差。如果應用程式要求極高的資料即時性（例如金融交易），這個延遲可能會導致讀到舊資料 (Stale Read)。</li>
+<li><strong>資料一致性</strong>：主從架構是「最終一致性 (Eventual Consistency)」模型。在發生延遲的狀況下，直接讀取不同 Slave 可能會拿到不一樣的資料。</li>
+<li><strong>架構複雜性</strong>：多了一層架構，意味著需要更多的監控和維護工作，例如監控延遲、處理 Master 故障時的切換 (Failover) 機制等。</li>
+</ul>
+<hr />
+<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
+<p><strong>主從式資料庫 (Master-Slave Replication)</strong> 是一個為系統帶來<strong>擴展性 (Scalability)</strong> 與<strong>可靠性 (Reliability)</strong> 的經典架構。</p>
+<p><strong>核心重點回顧：</strong></p>
+<ol>
+<li><strong>角色分工</strong>：Master 處理寫入，Slave 處理讀取。</li>
+<li><strong>三大優勢</strong>：讀寫分離、高可用性、負載隔離。</li>
+<li><strong>運作原理</strong>：基於 Binlog 的非同步複製機制。</li>
+<li><strong>主要挑戰</strong>：複製延遲與資料一致性問題。</li>
+</ol>
+<p>對於大多數正在成長的應用程式來說，導入主從架構是優化資料庫效能、保障服務穩定性的關鍵第一步。理解它的原理，將更好地設計出穩固且高效的系統。</p>
 
     </div>
 
@@ -765,21 +634,18 @@ uv run pytest                      <span class="hljs-comment"># 執行測試</sp
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/my-blog/tags/Python/" rel="tag"># Python</a>
+              <a href="/my-blog/tags/Database/" rel="tag"># Database</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/my-blog/2025/04/19/Django_ModelForm%E7%AD%86%E8%A8%98/" rel="prev" title="Django ModelForm 筆記">
-                  <i class="fa fa-angle-left"></i> Django ModelForm 筆記
+                <a href="/my-blog/2025/08/15/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E8%B3%87%E6%96%99%E5%BA%AB%E5%88%86%E7%89%87%20Sharding/" rel="prev" title="深入淺出資料庫分片 (Sharding)：當單一資料庫撐不住時，下一步是什麼？">
+                  <i class="fa fa-angle-left"></i> 深入淺出資料庫分片 (Sharding)：當單一資料庫撐不住時，下一步是什麼？
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/my-blog/2025/04/21/python_script%E8%88%87module%E7%9A%84%E5%B7%AE%E7%95%B0/" rel="next" title="Python Import 淺談：script 與 module 的差異">
-                  Python Import 淺談：script 與 module 的差異 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
