@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="在這個數據驅動的時代，每天都在處理海量的資料流。從使用者行為日誌、應用程式指標到 IoT 裝置的即時數據，如何高效、可靠地處理這些資料，成為了所有開發者與架構師必須面對的課題。 這篇文章要來聊聊一個解決這個問題的強大工具 — Apache Kafka，理解它的核心概念以及為何它會成為現代資料架構中不可或缺的一環。  Kafka 是什麼？一個進階版的「日誌」 許多人初次接觸 Kafka，會將它與傳統">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入淺出 Apache Kafka：現代資料工程的基石">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/08/17/kafka/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="在這個數據驅動的時代，每天都在處理海量的資料流。從使用者行為日誌、應用程式指標到 IoT 裝置的即時數據，如何高效、可靠地處理這些資料，成為了所有開發者與架構師必須面對的課題。 這篇文章要來聊聊一個解決這個問題的強大工具 — Apache Kafka，理解它的核心概念以及為何它會成為現代資料架構中不可或缺的一環。  Kafka 是什麼？一個進階版的「日誌」 許多人初次接觸 Kafka，會將它與傳統">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-08-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-17T15:16:34.971Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Kafka">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/08/17/kafka/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/08/17/kafka/","path":"2025/08/17/kafka/","title":"深入淺出 Apache Kafka：現代資料工程的基石"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>深入淺出 Apache Kafka：現代資料工程的基石 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">61</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">46</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(12)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(6)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#kafka-%E6%98%AF%E4%BB%80%E9%BA%BC%E4%B8%80%E5%80%8B%E9%80%B2%E9%9A%8E%E7%89%88%E7%9A%84%E6%97%A5%E8%AA%8C"><span class="nav-number">1.</span> <span class="nav-text"> Kafka 是什麼？一個進階版的「日誌」</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#kafka-%E7%9A%84%E5%9B%9B%E5%A4%A7%E6%A0%B8%E5%BF%83-api"><span class="nav-number">2.</span> <span class="nav-text"> Kafka 的四大核心 API</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8B%86%E8%A7%A3-kafka-%E7%9A%84%E6%A0%B8%E5%BF%83%E5%85%83%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text"> 拆解 Kafka 的核心元件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BA%8B%E4%BB%B6event-record"><span class="nav-number">3.1.</span> <span class="nav-text"> 1. 事件（Event &#x2F; Record）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%B8%BB%E9%A1%8Ctopic"><span class="nav-number">3.2.</span> <span class="nav-text"> 2. 主題（Topic）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%88%86%E5%89%B2%E5%8D%80partition"><span class="nav-number">3.3.</span> <span class="nav-text"> 3. 分割區（Partition）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-broker"><span class="nav-number">3.4.</span> <span class="nav-text"> 4. Broker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-producer-consumer"><span class="nav-number">3.5.</span> <span class="nav-text"> 5. Producer &amp; Consumer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E6%B6%88%E8%B2%BB%E8%80%85%E7%BE%A4%E7%B5%84consumer-group"><span class="nav-number">3.6.</span> <span class="nav-text"> 6. 消費者群組（Consumer Group）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-offset"><span class="nav-number">3.7.</span> <span class="nav-text"> 7. Offset</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E8%A6%81%E9%81%B8%E6%93%87-kafka"><span class="nav-number">4.</span> <span class="nav-text"> 為什麼要選擇 Kafka？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">5.</span> <span class="nav-text"> 總結</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">61</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">46</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/17/kafka/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="深入淺出 Apache Kafka：現代資料工程的基石 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深入淺出 Apache Kafka：現代資料工程的基石
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-08-17 00:00:00 / 修改時間：23:16:34" itemprop="dateCreated datePublished" datetime="2025-08-17T00:00:00+08:00">2025-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在這個數據驅動的時代，每天都在處理海量的資料流。從使用者行為日誌、應用程式指標到 IoT 裝置的即時數據，如何高效、可靠地處理這些資料，成為了所有開發者與架構師必須面對的課題。</p>
+<p>這篇文章要來聊聊一個解決這個問題的強大工具 — <strong>Apache Kafka</strong>，理解它的核心概念以及為何它會成為現代資料架構中不可或缺的一環。</p>
+<h1 id="kafka-是什麼一個進階版的日誌"><a class="markdownIt-Anchor" href="#kafka-是什麼一個進階版的日誌"></a> Kafka 是什麼？一個進階版的「日誌」</h1>
+<p>許多人初次接觸 Kafka，會將它與傳統的訊息佇列（Message Queue）如 RabbitMQ 或 ActiveMQ 相比較。這是一個好的開始，但並不完全準確。</p>
+<p>更精準地說，Kafka 是一個<strong>分散式串流平台（Distributed Streaming Platform）</strong>。</p>
+<p>讓我們先忘掉複雜的術語，把它想像成一個「<strong>永不刪除的超級日誌本</strong>」。</p>
+<blockquote>
+<p><strong>核心比喻：</strong><br />
+想像一下，有一個神奇的日誌本，可以不斷地在後面寫入新的紀錄（Events），而許多人可以同時從日誌本的任何地方開始讀取，並且每個人都有自己的書籤，記錄著自己讀到哪裡。這個日誌本是分散在多台機器上的，所以即使其中一台壞了，你的紀錄也安然無恙。</p>
+</blockquote>
+<p>這就是 Kafka 的本質：一個高可用、可擴展、持久化的日誌系統。</p>
+<h1 id="kafka-的四大核心-api"><a class="markdownIt-Anchor" href="#kafka-的四大核心-api"></a> Kafka 的四大核心 API</h1>
+<p>為了實現這個「超級日誌本」的功能，Kafka 提供了四個核心 API：</p>
+<ol>
+<li><strong>Producer API</strong>：允許應用程式發布（寫入）一連串的紀錄到一個或多個 Kafka 主題（Topics）中。</li>
+<li><strong>Consumer API</strong>：允許應用程式訂閱一個或多個主題，並處理其產生的紀錄流。</li>
+<li><strong>Streams API</strong>：將 Kafka 變成一個強大的串流處理框架。它允許應用程式從輸入主題讀取資料，進行即時的轉換、聚合、計算，然後將結果寫回輸出主題。</li>
+<li><strong>Connector API</strong>：用於建立可重複使用的 Producer 或 Consumer，將 Kafka 主題與現有的應用程式或資料系統（例如資料庫、搜尋引擎）連接起來。</li>
+</ol>
+<h1 id="拆解-kafka-的核心元件"><a class="markdownIt-Anchor" href="#拆解-kafka-的核心元件"></a> 拆解 Kafka 的核心元件</h1>
+<p>要真正理解 Kafka 如何運作，需要認識幾個關鍵的名詞。</p>
+<p>Kafka 流程圖:</p>
+<pre class="highlight"><code class="mermaid">graph LR
+    subgraph Producers
+        P1[Producer 1]
+        P2[Producer 2]
+    end
+
+    subgraph Kafka_Cluster[&quot;Kafka Cluster&quot;]
+        subgraph Topic_A[&quot;Topic A&quot;]
+            direction LR
+            Part0[Partition 0]
+            Part1[Partition 1]
+            Part2[Partition 2]
+        end
+    end
+
+    subgraph Consumer_Group[&quot;Consumer Group - data-processor&quot;]
+        C1[Consumer 1]
+        C2[Consumer 2]
+        C3[&quot;Consumer 3 (Idle)&quot;]
+    end
+
+    %% --- Connections ---
+    P1 -- writes --&gt; Topic_A
+    P2 -- writes --&gt; Topic_A
+
+    Part0 -- Assigned to --&gt; C1
+    Part1 -- Assigned to --&gt; C2
+    Part2 -- Assigned to --&gt; C2
+
+    style C3 fill:#f9f,stroke:#333,stroke-width:2px
+</code></pre>
+<h2 id="1-事件event-record"><a class="markdownIt-Anchor" href="#1-事件event-record"></a> 1. 事件（Event / Record）</h2>
+<p>這是 Kafka 中最基本的資料單位，也就是寫入日誌本的那一筆「紀錄」。它由三個部分組成：</p>
+<ul>
+<li><strong>Key</strong>：可選的鍵，用於決定事件要被送到哪個分割區（Partition）。</li>
+<li><strong>Value</strong>：事件的主要內容，通常是 JSON、Avro 或其他格式的資料。</li>
+<li><strong>Timestamp</strong>：事件發生的時間。</li>
+</ul>
+<h2 id="2-主題topic"><a class="markdownIt-Anchor" href="#2-主題topic"></a> 2. 主題（Topic）</h2>
+<p>主題是事件的分類名稱，就像是日誌本的「分類標籤」或資料庫中的「資料表」。例如，可以有一個 <code>user-clicks</code> 主題用來存放使用者點擊事件，一個 <code>order-placed</code> 主題用來存放訂單事件。</p>
+<h2 id="3-分割區partition"><a class="markdownIt-Anchor" href="#3-分割區partition"></a> 3. 分割區（Partition）</h2>
+<p>這是 Kafka 實現<strong>高吞吐量</strong>和<strong>可擴展性</strong>的關鍵！一個主題可以被分成多個分割區。</p>
+<blockquote>
+<p><strong>分割區的重要性：</strong></p>
+<ul>
+<li><strong>平行處理</strong>：多個 Consumer 可以同時從不同的分割區讀取資料，大幅提升處理速度。</li>
+<li><strong>順序保證</strong>：在<strong>同一個分割區內</strong>，事件的順序是嚴格保證的。這對於需要依序處理的業務場景至關重要。</li>
+<li><strong>擴展性</strong>：可以透過增加分割區的數量來擴展主題的吞吐能力。</li>
+</ul>
+</blockquote>
+<h2 id="4-broker"><a class="markdownIt-Anchor" href="#4-broker"></a> 4. Broker</h2>
+<p>一台 Kafka 伺服器就是一個 Broker。在生產環境中，通常會由多個 Broker 組成一個 Kafka <strong>叢集（Cluster）</strong>。叢集提供了<strong>容錯（Fault Tolerance）<strong>和</strong>高可用性</strong>。如果一個 Broker 掛了，其他 Broker 上的複本（Replicas）可以確保資料不遺失。</p>
+<h2 id="5-producer-consumer"><a class="markdownIt-Anchor" href="#5-producer-consumer"></a> 5. Producer &amp; Consumer</h2>
+<ul>
+<li><strong>Producer（生產者）</strong>：負責將事件發送到指定的 Topic。Producer 可以決定要將事件送到哪個 Partition。</li>
+<li><strong>Consumer（消費者）</strong>：負責從 Topic 訂閱並讀取事件。</li>
+</ul>
+<h2 id="6-消費者群組consumer-group"><a class="markdownIt-Anchor" href="#6-消費者群組consumer-group"></a> 6. 消費者群組（Consumer Group）</h2>
+<p>這是一個非常聰明的設計！多個 Consumer 可以組成一個「群組」來共同消費一個 Topic。Kafka 會自動將 Topic 的所有 Partition 平均分配給群組內的 Consumer。</p>
+<ul>
+<li>如果群組內只有 1 個 Consumer，它會收到所有 Partition 的資料。</li>
+<li>如果有 2 個 Consumer 和 4 個 Partition，每個 Consumer 會負責 2 個 Partition 的資料。</li>
+<li>如果 Consumer 的數量超過了 Partition 的數量，多出來的 Consumer 將會閒置。</li>
+</ul>
+<p>這個機制讓消費端的擴展變得非常簡單，只需要增加新的 Consumer 實例並將它們加入同一個群組即可。</p>
+<h2 id="7-offset"><a class="markdownIt-Anchor" href="#7-offset"></a> 7. Offset</h2>
+<p>Offset 是一個不斷遞增的整數，可以看作是 Consumer 在 Partition 中的「書籤」。它標記了 Consumer 已經讀取到哪一條訊息。這個 Offset 是由 Consumer 自己管理和提交的，這給了 Kafka 極大的靈活性。</p>
+<h1 id="為什麼要選擇-kafka"><a class="markdownIt-Anchor" href="#為什麼要選擇-kafka"></a> 為什麼要選擇 Kafka？</h1>
+<p>講了這麼多概念，那 Kafka 的真正優勢在哪裡？</p>
+<ol>
+<li><strong>高吞吐量與低延遲</strong>：Kafka 在設計上就為高流量場景而生。它透過順序讀寫磁碟（Sequential I/O）和零拷貝（Zero-copy）等技術，能以極高的效率處理每秒數十萬甚至數百萬的訊息。</li>
+<li><strong>高擴展性</strong>：無論是 Broker、Topic 還是 Producer/Consumer，都可以輕易地水平擴展以應對不斷增長的業務需求。</li>
+<li><strong>持久化與容錯</strong>：資料會在磁碟上持久化儲存，並透過複寫（Replication）機制分散到多個 Broker 上，確保了極高的資料可靠性。</li>
+<li><strong>系統解耦</strong>：Kafka 扮演了系統間的緩衝區。生產者不需要知道消費者是誰、在哪裡，反之亦然。這讓微服務架構的實現變得更加優雅和健壯。</li>
+<li><strong>即時串流處理</strong>：結合 Kafka Streams 或其他串流處理框架（如 Flink、Spark），Kafka 不再只是一個訊息通道，而是一個強大的即時資料處理平台。</li>
+</ol>
+<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
+<p>Kafka 絕不僅僅是一個訊息佇列，它是一個為處理即時資料流而生的強大平台。它透過 Topic、Partition 和 Consumer Group 等巧妙設計，完美地兼顧了高效能、高可用與高擴展性，這也是為什麼它能成為 LinkedIn、Netflix、Uber 等無數科技巨頭背後的資料中樞。</p>
+<p>Kafka 還有複寫機制、日誌壓縮、安全性等更多深入的主題等著我們去探索。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Kafka/" rel="tag"># Kafka</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/08/16/%E6%90%9E%E6%87%82%E4%B8%BB%E5%BE%9E%E5%BC%8F%E8%B3%87%E6%96%99%E5%BA%AB%20Master-Slave%20Replication/" rel="prev" title="搞懂主從式資料庫 (Master-Slave Replication)，提升效能與備援的關鍵第一步">
+                  <i class="fa fa-angle-left"></i> 搞懂主從式資料庫 (Master-Slave Replication)，提升效能與備援的關鍵第一步
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

@@ -105,8 +105,8 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">60</span></a>
-  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">45</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">61</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">46</span></a>
       <ul class="sub-menu">
   
   
@@ -253,6 +253,13 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/JavaScript/">
         JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
         <span class="post-count">(1)</span>
       </a>
     </li>
@@ -464,7 +471,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">60</span>
+          <span class="site-state-item-count">61</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -472,7 +479,7 @@
     
       <div class="site-state-item site-state-tags">
           <a href="/my-blog/tags/">
-        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -489,6 +496,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/17/kafka/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/08/17/kafka/" class="post-title-link" itemprop="url">
+              深入淺出 Apache Kafka：現代資料工程的基石
+            </a>
+            <a href="/my-blog/2025/08/17/kafka/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-08-17 00:00:00 / 修改時間：23:16:34" itemprop="dateCreated datePublished" datetime="2025-08-17T00:00:00+08:00">2025-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">在這個數據驅動的時代，每天都在處理海量的資料流。從使用者行為日誌、應用程式指標到 IoT 裝置的即時數據，如何高效、可靠地處理這些資料，成為了所有開發者與架構師必須面對的課題。 這篇文章要來聊聊一個解決這個問題的強大工具 — Apache Kafka，理解它的核心概念以及為何它會成為現代資料架構中不可或缺的一環。 Kafka 是什麼？一個進階版的「日誌」 許多人初次接觸 Kafka，會將它與傳統的訊息佇列（Message Queue）如 RabbitMQ 或 ActiveMQ 相比較。這是一個好的開始，但並不完全準確。 更精準地說，Kafka 是一個分散式串流平台（Distributed Streaming Platform）。 讓我們先忘掉複雜的術語，把它想像成一個「永不刪除的超級日誌本」。 核心比喻： 想像一下，有一個神奇的日誌本，可以不斷地在後面寫入新的紀錄（Events），而許多人可以同時從日誌本的任何地方開始讀取，並且每個人都有自己的書籤，記錄著自己讀到哪裡。這個日誌本是分散在多台機器上的，所以即使其中一台壞了，你的紀錄也安然無恙。 這就是 Kafka 的本質：一個高可用、可擴展、持久化的日誌系統。 Kafka 的四大核心 API 為了實現這個「超級日誌本」的功能，Kafka 提供了四個核心 API： Producer API：允許應用程式發布（寫入）一連串的紀錄到一個或多個 Kafka 主題（Topics）中。 Consumer API：允許應用程式訂閱一個或多個主題，並處理其產生的紀錄流。 Streams API：將 Kafka 變成一個強大的串流處理框架。它允許應用程式從輸入主題讀取資料，進行即時的轉換、聚合、計算，然後將結果寫回輸出主題。 Connector API：用於建立可重複使用的 Producer 或 Consumer，將 Kafka 主題與現有的應用程式或資料系統（例如資料庫、搜尋引擎）連接起來。 拆解 Kafka 的核心元件 要真正理解 Kafka 如何運作，需要認識幾個關鍵的名詞。 Kafka 流程圖: graph LR subgraph Producers P1[Producer 1] P2[Producer 2] end subgraph Kafka_Cluster[&quot;Kafka Cluster&quot;] subgraph Topic_A[&quot;Topic A&quot;] direction LR Part0[Partition 0] Part1[Partition 1] Part2[Partition 2] end end subgraph Consumer_Group[&quot;Consumer Group - data-processor&quot;] C1[Consumer 1] C2[Consumer 2] C3[&quot;Consumer 3 (Idle)&quot;] end %% --- Connections --- P1 -- writes --&gt; Topic_A P2 -- writes --&gt; Topic_A Part0 -- Assigned to --&gt; C1 Part1 -- Assigned to --&gt; C2 Part2 -- Assigned to --&gt; C2 style C3 fill:#f9f,stroke:#333,stroke-width:2px 1. 事件（Event / Record） 這是 Kafka 中最基本的資料單位，也就是寫入日誌本的那一筆「紀錄」。它由三個部分組成： Key：可選的鍵，用於決定事件要被送到哪個分割區（Partition）。 Value：事件的主要內容，通常是 JSON、Avro 或其他格式的資料。 Timestamp：事件發生的時間。 2. 主題（Topic） 主題是事件的分類名稱，就像是日誌本的「分類標籤」或資料庫中的「資料表」。例如，可以有一個 user-clicks 主題用來存放使用者點擊事件，一個 order-placed 主題用來存放訂單事件。 3. 分割區（Partition） 這是 Kafka 實現高吞吐量和可擴展性的關鍵！一個主題可以被分成多個分割區。 分割區的重要性： 平行處理：多個 Consumer 可以同時從不同的分割區讀取資料，大幅提升處理速度。 順序保證：在同一個分割區內，事件的順序是嚴格保證的。這對於需要依序處理的業務場景至關重要。 擴展性：可以透過增加分割區的數量來擴展主題的吞吐能力。 4. Broker 一台 Kafka 伺服器就是一個 Broker。在生產環境中，通常會由多個 Broker 組成一個 Kafka 叢集（Cluster）。叢集提供了容錯（Fault Tolerance）和高可用性。如果一個 Broker 掛了，其他 Broker 上的複本（Replicas）可以確保資料不遺失。 5. Producer &amp; Consumer Producer（生產者）：負責將事件發送到指定的 Topic。Producer 可以決定要將事件送到哪個 Partition。 Consumer（消費者）：負責從 Topic 訂閱並讀取事件。 6. 消費者群組（Consumer Group） 這是一個非常聰明的設計！多個 Consumer 可以組成一個「群組」來共同消費一個 Topic。Kafka 會自動將 Topic 的所有 Partition 平均分配給群組內的 Consumer。 如果群組內只有 1 個 Consumer，它會收到所有 Partition 的資料。 如果有 2 個 Consumer 和 4 個 Partition，每個 Consumer 會負責 2 個 Partition 的資料。 如果 Consumer 的數量超過了 Partition 的數量，多出來的 Consumer 將會閒置。 這個機制讓消費端的擴展變得非常簡單，只需要增加新的 Consumer 實例並將它們加入同一個群組即可。 7. Offset Offset 是一個不斷遞增的整數，可以看作是 Consumer 在 Partition 中的「書籤」。它標記了 Consumer 已經讀取到哪一條訊息。這個 Offset 是由 Consumer 自己管理和提交的，這給了 Kafka 極大的靈活性。 為什麼要選擇 Kafka？ 講了這麼多概念，那 Kafka 的真正優勢在哪裡？ 高吞吐量與低延遲：Kafka 在設計上就為高流量場景而生。它透過順序讀寫磁碟（Sequential I/O）和零拷貝（Zero-copy）等技術，能以極高的效率處理每秒數十萬甚至數百萬的訊息。 高擴展性：無論是 Broker、Topic 還是 Producer/Consumer，都可以輕易地水平擴展以應對不斷增長的業務需求。 持久化與容錯：資料會在磁碟上持久化儲存，並透過複寫（Replication）機制分散到多個 Broker 上，確保了極高的資料可靠性。 系統解耦：Kafka 扮演了系統間的緩衝區。生產者不需要知道消費者是誰、在哪裡，反之亦然。這讓微服務架構的實現變得更加優雅和健壯。 即時串流處理：結合 Kafka Streams 或其他串流處理框架（如 Flink、Spark），Kafka 不再只是一個訊息通道，而是一個強大的即時資料處理平台。 總結 Kafka 絕不僅僅是一個訊息佇列，它是一個為處理即時資料流而生的強大平台。它透過 Topic、Partition 和 Consumer Group 等巧妙設計，完美地兼顧了高效能、高可用與高擴展性，這也是為什麼它能成為 LinkedIn、Netflix、Uber 等無數科技巨頭背後的資料中樞。 Kafka 還有複寫機制、日誌壓縮、安全性等更多深入的主題等著我們去探索。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/08/17/kafka/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1264,94 +1357,8 @@
 
 
 
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/06/%E8%A7%A3%E9%8E%96%E8%B3%87%E6%96%99%E5%BA%AB%E6%95%88%E8%83%BD%20%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E5%9E%82%E7%9B%B4%E5%88%86%E5%89%B2%E8%88%87%E6%B0%B4%E5%B9%B3%E5%88%86%E5%89%B2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/08/06/%E8%A7%A3%E9%8E%96%E8%B3%87%E6%96%99%E5%BA%AB%E6%95%88%E8%83%BD%20%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E5%9E%82%E7%9B%B4%E5%88%86%E5%89%B2%E8%88%87%E6%B0%B4%E5%B9%B3%E5%88%86%E5%89%B2/" class="post-title-link" itemprop="url">
-              解鎖資料庫效能：深入淺出垂直分割與水平分割 (Vertical vs. Horizontal Partitioning)
-            </a>
-            <a href="/my-blog/2025/08/06/%E8%A7%A3%E9%8E%96%E8%B3%87%E6%96%99%E5%BA%AB%E6%95%88%E8%83%BD%20%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E5%9E%82%E7%9B%B4%E5%88%86%E5%89%B2%E8%88%87%E6%B0%B4%E5%B9%B3%E5%88%86%E5%89%B2/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-08-06 00:00:00 / 修改時間：23:26:55" itemprop="dateCreated datePublished" datetime="2025-08-06T00:00:00+08:00">2025-08-06</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">當應用程式從一個小專案成長為擁有海量使用者和數據的巨獸時，最先感受到壓力的往往是資料庫。查詢變慢、寫入延遲、伺服器負載居高不下… 這些都是成長的甜蜜負荷，也是系統架構必須面對的挑戰。 這篇文章將介紹資料庫的：垂直分割 (Vertical Partitioning) 與 水平分割 (Horizontal Partitioning / Sharding)。 理解這兩種分割策略的核心思想。 透過簡單易懂的比喻，輕鬆區分它們。 分析優缺點與適用情境。 幫助在未來的技術選型中做出更明智的決策。 故事的起點：一張越來越臃腫的「使用者資料表」 想像一下，有一個 Users 資料表，隨著業務擴展，它的欄位變得越來越多： UserID Username PasswordHash Email LastLogin Bio ProfileImageURL CreateDate Country … (另外 50 個欄位) 當我們只想做一個簡單的登入驗證，查詢 Username 和 PasswordHash 時，資料庫可能需要從磁碟讀取包含 Bio (可能是長文本)、ProfileImageURL 等許多不相關欄位的整個資料列。當資料量巨大時，這種不必要的 I/O 操作會嚴重拖慢效能。 這時候，垂直分割 就該登場了。 垂直分割 (Vertical Partitioning)：依「欄位」切分 垂直分割的核心概念就像整理一個巨大的檔案櫃。與其把所有資料都塞在一個抽屜裡，不如依照資料的性質，把它們分門別類放到不同的抽屜。 簡單比喻： 將一本厚重的字典，拆分成《常用字字典》和《生僻字字典》。兩本字典包含的字（資料列）是一樣的，但內容（欄位）被分開了。 在資料庫中，將一個寬表 (Wide Table) 按照欄位 (Column) 拆分成多個窄表 (Narrow Table)。 實作範例 將 Users 表拆分為： Users_Auth (使用者認證表) - 存放頻繁存取的核心認證資訊。 UserID (PK) Username PasswordHash Email Users_Profile (使用者資料表) - 存放不常變動或查詢的個人資料。 UserID (PK/FK) Bio ProfileImageURL Country Users_Activity (使用者活動表) - 存放活動紀錄。 UserID (PK/FK) LastLogin CreateDate 現在，當使用者登入時，我們只需要查詢 Users_Auth 這個小而快的表。想看個人檔案時，再去查詢 Users_Profile。這樣就大大減少了單次查詢的 I/O 負載。 垂直分割的優點 提升查詢效能： 查詢只會讀取必要的欄位，減少 I/O。 優化快取： 熱點資料（如認證資訊）更容易被完整載入記憶體快取。 維護性佳： 更小的資料表在備份、索引重建等維護操作上更快。 垂直分割的缺點 需要 JOIN 操作： 如果需要同時獲取認證資訊和個人檔案，必須使用 JOIN 連接這兩個表，這會增加查詢的複雜度和效能開銷。 未解決單表行數過多的問題： 它只解決了「欄位過多」的問題。如果 Users_Auth 表有十億筆資料，它依然會非常慢。 應用層改動： 應用程式的程式碼需要修改，以適應新的資料表結構。 水平分割 (Horizontal Partitioning / Sharding)：依「資料列」切分 當應用程式使用者正式突破千萬、上億等級，單一伺服器無論如何優化，都無法承受如此龐大的資料列 (Row) 數量。這時，需要的是水平分割。 水平分割，更廣為人知的名字是 分片 (Sharding)。它的核心思想是將一個巨大的資料表，按照某個規則（分片鍵 - Shard Key），將資料列分散儲存到多個不同的資料庫或伺服器上。 簡單比喻： 將一本全國電話簿（A-Z），按照姓氏首字母，拆分成 26 本獨立的電話簿（A冊、B冊、C冊…）。每本電話簿的結構（欄位）完全一樣，但存放的內容（資料列）不同。 實作範例 選擇 UserID 作為 Shard Key。可以設定一個簡單的規則，例如： UserID 為奇數的資料，存放到 Shard 1 (DB1)。 UserID 為偶數的資料，存放到 Shard 2 (DB2)。 Shard 1 (DB1) - Users 表: UserID Username … 1 Alice … 3 Carol … Shard 2 (DB2) - Users 表: UserID Username … 2 Bob … 4 Dave … 這樣一來，原本集中在一台伺服器的讀寫壓力，就被有效地分散到了兩台伺服器上。理論上，可以無限增加伺服器數量來擴展系統的承載能力。 水平分割的優點 極高的擴展性： 能夠將讀寫負載分散到多台機器，解決單機效能瓶頸，實現理論上的無限擴展。 提升效能與併發能力： 每個分片都更小，索引更有效率，查詢和寫入更快。 提高可用性： 如果一個分片故障，只會影響到部分使用者，而不會導致整個系統癱瘓（需要良好的架構設計配合）。 水平分割的缺點 架構極其複雜： 這是最大的挑戰。如何選擇 Shard Key、如何處理跨分片查詢、如何應對資料擴容（Re-sharding）、如何保證事務一致性，每一步都充滿了挑戰。 跨分片查詢困難： 比如，想查詢 Username 為 David 的使用者，不知道他在哪個分片，可能需要查詢所有分片，效率極低。 資料傾斜 (Hot Spot)： 如果 Shard Key 選擇不當（例如按國家分，但 80% 的使用者都在同一個國家），會導致某個分片負載極高，失去了負載均衡的意義。 垂直分割 vs. 水平分割 特性 垂直分割 (Vertical Partitioning) 水平分割 (Horizontal Partitioning / Sharding) 分割基礎 欄位 (Column) 資料列 (Row) 主要目標 減少單次查詢的 I/O，處理「寬表」問題 分散讀寫壓力到多台伺服器，處理「海量資料列」問題 分割後結構 多個結構不同的表，通常在同一資料庫 多個結構相同的表（分片），通常分布在不同伺服器 主要挑戰 JOIN 的複雜度和效能開銷 整體架構的複雜性、跨分片查詢、資料均衡 適用情境 表欄位過多、部分欄位存取頻率差異大 資料量巨大、讀寫請求頻繁，單機無法承受 結論 垂直分割與水平分割並非互相排斥，它們是資料庫架構工具箱中針對不同問題的解決方案。 當發現資料表欄位過多，且不同欄位的存取模式差異巨大時，可以考慮垂直分割。它相對簡單，能快速見效。 當應用程式資料量（行數）和請求量達到了單機極限時，水平分割 (Sharding) 雖然複雜，卻是實現大規模擴展的必經之路。 在實際的複雜系統中，甚至可能同時使用這兩種策略。例如，先對使用者表進行水平分割，然後在每個分片內部，再對使用者資料進行垂直分割。 希望這篇文章能幫助你更清晰地理解這兩個重要的資料庫擴展概念。技術的選擇始終源於對業務需求的深刻理解。先分析瓶頸，再選擇最適合的策略。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/08/06/%E8%A7%A3%E9%8E%96%E8%B3%87%E6%96%99%E5%BA%AB%E6%95%88%E8%83%BD%20%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E5%9E%82%E7%9B%B4%E5%88%86%E5%89%B2%E8%88%87%E6%B0%B4%E5%B9%B3%E5%88%86%E5%89%B2/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/my-blog/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/my-blog/page/6/">6</a><a class="extend next" rel="next" title="下一頁" aria-label="下一頁" href="/my-blog/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/my-blog/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/my-blog/page/7/">7</a><a class="extend next" rel="next" title="下一頁" aria-label="下一頁" href="/my-blog/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
