@@ -19,27 +19,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="在現代後端開發中，「非同步（asynchronous）」是一個重要的技術趨勢，尤其面對大量 I&#x2F;O 操作或高併發需求時。本文將從 Python 非同步的運作流程談起，並探討在後端是否有必要使用非同步處理資料流。   非同步的基本觀念：為什麼非同步不會阻塞？ JavaScript 及 Python 的非同步設計，核心在於：  避免主執行緒阻塞 把耗時的 I&#x2F;O 任務交給背景系統處理 等待完成後，再透">
+    <meta name="description" content="有沒有遇過這種情況：應用程式的一個頁面載入特別緩慢，使用者抱怨連連，而追查到最後，發現元兇是一條執行了數十秒甚至數分鐘的資料庫查詢？ 這幾乎是每位開發者和資料庫管理員（DBA）都曾面對的夢魘。然而，效能的瓶頸往往不是資料庫本身不夠力，而是沒有「好好地」跟它溝通。這篇文章將揭開資料庫效能背後的神秘面紗，深入探討一個核心概念：查詢優化（Query Optimization）。  什麼是查詢優化？ 想像">
 <meta property="og:type" content="article">
-<meta property="og:title" content="非同步運作觀念與後端使用非同步的必要性探討">
-<meta property="og:url" content="https://nivek-yang.github.io/2025/07/13/%E9%9D%9E%E5%90%8C%E6%AD%A5%E9%81%8B%E4%BD%9C%E8%A7%80%E5%BF%B5%E8%88%87%E5%BE%8C%E7%AB%AF%E4%BD%BF%E7%94%A8%E9%9D%9E%E5%90%8C%E6%AD%A5%E7%9A%84%E5%BF%85%E8%A6%81%E6%80%A7%E6%8E%A2%E8%A8%8E/index.html">
+<meta property="og:title" content="揭開資料庫效能的神秘面紗：查詢優化 (Database Query Optimization)">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/08/18/%E6%8F%AD%E9%96%8B%E8%B3%87%E6%96%99%E5%BA%AB%E6%95%88%E8%83%BD%E7%9A%84%E7%A5%9E%E7%A7%98%E9%9D%A2%E7%B4%97%20%E6%9F%A5%E8%A9%A2%E5%84%AA%E5%8C%96%20Database%20Query%20Optimization/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="在現代後端開發中，「非同步（asynchronous）」是一個重要的技術趨勢，尤其面對大量 I&#x2F;O 操作或高併發需求時。本文將從 Python 非同步的運作流程談起，並探討在後端是否有必要使用非同步處理資料流。   非同步的基本觀念：為什麼非同步不會阻塞？ JavaScript 及 Python 的非同步設計，核心在於：  避免主執行緒阻塞 把耗時的 I&#x2F;O 任務交給背景系統處理 等待完成後，再透">
+<meta property="og:description" content="有沒有遇過這種情況：應用程式的一個頁面載入特別緩慢，使用者抱怨連連，而追查到最後，發現元兇是一條執行了數十秒甚至數分鐘的資料庫查詢？ 這幾乎是每位開發者和資料庫管理員（DBA）都曾面對的夢魘。然而，效能的瓶頸往往不是資料庫本身不夠力，而是沒有「好好地」跟它溝通。這篇文章將揭開資料庫效能背後的神秘面紗，深入探討一個核心概念：查詢優化（Query Optimization）。  什麼是查詢優化？ 想像">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2025-07-12T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-07-13T14:53:59.767Z">
+<meta property="article:published_time" content="2025-08-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-18T15:22:50.185Z">
 <meta property="article:author" content="Kaiwii">
-<meta property="article:tag" content="Async">
+<meta property="article:tag" content="Database">
+<meta property="article:tag" content="SQL">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://nivek-yang.github.io/2025/07/13/%E9%9D%9E%E5%90%8C%E6%AD%A5%E9%81%8B%E4%BD%9C%E8%A7%80%E5%BF%B5%E8%88%87%E5%BE%8C%E7%AB%AF%E4%BD%BF%E7%94%A8%E9%9D%9E%E5%90%8C%E6%AD%A5%E7%9A%84%E5%BF%85%E8%A6%81%E6%80%A7%E6%8E%A2%E8%A8%8E/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/08/18/%E6%8F%AD%E9%96%8B%E8%B3%87%E6%96%99%E5%BA%AB%E6%95%88%E8%83%BD%E7%9A%84%E7%A5%9E%E7%A7%98%E9%9D%A2%E7%B4%97%20%E6%9F%A5%E8%A9%A2%E5%84%AA%E5%8C%96%20Database%20Query%20Optimization/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/07/13/%E9%9D%9E%E5%90%8C%E6%AD%A5%E9%81%8B%E4%BD%9C%E8%A7%80%E5%BF%B5%E8%88%87%E5%BE%8C%E7%AB%AF%E4%BD%BF%E7%94%A8%E9%9D%9E%E5%90%8C%E6%AD%A5%E7%9A%84%E5%BF%85%E8%A6%81%E6%80%A7%E6%8E%A2%E8%A8%8E/","path":"2025/07/13/非同步運作觀念與後端使用非同步的必要性探討/","title":"非同步運作觀念與後端使用非同步的必要性探討"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/08/18/%E6%8F%AD%E9%96%8B%E8%B3%87%E6%96%99%E5%BA%AB%E6%95%88%E8%83%BD%E7%9A%84%E7%A5%9E%E7%A7%98%E9%9D%A2%E7%B4%97%20%E6%9F%A5%E8%A9%A2%E5%84%AA%E5%8C%96%20Database%20Query%20Optimization/","path":"2025/08/18/揭開資料庫效能的神秘面紗 查詢優化 Database Query Optimization/","title":"揭開資料庫效能的神秘面紗：查詢優化 (Database Query Optimization)"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>非同步運作觀念與後端使用非同步的必要性探討 | 我的技術部落格</title>
+<title>揭開資料庫效能的神秘面紗：查詢優化 (Database Query Optimization) | 我的技術部落格</title>
   
 
 
@@ -461,7 +462,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%9E%E5%90%8C%E6%AD%A5%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%A7%80%E5%BF%B5%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9D%9E%E5%90%8C%E6%AD%A5%E4%B8%8D%E6%9C%83%E9%98%BB%E5%A1%9E"><span class="nav-number">1.</span> <span class="nav-text"> 非同步的基本觀念：為什麼非同步不會阻塞？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%9E%E5%90%8C%E6%AD%A5%E8%88%87%E9%98%BB%E5%A1%9E%E7%9A%84%E5%B7%AE%E7%95%B0%E6%AF%94%E5%96%BB"><span class="nav-number">1.1.</span> <span class="nav-text"> 非同步與阻塞的差異比喻</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#python-%E9%9D%9E%E5%90%8C%E6%AD%A5%E9%81%8B%E4%BD%9C%E6%B5%81%E7%A8%8Basyncio-%E8%88%87%E4%BA%8B%E4%BB%B6%E8%BF%B4%E5%9C%88"><span class="nav-number">2.</span> <span class="nav-text"> Python 非同步運作流程（asyncio 與事件迴圈）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#python-%E9%9D%9E%E5%90%8C%E6%AD%A5%E7%A4%BA%E6%84%8F%E7%A8%8B%E5%BC%8F"><span class="nav-number">2.1.</span> <span class="nav-text"> Python 非同步示意程式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%9E%E5%90%8C%E6%AD%A5-vs-%E5%A4%9A%E5%9F%B7%E8%A1%8C%E7%B7%92%E6%95%88%E8%83%BD%E5%B7%AE%E7%95%B0%E8%88%87%E9%81%A9%E7%94%A8%E5%A0%B4%E6%99%AF"><span class="nav-number">3.</span> <span class="nav-text"> 非同步 vs 多執行緒：效能差異與適用場景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%9E%E5%90%8C%E6%AD%A5%E5%9C%A8%E8%83%8C%E5%BE%8C%E5%9F%B7%E8%A1%8C%E6%95%88%E8%83%BD%E6%98%AF%E5%90%A6%E8%BC%83%E5%B7%AE"><span class="nav-number">4.</span> <span class="nav-text"> 非同步在背後執行效能是否較差？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%A8%E5%BE%8C%E7%AB%AF%E6%98%AF%E5%90%A6%E6%9C%89%E5%BF%85%E8%A6%81%E7%94%A8%E9%9D%9E%E5%90%8C%E6%AD%A5%E8%99%95%E7%90%86%E8%B3%87%E6%96%99%E6%B5%81"><span class="nav-number">5.</span> <span class="nav-text"> 在後端是否有必要用非同步處理資料流？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%A9%E5%90%88%E4%BD%BF%E7%94%A8%E9%9D%9E%E5%90%8C%E6%AD%A5%E7%9A%84%E5%A0%B4%E6%99%AF"><span class="nav-number">5.1.</span> <span class="nav-text"> 適合使用非同步的場景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E9%81%A9%E5%90%88%E4%BD%BF%E7%94%A8%E9%9D%9E%E5%90%8C%E6%AD%A5%E7%9A%84%E5%A0%B4%E6%99%AF"><span class="nav-number">5.2.</span> <span class="nav-text"> 不適合使用非同步的場景</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">6.</span> <span class="nav-text"> 總結</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF%E6%9F%A5%E8%A9%A2%E5%84%AA%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是查詢優化？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E6%9F%A5%E8%A9%A2%E5%84%AA%E5%8C%96%E5%A6%82%E6%AD%A4%E9%87%8D%E8%A6%81"><span class="nav-number">2.</span> <span class="nav-text"> 為什麼查詢優化如此重要？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9F%A5%E8%A9%A2%E5%84%AA%E5%8C%96%E6%98%AF%E5%A6%82%E4%BD%95%E9%81%8B%E4%BD%9C%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E8%A7%A3%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text"> 查詢優化是如何運作的？核心概念解析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9F%B7%E8%A1%8C%E8%A8%88%E7%95%ABexecution-plan"><span class="nav-number">3.1.</span> <span class="nav-text"> 1. 執行計畫（Execution Plan）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%B4%A2%E5%BC%95indexing"><span class="nav-number">3.2.</span> <span class="nav-text"> 2. 索引（Indexing）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%92%B0%E5%AF%AB%E9%AB%98%E6%95%88%E7%9A%84%E6%9F%A5%E8%A9%A2%E8%AA%9E%E5%8F%A5"><span class="nav-number">3.3.</span> <span class="nav-text"> 3. 撰寫高效的查詢語句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E7%B6%AD%E8%AD%B7%E8%B3%87%E6%96%99%E5%BA%AB%E7%B5%B1%E8%A8%88%E6%95%B8%E6%93%9A"><span class="nav-number">3.4.</span> <span class="nav-text"> 4. 維護資料庫統計數據</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%A6%E6%88%B0%E6%BC%94%E7%B7%B4%E4%B8%80%E5%80%8B%E7%B0%A1%E5%96%AE%E7%9A%84%E5%84%AA%E5%8C%96%E7%AF%84%E4%BE%8B"><span class="nav-number">4.</span> <span class="nav-text"> 實戰演練：一個簡單的優化範例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -509,7 +510,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/13/%E9%9D%9E%E5%90%8C%E6%AD%A5%E9%81%8B%E4%BD%9C%E8%A7%80%E5%BF%B5%E8%88%87%E5%BE%8C%E7%AB%AF%E4%BD%BF%E7%94%A8%E9%9D%9E%E5%90%8C%E6%AD%A5%E7%9A%84%E5%BF%85%E8%A6%81%E6%80%A7%E6%8E%A2%E8%A8%8E/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/18/%E6%8F%AD%E9%96%8B%E8%B3%87%E6%96%99%E5%BA%AB%E6%95%88%E8%83%BD%E7%9A%84%E7%A5%9E%E7%A7%98%E9%9D%A2%E7%B4%97%20%E6%9F%A5%E8%A9%A2%E5%84%AA%E5%8C%96%20Database%20Query%20Optimization/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -522,12 +523,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="非同步運作觀念與後端使用非同步的必要性探討 | 我的技術部落格">
+      <meta itemprop="name" content="揭開資料庫效能的神秘面紗：查詢優化 (Database Query Optimization) | 我的技術部落格">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          非同步運作觀念與後端使用非同步的必要性探討
+          揭開資料庫效能的神秘面紗：查詢優化 (Database Query Optimization)
         </h1>
 
         <div class="post-meta-container">
@@ -539,7 +540,7 @@
       <span class="post-meta-item-text">發表於</span>
       
 
-      <time title="創建時間：2025-07-13 00:00:00 / 修改時間：22:53:59" itemprop="dateCreated datePublished" datetime="2025-07-13T00:00:00+08:00">2025-07-13</time>
+      <time title="創建時間：2025-08-18 00:00:00 / 修改時間：23:22:50" itemprop="dateCreated datePublished" datetime="2025-08-18T00:00:00+08:00">2025-08-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -560,151 +561,72 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>在現代後端開發中，「非同步（asynchronous）」是一個重要的技術趨勢，尤其面對大量 I/O 操作或高併發需求時。本文將從 Python 非同步的運作流程談起，並探討在後端是否有必要使用非同步處理資料流。</p>
-<hr />
-<h1 id="非同步的基本觀念為什麼非同步不會阻塞"><a class="markdownIt-Anchor" href="#非同步的基本觀念為什麼非同步不會阻塞"></a> 非同步的基本觀念：為什麼非同步不會阻塞？</h1>
-<p>JavaScript 及 Python 的非同步設計，核心在於：</p>
-<ul>
-<li><strong>避免主執行緒阻塞</strong></li>
-<li><strong>把耗時的 I/O 任務交給背景系統處理</strong></li>
-<li><strong>等待完成後，再透過事件排程讓結果回到主執行緒</strong></li>
-</ul>
+    <div class="post-body" itemprop="articleBody"><p>有沒有遇過這種情況：應用程式的一個頁面載入特別緩慢，使用者抱怨連連，而追查到最後，發現元兇是一條執行了數十秒甚至數分鐘的資料庫查詢？</p>
+<p>這幾乎是每位開發者和資料庫管理員（DBA）都曾面對的夢魘。然而，效能的瓶頸往往不是資料庫本身不夠力，而是沒有「好好地」跟它溝通。這篇文章將揭開資料庫效能背後的神秘面紗，深入探討一個核心概念：<strong>查詢優化（Query Optimization）</strong>。</p>
+<h1 id="什麼是查詢優化"><a class="markdownIt-Anchor" href="#什麼是查詢優化"></a> 什麼是查詢優化？</h1>
+<p>想像一下，走進一座巨大的圖書館，想找一本特定主題的書。有兩種方法：</p>
+<ol>
+<li><strong>蠻力法：</strong> 從第一排書架開始，一本一本地翻閱，直到找到想要的書為止。</li>
+<li><strong>智慧法：</strong> 前往圖書館的檢索系統（電腦或卡片目錄），輸入書名或作者，系統會立刻告訴你書在哪一排、哪一架、哪一層。</li>
+</ol>
+<p>查詢優化，就是資料庫從「蠻力法」轉變為「智慧法」的過程。</p>
 <blockquote>
-<p><strong>重要觀念</strong>：非同步任務完成後需要排隊回傳結果，但這段等待並不會阻塞主執行緒，因為主執行緒可以去執行其他任務。</p>
+<p><strong>查詢優化是資料庫管理系統（DBMS）在接收到一條 SQL 查詢後，分析並找出執行該查詢最有效率、成本最低的路徑（Execution Plan）的過程。</strong></p>
 </blockquote>
-<h2 id="非同步與阻塞的差異比喻"><a class="markdownIt-Anchor" href="#非同步與阻塞的差異比喻"></a> 非同步與阻塞的差異比喻</h2>
-<table>
-<thead>
-<tr>
-<th>同步（阻塞）</th>
-<th>非同步（非阻塞）</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>你排隊等餐，直到拿到餐才離開</td>
-<td>你點完餐回位子坐著，等叫號再拿餐</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h1 id="python-非同步運作流程asyncio-與事件迴圈"><a class="markdownIt-Anchor" href="#python-非同步運作流程asyncio-與事件迴圈"></a> Python 非同步運作流程（asyncio 與事件迴圈）</h1>
-<p>Python 透過 <code>asyncio</code> 套件實現非同步，核心架構包含：</p>
+<p>資料庫內部的「查詢優化器（Query Optimizer）」會評估數種可能的執行方式，並選擇它認為最快、最省資源的一種。</p>
+<h1 id="為什麼查詢優化如此重要"><a class="markdownIt-Anchor" href="#為什麼查詢優化如此重要"></a> 為什麼查詢優化如此重要？</h1>
+<p>有些人可能會想：「現在硬體這麼便宜，伺服器規格開高一點不就好了？」這是一個危險的迷思。糟糕的查詢會像一個無底洞，再強大的硬體資源也會被它吞噬。做好查詢優化，能帶來四大好處：</p>
 <ul>
-<li><strong>協程（coroutine）</strong>：用 <code>async def</code> 定義的非同步函式</li>
-<li><strong>事件迴圈（event loop）</strong>：管理協程的執行與切換</li>
-<li><strong>非阻塞 I/O</strong>：遇到 <code>await</code> 時暫停協程，讓事件迴圈去處理其他工作</li>
+<li><strong>提升使用者體驗：</strong> 快速的響應時間是使用者滿意度的關鍵。沒有人喜歡盯著載入中的圖示乾等。</li>
+<li><strong>增強系統擴展性：</strong> 優化過的查詢能用更少的資源完成工作，讓系統能同時服務更多的使用者，從容應對流量高峰。</li>
+<li><strong>降低營運成本：</strong> 無論是本地伺服器還是雲端服務，CPU、記憶體和 I/O 都是要錢的。高效的查詢意味著更低的資源消耗。</li>
+<li><strong>維護系統穩定性：</strong> 一條慢查詢可能會長時間鎖定資料表，阻塞其他正常的操作，甚至引發連鎖反應，導致整個應用程式崩潰。</li>
 </ul>
-<h2 id="python-非同步示意程式"><a class="markdownIt-Anchor" href="#python-非同步示意程式"></a> Python 非同步示意程式</h2>
-<pre class="highlight"><code class="python"><span class="hljs-keyword">import</span> asyncio
-
-<span class="hljs-keyword">async</span> <span class="hljs-keyword">def</span> <span class="hljs-title function_">download_file</span>(<span class="hljs-params">filename</span>):
-    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Start downloading <span class="hljs-subst">&#123;filename&#125;</span>&quot;</span>)
-    <span class="hljs-keyword">await</span> asyncio.sleep(<span class="hljs-number">2</span>)  <span class="hljs-comment"># 模擬非同步 I/O 任務</span>
-    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Finished downloading <span class="hljs-subst">&#123;filename&#125;</span>&quot;</span>)
-    <span class="hljs-keyword">return</span> filename
-
-<span class="hljs-keyword">async</span> <span class="hljs-keyword">def</span> <span class="hljs-title function_">main</span>():
-    tasks = [
-        download_file(<span class="hljs-string">&quot;file1.txt&quot;</span>),
-        download_file(<span class="hljs-string">&quot;file2.txt&quot;</span>),
-        download_file(<span class="hljs-string">&quot;file3.txt&quot;</span>)
-    ]
-    <span class="hljs-keyword">await</span> asyncio.gather(*tasks)
-
-asyncio.run(main())
+<h1 id="查詢優化是如何運作的核心概念解析"><a class="markdownIt-Anchor" href="#查詢優化是如何運作的核心概念解析"></a> 查詢優化是如何運作的？核心概念解析</h1>
+<p>要讓查詢跑得快，需要理解優化器在做什麼，並為它提供有利的「線索」。以下是幾個最重要的核心概念：</p>
+<h2 id="1-執行計畫execution-plan"><a class="markdownIt-Anchor" href="#1-執行計畫execution-plan"></a> 1. 執行計畫（Execution Plan）</h2>
+<p>這是優化器最終決策的「作戰地圖」。它詳細描述了資料庫將如何一步步執行你的查詢：要先讀取哪張表、使用什麼索引、用哪種方式連接（Join）資料表等等。</p>
+<p>學會讀懂執行計畫是每位開發者的必修課。大部分資料庫都提供 <code>EXPLAIN</code> 或 <code>EXPLAIN ANALYZE</code> 指令，讓你窺探查詢的內部執行細節。</p>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 以 PostgreSQL 為例</span>
+EXPLAIN ANALYZE <span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> users <span class="hljs-keyword">WHERE</span> email <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;test@example.com&#x27;</span>;
 </code></pre>
-<p>在上面例子中，三個下載任務會「同時」開始，因為事件迴圈會在等待（sleep）時切換到其他任務，達到非阻塞效果。</p>
-<hr />
-<h1 id="非同步-vs-多執行緒效能差異與適用場景"><a class="markdownIt-Anchor" href="#非同步-vs-多執行緒效能差異與適用場景"></a> 非同步 vs 多執行緒：效能差異與適用場景</h1>
-<table>
-<thead>
-<tr>
-<th>特色</th>
-<th>非同步（Event Loop）</th>
-<th>多執行緒（Thread-based）</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>執行緒數</td>
-<td>單一主執行緒 + 背景任務</td>
-<td>多個執行緒</td>
-</tr>
-<tr>
-<td>適合任務類型</td>
-<td>I/O-bound（網路、檔案存取）</td>
-<td>CPU-bound（密集運算）</td>
-</tr>
-<tr>
-<td>資源使用</td>
-<td>較少（低記憶體占用）</td>
-<td>較高（每個執行緒需獨立記憶體）</td>
-</tr>
-<tr>
-<td>阻塞風險</td>
-<td>只要避免同步阻塞就不會卡死</td>
-<td>一個執行緒卡死不影響其他執行緒</td>
-</tr>
-<tr>
-<td>並行度</td>
-<td>非同步模擬並行，非真正多核心運算</td>
-<td>可利用多核 CPU 進行真正多工</td>
-</tr>
-<tr>
-<td>複雜度</td>
-<td>回呼函式、事件排程較複雜</td>
-<td>執行緒同步、鎖與死鎖問題需注意</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h1 id="非同步在背後執行效能是否較差"><a class="markdownIt-Anchor" href="#非同步在背後執行效能是否較差"></a> 非同步在背後執行效能是否較差？</h1>
-<p>非同步任務雖然不是在主線程跑，但不代表效率低：</p>
+<p>看到 <code>Seq Scan</code> (Sequential Scan，循序掃描) 這類字眼時，通常就是警訊，代表資料庫正在用「蠻力法」掃描整張表。</p>
+<h2 id="2-索引indexing"><a class="markdownIt-Anchor" href="#2-索引indexing"></a> 2. 索引（Indexing）</h2>
+<p><strong>索引是查詢優化中最重要、最立竿見影的工具。</strong> 它就像書本的目錄，讓資料庫不必掃描整張表，就能快速定位到目標資料。</p>
+<p>最常見的索引是 B-Tree 索引，特別適合用在 <code>WHERE</code> 條件句、<code>JOIN</code> 的連接鍵以及 <code>ORDER BY</code> 的排序欄位上。</p>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 為 users 表的 email 欄位建立索引</span>
+<span class="hljs-keyword">CREATE</span> INDEX idx_users_email <span class="hljs-keyword">ON</span> users(email);
+</code></pre>
+<p><strong>注意：</strong> 索引並非越多越好。它會佔用額外的儲存空間，並且在新增、修改、刪除資料時，資料庫需要額外花時間去維護索引，這會犧牲一部分寫入效能。因此只在「經常被查詢」的欄位上建立索引。</p>
+<h2 id="3-撰寫高效的查詢語句"><a class="markdownIt-Anchor" href="#3-撰寫高效的查詢語句"></a> 3. 撰寫高效的查詢語句</h2>
+<p>優化器雖然聰明，但仍然可以透過撰寫更清晰、更高效的 SQL 來幫助它。</p>
 <ul>
-<li><strong>I/O-bound 任務本質上耗時在等待資料回應</strong>，非同步能利用等待時間切換其他任務，提高資源利用率。</li>
-<li>背景系統（如 Node.js 的 libuv threadpool 或瀏覽器的 Web API）專門負責 I/O，效率通常比主線程好。</li>
+<li><strong>避免 <code>SELECT *</code>：</strong> 只查詢需要的欄位。這能減少網路傳輸量和資料庫的 I/O 負擔。</li>
+<li><strong><code>WHERE</code> 條件要明確：</strong> 確保 <code>WHERE</code> 子句中的篩選欄位有適當的索引。避免在索引欄位上使用函數，例如 <code>WHERE LOWER(email) = 'test@example.com'</code> 會導致索引失效。</li>
+<li><strong>理解 <code>JOIN</code> 的類型：</strong> 謹慎使用 <code>LEFT JOIN</code> 和 <code>RIGHT JOIN</code>，確保了解它們的運作方式。在可能的情況下，優先使用 <code>INNER JOIN</code>。</li>
+<li><strong>小心 <code>OR</code> 和 <code>IN</code>：</strong> 在某些情況下，使用 <code>UNION ALL</code> 可能比 <code>OR</code> 的效率更高。對於非常大的 <code>IN</code> 列表，可以考慮改寫為 <code>JOIN</code> 一個臨時表。</li>
 </ul>
-<p>但如果用非同步處理大量 CPU 運算，則會卡主事件迴圈，這時應該用多執行緒或多進程。</p>
-<hr />
-<h1 id="在後端是否有必要用非同步處理資料流"><a class="markdownIt-Anchor" href="#在後端是否有必要用非同步處理資料流"></a> 在後端是否有必要用非同步處理資料流？</h1>
-<h2 id="適合使用非同步的場景"><a class="markdownIt-Anchor" href="#適合使用非同步的場景"></a> 適合使用非同步的場景</h2>
-<ul>
-<li>高併發 API 請求（數千到數萬連線）</li>
-<li>需要大量等待 I/O（資料庫、檔案、第三方服務）</li>
-<li>WebSocket 或長連線通訊</li>
-<li>大量資料串流與處理（爬蟲、資料管線）</li>
-</ul>
-<h2 id="不適合使用非同步的場景"><a class="markdownIt-Anchor" href="#不適合使用非同步的場景"></a> 不適合使用非同步的場景</h2>
-<ul>
-<li>CPU 密集計算（影像處理、科學運算）</li>
-<li>使用大量同步套件（無法 async 支援）</li>
-<li>系統結構複雜，非同步調試困難</li>
-</ul>
-<hr />
-<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
-<table>
-<thead>
-<tr>
-<th>問題</th>
-<th>答案</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>非同步完成後回主線程排隊會阻塞嗎？</td>
-<td>不會，因為主線程可同時處理其他任務，排隊是非阻塞等待。</td>
-</tr>
-<tr>
-<td>非同步背景執行效能差嗎？</td>
-<td>對 I/O-bound 非同步任務效率高，但 CPU-bound 任務需多執行緒處理。</td>
-</tr>
-<tr>
-<td>後端要不要用非同步？</td>
-<td>若主要是 I/O-bound 或高併發，推薦使用非同步。CPU-heavy 則不適合。</td>
-</tr>
-</tbody>
-</table>
+<h2 id="4-維護資料庫統計數據"><a class="markdownIt-Anchor" href="#4-維護資料庫統計數據"></a> 4. 維護資料庫統計數據</h2>
+<p>查詢優化器是根據資料的「統計數據」（例如某個欄位的值分佈情況、資料表的總行數等）來做決策的。如果這些數據過時或不準確，優化器就可能做出錯誤的判斷。</p>
+<p>大部分資料庫都有自動更新統計數據的機制，但有時也需要手動執行指令（如 PostgreSQL 的 <code>ANALYZE</code>）來確保數據的即時性。</p>
+<h1 id="實戰演練一個簡單的優化範例"><a class="markdownIt-Anchor" href="#實戰演練一個簡單的優化範例"></a> 實戰演練：一個簡單的優化範例</h1>
+<p>假設有一個 <code>orders</code> 資料表，儲存了數百萬筆訂單資料。現在要查詢某位顧客（<code>customer_id = 123</code>）的所有訂單。</p>
+<p><strong>優化前：</strong></p>
+<pre class="highlight"><code class="sql">EXPLAIN <span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> orders <span class="hljs-keyword">WHERE</span> customer_id <span class="hljs-operator">=</span> <span class="hljs-number">123</span>;
+</code></pre>
+<p>執行計畫可能會顯示 <code>Seq Scan on orders</code>，表示它正在掃描整張數百萬行的表。如果這是一張大表，查詢可能需要數秒鐘。</p>
+<p><strong>優化步驟：</strong></p>
+<p>發現 <code>customer_id</code> 是查詢的關鍵，所以在這個欄位上建立索引。</p>
+<pre class="highlight"><code class="sql"><span class="hljs-keyword">CREATE</span> INDEX idx_orders_customer_id <span class="hljs-keyword">ON</span> orders(customer_id);
+</code></pre>
+<p><strong>優化後：</strong></p>
+<p>再次執行同樣的查詢：</p>
+<pre class="highlight"><code class="sql">EXPLAIN <span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> orders <span class="hljs-keyword">WHERE</span> customer_id <span class="hljs-operator">=</span> <span class="hljs-number">123</span>;
+</code></pre>
+<p>這次，執行計畫應該會顯示 <code>Index Scan using idx_orders_customer_id</code>。資料庫利用索引，像查字典一樣精準地找到了 <code>customer_id = 123</code> 的所有訂單，查詢時間可能縮短到幾毫秒。這就是優化的威力！</p>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>資料庫查詢優化是一門需要理論與實踐相結合的科學。它更像是一位偵探在辦案，透過 <code>EXPLAIN</code> 這個放大鏡，找出查詢緩慢的線索，再利用索引、改寫 SQL 等工具，將「兇手」繩之以法。</p>
+<p>精通查詢優化是衡量一位優秀開發者或 DBA 的重要指標。</p>
 
     </div>
 
@@ -714,21 +636,19 @@ asyncio.run(main())
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/my-blog/tags/Async/" rel="tag"># Async</a>
+              <a href="/my-blog/tags/Database/" rel="tag"># Database</a>
+              <a href="/my-blog/tags/SQL/" rel="tag"># SQL</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/my-blog/2025/07/10/%E9%9D%9E%E5%90%8C%E6%AD%A5%E6%8A%80%E8%A1%93%E6%AF%94%E8%BC%83/" rel="prev" title="非同步技術比較：async&#x2F;await vs. Message Queues vs. setTimeout">
-                  <i class="fa fa-angle-left"></i> 非同步技術比較：async/await vs. Message Queues vs. setTimeout
+                <a href="/my-blog/2025/08/17/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20Apache%20Kafka%20%E7%8F%BE%E4%BB%A3%E8%B3%87%E6%96%99%E5%B7%A5%E7%A8%8B%E7%9A%84%E5%9F%BA%E7%9F%B3/" rel="prev" title="深入淺出 Apache Kafka：現代資料工程的基石">
+                  <i class="fa fa-angle-left"></i> 深入淺出 Apache Kafka：現代資料工程的基石
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/my-blog/2025/07/16/%E4%BB%80%E9%BA%BC%E6%98%AF%20AMQP%20%E9%80%B2%E9%9A%8E%E6%B6%88%E6%81%AF%E9%9A%8A%E5%88%97%E5%8D%94%E5%AE%9A/" rel="next" title="什麼是 AMQP 進階消息隊列協定？">
-                  什麼是 AMQP 進階消息隊列協定？ <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
