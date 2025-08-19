@@ -19,28 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="在上一篇文章《解鎖 systemd：現代 Linux 開發者不可不知的服務管理利器》中，探討了如何利用 systemd 來優雅地管理應用程式。一個非常核心且重要的問題：「既然有了 Docker 和 Docker Compose，為什麼還需要 systemd 呢？ 如果用了 Docker，還需要 systemd 嗎？」 讓我們來深入剖析這兩者之間的關係，會發現，它們並非互相取代的競爭對手，而是一對相">
+    <meta name="description" content="當開發應用程式時，無論是電商網站的訂單系統、銀行的轉帳功能，還是社群平台的發文留言，背後都離不開與資料庫的互動。我們都希望資料是正確、可靠且一致的。但要如何確保在高併發、網路不穩定甚至系統當機的複雜環境下，資料依然能保持「高枕無憂」的狀態呢？ 答案，就藏在資料庫系統的核心設計哲學中——ACID 原則。  什麼是「交易」(Transaction)？ 在深入 ACID 之前，必須先理解什麼是「交易」。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Systemd vs. Docker：是敵是友？誰來管理誰？">
-<meta property="og:url" content="https://nivek-yang.github.io/2025/08/04/Systemd%20vs%20Docker%20%E6%98%AF%E6%95%B5%E6%98%AF%E5%8F%8B%20%E8%AA%B0%E4%BE%86%E7%AE%A1%E7%90%86%E8%AA%B0/index.html">
+<meta property="og:title" content="資料庫的基石：一次搞懂交易的四大守護神 ACID">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/08/19/%E8%B3%87%E6%96%99%E5%BA%AB%E7%9A%84%E5%9F%BA%E7%9F%B3%20%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%E4%BA%A4%E6%98%93%E7%9A%84%E5%9B%9B%E5%A4%A7%E5%AE%88%E8%AD%B7%E7%A5%9E%20ACID/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="在上一篇文章《解鎖 systemd：現代 Linux 開發者不可不知的服務管理利器》中，探討了如何利用 systemd 來優雅地管理應用程式。一個非常核心且重要的問題：「既然有了 Docker 和 Docker Compose，為什麼還需要 systemd 呢？ 如果用了 Docker，還需要 systemd 嗎？」 讓我們來深入剖析這兩者之間的關係，會發現，它們並非互相取代的競爭對手，而是一對相">
+<meta property="og:description" content="當開發應用程式時，無論是電商網站的訂單系統、銀行的轉帳功能，還是社群平台的發文留言，背後都離不開與資料庫的互動。我們都希望資料是正確、可靠且一致的。但要如何確保在高併發、網路不穩定甚至系統當機的複雜環境下，資料依然能保持「高枕無憂」的狀態呢？ 答案，就藏在資料庫系統的核心設計哲學中——ACID 原則。  什麼是「交易」(Transaction)？ 在深入 ACID 之前，必須先理解什麼是「交易」。">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2025-08-03T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-08-04T14:31:29.925Z">
+<meta property="article:published_time" content="2025-08-18T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-19T15:23:18.245Z">
 <meta property="article:author" content="Kaiwii">
-<meta property="article:tag" content="systemd">
-<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="Database">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://nivek-yang.github.io/2025/08/04/Systemd%20vs%20Docker%20%E6%98%AF%E6%95%B5%E6%98%AF%E5%8F%8B%20%E8%AA%B0%E4%BE%86%E7%AE%A1%E7%90%86%E8%AA%B0/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/08/19/%E8%B3%87%E6%96%99%E5%BA%AB%E7%9A%84%E5%9F%BA%E7%9F%B3%20%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%E4%BA%A4%E6%98%93%E7%9A%84%E5%9B%9B%E5%A4%A7%E5%AE%88%E8%AD%B7%E7%A5%9E%20ACID/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/08/04/Systemd%20vs%20Docker%20%E6%98%AF%E6%95%B5%E6%98%AF%E5%8F%8B%20%E8%AA%B0%E4%BE%86%E7%AE%A1%E7%90%86%E8%AA%B0/","path":"2025/08/04/Systemd vs Docker 是敵是友 誰來管理誰/","title":"Systemd vs. Docker：是敵是友？誰來管理誰？"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/08/19/%E8%B3%87%E6%96%99%E5%BA%AB%E7%9A%84%E5%9F%BA%E7%9F%B3%20%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%E4%BA%A4%E6%98%93%E7%9A%84%E5%9B%9B%E5%A4%A7%E5%AE%88%E8%AD%B7%E7%A5%9E%20ACID/","path":"2025/08/19/資料庫的基石 一次搞懂交易的四大守護神 ACID/","title":"資料庫的基石：一次搞懂交易的四大守護神 ACID"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Systemd vs. Docker：是敵是友？誰來管理誰？ | 我的技術部落格</title>
+<title>資料庫的基石：一次搞懂交易的四大守護神 ACID | 我的技術部落格</title>
   
 
 
@@ -462,7 +461,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%90%86%E8%A7%A3%E5%90%84%E8%87%AA%E7%9A%84%E8%81%B7%E8%B2%AC%E5%88%86%E5%B1%A4%E7%9A%84%E8%97%9D%E8%A1%93"><span class="nav-number">1.</span> <span class="nav-text"> 理解各自的職責：分層的藝術</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E4%B8%8D%E7%9B%B4%E6%8E%A5%E7%94%A8-docker-%E5%B0%B1%E5%A5%BD"><span class="nav-number">2.</span> <span class="nav-text"> 為什麼不直接用 Docker 就好？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%AA%B0%E4%BE%86%E7%AE%A1%E7%90%86-docker-%E8%87%AA%E5%B7%B1"><span class="nav-number">2.1.</span> <span class="nav-text"> 1. 誰來管理 Docker 自己？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%BF%BD%E6%B1%82%E7%9A%84%E6%98%AF%E7%B5%82%E6%A5%B5%E5%8F%AF%E9%9D%A0%E6%80%A7"><span class="nav-number">2.2.</span> <span class="nav-text"> 2. 追求的是終極可靠性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8-systemd-%E4%BE%86%E7%AE%A1%E7%90%86-docker-compose"><span class="nav-number">3.</span> <span class="nav-text"> 用 systemd 來管理 Docker Compose</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%A6%E6%88%B0%E7%82%BA-docker-compose-%E5%BB%BA%E7%AB%8B%E4%B8%80%E5%80%8B-systemd-%E6%9C%8D%E5%8B%99"><span class="nav-number">3.1.</span> <span class="nav-text"> 實戰：為 Docker Compose 建立一個 systemd 服務</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">4.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF%E4%BA%A4%E6%98%93transaction"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是「交易」(Transaction)？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#acid-%E7%9A%84%E5%9B%9B%E5%A4%A7%E6%A0%B8%E5%BF%83%E6%88%90%E5%93%A1"><span class="nav-number">2.</span> <span class="nav-text"> ACID 的四大核心成員</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#a-atomicity-%E5%8E%9F%E5%AD%90%E6%80%A7%E6%88%90%E6%95%97%E8%88%87%E5%85%B1%E7%B5%95%E4%B8%8D%E5%96%AE%E9%A3%9B"><span class="nav-number">2.1.</span> <span class="nav-text"> A - Atomicity (原子性)：成敗與共，絕不單飛</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-consistency-%E4%B8%80%E8%87%B4%E6%80%A7%E8%A6%8F%E5%89%87%E8%87%B3%E4%B8%8A%E7%B5%95%E4%B8%8D%E5%A6%A5%E5%8D%94"><span class="nav-number">2.2.</span> <span class="nav-text"> C - Consistency (一致性)：規則至上，絕不妥協</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#i-isolation-%E9%9A%94%E9%9B%A2%E6%80%A7%E4%BD%A0%E7%9A%84%E4%B8%96%E7%95%8C%E8%88%87%E6%88%91%E7%84%A1%E9%97%9C"><span class="nav-number">2.3.</span> <span class="nav-text"> I - Isolation (隔離性)：你的世界，與我無關</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#d-durability-%E6%8C%81%E4%B9%85%E6%80%A7%E4%B8%80%E8%AB%BE%E5%8D%83%E9%87%91%E6%B0%B8%E4%B8%8D%E9%81%BA%E5%A4%B1"><span class="nav-number">2.4.</span> <span class="nav-text"> D - Durability (持久性)：一諾千金，永不遺失</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90%E7%82%BA%E4%BD%95-acid-%E5%A6%82%E6%AD%A4%E9%87%8D%E8%A6%81"><span class="nav-number">3.</span> <span class="nav-text"> 總結：為何 ACID 如此重要？</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -510,7 +509,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/04/Systemd%20vs%20Docker%20%E6%98%AF%E6%95%B5%E6%98%AF%E5%8F%8B%20%E8%AA%B0%E4%BE%86%E7%AE%A1%E7%90%86%E8%AA%B0/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/19/%E8%B3%87%E6%96%99%E5%BA%AB%E7%9A%84%E5%9F%BA%E7%9F%B3%20%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%E4%BA%A4%E6%98%93%E7%9A%84%E5%9B%9B%E5%A4%A7%E5%AE%88%E8%AD%B7%E7%A5%9E%20ACID/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -523,12 +522,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Systemd vs. Docker：是敵是友？誰來管理誰？ | 我的技術部落格">
+      <meta itemprop="name" content="資料庫的基石：一次搞懂交易的四大守護神 ACID | 我的技術部落格">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Systemd vs. Docker：是敵是友？誰來管理誰？
+          資料庫的基石：一次搞懂交易的四大守護神 ACID
         </h1>
 
         <div class="post-meta-container">
@@ -540,7 +539,7 @@
       <span class="post-meta-item-text">發表於</span>
       
 
-      <time title="創建時間：2025-08-04 00:00:00 / 修改時間：22:31:29" itemprop="dateCreated datePublished" datetime="2025-08-04T00:00:00+08:00">2025-08-04</time>
+      <time title="創建時間：2025-08-19 00:00:00 / 修改時間：23:23:18" itemprop="dateCreated datePublished" datetime="2025-08-19T00:00:00+08:00">2025-08-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -561,101 +560,113 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>在上一篇文章《解鎖 systemd：現代 Linux 開發者不可不知的服務管理利器》中，探討了如何利用 <code>systemd</code> 來優雅地管理應用程式。一個非常核心且重要的問題：「<strong>既然有了 Docker 和 Docker Compose，為什麼還需要 <code>systemd</code> 呢？ 如果用了 Docker，還需要 <code>systemd</code> 嗎？</strong>」</p>
-<p>讓我們來深入剖析這兩者之間的關係，會發現，它們並非互相取代的競爭對手，而是一對相輔相成的黃金搭檔。</p>
-<hr />
-<h1 id="理解各自的職責分層的藝術"><a class="markdownIt-Anchor" href="#理解各自的職責分層的藝術"></a> 理解各自的職責：分層的藝術</h1>
-<p>要理解 <code>systemd</code> 和 <code>Docker</code> 的關係，最關鍵的一點是：<strong>它們解決的是不同層面的問題</strong>。</p>
-<p>用一個生動的比喻來理解：</p>
-<ul>
-<li><strong><code>Linux 作業系統</code></strong>：就像一棟<strong>辦公大樓</strong>，提供了基礎設施（水、電、空間）。</li>
-<li><strong><code>systemd</code></strong>：是這棟大樓的<strong>總務與保全系統</strong>。它的職責是確保大樓的基礎服務正常運轉，比如確保電力系統 (<code>network.target</code>) 在上班前就已啟動，並在伺服器（大樓）重啟時，自動化地讓各個辦公室（服務）恢復運作。它關心的是「<strong>程序是否在作業系統層級上運行</strong>」。</li>
-<li><strong><code>Docker</code></strong>：則像是一個個**「拎包入住」的模組化辦公室**。每個辦公室（Container）都自帶了所有必需的辦公用品、裝潢和特定環境（應用程式的函式庫、依賴、配置），與隔壁辦公室完全隔離。<code>Docker</code> 關心的是「<strong>應用程式能否在一個隔離且一致的環境中運行</strong>」。</li>
-<li><strong><code>Docker Compose</code></strong>：是<strong>部門規劃師</strong>。他拿著一張藍圖 (<code>docker-compose.yml</code>)，規劃：「這個部門需要三個辦公室，一個是前端，一個是後端，一個是資料庫，而且它們之間可以用內線電話（虛擬網路）溝通。」</li>
-</ul>
-<p>從這個比喻中，可以清楚地了解：<code>systemd</code> 負責管理<strong>整棟大樓的運轉</strong>，而 <code>Docker</code> 則負責管理<strong>每個辦公室內部的環境</strong>。</p>
-<h1 id="為什麼不直接用-docker-就好"><a class="markdownIt-Anchor" href="#為什麼不直接用-docker-就好"></a> 為什麼不直接用 Docker 就好？</h1>
-<p>可能會想說：「應用程式和它的所有依賴都在 Docker Compose 裡定義好了，只要 <code>docker compose up -d</code> 就能跑起來，為什麼還需要 <code>systemd</code> 這個『大樓管理員』呢？」</p>
-<p>原因有二：</p>
-<h2 id="1-誰來管理-docker-自己"><a class="markdownIt-Anchor" href="#1-誰來管理-docker-自己"></a> 1. 誰來管理 Docker 自己？</h2>
-<p>Docker Engine (即 <code>dockerd</code> 服務) 本身就是一個需要在作業系統上運行的背景程序。當伺服器開機時，是什麼東西自動啟動了 <code>dockerd</code> 服務，讓你可以使用 <code>docker</code> 指令？</p>
-<p>答案正是 <code>systemd</code>！</p>
-<p>可以隨時在 Linux 伺服器上執行這個指令來驗證：</p>
-<pre class="highlight"><code class="bash"><span class="hljs-built_in">sudo</span> systemctl status docker.service
-</code></pre>
-<p>會看到 <code>docker.service</code> 正在被 <code>systemd</code> 管理著。<code>systemd</code> 確保了 Docker 這個「模組化辦公室的供應商」在伺服器啟動時就已經準備就緒。</p>
-<h2 id="2-追求的是終極可靠性"><a class="markdownIt-Anchor" href="#2-追求的是終極可靠性"></a> 2. 追求的是終極可靠性</h2>
-<p><code>Docker</code> 和 <code>Docker Compose</code> 提供了優秀的內部管理機制。例如，可以在 <code>docker-compose.yml</code> 中為服務設定 <code>restart: always</code>。</p>
-<pre class="highlight"><code class="yaml"><span class="hljs-comment"># docker-compose.yml</span>
-<span class="hljs-attr">services:</span>
-  <span class="hljs-attr">my-app:</span>
-    <span class="hljs-attr">image:</span> <span class="hljs-string">my-app-image</span>
-    <span class="hljs-attr">restart:</span> <span class="hljs-string">always</span> <span class="hljs-comment"># 當容器停止時，Docker 會自動重啟它</span>
-</code></pre>
-<p>這在大部分情況下都很好用。但是，如果發生了更嚴重的問題，例如 <strong>Docker Engine (<code>dockerd</code>) 本身崩潰了或被意外停止了呢？</strong></p>
-<p>這時，所有由它管理的容器（無論 <code>restart</code> 策略是什麼）都會停止運行，而且無法自行恢復。就像辦公室的電力總開關被關了，單個辦公室內的備用電源是沒用的。</p>
-<p>這時，就需要更高層級的管理者——<code>systemd</code>——登場了。</p>
-<h1 id="用-systemd-來管理-docker-compose"><a class="markdownIt-Anchor" href="#用-systemd-來管理-docker-compose"></a> 用 <code>systemd</code> 來管理 <code>Docker Compose</code></h1>
-<p>這就是最佳實踐的誕生：<strong>用 <code>systemd</code> 來啟動、停止和監控我們的 <code>docker-compose</code> 應用</strong>。</p>
-<p>這樣做，我們就建立了一個強大的、多層次的可靠性保障：</p>
-<ul>
-<li><strong>容器層級</strong>：Docker 負責在容器內部保持應用程式健康。</li>
-<li><strong>主機層級</strong>：<code>systemd</code> 負責確保整個 Docker Compose 應用（作為一個整體單元）在主機上始終運行。</li>
-</ul>
-<h2 id="實戰為-docker-compose-建立一個-systemd-服務"><a class="markdownIt-Anchor" href="#實戰為-docker-compose-建立一個-systemd-服務"></a> 實戰：為 Docker Compose 建立一個 <code>systemd</code> 服務</h2>
-<p>假設 <code>docker-compose.yml</code> 放在 <code>/home/user/my_docker_app/</code> 目錄下。可以像這樣為它建立一個 <code>systemd</code> 服務檔：</p>
-<pre class="highlight"><code class="ini"><span class="hljs-comment"># /etc/systemd/system/my-docker-compose-app.service</span>
-
-<span class="hljs-section">[Unit]</span>
-<span class="hljs-attr">Description</span>=My Docker Compose Application
-<span class="hljs-comment"># 要求 docker.service 必須先啟動</span>
-<span class="hljs-attr">Requires</span>=docker.service
-<span class="hljs-comment"># 在 docker.service 啟動之後再啟動本服務</span>
-<span class="hljs-attr">After</span>=docker.service
-
-<span class="hljs-section">[Service]</span>
-<span class="hljs-comment"># 使用你的使用者</span>
-<span class="hljs-attr">User</span>=myuser
-<span class="hljs-comment"># Docker Compose 檔案所在的目錄</span>
-<span class="hljs-attr">WorkingDirectory</span>=/home/myuser/my_docker_app
-
-<span class="hljs-comment"># 啟動指令：在背景中啟動 compose</span>
-<span class="hljs-comment"># 注意：我們不再使用 -d 參數，因為 systemd 會處理背景化</span>
-<span class="hljs-attr">ExecStart</span>=/usr/local/bin/docker-compose up
-<span class="hljs-comment"># 停止指令</span>
-<span class="hljs-attr">ExecStop</span>=/usr/local/bin/docker-compose down
-
-<span class="hljs-comment"># 讓 systemd 自動重啟我們的服務</span>
-<span class="hljs-attr">Restart</span>=always
-<span class="hljs-attr">RestartSec</span>=<span class="hljs-number">10</span>s
-
-<span class="hljs-section">[Install]</span>
-<span class="hljs-attr">WantedBy</span>=multi-user.target
-</code></pre>
-<p><strong>注意</strong>：<code>docker-compose</code> 的路徑可能是 <code>/usr/bin/docker-compose</code> 或 <code>/usr/local/bin/docker-compose</code>，請用 <code>which docker-compose</code> 確認。</p>
-<p><strong>這樣做的好處是什麼？</strong></p>
+    <div class="post-body" itemprop="articleBody"><p>當開發應用程式時，無論是電商網站的訂單系統、銀行的轉帳功能，還是社群平台的發文留言，背後都離不開與資料庫的互動。我們都希望資料是正確、可靠且一致的。但要如何確保在高併發、網路不穩定甚至系統當機的複雜環境下，資料依然能保持「高枕無憂」的狀態呢？</p>
+<p>答案，就藏在資料庫系統的核心設計哲學中——<strong>ACID 原則</strong>。</p>
+<h1 id="什麼是交易transaction"><a class="markdownIt-Anchor" href="#什麼是交易transaction"></a> 什麼是「交易」(Transaction)？</h1>
+<p>在深入 ACID 之前，必須先理解什麼是「交易」。</p>
+<blockquote>
+<p>在資料庫中，<strong>交易</strong>是一連串操作的集合，這些操作被視為一個<strong>不可分割的最小工作單元</strong>。這個單元裡的所有操作，要麼<strong>全部成功</strong>，要麼<strong>全部失敗</strong>。</p>
+</blockquote>
+<p>最經典的例子就是銀行轉帳：</p>
 <ol>
-<li><strong>開機自啟</strong>：執行 <code>sudo systemctl enable my-docker-compose-app.service</code>，整個應用集群就會在伺服器啟動時自動運行。</li>
-<li><strong>終極守護</strong>：如果 Docker Engine 崩潰後重啟，<code>systemd</code> 會因為依賴關係（<code>Requires</code> 和 <code>After</code>）自動地重新啟動 <code>my-docker-compose-app</code> 服務。</li>
-<li><strong>統一管理介面</strong>：可以像管理普通系統服務一樣管理 Docker 應用，使用 <code>systemctl start</code>, <code>systemctl stop</code>, <code>systemctl status</code>。</li>
-<li><strong>集中日誌</strong>：<code>docker-compose</code> 的所有輸出（包含所有容器的 log）都會被 <code>journald</code> 捕獲。只需執行 <code>sudo journalctl -u my-docker-compose-app.service -f</code> 就可以查看應用集群的所有日誌，極其方便！</li>
+<li>從 A 帳戶扣除 1000 元。</li>
+<li>在 B 帳戶增加 1000 元。</li>
 </ol>
-<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>這兩個動作必須被綁定在一個「交易」中。絕對不希望只完成了第一步，系統就當機了，那 A 的錢就憑空消失了！而 ACID 原則，正是為了確保這種交易能夠安全可靠地完成。</p>
+<h1 id="acid-的四大核心成員"><a class="markdownIt-Anchor" href="#acid-的四大核心成員"></a> ACID 的四大核心成員</h1>
+<p>ACID 是四個單字的首字母縮寫，分別代表著：</p>
 <ul>
-<li>
-<p><strong>要管理一個獨立的、非容器化的程式嗎？</strong><br />
-👉 直接使用 <strong><code>systemd</code></strong>，如上一篇文章所示。</p>
-</li>
-<li>
-<p><strong>要打包一個含有多個組件、複雜依賴的應用程式，並確保它在任何地方都能一致地運行嗎？</strong><br />
-👉 使用 <strong><code>Docker</code> 和 <code>Docker Compose</code></strong> 來進行封裝。</p>
-</li>
-<li>
-<p><strong>希望將這個打包好的 Docker 應用，在生產環境的 Linux 伺服器上進行可靠、穩定、可維護的部署嗎？</strong><br />
-👉 將 <code>Docker Compose</code> 作為一個整體，用 <strong><code>systemd</code></strong> 來管理它。</p>
-</li>
+<li><strong>A</strong>tomicity (原子性)</li>
+<li><strong>C</strong>onsistency (一致性)</li>
+<li><strong>I</strong>solation (隔離性)</li>
+<li><strong>D</strong>urability (持久性)</li>
 </ul>
-<p><code>systemd</code> 和 <code>Docker</code> 它們各自填補了現代化應用部署體系中不可或缺的一環。<code>systemd</code> 是穩固的地基，<code>Docker Compose</code> 是精美的建築。只有當地基穩固時，上面的建築才能屹立不倒。</p>
+<h2 id="a-atomicity-原子性成敗與共絕不單飛"><a class="markdownIt-Anchor" href="#a-atomicity-原子性成敗與共絕不單飛"></a> A - Atomicity (原子性)：成敗與共，絕不單飛</h2>
+<p>原子性確保一個交易中的所有操作是「一個完整的整體」，就像化學中的原子一樣，不可再分割。這意味著：<strong>所有操作要麼全部完成，要麼全部都不做</strong>。如果交易中的任何一個環節失敗，整個交易就會被<strong>回滾 (Rollback)</strong> 到最初的狀態，彷彿什麼事都沒發生過。</p>
+<blockquote>
+<p><strong>生活化比喻：</strong><br />
+這就像去 ATM 提款。整個「交易」包含：插卡 -&gt; 輸入密碼 -&gt; 輸入金額 -&gt; 吐鈔 -&gt; 帳戶扣款 -&gt; 退卡。<br />
+如果在「吐鈔」環節機器卡住了，絕對不希望「帳戶扣款」這個動作還被執行。原子性能保證，一旦吐鈔失敗，整個交易就會被取消，帳戶餘額會恢復原狀。</p>
+</blockquote>
+<p>在 SQL 中，通常使用 <code>BEGIN TRANSACTION</code>, <code>COMMIT</code> (提交) 和 <code>ROLLBACK</code> (回滾) 來控制交易的原子性。</p>
+<pre class="highlight"><code class="sql"><span class="hljs-keyword">BEGIN</span> TRANSACTION;
+
+<span class="hljs-comment">-- 步驟 1: 從 A 帳戶扣款</span>
+<span class="hljs-keyword">UPDATE</span> Accounts <span class="hljs-keyword">SET</span> balance <span class="hljs-operator">=</span> balance <span class="hljs-operator">-</span> <span class="hljs-number">1000</span> <span class="hljs-keyword">WHERE</span> user_id <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;A&#x27;</span>;
+
+<span class="hljs-comment">-- 假設此處發生了某個錯誤！</span>
+<span class="hljs-comment">-- 例如：B 帳戶不存在或系統崩潰</span>
+
+<span class="hljs-comment">-- 步驟 2: 為 B 帳戶存款</span>
+<span class="hljs-keyword">UPDATE</span> Accounts <span class="hljs-keyword">SET</span> balance <span class="hljs-operator">=</span> balance <span class="hljs-operator">+</span> <span class="hljs-number">1000</span> <span class="hljs-keyword">WHERE</span> user_id <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;B&#x27;</span>;
+
+<span class="hljs-comment">-- 如果中間出錯，整個交易會被 ROLLBACK</span>
+<span class="hljs-comment">-- 如果一切順利，執行 COMMIT</span>
+<span class="hljs-keyword">COMMIT</span>;
+</code></pre>
+<h2 id="c-consistency-一致性規則至上絕不妥協"><a class="markdownIt-Anchor" href="#c-consistency-一致性規則至上絕不妥協"></a> C - Consistency (一致性)：規則至上，絕不妥協</h2>
+<p>一致性確保資料庫的狀態在交易<strong>開始前</strong>和<strong>結束後</strong>，都必須滿足所有的預設規則和約束 (例如：欄位類型、不得為空、主鍵唯一性、外鍵關聯等)。換句話說，一個交易不能破壞資料庫的「完整性」。</p>
+<p>資料庫本身並不創造一致性，而是<strong>提供機制來維持開發者定義的一致性</strong>。</p>
+<blockquote>
+<p><strong>生活化比喻：</strong><br />
+想像一個圖書館的借書系統，規則是「每個用戶最多只能借 5 本書」。<br />
+當一個已經借了 5 本書的用戶再來借書時，一個符合一致性的交易會拒絕這次操作，因為執行後會破壞「最多 5 本」這個規則。交易結束後，資料庫的狀態依然是合法的。它確保了資料庫永遠不會進入一個「矛盾」或「非法」的狀態。</p>
+</blockquote>
+<h2 id="i-isolation-隔離性你的世界與我無關"><a class="markdownIt-Anchor" href="#i-isolation-隔離性你的世界與我無關"></a> I - Isolation (隔離性)：你的世界，與我無關</h2>
+<p>在多使用者環境下，多個交易可能會同時發生 (併發)。隔離性確保<strong>一個交易的執行不會被其他正在同時執行的交易所干擾</strong>。從任何一個交易的角度來看，它都感覺好像是系統中唯一在運行的交易。</p>
+<p>如果沒有隔離性，可能會發生以下問題：</p>
+<ul>
+<li><strong>髒讀 (Dirty Read):</strong> 一個交易讀取了另一個尚未提交的交易所修改的資料。</li>
+<li><strong>不可重複讀 (Non-repeatable Read):</strong> 一個交易內兩次讀取同一筆資料，結果卻不同，因為中間被其他交易修改並提交了。</li>
+<li><strong>幻讀 (Phantom Read):</strong> 一個交易內兩次執行相同的範圍查詢，但第二次查詢返回了第一次沒有的「幻影」行，因為其他交易在此期間插入了新資料。</li>
+</ul>
+<blockquote>
+<p><strong>生活化比喻：</strong><br />
+你和另一個人同時在網上搶購最後一張演唱會門票。<br />
+隔離性確保系統會將你們倆的操作隔離開來。系統會先處理一個人的請求（比如你的），鎖定這張票，完成整個付款流程。在這期間，另一個人看到的狀態可能是「正在處理」或「已售罄」，而不會讓他也能進入付款頁面，導致一張票賣給兩個人。</p>
+</blockquote>
+<p>資料庫通常提供不同的<strong>隔離級別</strong> (如 <code>Read Uncommitted</code>, <code>Read Committed</code>, <code>Repeatable Read</code>, <code>Serializable</code>)，讓開發者在效能和資料一致性之間做取捨。</p>
+<h2 id="d-durability-持久性一諾千金永不遺失"><a class="markdownIt-Anchor" href="#d-durability-持久性一諾千金永不遺失"></a> D - Durability (持久性)：一諾千金，永不遺失</h2>
+<p>持久性保證<strong>一旦交易被成功提交 (Commit)，它對資料庫所做的更改就是永久性的</strong>。即使之後系統發生崩潰、斷電或其他故障，這些已提交的修改也不會丟失。</p>
+<p>資料庫通常透過<strong>預寫日誌 (Write-Ahead Logging, WAL)</strong> 等技術來實現持久性。在修改實際資料前，系統會先把操作記錄到一個穩定的日誌檔案中。這樣即使系統崩潰，重啟後也能透過日誌來恢復資料，確保已提交的交易不會遺失。</p>
+<blockquote>
+<p><strong>生活化比喻：</strong><br />
+當在網路上完成付款，並收到「交易成功」的確認訊息時，這個結果就是持久的。不用擔心商家下一秒說因為他們伺服器斷電了，所以訂單不算數。這個「承諾」已經被永久地記錄下來了。</p>
+</blockquote>
+<h1 id="總結為何-acid-如此重要"><a class="markdownIt-Anchor" href="#總結為何-acid-如此重要"></a> 總結：為何 ACID 如此重要？</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">原則</th>
+<th style="text-align:left">核心概念</th>
+<th style="text-align:left">口語化解釋</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>A</strong>tomicity</td>
+<td style="text-align:left">不可分割</td>
+<td style="text-align:left">一家人要整整齊齊，要麼一起成功，要麼一起失敗。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>C</strong>onsistency</td>
+<td style="text-align:left">狀態合法</td>
+<td style="text-align:left">做人要有底線，做事要守規矩，不能讓資料庫陷入混亂。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>I</strong>solation</td>
+<td style="text-align:left">互不干擾</td>
+<td style="text-align:left">你走你的陽關道，我過我的獨木橋，我們互不影響。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>D</strong>urability</td>
+<td style="text-align:left">永久保存</td>
+<td style="text-align:left">說出去的話，潑出去的水，一旦承諾，永久有效。</td>
+</tr>
+</tbody>
+</table>
+<p>ACID 原則是關聯式資料庫管理系統 (RDBMS) 如 MySQL、PostgreSQL 等的基石。它為我們提供了一個強大的承諾：<strong>資料是可靠的</strong>。這使得開發者可以專注於業務邏輯，而不必過度擔心底層資料在各種極端情況下的完整性問題。</p>
+<p>當然，在某些場景下（特別是需要極高吞吐量的 NoSQL 資料庫），人們會選擇犧牲部分 ACID 特性（尤其是 C 和 I），來換取更高的效能和可用性，這就是所謂的 <strong>BASE 理論</strong> (Basically Available, Soft state, Eventually consistent)，但這就是另一個有趣的話題了。</p>
 
     </div>
 
@@ -665,22 +676,18 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/my-blog/tags/systemd/" rel="tag"># systemd</a>
-              <a href="/my-blog/tags/Docker/" rel="tag"># Docker</a>
+              <a href="/my-blog/tags/Database/" rel="tag"># Database</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/my-blog/2025/08/03/systemd%20%E7%8F%BE%E4%BB%A3%20Linux%20%E9%96%8B%E7%99%BC%E8%80%85%E4%B8%8D%E5%8F%AF%E4%B8%8D%E7%9F%A5%E7%9A%84%E6%9C%8D%E5%8B%99%E7%AE%A1%E7%90%86%E5%88%A9%E5%99%A8/" rel="prev" title="解鎖 systemd：現代 Linux 開發者不可不知的服務管理利器">
-                  <i class="fa fa-angle-left"></i> 解鎖 systemd：現代 Linux 開發者不可不知的服務管理利器
+                <a href="/my-blog/2025/08/18/%E6%8F%AD%E9%96%8B%E8%B3%87%E6%96%99%E5%BA%AB%E6%95%88%E8%83%BD%E7%9A%84%E7%A5%9E%E7%A7%98%E9%9D%A2%E7%B4%97%20%E6%9F%A5%E8%A9%A2%E5%84%AA%E5%8C%96%20Database%20Query%20Optimization/" rel="prev" title="揭開資料庫效能的神秘面紗：查詢優化 (Database Query Optimization)">
+                  <i class="fa fa-angle-left"></i> 揭開資料庫效能的神秘面紗：查詢優化 (Database Query Optimization)
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/my-blog/2025/08/05/%E8%B3%87%E6%96%99%E5%BA%AB%E5%88%86%E5%89%B2%20Partitioning%20%E6%8C%87%E5%8D%97/" rel="next" title="資料庫分割 (Partitioning) 指南">
-                  資料庫分割 (Partitioning) 指南 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
