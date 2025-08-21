@@ -19,27 +19,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="在學習 Python 專案結構時，常會遇到一個讓人困惑的問題：  為什麼從某個檔案執行時可以正常 import，換個方式就報錯了？  這背後的關鍵差異，在於你是以「script」還是「module」的方式執行 Python 檔案。   🧱 基本目錄架構 假設我們的專案結構如下： myproject&#x2F; ├── main.py └── app&#x2F;     ├── __init__.py     ├──">
+    <meta name="description" content="當從單體應用程式 (Monolithic Application) 走向微服務或任何分散式架構時，享受了擴展性與彈性的好處，但也必須面對一個新的挑戰：如何在多個節點之間維持資料的可靠性與服務的可用性？ 想像一下這個場景：在一個全球知名的電商平台搶購限量版球鞋。當按下「購買」的瞬間，系統背後可能有數十甚至數百台伺服器在同時運作。系統如何確保你買到的這雙鞋不會同時被另一個人買走？又如何保證即使某個地區">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Python Import 淺談：script 與 module 的差異">
-<meta property="og:url" content="https://nivek-yang.github.io/2025/04/21/python_script%E8%88%87module%E7%9A%84%E5%B7%AE%E7%95%B0/index.html">
+<meta property="og:title" content="系統設計中的 CAP 理論">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/08/21/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88%E4%B8%AD%E7%9A%84%20CAP%20%E7%90%86%E8%AB%96/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="在學習 Python 專案結構時，常會遇到一個讓人困惑的問題：  為什麼從某個檔案執行時可以正常 import，換個方式就報錯了？  這背後的關鍵差異，在於你是以「script」還是「module」的方式執行 Python 檔案。   🧱 基本目錄架構 假設我們的專案結構如下： myproject&#x2F; ├── main.py └── app&#x2F;     ├── __init__.py     ├──">
+<meta property="og:description" content="當從單體應用程式 (Monolithic Application) 走向微服務或任何分散式架構時，享受了擴展性與彈性的好處，但也必須面對一個新的挑戰：如何在多個節點之間維持資料的可靠性與服務的可用性？ 想像一下這個場景：在一個全球知名的電商平台搶購限量版球鞋。當按下「購買」的瞬間，系統背後可能有數十甚至數百台伺服器在同時運作。系統如何確保你買到的這雙鞋不會同時被另一個人買走？又如何保證即使某個地區">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2025-04-20T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-04-21T15:07:15.892Z">
+<meta property="article:published_time" content="2025-08-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-21T15:40:58.912Z">
 <meta property="article:author" content="Kaiwii">
-<meta property="article:tag" content="Python">
+<meta property="article:tag" content="System design">
+<meta property="article:tag" content="Distributed systems">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://nivek-yang.github.io/2025/04/21/python_script%E8%88%87module%E7%9A%84%E5%B7%AE%E7%95%B0/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/08/21/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88%E4%B8%AD%E7%9A%84%20CAP%20%E7%90%86%E8%AB%96/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/04/21/python_script%E8%88%87module%E7%9A%84%E5%B7%AE%E7%95%B0/","path":"2025/04/21/python_script與module的差異/","title":"Python Import 淺談：script 與 module 的差異"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/08/21/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88%E4%B8%AD%E7%9A%84%20CAP%20%E7%90%86%E8%AB%96/","path":"2025/08/21/系統設計中的 CAP 理論/","title":"系統設計中的 CAP 理論"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Python Import 淺談：script 與 module 的差異 | 我的技術部落格</title>
+<title>系統設計中的 CAP 理論 | 我的技術部落格</title>
   
 
 
@@ -475,7 +476,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%9B%AE%E9%8C%84%E6%9E%B6%E6%A7%8B"><span class="nav-number">1.</span> <span class="nav-text"> 🧱 基本目錄架構</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#script-%E8%88%87-module-%E7%9A%84%E5%AE%9A%E7%BE%A9%E6%98%AF%E4%BB%80%E9%BA%BC"><span class="nav-number">2.</span> <span class="nav-text"> 🤔 script 與 module 的定義是什麼？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%EF%B8%8F-%E7%82%BA%E4%BB%80%E9%BA%BC-python-appcorepy-%E6%9C%83%E9%8C%AF"><span class="nav-number">3.</span> <span class="nav-text"> ⚠️ 為什麼 python app&#x2F;core.py 會錯？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E7%A2%BA%E5%81%9A%E6%B3%95%E4%BB%A5-module-%E6%96%B9%E5%BC%8F%E5%9F%B7%E8%A1%8C"><span class="nav-number">4.</span> <span class="nav-text"> ✅ 正確做法：以 module 方式執行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#script-vs-module-%E5%B7%AE%E7%95%B0%E6%95%B4%E7%90%86"><span class="nav-number">5.</span> <span class="nav-text"> 📌 script vs module 差異整理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AF%A6%E8%B8%90"><span class="nav-number">6.</span> <span class="nav-text"> ✅ 最佳實踐</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%B6%E4%BC%B8%E8%A3%9C%E5%85%85%E7%82%BA%E4%BB%80%E9%BA%BC-m-%E5%8F%AF%E4%BB%A5%E6%AD%A3%E7%A2%BA-import"><span class="nav-number">7.</span> <span class="nav-text"> 📚 延伸補充：為什麼 -m 可以正確 import？</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-cap-%E7%90%86%E8%AB%96"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是 CAP 理論？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cap-%E4%B8%89%E5%A4%A7%E7%89%B9%E6%80%A7"><span class="nav-number">2.</span> <span class="nav-text"> CAP 三大特性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B8%80%E8%87%B4%E6%80%A7consistency"><span class="nav-number">2.1.</span> <span class="nav-text"> 1. 一致性（Consistency）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8F%AF%E7%94%A8%E6%80%A7availability"><span class="nav-number">2.2.</span> <span class="nav-text"> 2. 可用性（Availability）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%88%86%E5%8D%80%E5%AE%B9%E9%8C%AF%E6%80%A7partition-tolerance"><span class="nav-number">2.3.</span> <span class="nav-text"> 3. 分區容錯性（Partition Tolerance）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cap-%E4%B8%8D%E5%8F%AF%E8%83%BD%E4%B8%89%E8%A7%92"><span class="nav-number">3.</span> <span class="nav-text"> CAP 不可能三角</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%8F%BE%E5%AF%A6%E4%B8%96%E7%95%8C%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="nav-number">4.</span> <span class="nav-text"> 現實世界的例子</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#cp-%E7%B3%BB%E7%B5%B1-consistency-availability"><span class="nav-number">4.1.</span> <span class="nav-text"> CP 系統 (Consistency &gt; Availability)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ap-%E7%B3%BB%E7%B5%B1-availability-consistency"><span class="nav-number">4.2.</span> <span class="nav-text"> AP 系統 (Availability &gt; Consistency)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%82%A3-ca-%E7%B3%BB%E7%B5%B1%E5%91%A2"><span class="nav-number">4.3.</span> <span class="nav-text"> 那 CA 系統呢？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -523,7 +524,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/21/python_script%E8%88%87module%E7%9A%84%E5%B7%AE%E7%95%B0/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/21/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88%E4%B8%AD%E7%9A%84%20CAP%20%E7%90%86%E8%AB%96/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -536,12 +537,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Python Import 淺談：script 與 module 的差異 | 我的技術部落格">
+      <meta itemprop="name" content="系統設計中的 CAP 理論 | 我的技術部落格">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Python Import 淺談：script 與 module 的差異
+          系統設計中的 CAP 理論
         </h1>
 
         <div class="post-meta-container">
@@ -553,7 +554,7 @@
       <span class="post-meta-item-text">發表於</span>
       
 
-      <time title="創建時間：2025-04-21 00:00:00 / 修改時間：23:07:15" itemprop="dateCreated datePublished" datetime="2025-04-21T00:00:00+08:00">2025-04-21</time>
+      <time title="創建時間：2025-08-21 00:00:00 / 修改時間：23:40:58" itemprop="dateCreated datePublished" datetime="2025-08-21T00:00:00+08:00">2025-08-21</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -574,143 +575,138 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>在學習 Python 專案結構時，常會遇到一個讓人困惑的問題：</p>
+    <div class="post-body" itemprop="articleBody"><p>當從單體應用程式 (Monolithic Application) 走向微服務或任何分散式架構時，享受了擴展性與彈性的好處，但也必須面對一個新的挑戰：如何在多個節點之間維持資料的可靠性與服務的可用性？</p>
+<p>想像一下這個場景：在一個全球知名的電商平台搶購限量版球鞋。當按下「購買」的瞬間，系統背後可能有數十甚至數百台伺服器在同時運作。系統如何確保你買到的這雙鞋不會同時被另一個人買走？又如何保證即使某個地區的機房發生網路問題，依然能順利完成交易？</p>
+<p>這就是 CAP 理論要解決的核心問題。</p>
+<p>在分散式系統設計中，<strong>CAP 理論</strong>（CAP Theorem）是一個核心概念，用來描述在分散式資料庫中，系統無法同時滿足 <strong>一致性（Consistency）</strong>、<strong>可用性（Availability）</strong>、<strong>分區容錯性（Partition Tolerance）</strong> 這三大特性。理解 CAP 理論對於後端工程師在設計資料庫架構或分散式系統時至關重要。</p>
+<hr />
+<h1 id="什麼是-cap-理論"><a class="markdownIt-Anchor" href="#什麼是-cap-理論"></a> 什麼是 CAP 理論？</h1>
+<p>CAP 理論，又稱布魯爾定理 (Brewer’s Theorem)，由電腦科學家 Eric Brewer 在 2000 年提出。它指出，任何一個分散式資料儲存系統，最多只能同時滿足以下三個特性中的兩項。</p>
 <blockquote>
-<p>為什麼從某個檔案執行時可以正常 import，換個方式就報錯了？</p>
+<p>在一個分散式系統中，<strong>一致性 (Consistency)</strong>、<strong>可用性 (Availability)</strong> 和 <strong>分區容錯性 (Partition Tolerance)</strong>，這三者無法兼得。</p>
 </blockquote>
-<p>這背後的關鍵差異，在於你是以「<strong>script</strong>」還是「<strong>module</strong>」的方式執行 Python 檔案。</p>
-<hr />
-<h2 id="基本目錄架構"><a class="markdownIt-Anchor" href="#基本目錄架構"></a> 🧱 基本目錄架構</h2>
-<p>假設我們的專案結構如下：</p>
-<pre class="highlight"><code class="">myproject/
-├── main.py
-└── app/
-    ├── __init__.py
-    ├── core.py
-    └── utils.py
-</code></pre>
-<ul>
-<li><code>core.py</code> 裡面引用了 <code>utils.py</code></li>
-</ul>
-<pre class="highlight"><code class="python"><span class="hljs-comment"># core.py</span>
-<span class="hljs-keyword">from</span> app <span class="hljs-keyword">import</span> utils
-</code></pre>
-<p>這看起來是個合理的絕對 import，照理說應該可以用 <code>python app/core.py</code> 執行吧？</p>
-<p>實際上會報錯：</p>
-<pre class="highlight"><code class="">ModuleNotFoundError: No module named 'app'
-</code></pre>
-<hr />
-<h2 id="script-與-module-的定義是什麼"><a class="markdownIt-Anchor" href="#script-與-module-的定義是什麼"></a> 🤔 script 與 module 的定義是什麼？</h2>
+<h1 id="cap-三大特性"><a class="markdownIt-Anchor" href="#cap-三大特性"></a> CAP 三大特性</h1>
+<h2 id="1-一致性consistency"><a class="markdownIt-Anchor" href="#1-一致性consistency"></a> 1. 一致性（Consistency）</h2>
 <ul>
 <li>
-<p><strong>script</strong>（腳本）：</p>
-<ul>
-<li>指的是你直接用 <code>python xxx.py</code> 執行的檔案</li>
-<li>它會成為 <code>__main__</code> 模組，也就是程式的進入點</li>
-<li>它<strong>沒有包在任何 package 裡</strong>，也就無法使用相對 import</li>
-</ul>
+<p><strong>定義</strong>：所有節點在同一時間點讀取到的資料，必須是完全相同的。</p>
 </li>
 <li>
-<p><strong>module</strong>（模組）：</p>
-<ul>
-<li>指的是 Python 中可以被 import 的 .py 檔案</li>
-<li>可以透過 <code>import</code> 或 <code>from xxx import yyy</code> 引用</li>
-<li>用 <code>python -m package.module</code> 方式執行時，模組有正確的 package 上下文</li>
-</ul>
+<p><strong>白話解釋</strong>：當成功寫入一筆新資料後，任何後續的讀取操作，都應該要能讀到這筆最新的資料。系統就像只有一個「真相」來源，絕不允許讀到舊的或不一致的資料。</p>
+</li>
+<li>
+<p><strong>優點</strong>：避免資料不同步問題，提供強一致性體驗。</p>
+</li>
+<li>
+<p><strong>缺點</strong>：可能需要等待資料同步完成，導致延遲。</p>
 </li>
 </ul>
-<p>兩者最大的差異在於：<strong>script 是執行入口、module 是被載入的單元</strong>。當你想讓某個檔案作為 script 直接執行時，它可能會因為沒處於正確的 package 環境而出錯。</p>
 <hr />
-<h2 id="️-為什麼-python-appcorepy-會錯"><a class="markdownIt-Anchor" href="#️-為什麼-python-appcorepy-會錯"></a> ⚠️ 為什麼 <code>python app/core.py</code> 會錯？</h2>
-<p>這是因為 Python 在執行時，會把你執行的 <strong>檔案所在的資料夾</strong> 當作第一個 <code>sys.path[0]</code>，也就是 Python 搜尋模組的起點。</p>
-<table>
-<thead>
-<tr>
-<th>執行方式</th>
-<th>sys.path[0] 設定值</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>python app/core.py</code></td>
-<td><code>myproject/app</code></td>
-</tr>
-<tr>
-<td><code>python -m app.core</code></td>
-<td><code>myproject</code>（根目錄）</td>
-</tr>
-</tbody>
-</table>
-<p>當你在 <code>myproject</code> 根目錄執行：</p>
-<pre class="highlight"><code class="bash">python app/core.py
+<h2 id="2-可用性availability"><a class="markdownIt-Anchor" href="#2-可用性availability"></a> 2. 可用性（Availability）</h2>
+<ul>
+<li>
+<p><strong>定義</strong>：每一次的請求，不論是讀取或寫入，都必須收到一個（非錯誤的）回應。</p>
+</li>
+<li>
+<p><strong>白話解釋</strong>：系統永遠處於「開機」狀態。只要使用者發出請求，系統就一定會回應，它不能因為內部忙碌或網路問題就直接拋出錯誤或無止盡地等待。不過，它不保證回傳的資料是最新的。</p>
+</li>
+<li>
+<p><strong>優點</strong>：系統可靠、不間斷服務。</p>
+</li>
+<li>
+<p><strong>缺點</strong>：可能回傳舊資料，導致一致性下降。</p>
+</li>
+</ul>
+<hr />
+<h2 id="3-分區容錯性partition-tolerance"><a class="markdownIt-Anchor" href="#3-分區容錯性partition-tolerance"></a> 3. 分區容錯性（Partition Tolerance）</h2>
+<ul>
+<li>
+<p><strong>定義</strong>：即使叢集中的部分節點之間因為網路問題而無法互相通訊（也就是發生「網路分區」），系統整體仍然能夠繼續運作。</p>
+</li>
+<li>
+<p><strong>白話解釋</strong>：在現代雲端架構中，網路閃爍、交換機故障、機房斷線是家常便飯。分區容錯性意味著系統設計必須能容忍這些意外，不能因為兩個節點「失聯」就導致整個系統崩潰。</p>
+</li>
+<li>
+<p><strong>優點</strong>：保證系統在網路異常下仍能運行。</p>
+</li>
+<li>
+<p><strong>缺點</strong>：必須在一致性與可用性之間做取捨。</p>
+</li>
+</ul>
+<hr />
+<h1 id="cap-不可能三角"><a class="markdownIt-Anchor" href="#cap-不可能三角"></a> CAP 不可能三角</h1>
+<p>CAP 理論指出，在發生網路分區的情況下，系統只能同時滿足 <strong>一致性（C）</strong> 和 <strong>可用性（A）</strong> 其中之一，而無法同時兼顧。這就是所謂的 <strong>「不可能三角」</strong>。</p>
+<p>用圖來表示如下：</p>
+<pre class="highlight"><code class="mermaid">graph TD
+    C[一致性&lt;br&gt;Consistency] --- A[可用性&lt;br&gt;Availability]
+    A --- P[分區容錯性&lt;br&gt;Partition Tolerance]
+    P --- C
+    style C fill:#d6f0ff,stroke:#3399ff,stroke-width:2px
+    style A fill:#d6f0ff,stroke:#3399ff,stroke-width:2px
+    style P fill:#d6f0ff,stroke:#3399ff,stroke-width:2px
 </code></pre>
-<p>Python 會把 <code>app/core.py</code> 所在的 <code>app/</code> 資料夾作為起點，這時 <code>from app import utils</code> 就會變成找 <code>app/app/utils.py</code>，結果找不到就報錯。</p>
-<p>此外因為 <code>core.py</code> 是 script 模式，沒有包裹在 package 中，也不能使用 <code>from . import utils</code> 相對 import。</p>
-<hr />
-<h2 id="正確做法以-module-方式執行"><a class="markdownIt-Anchor" href="#正確做法以-module-方式執行"></a> ✅ 正確做法：以 module 方式執行</h2>
-<p>使用 <code>-m</code> 可以指定「從 package 中執行」：</p>
-<pre class="highlight"><code class="bash"><span class="hljs-built_in">cd</span> myproject
-python -m app.core
+<p>CAP 理論最關鍵的部分在於：<strong>P (分區容錯性) 在現今的分散式系統中，是一個「必選項」，而不是「可選項」</strong>。</p>
+<p>只要系統部署在多台機器上，就必須假設網路隨時可能出問題。因此，系統設計的真正權衡，其實是在網路分區發生時，必須在 <strong>C (一致性)</strong> 和 <strong>A (可用性)</strong> 之間做出抉擇。</p>
+<p>用一個簡單的圖示來思考：</p>
+<pre class="highlight"><code class="">[資料庫節點 A]  &lt;---- 網路連線正常 ----&gt;  [資料庫節點 B]
+  (資料: v1)                             (資料: v1)
 </code></pre>
-<p>這樣 Python 就會把 <code>myproject</code> 加入 <code>sys.path</code>，才能正確找到 <code>app.utils</code> 模組，並允許相對 import。</p>
-<hr />
-<h2 id="script-vs-module-差異整理"><a class="markdownIt-Anchor" href="#script-vs-module-差異整理"></a> 📌 script vs module 差異整理</h2>
-<table>
-<thead>
-<tr>
-<th>執行方式</th>
-<th>模式</th>
-<th>sys.path[0] 起點</th>
-<th>絕對 import 是否成功？</th>
-<th>相對 import 是否成功？</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>python app/core.py</code></td>
-<td>script 模式</td>
-<td><code>app/</code></td>
-<td>❌ 失敗</td>
-<td>❌ 無 parent package</td>
-</tr>
-<tr>
-<td><code>python -m app.core</code></td>
-<td>module 模式</td>
-<td><code>myproject/</code></td>
-<td>✅ 成功</td>
-<td>✅ 成功</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="最佳實踐"><a class="markdownIt-Anchor" href="#最佳實踐"></a> ✅ 最佳實踐</h2>
+<p>假設此時，一個寫入請求進來，將資料更新為 <code>v2</code>。資料成功寫入節點 A，並開始同步到節點 B。</p>
+<pre class="highlight"><code class="">[資料庫節點 A]  &lt;---- 同步中 ----&gt;  [資料庫節點 B]
+  (資料: v2)                       (資料: v1)
+</code></pre>
+<p>就在這個瞬間，網路發生了分區！</p>
+<pre class="highlight"><code class="">[資料庫節點 A]  &lt;---- X 網路中斷 X ----&gt;  [資料庫節點 B]
+  (資料: v2)                             (資料: v1)
+</code></pre>
+<p>現在，一個讀取請求進來了，它可以被路由到節點 A 或節點 B。這時面臨了抉擇：</p>
 <ol>
-<li><strong>統一從根目錄啟動專案</strong>：
+<li>
+<p><strong>選擇 C (一致性)，放棄 A (可用性) - 稱為 CP 系統</strong></p>
 <ul>
-<li>使用 <code>main.py</code> 作為 entry point，避免直接執行模組內部的 py 檔案</li>
+<li>為了保證一致性，節點 B 因為無法與節點 A 同步以獲取最新的 <code>v2</code> 資料，它必須拒絕所有的讀取請求，或者回傳錯誤。</li>
+<li>這樣做確保了任何讀取請求都不會讀到舊的資料 (<code>v1</code>)，維持了資料的強一致性。但犧牲了節點 B 的可用性。</li>
 </ul>
 </li>
-</ol>
-<pre class="highlight"><code class="python"><span class="hljs-comment"># main.py</span>
-<span class="hljs-keyword">from</span> app.core <span class="hljs-keyword">import</span> run
-
-<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:
-    run()
-</code></pre>
-<ol start="2">
-<li><strong>避免直接執行子模組的 script</strong>：
+<li>
+<p><strong>選擇 A (可用性)，放棄 C (一致性) - 稱為 AP 系統</strong></p>
 <ul>
-<li><code>python app/core.py</code> 易出錯</li>
-<li>請改用 <code>python -m app.core</code></li>
+<li>為了保證可用性，節點 B 即使知道自己可能不是最新的，它仍然會回傳它目前擁有的資料 (<code>v1</code>)。</li>
+<li>這樣做確保了系統永遠可以回應使用者的請求，但犧牲了資料的一致性（使用者可能會讀到舊資料）。</li>
 </ul>
 </li>
 </ol>
 <hr />
-<h2 id="延伸補充為什麼-m-可以正確-import"><a class="markdownIt-Anchor" href="#延伸補充為什麼-m-可以正確-import"></a> 📚 延伸補充：為什麼 <code>-m</code> 可以正確 import？</h2>
-<p>使用 <code>-m</code> 時，Python 會把指定 module 所在 package 的<strong>上一層目錄</strong>加入 <code>sys.path</code>，這讓整個 package 可以正確地相對或絕對 import。</p>
-<p>這也符合開發大型專案的需求，讓每個 module 可以互相引用而不報錯。</p>
+<h1 id="現實世界的例子"><a class="markdownIt-Anchor" href="#現實世界的例子"></a> 現實世界的例子</h1>
+<h2 id="cp-系統-consistency-availability"><a class="markdownIt-Anchor" href="#cp-系統-consistency-availability"></a> CP 系統 (Consistency &gt; Availability)</h2>
+<p>當資料的正確性至關重要，不容許絲毫偏差時，就會選擇 CP。</p>
+<ul>
+<li><strong>應用場景</strong>：銀行交易、金融系統、訂單管理。絕對不希望因為讀到舊的餘額資料而造成超額提款，或因為庫存資料不一致而超賣商品。</li>
+<li><strong>代表技術</strong>：MongoDB、Redis、HBase。這些系統都提供了調整一致性等級的選項，在需要時可以配置為強一致性模式。</li>
+</ul>
+<h2 id="ap-系統-availability-consistency"><a class="markdownIt-Anchor" href="#ap-系統-availability-consistency"></a> AP 系統 (Availability &gt; Consistency)</h2>
+<p>當使用者體驗和系統的永遠在線比短暫的資料不一致更重要時，就會選擇 AP。</p>
+<ul>
+<li><strong>應用場景</strong>：社群媒體的按讚數、貼文瀏覽次數、電商網站的商品評論。晚幾秒鐘看到最新的按讚數不會造成嚴重後果，但如果網站頻繁顯示錯誤訊息，使用者會立刻流失。</li>
+<li><strong>代表技術</strong>：Cassandra、DynamoDB (Amazon)、CouchDB。它們天生就是為了高可用性和高擴展性而設計的，採用的是「最終一致性」(Eventual Consistency) 模型。</li>
+</ul>
+<h2 id="那-ca-系統呢"><a class="markdownIt-Anchor" href="#那-ca-系統呢"></a> 那 CA 系統呢？</h2>
+<p>理論上，一個沒有分區容錯需求的系統就是 CA 系統。這意味著什麼？它只有一個節點！傳統的單體關聯式資料庫（如 MySQL、PostgreSQL）可以被視為 CA 系統。它們在單機內保證了強大的 ACID 一致性與可用性，但一旦這台機器掛了，或是網路斷了，整個系統就無法服務了。這在分散式架構中是不可行的。</p>
 <hr />
-<p>希望這篇可以幫你釐清 <code>script</code> 與 <code>module</code> 的差異，也知道為什麼在子目錄中就算寫絕對 import 也還是會錯！</p>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>CAP 理論不是一個僵硬的規則，而是一個幫助我們理解分散式系統設計權衡的框架。它提醒我們：</p>
+<ol>
+<li>在分散式世界裡，<strong>網路分區 (P) 是必然的</strong>，必須為它設計。</li>
+<li>你的選擇是在發生分區時，要 <strong>犧牲一致性 © 還是可用性 (A)</strong>。</li>
+<li>這個選擇<strong>沒有絕對的好壞</strong>，完全取決於業務需求。問問自己：是「絕對不能出錯的資料」比較重要，還是「永不中斷的服務」比較重要？</li>
+</ol>
+<p>在設計分散式系統時，不可能同時兼顧 <strong>一致性、可用性、分區容錯性</strong> 三者，只能依照應用場景做出取捨。</p>
+<ul>
+<li>金融或高敏感度資料 → <strong>CP 系統</strong></li>
+<li>高可用、用戶體驗優先 → <strong>AP 系統</strong></li>
+<li>小型單機系統 → <strong>CA 系統</strong></li>
+</ul>
+<p>理解 CAP 理論，能幫助我們在不同業務需求下選擇合適的架構，設計更可靠與合理的分散式系統。</p>
 
     </div>
 
@@ -720,21 +716,19 @@ python -m app.core
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/my-blog/tags/Python/" rel="tag"># Python</a>
+              <a href="/my-blog/tags/System-design/" rel="tag"># System design</a>
+              <a href="/my-blog/tags/Distributed-systems/" rel="tag"># Distributed systems</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/my-blog/2025/04/20/%E4%BD%BF%E7%94%A8uv%E5%BB%BA%E7%AB%8BPython%E5%B0%88%E6%A1%88%E7%92%B0%E5%A2%83/" rel="prev" title="使用 uv 建立 Python 專案環境">
-                  <i class="fa fa-angle-left"></i> 使用 uv 建立 Python 專案環境
+                <a href="/my-blog/2025/08/20/%E7%90%86%E8%A7%A3%20BASE%20%E7%90%86%E8%AB%96%20%E5%9C%A8%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1%E4%B8%AD%E7%9A%84%E8%B3%87%E6%96%99%E4%B8%80%E8%87%B4%E6%80%A7%E5%8F%96%E6%8D%A8/" rel="prev" title="理解 BASE 理論：在分散式系統中的資料一致性取捨">
+                  <i class="fa fa-angle-left"></i> 理解 BASE 理論：在分散式系統中的資料一致性取捨
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/my-blog/2025/04/22/TimeTracker%E6%99%82%E9%96%93%E8%BF%BD%E8%B9%A4%E5%B7%A5%E5%85%B7/" rel="next" title="個人開發：TimeTracker 時間追蹤工具">
-                  個人開發：TimeTracker 時間追蹤工具 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
