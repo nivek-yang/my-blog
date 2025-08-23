@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="在日常開發中，總會遇到一個共同的挑戰：如何讓應用程式反應更快、處理更多請求，同時又不會讓資料庫不堪重負？ 答案往往指向一個強大的技術：快取 (Caching)。 然而，快取並不是一個簡單的「啟用&#x2F;停用」開關。要真正發揮它的威力，需要理解並選擇正確的快取策略 (Cache Strategy)。這篇文章將深入淺出地探索幾種核心的快取策略，幫助應用程式做出最佳選擇。  為什麼需要快取策略？ 想像一下，書">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入淺出快取策略 (Cache Strategy)">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/08/23/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E5%BF%AB%E5%8F%96%E7%AD%96%E7%95%A5%20Cache%20Strategy/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="在日常開發中，總會遇到一個共同的挑戰：如何讓應用程式反應更快、處理更多請求，同時又不會讓資料庫不堪重負？ 答案往往指向一個強大的技術：快取 (Caching)。 然而，快取並不是一個簡單的「啟用&#x2F;停用」開關。要真正發揮它的威力，需要理解並選擇正確的快取策略 (Cache Strategy)。這篇文章將深入淺出地探索幾種核心的快取策略，幫助應用程式做出最佳選擇。  為什麼需要快取策略？ 想像一下，書">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-08-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-23T15:34:41.260Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Cache">
+<meta property="article:tag" content="System design">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/08/23/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E5%BF%AB%E5%8F%96%E7%AD%96%E7%95%A5%20Cache%20Strategy/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/08/23/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E5%BF%AB%E5%8F%96%E7%AD%96%E7%95%A5%20Cache%20Strategy/","path":"2025/08/23/深入淺出快取策略 Cache Strategy/","title":"深入淺出快取策略 (Cache Strategy)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>深入淺出快取策略 (Cache Strategy) | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">67</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">48</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(15)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9C%80%E8%A6%81%E5%BF%AB%E5%8F%96%E7%AD%96%E7%95%A5"><span class="nav-number">1.</span> <span class="nav-text"> 為什麼需要快取策略？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%BF%AB%E5%8F%96%E8%AE%80%E5%AF%AB%E7%AD%96%E7%95%A5"><span class="nav-number">2.</span> <span class="nav-text"> 核心快取讀寫策略</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-cache-aside-%E6%97%81%E8%B7%AF%E5%BF%AB%E5%8F%96"><span class="nav-number">2.1.</span> <span class="nav-text"> 1. Cache-Aside (旁路快取)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-read-through-%E8%AE%80%E5%8F%96%E7%A9%BF%E9%80%8F"><span class="nav-number">2.2.</span> <span class="nav-text"> 2. Read-Through (讀取穿透)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-write-through-%E5%AF%AB%E5%85%A5%E7%A9%BF%E9%80%8F"><span class="nav-number">2.3.</span> <span class="nav-text"> 3. Write-Through (寫入穿透)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-write-back-%E5%9B%9E%E5%AF%AB-%E5%BB%B6%E9%81%B2%E5%AF%AB%E5%85%A5"><span class="nav-number">2.4.</span> <span class="nav-text"> 4. Write-Back (回寫 &#x2F; 延遲寫入)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E9%81%B8%E6%93%87"><span class="nav-number">3.</span> <span class="nav-text"> 策略選擇</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">4.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">48</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/23/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E5%BF%AB%E5%8F%96%E7%AD%96%E7%95%A5%20Cache%20Strategy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="深入淺出快取策略 (Cache Strategy) | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深入淺出快取策略 (Cache Strategy)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-08-23 00:00:00 / 修改時間：23:34:41" itemprop="dateCreated datePublished" datetime="2025-08-23T00:00:00+08:00">2025-08-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在日常開發中，總會遇到一個共同的挑戰：如何讓應用程式反應更快、處理更多請求，同時又不會讓資料庫不堪重負？</p>
+<p>答案往往指向一個強大的技術：<strong>快取 (Caching)</strong>。</p>
+<p>然而，快取並不是一個簡單的「啟用/停用」開關。要真正發揮它的威力，需要理解並選擇正確的<strong>快取策略 (Cache Strategy)</strong>。這篇文章將深入淺出地探索幾種核心的快取策略，幫助應用程式做出最佳選擇。</p>
+<h1 id="為什麼需要快取策略"><a class="markdownIt-Anchor" href="#為什麼需要快取策略"></a> 為什麼需要快取策略？</h1>
+<p>想像一下，書桌就是<strong>快取 (Cache)</strong>，而身後巨大的書櫃則是<strong>資料庫 (Database)</strong>。</p>
+<p>當需要一本書（資料）時，如果它就在書桌上，隨手就能拿到，非常快。這就是 <strong><code>Cache Hit</code> (快取命中)</strong>。如果書桌上沒有，就得轉身走到書櫃，花時間找到它，再拿回書桌。這就是 <strong><code>Cache Miss</code> (快取未命中)</strong>，成本顯然高得多。</p>
+<p>快取策略，就是決定「<strong>哪些書應該放在書桌上</strong>」以及「<strong>書本內容更新時，如何同步書桌和書櫃</strong>」的一套規則。一個好的策略能確保書桌上總有你最需要的書，而且資訊不會過時。</p>
+<p><em>一個簡單的比喻：快取就像你的工作桌面，資料庫則是檔案櫃</em></p>
+<h1 id="核心快取讀寫策略"><a class="markdownIt-Anchor" href="#核心快取讀寫策略"></a> 核心快取讀寫策略</h1>
+<p>接下來，讓我們深入了解幾種最常見的讀寫策略。每種策略都有其獨特的運作模式、優缺點及適用場景。</p>
+<h2 id="1-cache-aside-旁路快取"><a class="markdownIt-Anchor" href="#1-cache-aside-旁路快取"></a> 1. Cache-Aside (旁路快取)</h2>
+<p>這是最常見、也最經典的快取策略，可能不知不覺中已經在使用它了。</p>
+<blockquote>
+<p><strong>核心思想</strong>：應用程式全權負責維護快取和資料庫，快取只是一個「旁路」儲存。</p>
+</blockquote>
+<p><strong>運作流程：</strong></p>
+<ul>
+<li>
+<p><strong>讀取 (Read):</strong></p>
+<ol>
+<li>應用程式先向快取請求資料。</li>
+<li>如果快取命中 (<code>Hit</code>)，直接將資料返回給客戶端。</li>
+<li>如果快取未命中 (<code>Miss</code>)，應用程式會向資料庫請求資料。</li>
+<li>從資料庫取得資料後，先將資料<strong>寫入快取</strong>，然後再返回給客戶端。</li>
+</ol>
+</li>
+<li>
+<p><strong>寫入 (Write):</strong></p>
+<ol>
+<li>應用程式直接更新資料庫。</li>
+<li>更新成功後，<strong>讓快取中的對應資料失效 (Invalidate)</strong>。</li>
+</ol>
+</li>
+</ul>
+<p><strong>流程圖：</strong></p>
+<pre class="highlight"><code class="">// 讀取流程
+Client ---&gt; App ---&gt; Cache?
+             |       (Miss)
+             |          |
+             V          V
+             App ---&gt; Database
+              ^          |
+              |          V
+              +----- Cache (Set)
+</code></pre>
+<ul>
+<li>
+<p><strong>優點 (Pros):</strong></p>
+<ul>
+<li><strong>邏輯簡單直觀</strong>：開發者完全掌控資料流。</li>
+<li><strong>高可用性</strong>：即使快取服務掛了，應用程式仍能從資料庫讀取資料，只是速度變慢。</li>
+<li><strong>資料庫與快取解耦</strong>：兩者可以獨立擴展和部署。</li>
+</ul>
+</li>
+<li>
+<p><strong>缺點 (Cons):</strong></p>
+<ul>
+<li><strong>首次請求延遲</strong>：對於冷資料（第一次被請求的資料），總會發生一次 <code>Cache Miss</code>，延遲較高。</li>
+<li><strong>資料不一致性</strong>：在「寫入資料庫」和「讓快取失效」這兩個步驟之間，存在一個微小的時間窗口，可能導致讀到舊資料。</li>
+</ul>
+</li>
+<li>
+<p><strong>適用場景：</strong></p>
+<ul>
+<li><strong>讀多寫少</strong>的應用場景，例如：商品目錄、新聞文章、使用者個人資料頁。</li>
+<li>對資料一致性要求不是極端嚴格的系統。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="2-read-through-讀取穿透"><a class="markdownIt-Anchor" href="#2-read-through-讀取穿透"></a> 2. Read-Through (讀取穿透)</h2>
+<p>這個策略將快取變成資料的主要入口，應用程式本身不用再關心資料庫。</p>
+<blockquote>
+<p><strong>核心思想</strong>：應用程式只跟快取打交道，由快取本身負責從資料庫載入資料。</p>
+</blockquote>
+<p><strong>運作流程：</strong></p>
+<ul>
+<li><strong>讀取 (Read):</strong>
+<ol>
+<li>應用程式向快取請求資料。</li>
+<li>如果快取命中 (<code>Hit</code>)，直接返回資料。</li>
+<li>如果快取未命中 (<code>Miss</code>)，<strong>快取服務會自己</strong>去向資料庫請求資料。</li>
+<li>快取從資料庫取得資料後，先存入自身，再返回給應用程式。</li>
+</ol>
+</li>
+</ul>
+<p><strong>流程圖：</strong></p>
+<pre class="highlight"><code class="">Client ---&gt; App ---&gt; Cache?
+                        | (Miss)
+                        V
+                     Database (Loaded by Cache)
+</code></pre>
+<ul>
+<li>
+<p><strong>優點 (Pros):</strong></p>
+<ul>
+<li><strong>簡化應用程式邏輯</strong>：應用程式的程式碼更乾淨，不用再寫快取未命中時去讀取資料庫的邏輯。</li>
+<li><strong>一致的資料來源</strong>：所有讀取請求都從同一個來源（快取）獲取。</li>
+</ul>
+</li>
+<li>
+<p><strong>缺點 (Cons):</strong></p>
+<ul>
+<li><strong>實作複雜</strong>：通常需要快取函式庫或服務（如 Ehcache, Hazelcast）提供支援。</li>
+<li><strong>首次請求延遲</strong>：與 Cache-Aside 相同，冷資料的首次載入會比較慢。</li>
+</ul>
+</li>
+<li>
+<p><strong>適用場景：</strong></p>
+<ul>
+<li>適合那些希望將快取邏輯與業務邏輯分離的架構。</li>
+<li>當使用的快取系統原生支援此模式時。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="3-write-through-寫入穿透"><a class="markdownIt-Anchor" href="#3-write-through-寫入穿透"></a> 3. Write-Through (寫入穿透)</h2>
+<p>與 Read-Through 相對應，Write-Through 讓快取成為寫入操作的代理。</p>
+<blockquote>
+<p><strong>核心思想</strong>：應用程式的寫入操作只針對快取，由快取負責同步更新資料庫。</p>
+</blockquote>
+<p><strong>運作流程：</strong></p>
+<ul>
+<li><strong>寫入 (Write):</strong>
+<ol>
+<li>應用程式將新資料寫入快取。</li>
+<li><strong>快取服務立即</strong>將該資料同步寫入資料庫。</li>
+<li>只有當快取和資料庫都寫入成功後，才向應用程式返回成功。</li>
+</ol>
+</li>
+</ul>
+<p><strong>流程圖：</strong></p>
+<pre class="highlight"><code class="">Client ---&gt; App ---&gt; Cache (Set) ---&gt; Database (Sync Write)
+</code></pre>
+<ul>
+<li>
+<p><strong>優點 (Pros):</strong></p>
+<ul>
+<li><strong>強資料一致性</strong>：寫入操作是同步的，快取和資料庫的資料永遠一致，不會讀到舊資料。</li>
+<li><strong>簡化應用程式邏輯</strong>：寫入邏輯統一由快取處理。</li>
+</ul>
+</li>
+<li>
+<p><strong>缺點 (Cons):</strong></p>
+<ul>
+<li><strong>寫入延遲高</strong>：每次寫入都要等待快取和資料庫兩次 I/O 操作完成，效能較差。</li>
+<li><strong>不適合寫入頻繁的場景</strong>：會給資料庫帶來巨大壓力。</li>
+</ul>
+</li>
+<li>
+<p><strong>適用場景：</strong></p>
+<ul>
+<li>對資料一致性要求極高，且不允許丟失任何寫入的場景，例如：銀行交易、訂單狀態更新。</li>
+<li>讀取頻率遠大於寫入頻率的系統。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="4-write-back-回寫-延遲寫入"><a class="markdownIt-Anchor" href="#4-write-back-回寫-延遲寫入"></a> 4. Write-Back (回寫 / 延遲寫入)</h2>
+<p>這是一種高效能的寫入策略，追求極致的寫入速度。</p>
+<blockquote>
+<p><strong>核心思想</strong>：寫入操作只更新快取，然後在未來的某個時間點（例如：延遲一段時間、累積一定數量）才將資料「批次」寫回資料庫。</p>
+</blockquote>
+<p><strong>運作流程：</strong></p>
+<ul>
+<li><strong>寫入 (Write):</strong>
+<ol>
+<li>應用程式將新資料寫入快取。</li>
+<li>快取將該資料標記為「髒資料 (Dirty)」，並立即向應用程式返回成功。</li>
+<li>快取服務會在之後的某個時間點（例如：每隔 5 秒），將所有「髒資料」一次性寫入資料庫。</li>
+</ol>
+</li>
+</ul>
+<p><strong>流程圖：</strong></p>
+<pre class="highlight"><code class="">// Step 1: Immediate Write
+Client ---&gt; App ---&gt; Cache (Set &amp; Mark as Dirty)
+
+// Step 2: Delayed Write
+Cache ---&gt; (Async Batch Write) ---&gt; Database
+</code></pre>
+<ul>
+<li>
+<p><strong>優點 (Pros):</strong></p>
+<ul>
+<li><strong>極低的寫入延遲</strong>：應用程式幾乎感受不到資料庫的寫入耗時，響應速度極快。</li>
+<li><strong>降低資料庫壓力</strong>：將多次零散的寫入合併為一次批次寫入，大幅提升資料庫吞吐量。</li>
+</ul>
+</li>
+<li>
+<p><strong>缺點 (Cons):</strong></p>
+<ul>
+<li><strong>可能遺失資料</strong>：如果在快取將髒資料寫回資料庫之前，快取服務崩潰或斷電，這部分資料將會永久遺失。</li>
+<li><strong>實作複雜</strong>：需要可靠的機制來管理髒資料的寫回。</li>
+</ul>
+</li>
+<li>
+<p><strong>適用場景：</strong></p>
+<ul>
+<li><strong>寫入極其頻繁</strong>的場景，例如：即時數據監控、使用者行為追蹤、IoT 設備數據上報。</li>
+<li>可以容忍在極端情況下丟失少量最新資料的系統。</li>
+</ul>
+</li>
+</ul>
+<h1 id="策略選擇"><a class="markdownIt-Anchor" href="#策略選擇"></a> 策略選擇</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">策略 (Strategy)</th>
+<th style="text-align:center">資料一致性</th>
+<th style="text-align:center">寫入效能</th>
+<th style="text-align:center">讀取效能</th>
+<th style="text-align:center">實作複雜度</th>
+<th style="text-align:center">風險</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Cache-Aside</strong></td>
+<td style="text-align:center">中等</td>
+<td style="text-align:center">高</td>
+<td style="text-align:center">中等</td>
+<td style="text-align:center">低</td>
+<td style="text-align:center">資料不一致</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Read-Through</strong></td>
+<td style="text-align:center">中等</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">中等</td>
+<td style="text-align:center">中等</td>
+<td style="text-align:center">快取依賴</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Write-Through</strong></td>
+<td style="text-align:center"><strong>高</strong></td>
+<td style="text-align:center">低</td>
+<td style="text-align:center">高</td>
+<td style="text-align:center">中等</td>
+<td style="text-align:center">寫延遲</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Write-Back</strong></td>
+<td style="text-align:center">低</td>
+<td style="text-align:center"><strong>極高</strong></td>
+<td style="text-align:center">高</td>
+<td style="text-align:center">高</td>
+<td style="text-align:center"><strong>資料遺失</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>如何選擇？問自己幾個問題：</strong></p>
+<ol>
+<li><strong>業務能容忍多大程度的資料不一致？</strong>
+<ul>
+<li>如果完全不能容忍 -&gt; 考慮 <strong>Write-Through</strong>。</li>
+<li>如果可以稍微容忍 -&gt; <strong>Cache-Aside</strong> 是個不錯的起點。</li>
+</ul>
+</li>
+<li><strong>應用是讀多還是寫多？</strong>
+<ul>
+<li>讀多寫少 -&gt; <strong>Cache-Aside</strong> / <strong>Read-Through</strong> 非常適合。</li>
+<li>寫多讀少，且寫入效能是瓶頸 -&gt; <strong>Write-Back</strong> 是救星。</li>
+</ul>
+</li>
+<li><strong>能接受資料遺失的風險嗎？</strong>
+<ul>
+<li>絕不！ -&gt; 遠離 <strong>Write-Back</strong>。</li>
+<li>可以接受丟失幾秒鐘的非核心資料 -&gt; <strong>Write-Back</strong> 可以大幅提升效能。</li>
+</ul>
+</li>
+</ol>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>快取策略是系統架構設計中的一門藝術，它關乎效能、成本和可靠性之間的精妙平衡。</p>
+<ul>
+<li><strong>Cache-Aside</strong> 是最靈活、最常見的萬金油策略。</li>
+<li><strong>Write-Through</strong> 提供了最強的資料一致性保證，但犧牲了寫入效能。</li>
+<li><strong>Write-Back</strong> 提供了極致的寫入效能，但伴隨著資料遺失的風險。</li>
+</ul>
+<p>記住，最好的策略永遠是最適合當前業務場景的那一個。深入理解需求，然後勇敢地去實驗和選擇吧！</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Cache/" rel="tag"># Cache</a>
+              <a href="/my-blog/tags/System-design/" rel="tag"># System design</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/08/22/%E5%BE%9E%20CAP%20%E7%9A%84%E6%8A%89%E6%93%87%E5%88%B0%20BASE%20%E7%9A%84%E5%AF%A6%E8%B8%90%20%E7%8F%BE%E4%BB%A3%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1%E7%9A%84%E8%A8%AD%E8%A8%88%E5%93%B2%E5%AD%B8/" rel="prev" title="從 CAP 的抉擇到 BASE 的實踐：現代分散式系統的設計哲學">
+                  <i class="fa fa-angle-left"></i> 從 CAP 的抉擇到 BASE 的實踐：現代分散式系統的設計哲學
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
