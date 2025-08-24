@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">67</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">68</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">48</span></a>
       <ul class="sub-menu">
   
@@ -393,7 +393,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/System-design/">
         System design
-        <span class="post-count">(3)</span>
+        <span class="post-count">(4)</span>
       </a>
     </li>
   
@@ -485,7 +485,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-count">68</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -510,6 +510,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/14/%E8%A7%A3%E9%8E%96%E5%8D%B3%E6%99%82%E8%B3%87%E6%96%99%E7%9A%84%E5%A5%A7%E7%A7%98%20%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20CDC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/08/14/%E8%A7%A3%E9%8E%96%E5%8D%B3%E6%99%82%E8%B3%87%E6%96%99%E7%9A%84%E5%A5%A7%E7%A7%98%20%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20CDC/" class="post-title-link" itemprop="url">
+              解鎖即時資料的奧秘：深入淺出 CDC (Change Data Capture)
+            </a>
+            <a href="/my-blog/2025/08/14/%E8%A7%A3%E9%8E%96%E5%8D%B3%E6%99%82%E8%B3%87%E6%96%99%E7%9A%84%E5%A5%A7%E7%A7%98%20%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20CDC/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-08-14 00:00:00 / 修改時間：23:28:01" itemprop="dateCreated datePublished" datetime="2025-08-14T00:00:00+08:00">2025-08-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">在現代的資料工程與軟體架構中，時常面臨一個挑戰：如何即時、高效地同步不同系統之間的資料？ 過去，我們可能習慣於每天半夜執行批次任務 (Batch Job)，將資料庫的資料整批匯出、轉換再載入到另一個系統。但這種方式延遲高、對資料庫壓力大，而且難以捕捉到「刪除」操作。 這篇文章要來聊聊解決這個問題的優雅方案：CDC (Change Data Capture)。它就像是為資料庫請了一位全天候的速記員，精準記錄下每一筆變更，徹底改變了處理資料流動的方式。 核心概念：CDC 是一種設計模式，用於識別與捕捉資料庫中的資料變更（包含新增、修改、刪除），並將這些變更以事件的形式，提供給其他系統或應用程式使用。 這篇文章將帶你深入了解： 什麼是 CDC？它的核心價值是什麼？ 為什麼需要它？傳統做法有哪些痛點？ CDC 的幾種主流實現方式及其優劣分析。 CDC 在真實世界的應用場景。 為什麼需要 CDC？傳統做法的痛點 想像一下，如果沒有 CDC，要如何將線上交易資料庫 (OLTP) 的資料同步到資料倉儲 (Data Warehouse) 進行分析？ 最直觀的方式是定期輪詢 (Polling)： 每隔 5 分鐘，向資料庫下 SELECT * FROM orders WHERE updated_at &gt; ? 這樣的查詢。 將查到的新資料送到下游系統。 這種做法會帶來幾個難以忽視的痛點： 高延遲 (High Latency)：資料永遠不是即時的。在查詢間隔中發生的變更，下游系統無法立刻感知。 高資源消耗 (High Resource Consumption)：頻繁的 SELECT 查詢會對生產資料庫造成巨大壓力，尤其是在資料表非常大的情況下。 遺漏刪除操作 (Missed Deletes)：DELETE 操作很難透過 updated_at 這樣的欄位來追蹤。除非採用「軟刪除」（將資料標記為已刪除，而非物理刪除），否則很難同步刪除事件。 處理中間狀態的複雜性：如果在輪詢間隔內，一筆資料被修改了三次，可能只會拿到最後的狀態，而錯失了中間的變化過程。 CDC 的出現，正是為了解決以上所有問題。它不再是「拉取」(Pull) 資料，而是由資料源「推送」(Push) 變更，實現了真正的事件驅動架構。 CDC 的核心實現方式 CDC 的實現方式主要有三種，每種都有其獨特的優缺點。了解它們的差異，有助於根據場景做出最佳選擇。 1. 基於交易日誌 (Transaction Log-Based) 這是目前最受推崇、也是最高效的方式。 現代資料庫（如 MySQL、PostgreSQL、Oracle）都有一個稱為「交易日誌」(Transaction Log) 的內部機制（MySQL 的 Binlog、PostgreSQL 的 WAL）。這個日誌記錄了所有會改變資料庫狀態的操作，其目的是為了資料庫的備份、還原與複寫。 工作原理： CDC 工具偽裝成一個從資料庫 (Slave)，去讀取主資料庫 (Master) 的交易日誌。它解析日誌中的 INSERT, UPDATE, DELETE 操作，並將它們轉換成結構化的事件流。 優點： 低侵入性：對源資料庫的性能影響極小，因為它只是非同步地讀取日誌檔。 高準確性：能捕捉到所有變更，包括 DELETE 和模式變更 (Schema Change)。 近乎即時：延遲非常低，可以達到秒級甚至毫秒級。 缺點： 設置複雜：需要資料庫的管理權限來開啟和存取交易日誌。 日誌格式依賴：日誌格式可能隨資料庫版本更新而改變，CDC 工具需要跟著升級。 代表工具：Debezium、Maxwell’s Daemon、Oracle GoldenGate。 2. 基於觸發器 (Trigger-Based) 這是一種相對傳統但非常可靠的方式。 工作原理： 在需要追蹤的資料表上建立觸發器 (Triggers)，分別對應 INSERT, UPDATE, DELETE 操作。當這些操作發生時，觸發器會被啟動，將變更的內容（舊資料、新資料）寫入一個額外的「歷史紀錄表」或「事件表」中。下游的應用程式再從這個事件表讀取資料。 優點： 實現簡單直觀：完全使用資料庫的標準功能，容易理解與部署。 捕捉所有變更：可以精準記錄每一筆操作的細節。 缺點： 高侵入性：對源資料庫性能有顯著影響。每一次寫入操作都會額外觸發一次寫入（到歷史紀錄表），增加了交易的延遲與負載。 管理成本：需要在每張要監控的表上都建立和維護觸發器。 3. 基於查詢 (Query-Based) 這就是一開始提到的輪詢方式，但它也是一種廣義的 CDC。 工作原理： 透過定期查詢資料庫來識別變更。通常依賴一個「最後更新時間」的欄位（例如 last_updated）。 優點： 實現最簡單：不需要任何資料庫管理權限或特殊設置。 對資料庫結構無侵入。 缺點： 無法捕捉 DELETE。 延遲高，非即時。 性能開銷：對資料庫的查詢壓力取決於輪詢頻率與表的大小。 三種方式比較 特性 基於交易日誌 (Log-Based) 基於觸發器 (Trigger-Based) 基於查詢 (Query-Based) 對源庫性能影響 極低 高 中等 資料延遲 近乎即時 低 高 實現複雜度 較高 中等 低 是否能抓取 DELETE 是 是 否 侵入性 低（需日誌權限） 高（修改 Schema） 無 CDC 的常見應用場景 當掌握了 CDC 後，就能建構出許多強大的即時資料應用： 即時資料倉儲 (Real-time Data Warehousing) 將線上交易資料庫的變更即時串流到 Snowflake、BigQuery 或 ClickHouse 等分析型資料庫中，讓商業智慧 (BI) 報表和儀表板永遠呈現最新鮮的數據。 微服務資料同步 (Microservices Data Synchronization) 在微服務架構中，不同服務常有自己的資料庫。當 用戶服務 的資料更新時，可以透過 CDC 將變更事件廣播出去，讓 訂單服務 或 通知服務 能即時更新相關的用戶資訊快取，而無需透過同步 API 呼叫。 快取與搜尋引擎同步 (Cache/Search Index Synchronization) 當資料庫中的商品資訊變更時，透過 CDC 將變更事件推送到 Redis 快取或 Elasticsearch 搜尋引擎中，確保用戶總是能看到和搜尋到最新的商品狀態。 零停機資料庫遷移 (Zero-Downtime Database Migration) 在遷移資料庫時，可以先進行一次全量同步，然後利用 CDC 持續同步增量資料。當時機成熟時，只需將應用程式的連線切換到新資料庫，即可實現幾乎無感的平滑遷移。 資料稽核與監控 (Auditing &amp; Monitoring) 將所有資料庫的變更日誌記錄到一個不可變的儲存中，用於安全稽核、追蹤異常操作或資料恢復。 主流的 CDC 工具 Debezium: 目前最流行的開源 CDC 工具，基於 Kafka Connect 架構。它為主流資料庫（MySQL, PostgreSQL, MongoDB, SQL Server等）提供了豐富的連接器 (Connector)，能將資料變更無縫地串流到 Kafka 中。 Maxwell’s Daemon: 另一個專為 MySQL 設計的開源工具，可以將 Binlog 變更即時轉換為 JSON 格式並發送到 Kafka、Kinesis 等訊息佇列。 雲端平台服務: AWS DMS (Database Migration Service): 不僅用於遷移，其 CDC 功能也十分強大。 Google Cloud Datastream: Google Cloud 上的無伺服器 CDC 和複寫服務。 Alibaba Cloud DTS (Data Transmission Service): 阿里雲提供的資料傳輸服務，支援 CDC。 結論 CDC (Change Data Capture) 已不再是一個小眾技術，而是建構現代、事件驅動資料架構的基石。 它讓我們告別了高延遲、高開銷的批次處理模式，轉向了更高效、更即時的資料流。無論是為了打造即時分析儀表板、實現微服務間的解耦，還是進行平滑的資料庫遷移，CDC 都提供了強而有力的支持。 下次當設計資料管線時，不妨問問自己：需要即時資料嗎？需要可靠地捕捉所有變更嗎？如果答案是肯定的，那麼 CDC 很可能就是正在尋找的那個關鍵鑰匙。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/08/14/%E8%A7%A3%E9%8E%96%E5%8D%B3%E6%99%82%E8%B3%87%E6%96%99%E7%9A%84%E5%A5%A7%E7%A7%98%20%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20CDC/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1274,92 +1360,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/08/04/Systemd%20vs%20Docker%20%E6%98%AF%E6%95%B5%E6%98%AF%E5%8F%8B%20%E8%AA%B0%E4%BE%86%E7%AE%A1%E7%90%86%E8%AA%B0/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/03/systemd%20%E7%8F%BE%E4%BB%A3%20Linux%20%E9%96%8B%E7%99%BC%E8%80%85%E4%B8%8D%E5%8F%AF%E4%B8%8D%E7%9F%A5%E7%9A%84%E6%9C%8D%E5%8B%99%E7%AE%A1%E7%90%86%E5%88%A9%E5%99%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/08/03/systemd%20%E7%8F%BE%E4%BB%A3%20Linux%20%E9%96%8B%E7%99%BC%E8%80%85%E4%B8%8D%E5%8F%AF%E4%B8%8D%E7%9F%A5%E7%9A%84%E6%9C%8D%E5%8B%99%E7%AE%A1%E7%90%86%E5%88%A9%E5%99%A8/" class="post-title-link" itemprop="url">
-              解鎖 systemd：現代 Linux 開發者不可不知的服務管理利器
-            </a>
-            <a href="/my-blog/2025/08/03/systemd%20%E7%8F%BE%E4%BB%A3%20Linux%20%E9%96%8B%E7%99%BC%E8%80%85%E4%B8%8D%E5%8F%AF%E4%B8%8D%E7%9F%A5%E7%9A%84%E6%9C%8D%E5%8B%99%E7%AE%A1%E7%90%86%E5%88%A9%E5%99%A8/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-08-03 00:00:00 / 修改時間：23:11:26" itemprop="dateCreated datePublished" datetime="2025-08-03T00:00:00+08:00">2025-08-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">在軟體開發中，時常需要讓應用程式在背景穩定運行、開機時自動啟動，或是在意外崩潰後自動重啟。過去，我們可能需要撰寫複雜的 shell script 來處理這些「維運」任務，本篇文章將分享一個更現代、更強大也更優雅的解決方案：systemd。 為什麼需要 systemd？來自開發者的三個靈魂拷問 在深入探討 systemd 是什麼之前，先回想一下在部署應用時常遇到的情境： 「服務掛了，怎麼辦？」：用 nohup a.out &amp; 啟動了程式，但某天它因為一個未處理的例外而崩潰了。在有人發現之前，服務已經中斷了數小時。 「伺服器重啟了，誰來啟動我的應用？」：系統維護、更新核心或是意外斷電導致伺服器重啟。是否記得上去手動重新執行所有必要的服務？它們之間的啟動順序又該如何保證？ 「Log 檔在哪裡？為什麼這麼亂？」：每個應用程式都將日誌輸出到不同的檔案，格式五花八門，追蹤問題時需要在多個檔案之間來回切換，讓人心力交瘁。 如果對以上任何一個問題感到熟悉，那麼恭喜你，systemd 正是為了解決這些痛點而生。 什麼是 systemd？它不只是一個 init 系統 簡單來說，systemd 是現代 Linux 作業系統的系統與服務管理器 (System and Service Manager)。它取代了傳統的 SysVinit 或 Upstart，成為了開機時執行的第一個程序（PID 1），並負責啟動、停止和管理系統上所有的背景服務（daemons）。 systemd 的核心概念是 Unit (單元)。Unit 是 systemd 管理的資源配置檔案，它們描述了系統中的一個服務、一個掛載點、一個設備或是一個 socket。對於開發者而言，最常用也最重要的就是 .service 單元。 開發者該如何應用 systemd？三大核心優勢 systemd 不僅是系統管理員的工具，更是開發者的好朋友。它能將繁瑣的服務管理工作標準化、自動化，讓我們可以更專注於程式碼本身。 1. 標準化的服務管理 告別手動撰寫 start.sh, stop.sh 的日子。 systemd 提供了一套標準的 .service 檔案格式來定義應用程式如何啟動、停止、重啟。 2. 強大的可靠性與依賴管理 自動重啟 (Auto-Restart)：可以簡單地設定一行配置，讓 systemd 在應用程式崩潰時自動將其拉起。 依賴管理 (Dependency Management)：Web 應用需要在資料庫啟動後才能正常工作？沒問題，systemd 可以確保服務之間的啟動順序。 3. 統一的日誌系統 (journald) systemd 會自動捕獲所有由它管理的服務所產生的標準輸出 (stdout) 和標準錯誤 (stderr)，並將它們彙整到一個稱為 journal 的中央日誌系統中。可以使用 journalctl 這一個指令，輕鬆地查詢、過濾和追蹤任何服務的日誌，無需再到處 grep Log 檔。 實戰教學：用 systemd 管理一個 Python Web 應用 理論說了這麼多，讓我們來動手實作吧！假設有一個簡單的 Python Flask 應用程式。 步驟 1：準備應用程式 應用程式 main.py 如下，它會在 8000 port 啟動一個簡單的 web server。 # main.py from flask import Flask import time import os app = Flask(__name__) @app.route(&#x27;/&#x27;) def hello(): return f&quot;Hello from process &#123;os.getpid()&#125;!&quot; if __name__ == &#x27;__main__&#x27;: app.run(host=&#x27;0.0.0.0&#x27;, port=8000) 可以將它放在 /home/user/my_app/ 目錄下。 步驟 2：撰寫 .service Unit 檔案 這是最核心的一步。需要在 /etc/systemd/system/ 目錄下建立一個 myapp.service 檔案。 提示：需要 sudo 權限來在這個目錄下建立檔案。 # /etc/systemd/system/myapp.service [Unit] Description=My Simple Python Web App # 表示我們的服務應該在網路服務啟動後才啟動 After=network.target [Service] # 假設你的使用者是 myuser User=myuser # 應用程式的工作目錄 WorkingDirectory=/home/myuser/my_app # 啟動服務的指令，建議使用絕對路徑 ExecStart=/usr/bin/python3 /home/myuser/my_app/main.py # 設定服務在失敗時自動重啟 Restart=on-failure # 重啟間隔秒數 RestartSec=5s [Install] # 表示這個服務應該在多使用者模式下被啟用 WantedBy=multi-user.target 解析這個檔案的內容： [Unit]：定義了這個單元的基本資訊和依賴關係。Description 只是方便人類閱讀的描述。 [Service]：定義了服務的行為。 User：指定用哪個使用者身份執行程式，增加安全性。 WorkingDirectory：設定程式的執行目錄。 ExecStart：核心指令，定義如何啟動你的服務。 Restart：設定重啟策略，on-failure 表示只有在程式異常退出時（exit code 非 0）才會重啟。 [Install]：定義了當 enable 這個服務時，它應該被連結到哪個系統目標（target）下。 步驟 3：管理服務 寫好 .service 檔後，就可以用 systemctl 指令來掌控應用程式了！ 重載 systemd 配置： 每次新增或修改 .service 檔後，都需要執行此命令讓 systemd 重新讀取設定。 sudo systemctl daemon-reload 啟動服務： sudo systemctl start myapp.service 查看服務狀態： 這是個非常有用的指令，可以看到服務是否正在運行、PID 是多少、以及最新的幾行日誌。 sudo systemctl status myapp.service 會看到類似這樣的綠色輸出，代表服務運行正常： ● myapp.service - My Simple Python Web App Loaded: loaded (/etc/systemd/system/myapp.service; disabled; vendor preset: enabled) Active: active (running) since Tue 2023-10-27 10:30:00 UTC; 5s ago Main PID: 12345 (python3) Tasks: 1 (limit: 4915) Memory: 10.1M CGroup: /system.slice/myapp.service └─12345 /usr/bin/python3 /home/myuser/my_app/main.py 設定開機自啟： sudo systemctl enable myapp.service 現在，即使伺服器重啟，systemd 也會自動幫你啟動 myapp.service！ 停止與重啟： sudo systemctl stop myapp.service sudo systemctl restart myapp.service 步驟 4：查看日誌 忘掉 tail -f /path/to/logfile 吧！現在可以這樣做： # 查看 myapp 服務的所有日誌 sudo journalctl -u myapp.service # 即時追蹤新的日誌（類似 tail -f） sudo journalctl -u myapp.service -f # 查看從一小時前到現在的日誌 sudo journalctl -u myapp.service --since &quot;1 hour ago&quot; 結論 systemd 乍看之下可能有些複雜，但一旦掌握了 .service 單元的基本用法，會發現它為開發和部署工作帶來了前所未有的便利性與可靠性。它將服務管理的最佳實踐內建其中，讓我們能夠： 用標準化的方式管理應用。 透過自動重啟提升服務的可用性。 用統一的日誌系統簡化問題排查。 希望這篇文章能幫助揭開 systemd 的神秘面紗。試著在下一個部署在 Linux 上的專案中用 systemd 來管理它吧！</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/08/03/systemd%20%E7%8F%BE%E4%BB%A3%20Linux%20%E9%96%8B%E7%99%BC%E8%80%85%E4%B8%8D%E5%8F%AF%E4%B8%8D%E7%9F%A5%E7%9A%84%E6%9C%8D%E5%8B%99%E7%AE%A1%E7%90%86%E5%88%A9%E5%99%A8/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>
