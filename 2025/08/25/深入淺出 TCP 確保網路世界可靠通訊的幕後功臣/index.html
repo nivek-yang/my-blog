@@ -19,27 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="在上一篇文章《系統設計中的 CAP 理論》中，探討了分散式系統的「不可能三角」—— CAP 理論。它告訴我們，在面對網路分區時，必須在強一致性 (Consistency) 和高可用性 (Availability) 之間做出痛苦的抉擇。 那麼問題來了：當為了擴展性與彈性，選擇擁抱「可用性」而犧牲「強一致性」時，該遵循什麼樣的設計原則呢？ 這就是 BASE 理論 登場的時刻。BASE 理論不是 CAP">
+    <meta name="description" content="是否曾想過，當在瀏覽網頁、傳送重要郵件，或下載檔案時，為什麼資料總能完整無誤地到達目的地？即使網路環境偶爾不穩定，網頁的圖片也不會少一塊，郵件的文字也不會缺一段。這一切的背後，都有一位默默工作、確保可靠性的幕後功臣——TCP (Transmission Control Protocol)。 這篇文章讓我們一起揭開 TCP 的神秘面紗，了解它如何為我們的數位生活建立起穩固的信任橋樑。  什麼是 TC">
 <meta property="og:type" content="article">
-<meta property="og:title" content="從 CAP 的抉擇到 BASE 的實踐：現代分散式系統的設計哲學">
-<meta property="og:url" content="https://nivek-yang.github.io/2025/08/22/%E5%BE%9E%20CAP%20%E7%9A%84%E6%8A%89%E6%93%87%E5%88%B0%20BASE%20%E7%9A%84%E5%AF%A6%E8%B8%90%20%E7%8F%BE%E4%BB%A3%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1%E7%9A%84%E8%A8%AD%E8%A8%88%E5%93%B2%E5%AD%B8/index.html">
+<meta property="og:title" content="深入淺出 TCP：確保網路世界可靠通訊的幕後功臣">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/08/25/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20TCP%20%E7%A2%BA%E4%BF%9D%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E5%8F%AF%E9%9D%A0%E9%80%9A%E8%A8%8A%E7%9A%84%E5%B9%95%E5%BE%8C%E5%8A%9F%E8%87%A3/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="在上一篇文章《系統設計中的 CAP 理論》中，探討了分散式系統的「不可能三角」—— CAP 理論。它告訴我們，在面對網路分區時，必須在強一致性 (Consistency) 和高可用性 (Availability) 之間做出痛苦的抉擇。 那麼問題來了：當為了擴展性與彈性，選擇擁抱「可用性」而犧牲「強一致性」時，該遵循什麼樣的設計原則呢？ 這就是 BASE 理論 登場的時刻。BASE 理論不是 CAP">
+<meta property="og:description" content="是否曾想過，當在瀏覽網頁、傳送重要郵件，或下載檔案時，為什麼資料總能完整無誤地到達目的地？即使網路環境偶爾不穩定，網頁的圖片也不會少一塊，郵件的文字也不會缺一段。這一切的背後，都有一位默默工作、確保可靠性的幕後功臣——TCP (Transmission Control Protocol)。 這篇文章讓我們一起揭開 TCP 的神秘面紗，了解它如何為我們的數位生活建立起穩固的信任橋樑。  什麼是 TC">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2025-08-21T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-08-22T15:31:04.751Z">
+<meta property="article:published_time" content="2025-08-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-25T15:37:19.704Z">
 <meta property="article:author" content="Kaiwii">
-<meta property="article:tag" content="System design">
+<meta property="article:tag" content="Networking">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://nivek-yang.github.io/2025/08/22/%E5%BE%9E%20CAP%20%E7%9A%84%E6%8A%89%E6%93%87%E5%88%B0%20BASE%20%E7%9A%84%E5%AF%A6%E8%B8%90%20%E7%8F%BE%E4%BB%A3%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1%E7%9A%84%E8%A8%AD%E8%A8%88%E5%93%B2%E5%AD%B8/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/08/25/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20TCP%20%E7%A2%BA%E4%BF%9D%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E5%8F%AF%E9%9D%A0%E9%80%9A%E8%A8%8A%E7%9A%84%E5%B9%95%E5%BE%8C%E5%8A%9F%E8%87%A3/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/08/22/%E5%BE%9E%20CAP%20%E7%9A%84%E6%8A%89%E6%93%87%E5%88%B0%20BASE%20%E7%9A%84%E5%AF%A6%E8%B8%90%20%E7%8F%BE%E4%BB%A3%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1%E7%9A%84%E8%A8%AD%E8%A8%88%E5%93%B2%E5%AD%B8/","path":"2025/08/22/從 CAP 的抉擇到 BASE 的實踐 現代分散式系統的設計哲學/","title":"從 CAP 的抉擇到 BASE 的實踐：現代分散式系統的設計哲學"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/08/25/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20TCP%20%E7%A2%BA%E4%BF%9D%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E5%8F%AF%E9%9D%A0%E9%80%9A%E8%A8%8A%E7%9A%84%E5%B9%95%E5%BE%8C%E5%8A%9F%E8%87%A3/","path":"2025/08/25/深入淺出 TCP 確保網路世界可靠通訊的幕後功臣/","title":"深入淺出 TCP：確保網路世界可靠通訊的幕後功臣"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>從 CAP 的抉擇到 BASE 的實踐：現代分散式系統的設計哲學 | 我的技術部落格</title>
+<title>深入淺出 TCP：確保網路世界可靠通訊的幕後功臣 | 我的技術部落格</title>
   
 
 
@@ -482,7 +482,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E8%A4%87%E7%BF%92cap-%E7%90%86%E8%AB%96%E7%9A%84%E6%A0%B8%E5%BF%83"><span class="nav-number">1.</span> <span class="nav-text"> 快速複習：CAP 理論的核心</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#base-%E7%90%86%E8%AB%96%E6%98%AF%E4%BB%80%E9%BA%BC"><span class="nav-number">2.</span> <span class="nav-text"> BASE 理論是什麼？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E5%8F%AF%E7%94%A8-basically-available"><span class="nav-number">2.1.</span> <span class="nav-text"> 1. 基本可用 (Basically Available)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%BB%9F%E7%8B%80%E6%85%8B-soft-state"><span class="nav-number">2.2.</span> <span class="nav-text"> 2. 軟狀態 (Soft State)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%9C%80%E7%B5%82%E4%B8%80%E8%87%B4%E6%80%A7-eventually-consistent"><span class="nav-number">2.3.</span> <span class="nav-text"> 3. 最終一致性 (Eventually Consistent)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cap-vs-base%E5%AE%83%E5%80%91%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E9%BA%BC%E9%97%9C%E4%BF%82"><span class="nav-number">3.</span> <span class="nav-text"> CAP vs. BASE：它們到底是什麼關係？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%A6%E8%B8%90%E4%B8%AD%E7%9A%84%E6%8A%89%E6%93%87%E8%A9%B2%E7%94%A8%E5%93%AA%E5%80%8B"><span class="nav-number">4.</span> <span class="nav-text"> 實踐中的抉擇：該用哪個？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-tcp"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是 TCP？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tcp-%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A9%9F%E5%88%B6%E5%8F%AF%E9%9D%A0%E6%80%A7%E6%98%AF%E5%A6%82%E4%BD%95%E7%85%89%E6%88%90%E7%9A%84"><span class="nav-number">2.</span> <span class="nav-text"> TCP 的核心機制：可靠性是如何煉成的？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B8%89%E5%90%91%E4%BA%A4%E6%8F%A1-three-way-handshake"><span class="nav-number">2.1.</span> <span class="nav-text"> 1. 三向交握 (Three-Way Handshake)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%BA%8F%E5%88%97%E8%99%9F%E8%88%87%E7%A2%BA%E8%AA%8D%E6%87%89%E7%AD%94-sequence-numbers-acknowledgments"><span class="nav-number">2.2.</span> <span class="nav-text"> 2. 序列號與確認應答 (Sequence Numbers &amp; Acknowledgments)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6-flow-control"><span class="nav-number">2.3.</span> <span class="nav-text"> 3. 流量控制 (Flow Control)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%A3%85%E5%A1%9E%E6%8E%A7%E5%88%B6-congestion-control"><span class="nav-number">2.4.</span> <span class="nav-text"> 4. 壅塞控制 (Congestion Control)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tcp-vs-udp%E4%B8%80%E5%B0%8D%E5%80%8B%E6%80%A7%E8%BF%A5%E7%95%B0%E7%9A%84%E5%85%84%E5%BC%9F"><span class="nav-number">3.</span> <span class="nav-text"> TCP vs. UDP：一對個性迥異的兄弟</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">4.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -530,7 +530,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/22/%E5%BE%9E%20CAP%20%E7%9A%84%E6%8A%89%E6%93%87%E5%88%B0%20BASE%20%E7%9A%84%E5%AF%A6%E8%B8%90%20%E7%8F%BE%E4%BB%A3%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1%E7%9A%84%E8%A8%AD%E8%A8%88%E5%93%B2%E5%AD%B8/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/25/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20TCP%20%E7%A2%BA%E4%BF%9D%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E5%8F%AF%E9%9D%A0%E9%80%9A%E8%A8%8A%E7%9A%84%E5%B9%95%E5%BE%8C%E5%8A%9F%E8%87%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -543,12 +543,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="從 CAP 的抉擇到 BASE 的實踐：現代分散式系統的設計哲學 | 我的技術部落格">
+      <meta itemprop="name" content="深入淺出 TCP：確保網路世界可靠通訊的幕後功臣 | 我的技術部落格">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          從 CAP 的抉擇到 BASE 的實踐：現代分散式系統的設計哲學
+          深入淺出 TCP：確保網路世界可靠通訊的幕後功臣
         </h1>
 
         <div class="post-meta-container">
@@ -560,7 +560,7 @@
       <span class="post-meta-item-text">發表於</span>
       
 
-      <time title="創建時間：2025-08-22 00:00:00 / 修改時間：23:31:04" itemprop="dateCreated datePublished" datetime="2025-08-22T00:00:00+08:00">2025-08-22</time>
+      <time title="創建時間：2025-08-25 00:00:00 / 修改時間：23:37:19" itemprop="dateCreated datePublished" datetime="2025-08-25T00:00:00+08:00">2025-08-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -581,108 +581,86 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>在上一篇文章《系統設計中的 CAP 理論》中，探討了分散式系統的「不可能三角」—— CAP 理論。它告訴我們，在面對網路分區時，必須在強一致性 (Consistency) 和高可用性 (Availability) 之間做出痛苦的抉擇。</p>
-<p>那麼問題來了：當為了擴展性與彈性，選擇擁抱「可用性」而犧牲「強一致性」時，該遵循什麼樣的設計原則呢？</p>
-<p>這就是 <strong>BASE 理論</strong> 登場的時刻。BASE 理論不是 CAP 理論的替代品或競爭對手，恰恰相反，<strong>它是對 CAP 理論中 AP (Availability + Partition Tolerance) 路線的具體實踐與延伸</strong>。</p>
-<h1 id="快速複習cap-理論的核心"><a class="markdownIt-Anchor" href="#快速複習cap-理論的核心"></a> 快速複習：CAP 理論的核心</h1>
-<p>為了更好地理解 BASE，快速回顧一下 CAP：</p>
+    <div class="post-body" itemprop="articleBody"><p>是否曾想過，當在瀏覽網頁、傳送重要郵件，或下載檔案時，為什麼資料總能完整無誤地到達目的地？即使網路環境偶爾不穩定，網頁的圖片也不會少一塊，郵件的文字也不會缺一段。這一切的背後，都有一位默默工作、確保可靠性的幕後功臣——<strong>TCP (Transmission Control Protocol)</strong>。</p>
+<p>這篇文章讓我們一起揭開 TCP 的神秘面紗，了解它如何為我們的數位生活建立起穩固的信任橋樑。</p>
+<h1 id="什麼是-tcp"><a class="markdownIt-Anchor" href="#什麼是-tcp"></a> 什麼是 TCP？</h1>
+<p><strong>TCP</strong>，全名為「傳輸控制協定」（Transmission Control Protocol），是網際網路協定套組 (TCP/IP) 中，位於<strong>傳輸層 (Transport Layer)</strong> 的核心協定之一。</p>
+<p>可以把它想像成一位極度認真負責的快遞員。這位快遞員的使命不僅僅是「把包裹送達」，而是「<strong>確保包裹安全、完整、且按照正確順序送達</strong>」。</p>
+<p>TCP 的主要特點可以歸納為三點：</p>
+<ol>
+<li><strong>連線導向 (Connection-Oriented)</strong>：在傳輸資料之前，傳送方和接收方必須先建立一個穩定的通訊管道。就像打電話一樣，必須先撥號、對方接聽，雙方確認可以通話後，才開始交談。</li>
+<li><strong>可靠傳輸 (Reliable)</strong>：TCP 擁有多種機制來保證資料的可靠性。如果資料在途中遺失或損毀，它會要求重新傳送，直到所有資料都正確無誤地被接收。</li>
+<li><strong>依序傳遞 (In-Order Delivery)</strong>：大型資料會被TCP拆分成許多小資料區段（Segments）來傳送。TCP 會為每個區段編號，確保接收方能將它們按照正確的順序重組，還原成原始資料。</li>
+</ol>
+<hr />
+<h1 id="tcp-的核心機制可靠性是如何煉成的"><a class="markdownIt-Anchor" href="#tcp-的核心機制可靠性是如何煉成的"></a> TCP 的核心機制：可靠性是如何煉成的？</h1>
+<p>TCP 的可靠性並非空穴來風，而是建立在一系列精密的機制之上。讓我們來看看幾個最關鍵的設計：</p>
+<h2 id="1-三向交握-three-way-handshake"><a class="markdownIt-Anchor" href="#1-三向交握-three-way-handshake"></a> 1. 三向交握 (Three-Way Handshake)</h2>
+<p>這是建立 TCP 連線的經典過程，確保雙方都準備好進行通訊。</p>
 <blockquote>
-<p>在分散式系統中，<strong>一致性 (Consistency)</strong>、<strong>可用性 (Availability)</strong>、<strong>分區容錯性 (Partition tolerance)</strong> 三者不可兼得。</p>
+<p><strong>生活化比喻：打電話</strong></p>
+<ol>
+<li><strong>你 (Client) 撥電話給朋友 (Server)</strong>：「喂，聽得到嗎？」 (發送 <code>SYN</code> 封包)</li>
+<li><strong>朋友聽到後回答</strong>：「聽得到，你聽得到我嗎？」 (回覆 <code>SYN-ACK</code> 封包)</li>
+<li><strong>你聽到朋友的回答後，確認可以開始聊天</strong>：「聽得到，那我們開始說話吧！」 (發送 <code>ACK</code> 封包)</li>
+</ol>
 </blockquote>
+<p>經過這三步驟，一條穩定的通訊管道就建立完成了。</p>
+<h2 id="2-序列號與確認應答-sequence-numbers-acknowledgments"><a class="markdownIt-Anchor" href="#2-序列號與確認應答-sequence-numbers-acknowledgments"></a> 2. 序列號與確認應答 (Sequence Numbers &amp; Acknowledgments)</h2>
+<p>這是確保資料不丟失、不錯亂的關鍵。</p>
 <ul>
-<li><strong>CP (一致性 + 分區容錯)</strong>: 系統保證資料絕對正確，但在節點失聯時，可能暫時無法提供服務。</li>
-<li><strong>AP (可用性 + 分區容錯)</strong>: 系統保證永遠在線，但可能在短時間內回傳舊的資料。</li>
+<li><strong>序列號 (Sequence Number, SEQ)</strong>：傳送方為每個發出的資料區段都標上一個獨一無二的編號，就像為一本書的每一頁編上頁碼。</li>
+<li><strong>確認應答號 (Acknowledgment Number, ACK)</strong>：接收方每收到一個資料區段，就會回覆一個「確認」訊息，告訴傳送方：「我已經成功收到了編號 X 之前的所有資料，請從編號 X 開始傳送下一批。」</li>
 </ul>
-<p>在現代雲端架構下，分區容錯 (P) 是基本要求。因此，設計的焦點變成了：<strong>該選擇 CP 還是 AP？</strong> 如果答案是 AP，那麼代表已經踏入了 BASE 理論的世界。</p>
-<h1 id="base-理論是什麼"><a class="markdownIt-Anchor" href="#base-理論是什麼"></a> BASE 理論是什麼？</h1>
-<p>BASE 理論由 eBay 的架構師 Dan Pritchett 提出，它是三個概念的縮寫，代表了一種與傳統 ACID (Atomicity, Consistency, Isolation, Durability) 強一致性模型截然不同的設計哲學：</p>
-<ul>
-<li><strong>BA - 基本可用 (Basically Available)</strong></li>
-<li><strong>S - 軟狀態 (Soft State)</strong></li>
-<li><strong>E - 最終一致性 (Eventually Consistent)</strong></li>
-</ul>
-<p>讓我們來逐一解析：</p>
-<h2 id="1-基本可用-basically-available"><a class="markdownIt-Anchor" href="#1-基本可用-basically-available"></a> 1. 基本可用 (Basically Available)</h2>
-<p>這意味著系統保證其核心功能在任何時候都是可用的。它允許在系統出現故障時損失部分功能或響應時間變長，但絕不允許整個系統完全崩潰。</p>
-<ul>
-<li><strong>舉例</strong>：在電商大促銷期間，為了保證核心的「下單」功能可用，網站可能會暫時關閉「商品評論」或「精準推薦」等非核心功能。即使伺服器負載極高，頁面載入慢了一點，但使用者最終還是能完成購買。這就是「基本可用」。</li>
-</ul>
-<h2 id="2-軟狀態-soft-state"><a class="markdownIt-Anchor" href="#2-軟狀態-soft-state"></a> 2. 軟狀態 (Soft State)</h2>
-<p>相對於資料狀態一旦寫入就不會改變的「硬狀態」(Hard State)，「軟狀態」允許系統中的資料狀態在沒有外部操作介入的情況下，隨著時間的推移而發生變化。</p>
-<ul>
-<li><strong>為何需要軟狀態？</strong> 因為資料的同步需要時間！在資料從一個節點同步到所有節點的過程中，系統的整體狀態就處於一個不斷變化的「中間狀態」。</li>
-<li><strong>舉例</strong>：在社群媒體上發布了一則新貼文， A 朋友立刻看到了，但遠在另一個國家的 B 朋友可能要過幾秒鐘才能看到。在這幾秒內，整個系統的資料狀態就是「軟」的，它正在自我演進，直到所有節點都同步完成。</li>
-</ul>
-<h2 id="3-最終一致性-eventually-consistent"><a class="markdownIt-Anchor" href="#3-最終一致性-eventually-consistent"></a> 3. 最終一致性 (Eventually Consistent)</h2>
-<p>這是 BASE 理論的基石。它不要求資料在任何時刻都保持強一致性，而是承諾「<strong>在未來某個時間點，如果沒有新的更新操作，所有節點的資料最終會達到一致的狀態</strong>」。</p>
-<ul>
-<li><strong>核心思想</strong>：「暫時的不一致」是可以接受的，只要系統能自我修復並最終趨於一致。</li>
-<li><strong>舉例</strong>：維基百科的編輯。當修改一個詞條後，全球各地的使用者不會在同一毫秒看到你的更新。但系統保證在一段時間後（可能是幾秒或幾分鐘），所有人最終都會看到編輯後的最新版本。</li>
-</ul>
-<h1 id="cap-vs-base它們到底是什麼關係"><a class="markdownIt-Anchor" href="#cap-vs-base它們到底是什麼關係"></a> CAP vs. BASE：它們到底是什麼關係？</h1>
-<p>很多人會誤以為 CAP 和 BASE 是對立的。事實上，它們的關係更像是「<strong>提問者</strong>」與「<strong>回答者</strong>」。</p>
+<p>如果傳送方在一定的時間內沒有收到對某個資料區段的確認，它就會認定該區段可能在途中遺失了，並會<strong>重新傳送</strong>該區段。</p>
+<h2 id="3-流量控制-flow-control"><a class="markdownIt-Anchor" href="#3-流量控制-flow-control"></a> 3. 流量控制 (Flow Control)</h2>
+<p>這個機制是為了防止傳送方傳送速度太快，導致接收方來不及處理而造成資料遺失。</p>
 <blockquote>
-<p><strong>CAP 理論拋出了一個問題</strong>：當網路分區發生時，你要 C 還是 A？</p>
-<p><strong>BASE 理論給出了一個答案</strong>：如果選擇了 A (可用性)，這是我的一整套設計哲學與實踐方法。</p>
+<p><strong>生活化比喻：倒水</strong><br />
+接收方 (杯子) 會告訴傳送方 (水壺)：「我現在還有多少空間 (Window Size)」。水壺會根據杯子剩餘的空間來控制倒水的速度，避免水滿溢出來。</p>
 </blockquote>
-<p>可以透過下表更清晰地理解它們的區別與聯繫：</p>
+<p>透過「滑動視窗 (Sliding Window)」機制，接收方可以動態地告知傳送方自己還有多少緩衝區空間可用，從而調節傳送速率。</p>
+<h2 id="4-壅塞控制-congestion-control"><a class="markdownIt-Anchor" href="#4-壅塞控制-congestion-control"></a> 4. 壅塞控制 (Congestion Control)</h2>
+<p>流量控制關心的是「點對點」的傳輸速率，而壅塞控制關心的則是整個<strong>網路</strong>的健康狀況。</p>
+<p>當網路上有太多資料在傳輸，就像尖峰時段的公路一樣，會發生「塞車」。TCP 的壅塞控制機制會偵測這種情況，並主動降低傳送速率，以緩解網路的負擔。當網路狀況好轉時，再逐步提高傳輸速率。這是一種顧全大局的智慧機制，避免了網路的崩潰。</p>
+<hr />
+<h1 id="tcp-vs-udp一對個性迥異的兄弟"><a class="markdownIt-Anchor" href="#tcp-vs-udp一對個性迥異的兄弟"></a> TCP vs. UDP：一對個性迥異的兄弟</h1>
+<p>在傳輸層，TCP 有一個廣為人知的兄弟——<strong>UDP (User Datagram Protocol)</strong>。相較於 TCP 的嚴謹可靠，UDP 追求的是<strong>速度</strong>與<strong>效率</strong>。</p>
 <table>
 <thead>
 <tr>
 <th style="text-align:left">特性</th>
-<th style="text-align:left">CAP 理論</th>
-<th style="text-align:left">BASE 理論</th>
+<th style="text-align:left"><strong>TCP (可靠的快遞員)</strong></th>
+<th style="text-align:left"><strong>UDP (快速的郵差)</strong></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left"><strong>本質</strong></td>
-<td style="text-align:left">一個<strong>理論</strong> (Theorem)，描述了客觀限制</td>
-<td style="text-align:left">一套<strong>設計哲學</strong> (Philosophy)，指導如何實踐</td>
+<td style="text-align:left"><strong>連線</strong></td>
+<td style="text-align:left">連線導向 (需先建立連線)</td>
+<td style="text-align:left">無連線 (直接傳送)</td>
 </tr>
 <tr>
-<td style="text-align:left"><strong>關注點</strong></td>
-<td style="text-align:left">關注系統設計的<strong>權衡與取捨</strong> (Trade-off)</td>
-<td style="text-align:left">關注如何在犧牲強一致性的前提下<strong>獲得高可用性和擴展性</strong></td>
+<td style="text-align:left"><strong>可靠性</strong></td>
+<td style="text-align:left">高 (保證送達、保證順序)</td>
+<td style="text-align:left">低 (不保證送達、不保證順序)</td>
 </tr>
 <tr>
-<td style="text-align:left"><strong>模型</strong></td>
-<td style="text-align:left">偏向<strong>理論化</strong>、<strong>二元對立</strong> (C or A)</td>
-<td style="text-align:left">偏向<strong>實踐化</strong>、<strong>彈性光譜</strong> (從弱到強的多種一致性模型)</td>
+<td style="text-align:left"><strong>速度</strong></td>
+<td style="text-align:left">較慢 (因確認與重傳機制)</td>
+<td style="text-align:left">較快 (無額外負擔)</td>
 </tr>
 <tr>
-<td style="text-align:left"><strong>關係</strong></td>
-<td style="text-align:left"><strong>BASE 是對 CAP 理論中 AP 選擇的具體化和實現</strong></td>
-<td style="text-align:left"></td>
+<td style="text-align:left"><strong>使用場景</strong></td>
+<td style="text-align:left">網頁瀏覽 (HTTP/S)、電子郵件 (SMTP)、檔案傳輸 (FTP)</td>
+<td style="text-align:left">線上遊戲、影音串流、DNS 查詢</td>
 </tr>
 </tbody>
 </table>
-<p>當系統設計選擇了 AP 路徑，就是在實踐 BASE 的思想。透過接受「軟狀態」和「最終一致性」，來換取系統的「基本可用」。</p>
-<h1 id="實踐中的抉擇該用哪個"><a class="markdownIt-Anchor" href="#實踐中的抉擇該用哪個"></a> 實踐中的抉擇：該用哪個？</h1>
-<p>這個問題的答案完全取決於<strong>業務場景</strong>。</p>
-<ul>
-<li>
-<p><strong>選擇 CP (遵循 ACID)</strong></p>
-<ul>
-<li><strong>場景</strong>：金融交易、銀行轉帳、庫存管理、電信計費。</li>
-<li><strong>理由</strong>：在這些場景下，資料的正確性是第一位的。一分錢的錯誤都可能導致巨大的損失。使用者寧願在轉帳時看到「系統繁忙，請稍後再試」（犧牲可用性），也絕不接受帳戶餘額算錯（犧牲一致性）。</li>
-</ul>
-</li>
-<li>
-<p><strong>選擇 AP (遵循 BASE)</strong></p>
-<ul>
-<li><strong>場景</strong>：社群媒體動態、使用者個人資料、影片觀看次數、IoT 裝置數據上報。</li>
-<li><strong>理由</strong>：在這些場景下，使用者體驗和系統的 24/7 在線更為重要。使用者可以接受新頭像晚幾秒鐘才在所有朋友那裡更新，但無法接受網站頻繁地無法訪問。</li>
-</ul>
-</li>
-</ul>
+<p>簡單來說，當<strong>資料完整性至關重要</strong>時，選擇 TCP；當<strong>即時性比零失誤更重要</strong>時，UDP 則是更好的選擇。</p>
 <h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
-<p>CAP 理論是理解分散式系統限制的「地圖」，它清晰地標示出了無法通行的區域。而 BASE 理論則是這張地圖上一條通往「高可用性」與「大規模擴展」的、經過驗證的可靠路徑。</p>
-<ul>
-<li><strong>CAP</strong> 告訴我們「你必須選」。</li>
-<li><strong>BASE</strong> 告訴我們「如果你這樣選，可以這樣做」。</li>
-</ul>
-<p>作為一名現代軟體架構師或開發者，深刻理解這兩者之間的關係，能讓你不再糾結於「哪個更好」，而是能根據實際業務需求，自信地回答：「在當前的場景下，哪種選擇更合適」。</p>
+<p>TCP 如同網路世界中一位值得信賴的工程師，它透過三向交握、序列號與確認、流量控制和壅塞控制等精密設計，在複雜多變的網路環境中，為我們的應用程式提供了一條穩定可靠的資料傳輸通道。</p>
+<p>雖然它的機制相對複雜，帶來了一些效能上的開銷，但正是這份堅持，才讓我們可以安心地進行網頁瀏覽、檔案傳輸和收發郵件等各種數位活動。</p>
 
     </div>
 
@@ -692,21 +670,18 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/my-blog/tags/System-design/" rel="tag"># System design</a>
+              <a href="/my-blog/tags/Networking/" rel="tag"># Networking</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/my-blog/2025/08/21/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88%E4%B8%AD%E7%9A%84%20CAP%20%E7%90%86%E8%AB%96/" rel="prev" title="系統設計中的 CAP 理論">
-                  <i class="fa fa-angle-left"></i> 系統設計中的 CAP 理論
+                <a href="/my-blog/2025/08/24/%E6%8E%8C%E6%8F%A1%E7%8F%BE%E4%BB%A3%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88%E7%9A%84%E4%BA%94%E5%A4%A7%E5%BF%83%E6%B3%95/" rel="prev" title="掌握現代系統設計的五大心法">
+                  <i class="fa fa-angle-left"></i> 掌握現代系統設計的五大心法
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/my-blog/2025/08/23/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E5%BF%AB%E5%8F%96%E7%AD%96%E7%95%A5%20Cache%20Strategy/" rel="next" title="深入淺出快取策略 (Cache Strategy)">
-                  深入淺出快取策略 (Cache Strategy) <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
