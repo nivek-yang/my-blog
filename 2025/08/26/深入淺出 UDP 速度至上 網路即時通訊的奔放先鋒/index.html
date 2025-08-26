@@ -19,25 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="分享程式技術">
-<meta property="og:type" content="website">
-<meta property="og:title" content="我的技術部落格">
-<meta property="og:url" content="https://nivek-yang.github.io/tags/Celery/index.html">
+    <meta name="description" content="在上一篇文章《深入淺出 TCP：確保網路世界可靠通訊的幕後功臣》中，我們認識了那位嚴謹、可靠的「快遞員」——TCP。它確保了資料能完整無誤、依序送達。但在某些情境下，「可靠」並不是最重要的考量。 想像一下正在進行一場緊張刺激的線上遊戲，或是與朋友進行視訊通話。在這些場景中，最不能忍受的是什麼？是畫面偶爾出現一點點馬賽克，還是長達兩秒的延遲與卡頓？ 絕大多數人會選擇前者。這就是本篇文章的主角——UD">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入淺出 UDP：速度至上，網路即時通訊的奔放先鋒">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/08/26/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20UDP%20%E9%80%9F%E5%BA%A6%E8%87%B3%E4%B8%8A%20%E7%B6%B2%E8%B7%AF%E5%8D%B3%E6%99%82%E9%80%9A%E8%A8%8A%E7%9A%84%E5%A5%94%E6%94%BE%E5%85%88%E9%8B%92/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="分享程式技術">
+<meta property="og:description" content="在上一篇文章《深入淺出 TCP：確保網路世界可靠通訊的幕後功臣》中，我們認識了那位嚴謹、可靠的「快遞員」——TCP。它確保了資料能完整無誤、依序送達。但在某些情境下，「可靠」並不是最重要的考量。 想像一下正在進行一場緊張刺激的線上遊戲，或是與朋友進行視訊通話。在這些場景中，最不能忍受的是什麼？是畫面偶爾出現一點點馬賽克，還是長達兩秒的延遲與卡頓？ 絕大多數人會選擇前者。這就是本篇文章的主角——UD">
 <meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-08-25T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-26T15:25:08.518Z">
 <meta property="article:author" content="Kaiwii">
-<meta property="article:tag" content="Python, Django, Javascript, Database, Git">
+<meta property="article:tag" content="Networking">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://nivek-yang.github.io/tags/Celery/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/08/26/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20UDP%20%E9%80%9F%E5%BA%A6%E8%87%B3%E4%B8%8A%20%E7%B6%B2%E8%B7%AF%E5%8D%B3%E6%99%82%E9%80%9A%E8%A8%8A%E7%9A%84%E5%A5%94%E6%94%BE%E5%85%88%E9%8B%92/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-TW","comments":"","permalink":"","path":"tags/Celery/index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/08/26/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20UDP%20%E9%80%9F%E5%BA%A6%E8%87%B3%E4%B8%8A%20%E7%B6%B2%E8%B7%AF%E5%8D%B3%E6%99%82%E9%80%9A%E8%A8%8A%E7%9A%84%E5%A5%94%E6%94%BE%E5%85%88%E9%8B%92/","path":"2025/08/26/深入淺出 UDP 速度至上 網路即時通訊的奔放先鋒/","title":"深入淺出 UDP：速度至上，網路即時通訊的奔放先鋒"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>標籤: Celery | 我的技術部落格</title>
+<title>深入淺出 UDP：速度至上，網路即時通訊的奔放先鋒 | 我的技術部落格</title>
   
 
 
@@ -467,7 +469,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目錄
@@ -480,6 +482,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-udp"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是 UDP？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BD%95%E9%9C%80%E8%A6%81%E4%B8%80%E5%80%8B%E4%B8%8D%E5%8F%AF%E9%9D%A0%E7%9A%84%E5%8D%94%E5%AE%9A"><span class="nav-number">2.</span> <span class="nav-text"> 為何需要一個「不可靠」的協定？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%A5%B5%E4%BD%8E%E7%9A%84%E5%BB%B6%E9%81%B2-extremely-low-latency"><span class="nav-number">2.1.</span> <span class="nav-text"> 1. 極低的延遲 (Extremely Low Latency)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%BC%95%E9%87%8F%E8%88%87%E9%AB%98%E6%95%88-lightweight-efficient"><span class="nav-number">2.2.</span> <span class="nav-text"> 2. 輕量與高效 (Lightweight &amp; Efficient)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%94%AF%E6%8F%B4%E5%BB%A3%E6%92%AD%E8%88%87%E5%A4%9A%E6%92%AD-broadcast-multicast"><span class="nav-number">2.3.</span> <span class="nav-text"> 3. 支援廣播與多播 (Broadcast &amp; Multicast)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tcp-vs-udp"><span class="nav-number">3.</span> <span class="nav-text"> TCP vs. UDP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">4.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -516,46 +519,172 @@
 
     </div>
 
-    <div class="main-inner tag posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
-    <div class="post-block">
-      <div class="post-content">
-        <div class="collection-title">
-          <h1 class="collection-header">Celery
-            <small>標籤</small>
-          </h1>
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/26/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20UDP%20%E9%80%9F%E5%BA%A6%E8%87%B3%E4%B8%8A%20%E7%B6%B2%E8%B7%AF%E5%8D%B3%E6%99%82%E9%80%9A%E8%A8%8A%E7%9A%84%E5%A5%94%E6%94%BE%E5%85%88%E9%8B%92/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="深入淺出 UDP：速度至上，網路即時通訊的奔放先鋒 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深入淺出 UDP：速度至上，網路即時通訊的奔放先鋒
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-08-26 00:00:00 / 修改時間：23:25:08" itemprop="dateCreated datePublished" datetime="2025-08-26T00:00:00+08:00">2025-08-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
         </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在上一篇文章《深入淺出 TCP：確保網路世界可靠通訊的幕後功臣》中，我們認識了那位嚴謹、可靠的「快遞員」——TCP。它確保了資料能完整無誤、依序送達。但在某些情境下，「可靠」並不是最重要的考量。</p>
+<p>想像一下正在進行一場緊張刺激的線上遊戲，或是與朋友進行視訊通話。在這些場景中，最不能忍受的是什麼？是畫面偶爾出現一點點馬賽克，還是長達兩秒的延遲與卡頓？</p>
+<p>絕大多數人會選擇前者。這就是本篇文章的主角——<strong>UDP (User Datagram Protocol)</strong>——大放異彩的舞台。</p>
+<h1 id="什麼是-udp"><a class="markdownIt-Anchor" href="#什麼是-udp"></a> 什麼是 UDP？</h1>
+<p><strong>UDP</strong>，全名為「使用者資料包協定」（User Datagram Protocol），和 TCP 一樣，同屬網際網路協定套組 (TCP/IP) 中<strong>傳輸層 (Transport Layer)</strong> 的核心協定。</p>
+<p>如果說 TCP 是一位確保簽收、會電話確認的快遞員，那麼 UDP 更像是一位<strong>郵差</strong>。他只負責將信件（資料）投入信箱，不保證對方一定能收到，也不關心信件的順序，但最大的優點是——<strong>快</strong>。</p>
+<p>UDP 的核心理念是<strong>簡潔與高效</strong>。它的特點可以歸納如下：</p>
+<ol>
+<li><strong>無連線 (Connectionless)</strong>：UDP 在傳送資料前，不需要像 TCP 那樣先進行「三向交握」。它拿到資料後就直接往目的地傳送，省去了建立和維護連線的開銷。</li>
+<li><strong>不可靠傳輸 (Unreliable)</strong>：UDP 不提供任何送達保證。資料在途中遺失了，它不會知道，也不會要求重傳。此外，也不保證資料的接收順序。</li>
+<li><strong>極簡的標頭 (Minimal Header)</strong>：UDP 的標頭只有 8 個位元組（Bytes），相比 TCP 的 20 個位元組以上，它的額外負擔非常小，這意味著每個資料包中，實際資料的佔比更高。</li>
+<li><strong>資料包導向 (Datagram-Oriented)</strong>：應用程式交給 UDP 多大的資料，UDP 就會原封不動地打包成一個資料包（Datagram）傳送出去，不會像 TCP 那樣進行拆分或合併。</li>
+</ol>
+<hr />
+<h1 id="為何需要一個不可靠的協定"><a class="markdownIt-Anchor" href="#為何需要一個不可靠的協定"></a> 為何需要一個「不可靠」的協定？</h1>
+<p>看到「不可靠」，可能會覺得 UDP 聽起來很不中用。但實際上，它的「缺點」正是它在特定領域無可取代的「優點」。UDP 的設計哲學是<strong>將可靠性的控制權交給應用程式本身</strong>，從而換取極致的效能。</p>
+<h2 id="1-極低的延遲-extremely-low-latency"><a class="markdownIt-Anchor" href="#1-極低的延遲-extremely-low-latency"></a> 1. 極低的延遲 (Extremely Low Latency)</h2>
+<p>這是 UDP 最核心的優勢。由於沒有建立連線、確認應答、重傳等複雜機制，資料可以幾乎在生成的瞬間就被傳送出去。</p>
+<blockquote>
+<p><strong>應用場景：線上遊戲</strong><br />
+在遊戲中，角色位置、開火指令等資訊，最重要的是「即時性」。傳送一則 2 秒前的角色位置資訊是毫无意義的。UDP 能確保最新的資訊被最快地傳遞出去，即使中途丟失一兩個封包，也比收到過時的資訊要好得多。</p>
+</blockquote>
+<h2 id="2-輕量與高效-lightweight-efficient"><a class="markdownIt-Anchor" href="#2-輕量與高效-lightweight-efficient"></a> 2. 輕量與高效 (Lightweight &amp; Efficient)</h2>
+<p>因為標頭小、機制簡單，UDP 處理資料的成本非常低，無論是對於傳送方、接收方還是網路中的路由器，負擔都比較小。</p>
+<blockquote>
+<p><strong>應用場景：DNS 查詢</strong><br />
+當在瀏覽器輸入 <code>www.google.com</code> 時，電腦需要向 DNS 伺服器查詢這個網域名稱對應的 IP 位址。這個查詢過程通常就使用 UDP。因為請求和回應的資料量都很小，使用 UDP 可以快速完成，如果查詢失敗，應用程式（瀏覽器）本身可以簡單地再次發起查詢。</p>
+</blockquote>
+<h2 id="3-支援廣播與多播-broadcast-multicast"><a class="markdownIt-Anchor" href="#3-支援廣播與多播-broadcast-multicast"></a> 3. 支援廣播與多播 (Broadcast &amp; Multicast)</h2>
+<p>TCP 的連線是點對點的，像一通私人電話。而 UDP 則可以實現一對多的通訊，就像廣播電台一樣。它可以將一個資料包同時傳送給網路中的多個、甚至所有裝置，這對於影音串流等應用至關重要。</p>
+<hr />
+<h1 id="tcp-vs-udp"><a class="markdownIt-Anchor" href="#tcp-vs-udp"></a> TCP vs. UDP</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">特性</th>
+<th style="text-align:left"><strong>TCP (可靠的藝術家)</strong></th>
+<th style="text-align:left"><strong>UDP (奔放的運動員)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>連線</strong></td>
+<td style="text-align:left">連線導向 (精雕細琢，慢工出細活)</td>
+<td style="text-align:left">無連線 (拿到就跑，追求速度)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>可靠性</strong></td>
+<td style="text-align:left">高 (絕不容許任何差錯)</td>
+<td style="text-align:left">低 (允許一定程度的失誤)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>速度</strong></td>
+<td style="text-align:left">相對較慢</td>
+<td style="text-align:left">非常快</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>傳輸單位</strong></td>
+<td style="text-align:left">位元組流 (Stream)</td>
+<td style="text-align:left">資料包 (Datagram)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>使用場景</strong></td>
+<td style="text-align:left">網頁瀏覽、檔案傳輸、電子郵件</td>
+<td style="text-align:left">影音串流、線上遊戲、DNS、VoIP</td>
+</tr>
+</tbody>
+</table>
+<p>這兩者之間沒有絕對的好壞，只有<strong>適用場景的不同</strong>。它們是為了解決不同問題而生的完美搭檔。</p>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>UDP 並不是一個「有缺陷」的協定，而是一個經過深思熟慮的設計。它勇敢地捨棄了 TCP 的可靠性保障，將控制權交還給上層應用，以換取<strong>速度</strong>與<strong>效率</strong>。</p>
+<p>在當今這個對即時互動要求越來越高的世界裡，從視訊會議、直播串流到雲端遊戲，UDP 的地位變得日益重要。它像一位專注於衝刺的運動員，目標明確，摒棄一切不必要的負擔，只為將最新的資訊，以最快的速度送達彼方。</p>
+<p>了解 TCP 的穩重，也欣賞 UDP 的奔放，才能更全面地理解我們賴以生存的網路世界是如何運作的。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Networking/" rel="tag"># Networking</a>
+          </div>
 
         
-    <div class="collection-year">
-      <span class="collection-header">2025</span>
-    </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2025-07-24T00:00:00+08:00"
-              content="2025-07-24">
-          07-24
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/my-blog/2025/07/24/Python%20Celery%20%E5%85%A5%E9%96%80%20%E9%9D%9E%E5%90%8C%E6%AD%A5%E4%BB%BB%E5%8B%99%E7%9A%84%E5%BE%97%E5%8A%9B%E5%8A%A9%E6%89%8B/" itemprop="url">
-            <span itemprop="name">Python Celery 入門：非同步任務的得力助手</span>
-          </a>
-      </div>
-
-      
-    </header>
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/08/25/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20TCP%20%E7%A2%BA%E4%BF%9D%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E5%8F%AF%E9%9D%A0%E9%80%9A%E8%A8%8A%E7%9A%84%E5%B9%95%E5%BE%8C%E5%8A%9F%E8%87%A3/" rel="prev" title="深入淺出 TCP：確保網路世界可靠通訊的幕後功臣">
+                  <i class="fa fa-angle-left"></i> 深入淺出 TCP：確保網路世界可靠通訊的幕後功臣
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
   </article>
+</div>
 
-      </div>
-    </div>
-  
+
+
+
+
 
 </div>
   </main>
