@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">71</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">72</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">49</span></a>
       <ul class="sub-menu">
   
@@ -302,7 +302,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Networking/">
         Networking
-        <span class="post-count">(3)</span>
+        <span class="post-count">(4)</span>
       </a>
     </li>
   
@@ -492,7 +492,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">71</span>
+          <span class="site-state-item-count">72</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -517,6 +517,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/13/%E9%9D%9E%E5%90%8C%E6%AD%A5%E9%81%8B%E4%BD%9C%E8%A7%80%E5%BF%B5%E8%88%87%E5%BE%8C%E7%AB%AF%E4%BD%BF%E7%94%A8%E9%9D%9E%E5%90%8C%E6%AD%A5%E7%9A%84%E5%BF%85%E8%A6%81%E6%80%A7%E6%8E%A2%E8%A8%8E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/07/13/%E9%9D%9E%E5%90%8C%E6%AD%A5%E9%81%8B%E4%BD%9C%E8%A7%80%E5%BF%B5%E8%88%87%E5%BE%8C%E7%AB%AF%E4%BD%BF%E7%94%A8%E9%9D%9E%E5%90%8C%E6%AD%A5%E7%9A%84%E5%BF%85%E8%A6%81%E6%80%A7%E6%8E%A2%E8%A8%8E/" class="post-title-link" itemprop="url">
+              非同步運作觀念與後端使用非同步的必要性探討
+            </a>
+            <a href="/my-blog/2025/07/13/%E9%9D%9E%E5%90%8C%E6%AD%A5%E9%81%8B%E4%BD%9C%E8%A7%80%E5%BF%B5%E8%88%87%E5%BE%8C%E7%AB%AF%E4%BD%BF%E7%94%A8%E9%9D%9E%E5%90%8C%E6%AD%A5%E7%9A%84%E5%BF%85%E8%A6%81%E6%80%A7%E6%8E%A2%E8%A8%8E/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-07-13 00:00:00 / 修改時間：22:53:59" itemprop="dateCreated datePublished" datetime="2025-07-13T00:00:00+08:00">2025-07-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">在現代後端開發中，「非同步（asynchronous）」是一個重要的技術趨勢，尤其面對大量 I/O 操作或高併發需求時。本文將從 Python 非同步的運作流程談起，並探討在後端是否有必要使用非同步處理資料流。 非同步的基本觀念：為什麼非同步不會阻塞？ JavaScript 及 Python 的非同步設計，核心在於： 避免主執行緒阻塞 把耗時的 I/O 任務交給背景系統處理 等待完成後，再透過事件排程讓結果回到主執行緒 重要觀念：非同步任務完成後需要排隊回傳結果，但這段等待並不會阻塞主執行緒，因為主執行緒可以去執行其他任務。 非同步與阻塞的差異比喻 同步（阻塞） 非同步（非阻塞） 你排隊等餐，直到拿到餐才離開 你點完餐回位子坐著，等叫號再拿餐 Python 非同步運作流程（asyncio 與事件迴圈） Python 透過 asyncio 套件實現非同步，核心架構包含： 協程（coroutine）：用 async def 定義的非同步函式 事件迴圈（event loop）：管理協程的執行與切換 非阻塞 I/O：遇到 await 時暫停協程，讓事件迴圈去處理其他工作 Python 非同步示意程式 import asyncio async def download_file(filename): print(f&quot;Start downloading &#123;filename&#125;&quot;) await asyncio.sleep(2) # 模擬非同步 I/O 任務 print(f&quot;Finished downloading &#123;filename&#125;&quot;) return filename async def main(): tasks = [ download_file(&quot;file1.txt&quot;), download_file(&quot;file2.txt&quot;), download_file(&quot;file3.txt&quot;) ] await asyncio.gather(*tasks) asyncio.run(main()) 在上面例子中，三個下載任務會「同時」開始，因為事件迴圈會在等待（sleep）時切換到其他任務，達到非阻塞效果。 非同步 vs 多執行緒：效能差異與適用場景 特色 非同步（Event Loop） 多執行緒（Thread-based） 執行緒數 單一主執行緒 + 背景任務 多個執行緒 適合任務類型 I/O-bound（網路、檔案存取） CPU-bound（密集運算） 資源使用 較少（低記憶體占用） 較高（每個執行緒需獨立記憶體） 阻塞風險 只要避免同步阻塞就不會卡死 一個執行緒卡死不影響其他執行緒 並行度 非同步模擬並行，非真正多核心運算 可利用多核 CPU 進行真正多工 複雜度 回呼函式、事件排程較複雜 執行緒同步、鎖與死鎖問題需注意 非同步在背後執行效能是否較差？ 非同步任務雖然不是在主線程跑，但不代表效率低： I/O-bound 任務本質上耗時在等待資料回應，非同步能利用等待時間切換其他任務，提高資源利用率。 背景系統（如 Node.js 的 libuv threadpool 或瀏覽器的 Web API）專門負責 I/O，效率通常比主線程好。 但如果用非同步處理大量 CPU 運算，則會卡主事件迴圈，這時應該用多執行緒或多進程。 在後端是否有必要用非同步處理資料流？ 適合使用非同步的場景 高併發 API 請求（數千到數萬連線） 需要大量等待 I/O（資料庫、檔案、第三方服務） WebSocket 或長連線通訊 大量資料串流與處理（爬蟲、資料管線） 不適合使用非同步的場景 CPU 密集計算（影像處理、科學運算） 使用大量同步套件（無法 async 支援） 系統結構複雜，非同步調試困難 總結 問題 答案 非同步完成後回主線程排隊會阻塞嗎？ 不會，因為主線程可同時處理其他任務，排隊是非阻塞等待。 非同步背景執行效能差嗎？ 對 I/O-bound 非同步任務效率高，但 CPU-bound 任務需多執行緒處理。 後端要不要用非同步？ 若主要是 I/O-bound 或高併發，推薦使用非同步。CPU-heavy 則不適合。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/07/13/%E9%9D%9E%E5%90%8C%E6%AD%A5%E9%81%8B%E4%BD%9C%E8%A7%80%E5%BF%B5%E8%88%87%E5%BE%8C%E7%AB%AF%E4%BD%BF%E7%94%A8%E9%9D%9E%E5%90%8C%E6%AD%A5%E7%9A%84%E5%BF%85%E8%A6%81%E6%80%A7%E6%8E%A2%E8%A8%8E/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1287,92 +1373,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/06/19/%E4%BB%80%E9%BA%BC%E6%98%AF%20SQL%20Injection%E5%8F%88%E8%A9%B2%E5%A6%82%E4%BD%95%E9%A0%90%E9%98%B2/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/06/18/%E4%BB%80%E9%BA%BC%E6%98%AFCORS-%E8%A9%B2%E6%80%8E%E9%BA%BC%E8%A7%A3%E6%B1%BA%E8%B7%A8%E4%BE%86%E6%BA%90%E8%AB%8B%E6%B1%82%E5%95%8F%E9%A1%8C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/06/18/%E4%BB%80%E9%BA%BC%E6%98%AFCORS-%E8%A9%B2%E6%80%8E%E9%BA%BC%E8%A7%A3%E6%B1%BA%E8%B7%A8%E4%BE%86%E6%BA%90%E8%AB%8B%E6%B1%82%E5%95%8F%E9%A1%8C/" class="post-title-link" itemprop="url">
-              什麼是 CORS（Cross-Origin Resource Sharing)？ 該怎麼解決跨來源請求問題？
-            </a>
-            <a href="/my-blog/2025/06/18/%E4%BB%80%E9%BA%BC%E6%98%AFCORS-%E8%A9%B2%E6%80%8E%E9%BA%BC%E8%A7%A3%E6%B1%BA%E8%B7%A8%E4%BE%86%E6%BA%90%E8%AB%8B%E6%B1%82%E5%95%8F%E9%A1%8C/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-06-18 00:00:00 / 修改時間：23:52:45" itemprop="dateCreated datePublished" datetime="2025-06-18T00:00:00+08:00">2025-06-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">前端開發常常會遇到「跨來源請求被阻擋」的錯誤訊息，比如： Access to fetch at 'https://api.example.com/data' from origin 'http://localhost:3000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present... 這就是著名的 CORS 問題。本篇文章將說明 CORS 是什麼、為什麼會發生，以及常見的解法。 CORS 是什麼？ CORS（Cross-Origin Resource Sharing，跨來源資源共享）是一種瀏覽器的安全機制，用來限制「不同網域」之間的請求。簡單來說，它防止了一個網站的 JavaScript 去隨意讀取另一個網站的資料。 什麼是「跨來源」？ 只要以下任何一個不同，就會被視為「不同來源」： 區塊 範例 協定 http://example.com vs https://example.com 網域 api.example.com vs www.example.com Port example.com:3000 vs example.com:8000 為什麼會出現 CORS 錯誤？ 瀏覽器會阻擋從網頁腳本對其他來源發起的請求（例如使用 fetch、axios）。除非 伺服器端主動聲明允許該請求的來源，否則請求會被攔截。 範例情境 假設前端使用 React (http://localhost:3000)，想從後端 API (http://localhost:8000) 取得資料： fetch(&#x27;http://localhost:8000/api/data&#x27;) 這是跨來源請求，除非後端有設定 CORS header，否則會被瀏覽器擋下來。 解決 CORS 問題的方法 1. 修改後端設定 CORS 問題應由「伺服器端」解決。需要在伺服器回應中加上正確的 Access-Control-Allow-Origin header。 範例：使用 Express const express = require(&#x27;express&#x27;); const cors = require(&#x27;cors&#x27;); const app = express(); app.use(cors()); // 允許所有來源 // 或只允許特定來源 // app.use(cors(&#123; origin: &#x27;http://localhost:3000&#x27; &#125;)); app.get(&#x27;/api/data&#x27;, (req, res) =&gt; &#123; res.json(&#123; message: &#x27;Hello from server!&#x27; &#125;); &#125;); app.listen(8000); 範例：使用 Django + django-cors-headers pip install django-cors-headers # settings.py INSTALLED_APPS = [ ... &#x27;corsheaders&#x27;, ] MIDDLEWARE = [ &#x27;corsheaders.middleware.CorsMiddleware&#x27;, ... ] # 允許所有網域 CORS_ALLOW_ALL_ORIGINS = True # 或只允許特定網域 # CORS_ALLOWED_ORIGINS = [ # &quot;http://localhost:3000&quot;, # ] 2. 使用 Proxy 避開 CORS 開發時可使用前端代理轉發請求，例如 React： // vite.config.js or package.json proxy: &#123; &#x27;/api&#x27;: &#123; target: &#x27;http://localhost:8000&#x27;, changeOrigin: true, &#125;, &#125; 這樣 fetch('/api/data') 實際會被代理成後端的請求，不會被視為跨來源。 3. 後端設定 Access-Control Headers 除了 Access-Control-Allow-Origin，有時也需要加上這些 header： Access-Control-Allow-Origin: http://localhost:3000 Access-Control-Allow-Methods: GET, POST, PUT, DELETE Access-Control-Allow-Headers: Content-Type, Authorization 這些設定也必須在「預檢請求（Preflight Request）」中正確處理。 面試題目 「請說明什麼是 CORS（Cross-Origin Resource Sharing），以及如果遇到 CORS 問題該如何解決？」 回答範例： CORS（Cross-Origin Resource Sharing） 是一種瀏覽器的安全機制，用來限制前端從不同來源（origin）去請求資源，避免惡意網站竊取資料。當前端的 JavaScript 嘗試向不同網域、協定或 port 發送請求時，如果伺服器沒有正確設定 CORS header，瀏覽器會阻擋這個請求。 常見錯誤： 例如使用 fetch 或 axios 向不同來源的 API 發送請求時，會看到類似錯誤： Access to fetch at 'http://api.example.com' from origin 'http://localhost:3000' has been blocked by CORS policy 解決方式： 從伺服器端設定 CORS header（這是正確的做法）： 設定 Access-Control-Allow-Origin，明確允許某個前端網域。 可搭配套件，如： Node.js 可用 cors middleware Django 可用 django-cors-headers 本地開發時使用 proxy 轉發請求，避開跨域問題（開發用）： 例如 React 可以設定 vite.config.js 或 webpack devServer proxy 總結 問題 解法 跨來源請求被阻擋 在後端加上 CORS Header 特定網域允許 設定 Access-Control-Allow-Origin 為指定來源 多來源需求 使用動態設定或 whitelist 本地開發測試 使用 Proxy 或開啟允許全部來源 延伸閱讀 MDN - HTTP access control (CORS) CORS 官方規範 (W3C) django-cors-headers GitHub 如果曾經在開發中遇過 CORS 錯誤，不妨回頭看看是不是跨來源造成的限制，並從伺服器端著手解決吧！</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/06/18/%E4%BB%80%E9%BA%BC%E6%98%AFCORS-%E8%A9%B2%E6%80%8E%E9%BA%BC%E8%A7%A3%E6%B1%BA%E8%B7%A8%E4%BE%86%E6%BA%90%E8%AB%8B%E6%B1%82%E5%95%8F%E9%A1%8C/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>

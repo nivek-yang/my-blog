@@ -19,28 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="本文詳細解釋了 Git 本機與遠端操作的常見指令及其應用場景，涵蓋 git fetch、git pull、git push、Pull Request (PR) 的管理，以及如何保持 Git 圖表清晰的最佳實踐。    git fetch 與分支同步 git fetch 是用來從遠端倉庫抓取最新的更新，但不會自動合併到本地分支。它的作用是讓本地倉庫知道遠端的最新狀態。  使用範例： git fet">
+    <meta name="description" content="我們已經了解了 TCP 的可靠性、UDP 的高效性，以及重要的，IP 如何為網路上每一個設備賦予獨一無二的「地址」。知道了要把資料「送給誰」，但要怎麼把它準確送達呢？ 想像一下，手上有一封信，上面寫著收件人的詳細地址（這就是 IP 地址）。可以選擇快遞（TCP）或平信（UDP）。但這封信必須經過許多郵局、轉運站，才能最終抵達收件人手中。 在網際網路這個龐大無比的「全球郵政系統」裡，負責規劃資料包旅">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Git 本機與遠端操作詳解">
-<meta property="og:url" content="https://nivek-yang.github.io/2025/05/03/Git%20%E6%9C%AC%E6%A9%9F%E8%88%87%E9%81%A0%E7%AB%AF%E6%93%8D%E4%BD%9C%E8%A9%B3%E8%A7%A3/index.html">
+<meta property="og:title" content="深入淺出路由 (Routing)：資料包旅行的路徑規劃師，如何在茫茫網路中指引方向？">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/08/29/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E8%B7%AF%E7%94%B1%20Routing%20%E8%B3%87%E6%96%99%E5%8C%85%E6%97%85%E8%A1%8C%E7%9A%84%E8%B7%AF%E5%BE%91%E8%A6%8F%E5%8A%83%E5%B8%AB/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="本文詳細解釋了 Git 本機與遠端操作的常見指令及其應用場景，涵蓋 git fetch、git pull、git push、Pull Request (PR) 的管理，以及如何保持 Git 圖表清晰的最佳實踐。    git fetch 與分支同步 git fetch 是用來從遠端倉庫抓取最新的更新，但不會自動合併到本地分支。它的作用是讓本地倉庫知道遠端的最新狀態。  使用範例： git fet">
+<meta property="og:description" content="我們已經了解了 TCP 的可靠性、UDP 的高效性，以及重要的，IP 如何為網路上每一個設備賦予獨一無二的「地址」。知道了要把資料「送給誰」，但要怎麼把它準確送達呢？ 想像一下，手上有一封信，上面寫著收件人的詳細地址（這就是 IP 地址）。可以選擇快遞（TCP）或平信（UDP）。但這封信必須經過許多郵局、轉運站，才能最終抵達收件人手中。 在網際網路這個龐大無比的「全球郵政系統」裡，負責規劃資料包旅">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2025-05-02T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-05-02T18:37:40.980Z">
+<meta property="article:published_time" content="2025-08-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-29T15:22:15.755Z">
 <meta property="article:author" content="Kaiwii">
-<meta property="article:tag" content="Git">
-<meta property="article:tag" content="Version Control">
+<meta property="article:tag" content="Networking">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://nivek-yang.github.io/2025/05/03/Git%20%E6%9C%AC%E6%A9%9F%E8%88%87%E9%81%A0%E7%AB%AF%E6%93%8D%E4%BD%9C%E8%A9%B3%E8%A7%A3/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/08/29/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E8%B7%AF%E7%94%B1%20Routing%20%E8%B3%87%E6%96%99%E5%8C%85%E6%97%85%E8%A1%8C%E7%9A%84%E8%B7%AF%E5%BE%91%E8%A6%8F%E5%8A%83%E5%B8%AB/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/05/03/Git%20%E6%9C%AC%E6%A9%9F%E8%88%87%E9%81%A0%E7%AB%AF%E6%93%8D%E4%BD%9C%E8%A9%B3%E8%A7%A3/","path":"2025/05/03/Git 本機與遠端操作詳解/","title":"Git 本機與遠端操作詳解"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/08/29/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E8%B7%AF%E7%94%B1%20Routing%20%E8%B3%87%E6%96%99%E5%8C%85%E6%97%85%E8%A1%8C%E7%9A%84%E8%B7%AF%E5%BE%91%E8%A6%8F%E5%8A%83%E5%B8%AB/","path":"2025/08/29/深入淺出路由 Routing 資料包旅行的路徑規劃師/","title":"深入淺出路由 (Routing)：資料包旅行的路徑規劃師，如何在茫茫網路中指引方向？"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Git 本機與遠端操作詳解 | 我的技術部落格</title>
+<title>深入淺出路由 (Routing)：資料包旅行的路徑規劃師，如何在茫茫網路中指引方向？ | 我的技術部落格</title>
   
 
 
@@ -483,7 +482,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#git-fetch-%E8%88%87%E5%88%86%E6%94%AF%E5%90%8C%E6%AD%A5"><span class="nav-number">1.</span> <span class="nav-text"> git fetch 與分支同步</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%AF%84%E4%BE%8B"><span class="nav-number">1.1.</span> <span class="nav-text"> 使用範例：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%AC%E6%A9%9F%E8%88%87%E9%81%A0%E7%AB%AF%E5%90%8C%E6%AD%A5%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text"> 本機與遠端同步的方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-git-merge"><span class="nav-number">2.1.</span> <span class="nav-text"> 1. git merge</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-git-rebase"><span class="nav-number">2.2.</span> <span class="nav-text"> 2. git rebase</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-git-reset"><span class="nav-number">2.3.</span> <span class="nav-text"> 3. git reset</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git-push-%E7%9A%84%E9%80%B2%E9%9A%8E%E7%94%A8%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text"> git push 的進階用法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%8E%A8%E9%80%81%E5%88%B0%E7%9B%B8%E5%90%8C%E5%90%8D%E7%A8%B1%E7%9A%84%E5%88%86%E6%94%AF"><span class="nav-number">3.1.</span> <span class="nav-text"> 1. 推送到相同名稱的分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%8E%A8%E9%80%81%E5%88%B0%E4%B8%8D%E5%90%8C%E5%90%8D%E7%A8%B1%E7%9A%84%E5%88%86%E6%94%AF"><span class="nav-number">3.2.</span> <span class="nav-text"> 2. 推送到不同名稱的分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%88%AA%E9%99%A4%E9%81%A0%E7%AB%AF%E5%88%86%E6%94%AF"><span class="nav-number">3.3.</span> <span class="nav-text"> 3. 刪除遠端分支</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pull-request-pr-%E7%9A%84%E7%AE%A1%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text"> Pull Request (PR) 的管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#pr-%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AF%A6%E8%B8%90"><span class="nav-number">4.1.</span> <span class="nav-text"> PR 的最佳實踐</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%9D%E6%8C%81-git-%E5%9C%96%E8%A1%A8%E6%B8%85%E6%99%B0%E7%9A%84%E5%BB%BA%E8%AD%B0"><span class="nav-number">5.</span> <span class="nav-text"> 保持 Git 圖表清晰的建議</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E8%A6%8B%E6%93%8D%E4%BD%9C%E7%AF%84%E4%BE%8B"><span class="nav-number">6.</span> <span class="nav-text"> 常見操作範例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E6%96%B0%E5%88%86%E6%94%AF%E4%B8%A6%E6%8E%A8%E9%80%81"><span class="nav-number">6.1.</span> <span class="nav-text"> 建立新分支並推送</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%99%BC%E8%B5%B7-pr-%E4%B8%A6%E9%80%B2%E8%A1%8C-code-review"><span class="nav-number">6.2.</span> <span class="nav-text"> 發起 PR 並進行 Code Review</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%A2%E8%A9%A6%E4%B8%AD%E7%9A%84-git-%E6%8A%80%E5%B7%A7"><span class="nav-number">7.</span> <span class="nav-text"> 面試中的 Git 技巧</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF%E8%B7%AF%E7%94%B1-routing"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是路由 (Routing)？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E5%99%A8%E7%9A%84%E6%A0%B8%E5%BF%83%E8%B7%AF%E7%94%B1%E8%A1%A8-routing-table"><span class="nav-number">2.</span> <span class="nav-text"> 路由器的核心：路由表 (Routing Table)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E7%9A%84%E5%85%A9%E7%A8%AE%E4%B8%BB%E8%A6%81%E6%96%B9%E5%BC%8F%E9%9D%9C%E6%85%8B%E8%88%87%E5%8B%95%E6%85%8B"><span class="nav-number">3.</span> <span class="nav-text"> 路由的兩種主要方式：靜態與動態</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E9%9D%9C%E6%85%8B%E8%B7%AF%E7%94%B1-static-routing"><span class="nav-number">3.1.</span> <span class="nav-text"> 1. 靜態路由 (Static Routing)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8B%95%E6%85%8B%E8%B7%AF%E7%94%B1-dynamic-routing"><span class="nav-number">3.2.</span> <span class="nav-text"> 2. 動態路由 (Dynamic Routing)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1-routing-vs-%E4%BA%A4%E6%8F%9B-switching%E5%88%A5%E5%82%BB%E5%82%BB%E5%88%86%E4%B8%8D%E6%B8%85%E6%A5%9A"><span class="nav-number">4.</span> <span class="nav-text"> 路由 (Routing) vs. 交換 (Switching)：別傻傻分不清楚！</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -531,7 +530,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/05/03/Git%20%E6%9C%AC%E6%A9%9F%E8%88%87%E9%81%A0%E7%AB%AF%E6%93%8D%E4%BD%9C%E8%A9%B3%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/29/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E8%B7%AF%E7%94%B1%20Routing%20%E8%B3%87%E6%96%99%E5%8C%85%E6%97%85%E8%A1%8C%E7%9A%84%E8%B7%AF%E5%BE%91%E8%A6%8F%E5%8A%83%E5%B8%AB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -544,12 +543,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Git 本機與遠端操作詳解 | 我的技術部落格">
+      <meta itemprop="name" content="深入淺出路由 (Routing)：資料包旅行的路徑規劃師，如何在茫茫網路中指引方向？ | 我的技術部落格">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Git 本機與遠端操作詳解
+          深入淺出路由 (Routing)：資料包旅行的路徑規劃師，如何在茫茫網路中指引方向？
         </h1>
 
         <div class="post-meta-container">
@@ -561,7 +560,7 @@
       <span class="post-meta-item-text">發表於</span>
       
 
-      <time title="創建時間：2025-05-03 00:00:00 / 修改時間：02:37:40" itemprop="dateCreated datePublished" datetime="2025-05-03T00:00:00+08:00">2025-05-03</time>
+      <time title="創建時間：2025-08-29 00:00:00 / 修改時間：23:22:15" itemprop="dateCreated datePublished" datetime="2025-08-29T00:00:00+08:00">2025-08-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -582,135 +581,90 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><blockquote>
-<p>本文詳細解釋了 Git 本機與遠端操作的常見指令及其應用場景，涵蓋 <code>git fetch</code>、<code>git pull</code>、<code>git push</code>、Pull Request (PR) 的管理，以及如何保持 Git 圖表清晰的最佳實踐。</p>
-</blockquote>
-<hr />
-<h1 id="git-fetch-與分支同步"><a class="markdownIt-Anchor" href="#git-fetch-與分支同步"></a> <code>git fetch</code> 與分支同步</h1>
-<p><code>git fetch</code> 是用來從遠端倉庫抓取最新的更新，但不會自動合併到本地分支。它的作用是讓本地倉庫知道遠端的最新狀態。</p>
-<h2 id="使用範例"><a class="markdownIt-Anchor" href="#使用範例"></a> 使用範例：</h2>
-<pre class="highlight"><code class="bash">git fetch
-</code></pre>
-<ul>
-<li><strong>效果</strong>：抓取遠端的更新，並建立對應的遠端分支（如 <code>origin/master</code>）。</li>
-<li><strong>應用場景</strong>：當你想檢查遠端的最新變更，但不希望立即影響本地分支時使用。</li>
-</ul>
-<hr />
-<h1 id="本機與遠端同步的方式"><a class="markdownIt-Anchor" href="#本機與遠端同步的方式"></a> 本機與遠端同步的方式</h1>
-<p>要讓本機分支跟上遠端的進度，可以使用以下幾種方式：</p>
-<h2 id="1-git-merge"><a class="markdownIt-Anchor" href="#1-git-merge"></a> 1. <code>git merge</code></h2>
-<p>將遠端的變更合併到本地分支，保留本地和遠端的提交歷史。</p>
-<pre class="highlight"><code class="bash">git pull = git fetch + git merge
-</code></pre>
-<ul>
-<li><strong>效果</strong>：合併後會保留兩條提交記錄，適合需要完整歷史的場景。</li>
-<li><strong>缺點</strong>：可能導致 Git 圖表變得複雜。</li>
-</ul>
-<h2 id="2-git-rebase"><a class="markdownIt-Anchor" href="#2-git-rebase"></a> 2. <code>git rebase</code></h2>
-<p>將遠端的變更應用到本地分支的基礎上，重新整理提交歷史。</p>
-<pre class="highlight"><code class="bash">git pull --rebase = git fetch + git rebase
-</code></pre>
-<ul>
-<li><strong>效果</strong>：提交歷史會變得線性，讓 Git 圖表更清晰。</li>
-<li><strong>注意</strong>：在使用 <code>rebase</code> 時，需確保沒有其他人依賴你的分支，避免衝突。</li>
-</ul>
-<h2 id="3-git-reset"><a class="markdownIt-Anchor" href="#3-git-reset"></a> 3. <code>git reset</code></h2>
-<p>重置本地分支到遠端分支的狀態，適合需要完全同步的情況。</p>
-<hr />
-<h1 id="git-push-的進階用法"><a class="markdownIt-Anchor" href="#git-push-的進階用法"></a> <code>git push</code> 的進階用法</h1>
-<p><code>git push</code> 是將本地分支的變更推送到遠端分支。以下是一些進階用法：</p>
-<h2 id="1-推送到相同名稱的分支"><a class="markdownIt-Anchor" href="#1-推送到相同名稱的分支"></a> 1. 推送到相同名稱的分支</h2>
-<pre class="highlight"><code class="bash">git push origin main
-</code></pre>
-<ul>
-<li><strong>效果</strong>：將本地的 <code>main</code> 分支推送到遠端的 <code>main</code> 分支。</li>
-</ul>
-<h2 id="2-推送到不同名稱的分支"><a class="markdownIt-Anchor" href="#2-推送到不同名稱的分支"></a> 2. 推送到不同名稱的分支</h2>
-<pre class="highlight"><code class="bash">git push origin main:<span class="hljs-built_in">cat</span>
-</code></pre>
-<ul>
-<li><strong>效果</strong>：將本地的 <code>main</code> 分支推送到遠端的 <code>cat</code> 分支。</li>
-</ul>
-<h2 id="3-刪除遠端分支"><a class="markdownIt-Anchor" href="#3-刪除遠端分支"></a> 3. 刪除遠端分支</h2>
-<pre class="highlight"><code class="bash">git push origin :<span class="hljs-built_in">cat</span>
-</code></pre>
-<ul>
-<li><strong>效果</strong>：刪除遠端的 <code>cat</code> 分支，相當於執行 <code>null:cat</code>。</li>
-</ul>
-<hr />
-<h1 id="pull-request-pr-的管理"><a class="markdownIt-Anchor" href="#pull-request-pr-的管理"></a> Pull Request (PR) 的管理</h1>
-<p>Pull Request 是團隊協作中不可或缺的一部分，用於代碼審查和合併。</p>
-<h2 id="pr-的最佳實踐"><a class="markdownIt-Anchor" href="#pr-的最佳實踐"></a> PR 的最佳實踐</h2>
+    <div class="post-body" itemprop="articleBody"><p>我們已經了解了 <strong>TCP</strong> 的可靠性、<strong>UDP</strong> 的高效性，以及重要的，<strong>IP</strong> 如何為網路上每一個設備賦予獨一無二的「地址」。知道了要把資料「送給誰」，但要怎麼把它<strong>準確送達</strong>呢？</p>
+<p>想像一下，手上有一封信，上面寫著收件人的詳細地址（這就是 <strong>IP 地址</strong>）。可以選擇快遞（TCP）或平信（UDP）。但這封信必須經過許多郵局、轉運站，才能最終抵達收件人手中。</p>
+<p>在網際網路這個龐大無比的「全球郵政系統」裡，負責規劃資料包旅行路線、指引它們在錯綜複雜的網路中找到「最佳路徑」的，就是本篇文章的主角——<strong>路由 (Routing)</strong>。</p>
+<h1 id="什麼是路由-routing"><a class="markdownIt-Anchor" href="#什麼是路由-routing"></a> 什麼是路由 (Routing)？</h1>
+<p><strong>路由 (Routing)</strong> 是決定資料包從來源到目的地應經過哪個路徑的過程。它工作在 IP 之上，屬於 TCP/IP 模型中的<strong>網路層 (Network Layer)</strong>。</p>
+<p>執行路由任務的關鍵設備就是<strong>路由器 (Router)</strong>。可以把它想成網路世界的「智慧型交通警察」或是「高級導航系統」。當一個資料包到達路由器時，路由器會：</p>
 <ol>
-<li>
-<p><strong>設定審核條件</strong>：</p>
-<ul>
-<li>可以設定 6 人團隊中至少 5 人接受後才能合併。</li>
-<li>當條件滿足時，合併按鈕會亮起，任何人都可以按下合併。</li>
-</ul>
-</li>
-<li>
-<p><strong>PR 的重要性</strong>：</p>
-<ul>
-<li>即使功能不是你開發的，參與 PR 的 Code Review 也能幫助你了解功能的運作方式。</li>
-<li>在面試中，可以提到你參與過的 Code Review，展示對系統的理解。</li>
-</ul>
-</li>
-<li>
-<p><strong>避免 PR 堆積</strong>：</p>
-<ul>
-<li>PR 長時間未處理會導致難以合併，建議每週安排一次 PR 日，集中討論和處理 PR。</li>
-</ul>
-</li>
+<li><strong>讀取目的 IP 地址</strong>：它會查看資料包「信封」上的目的地。</li>
+<li><strong>查詢路由表 (Routing Table)</strong>：路由器內部有一個記錄了已知路徑的「地圖冊」或「導航資料庫」。</li>
+<li><strong>決定最佳路徑</strong>：根據路由表中的資訊，路由器決定將資料包轉發到哪一個「下一個跳 (Next Hop)」，也就是資料包旅行的下一個中轉站（通常是另一台路由器），直到資料包抵達最終的目的地網路。</li>
 </ol>
+<p>所以，路由的目標就是確保資料包總能找到一個有效且通常是「最佳」的路徑，從一個網路發送到另一個網路。</p>
 <hr />
-<h1 id="保持-git-圖表清晰的建議"><a class="markdownIt-Anchor" href="#保持-git-圖表清晰的建議"></a> 保持 Git 圖表清晰的建議</h1>
+<h1 id="路由器的核心路由表-routing-table"><a class="markdownIt-Anchor" href="#路由器的核心路由表-routing-table"></a> 路由器的核心：路由表 (Routing Table)</h1>
+<p>路由表是路由器的「大腦」，儲存了用於轉發資料包的關鍵資訊。每個表項通常包含以下內容：</p>
+<ul>
+<li><strong>目的地網路 (Destination Network)</strong>：資料包要前往的目標網路地址。</li>
+<li><strong>下一個跳 (Next Hop)</strong>：資料包應該發送到的下一個路由器或設備的 IP 地址。</li>
+<li><strong>出站介面 (Outgoing Interface)</strong>：資料包應該從路由器哪個接口發送出去。</li>
+<li><strong>度量值 (Metric)</strong>：衡量到達目的地網路的「成本」或「距離」。這個值越小，通常表示路徑越好。度量值可以基於跳數 (Hop Count)、頻寬 (Bandwidth)、延遲 (Delay) 等因素。</li>
+</ul>
+<p>當路由器收到一個資料包，它會：</p>
 <ol>
-<li>
-<p><strong>優先使用 <code>git rebase</code></strong>：</p>
-<ul>
-<li>在執行 <code>git fetch</code> 後，盡量使用 <code>rebase</code> 而非 <code>merge</code>，避免提交歷史過於複雜。</li>
-</ul>
-</li>
-<li>
-<p><strong>避免強制推送到共享分支</strong>：</p>
-<ul>
-<li><code>git push origin main --force</code> 應謹慎使用，尤其是在共享分支上。</li>
-<li>如果需要整理自己的分支，可以在個人分支上使用 <code>--force</code>。</li>
-</ul>
-</li>
+<li>從資料包標頭中提取目的 IP 地址。</li>
+<li>在路由表中查找與目的 IP 地址最匹配的「目的地網路」條目。</li>
+<li>根據找到的條目，將資料包轉發到指定的「下一個跳」IP 地址，並從「出站介面」發送出去。</li>
 </ol>
+<p>這個過程不斷重複，資料包在「跳 (Hop)」之間傳遞，直到到達目的地網路。</p>
 <hr />
-<h1 id="常見操作範例"><a class="markdownIt-Anchor" href="#常見操作範例"></a> 常見操作範例</h1>
-<h2 id="建立新分支並推送"><a class="markdownIt-Anchor" href="#建立新分支並推送"></a> 建立新分支並推送</h2>
-<pre class="highlight"><code class="bash">git branch issues/705
-git push origin issues/705
-</code></pre>
+<h1 id="路由的兩種主要方式靜態與動態"><a class="markdownIt-Anchor" href="#路由的兩種主要方式靜態與動態"></a> 路由的兩種主要方式：靜態與動態</h1>
+<p>路由策略可以分為兩大類，它們各有優缺點，適用於不同的網路環境：</p>
+<h2 id="1-靜態路由-static-routing"><a class="markdownIt-Anchor" href="#1-靜態路由-static-routing"></a> 1. 靜態路由 (Static Routing)</h2>
 <ul>
-<li><strong>效果</strong>：建立一個名為 <code>issues/705</code> 的分支，並推送到遠端。</li>
-</ul>
-<h2 id="發起-pr-並進行-code-review"><a class="markdownIt-Anchor" href="#發起-pr-並進行-code-review"></a> 發起 PR 並進行 Code Review</h2>
-<ol>
-<li>在遠端倉庫中發起 PR，請求其他成員進行代碼審查。</li>
-<li>通過審查後，合併到主分支。</li>
-</ol>
-<hr />
-<h1 id="面試中的-git-技巧"><a class="markdownIt-Anchor" href="#面試中的-git-技巧"></a> 面試中的 Git 技巧</h1>
-<p>在面試中，展示你對 Git 的理解和實踐經驗非常重要。例如：</p>
+<li><strong>定義</strong>：由網路管理員<strong>手動配置</strong>到路由表中的路由條目。路由器不會自動學習或更新這些路由。</li>
+<li><strong>優點</strong>：
 <ul>
-<li><strong>參與 Code Review</strong>：
-<ul>
-<li>即使某功能不是你開發的，可以提到在 PR 中進行過代碼審查，並了解該功能的實現細節。</li>
+<li><strong>簡單易部署</strong>：對於小型或拓撲較穩定的網路來說，配置簡單。</li>
+<li><strong>高安全性</strong>：由於路由是手動指定，沒有路由協定流量，不易被惡意偵聽或攻擊。</li>
+<li><strong>資源消耗低</strong>：不執行複雜的路由演算法，對 CPU 和記憶體要求較低。</li>
 </ul>
 </li>
-<li><strong>版本控制的實踐</strong>：
+<li><strong>缺點</strong>：
 <ul>
-<li>提到如何使用 <code>rebase</code> 保持提交歷史清晰，或如何處理衝突。</li>
+<li><strong>不易擴展</strong>：隨著網路規模擴大，手動配置變得非常複雜且容易出錯。</li>
+<li><strong>無容錯能力</strong>：如果網路拓撲發生變化（例如某條鏈路斷開），靜態路由不會自動調整，需要管理員手動修改，導致網路中斷。</li>
+<li><strong>維護成本高</strong>：變更或修改路由需要人工干預。</li>
 </ul>
 </li>
+<li><strong>比喻</strong>：就像手裡拿著一份<strong>固定不變的紙本地圖</strong>。知道從 A 到 B 走哪條路，但如果那條路發生塌方，會不知道如何改道。</li>
+</ul>
+<h2 id="2-動態路由-dynamic-routing"><a class="markdownIt-Anchor" href="#2-動態路由-dynamic-routing"></a> 2. 動態路由 (Dynamic Routing)</h2>
+<ul>
+<li><strong>定義</strong>：路由器之間運行特定的<strong>路由協定 (Routing Protocols)</strong>，自動交換路由資訊，學習並實時更新路由表。</li>
+<li><strong>優點</strong>：
+<ul>
+<li><strong>高擴展性</strong>：適合大型複雜網路，路由器會自動建立和維護路由表。</li>
+<li><strong>高容錯能力</strong>：當網路拓撲發生變化時，路由協定會自動學習新的路徑，並收斂到一個新的穩定狀態，提供自動備援。</li>
+<li><strong>低維護成本</strong>：減少了管理員手動配置和更新路由的工作量。</li>
+</ul>
+</li>
+<li><strong>缺點</strong>：
+<ul>
+<li><strong>配置較複雜</strong>：需要對路由協定有深入理解。</li>
+<li><strong>資源消耗高</strong>：路由器需要額外的 CPU 和記憶體來運行路由演算法和交換路由更新資訊。</li>
+<li><strong>安全性挑戰</strong>：路由更新資訊可能被惡意攔截或篡改，需要額外的安全措施。</li>
+</ul>
+</li>
+<li><strong>比喻</strong>：就像使用<strong>實時更新的 GPS 導航系統</strong>。它會根據即時路況（網路狀態）自動為你規劃最佳路徑，甚至在遇到堵車或封路時為你重新導航。</li>
+</ul>
+<p>常見的動態路由協定包括：</p>
+<ul>
+<li><strong>內部閘道協定 (IGP - Interior Gateway Protocols)</strong>：用於單一「自治系統 (Autonomous System, AS)」內部，例如 <strong>OSPF</strong> (Open Shortest Path First)、<strong>EIGRP</strong> (Enhanced Interior Gateway Routing Protocol)、<strong>RIP</strong> (Routing Information Protocol)。</li>
+<li><strong>外部閘道協定 (EGP - Exterior Gateway Protocols)</strong>：用於連接不同的自治系統之間，也就是構成整個網際網路骨幹的協定，最著名的是 <strong>BGP</strong> (Border Gateway Protocol)。</li>
 </ul>
 <hr />
-<p>這篇文章介紹了 Git 本機與遠端操作的常見場景和實踐，適合用於團隊協作和個人開發的日常工作中。</p>
+<h1 id="路由-routing-vs-交換-switching別傻傻分不清楚"><a class="markdownIt-Anchor" href="#路由-routing-vs-交換-switching別傻傻分不清楚"></a> 路由 (Routing) vs. 交換 (Switching)：別傻傻分不清楚！</h1>
+<p>常常有人會把路由跟交換搞混，其實它們功能不同，工作在不同的網路層：</p>
+<ul>
+<li><strong>交換 (Switching)</strong>：主要發生在<strong>資料連結層 (Layer 2)</strong>。交換器 (Switch) 根據 <strong>MAC 地址</strong>在<strong>同一內部網路 (LAN)</strong> 中轉發資料幀。它知道哪個設備連接到哪個接口。</li>
+<li><strong>路由 (Routing)</strong>：主要發生在<strong>網路層 (Layer 3)</strong>。路由器 (Router) 根據 <strong>IP 地址</strong>在<strong>不同網路 (Inter-network)</strong> 之間轉發資料包。它知道如何跨網路找到路徑。</li>
+</ul>
+<p>簡單來說：<strong>交換器是在一棟大樓內找房間，路由器是在不同城市之間找地址。</strong></p>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>路由，作為網際網路的核心機制，是確保資料包能從世界上任何一個角落，精準地找到並抵達另一個角落的關鍵。正是透過路由器不斷優化和更新路由表，電郵、網頁瀏覽、視訊通話才能暢通無阻地進行。</p>
 
     </div>
 
@@ -720,22 +674,18 @@ git push origin issues/705
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/my-blog/tags/Git/" rel="tag"># Git</a>
-              <a href="/my-blog/tags/Version-Control/" rel="tag"># Version Control</a>
+              <a href="/my-blog/tags/Networking/" rel="tag"># Networking</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/my-blog/2025/05/02/%E5%9C%98%E9%9A%8A%E5%B0%88%E6%A1%88%E4%BB%BB%E5%8B%99%E7%AE%A1%E7%90%86%E8%88%87%E5%9F%B7%E8%A1%8C%E6%B5%81%E7%A8%8B/" rel="prev" title="團隊專案任務管理與執行流程">
-                  <i class="fa fa-angle-left"></i> 團隊專案任務管理與執行流程
+                <a href="/my-blog/2025/08/28/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20IP%20%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E7%9A%84%E5%9C%B0%E5%9D%80%E8%88%87%E8%BA%AB%E4%BB%BD%E8%AD%89/" rel="prev" title="深入淺出 IP：網路世界的地址與身份證">
+                  <i class="fa fa-angle-left"></i> 深入淺出 IP：網路世界的地址與身份證
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/my-blog/2025/05/05/Supabase%20PostgreSQL%20%E9%81%A0%E7%AB%AF%E8%B3%87%E6%96%99%E5%BA%AB%E5%BB%BA%E7%AB%8B%E8%88%87%E9%80%A3%E6%8E%A5/" rel="next" title="Supabase PostgreSQL 遠端資料庫建立與連接">
-                  Supabase PostgreSQL 遠端資料庫建立與連接 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
