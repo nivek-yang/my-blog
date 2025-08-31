@@ -19,27 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="在我們日常生活中，從預訂一張電影票的 App，到公司內部複雜的 ERP 系統，背後都隱藏著一個共同的起點——系統分析。 可以把系統分析想像成替一座數位建築繪製藍圖的過程。如果沒有這份精準的藍圖，直接動工蓋大樓，後果將不堪設想，同樣的，沒有經過紮實的系統分析就開始寫程式，專案也很可能走向混亂與失敗。 這份「數位藍圖」究竟是如何誕生的呢？讓我們一步步揭開系統分析的神秘面紗，探索其最核心的五大步驟。">
+    <meta name="description" content="隨著對 IP 地址和路由的深入了解，可能已經開始意識到，儘管 IP 地址 是網路世界中每個設備的唯一「身份證」，但 IPv4 地址的數量是有限的。全球有數十億甚至更多的設備需要連接到網際網路，這對於總量約 43 億的 IPv4 地址來說，無疑是杯水車薪。 那麼，現代家庭或辦公室裡，為什麼數十個設備（手機、電腦、平板、智慧家電）都可以同時上網，卻只需要一個「公網 IP」呢？這背後的神奇技術，就是這篇">
 <meta property="og:type" content="article">
-<meta property="og:title" content="解構數位藍圖：系統分析的核心五大步驟">
-<meta property="og:url" content="https://nivek-yang.github.io/2025/07/29/%E7%B3%BB%E7%B5%B1%E5%88%86%E6%9E%90%E7%9A%84%E6%A0%B8%E5%BF%83%E4%BA%94%E5%A4%A7%E6%AD%A5%E9%A9%9F/index.html">
+<meta property="og:title" content="深入淺出 NAT：保護內部網路並應對 IPv4 枯竭的救星">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/08/31/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20NAT%20%E4%BF%9D%E8%AD%B7%E5%85%A7%E9%83%A8%E7%B6%B2%E8%B7%AF%E4%B8%A6%E6%87%89%E5%B0%8D%20IPv4%20%E6%9E%AF%E7%AB%AD%E7%9A%84%E6%95%91%E6%98%9F/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="在我們日常生活中，從預訂一張電影票的 App，到公司內部複雜的 ERP 系統，背後都隱藏著一個共同的起點——系統分析。 可以把系統分析想像成替一座數位建築繪製藍圖的過程。如果沒有這份精準的藍圖，直接動工蓋大樓，後果將不堪設想，同樣的，沒有經過紮實的系統分析就開始寫程式，專案也很可能走向混亂與失敗。 這份「數位藍圖」究竟是如何誕生的呢？讓我們一步步揭開系統分析的神秘面紗，探索其最核心的五大步驟。">
+<meta property="og:description" content="隨著對 IP 地址和路由的深入了解，可能已經開始意識到，儘管 IP 地址 是網路世界中每個設備的唯一「身份證」，但 IPv4 地址的數量是有限的。全球有數十億甚至更多的設備需要連接到網際網路，這對於總量約 43 億的 IPv4 地址來說，無疑是杯水車薪。 那麼，現代家庭或辦公室裡，為什麼數十個設備（手機、電腦、平板、智慧家電）都可以同時上網，卻只需要一個「公網 IP」呢？這背後的神奇技術，就是這篇">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2025-07-28T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-07-29T15:10:32.757Z">
+<meta property="article:published_time" content="2025-08-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-08-31T14:29:43.778Z">
 <meta property="article:author" content="Kaiwii">
-<meta property="article:tag" content="Systems analysis">
+<meta property="article:tag" content="Networking">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://nivek-yang.github.io/2025/07/29/%E7%B3%BB%E7%B5%B1%E5%88%86%E6%9E%90%E7%9A%84%E6%A0%B8%E5%BF%83%E4%BA%94%E5%A4%A7%E6%AD%A5%E9%A9%9F/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/08/31/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20NAT%20%E4%BF%9D%E8%AD%B7%E5%85%A7%E9%83%A8%E7%B6%B2%E8%B7%AF%E4%B8%A6%E6%87%89%E5%B0%8D%20IPv4%20%E6%9E%AF%E7%AB%AD%E7%9A%84%E6%95%91%E6%98%9F/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/07/29/%E7%B3%BB%E7%B5%B1%E5%88%86%E6%9E%90%E7%9A%84%E6%A0%B8%E5%BF%83%E4%BA%94%E5%A4%A7%E6%AD%A5%E9%A9%9F/","path":"2025/07/29/系統分析的核心五大步驟/","title":"解構數位藍圖：系統分析的核心五大步驟"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/08/31/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20NAT%20%E4%BF%9D%E8%AD%B7%E5%85%A7%E9%83%A8%E7%B6%B2%E8%B7%AF%E4%B8%A6%E6%87%89%E5%B0%8D%20IPv4%20%E6%9E%AF%E7%AB%AD%E7%9A%84%E6%95%91%E6%98%9F/","path":"2025/08/31/深入淺出 NAT 保護內部網路並應對 IPv4 枯竭的救星/","title":"深入淺出 NAT：保護內部網路並應對 IPv4 枯竭的救星"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>解構數位藍圖：系統分析的核心五大步驟 | 我的技術部落格</title>
+<title>深入淺出 NAT：保護內部網路並應對 IPv4 枯竭的救星 | 我的技術部落格</title>
   
 
 
@@ -482,7 +482,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F%E4%B8%80%E5%95%8F%E9%A1%8C%E8%AD%98%E5%88%A5%E8%88%87%E5%88%9D%E6%AD%A5%E8%AA%BF%E6%9F%A5-problem-identification-preliminary-investigation"><span class="nav-number">1.</span> <span class="nav-text"> 步驟一：問題識別與初步調查 (Problem Identification &amp; Preliminary Investigation)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F%E4%BA%8C%E5%8F%AF%E8%A1%8C%E6%80%A7%E5%88%86%E6%9E%90-feasibility-analysis"><span class="nav-number">2.</span> <span class="nav-text"> 步驟二：可行性分析 (Feasibility Analysis)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F%E4%B8%89%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E8%88%87%E5%AE%9A%E7%BE%A9-requirements-analysis-definition"><span class="nav-number">3.</span> <span class="nav-text"> 步驟三：需求分析與定義 (Requirements Analysis &amp; Definition)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F%E5%9B%9B%E7%B3%BB%E7%B5%B1%E5%BB%BA%E6%A8%A1-system-modeling"><span class="nav-number">4.</span> <span class="nav-text"> 步驟四：系統建模 (System Modeling)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F%E4%BA%94%E7%B3%BB%E7%B5%B1%E8%A6%8F%E6%A0%BC%E6%9B%B8%E6%92%B0%E5%AF%AB%E8%88%87%E5%AF%A9%E6%9F%A5-specification-review"><span class="nav-number">5.</span> <span class="nav-text"> 步驟五：系統規格書撰寫與審查 (Specification &amp; Review)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">6.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-nat"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是 NAT？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nat-%E7%9A%84%E4%B8%BB%E8%A6%81%E7%9B%AE%E7%9A%84"><span class="nav-number">2.</span> <span class="nav-text"> NAT 的主要目的</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nat-%E7%9A%84%E9%81%8B%E4%BD%9C%E6%96%B9%E5%BC%8F%E4%B8%BB%E8%A6%81%E9%A1%9E%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text"> NAT 的運作方式：主要類型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E9%9D%9C%E6%85%8B-nat-static-nat"><span class="nav-number">3.1.</span> <span class="nav-text"> 1. 靜態 NAT (Static NAT)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8B%95%E6%85%8B-nat-dynamic-nat"><span class="nav-number">3.2.</span> <span class="nav-text"> 2. 動態 NAT (Dynamic NAT)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%9F%A0%E5%9C%B0%E5%9D%80%E8%BD%89%E6%8F%9B-%E7%B6%B2%E8%B7%AF%E5%9C%B0%E5%9D%80%E5%9F%A0%E8%BD%89%E6%8F%9B-pat-nat-overload"><span class="nav-number">3.3.</span> <span class="nav-text"> 3. 埠地址轉換 &#x2F; 網路地址埠轉換 (PAT &#x2F; NAT Overload)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pat-%E7%AF%84%E4%BE%8B"><span class="nav-number">3.3.1.</span> <span class="nav-text"> PAT 範例：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nat-%E7%9A%84%E5%AE%89%E5%85%A8%E6%80%A7%E8%80%83%E9%87%8F%E5%A5%BD%E8%99%95%E8%88%87%E9%99%90%E5%88%B6"><span class="nav-number">4.</span> <span class="nav-text"> NAT 的安全性考量：好處與限制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -530,7 +530,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/29/%E7%B3%BB%E7%B5%B1%E5%88%86%E6%9E%90%E7%9A%84%E6%A0%B8%E5%BF%83%E4%BA%94%E5%A4%A7%E6%AD%A5%E9%A9%9F/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/31/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20NAT%20%E4%BF%9D%E8%AD%B7%E5%85%A7%E9%83%A8%E7%B6%B2%E8%B7%AF%E4%B8%A6%E6%87%89%E5%B0%8D%20IPv4%20%E6%9E%AF%E7%AB%AD%E7%9A%84%E6%95%91%E6%98%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -543,12 +543,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="解構數位藍圖：系統分析的核心五大步驟 | 我的技術部落格">
+      <meta itemprop="name" content="深入淺出 NAT：保護內部網路並應對 IPv4 枯竭的救星 | 我的技術部落格">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          解構數位藍圖：系統分析的核心五大步驟
+          深入淺出 NAT：保護內部網路並應對 IPv4 枯竭的救星
         </h1>
 
         <div class="post-meta-container">
@@ -560,7 +560,7 @@
       <span class="post-meta-item-text">發表於</span>
       
 
-      <time title="創建時間：2025-07-29 00:00:00 / 修改時間：23:10:32" itemprop="dateCreated datePublished" datetime="2025-07-29T00:00:00+08:00">2025-07-29</time>
+      <time title="創建時間：2025-08-31 00:00:00 / 修改時間：22:29:43" itemprop="dateCreated datePublished" datetime="2025-08-31T00:00:00+08:00">2025-08-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -581,79 +581,89 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>在我們日常生活中，從預訂一張電影票的 App，到公司內部複雜的 ERP 系統，背後都隱藏著一個共同的起點——<strong>系統分析</strong>。</p>
-<p>可以把系統分析想像成替一座數位建築繪製藍圖的過程。如果沒有這份精準的藍圖，直接動工蓋大樓，後果將不堪設想，同樣的，沒有經過紮實的系統分析就開始寫程式，專案也很可能走向混亂與失敗。</p>
-<p>這份「數位藍圖」究竟是如何誕生的呢？讓我們一步步揭開系統分析的神秘面紗，探索其最核心的五大步驟。</p>
+    <div class="post-body" itemprop="articleBody"><p>隨著對 IP 地址和路由的深入了解，可能已經開始意識到，儘管 <strong>IP 地址</strong> 是網路世界中每個設備的唯一「身份證」，但 <strong>IPv4 地址的數量是有限的</strong>。全球有數十億甚至更多的設備需要連接到網際網路，這對於總量約 43 億的 IPv4 地址來說，無疑是杯水車薪。</p>
+<p>那麼，現代家庭或辦公室裡，為什麼數十個設備（手機、電腦、平板、智慧家電）都可以同時上網，卻只需要一個「公網 IP」呢？這背後的神奇技術，就是這篇文章要深入探討的「<strong>網路地址轉換</strong>」—— <strong>NAT (Network Address Translation)</strong>。</p>
+<h1 id="什麼是-nat"><a class="markdownIt-Anchor" href="#什麼是-nat"></a> 什麼是 NAT？</h1>
+<p><strong>NAT (Network Address Translation)</strong> 是一種在 IP 封包到達路由器邊界時，透過修改其 IP 地址資訊，使得多個設備可以共用一個公共 IP 地址上網的技術。它主要工作在 <strong>OSI 模型的第三層（網路層）</strong>，或 TCP/IP 模型中的網路層。</p>
+<p>可以將 NAT 想像成一位網路世界的「<strong>翻譯官</strong>」或「<strong>前台接待員</strong>」。</p>
+<ul>
+<li><strong>比喻：公司前台的電話機</strong>
+<ul>
+<li>一家公司對外只有一個總機號碼（<strong>公網 IP</strong>）。</li>
+<li>公司內部有許多分機（<strong>私有 IP</strong>），員工用分機打電話。</li>
+<li>當內部員工打電話給外部時，總機負責將分機號碼「偽裝」成總機號碼打出去。</li>
+<li>當外部電話打進總機，總機會根據之前的紀錄（或指示），將電話轉接到內部特定的分機。</li>
+</ul>
+</li>
+</ul>
+<p>在這個比喻中，<strong>路由器就是總機，公網 IP 是總機號碼，內部電腦的私有 IP 就是分機號碼。</strong></p>
 <hr />
-<h1 id="步驟一問題識別與初步調查-problem-identification-preliminary-investigation"><a class="markdownIt-Anchor" href="#步驟一問題識別與初步調查-problem-identification-preliminary-investigation"></a> 步驟一：問題識別與初步調查 (Problem Identification &amp; Preliminary Investigation)</h1>
-<p>這是整個旅程的起點。在這個階段，我們的首要任務不是思考「解決方案」，而是深刻理解「問題」本身。</p>
-<ul>
-<li><strong>目標：</strong> 確認專案的必要性與基本方向。</li>
-<li><strong>核心活動：</strong>
-<ul>
-<li><strong>訪談利害關係人 (Stakeholders)：</strong> 與提出需求的客戶、未來的使用者、管理層進行溝通，了解他們遇到了什麼困難？期望達到什麼目標？</li>
-<li><strong>定義問題：</strong> 將模糊的抱怨（例如：「我們系統好慢」）轉化為具體的、可衡量的問題（例如：「在尖峰時段，訂單處理時間超過 5 分鐘，導致客戶流失率增加 15%。」）。</li>
-<li><strong>界定範疇 (Scope)：</strong> 畫出專案的邊界。要解決什麼？同樣重要的是，<strong>我們不解決什麼？</strong> 明確的範疇可以防止專案無限擴大，導致失控。</li>
-</ul>
-</li>
-</ul>
-<p>這個階段就像建築師第一次與屋主會面，傾聽他們對未來「家」的夢想與需求，並勘查建地的基本狀況。</p>
-<h1 id="步驟二可行性分析-feasibility-analysis"><a class="markdownIt-Anchor" href="#步驟二可行性分析-feasibility-analysis"></a> 步驟二：可行性分析 (Feasibility Analysis)</h1>
-<p>當我們初步了解問題後，下一步就是評估：「這個專案，我們真的做得起來嗎？」這需要從三個關鍵角度進行理性評估：</p>
-<blockquote>
-<p><strong>這一步是專案的「健康檢查」，確保不是在打造一座空中樓閣。</strong></p>
-</blockquote>
+<h1 id="nat-的主要目的"><a class="markdownIt-Anchor" href="#nat-的主要目的"></a> NAT 的主要目的</h1>
+<p>NAT 的出現，主要解決了以下幾個關鍵問題：</p>
 <ol>
-<li><strong>技術可行性 (Technical Feasibility)：</strong> 以現有的技術、工具和團隊的技能，有能力開發出這個系統嗎？</li>
-<li><strong>經濟可行性 (Economic Feasibility)：</strong> 投入的成本（人力、時間、硬體）是否能被未來的效益（提升效率、增加營收、降低成本）所覆蓋？簡單來說，這筆投資划算嗎？</li>
-<li><strong>操作可行性 (Operational Feasibility)：</strong> 系統完成後，公司或使用者是否有能力、有意願去操作它？它能否順利融入現有的工作流程？</li>
+<li><strong>緩解 IPv4 地址枯竭</strong>：這是最主要的原因。透過讓多個內部設備共用少量的公共 IP 地址，極大地延緩了 IPv4 地址的耗盡速度。</li>
+<li><strong>提升網路安全性</strong>：由於外部網路無法直接看到或存取內部網路設備的私有 IP 地址，這為內部網路提供了一層額外的保護，像是一個「隱形披風」。</li>
+<li><strong>靈活性與簡化網路管理</strong>：當內部網路需要修改 IP 配置時（例如更換 ISP），只需修改路由器的公網 IP，內部私有 IP 配置可以不變，減少了管理複雜性。</li>
 </ol>
-<p>如果任何一項評估結果為「不可行」，就需要回到上一步重新思考問題的定義，或者果斷中止專案，避免更大的損失。</p>
-<h1 id="步驟三需求分析與定義-requirements-analysis-definition"><a class="markdownIt-Anchor" href="#步驟三需求分析與定義-requirements-analysis-definition"></a> 步驟三：需求分析與定義 (Requirements Analysis &amp; Definition)</h1>
-<p>這是系統分析中最核心、也最耗時的環節。要將前兩個步驟收集到的模糊需求，轉化為清晰、完整、無歧義的規格。這份規格將成為後續設計與開發團隊的唯一聖經。</p>
+<hr />
+<h1 id="nat-的運作方式主要類型"><a class="markdownIt-Anchor" href="#nat-的運作方式主要類型"></a> NAT 的運作方式：主要類型</h1>
+<p>根據轉換方式的不同，NAT 主要有三種類型：</p>
+<h2 id="1-靜態-nat-static-nat"><a class="markdownIt-Anchor" href="#1-靜態-nat-static-nat"></a> 1. 靜態 NAT (Static NAT)</h2>
 <ul>
-<li><strong>目標：</strong> 產出一份詳盡的「系統需求規格書 (SRS)」。</li>
-<li><strong>核心活動：</strong>
+<li><strong>定義</strong>：將內部網路的<strong>一個特定私有 IP 地址</strong>，一對一地永久映射到<strong>一個公有 IP 地址</strong>。</li>
+<li><strong>用途</strong>：主要用於讓外部網路能夠存取內部網路中的特定伺服器（例如：Web 伺服器、FTP 伺服器），因為這些伺服器需要一個固定的公共入口。</li>
+<li><strong>優點</strong>：簡單、穩定，外部可直接訪問。</li>
+<li><strong>缺點</strong>：每個內部 IP 都需要一個獨特的公網 IP，無法節省公共 IP 地址，也不提供隱蔽性。</li>
+<li><strong>比喻</strong>：公司為某位高管分配了一個<strong>專屬的直撥號碼</strong>，外部可以直接撥打到他/她的分機，但這個號碼不能給其他人用。</li>
+</ul>
+<h2 id="2-動態-nat-dynamic-nat"><a class="markdownIt-Anchor" href="#2-動態-nat-dynamic-nat"></a> 2. 動態 NAT (Dynamic NAT)</h2>
 <ul>
-<li><strong>需求收集：</strong> 運用訪談、問卷、使用者觀察、腦力激盪等方法，全面挖掘使用者需要系統「做什麼」。</li>
-<li><strong>需求分類：</strong>
+<li><strong>定義</strong>：路由器維護一個可用的公共 IP 地址池 (Pool)。當內部設備需要上網時，路由器會從這個池中<strong>動態地分配一個未被使用的公有 IP 地址</strong>給它，進行一對一映射。</li>
+<li><strong>用途</strong>：主要用於那些需要臨時公網 IP 訪問的內部設備，例如普通員工的電腦。</li>
+<li><strong>優點</strong>：節省了公共 IP 地址，因為公網 IP 可以重複利用（當設備離線時，其分配到的公網 IP 會被釋放回池中）。</li>
+<li><strong>缺點</strong>：仍然受限於公共 IP 地址池的大小，如果內部設備數量超過地址池數量，部分設備將無法獲得公網 IP。</li>
+<li><strong>比喻</strong>：公司有一組<strong>對外公開的客服專線號碼</strong>。當員工需要打外部電話時，系統會自動分配一個當前空閒的客服專線號碼給他/她。</li>
+</ul>
+<h2 id="3-埠地址轉換-網路地址埠轉換-pat-nat-overload"><a class="markdownIt-Anchor" href="#3-埠地址轉換-網路地址埠轉換-pat-nat-overload"></a> 3. 埠地址轉換 / 網路地址埠轉換 (PAT / NAT Overload)</h2>
 <ul>
-<li><strong>功能性需求 (Functional Requirements)：</strong> 系統必須具備的功能。例如：「使用者必須能夠使用電子郵件和密碼登入。」</li>
-<li><strong>非功能性需求 (Non-functional Requirements)：</strong> 系統運行的品質與限制。例如：「網頁回應時間不得超過 2 秒」、「系統必須能同時支援 1000 人上線」。</li>
+<li><strong>定義</strong>：這是日常生活中最常用、最常見的 NAT 形式。它允許<strong>多個內部私有 IP 地址</strong>，共用<strong>一個單一的公共 IP 地址</strong>來訪問網際網路。它通過為每個連線分配<strong>不同的埠號 (Port Number)</strong> 來區分不同的內部會話。</li>
+<li><strong>用途</strong>：絕大多數家用路由器、小型辦公室網路都使用 PAT。它極大地節省了 IPv4 地址。</li>
+<li><strong>優點</strong>：最大限度地節省公共 IP 地址，一個公網 IP 可以支持數千個內部設備同時上網。</li>
+<li><strong>缺點</strong>：
+<ul>
+<li><strong>無法直接從外部主動連接內部設備</strong>：因為外部設備只看到路由器的公網 IP 和埠號，不知道對應哪個內部設備。除非透過「埠轉發 (Port Forwarding)」或「DMZ 主機」進行特殊配置。</li>
+<li><strong>對某些應用程式可能產生兼容性問題</strong>：尤其是一些對 IP 和埠號有嚴格要求的舊應用程式。</li>
 </ul>
 </li>
-<li><strong>需求驗證：</strong> 與利害關係人再次確認，確保理解的需求與他們的期望完全一致。</li>
+<li><strong>比喻</strong>：公司對外只有<strong>一個總機號碼</strong>。當內部員工打電話給外部時，總機會在撥出的號碼後面加上一個<strong>分機號碼</strong>（埠號）來標示是哪個員工打的。外部電話回撥到總機時，總機就知道要轉接給哪個分機。</li>
+</ul>
+<h3 id="pat-範例"><a class="markdownIt-Anchor" href="#pat-範例"></a> <strong>PAT 範例：</strong></h3>
+<p>想像一下，家庭路由器只有一個公網 IP：<code>203.0.113.10</code></p>
+<ol>
+<li>你的電腦 (<code>192.168.1.100</code>) 訪問 Google 網站 (假設目的埠 <code>80</code>)。
+<ul>
+<li>路由器會記錄：內部 <code>192.168.1.100:12345</code> -&gt; 外部 <code>203.0.113.10:50000</code> (這裡的 12345 和 50000 都是源埠號，50000 是路由器為此次連接分配的唯一埠)</li>
 </ul>
 </li>
-</ul>
-<p>這個階段，建築師會畫出詳細的平面圖，標明每個房間的大小、功能、門窗位置，並與屋主反覆確認，直到每個細節都符合期待。</p>
-<h1 id="步驟四系統建模-system-modeling"><a class="markdownIt-Anchor" href="#步驟四系統建模-system-modeling"></a> 步驟四：系統建模 (System Modeling)</h1>
-<p>文字描述往往存在模糊空間，為了更精準地表達系統的結構與行為，會使用圖形化的模型來輔助說明。這就是「建模」。</p>
+<li>你的手機 (<code>192.168.1.101</code>) 同時訪問 Facebook 網站 (假設目的埠 <code>80</code>)。
 <ul>
-<li><strong>目標：</strong> 將抽象的需求轉化為視覺化的、結構化的模型。</li>
-<li><strong>常用模型工具：</strong>
-<ul>
-<li><strong>使用案例圖 (Use Case Diagram)：</strong> 描述使用者（Actor）如何與系統互動以完成特定目標。</li>
-<li><strong>資料流程圖 (Data Flow Diagram, DFD)：</strong> 描繪資料在系統中的流動、處理與儲存過程。</li>
-<li><strong>實體關係圖 (Entity-Relationship Diagram, ERD)：</strong> 展現系統需要儲存的資料（實體）以及它們之間的關聯。</li>
-<li><strong>活動圖 (Activity Diagram) / 循序圖 (Sequence Diagram)：</strong> 表現特定業務流程的步驟或物件之間的互動順序。</li>
+<li>路由器會記錄：內部 <code>192.168.1.101:54321</code> -&gt; 外部 <code>203.0.113.10:50001</code> (又分配了一個不同的埠)</li>
 </ul>
 </li>
-</ul>
-<p>這些圖表就是藍圖中的結構圖、水電管線圖和立面圖。它們讓開發團隊能從不同視角清楚地理解系統的內部運作邏輯。</p>
-<h1 id="步驟五系統規格書撰寫與審查-specification-review"><a class="markdownIt-Anchor" href="#步驟五系統規格書撰寫與審查-specification-review"></a> 步驟五：系統規格書撰寫與審查 (Specification &amp; Review)</h1>
-<p>最後，將前面所有步驟的成果——問題定義、可行性分析、需求列表、系統模型——全部彙整成一份正式的、結構化的文件，這就是**「系統規格書 (System Specification)」**。</p>
-<p>這份文件是系統分析階段的最終產出，也是連結「分析」與「設計」兩個階段的關鍵橋樑。它將交付給：</p>
+</ol>
+<p>當 Google 或 Facebook 的伺服器回應資料時，它們將資料發送到 <code>203.0.113.10</code> 和路由器為其分配的特定埠（例如 <code>50000</code> 或 <code>50001</code>）。路由器收到後，查詢其 NAT 表，就能準確地將回應轉發回你的電腦或手機。</p>
+<hr />
+<h1 id="nat-的安全性考量好處與限制"><a class="markdownIt-Anchor" href="#nat-的安全性考量好處與限制"></a> NAT 的安全性考量：好處與限制</h1>
+<p>NAT 在提供地址隱蔽性的同時，也帶來了一些安全上的特性：</p>
 <ul>
-<li><strong>專案經理：</strong> 用於規劃時程與資源。</li>
-<li><strong>系統設計師/架構師：</strong> 作為架構設計的依據。</li>
-<li><strong>開發工程師：</strong> 了解功能細節。</li>
-<li><strong>測試工程師：</strong> 編寫測試案例的基礎。</li>
+<li><strong>隱藏內部拓撲</strong>：外部攻擊者無法直接掃描內部網路的 IP 地址，提高了匿名性。</li>
+<li><strong>自然的防火牆作用</strong>：由於外部無法主動發起對內部私有 IP 的連線（除非設定特殊規則），NAT 在某種程度上扮演了非狀態防火牆的角色，阻擋了許多未經請求的外部連線。</li>
+<li><strong>「埠轉發 (Port Forwarding)」為突破口</strong>：如果要讓外部主動存取內部伺服器，就需要在路由器上設定「埠轉發」，將特定埠從公網 IP 映射到內部私有 IP 的特定埠。這會打開一個「孔」，需要謹慎配置。</li>
 </ul>
-<p>文件完成後，還需要召開一次正式的審查會議，邀請所有利害關係人共同檢視，確保無誤後簽署確認。一旦確認，這份藍圖就正式定稿，準備交給施工團隊（設計與開發人員）動工了！</p>
+<hr />
 <h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
-<p>系統分析從來就不只是一門純粹的技術工作，它更是一門<strong>溝通、同理與結構化思考的藝術</strong>。它是一座橋樑，穩固地連結著使用者的真實需求與最終的技術實現。</p>
-<p>下次當使用一個順暢好用的軟體時，不妨想一想，在這背後，一定有一位或一群系統分析師，曾經像偵探一樣細心探詢、像建築師一樣精心規劃，才繪製出那份無可取代的數位藍圖。</p>
+<p>NAT 是一項實用的網路技術，它在解決 IPv4 地址枯竭問題上功不可沒，同時也為我們的內部網路提供了一層隱形的保護。無論是家用的 Wi-Fi 路由器，還是企業級的網路設備，NAT 都扮演著<strong>不可或缺的翻譯官角色</strong>，讓私有網路設備能夠順暢無阻地與網際網路進行溝通。</p>
+<p>理解 NAT 的原理和不同類型，能幫助我們更好地配置和管理自己的網路，並對資料流動有更清晰的認識。</p>
 
     </div>
 
@@ -663,21 +673,18 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/my-blog/tags/Systems-analysis/" rel="tag"># Systems analysis</a>
+              <a href="/my-blog/tags/Networking/" rel="tag"># Networking</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/my-blog/2025/07/27/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E8%AB%87%E8%B2%A0%E8%BC%89%E5%B9%B3%E8%A1%A1%20Load%20Balancer/" rel="prev" title="揭開流量的神秘面紗：深入淺出談負載平衡 (Load Balancer)">
-                  <i class="fa fa-angle-left"></i> 揭開流量的神秘面紗：深入淺出談負載平衡 (Load Balancer)
+                <a href="/my-blog/2025/08/29/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E8%B7%AF%E7%94%B1%20Routing%20%E8%B3%87%E6%96%99%E5%8C%85%E6%97%85%E8%A1%8C%E7%9A%84%E8%B7%AF%E5%BE%91%E8%A6%8F%E5%8A%83%E5%B8%AB/" rel="prev" title="深入淺出路由 (Routing)：資料包旅行的路徑規劃師，如何在茫茫網路中指引方向？">
+                  <i class="fa fa-angle-left"></i> 深入淺出路由 (Routing)：資料包旅行的路徑規劃師，如何在茫茫網路中指引方向？
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/my-blog/2025/07/30/%E6%8F%AD%E7%A7%98%E5%89%8D%E7%AB%AF%E6%B8%B2%E6%9F%93%20CSR%20SSR%20SSG%20%E5%85%A8%E6%96%B9%E4%BD%8D%E8%A7%A3%E6%9E%90%E8%88%87%E5%AF%A6%E6%88%B0%E6%8C%87%E5%8D%97/" rel="next" title="揭秘前端渲染：CSR、SSR、SSG 全方位解析與實戰指南">
-                  揭秘前端渲染：CSR、SSR、SSG 全方位解析與實戰指南 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
