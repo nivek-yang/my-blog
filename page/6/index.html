@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">75</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">76</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">49</span></a>
       <ul class="sub-menu">
   
@@ -302,7 +302,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Networking/">
         Networking
-        <span class="post-count">(7)</span>
+        <span class="post-count">(8)</span>
       </a>
     </li>
   
@@ -492,7 +492,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">75</span>
+          <span class="site-state-item-count">76</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -517,6 +517,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/05/%E7%94%A8Ruff%E6%89%93%E9%80%A0%E8%87%AA%E5%8B%95%E5%8C%96Python%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%88%87%E9%9D%9C%E6%85%8B%E6%AA%A2%E6%9F%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/07/05/%E7%94%A8Ruff%E6%89%93%E9%80%A0%E8%87%AA%E5%8B%95%E5%8C%96Python%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%88%87%E9%9D%9C%E6%85%8B%E6%AA%A2%E6%9F%A5/" class="post-title-link" itemprop="url">
+              用 Ruff 打造自動化 Python 格式化與靜態檢查（VS Code 實戰）
+            </a>
+            <a href="/my-blog/2025/07/05/%E7%94%A8Ruff%E6%89%93%E9%80%A0%E8%87%AA%E5%8B%95%E5%8C%96Python%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%88%87%E9%9D%9C%E6%85%8B%E6%AA%A2%E6%9F%A5/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-07-05 00:00:00 / 修改時間：23:36:44" itemprop="dateCreated datePublished" datetime="2025-07-05T00:00:00+08:00">2025-07-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">在現代 Python 專案中，維持一致的程式碼風格與自動排版已成為團隊協作的基本需求。Ruff 是一套超快速、全方位的 Python linter 與 formatter，能同時做到靜態檢查、import 排序與自動格式化。 本文將介紹 Ruff 的安裝、基本設定與常見用法，以及如何在 VS Code 開發環境下，讓 Ruff 在每次儲存檔案時自動執行，確保團隊程式碼品質一致。 Ruff 是什麼？ Ruff 是用 Rust 開發的 Python 靜態分析工具，主打「快」與「多合一」： Linter：檢查語法錯誤、潛在 bug、PEP8 風格等 Formatter：自動排版、統一引號、行寬等 Import 排序：自動整理 import 順序 如何安裝 Ruff 可以直接用 pip 安裝： pip install ruff 如果專案有 pyproject.toml，也可以直接在 dev dependencies 加入： [dependency-groups] dev = [ &quot;ruff&gt;=0.12.0&quot;, ] 設定 Ruff：pyproject.toml Ruff 支援在 pyproject.toml 設定，常見設定如下： [tool.ruff] select = [&quot;E&quot;, &quot;F&quot;, &quot;I&quot;] # 啟用基本錯誤檢查與 import 排序 exclude = [&quot;venv&quot;, &quot;.venv&quot;, &quot;__pycache__&quot;, &quot;migrations&quot;] # 排除目錄 line-length = 88 target-version = &quot;py311&quot; fix = true # 預設自動修復違規 [tool.ruff.format] quote-style = &quot;single&quot; # 統一用單引號 line-ending = &quot;lf&quot; # 換行符號 [tool.ruff.isort] combine-as-imports = true # 排序 import 時合併 as 語法 VS Code 設定：儲存時自動執行 Ruff 安裝 Python 與 Ruff 擴充套件 安裝 Python extension for VS Code 安裝 Ruff extension for VS Code 編輯 .vscode/settings.json 在專案根目錄建立或編輯 .vscode/settings.json，加入： &#123; &quot;python.formatting.provider&quot;: &quot;ruff&quot;, &quot;editor.formatOnSave&quot;: true, &quot;ruff.enable&quot;: true, &quot;ruff.formatOnSave&quot;: true, &quot;python.linting.enabled&quot;: true, &quot;python.linting.ruffEnabled&quot;: true &#125; 若同時有安裝 black/autopep8/yapf，請確保 python.formatting.provider 設為 &quot;ruff&quot;。 實際效果 每次儲存 Python 檔案時，Ruff 會自動格式化、排序 import、修正違規 所有格式與靜態檢查規則都依 pyproject.toml 設定 團隊協作時，程式碼風格一致，減少 review friction 常用指令 自動格式化所有 Python 檔案 ruff format . 檢查並自動修正違規 ruff check . --fix 只檢查，不修正 ruff check . 結論 Ruff 結合 VS Code 的自動化設定，能大幅提升 Python 專案的開發效率與品質。 只要簡單設定，從此不再為格式與 import 排序煩惱！</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/07/05/%E7%94%A8Ruff%E6%89%93%E9%80%A0%E8%87%AA%E5%8B%95%E5%8C%96Python%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%88%87%E9%9D%9C%E6%85%8B%E6%AA%A2%E6%9F%A5/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1293,92 +1379,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/04/30/Django%20messages/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/29/HTMX%E5%92%8CDjango%E5%AF%A6%E7%8F%BE%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E8%88%87%E5%BE%8C%E7%AB%AF%E6%B8%B2%E6%9F%93/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/04/29/HTMX%E5%92%8CDjango%E5%AF%A6%E7%8F%BE%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E8%88%87%E5%BE%8C%E7%AB%AF%E6%B8%B2%E6%9F%93/" class="post-title-link" itemprop="url">
-              HTMX 與 Django 實現局部更新與後端渲染
-            </a>
-            <a href="/my-blog/2025/04/29/HTMX%E5%92%8CDjango%E5%AF%A6%E7%8F%BE%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E8%88%87%E5%BE%8C%E7%AB%AF%E6%B8%B2%E6%9F%93/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-04-29 00:00:00 / 修改時間：23:00:19" itemprop="dateCreated datePublished" datetime="2025-04-29T00:00:00+08:00">2025-04-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">功能概述 此功能實現了一個按讚（收藏）按鈕，使用者可以對特定的項目（如面試記錄）進行按讚或取消按讚操作。按鈕的狀態（已收藏或收藏）由後端決定，並通過 HTMX 局部更新頁面。 技術細節 1. 前端模板設計 favorite.html 這個模板負責渲染按讚按鈕，按鈕的狀態根據使用者是否已經按讚來決定。 &#123;% if user in interview.favorited_by.all %&#125; 已收藏 &#123;% else %&#125; 收藏 &#123;% endif %&#125; hx-post: 當按鈕被點擊時，發送一個 POST 請求到指定的 URL。 hx-swap=&quot;outerHTML&quot;: 指定 HTMX 替換整個按鈕的 HTML，而不僅僅是按鈕內的內容。 按鈕狀態: 使用 Django 模板語法 `</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/04/29/HTMX%E5%92%8CDjango%E5%AF%A6%E7%8F%BE%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E8%88%87%E5%BE%8C%E7%AB%AF%E6%B8%B2%E6%9F%93/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>

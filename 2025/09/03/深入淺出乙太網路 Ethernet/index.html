@@ -19,27 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="這篇筆記說明如何用 Git Subtree 設計一個在 GitHub 上「可重複練習、集中管理」的多分支專案架構，並透過 Makefile 實現自動化整合。  核心目標是：  從 template 分支快速建立開發練習分支，讓每次開發練習都從一致的起點開始 每個開發分支獨立開發、保有完整 commit 紀錄 最終成果自動整合到 master 分支的子資料夾，方便集中展示與維運管理  這樣的流程設">
+    <meta name="description" content="在先前的文章，了解了 IP 地址如何進行全球定位，MAC 地址如何作為設備的實體身份，以及 ARP 如何在兩者之間建立橋樑。這些高層次的邏輯和地址解析機制，最終都需要依託於一個實際的物理傳輸介質和規則，才能讓資料真正「動起來」。 這個底層的驅動力，就是這篇文章的主角——乙太網路 (Ethernet)。它不僅是當今全球最普及的區域網路 (LAN) 技術，更是連接世界的重要管道，從家用路由器到大型企業">
 <meta property="og:type" content="article">
-<meta property="og:title" content="基於 Git Subtree 的多分支專案管理與自動化整合">
-<meta property="og:url" content="https://nivek-yang.github.io/2025/04/27/%E5%9F%BA%E6%96%BC%20Git%20Subtree%20%E7%9A%84%E5%A4%9A%E5%88%86%E6%94%AF%E5%B0%88%E6%A1%88%E7%AE%A1%E7%90%86%E8%88%87%E8%87%AA%E5%8B%95%E5%8C%96%E6%95%B4%E5%90%88/index.html">
+<meta property="og:title" content="深入淺出乙太網路 (Ethernet)">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/09/03/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E4%B9%99%E5%A4%AA%E7%B6%B2%E8%B7%AF%20Ethernet/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="這篇筆記說明如何用 Git Subtree 設計一個在 GitHub 上「可重複練習、集中管理」的多分支專案架構，並透過 Makefile 實現自動化整合。  核心目標是：  從 template 分支快速建立開發練習分支，讓每次開發練習都從一致的起點開始 每個開發分支獨立開發、保有完整 commit 紀錄 最終成果自動整合到 master 分支的子資料夾，方便集中展示與維運管理  這樣的流程設">
+<meta property="og:description" content="在先前的文章，了解了 IP 地址如何進行全球定位，MAC 地址如何作為設備的實體身份，以及 ARP 如何在兩者之間建立橋樑。這些高層次的邏輯和地址解析機制，最終都需要依託於一個實際的物理傳輸介質和規則，才能讓資料真正「動起來」。 這個底層的驅動力，就是這篇文章的主角——乙太網路 (Ethernet)。它不僅是當今全球最普及的區域網路 (LAN) 技術，更是連接世界的重要管道，從家用路由器到大型企業">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2025-04-26T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-04-27T16:21:02.817Z">
+<meta property="article:published_time" content="2025-09-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-09-03T15:20:02.247Z">
 <meta property="article:author" content="Kaiwii">
-<meta property="article:tag" content="Git">
+<meta property="article:tag" content="Networking">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://nivek-yang.github.io/2025/04/27/%E5%9F%BA%E6%96%BC%20Git%20Subtree%20%E7%9A%84%E5%A4%9A%E5%88%86%E6%94%AF%E5%B0%88%E6%A1%88%E7%AE%A1%E7%90%86%E8%88%87%E8%87%AA%E5%8B%95%E5%8C%96%E6%95%B4%E5%90%88/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/09/03/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E4%B9%99%E5%A4%AA%E7%B6%B2%E8%B7%AF%20Ethernet/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/04/27/%E5%9F%BA%E6%96%BC%20Git%20Subtree%20%E7%9A%84%E5%A4%9A%E5%88%86%E6%94%AF%E5%B0%88%E6%A1%88%E7%AE%A1%E7%90%86%E8%88%87%E8%87%AA%E5%8B%95%E5%8C%96%E6%95%B4%E5%90%88/","path":"2025/04/27/基於 Git Subtree 的多分支專案管理與自動化整合/","title":"基於 Git Subtree 的多分支專案管理與自動化整合"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/09/03/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E4%B9%99%E5%A4%AA%E7%B6%B2%E8%B7%AF%20Ethernet/","path":"2025/09/03/深入淺出乙太網路 Ethernet/","title":"深入淺出乙太網路 (Ethernet)"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>基於 Git Subtree 的多分支專案管理與自動化整合 | 我的技術部落格</title>
+<title>深入淺出乙太網路 (Ethernet) | 我的技術部落格</title>
   
 
 
@@ -482,7 +482,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B-template-%E5%88%86%E6%94%AF"><span class="nav-number">1.</span> <span class="nav-text"> 🧱 建立 template 分支</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%EF%B8%8F-%E6%9B%B4%E6%94%B9%E9%A0%90%E8%A8%AD%E5%88%86%E6%94%AFgithub-%E6%93%8D%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text"> ⚙️ 更改預設分支（GitHub 操作）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%EF%B8%8F-%E5%88%AA%E9%99%A4-master-%E4%B8%A6%E9%87%8D%E5%BB%BA"><span class="nav-number">3.</span> <span class="nav-text"> 🗑️ 刪除 master 並重建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8-git-subtree-%E5%B0%87%E5%A4%9A%E5%88%86%E6%94%AF%E5%B0%88%E6%A1%88%E6%95%B4%E5%90%88"><span class="nav-number">4.</span> <span class="nav-text"> 用 git subtree 將多分支專案整合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B-makefile-%E8%87%AA%E5%8B%95%E9%81%B7%E7%A7%BB%E8%85%B3%E6%9C%AC"><span class="nav-number">5.</span> <span class="nav-text"> 建立 Makefile 自動遷移腳本</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%B8%E6%AA%94%E7%B7%B4%E7%BF%92%E5%88%86%E6%94%AF%E5%85%A7%E5%AE%B9"><span class="nav-number">6.</span> <span class="nav-text"> 📦 歸檔練習分支內容</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BE%8C%E7%BA%8C%E5%8F%AF%E6%95%B4%E5%90%88-github-actions-%E8%87%AA%E5%8B%95%E5%8C%96%E6%B5%81%E7%A8%8B"><span class="nav-number">7.</span> <span class="nav-text"> 🚀 後續可整合 GitHub Actions 自動化流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E6%9E%9C%E5%B1%95%E7%A4%BA"><span class="nav-number">8.</span> <span class="nav-text"> ✅ 結果展示</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF%E4%B9%99%E5%A4%AA%E7%B6%B2%E8%B7%AF-ethernet"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是乙太網路 (Ethernet)？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B9%99%E5%A4%AA%E7%B6%B2%E8%B7%AF%E5%A6%82%E4%BD%95%E9%81%8B%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text"> 乙太網路如何運作？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B9%99%E5%A4%AA%E7%B6%B2%E8%B7%AF%E5%B9%80-ethernet-frame%E8%B3%87%E6%96%99%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%96%AE%E4%BD%8D"><span class="nav-number">2.1.</span> <span class="nav-text"> 1. 乙太網路幀 (Ethernet Frame)：資料的基本單位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%85%B1%E4%BA%AB%E4%BB%8B%E8%B3%AA%E7%9A%84%E8%A8%AA%E5%95%8F%E6%8E%A7%E5%88%B6csmacd-%E6%AD%B7%E5%8F%B2%E8%88%87%E6%BC%94%E9%80%B2"><span class="nav-number">2.2.</span> <span class="nav-text"> 2. 共享介質的訪問控制：CSMA&#x2F;CD (歷史與演進)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B9%99%E5%A4%AA%E7%B6%B2%E8%B7%AF%E7%9A%84%E7%A8%AE%E9%A1%9E%E8%88%87%E9%80%9F%E5%BA%A6%E7%99%BC%E5%B1%95"><span class="nav-number">3.</span> <span class="nav-text"> 乙太網路的種類與速度發展</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B9%99%E5%A4%AA%E7%B6%B2%E8%B7%AF%E8%88%87-iparp-%E5%A6%82%E4%BD%95%E5%8D%94%E5%90%8C%E9%81%8B%E4%BD%9C"><span class="nav-number">4.</span> <span class="nav-text"> 乙太網路與 IP&#x2F;ARP 如何協同運作？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B9%99%E5%A4%AA%E7%B6%B2%E8%B7%AF%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7%E8%88%87%E5%84%AA%E5%8B%A2"><span class="nav-number">5.</span> <span class="nav-text"> 乙太網路的重要性與優勢</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">6.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -530,7 +530,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/27/%E5%9F%BA%E6%96%BC%20Git%20Subtree%20%E7%9A%84%E5%A4%9A%E5%88%86%E6%94%AF%E5%B0%88%E6%A1%88%E7%AE%A1%E7%90%86%E8%88%87%E8%87%AA%E5%8B%95%E5%8C%96%E6%95%B4%E5%90%88/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/03/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E4%B9%99%E5%A4%AA%E7%B6%B2%E8%B7%AF%20Ethernet/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -543,12 +543,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="基於 Git Subtree 的多分支專案管理與自動化整合 | 我的技術部落格">
+      <meta itemprop="name" content="深入淺出乙太網路 (Ethernet) | 我的技術部落格">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          基於 Git Subtree 的多分支專案管理與自動化整合
+          深入淺出乙太網路 (Ethernet)
         </h1>
 
         <div class="post-meta-container">
@@ -558,15 +558,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">發表於</span>
+      
 
-      <time title="創建時間：2025-04-27 00:00:00" itemprop="dateCreated datePublished" datetime="2025-04-27T00:00:00+08:00">2025-04-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新於</span>
-      <time title="修改時間：2025-04-28 00:21:02" itemprop="dateModified" datetime="2025-04-28T00:21:02+08:00">2025-04-28</time>
+      <time title="創建時間：2025-09-03 00:00:00 / 修改時間：23:20:02" itemprop="dateCreated datePublished" datetime="2025-09-03T00:00:00+08:00">2025-09-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -587,168 +581,110 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><blockquote>
-<p>這篇筆記說明如何用 <code>Git Subtree</code> 設計一個在 GitHub 上「可重複練習、集中管理」的多分支專案架構，並透過 <code>Makefile</code> 實現自動化整合。</p>
-</blockquote>
-<p>核心目標是：</p>
+    <div class="post-body" itemprop="articleBody"><p>在先前的文章，了解了 IP 地址如何進行全球定位，MAC 地址如何作為設備的實體身份，以及 ARP 如何在兩者之間建立橋樑。這些高層次的邏輯和地址解析機制，最終都需要依託於一個<strong>實際的物理傳輸介質和規則</strong>，才能讓資料真正「動起來」。</p>
+<p>這個底層的驅動力，就是這篇文章的主角——<strong>乙太網路 (Ethernet)</strong>。它不僅是當今全球最普及的區域網路 (LAN) 技術，更是連接世界的重要管道，從家用路由器到大型企業資料中心的伺服器，幾乎所有地方都能看到它的身影。</p>
+<h1 id="什麼是乙太網路-ethernet"><a class="markdownIt-Anchor" href="#什麼是乙太網路-ethernet"></a> 什麼是乙太網路 (Ethernet)？</h1>
+<p><strong>乙太網路 (Ethernet)</strong> 是一種用於<strong>區域網路 (Local Area Network, LAN)</strong> 的網路技術規範，它定義了資料在纜線上的傳輸方式、幀的格式，以及如何處理多個設備共享通訊介質時可能發生的衝突。</p>
+<p>可以將乙太網路想像成鋪設在家裡、辦公室或資料中心的一套<strong>高速且標準化的「道路系統」</strong>。在這個系統上，不同類型的「車輛」（資料幀）可以在嚴格的交通規則下高效地運行。</p>
 <ul>
-<li><strong>從 <code>template</code> 分支快速建立開發練習分支</strong>，讓每次開發練習都從一致的起點開始</li>
-<li><strong>每個開發分支獨立開發、保有完整 commit 紀錄</strong></li>
-<li><strong>最終成果自動整合到 <code>master</code> 分支的子資料夾</strong>，方便集中展示與維運管理</li>
-</ul>
-<p>這樣的流程設計有以下優點：</p>
+<li><strong>起源與標準化</strong>：乙太網路最初由 Xerox 公司於 1970 年代開發，隨後由 IEEE (電機電子工程師學會) 進行標準化，成為 <strong>IEEE 802.3 系列標準</strong>。</li>
+<li><strong>工作層次</strong>：乙太網路橫跨 <strong>OSI 模型的兩個最低層</strong>：
 <ul>
-<li>快速複製練習環境，便於反覆練習與教學</li>
-<li>每次練習皆為獨立專案，保留完整開發歷程</li>
-<li>成果集中到 <code>master</code>，只需瀏覽一個分支即可看到所有進度</li>
-<li>可搭配 GitHub Actions 等工具，自動化整合與部署流程</li>
-</ul>
-<hr />
-<h1 id="建立-template-分支"><a class="markdownIt-Anchor" href="#建立-template-分支"></a> 🧱 建立 template 分支</h1>
-<p><code>template</code> 分支是所有練習的起始樣板，可以依照以下兩種方式建立：</p>
-<ol>
-<li><strong>建立初始開發環境</strong>：準備好基礎的資料夾架構、依賴設定檔（例如 <code>package.json</code>、<code>requirements.txt</code>）或共用的 utility function。</li>
-<li><strong>給予練習規格</strong>：可以只放入說明文件、範例輸入/輸出或 TODO 任務，讓想練習的人依據這份規格自行開發。</li>
-</ol>
-<p>建立指令如下：</p>
-<pre class="highlight"><code class="bash"><span class="hljs-comment"># 從 master 建立 template 分支</span>
-git checkout -b template
-
-<span class="hljs-comment"># 推送到遠端</span>
-git push origin template
-</code></pre>
-<hr />
-<h1 id="️-更改預設分支github-操作"><a class="markdownIt-Anchor" href="#️-更改預設分支github-操作"></a> ⚙️ 更改預設分支（GitHub 操作）</h1>
-<ol>
-<li>前往 GitHub Repo 頁面</li>
-<li>點擊「⚙ Settings」</li>
-<li>左側選單中選擇「Branches」</li>
-<li>將 Default branch 改為 <code>template</code></li>
-</ol>
-<p>這個設定是為了能夠先刪除 master 分支並重建，讓 master 存放練習後的成果</p>
-<hr />
-<h1 id="️-刪除-master-並重建"><a class="markdownIt-Anchor" href="#️-刪除-master-並重建"></a> 🗑️ 刪除 master 並重建</h1>
-<p>如果你想讓 <code>master</code> 分支只存放整合後的成果，而非開發內容，可以重新建立一個乾淨的 <code>master</code> 分支：</p>
-<pre class="highlight"><code class="bash"><span class="hljs-comment"># 刪除遠端 master 分支</span>
-git push origin --delete master
-
-<span class="hljs-comment"># 本地切換並建立新的空 master 分支</span>
-git checkout --orphan master
-
-<span class="hljs-comment"># 移除所有檔案（保留工作區）</span>
-git <span class="hljs-built_in">rm</span> -rf .
-
-<span class="hljs-comment"># 建立 .gitignore 和 Makefile</span>
-<span class="hljs-built_in">touch</span> .gitignore Makefile
-
-<span class="hljs-comment"># 提交並推送新的空白 master 分支</span>
-git add .gitignore Makefile
-git commit -m <span class="hljs-string">&quot;Initialize new master branch&quot;</span>
-git push -u origin master
-</code></pre>
-<p>⚠️ <strong>請記得將預設分支從 <code>template</code> 改回 <code>master</code></strong>，以便未來集中展示成果與管理。</p>
-<hr />
-<h1 id="用-git-subtree-將多分支專案整合"><a class="markdownIt-Anchor" href="#用-git-subtree-將多分支專案整合"></a> 用 git subtree 將多分支專案整合</h1>
-<p><code>git subtree</code> 是 Git 提供的工具，允許你將另一個分支的內容匯入到當前分支的某個子資料夾，並保留其完整的 commit 歷史。</p>
-<pre class="highlight"><code class="sh">git subtree add --prefix=&lt;資料夾路徑&gt; &lt;遠端名稱&gt;/&lt;分支名稱&gt;
-</code></pre>
-<p>這條指令的作用是將指定的遠端分支內容匯入到當前分支的某個子資料夾中，並保留該分支的完整 commit 歷史</p>
-<ul>
-<li>
-<p><strong><code>--prefix=&lt;資料夾路徑&gt;</code></strong>：</p>
-<ul>
-<li>指定將分支內容匯入到當前分支的哪個子資料夾。</li>
-<li>如果該資料夾不存在，Git 會自動建立。</li>
-</ul>
-</li>
-<li>
-<p><strong><code>&lt;遠端名稱&gt;/&lt;分支名稱&gt;</code></strong>：</p>
-<ul>
-<li>指定要匯入的遠端分支。</li>
-<li>例如，<code>origin/feature-1</code> 表示從遠端 <code>origin</code> 的 <code>feature-1</code> 分支匯入。</li>
+<li><strong>實體層 (Physical Layer, Layer 1)</strong>：負責定義電氣訊號、傳輸介質（如銅纜、光纖）、連接器（如 RJ45 插頭）以及物理佈線的特性。</li>
+<li><strong>資料連結層 (Data Link Layer, Layer 2)</strong>：負責資料的成幀 (Framing)、錯誤檢測、以及 MAC 地址的尋址。</li>
 </ul>
 </li>
 </ul>
-<p>在本專案中，我們使用 <code>git subtree</code> 的目的包括：</p>
+<hr />
+<h1 id="乙太網路如何運作"><a class="markdownIt-Anchor" href="#乙太網路如何運作"></a> 乙太網路如何運作？</h1>
+<p>乙太網路的運作核心是它如何組織資料並在共享介質上傳輸。</p>
+<h2 id="1-乙太網路幀-ethernet-frame資料的基本單位"><a class="markdownIt-Anchor" href="#1-乙太網路幀-ethernet-frame資料的基本單位"></a> 1. 乙太網路幀 (Ethernet Frame)：資料的基本單位</h2>
+<p>當 IP 資料包從網路層傳遞下來時，在資料連結層會被乙太網路<strong>封裝 (Encapsulate)</strong> 成一個「<strong>乙太網路幀 (Ethernet Frame)</strong>」。這就好比把郵件（IP 資料包）放進一個信封裡（乙太網路幀），並在信封上寫上本地郵局能識別的地址（MAC 地址）。</p>
+<p>一個標準的乙太網路幀包含了以下主要部分：</p>
 <ul>
-<li>將每個練習分支（如 <code>feature_1</code>）的專案內容，<strong>整合匯入到 <code>master</code> 分支的對應子資料夾（如 <code>feature_1/</code>）</strong></li>
-<li>避免用 <code>merge</code> 或 <code>cherry-pick</code> 導致 commit 歷史混亂</li>
-<li>可重複執行，不會影響其他資料夾內容</li>
+<li><strong>目標 MAC 地址 (Destination MAC Address)</strong>：接收方的 Layer 2 物理地址。</li>
+<li><strong>來源 MAC 地址 (Source MAC Address)</strong>：發送方的 Layer 2 物理地址。</li>
+<li><strong>類型/長度 (Type/Length)</strong>：指示幀中承載的是什麼樣的資料（例如 IP 封包、ARP 封包）。</li>
+<li><strong>資料 (Data)</strong>：實際的酬載 (Payload)，也就是 IP 資料包或其他協議的資料。</li>
+<li><strong>幀校驗序列 (Frame Check Sequence, FCS)</strong>：用於檢測傳輸過程中是否發生錯誤。</li>
 </ul>
-<h1 id="建立-makefile-自動遷移腳本"><a class="markdownIt-Anchor" href="#建立-makefile-自動遷移腳本"></a> 建立 Makefile 自動遷移腳本</h1>
-<p>以下是 <code>master</code> 分支根目錄的 <code>Makefile</code> 實作：</p>
-<pre class="highlight"><code class="makefile"><span class="hljs-meta"><span class="hljs-keyword">.PHONY</span>: archive archive-all</span>
-
-<span class="hljs-comment"># 將指定分支內容以 git subtree 匯入對應資料夾，保留完整 commit 紀錄</span>
-<span class="hljs-section">archive:</span>
-<span class="hljs-keyword">ifndef</span> name
-	<span class="hljs-variable">$(<span class="hljs-built_in">error</span> Usage: make archive name=feature-&lt;X&gt;)</span>
-<span class="hljs-keyword">endif</span>
-	@echo <span class="hljs-string">&quot;🌲 Archiving <span class="hljs-variable">$(name)</span> into master:<span class="hljs-variable">$(name)</span>/ using git subtree...&quot;</span>
-
-	<span class="hljs-comment"># 確保在 master 分支</span>
-	@git checkout master
-
-	<span class="hljs-comment"># 檢查有無未提交的變更</span>
-	@if [ -n <span class="hljs-string">&quot;$$\(git status --porcelain)&quot;</span> ]; then \
-		echo <span class="hljs-string">&quot;❌ master branch has uncommitted changes. Please commit or stash first.&quot;</span>; \
-		exit 1; \
-	fi
-
-	<span class="hljs-comment"># 匯入分支內容到對應資料夾（不使用 --squash，可保留所有 commit）</span>
-	@git subtree add --prefix=<span class="hljs-variable">$(name)</span> origin/<span class="hljs-variable">$(name)</span>
-
-	@echo <span class="hljs-string">&quot;✅ Done archiving <span class="hljs-variable">$(name)</span> into master:<span class="hljs-variable">$(name)</span>/&quot;</span>
-
-<span class="hljs-comment"># 批次對所有符合 feature-* 的分支執行 subtree 匯入</span>
-<span class="hljs-section">archive-all:</span>
-	@git fetch origin
-	@git branch -r | grep &#x27;origin/feature_&#x27; | sed &#x27;s|origin/||&#x27; | while read branch; do \
-		<span class="hljs-variable">$(MAKE)</span> archive name=$$branch; \
-	done
-</code></pre>
+<h2 id="2-共享介質的訪問控制csmacd-歷史與演進"><a class="markdownIt-Anchor" href="#2-共享介質的訪問控制csmacd-歷史與演進"></a> 2. 共享介質的訪問控制：CSMA/CD (歷史與演進)</h2>
+<p>在早期的乙太網路（特別是使用<strong>集線器 Hub</strong>）環境中，所有設備都共用同一條通訊介質。為了避免彼此通訊時「打架」，乙太網路使用了一種機制叫做 <strong>CSMA/CD (Carrier Sense Multiple Access with Collision Detection)</strong>：</p>
+<ul>
+<li><strong>載波偵聽 (Carrier Sense)</strong>：設備在發送資料前，會先「聽一聽」線路上是否有其他設備在傳輸資料。如果線路是空的，才開始發送。</li>
+<li><strong>多重存取 (Multiple Access)</strong>：多個設備可以共享同一條通訊介質。</li>
+<li><strong>碰撞偵測 (Collision Detection)</strong>：如果兩個設備幾乎同時發送資料，就會發生「<strong>碰撞 (Collision)</strong>」。設備偵測到碰撞後，會停止發送，等待一段隨機時間後再嘗試發送。</li>
+</ul>
+<p>然而，<strong>這種碰撞機制在現代乙太網路中已較少見</strong>。由於現在大多使用<strong>交換器 (Switch)</strong> 而非集線器：</p>
+<ul>
+<li><strong>交換器</strong>：能為每個連接的設備建立<strong>獨立的微網段 (Microsegmentation)</strong>，使它們可以<strong>全雙工 (Full-Duplex)</strong> 模式通訊（同時發送和接收），<strong>從根本上消除了碰撞</strong>。因此，現代乙太網路幾乎不再依賴 CSMA/CD。</li>
+</ul>
 <hr />
-<h1 id="歸檔練習分支內容"><a class="markdownIt-Anchor" href="#歸檔練習分支內容"></a> 📦 歸檔練習分支內容</h1>
-<p>每完成一個 <code>feature_&lt;n&gt;</code> 分支的專案後，執行：</p>
-<pre class="highlight"><code class="bash">make archive name=feature_&lt;n&gt;
-</code></pre>
-<p>系統會自動將該分支所有檔案以 <code>git subtree</code> 匯入到 <code>master</code> 的 <code>feature_&lt;n&gt;/</code> 資料夾中，<strong>保留完整 commit 歷史</strong>。</p>
-<p>若要一鍵歸檔所有 <code>feature_&lt;n&gt;</code> 分支，可執行：</p>
-<pre class="highlight"><code class="bash">make archive-all
-</code></pre>
+<h1 id="乙太網路的種類與速度發展"><a class="markdownIt-Anchor" href="#乙太網路的種類與速度發展"></a> 乙太網路的種類與速度發展</h1>
+<p>乙太網路歷經數十年發展，從慢速到超高速，從笨重的粗同軸電纜到精巧的光纖，不斷演進。命名方式通常遵循 <code>[速度][基礎頻寬][介質類型]</code>：</p>
+<ul>
+<li><strong>經典乙太網路 (Classic Ethernet)</strong>：
+<ul>
+<li><code>10BASE-T</code> (10 Mbps, 雙絞線)：最早普及的形態，使用 Cat3 或更高的雙絞線。</li>
+</ul>
+</li>
+<li><strong>快速乙太網路 (Fast Ethernet)</strong>：
+<ul>
+<li><code>100BASE-TX</code> (100 Mbps, 雙絞線)：推動了區域網路的速度升級，使用 Cat5e 或更高的雙絞線。</li>
+</ul>
+</li>
+<li><strong>千兆乙太網路 (Gigabit Ethernet)</strong>：
+<ul>
+<li><code>1000BASE-T</code> (1 Gbps, 雙絞線)：目前最常見的家庭和小型辦公室網路標準，使用 Cat5e/Cat6 雙絞線。</li>
+<li><code>1000BASE-SX/LX</code> (1 Gbps, 光纖)：用於較長距離或需要電氣隔離的場合。</li>
+</ul>
+</li>
+<li><strong>萬兆乙太網路 (10 Gigabit Ethernet)</strong>：
+<ul>
+<li><code>10GBASE-T</code> (10 Gbps, 雙絞線)：用於伺服器連接、資料中心骨幹，需要 Cat6a/Cat7 等級的雙絞線。</li>
+<li><code>10GBASE-SR/LR</code> (10 Gbps, 光纖)：資料中心和企業網路的首選。</li>
+</ul>
+</li>
+<li><strong>更高速度的乙太網路</strong>：
+<ul>
+<li><code>25GE</code> (25 Gbps)</li>
+<li><code>40GE</code> (40 Gbps)</li>
+<li><code>100GE</code> (100 Gbps)</li>
+<li>乃至 <code>200GE</code> 和 <code>400GE</code>：在大型資料中心、ISP 骨幹網和高性能計算場景中廣泛應用，主要使用光纖傳輸。</li>
+</ul>
+</li>
+</ul>
+<p>這些不同標準的演進，都維持了乙太網路原有的幀格式和基本工作原理，提供了良好的向下兼容性。</p>
 <hr />
-<h1 id="後續可整合-github-actions-自動化流程"><a class="markdownIt-Anchor" href="#後續可整合-github-actions-自動化流程"></a> 🚀 後續可整合 GitHub Actions 自動化流程</h1>
-<p>未來可以使用 GitHub Actions 自動觸發 <code>make archive name=feature_&lt;n&gt;</code> 指令，將 PR 合併後的分支內容自動歸檔到 <code>master</code> 的對應子資料夾。建議流程如下：</p>
+<h1 id="乙太網路與-iparp-如何協同運作"><a class="markdownIt-Anchor" href="#乙太網路與-iparp-如何協同運作"></a> 乙太網路與 IP/ARP 如何協同運作？</h1>
+<p>乙太網路是網路世界賴以運行的基礎。當瀏覽網頁時，乙太網路扮演著關鍵的「載體」角色：</p>
 <ol>
-<li>當 PR 合併至 <code>feature_&lt;n&gt;</code> 分支時觸發 workflow</li>
-<li>使用 <code>actions/checkout</code> 切換到 <code>master</code> 分支</li>
-<li>使用 <code>git fetch</code> 確保能抓到對應的分支內容</li>
-<li>執行 <code>make archive name=feature_&lt;n&gt;</code> 自動歸檔</li>
-<li>將更新過的 <code>master</code> 分支 push 回遠端</li>
-</ol>
-<p>這樣可以避免手動切換與操作，讓每個練習成果在合併 PR 後自動整理到展示區。你也可以加入條件判斷，只對分支名稱符合 <code>feature_*</code> 格式的情況執行此流程。</p>
-<hr />
-<h1 id="結果展示"><a class="markdownIt-Anchor" href="#結果展示"></a> ✅ 結果展示</h1>
-<pre class="highlight"><code class="">master
-├── .gitignore
-├── Makefile
-├── feature_1/
-│   ├── manage.py
-│   ├── app/
-│   └── ...
-├── feature_2/
-│   └── ...
-└── feature_3/
-    └── ...
-</code></pre>
-<p>這樣的架構讓你可以：</p>
+<li><strong>應用層到傳輸層</strong>：瀏覽器（應用層）產生資料，TCP/UDP（傳輸層）為它加上端口號。</li>
+<li><strong>網路層</strong>：IP（網路層）為資料加上來源和目的 IP 地址，形成 IP 資料包。</li>
+<li><strong>資料連結層 (乙太網路)</strong>：
 <ul>
-<li>保有一份可重複使用的範本分支（template）</li>
-<li>在多個練習分支開發而不互相干擾</li>
-<li>將成果統一集中到 <code>master</code> 展示，方便他人瀏覽</li>
-<li>將 CI/CD、部屬、技術分享等操作聚焦於 <code>master</code> 管理</li>
+<li>如果目的 IP 和來源 IP 在同一個區域網路，發送方會使用 <strong>ARP</strong> 協定來查詢目的 IP 地址對應的 MAC 地址。</li>
+<li>如果目的 IP 在不同區域網路，發送方會把 IP 資料包的目標 MAC 地址設為<strong>預設閘道 (Default Gateway, 通常是路由器)</strong> 的 MAC 地址。</li>
+<li>乙太網路將 IP 資料包包裝成<strong>乙太網路幀</strong>，並在幀頭加上來源和目的 MAC 地址。</li>
 </ul>
-<p>非常適合用於建立個人練習倉庫、技術文章範例、或團隊協作練習環境。</p>
+</li>
+<li><strong>實體層 (乙太網路)</strong>：乙太網路幀被轉換成電氣訊號或光訊號，通過網線或光纖傳輸出去。</li>
+</ol>
+<p>換句話說，IP 負責全局導航，MAC 地址負責局部投遞，而乙太網路就是那個負責鋪設道路、制定交通規則，並承載著這些「信件」（資料幀）精準抵達目的地的<strong>物流系統</strong>。</p>
+<hr />
+<h1 id="乙太網路的重要性與優勢"><a class="markdownIt-Anchor" href="#乙太網路的重要性與優勢"></a> 乙太網路的重要性與優勢</h1>
+<p>乙太網路之所以能夠成為主導性的區域網路技術，得益於其多項顯著優勢：</p>
+<ul>
+<li><strong>通用性與互操作性</strong>：它是全球公認的標準，不同廠商的乙太網路設備之間都能良好互通。</li>
+<li><strong>穩定可靠</strong>：經過數十年的發展和完善，乙太網路技術非常成熟穩定。</li>
+<li><strong>成本效益</strong>：相對於其他網路技術，乙太網路的設備和佈線成本相對較低。</li>
+<li><strong>豐富的生態系統</strong>：從網卡、纜線、交換器到路由，都有非常成熟和廣泛的產品選擇。</li>
+<li><strong>持續發展</strong>：速度和技術不斷演進，以滿足不斷增長的頻寬需求。</li>
+</ul>
+<hr />
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>乙太網路，這個看似基礎卻又無比強大的技術，是我們今天能夠享受高速、可靠網路服務的基石。它不僅定義了資料如何在物理介質上流動，更與 IP、MAC、ARP 等協同合作，共同構築了我們所熟悉的網路世界。</p>
+<p>從家裡連接上網的電腦，到支撐全球雲計算的資料中心，乙太網路都以其卓越的性能和普適性，默默地扮演著連接一切的英雄角色。</p>
 
     </div>
 
@@ -758,21 +694,18 @@ git push -u origin master
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/my-blog/tags/Git/" rel="tag"># Git</a>
+              <a href="/my-blog/tags/Networking/" rel="tag"># Networking</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/my-blog/2025/04/25/Git%20%E6%8C%87%E5%8D%97%EF%BC%9A%E5%BE%9E%E5%9F%BA%E7%A4%8E%E6%93%8D%E4%BD%9C%E5%88%B0%E9%80%B2%E9%9A%8E%E6%8A%80%E5%B7%A7/" rel="prev" title="Git 指南：從基礎操作到進階技巧">
-                  <i class="fa fa-angle-left"></i> Git 指南：從基礎操作到進階技巧
+                <a href="/my-blog/2025/09/02/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20MAC%20Address%20%E8%88%87%20ARP/" rel="prev" title="深入淺出 MAC Address 與 ARP：網路世界裡的「身分證」與「尋人啟事」">
+                  <i class="fa fa-angle-left"></i> 深入淺出 MAC Address 與 ARP：網路世界裡的「身分證」與「尋人啟事」
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/my-blog/2025/04/28/Django%20%E4%BD%BF%E7%94%A8%20%60ManyToMany%60%20%E9%97%9C%E8%81%AF%E6%A8%A1%E5%9E%8B%E8%99%95%E7%90%86%E3%80%8C%E5%8B%95%E6%85%8B%E5%88%87%E6%8F%9B%E6%8C%89%E8%AE%9A%E7%8B%80%E6%85%8B%E3%80%8D/" rel="next" title="Django 使用 &#96;ManyToMany&#96; 關聯模型處理「動態切換按讚狀態」">
-                  Django 使用 `ManyToMany` 關聯模型處理「動態切換按讚狀態」 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
