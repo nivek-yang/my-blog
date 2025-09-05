@@ -19,27 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="在設計一套後端系統時，經常會遇到一個關鍵抉擇：使用同步（synchronous）還是非同步（asynchronous）伺服器模型？ 這個選擇不只是語法風格的不同，更直接影響：  效能與併發能力（Concurrency &amp; Throughput） 系統架構與部署方式 開發難度與維運策略  本文將以實務角度，帶你全面了解兩者的差異、優劣與適用場景。   同步伺服器（Synchronous Se">
+    <meta name="description" content="當打開瀏覽器，輸入網址，或是點擊一個連結時，我們都在無意識地使用著網路上最重要的應用層協定之一——HTTP。然而，隨著網路威脅的日益增長，單純的 HTTP 已經遠遠不足以保護資料安全。這就是為什麼需要它的安全進化版：HTTPS。  HTTP：網路世界的「公開信件」 HTTP，全名為「超文本傳輸協定 (Hypertext Transfer Protocol)」，是網際網路中最廣泛使用的協定，用於在全">
 <meta property="og:type" content="article">
-<meta property="og:title" content="後端同步 vs 非同步伺服器：架構、效能與實務差異解析">
-<meta property="og:url" content="https://nivek-yang.github.io/2025/07/07/%E5%BE%8C%E7%AB%AF%E5%90%8C%E6%AD%A5%E9%9D%9E%E5%90%8C%E6%AD%A5%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E6%A7%8B%E6%95%88%E8%83%BD%E8%88%87%E5%AF%A6%E5%8B%99%E5%B7%AE%E7%95%B0%E8%A7%A3%E6%9E%90/index.html">
+<meta property="og:title" content="HTTP vs. HTTPS：為什麼多一個 &quot;S&quot; 如此重要？">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/09/05/HTTP%20vs%20HTTPS/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="在設計一套後端系統時，經常會遇到一個關鍵抉擇：使用同步（synchronous）還是非同步（asynchronous）伺服器模型？ 這個選擇不只是語法風格的不同，更直接影響：  效能與併發能力（Concurrency &amp; Throughput） 系統架構與部署方式 開發難度與維運策略  本文將以實務角度，帶你全面了解兩者的差異、優劣與適用場景。   同步伺服器（Synchronous Se">
+<meta property="og:description" content="當打開瀏覽器，輸入網址，或是點擊一個連結時，我們都在無意識地使用著網路上最重要的應用層協定之一——HTTP。然而，隨著網路威脅的日益增長，單純的 HTTP 已經遠遠不足以保護資料安全。這就是為什麼需要它的安全進化版：HTTPS。  HTTP：網路世界的「公開信件」 HTTP，全名為「超文本傳輸協定 (Hypertext Transfer Protocol)」，是網際網路中最廣泛使用的協定，用於在全">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2025-07-06T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-07-07T15:07:24.789Z">
+<meta property="article:published_time" content="2025-09-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-09-05T15:24:59.440Z">
 <meta property="article:author" content="Kaiwii">
-<meta property="article:tag" content="Async">
+<meta property="article:tag" content="Networking">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://nivek-yang.github.io/2025/07/07/%E5%BE%8C%E7%AB%AF%E5%90%8C%E6%AD%A5%E9%9D%9E%E5%90%8C%E6%AD%A5%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E6%A7%8B%E6%95%88%E8%83%BD%E8%88%87%E5%AF%A6%E5%8B%99%E5%B7%AE%E7%95%B0%E8%A7%A3%E6%9E%90/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/09/05/HTTP%20vs%20HTTPS/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/07/07/%E5%BE%8C%E7%AB%AF%E5%90%8C%E6%AD%A5%E9%9D%9E%E5%90%8C%E6%AD%A5%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E6%A7%8B%E6%95%88%E8%83%BD%E8%88%87%E5%AF%A6%E5%8B%99%E5%B7%AE%E7%95%B0%E8%A7%A3%E6%9E%90/","path":"2025/07/07/後端同步非同步伺服器架構效能與實務差異解析/","title":"後端同步 vs 非同步伺服器：架構、效能與實務差異解析"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/09/05/HTTP%20vs%20HTTPS/","path":"2025/09/05/HTTP vs HTTPS/","title":"HTTP vs. HTTPS：為什麼多一個 \"S\" 如此重要？"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>後端同步 vs 非同步伺服器：架構、效能與實務差異解析 | 我的技術部落格</title>
+<title>HTTP vs. HTTPS：為什麼多一個 "S" 如此重要？ | 我的技術部落格</title>
   
 
 
@@ -482,7 +482,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E4%BC%BA%E6%9C%8D%E5%99%A8synchronous-server"><span class="nav-number">1.</span> <span class="nav-text"> 同步伺服器（Synchronous Server）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%8B%E4%BD%9C%E6%96%B9%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text"> 運作方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E9%BB%9E"><span class="nav-number">1.2.</span> <span class="nav-text"> 特點</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%9E%E5%90%8C%E6%AD%A5%E4%BC%BA%E6%9C%8D%E5%99%A8asynchronous-server"><span class="nav-number">2.</span> <span class="nav-text"> 非同步伺服器（Asynchronous Server）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%8B%E4%BD%9C%E6%96%B9%E5%BC%8F-2"><span class="nav-number">2.1.</span> <span class="nav-text"> 運作方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E9%BB%9E-2"><span class="nav-number">2.1.1.</span> <span class="nav-text"> 特點</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%84%AA%E7%BC%BA%E9%BB%9E%E6%AF%94%E8%BC%83%E7%B8%BD%E8%A1%A8"><span class="nav-number">3.</span> <span class="nav-text"> 優缺點比較總表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%E5%90%8C%E6%99%82%E8%99%95%E7%90%86-1000-%E5%80%8B%E8%AB%8B%E6%B1%82"><span class="nav-number">4.</span> <span class="nav-text"> 案例分析：同時處理 1000 個請求</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E4%BC%BA%E6%9C%8D%E5%99%A8%E5%A6%82django-gunicorn"><span class="nav-number">4.1.</span> <span class="nav-text"> 同步伺服器（如：Django + Gunicorn）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%9E%E5%90%8C%E6%AD%A5%E4%BC%BA%E6%9C%8D%E5%99%A8%E5%A6%82fastapi-uvicorn"><span class="nav-number">4.2.</span> <span class="nav-text"> 非同步伺服器（如：FastAPI + Uvicorn）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E8%A6%8B%E8%AA%A4%E8%A7%A3%E9%87%90%E6%B8%85"><span class="nav-number">5.</span> <span class="nav-text"> 常見誤解釐清</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%A6%E5%8B%99%E5%BB%BA%E8%AD%B0%E5%93%AA%E6%99%82%E5%80%99%E8%A9%B2%E9%81%B8%E5%93%AA%E5%80%8B"><span class="nav-number">6.</span> <span class="nav-text"> 實務建議：哪時候該選哪個？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">7.</span> <span class="nav-text"> 總結</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#http%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E7%9A%84%E5%85%AC%E9%96%8B%E4%BF%A1%E4%BB%B6"><span class="nav-number">1.</span> <span class="nav-text"> HTTP：網路世界的「公開信件」</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#http-%E7%9A%84%E6%9C%AC%E8%B3%AA%E5%BC%B1%E9%BB%9E%E9%80%8F%E6%98%8E%E7%9A%84%E6%BA%9D%E9%80%9A"><span class="nav-number">1.1.</span> <span class="nav-text"> HTTP 的本質弱點：透明的溝通</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#https%E5%8A%A0%E4%B8%8A%E5%AE%89%E5%85%A8%E9%8E%96%E7%9A%84%E6%BA%9D%E9%80%9A%E6%96%B9%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text"> HTTPS：加上「安全鎖」的溝通方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#https-%E5%A6%82%E4%BD%95%E6%8F%90%E4%BE%9B%E5%AE%89%E5%85%A8%E6%80%A7%E4%B8%89%E5%A4%A7%E6%94%AF%E6%9F%B1"><span class="nav-number">2.1.</span> <span class="nav-text"> HTTPS 如何提供安全性？三大支柱：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#https-%E7%9A%84%E9%81%8B%E4%BD%9C%E6%A9%9F%E5%88%B6%E7%B0%A1%E4%BB%8Bssltls-%E6%8F%A1%E6%89%8B"><span class="nav-number">3.</span> <span class="nav-text"> HTTPS 的運作機制簡介：SSL&#x2F;TLS 握手</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC-https-%E4%B8%8D%E5%86%8D%E6%98%AF%E9%81%B8%E9%A0%85%E8%80%8C%E6%98%AF%E5%BF%85%E9%9C%80"><span class="nav-number">4.</span> <span class="nav-text"> 為什麼 HTTPS 不再是選項，而是必需？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#http-vs-https%E6%A0%B8%E5%BF%83%E5%B7%AE%E7%95%B0%E4%B8%80%E8%A6%BD"><span class="nav-number">5.</span> <span class="nav-text"> HTTP vs. HTTPS：核心差異一覽</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">6.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -530,7 +530,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/07/%E5%BE%8C%E7%AB%AF%E5%90%8C%E6%AD%A5%E9%9D%9E%E5%90%8C%E6%AD%A5%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E6%A7%8B%E6%95%88%E8%83%BD%E8%88%87%E5%AF%A6%E5%8B%99%E5%B7%AE%E7%95%B0%E8%A7%A3%E6%9E%90/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/05/HTTP%20vs%20HTTPS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -543,12 +543,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="後端同步 vs 非同步伺服器：架構、效能與實務差異解析 | 我的技術部落格">
+      <meta itemprop="name" content="HTTP vs. HTTPS：為什麼多一個 &quot;S&quot; 如此重要？ | 我的技術部落格">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          後端同步 vs 非同步伺服器：架構、效能與實務差異解析
+          HTTP vs. HTTPS：為什麼多一個 "S" 如此重要？
         </h1>
 
         <div class="post-meta-container">
@@ -560,7 +560,7 @@
       <span class="post-meta-item-text">發表於</span>
       
 
-      <time title="創建時間：2025-07-07 00:00:00 / 修改時間：23:07:24" itemprop="dateCreated datePublished" datetime="2025-07-07T00:00:00+08:00">2025-07-07</time>
+      <time title="創建時間：2025-09-05 00:00:00 / 修改時間：23:24:59" itemprop="dateCreated datePublished" datetime="2025-09-05T00:00:00+08:00">2025-09-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -581,223 +581,140 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>在設計一套後端系統時，經常會遇到一個關鍵抉擇：<strong>使用同步（synchronous）還是非同步（asynchronous）伺服器模型？</strong><br />
-這個選擇不只是語法風格的不同，更直接影響：</p>
+    <div class="post-body" itemprop="articleBody"><p>當打開瀏覽器，輸入網址，或是點擊一個連結時，我們都在無意識地使用著網路上最重要的應用層協定之一——<strong>HTTP</strong>。然而，隨著網路威脅的日益增長，單純的 HTTP 已經遠遠不足以保護資料安全。這就是為什麼需要它的安全進化版：<strong>HTTPS</strong>。</p>
+<h1 id="http網路世界的公開信件"><a class="markdownIt-Anchor" href="#http網路世界的公開信件"></a> HTTP：網路世界的「公開信件」</h1>
+<p><strong>HTTP</strong>，全名為「<strong>超文本傳輸協定 (Hypertext Transfer Protocol)</strong>」，是網際網路中最廣泛使用的協定，用於在全球資訊網 (World Wide Web) 上傳輸各種格式的超文本資料。它可以說是瀏覽器與網站伺服器之間進行「對話」的<strong>基本語言</strong>。</p>
 <ul>
-<li>效能與併發能力（Concurrency &amp; Throughput）</li>
-<li>系統架構與部署方式</li>
-<li>開發難度與維運策略</li>
-</ul>
-<p>本文將以實務角度，帶你全面了解兩者的差異、優劣與適用場景。</p>
-<hr />
-<h1 id="同步伺服器synchronous-server"><a class="markdownIt-Anchor" href="#同步伺服器synchronous-server"></a> 同步伺服器（Synchronous Server）</h1>
-<h2 id="運作方式"><a class="markdownIt-Anchor" href="#運作方式"></a> 運作方式</h2>
-<p>同步伺服器在處理請求時會「一條請求、一條線程（或進程）」，並且整個執行流程（例如存取資料庫、外部 API、檔案）是<strong>阻塞式的</strong>。</p>
-<pre class="highlight"><code class="python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">handle_request</span>():
-    user = db.query_user()         <span class="hljs-comment"># 等待資料庫查詢完成</span>
-    data = requests.get(API_URL)   <span class="hljs-comment"># 等待外部 API 回應</span>
-    <span class="hljs-keyword">return</span> render(data)
-</code></pre>
-<h2 id="特點"><a class="markdownIt-Anchor" href="#特點"></a> 特點</h2>
-<table>
-<thead>
-<tr>
-<th>特性</th>
-<th>說明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>阻塞式處理</td>
-<td>一條線程被某個 I/O 任務卡住時，無法處理其他請求</td>
-</tr>
-<tr>
-<td>簡單直覺</td>
-<td>程式碼撰寫與除錯容易</td>
-</tr>
-<tr>
-<td>資源密集</td>
-<td>多請求需要多線程，記憶體與 CPU 成本高</td>
-</tr>
-<tr>
-<td>常用框架</td>
-<td>Django（WSGI）、Flask、Laravel、Spring MVC</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h1 id="非同步伺服器asynchronous-server"><a class="markdownIt-Anchor" href="#非同步伺服器asynchronous-server"></a> 非同步伺服器（Asynchronous Server）</h1>
-<h2 id="運作方式-2"><a class="markdownIt-Anchor" href="#運作方式-2"></a> 運作方式</h2>
-<p>非同步伺服器採用 <strong>事件迴圈 + 協程</strong> 模型，能在等待 I/O 操作時釋出資源，去處理其他請求。核心在於 <code>await</code> 或事件回呼（callback）。</p>
-<pre class="highlight"><code class="python"><span class="hljs-keyword">async</span> <span class="hljs-keyword">def</span> <span class="hljs-title function_">handle_request</span>():
-    user = <span class="hljs-keyword">await</span> db.fetch_user()         <span class="hljs-comment"># 非同步資料庫</span>
-    data = <span class="hljs-keyword">await</span> http.get(API_URL)       <span class="hljs-comment"># 非同步 HTTP</span>
-    <span class="hljs-keyword">return</span> render(data)
-</code></pre>
-<h3 id="特點-2"><a class="markdownIt-Anchor" href="#特點-2"></a> 特點</h3>
-<table>
-<thead>
-<tr>
-<th>特性</th>
-<th>說明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>非阻塞處理</td>
-<td>請求之間可共享同一事件迴圈，無需多條 thread</td>
-</tr>
-<tr>
-<td>複雜度較高</td>
-<td>需學習 async/await，debug 相對困難</td>
-</tr>
-<tr>
-<td>高併發效率</td>
-<td>大幅減少 thread 切換與記憶體使用</td>
-</tr>
-<tr>
-<td>常用框架</td>
-<td>FastAPI、Node.js、Django ASGI、Go、Vert.x</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h1 id="優缺點比較總表"><a class="markdownIt-Anchor" href="#優缺點比較總表"></a> 優缺點比較總表</h1>
-<table>
-<thead>
-<tr>
-<th>項目</th>
-<th>同步伺服器</th>
-<th>非同步伺服器</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>開發容易度</td>
-<td>✅ 簡單</td>
-<td>❌ 複雜（需 async/await）</td>
-</tr>
-<tr>
-<td>單請求效能</td>
-<td>✅ 穩定</td>
-<td>✅ 穩定</td>
-</tr>
-<tr>
-<td>高併發表現</td>
-<td>❌ thread 限制</td>
-<td>✅ 優異</td>
-</tr>
-<tr>
-<td>記憶體使用</td>
-<td>❌ 高</td>
-<td>✅ 低</td>
-</tr>
-<tr>
-<td>長連線支援（WebSocket）</td>
-<td>❌ 不適合</td>
-<td>✅ 適合</td>
-</tr>
-<tr>
-<td>舊程式碼相容性</td>
-<td>✅ 高</td>
-<td>❌ async 套件有限</td>
-</tr>
-<tr>
-<td>除錯追蹤</td>
-<td>✅ 易懂堆疊</td>
-<td>❌ StackTrace 被拆開</td>
-</tr>
-<tr>
-<td>常見應用</td>
-<td>CMS、內部系統、企業服務</td>
-<td>API Gateway、聊天系統、即時平台</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h1 id="案例分析同時處理-1000-個請求"><a class="markdownIt-Anchor" href="#案例分析同時處理-1000-個請求"></a> 案例分析：同時處理 1000 個請求</h1>
-<h2 id="同步伺服器如django-gunicorn"><a class="markdownIt-Anchor" href="#同步伺服器如django-gunicorn"></a> 同步伺服器（如：Django + Gunicorn）</h2>
+<li><strong>工作層次</strong>：HTTP 工作在 <strong>OSI 模型的應用層 (Application Layer, Layer 7)</strong>。</li>
+<li><strong>運作方式</strong>：
 <ul>
-<li>每個請求綁一條 thread（或 worker）</li>
-<li>等待資料庫或 API 期間 thread 閒置，但資源仍被佔用</li>
-<li>若有 1000 個請求 → 需要 1000 條 thread，否則排隊</li>
+<li><strong>客戶端-伺服器模型</strong>：瀏覽器 (客戶端) 向網站伺服器 (伺服器端) 發出請求 (Request)，伺服器收到請求後，回應相應的網頁內容 (Response)。</li>
+<li><strong>請求-回應機制</strong>：每次溝通都由客戶端發起請求，伺服器進行回應。</li>
+<li><strong>無狀態 (Stateless)</strong>：HTTP 本身不保存客戶端的過去互動狀態。每個請求都是獨立的。</li>
+<li><strong>預設埠</strong>：HTTP 的預設埠號是 <code>80</code>。</li>
 </ul>
-<h2 id="非同步伺服器如fastapi-uvicorn"><a class="markdownIt-Anchor" href="#非同步伺服器如fastapi-uvicorn"></a> 非同步伺服器（如：FastAPI + Uvicorn）</h2>
-<ul>
-<li>所有請求共享事件迴圈</li>
-<li>一旦遇到 <code>await</code> 就切去處理其他請求</li>
-<li>少量 thread 即可服務大量併發請求</li>
+</li>
+<li><strong>用途</strong>：主要用於取得 HTML 文件、圖片、聲音、影片等多媒體資訊。</li>
 </ul>
-<hr />
-<h1 id="常見誤解釐清"><a class="markdownIt-Anchor" href="#常見誤解釐清"></a> 常見誤解釐清</h1>
+<h2 id="http-的本質弱點透明的溝通"><a class="markdownIt-Anchor" href="#http-的本質弱點透明的溝通"></a> HTTP 的本質弱點：透明的溝通</h2>
+<p>想像一下，和朋友用<strong>明信片</strong>進行溝通。明信片上的內容清晰可見，任何人，路過的郵差、分揀員，甚至是好奇的旁觀者都能讀取你寫的訊息。</p>
+<p>這正是 HTTP 的問題所在：它以<strong>純文字 (Plain Text)</strong> 的形式傳輸資料。這意味著：</p>
 <ol>
-<li>
-<p><strong>Q：前端用 async/await，後端也要非同步伺服器嗎？</strong><br />
-A：不一定。前端非同步只是 UI 不被卡住，與後端架構無關。但若請求量大，後端 async 可顯著減少資源浪費。</p>
+<li><strong>資料未加密</strong>：輸入的用戶名、密碼、信用卡號碼等敏感資訊，在網路傳輸過程中是完全暴露的，任何人透過截取網路流量就能直接讀取。</li>
+<li><strong>無法驗證資訊來源</strong>：無法確定正在訪問的網站是否真的是預期的網站，還是有人偽裝了它。</li>
+<li><strong>資料完整性未受保護</strong>：傳輸途中的資料可能會被惡意篡改，卻渾然不知。</li>
+</ol>
+<p>在沒有這些保護的情況下，瀏覽活動和個人資料很容易受到「<strong>中間人攻擊 (Man-in-the-Middle, MITM)</strong>」、網路竊聽、資料篡改等威脅。</p>
+<h1 id="https加上安全鎖的溝通方式"><a class="markdownIt-Anchor" href="#https加上安全鎖的溝通方式"></a> HTTPS：加上「安全鎖」的溝通方式</h1>
+<p><strong>HTTPS</strong>，全名為「<strong>超文本傳輸安全協定 (Hypertext Transfer Protocol Secure)</strong>」，是 HTTP 的安全版本。它本質上是在 HTTP 上層疊加了一個<strong>安全層 (SSL/TLS)</strong>，為資料加上了一道堅不可摧的保護網。</p>
+<p>這個多出來的 <code>S</code>，代表的就是 <strong>Secure (安全)</strong>。</p>
+<ul>
+<li><strong>工作層次</strong>：HTTPS 雖然仍是應用層協定，但其安全性關鍵在於引入了<strong>傳輸層安全協議 (TLS, Transport Layer Security)</strong>，它取代了其前身 <strong>安全通訊端層 (SSL, Secure Sockets Layer)</strong>。TLS/SSL 工作在 OSI 模型的<strong>會話層、表示層和傳輸層之間</strong>。</li>
+<li><strong>運作方式</strong>：
+<ul>
+<li>在客戶端和伺服器建立 HTTP 通訊之前，會先建立一個 <strong>TLS/SSL 安全通道</strong>。</li>
+<li>在這個通道內，所有通過 HTTP 傳輸的資料都會被<strong>加密</strong>。</li>
+<li>HTTPS 的預設埠號是 <code>443</code>。</li>
+</ul>
 </li>
-<li>
-<p><strong>Q：非同步伺服器無敵嗎？</strong><br />
-A：不是。對 CPU-bound 任務（如報表、壓縮、加解密），async 無助效能，反而需用多進程處理。</p>
+</ul>
+<h2 id="https-如何提供安全性三大支柱"><a class="markdownIt-Anchor" href="#https-如何提供安全性三大支柱"></a> HTTPS 如何提供安全性？三大支柱：</h2>
+<p>HTTPS 透過 TLS/SSL 協議，提供了三大核心安全特性，就像是把公開的明信片放進了一個<strong>加密的信封</strong>，並且加上了<strong>寄件人身份證明</strong>和<strong>防篡改印章</strong>：</p>
+<ol>
+<li><strong>資料加密 (Encryption)</strong>：
+<ul>
+<li>所有在客戶端和伺服器之間傳輸的資料都會被加密，使其變得不可讀。即使資料被截取，竊聽者也無法理解其內容。</li>
+<li>這確保了敏感資訊（如登入憑證、交易細節）在傳輸過程中是安全的。</li>
+</ul>
 </li>
-<li>
-<p><strong>Q：用的是同步框架（如 Flask），怎麼辦？</strong><br />
-A：可透過多進程（如 Gunicorn）擴展，或漸進遷移至 async 架構。</p>
+<li><strong>身份驗證 (Authentication)</strong>：
+<ul>
+<li>伺服器會向客戶端提供一個<strong>數位憑證 (Digital Certificate)</strong>，該憑證由受信任的<strong>憑證頒發機構 (Certificate Authority, CA)</strong> 簽發。</li>
+<li>客戶端可以驗證這個憑證的有效性，從而確認網站的身份是真實的，而非惡意網站的偽裝。這有效防止了中間人攻擊。</li>
+</ul>
+</li>
+<li><strong>資料完整性 (Data Integrity)</strong>：
+<ul>
+<li>TLS/SSL 協議會使用訊息摘要 (Message Digest) 或雜湊函數 (Hash Function) 來檢測資料在傳輸過程中是否被篡改。</li>
+<li>如果資料在途中被修改，接收方會立即發現並拒絕該資料。這保證了收到的資訊是期望收到的、未被動手腳的資訊。</li>
+</ul>
 </li>
 </ol>
-<hr />
-<h1 id="實務建議哪時候該選哪個"><a class="markdownIt-Anchor" href="#實務建議哪時候該選哪個"></a> 實務建議：哪時候該選哪個？</h1>
+<h1 id="https-的運作機制簡介ssltls-握手"><a class="markdownIt-Anchor" href="#https-的運作機制簡介ssltls-握手"></a> HTTPS 的運作機制簡介：SSL/TLS 握手</h1>
+<p>當嘗試訪問一個 HTTPS 網站時，會發生一個複雜而精密的「<strong>SSL/TLS 握手</strong>」過程：</p>
+<ol>
+<li><strong>客戶端發送 Hello</strong>：瀏覽器向伺服器發送一個「Client Hello」，聲明它支持的 TLS 版本、加密演算法等。</li>
+<li><strong>伺服器回應 Hello 和憑證</strong>：伺服器回應「Server Hello」，選擇一個共同支持的加密組，並將自己的<strong>數位憑證</strong>發送給瀏覽器。</li>
+<li><strong>瀏覽器驗證憑證</strong>：瀏覽器檢查憑證的有效性（是否由受信任的 CA 簽發、是否過期等），以確認伺服器的真實身份。</li>
+<li><strong>密鑰交換</strong>：驗證成功後，瀏覽器生成一個<strong>對稱加密金鑰 (Symmetric Key)</strong>，使用伺服器憑證中的<strong>公開金鑰</strong>加密後發送給伺服器。只有擁有<strong>私有金鑰</strong>的伺服器才能解密這個對稱金鑰。</li>
+<li><strong>建立安全通道</strong>：雙方都獲得了相同的對稱金鑰後，這個金鑰將用於後續所有資料的<strong>加密和解密</strong>。</li>
+<li><strong>資料傳輸</strong>：之後，所有 HTTP 資料都在這個由對稱金鑰加密的 TLS 安全通道中傳輸，確保安全。</li>
+</ol>
+<p>這個過程雖然看起來複雜，但都發生在毫秒之間，對使用者來說是完全透明的。</p>
+<h1 id="為什麼-https-不再是選項而是必需"><a class="markdownIt-Anchor" href="#為什麼-https-不再是選項而是必需"></a> 為什麼 HTTPS 不再是選項，而是必需？</h1>
+<p>如今，HTTPS 已經不再是「錦上添花」的優勢，而是<strong>任何網站的必要條件</strong>：</p>
+<ul>
+<li><strong>保護用戶隱私與數據安全</strong>：這是最核心的價值。無論是個人資料、商務交易還是日常瀏覽，HTTPS 都能有效防止資料洩露和被篡改。</li>
+<li><strong>建立信任</strong>：網址列上的綠色小鎖頭和 <code>https://</code> 已經成為用戶判斷網站是否安全可信的標誌。沒有 HTTPS 的網站會被瀏覽器標記為「不安全」，嚴重損害網站形象。</li>
+<li><strong>搜尋引擎優化 (SEO)</strong>：Google 等主流搜尋引擎已將 HTTPS 作為<strong>排名考量因素</strong>之一。使用 HTTPS 的網站會獲得更好的搜尋排名。</li>
+<li><strong>支援新網路技術</strong>：許多現代網路技術和協議（如 HTTP/2）都<strong>要求或強烈建議使用 TLS/SSL</strong>。HTTP/2 在 HTTPS 的基礎上提供了更快的連線速度和更高的效率。</li>
+<li><strong>遵守法規合規性</strong>：GDPR 等資料保護法規要求網站必須採取足夠的技術措施來保護用戶數據，HTTPS 是實現這一目標的基礎。</li>
+</ul>
+<h1 id="http-vs-https核心差異一覽"><a class="markdownIt-Anchor" href="#http-vs-https核心差異一覽"></a> HTTP vs. HTTPS：核心差異一覽</h1>
 <table>
 <thead>
 <tr>
-<th>情境</th>
-<th>建議</th>
+<th style="text-align:left">特性</th>
+<th style="text-align:left">HTTP (Hypertext Transfer Protocol)</th>
+<th style="text-align:left">HTTPS (Hypertext Transfer Protocol Secure)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>網站用戶量不高、以 CRUD 為主</td>
-<td>同步伺服器（Flask、Django）</td>
+<td style="text-align:left"><strong>安全性</strong></td>
+<td style="text-align:left"><strong>無加密</strong>，資料以純文字傳輸，易被竊聽與篡改。</td>
+<td style="text-align:left"><strong>加密</strong>，資料透過 SSL/TLS 加密傳輸，防竊聽、防篡改。</td>
 </tr>
 <tr>
-<td>API Gateway、大量查詢或等待外部資源</td>
-<td>非同步伺服器（FastAPI、Node.js）</td>
+<td style="text-align:left"><strong>連接埠</strong></td>
+<td style="text-align:left">預設使用 <strong>80 埠</strong>。</td>
+<td style="text-align:left">預設使用 <strong>443 埠</strong>。</td>
 </tr>
 <tr>
-<td>即時互動（聊天室、推播、遊戲）</td>
-<td>非同步 + 長連線（WebSocket）架構</td>
+<td style="text-align:left"><strong>憑證</strong></td>
+<td style="text-align:left">無需憑證。</td>
+<td style="text-align:left">需要 <strong>SSL/TLS 數位憑證</strong>，由 CA 簽發。</td>
 </tr>
 <tr>
-<td>有舊系統整合需求、需穩定維運</td>
-<td>同步架構保守推進</td>
+<td style="text-align:left"><strong>身份驗證</strong></td>
+<td style="text-align:left">無伺服器身份驗證，無法確認網站真實性。</td>
+<td style="text-align:left"><strong>提供伺服器身份驗證</strong>，確認網站是可信的。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>資料完整性</strong></td>
+<td style="text-align:left">無資料完整性保護。</td>
+<td style="text-align:left"><strong>提供資料完整性檢查</strong>，確保資料未被篡改。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>成本</strong></td>
+<td style="text-align:left">零 (設定簡易)。</td>
+<td style="text-align:left">憑證費 (雖然現在有免費憑證如 Let’s Encrypt)，伺服器資源消耗略高。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SEO 影響</strong></td>
+<td style="text-align:left">負面影響，可能降低搜尋排名。</td>
+<td style="text-align:left"><strong>正面影響</strong>，有助於提升搜尋排名。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>瀏覽器顯示</strong></td>
+<td style="text-align:left">顯示 <code>http://</code>，常被標示為「不安全」或無鎖圖示。</td>
+<td style="text-align:left">顯示 <code>https://</code>，有綠色鎖頭或安全標誌。</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
-<table>
-<thead>
-<tr>
-<th>結論</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>同步架構簡單、穩定，適合中小型應用與企業內部系統</td>
-</tr>
-<tr>
-<td>非同步適合高併發、I/O 密集、WebSocket 等場景</td>
-</tr>
-<tr>
-<td>現代框架（如 FastAPI、Django 4+）皆支援「同步 + 非同步混合」，可漸進導入</td>
-</tr>
-<tr>
-<td>選擇前先分析瓶頸，是 CPU-bound 還是 I/O-bound</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>「同步好開發、非同步好擴展」，選擇要根據實際需求、開發人力與併發目標靈活判斷！</p>
-</blockquote>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>在資訊安全日益重要的今天，HTTP 已經成為過時且危險的通訊方式。而 HTTPS 則作為現代網路的標準，以其強大的加密、身份驗證和資料完整性機制，為每一次點擊、每一次輸入提供保護。</p>
 
     </div>
 
@@ -807,21 +724,18 @@ A：可透過多進程（如 Gunicorn）擴展，或漸進遷移至 async 架構
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/my-blog/tags/Async/" rel="tag"># Async</a>
+              <a href="/my-blog/tags/Networking/" rel="tag"># Networking</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/my-blog/2025/07/06/Nginx%E5%9C%A8%E5%B0%88%E6%A1%88%E4%B8%AD%E7%9A%84%E8%A7%92%E8%89%B2%E8%88%87%E8%A8%AD%E5%AE%9A%E5%AF%A6%E4%BE%8B/" rel="prev" title="Nginx 在專案中的角色與設定實例">
-                  <i class="fa fa-angle-left"></i> Nginx 在專案中的角色與設定實例
+                <a href="/my-blog/2025/09/04/%E5%8D%80%E5%9F%9F%E7%B6%B2%E8%B7%AF%E7%9A%84%E5%B9%95%E5%BE%8C%E8%8B%B1%E9%9B%84%20%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%E4%BA%A4%E6%8F%9B%E5%99%A8%20Switch%20%E8%88%87%E9%9B%86%E7%B7%9A%E5%99%A8%20Hub%20%E7%9A%84%E5%B7%AE%E7%95%B0/" rel="prev" title="區域網路的幕後英雄：深入解析交換器 (Switch) 與集線器 (Hub) 的差異">
+                  <i class="fa fa-angle-left"></i> 區域網路的幕後英雄：深入解析交換器 (Switch) 與集線器 (Hub) 的差異
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/my-blog/2025/07/08/GitHub%20Actions%20%E8%87%AA%E5%8B%95%E5%8C%96%E6%B8%AC%E8%A9%A6%E6%B5%81%E7%A8%8B/" rel="next" title="GitHub Actions 自動化測試流程">
-                  GitHub Actions 自動化測試流程 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
