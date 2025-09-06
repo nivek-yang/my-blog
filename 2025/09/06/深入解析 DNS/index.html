@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="想像一下，如果每次訪問網站，都必須記住或輸入一串如 172.217.160.142 這樣的 IP 地址，那將會是多麼繁瑣和惱人！ 幸好，我們不必這麼做。當輸入 www.google.com，或是點擊一個 techblog.com 的連結時，一個位於網路世界深處極其重要的系統，正在幕後迅速運作，幫助電腦找到正確的網路目的地。這個系統，就是這篇文章要深入探討的——網域名稱系統 (Domain Name">
+<meta property="og:type" content="article">
+<meta property="og:title" content="網際網路的「電話簿」與「導航系統」：深入解析 DNS (Domain Name System)">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/09/06/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20DNS/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="想像一下，如果每次訪問網站，都必須記住或輸入一串如 172.217.160.142 這樣的 IP 地址，那將會是多麼繁瑣和惱人！ 幸好，我們不必這麼做。當輸入 www.google.com，或是點擊一個 techblog.com 的連結時，一個位於網路世界深處極其重要的系統，正在幕後迅速運作，幫助電腦找到正確的網路目的地。這個系統，就是這篇文章要深入探討的——網域名稱系統 (Domain Name">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-09-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-09-06T14:56:38.511Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Networking">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/09/06/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20DNS/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/09/06/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20DNS/","path":"2025/09/06/深入解析 DNS/","title":"網際網路的「電話簿」與「導航系統」：深入解析 DNS (Domain Name System)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>網際網路的「電話簿」與「導航系統」：深入解析 DNS (Domain Name System) | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">79</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">49</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(15)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(11)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-dns%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9C%80%E8%A6%81%E5%AE%83"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是 DNS？為什麼需要它？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9C%80%E8%A6%81-dns"><span class="nav-number">1.1.</span> <span class="nav-text"> 為什麼需要 DNS？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dns-%E5%A6%82%E4%BD%95%E9%81%8B%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text"> DNS 如何運作？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90%E6%B5%81%E7%A8%8B%E6%AD%A5%E9%A9%9F"><span class="nav-number">2.1.</span> <span class="nav-text"> 解析流程步驟：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dns-%E7%9A%84%E9%87%8D%E8%A6%81%E7%B5%84%E6%88%90%E9%83%A8%E5%88%86%E8%88%87%E8%A8%98%E9%8C%84%E9%A1%9E%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text"> DNS 的重要組成部分與記錄類型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dns-%E7%9A%84%E5%88%86%E5%B1%A4%E7%B5%90%E6%A7%8B"><span class="nav-number">3.1.</span> <span class="nav-text"> DNS 的分層結構</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A6%8B%E7%9A%84-dns-%E8%A8%98%E9%8C%84%E9%A1%9E%E5%9E%8B-resource-records"><span class="nav-number">3.2.</span> <span class="nav-text"> 常見的 DNS 記錄類型 (Resource Records)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dns-%E7%9A%84%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%B0"><span class="nav-number">4.</span> <span class="nav-text"> DNS 的安全挑戰</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/06/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20DNS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="網際網路的「電話簿」與「導航系統」：深入解析 DNS (Domain Name System) | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          網際網路的「電話簿」與「導航系統」：深入解析 DNS (Domain Name System)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-09-06 00:00:00 / 修改時間：22:56:38" itemprop="dateCreated datePublished" datetime="2025-09-06T00:00:00+08:00">2025-09-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>想像一下，如果每次訪問網站，都必須記住或輸入一串如 <code>172.217.160.142</code> 這樣的 IP 地址，那將會是多麼繁瑣和惱人！</p>
+<p>幸好，我們不必這麼做。當輸入 <code>www.google.com</code>，或是點擊一個 <code>techblog.com</code> 的連結時，一個位於網路世界深處極其重要的系統，正在幕後迅速運作，幫助電腦找到正確的網路目的地。這個系統，就是這篇文章要深入探討的——<strong>網域名稱系統 (Domain Name System, DNS)</strong>。</p>
+<p>DNS 就像是網際網路的「電話簿」或「GPS 導航系統」。它將人類易於記憶的網域名稱 (如 <code>example.com</code>) 轉換成機器可識別的 IP 地址 (如 <code>192.0.2.1</code>)，讓你無需記憶複雜的數字，就能暢遊網路。</p>
+<h1 id="什麼是-dns為什麼需要它"><a class="markdownIt-Anchor" href="#什麼是-dns為什麼需要它"></a> 什麼是 DNS？為什麼需要它？</h1>
+<p><strong>DNS (Domain Name System)</strong> 是一個分散式的命名系統，用於將<strong>網域名稱 (Domain Names)</strong> 轉換為<strong>IP 地址 (IP Addresses)</strong>。</p>
+<ul>
+<li><strong>工作層次</strong>：DNS 主要工作在 <strong>OSI 模型的應用層 (Application Layer, Layer 7)</strong>，但它的運作是整個網路底層服務的基石。</li>
+<li><strong>核心功能</strong>：讓使用者可以使用具備語義的網域名稱（例如公司名稱或品牌名），而不是無意義的複雜數字串連。</li>
+</ul>
+<h2 id="為什麼需要-dns"><a class="markdownIt-Anchor" href="#為什麼需要-dns"></a> 為什麼需要 DNS？</h2>
+<ol>
+<li><strong>人類記憶的限制</strong>：對於人類來說，記住像 <code>www.google.com</code> 這樣的英文單字串比記住 <code>142.250.199.100</code> 這樣的數字串容易且直觀得多。</li>
+<li><strong>IP 地址的變動性</strong>：網站的 IP 地址可能會因為伺服器遷移、負載平衡等原因而改變。如果沒有 DNS，每次 IP 地址變更，可能都需要手動更新。DNS 則能自動處理這種變動。</li>
+<li><strong>網路的規模</strong>：網路上有數十億的設備和網站。如果沒有統一的名稱解析系統，網路將無法有效運作。</li>
+</ol>
+<p>DNS 使得網際網路對使用者而言更加<strong>友善、便捷和穩定</strong>。</p>
+<h1 id="dns-如何運作"><a class="markdownIt-Anchor" href="#dns-如何運作"></a> DNS 如何運作？</h1>
+<p>當在瀏覽器中輸入 <code>www.example.com</code> 並按下 Enter 鍵時，DNS 會啟動一場精密的查詢之旅，為你找到正確的網站伺服器。</p>
+<p>這場旅程通常涉及以下四種類型的伺服器：</p>
+<ol>
+<li><strong>DNS 解析器 (DNS Resolver)</strong>：也稱為遞迴解析器 (Recursive Resolver)。這是電腦或路由器配置的 DNS 服務器（通常由網際網路服務供應商 ISP 提供，或手動設定，如 Google Public DNS <code>8.8.8.8</code>）。它是發出查詢請求的第一站。</li>
+<li><strong>根 DNS 伺服器 (Root DNS Server)</strong>：全球只有 13 組根伺服器，它們是 DNS 階層的頂端，負責管理所有<strong>頂級網域 (TLD)</strong> 的資訊。</li>
+<li><strong>頂級網域 (TLD) DNS 伺服器</strong>：負責管理特定頂級網域（如 <code>.com</code>, <code>.org</code>, <code>.net</code>, <code>.tw</code> 等）下的所有網域資訊。</li>
+<li><strong>權威 DNS 伺服器 (Authoritative DNS Server)</strong>：這是最終存儲特定網域名稱（如 <code>example.com</code>）及其對應 IP 地址的伺服器。一個網站的所有 DNS 記錄都由它負責管理。</li>
+</ol>
+<h2 id="解析流程步驟"><a class="markdownIt-Anchor" href="#解析流程步驟"></a> 解析流程步驟：</h2>
+<ol>
+<li><strong>用戶發起請求</strong>：在瀏覽器輸入 <code>www.example.com</code>。</li>
+<li><strong>檢查本地快取</strong>：電腦會先檢查本地 DNS 快取（本地電腦或瀏覽器內部）是否有 <code>www.example.com</code> 的 IP 地址。如果找到，直接返回 IP 地址，流程結束。</li>
+<li><strong>請求發送給 DNS 解析器</strong>：如果本地快取沒有，請求會發送給配置的 DNS 解析器。</li>
+<li><strong>解析器查詢根伺服器</strong>：DNS 解析器向<strong>根 DNS 伺服器</strong>發送查詢請求：「<code>www.example.com</code> 的 IP 是多少？」</li>
+<li><strong>根伺服器回應 TLD 伺服器地址</strong>：根伺服器不認識 <code>example.com</code> 的 IP，但它知道 <code>.com</code> 這個頂級網域由哪個 TLD 伺服器負責，因此會回應 DNS 解析器：「我不知道 <code>www.example.com</code> 的 IP，但可以去問 <code>.com</code> 的 TLD 伺服器，它的地址是 XXX。」</li>
+<li><strong>解析器查詢 TLD 伺服器</strong>：DNS 解析器接著向 <code>.com</code> 的 <strong>TLD DNS 伺服器</strong>發送查詢請求：「<code>www.example.com</code> 的 IP 是多少？」</li>
+<li><strong>TLD 伺服器回應權威伺服器地址</strong>：TLD 伺服器不認識 <code>www.example.com</code> 的 IP，但它知道管理 <code>example.com</code> 這個網域的<strong>權威 DNS 伺服器</strong>是誰，因此會回應 DNS 解析器：「我不知道 <code>www.example.com</code> 的 IP，但 <code>example.com</code> 的權威伺服器是 YYY，可以去問它。」</li>
+<li><strong>解析器查詢權威伺服器</strong>：DNS 解析器最後向 <code>example.com</code> 的<strong>權威 DNS 伺服器</strong>發送查詢請求：「<code>www.example.com</code> 的 IP 是多少？」</li>
+<li><strong>權威伺服器回應 IP 地址</strong>：權威 DNS 伺服器存儲著 <code>www.example.com</code> 的具體 IP 地址，它會回應 DNS 解析器：「<code>www.example.com</code> 的 IP 地址是 <code>192.0.2.1</code>。」</li>
+<li><strong>解析器返回 IP 地址並快取</strong>：DNS 解析器將 <code>192.0.2.1</code> 這個 IP 地址返回給電腦，並將結果<strong>快取</strong>起來，以便下次更快響應同一個查詢。</li>
+<li><strong>電腦連接網站</strong>：電腦收到 IP 地址後，就能向 <code>192.0.2.1</code> 發出 HTTP/HTTPS 請求，訪問 <code>www.example.com</code> 的網站內容了。</li>
+</ol>
+<p>這個看似漫長的過程，通常在<strong>幾十到幾百毫秒</strong>內完成，因為大量的 DNS 查詢結果會被快取在電腦、路由器或 ISP 的 DNS 解析器中，從而大大加快了速度。</p>
+<h1 id="dns-的重要組成部分與記錄類型"><a class="markdownIt-Anchor" href="#dns-的重要組成部分與記錄類型"></a> DNS 的重要組成部分與記錄類型</h1>
+<h2 id="dns-的分層結構"><a class="markdownIt-Anchor" href="#dns-的分層結構"></a> DNS 的分層結構</h2>
+<p>DNS 系統是一個<strong>分層的樹狀結構</strong>，具有以下幾級：</p>
+<ul>
+<li><strong>根域 (Root Domain)</strong>：位於層級的最頂端，以一個點 <code>.</code> 表示。</li>
+<li><strong>頂級網域 (Top-Level Domain, TLD)</strong>：根域之下，分為通用頂級網域 (gTLD，如 <code>.com</code>, <code>.org</code>, <code>.net</code>) 和國家代碼頂級網域 (ccTLD，如 <code>.tw</code>, <code>.jp</code>, <code>.uk</code>)。</li>
+<li><strong>二級網域 (Second-Level Domain)</strong>：TLD 之下，由用戶註冊使用，如 <code>example.com</code> 中的 <code>example</code>。</li>
+<li><strong>子網域 (Subdomain)</strong>：二級網域之下，如 <code>www.example.com</code> 中的 <code>www</code>。</li>
+</ul>
+<h2 id="常見的-dns-記錄類型-resource-records"><a class="markdownIt-Anchor" href="#常見的-dns-記錄類型-resource-records"></a> 常見的 DNS 記錄類型 (Resource Records)</h2>
+<p>權威 DNS 伺服器儲存著各種不同類型的 DNS 記錄，用於指導如何解析網域名稱：</p>
+<ul>
+<li><strong>A 記錄 (Address Record)</strong>：將網域名稱映射到一個 <strong>IPv4 地址</strong>。例如：<code>example.com</code> -&gt; <code>192.0.2.1</code>。</li>
+<li><strong>AAAA 記錄 (Quad-A Record)</strong>：將網域名稱映射到一個 <strong>IPv6 地址</strong>。例如：<code>example.com</code> -&gt; <code>2001:0db8::1</code>。</li>
+<li><strong>CNAME 記錄 (Canonical Name Record)</strong>：將一個網域名稱（別名）映射到另一個<strong>網域名稱</strong>（規範名）。例如：<code>www.example.com</code> -&gt; <code>example.com</code>。常用於將多個服務指向同一台伺服器。</li>
+<li><strong>MX 記錄 (Mail Exchange Record)</strong>：指定用於接收域名的電子郵件的<strong>郵件伺服器</strong>。例如：<code>example.com</code> 的郵件由 <code>mail.example.com</code> 處理。</li>
+<li><strong>NS 記錄 (Name Server Record)</strong>：指定哪個 DNS 伺服器是該域名的<strong>權威 DNS 伺服器</strong>。用於建立 DNS 的委託鏈。</li>
+<li><strong>TXT 記錄 (Text Record)</strong>：儲存任意的文字資訊。常用於 SPF (Sender Policy Framework) 和 DKIM (DomainKeys Identified Mail) 等郵件認證機制，以及網站所有權驗證等。</li>
+</ul>
+<h1 id="dns-的安全挑戰"><a class="markdownIt-Anchor" href="#dns-的安全挑戰"></a> DNS 的安全挑戰</h1>
+<p>儘管 DNS 是網際網路的基石，但它也面臨著嚴峻的安全挑戰：</p>
+<ul>
+<li><strong>DNS 劫持 (DNS Hijacking)</strong>：惡意攻擊者控制 DNS 查詢過程，將用戶重新導向到惡意網站。</li>
+<li><strong>DNS 緩存中毒 (DNS Cache Poisoning)</strong>：攻擊者向 DNS 伺服器注入偽造的記錄，使其將錯誤的 IP 地址與網域名稱關聯起來。</li>
+<li><strong>DDoS 攻擊 (Distributed Denial of Service)</strong>：針對 DNS 伺服器的大規模流量攻擊，使其無法響應合法的查詢。</li>
+</ul>
+<p>為了解決這些問題，<strong>DNSSEC (DNS Security Extensions)</strong> 技術被開發出來，它透過數位簽章來驗證 DNS 查詢的真實性和完整性，保護使用者免受偽造的 DNS 資料攻擊。</p>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>DNS 是網際網路一個「看不見但不可或缺」的基礎服務。它默默地將熟悉的網域名稱轉換為機器能夠理解的 IP 地址，讓我們能夠輕而易舉地瀏覽數以億計的網站，並發送接收電子郵件。</p>
+<p>理解 DNS 的運作原理，不僅能幫助更好地理解網路是如何協同工作的，也能在遇到網路連線問題時，幫助更快地定位和解決問題。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Networking/" rel="tag"># Networking</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/09/05/HTTP%20vs%20HTTPS/" rel="prev" title="HTTP vs. HTTPS：為什麼多一個 &quot;S&quot; 如此重要？">
+                  <i class="fa fa-angle-left"></i> HTTP vs. HTTPS：為什麼多一個 "S" 如此重要？
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
