@@ -19,27 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="為什麼需要索引？ 在關聯式資料庫中，若沒有索引，查詢時必須逐列（row‑by‑row）掃描整張表（全表掃描 &#x2F; Full Table Scan）。 建立索引就像在書本的目錄貼上標籤，讓資料庫能快速定位資料，降低 I&#x2F;O 成本，提升查詢效率。   索引的主要類型    類型 主要結構 適用情境     B‑Tree (預設) 平衡搜尋樹 大多數範圍查詢、排序   Hash Index 雜湊表 精準">
+    <meta name="description" content="在之前的文章中，已經了解了 IP 地址作為設備在網路上的唯一身份有多麼重要。但有沒有想過，當手機連接 Wi-Fi、電腦插入乙太網路線時，它是如何獲得一個可以上網的 IP 地址？是誰在背後默默地為它分配了所有必要的網路設定？ 答案就是——動態主機配置協定 (Dynamic Host Configuration Protocol)，簡稱 DHCP。 DHCP 是網際網路工程任務組 (IETF) 定義的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="資料庫索引 (index) 的優點及缺點">
-<meta property="og:url" content="https://nivek-yang.github.io/2025/06/21/%E8%B3%87%E6%96%99%E5%BA%AB%E7%B4%A2%E5%BC%95index%E7%9A%84%E5%84%AA%E9%BB%9E%E5%8F%8A%E7%BC%BA%E9%BB%9E/index.html">
+<meta property="og:title" content="網路世界的「自動化 IP 地址分配員」：深入解析 DHCP (Dynamic Host Configuration Protocol)">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/09/07/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20DHCP/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="為什麼需要索引？ 在關聯式資料庫中，若沒有索引，查詢時必須逐列（row‑by‑row）掃描整張表（全表掃描 &#x2F; Full Table Scan）。 建立索引就像在書本的目錄貼上標籤，讓資料庫能快速定位資料，降低 I&#x2F;O 成本，提升查詢效率。   索引的主要類型    類型 主要結構 適用情境     B‑Tree (預設) 平衡搜尋樹 大多數範圍查詢、排序   Hash Index 雜湊表 精準">
+<meta property="og:description" content="在之前的文章中，已經了解了 IP 地址作為設備在網路上的唯一身份有多麼重要。但有沒有想過，當手機連接 Wi-Fi、電腦插入乙太網路線時，它是如何獲得一個可以上網的 IP 地址？是誰在背後默默地為它分配了所有必要的網路設定？ 答案就是——動態主機配置協定 (Dynamic Host Configuration Protocol)，簡稱 DHCP。 DHCP 是網際網路工程任務組 (IETF) 定義的">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2025-06-20T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-06-21T15:24:00.030Z">
+<meta property="article:published_time" content="2025-09-06T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-09-07T15:18:45.384Z">
 <meta property="article:author" content="Kaiwii">
-<meta property="article:tag" content="Database">
+<meta property="article:tag" content="Networking">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://nivek-yang.github.io/2025/06/21/%E8%B3%87%E6%96%99%E5%BA%AB%E7%B4%A2%E5%BC%95index%E7%9A%84%E5%84%AA%E9%BB%9E%E5%8F%8A%E7%BC%BA%E9%BB%9E/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/09/07/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20DHCP/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/06/21/%E8%B3%87%E6%96%99%E5%BA%AB%E7%B4%A2%E5%BC%95index%E7%9A%84%E5%84%AA%E9%BB%9E%E5%8F%8A%E7%BC%BA%E9%BB%9E/","path":"2025/06/21/資料庫索引index的優點及缺點/","title":"資料庫索引 (index) 的優點及缺點"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/09/07/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20DHCP/","path":"2025/09/07/深入解析 DHCP/","title":"網路世界的「自動化 IP 地址分配員」：深入解析 DHCP (Dynamic Host Configuration Protocol)"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>資料庫索引 (index) 的優點及缺點 | 我的技術部落格</title>
+<title>網路世界的「自動化 IP 地址分配員」：深入解析 DHCP (Dynamic Host Configuration Protocol) | 我的技術部落格</title>
   
 
 
@@ -482,7 +482,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9C%80%E8%A6%81%E7%B4%A2%E5%BC%95"><span class="nav-number">1.</span> <span class="nav-text"> 為什麼需要索引？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E4%B8%BB%E8%A6%81%E9%A1%9E%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text"> 索引的主要類型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E5%84%AA%E9%BB%9E"><span class="nav-number">3.</span> <span class="nav-text"> 索引的優點</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E7%BC%BA%E9%BB%9E"><span class="nav-number">4.</span> <span class="nav-text"> 索引的缺點</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E7%B4%A2%E5%BC%95%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AF%A6%E5%8B%99"><span class="nav-number">5.</span> <span class="nav-text"> 建立索引的最佳實務</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AF%84%E4%BE%8Bpostgresql-%E5%BB%BA%E7%AB%8B%E8%A4%87%E5%90%88%E7%B4%A2%E5%BC%95"><span class="nav-number">6.</span> <span class="nav-text"> 範例：PostgreSQL 建立複合索引</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%A2%E8%A9%A6%E5%9B%9E%E7%AD%94"><span class="nav-number">7.</span> <span class="nav-text"> 面試回答</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">8.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-dhcp%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9C%80%E8%A6%81%E5%AE%83"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是 DHCP？為什麼需要它？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC-dhcp-%E6%98%AF%E7%8F%BE%E4%BB%A3%E7%B6%B2%E8%B7%AF%E7%9A%84%E5%BF%85%E9%9C%80%E5%93%81"><span class="nav-number">1.1.</span> <span class="nav-text"> 為什麼 DHCP 是現代網路的必需品？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dhcp-%E5%A6%82%E4%BD%95%E9%81%8B%E4%BD%9C%E4%B8%80%E5%A0%B4dora%E6%8E%A2%E9%9A%AA%E4%B9%8B%E6%97%85"><span class="nav-number">2.</span> <span class="nav-text"> DHCP 如何運作？一場「DORA」探險之旅</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ip-%E7%A7%9F%E8%B3%83%E8%88%87%E7%BA%8C%E7%B4%84"><span class="nav-number">2.1.</span> <span class="nav-text"> IP 租賃與續約</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dhcp-%E7%9A%84%E6%A0%B8%E5%BF%83%E7%B5%84%E6%88%90%E9%83%A8%E5%88%86"><span class="nav-number">3.</span> <span class="nav-text"> DHCP 的核心組成部分</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dhcp-%E6%8F%90%E4%BE%9B%E7%9A%84%E8%B1%90%E5%AF%8C%E8%B3%87%E8%A8%8A"><span class="nav-number">4.</span> <span class="nav-text"> DHCP 提供的豐富資訊</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dhcp-%E7%9A%84%E5%84%AA%E5%8B%A2%E8%88%87%E8%80%83%E9%87%8F"><span class="nav-number">5.</span> <span class="nav-text"> DHCP 的優勢與考量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%84%AA%E5%8B%A2"><span class="nav-number">5.1.</span> <span class="nav-text"> 優勢：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%80%83%E9%87%8F"><span class="nav-number">5.2.</span> <span class="nav-text"> 考量：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">6.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -530,7 +530,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/06/21/%E8%B3%87%E6%96%99%E5%BA%AB%E7%B4%A2%E5%BC%95index%E7%9A%84%E5%84%AA%E9%BB%9E%E5%8F%8A%E7%BC%BA%E9%BB%9E/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/07/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20DHCP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -543,12 +543,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="資料庫索引 (index) 的優點及缺點 | 我的技術部落格">
+      <meta itemprop="name" content="網路世界的「自動化 IP 地址分配員」：深入解析 DHCP (Dynamic Host Configuration Protocol) | 我的技術部落格">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          資料庫索引 (index) 的優點及缺點
+          網路世界的「自動化 IP 地址分配員」：深入解析 DHCP (Dynamic Host Configuration Protocol)
         </h1>
 
         <div class="post-meta-container">
@@ -560,7 +560,7 @@
       <span class="post-meta-item-text">發表於</span>
       
 
-      <time title="創建時間：2025-06-21 00:00:00 / 修改時間：23:24:00" itemprop="dateCreated datePublished" datetime="2025-06-21T00:00:00+08:00">2025-06-21</time>
+      <time title="創建時間：2025-09-07 00:00:00 / 修改時間：23:18:45" itemprop="dateCreated datePublished" datetime="2025-09-07T00:00:00+08:00">2025-09-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -581,229 +581,120 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="為什麼需要索引"><a class="markdownIt-Anchor" href="#為什麼需要索引"></a> 為什麼需要索引？</h1>
-<p>在關聯式資料庫中，若沒有索引，查詢時必須逐列（row‑by‑row）掃描整張表（<strong>全表掃描 / Full Table Scan</strong>）。<br />
-建立索引就像在書本的目錄貼上標籤，讓資料庫能快速定位資料，降低 I/O 成本，提升查詢效率。</p>
-<hr />
-<h1 id="索引的主要類型"><a class="markdownIt-Anchor" href="#索引的主要類型"></a> 索引的主要類型</h1>
-<table>
-<thead>
-<tr>
-<th>類型</th>
-<th>主要結構</th>
-<th>適用情境</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>B‑Tree (預設)</td>
-<td>平衡搜尋樹</td>
-<td>大多數範圍查詢、排序</td>
-</tr>
-<tr>
-<td>Hash Index</td>
-<td>雜湊表</td>
-<td>精準比對 (<code>=</code>)</td>
-</tr>
-<tr>
-<td>GiST / GIN</td>
-<td>特殊索引</td>
-<td>文字搜尋、GIS、JSONB</td>
-</tr>
-<tr>
-<td>Bitmap Index</td>
-<td>位元圖</td>
-<td>大型資料倉儲、低寫入量，高查詢壓力</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p><em>不同資料庫支援的索引型別略有差異，請以官方文件為準。</em></p>
-</blockquote>
-<hr />
-<h1 id="索引的優點"><a class="markdownIt-Anchor" href="#索引的優點"></a> 索引的優點</h1>
+    <div class="post-body" itemprop="articleBody"><p>在之前的文章中，已經了解了 IP 地址作為設備在網路上的唯一身份有多麼重要。但有沒有想過，當手機連接 Wi-Fi、電腦插入乙太網路線時，它是如何獲得一個可以上網的 IP 地址？是誰在背後默默地為它分配了所有必要的網路設定？</p>
+<p>答案就是——<strong>動態主機配置協定 (Dynamic Host Configuration Protocol)，簡稱 DHCP</strong>。</p>
+<p>DHCP 是網際網路工程任務組 (IETF) 定義的一種網路協議，它允許伺服器自動為連接到網路的設備（客戶端）分發 IP 地址和提供其他相關的配置資訊。它簡化了網路管理，使得設備能夠「即插即用」，是現代任何規模網路——從家庭網路到大型企業和資料中心——不可或缺的服務。</p>
+<h1 id="什麼是-dhcp為什麼需要它"><a class="markdownIt-Anchor" href="#什麼是-dhcp為什麼需要它"></a> 什麼是 DHCP？為什麼需要它？</h1>
+<p><strong>DHCP (Dynamic Host Configuration Protocol)</strong> 作用在 <strong>OSI 模型的應用層 (Application Layer, Layer 7)</strong>。它是一個基於<strong>客戶端-伺服器模型</strong>的協議，旨在<strong>自動化網路上主機的 IP 地址和其他網路配置的分配</strong>。</p>
+<h2 id="為什麼-dhcp-是現代網路的必需品"><a class="markdownIt-Anchor" href="#為什麼-dhcp-是現代網路的必需品"></a> 為什麼 DHCP 是現代網路的必需品？</h2>
+<p>在沒有 DHCP 的情況下，管理 IP 地址就像一場惡夢：</p>
 <ol>
-<li>
-<p><strong>加速查詢</strong></p>
+<li><strong>手動配置的複雜性與錯誤率</strong>：
 <ul>
-<li><em>O(log n)</em> 級別搜尋（B‑Tree）代替 <em>O(n)</em> 全表掃描</li>
-<li>對高選擇性欄位（distinct 值多）效果最佳</li>
+<li>每一台設備都需要管理員手動輸入 IP 地址、子網路遮罩、預設閘道、DNS 伺服器等資訊。這不僅耗時，而且極易出錯，一個小小的打字錯誤可能導致設備無法上網。</li>
+<li>在大型網路中，這將是不可承受的工作量。</li>
 </ul>
 </li>
-<li>
-<p><strong>支援唯一性約束（UNIQUE）</strong></p>
+<li><strong>IP 地址衝突</strong>：
 <ul>
-<li>防止重複資料，同時利用索引查找衝突</li>
+<li>如果兩個或更多的設備被分配了相同的 IP 地址，就會發生「IP 地址衝突」，導致兩個設備都無法正常通訊。</li>
+<li>手動管理時，很難避免這種狀況。</li>
 </ul>
 </li>
-<li>
-<p><strong>提升排序與分組效率</strong></p>
+<li><strong>地址資源的浪費與管理困難</strong>：
 <ul>
-<li><code>ORDER BY / GROUP BY</code> 若使用索引涵蓋欄位，可避免額外排序</li>
-</ul>
-</li>
-<li>
-<p><strong>覆蓋索引（Covering Index）</strong></p>
-<ul>
-<li>查詢所需欄位全在索引中，省去回表（回到資料列）的成本</li>
-</ul>
-</li>
-<li>
-<p><strong>優化關聯 / JOIN</strong></p>
-<ul>
-<li>在外鍵、關聯欄位建索引，可顯著降低複雜查詢時間</li>
+<li>許多設備（如筆記型電腦、手機）是移動的，它們會頻繁地連接和斷開網路。如果給這些設備分配固定 IP 地址，當它們離開網路時，IP 地址就會被閒置，造成浪費。</li>
+<li>追蹤所有已分配和可用 IP 地址將是一個巨大的挑戰。</li>
 </ul>
 </li>
 </ol>
-<hr />
-<h1 id="索引的缺點"><a class="markdownIt-Anchor" href="#索引的缺點"></a> 索引的缺點</h1>
+<p>DHCP 完美地解決了這些問題，它讓網路配置變得<strong>自動化、高效且無錯誤</strong>。</p>
+<h1 id="dhcp-如何運作一場dora探險之旅"><a class="markdownIt-Anchor" href="#dhcp-如何運作一場dora探險之旅"></a> DHCP 如何運作？一場「DORA」探險之旅</h1>
+<p>DHCP 客戶端從 DHCP 伺服器獲取 IP 地址和其他配置資訊的過程，通常被稱為「DORA」過程，代表了四個關鍵的步驟：<strong>D</strong>iscover (發現)、<strong>O</strong>ffer (提供)、<strong>R</strong>equest (請求)、<strong>A</strong>cknowledge (確認)。</p>
+<p>來看看這個精密的互動過程：</p>
 <ol>
-<li>
-<p><strong>寫入放大（Write Amplification）</strong></p>
+<li><strong>[D]iscover (發現)</strong>：
 <ul>
-<li><code>INSERT / UPDATE / DELETE</code> 必須同步更新索引</li>
-<li>高頻寫入場景可能因索引過多而拖慢整體效能</li>
+<li>當一台新設備（DHCP 客戶端）連接到網路，且需要 IP 地址時，它會發送一個 DHCP <strong>Discover</strong> 訊息。這個訊息是一個<strong>廣播 (Broadcast)</strong> 訊息，目標埠為 67 (DHCP Server)，來源埠為 68 (DHCP Client)。</li>
+<li>由於客戶端還沒有 IP 地址，它會使用 <code>0.0.0.0</code> 作為來源 IP 地址。</li>
+<li>這個廣播的目的是找到網路中可用的 DHCP 伺服器。</li>
 </ul>
 </li>
-<li>
-<p><strong>額外儲存空間</strong></p>
+<li><strong>[O]ffer (提供)</strong>：
 <ul>
-<li>索引需要保存鍵值與指標，通常佔用資料表數倍空間</li>
-<li>SSD 成本高或磁碟資源有限時需要權衡</li>
+<li>網路中的 DHCP 伺服器接收到 Discover 訊息後，會從其<strong>IP 地址池 (IP Pool/Scope)</strong> 中選擇一個可用的 IP 地址，並連同子網路遮罩、預設閘道、DNS 伺服器等配置資訊，發送一個 DHCP <strong>Offer</strong> 訊息給客戶端。</li>
+<li>這個 Offer 訊息通常是<strong>單播 (Unicast)</strong>，但有時也可能是廣播，取決於客戶端的配置。</li>
+<li>注意：如果有多個 DHCP 伺服器，客戶端可能會收到多個 Offer。</li>
 </ul>
 </li>
-<li>
-<p><strong>維護成本</strong></p>
+<li><strong>[R]equest (請求)</strong>：
 <ul>
-<li>索引碎片化（Fragmentation）導致效能降低</li>
-<li>需定期 <code>REINDEX / OPTIMIZE</code>，佔用系統資源</li>
+<li>客戶端收到一個或多個 Offer 訊息後，會選擇其中一個 Offer（通常是第一個收到的），然後向該 DHCP 伺服器發送一個 DHCP <strong>Request</strong> 訊息，<strong>廣播</strong>宣布它接受了哪個伺服器提供的哪個 IP 地址。</li>
+<li>這個廣播的目的是告知所有其他可能提供了 Offer 的 DHCP 伺服器，它們提供的地址現在可以被釋放或重新分配了。</li>
 </ul>
 </li>
-<li>
-<p><strong>查詢規劃複雜度</strong></p>
+<li><strong>[A]cknowledge (確認)</strong>：
 <ul>
-<li>不適當或重疊的索引會混淆查詢最佳化器</li>
-<li>可能反而導致 sub‑optimal 計劃</li>
-</ul>
-</li>
-<li>
-<p><strong>鎖定與競爭</strong></p>
-<ul>
-<li>部分資料庫在建立／重建索引時需鎖表或消耗大量 CPU</li>
-<li>線上重建（Online Rebuild）仍有資源競爭風險</li>
+<li>DHCP 伺服器收到客戶端的 Request 訊息後，會發送一個 DHCP <strong>ACK (Acknowledgement)</strong> 訊息作為最終確認。</li>
+<li>這個 ACK 訊息包含了客戶端需要的所有配置資訊（IP 地址、子網路遮罩、閘道、DNS 伺服器等）以及這個 IP 地址的<strong>租賃期限 (Lease Time)</strong>。</li>
+<li>至此，客戶端成功獲得了 IP 地址及所有必要的網路設定，可以開始進行網路通訊了。</li>
 </ul>
 </li>
 </ol>
-<hr />
-<h1 id="建立索引的最佳實務"><a class="markdownIt-Anchor" href="#建立索引的最佳實務"></a> 建立索引的最佳實務</h1>
+<h2 id="ip-租賃與續約"><a class="markdownIt-Anchor" href="#ip-租賃與續約"></a> IP 租賃與續約</h2>
+<p>DHCP 分配的 IP 地址通常不是永久的，而是有<strong>租賃期限</strong>的。</p>
+<ul>
+<li>在租賃期限過半時，客戶端會嘗試向提供其 IP 地址的 DHCP 伺服器發送 DHCP <strong>Request</strong> 訊息，請求<strong>續租</strong>。</li>
+<li>如果伺服器准許續租，會發送 ACK 訊息確認。</li>
+<li>如果客戶端在租賃期限結束前未能成功續租，它將停止使用該 IP 地址，並重新啟動 DORA 過程來獲取新的 IP 地址。這確保了 IP 地址資源能夠被高效地回收和再利用。</li>
+</ul>
+<h1 id="dhcp-的核心組成部分"><a class="markdownIt-Anchor" href="#dhcp-的核心組成部分"></a> DHCP 的核心組成部分</h1>
 <ol>
-<li>
-<p><strong>以查詢為核心</strong></p>
+<li><strong>DHCP 伺服器 (DHCP Server)</strong>：
 <ul>
-<li>依實際慢查詢（slow query log）或 <code>EXPLAIN</code> 報告決定索引策略</li>
-<li>先優化 schema 與 SQL，再考慮添加索引</li>
+<li>負責管理 IP 地址池，並向客戶端分發 IP 地址及其他配置資訊。</li>
+<li>常見的 DHCP 伺服器可以運行在路由器、伺服器作業系統（如 Windows Server, Linux）或專用的網路設備上。</li>
 </ul>
 </li>
-<li>
-<p><strong>選擇性 &gt; 0.2</strong></p>
+<li><strong>DHCP 客戶端 (DHCP Client)</strong>：
 <ul>
-<li>選擇性（distinct/total rows）太低的欄位通常不該單獨建索引</li>
-<li>可考慮複合索引或前綴索引</li>
+<li>任何需要自動獲取 IP 地址的網路設備，如電腦、手機、印表機、IoT 設備等。</li>
 </ul>
 </li>
-<li>
-<p><strong>覆蓋索引優先</strong></p>
+<li><strong>DHCP 中繼代理 (DHCP Relay Agent)</strong>：
 <ul>
-<li>常見查詢僅讀取少量欄位時，可設計覆蓋索引取得最大效益</li>
-</ul>
-</li>
-<li>
-<p><strong>觀察寫入壓力</strong></p>
-<ul>
-<li>高寫入 OLTP 系統：少量、精準索引</li>
-<li>查詢為主 OLAP / 報表系統：可接受多重索引</li>
-</ul>
-</li>
-<li>
-<p><strong>定期審計與重建</strong></p>
-<ul>
-<li>使用 <code>pg_stat_user_indexes</code>、<code>mysql.innodb_index_stats</code> 等檢視未使用索引</li>
-<li>失效或冗餘索引要及時移除</li>
+<li>用於解決 DHCP 伺服器和客戶端不在同一個廣播域 (子網路) 內的問題。</li>
+<li>由於 DHCP Discover 訊息是廣播的，無法跨越路由器直接到達不同子網路的 DHCP 伺服器。中繼代理會接收客戶端的 DHCP 廣播，並將其<strong>轉換為單播發送到指定子網路的 DHCP 伺服器</strong>，然後將伺服器的回應轉發給客戶端。</li>
 </ul>
 </li>
 </ol>
-<hr />
-<h1 id="範例postgresql-建立複合索引"><a class="markdownIt-Anchor" href="#範例postgresql-建立複合索引"></a> 範例：PostgreSQL 建立複合索引</h1>
-<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 針對 (status, created_at) 的高頻查詢</span>
-<span class="hljs-keyword">CREATE</span> INDEX idx_orders_status_created
-<span class="hljs-keyword">ON</span> orders (status, created_at <span class="hljs-keyword">DESC</span>);
-</code></pre>
-<p><strong>注意</strong>：複合索引遵循<strong>最左前綴原則</strong>，若只查 <code>created_at</code> 而不含 <code>status</code>，此索引將無法被使用。</p>
-<hr />
-<h1 id="面試回答"><a class="markdownIt-Anchor" href="#面試回答"></a> 面試回答</h1>
-<p><strong>索引的優點有：</strong></p>
-<ol>
-<li>
-<p><strong>提升查詢效率</strong></p>
+<h1 id="dhcp-提供的豐富資訊"><a class="markdownIt-Anchor" href="#dhcp-提供的豐富資訊"></a> DHCP 提供的豐富資訊</h1>
+<p>除了 IP 地址，DHCP 伺服器還可以提供一系列重要的網路配置參數，這些參數通常被稱為 <strong>DHCP 選項 (DHCP Options)</strong>：</p>
 <ul>
-<li>對於常用在 <code>WHERE</code>、<code>JOIN</code>、<code>ORDER BY</code> 的欄位建立索引，可以大幅降低查詢時間，從全表掃描降到數筆查找。</li>
+<li><strong>子網路遮罩 (Subnet Mask)</strong>：定義網路和主機部分。</li>
+<li><strong>預設閘道 (Default Gateway)</strong>：路由器或第 3 層交換器的 IP 地址，用於將網路流量路由到其他網路（包括網際網路）。</li>
+<li><strong>DNS 伺服器地址 (DNS Server Address)</strong>：提供域名解析服務的伺服器 IP 地址，讓你的設備能將網域名稱解析成 IP 地址。</li>
+<li><strong>租賃期限 (Lease Duration)</strong>：IP 地址的有效使用時間。</li>
+<li><strong>WINS 伺服器地址</strong>：用於 Windows 網路中解析 NetBIOS 名稱。</li>
+<li><strong>域後綴 (Domain Suffix)</strong>：例如 <code>example.com</code>，方便快速解析本地網路主機名。</li>
 </ul>
-</li>
-<li>
-<p><strong>支援唯一性限制</strong></p>
+<h1 id="dhcp-的優勢與考量"><a class="markdownIt-Anchor" href="#dhcp-的優勢與考量"></a> DHCP 的優勢與考量</h1>
+<h2 id="優勢"><a class="markdownIt-Anchor" href="#優勢"></a> 優勢：</h2>
 <ul>
-<li>像是 <code>UNIQUE</code> 或主鍵索引可以避免重複資料。</li>
+<li><strong>自動化配置</strong>：極大地減少了網路管理員的工作負擔，尤其是對於大型網路。</li>
+<li><strong>減少錯誤</strong>：自動分配避免了手動輸入錯誤和 IP 地址衝突。</li>
+<li><strong>高效利用 IP 地址</strong>：通過租賃機制，可以動態回收和再利用不活躍設備的 IP 地址。</li>
+<li><strong>移動性支持</strong>：對於經常在不同網路間移動的設備（如筆記型電腦），無需手動更改配置。</li>
+<li><strong>擴展性</strong>：輕鬆添加新的網路設備，而無需擔心 IP 配置問題。</li>
 </ul>
-</li>
-<li>
-<p><strong>覆蓋查詢（Covering Index）</strong></p>
+<h2 id="考量"><a class="markdownIt-Anchor" href="#考量"></a> 考量：</h2>
 <ul>
-<li>若查詢所需欄位都包含在索引中，可直接從索引取得資料，省略回表動作。</li>
+<li><strong>單點故障</strong>：如果網路中唯一的 DHCP 伺服器崩潰，所有新的客戶端都將無法獲得 IP 地址。通常會配置備援 DHCP 伺服器。</li>
+<li><strong>惡意 DHCP 伺服器 (Rogue DHCP Server)</strong>：未經授權的 DHCP 伺服器可能分發錯誤或惡意的網路配置，導致用戶無法上網或竊取流量。可透過 DHCP Snooping 等安全機制防範。</li>
 </ul>
-</li>
-</ol>
-<hr />
-<p><strong>索引的缺點有：</strong></p>
-<ol>
-<li>
-<p><strong>寫入效能降低</strong></p>
-<ul>
-<li>每次 <code>INSERT</code>、<code>UPDATE</code>、<code>DELETE</code> 都要同步更新相關索引，會增加寫入成本。</li>
-</ul>
-</li>
-<li>
-<p><strong>占用額外空間</strong></p>
-<ul>
-<li>索引是額外資料結構，尤其在高頻查詢、大資料量的系統中，可能需要數倍的空間。</li>
-</ul>
-</li>
-<li>
-<p><strong>維護成本</strong></p>
-<ul>
-<li>索引太多可能會混淆查詢最佳化器（optimizer），導致選錯查詢路徑。也可能隨時間產生碎片，影響效能。</li>
-</ul>
-</li>
-</ol>
-<hr />
-<p><strong>補充實務觀點（加分項）：</strong></p>
-<blockquote>
-<p>平常會配合 <code>EXPLAIN</code> 去分析查詢是否有用到索引，避免建立太多沒被使用的索引。也會觀察查詢選擇性（如某欄位是否夠分散），確保索引是有價值的。</p>
-</blockquote>
-<hr />
 <h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
-<p>索引是資料庫效能調校的雙刃劍：</p>
-<ul>
-<li><strong>讀取性能</strong> 與 <strong>寫入開銷</strong> 必須取得平衡</li>
-<li>透過 <strong>持續監控</strong>、<strong>資料分佈分析</strong> 和 <strong>業務場景理解</strong>，才能打造最貼合需求的索引策略</li>
-</ul>
-<blockquote>
-<p><strong>行動項目</strong>：</p>
-<ol>
-<li>立刻檢查慢查詢日誌，找出無索引的查詢。</li>
-<li>使用 <code>EXPLAIN ANALYZE</code> 確認索引是否生效。</li>
-<li>訂定週期性索引健康檢查排程。</li>
-</ol>
-</blockquote>
+<p>DHCP 是我們每天使用的網路背後不可或缺的基石。它將繁瑣的 IP 地址配置工作自動化，不僅節省了時間，減少了錯誤，更使得網路變得更加靈活、易於管理和擴展。</p>
+<p>正是因為 DHCP 的存在，才能體驗到「連上 Wi-Fi 就上網」的便捷性。</p>
 
     </div>
 
@@ -813,21 +704,18 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/my-blog/tags/Database/" rel="tag"># Database</a>
+              <a href="/my-blog/tags/Networking/" rel="tag"># Networking</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/my-blog/2025/06/19/%E4%BB%80%E9%BA%BC%E6%98%AF%20SQL%20Injection%E5%8F%88%E8%A9%B2%E5%A6%82%E4%BD%95%E9%A0%90%E9%98%B2/" rel="prev" title="什麼是 SQL Injection？又該如何預防？">
-                  <i class="fa fa-angle-left"></i> 什麼是 SQL Injection？又該如何預防？
+                <a href="/my-blog/2025/09/06/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20DNS/" rel="prev" title="網際網路的「電話簿」與「導航系統」：深入解析 DNS (Domain Name System)">
+                  <i class="fa fa-angle-left"></i> 網際網路的「電話簿」與「導航系統」：深入解析 DNS (Domain Name System)
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/my-blog/2025/07/04/Django%20%E9%9D%9C%E6%85%8B%E6%AA%94%E6%A1%88%E9%83%A8%E7%BD%B2%E7%88%86%E7%89%88%E5%95%8F%E9%A1%8C%E6%8E%92%E6%9F%A5%E8%88%87%E8%A7%A3%E6%B3%95/" rel="next" title="Django 靜態檔案部署爆版問題排查與解法">
-                  Django 靜態檔案部署爆版問題排查與解法 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
