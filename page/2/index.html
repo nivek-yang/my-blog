@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">80</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">81</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">49</span></a>
       <ul class="sub-menu">
   
@@ -302,7 +302,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Networking/">
         Networking
-        <span class="post-count">(12)</span>
+        <span class="post-count">(13)</span>
       </a>
     </li>
   
@@ -492,7 +492,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-count">81</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -517,6 +517,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/28/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20IP%20%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E7%9A%84%E5%9C%B0%E5%9D%80%E8%88%87%E8%BA%AB%E4%BB%BD%E8%AD%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/08/28/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20IP%20%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E7%9A%84%E5%9C%B0%E5%9D%80%E8%88%87%E8%BA%AB%E4%BB%BD%E8%AD%89/" class="post-title-link" itemprop="url">
+              深入淺出 IP：網路世界的地址與身份證
+            </a>
+            <a href="/my-blog/2025/08/28/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20IP%20%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E7%9A%84%E5%9C%B0%E5%9D%80%E8%88%87%E8%BA%AB%E4%BB%BD%E8%AD%89/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-08-28 00:00:00 / 修改時間：23:12:18" itemprop="dateCreated datePublished" datetime="2025-08-28T00:00:00+08:00">2025-08-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">在前兩篇文章中，分別認識了TCP這位嚴謹可靠的「快遞員」，以及UDP這位追求速度的「奔放郵差」。它們負責將資料或可靠地、或快速地送達。 但無論是哪種方式，要將資料成功送出去，首先得知道「送往哪裡？」 這就像要寄一封信，即使知道要用平信（UDP 的速度）還是掛號（TCP 的可靠），還是需要一個明確的地址才能寄出。在網際網路中，扮演這個「地址」與「導航系統」角色的，就是本篇文章的主角——IP (Internet Protocol)。 什麼是 IP？ IP，全名為「網際網路協定」（Internet Protocol），它是網際網路協定套組 (TCP/IP) 中網路層 (Network Layer) 的核心協定。 如果說 TCP 和 UDP 負責「送貨的方式」，那麼 IP 則負責「送貨的目的地」。它定義了資料在網際網路中傳輸的基本格式和尋址方式。 可以把 IP 想像成現實世界中的郵寄地址。無論是電腦、手機、伺服器還是任何連網設備，只要它想在網路上進行通訊，就必須擁有一個 IP 地址，就像每棟建築物都必須有門牌號碼一樣。 IP 的主要特點包括： 邏輯地址 (Logical Addressing)：IP 地址是可變的，依附在網路卡上的。不像 MAC 地址是固定在硬體上的「物理地址」。這使得資料可以跨越不同的物理網路進行路由。 無連線 (Connectionless)：IP 協定本身不建立、不維護與目的地的「連線」。它只管接收到資料包 (Packet) 後，根據目標 IP 地址盡力而為地轉發出去。 不可靠 (Unreliable)：單純的 IP 協定並不保證資料包會被成功送達、不重複、不失序。這些可靠性保證是由上層的 TCP 協定提供的。IP 只負責「找到路徑並傳遞」。 資料包導向 (Packet-Oriented)：IP 將上層傳下來的資料分割成許多獨立的「資料包」（或稱 IP 包、IP Datagram），每個資料包都帶有獨立的來源 IP 和目的 IP 資訊，獨立地在網路中傳輸。 IP 地址：網路世界的身份證與導航 IP 地址是網路中一個設備的唯一識別碼。目前主流有兩種版本： 1. IPv4 (Internet Protocol version 4) 格式：由 32 個二進位位元組成，通常表示為四組十進位數字，每組數字之間用點 (.) 分隔，例如 192.168.1.1。每組數字的範圍是 0 到 255。 地址數量：理論上可以提供約 43 億個唯一地址。 困境：隨著網際網路的爆炸式成長，IPv4 地址已經枯竭。這導致了許多技術的產生，例如 NAT (網路地址轉換)，來緩解地址短缺的問題。 私有 IP 地址：為了解決地址枯竭問題，並增加內部網路安全性，RFC 1918 定義了三段私有 IP 範圍（例如 192.168.0.0/16、10.0.0.0/8、172.16.0.0/12）。這些地址只能在局域網內部使用，無法直接在公網上路由，需要通過 NAT 轉換成公有 IP 才能訪問網際網路。 2. IPv6 (Internet Protocol version 6) 格式：為了應對 IPv4 的枯竭，IPv6 應運而生。它由 128 個二進位位元組成，通常表示為八組十六進位數字，每組之間用冒號 (:) 分隔，例如 2001:0db8:85a3:0000:0000:8a2e:0370:7334。為了簡化，會有縮寫規則。 地址數量：數量驚人，可以提供約 3.4 x 10^38 個地址，足以保證地球上每個沙粒都能有自己的 IP 地址！ 優勢： 海量地址：徹底解決地址枯竭問題。 簡化協定標頭：提高了路由效率。 更好的安全特性：內建 IPSec。 自動配置：支援無狀態地址自動配置 (SLAAC)，設備可以自動生成 IPv6 地址。 IP 如何指引資料包方向？ 當發送一個資料包時，它會如何找到遠在天邊的接收者呢？這要歸功於路由器 (Router) 和 IP 地址的完美配合。 想像一下在一個城市中，每棟建築物都有一個 IP 地址。當一個資料包從來源地發出，它會被傳送到最近的路由器。路由器就像一個中央轉運站，它會查看資料包的目的 IP 地址，然後查詢自己的路由表 (Routing Table)，找出將這個資料包轉發到下一個最佳「轉運站」（另一個路由器）的路徑，直到資料包到達最終的目的地網路，最後再由該網路的設備接收。 這個過程就如同寄送國際包裹，包裹上的目的地國家、城市地址（IP 地址）引導它：先從本地郵局，到集散中心，再到國際中轉站，最終到達目的國家的各級郵局分發，直到最後派送給你。 IP 地址 vs. MAC 地址：邏輯與物理的區別 這是一個常常讓初學者感到困惑的地方。簡而言之： IP 地址：是邏輯地址 (Logical Address)。就像家鄉地址或公司地址。這個地址可能會變動（例如搬家了，或是連線到不同的網路），它用於跨網路的資料路由。 MAC 地址：是物理地址 (Physical Address)，也稱為硬體地址。就像身份證上的身份證字號，或是電腦網路卡的出廠編號。這個地址在產品出廠時就燒錄在硬體裡，全球唯一且通常固定不變（除非透過軟體 spoofing）。它主要用於局域網內部的設備識別。 在同一個局域網內，資料傳輸需要知道對方的 MAC 地址；但當資料要跨越網路時，IP 地址就成了決定方向的關鍵。這兩者在不同的網路層次中各司其職，共同確保了資料的準確傳輸。 結論 IP 協定是整個網際網路最基礎、最核心的「地圖與導航系統」。沒有 IP 地址，資料將寸步難行，無法在廣大的網路中找到方向。 從 IPv4 的精巧到 IPv6 的宏大，IP 協定在確保網路通訊的連通性上扮演著無可取代的角色。理解 IP，就如同掌握了網路世界的基本「方位感」，能幫助我們更好地構建和理解複雜的網路架構。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/08/28/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20IP%20%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E7%9A%84%E5%9C%B0%E5%9D%80%E8%88%87%E8%BA%AB%E4%BB%BD%E8%AD%89/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1292,94 +1378,8 @@
 
 
 
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/17/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20Apache%20Kafka%20%E7%8F%BE%E4%BB%A3%E8%B3%87%E6%96%99%E5%B7%A5%E7%A8%8B%E7%9A%84%E5%9F%BA%E7%9F%B3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/08/17/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20Apache%20Kafka%20%E7%8F%BE%E4%BB%A3%E8%B3%87%E6%96%99%E5%B7%A5%E7%A8%8B%E7%9A%84%E5%9F%BA%E7%9F%B3/" class="post-title-link" itemprop="url">
-              深入淺出 Apache Kafka：現代資料工程的基石
-            </a>
-            <a href="/my-blog/2025/08/17/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20Apache%20Kafka%20%E7%8F%BE%E4%BB%A3%E8%B3%87%E6%96%99%E5%B7%A5%E7%A8%8B%E7%9A%84%E5%9F%BA%E7%9F%B3/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-08-17 00:00:00 / 修改時間：23:16:34" itemprop="dateCreated datePublished" datetime="2025-08-17T00:00:00+08:00">2025-08-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">在這個數據驅動的時代，每天都在處理海量的資料流。從使用者行為日誌、應用程式指標到 IoT 裝置的即時數據，如何高效、可靠地處理這些資料，成為了所有開發者與架構師必須面對的課題。 這篇文章要來聊聊一個解決這個問題的強大工具 — Apache Kafka，理解它的核心概念以及為何它會成為現代資料架構中不可或缺的一環。 Kafka 是什麼？一個進階版的「日誌」 許多人初次接觸 Kafka，會將它與傳統的訊息佇列（Message Queue）如 RabbitMQ 或 ActiveMQ 相比較。這是一個好的開始，但並不完全準確。 更精準地說，Kafka 是一個分散式串流平台（Distributed Streaming Platform）。 讓我們先忘掉複雜的術語，把它想像成一個「永不刪除的超級日誌本」。 核心比喻： 想像一下，有一個神奇的日誌本，可以不斷地在後面寫入新的紀錄（Events），而許多人可以同時從日誌本的任何地方開始讀取，並且每個人都有自己的書籤，記錄著自己讀到哪裡。這個日誌本是分散在多台機器上的，所以即使其中一台壞了，你的紀錄也安然無恙。 這就是 Kafka 的本質：一個高可用、可擴展、持久化的日誌系統。 Kafka 的四大核心 API 為了實現這個「超級日誌本」的功能，Kafka 提供了四個核心 API： Producer API：允許應用程式發布（寫入）一連串的紀錄到一個或多個 Kafka 主題（Topics）中。 Consumer API：允許應用程式訂閱一個或多個主題，並處理其產生的紀錄流。 Streams API：將 Kafka 變成一個強大的串流處理框架。它允許應用程式從輸入主題讀取資料，進行即時的轉換、聚合、計算，然後將結果寫回輸出主題。 Connector API：用於建立可重複使用的 Producer 或 Consumer，將 Kafka 主題與現有的應用程式或資料系統（例如資料庫、搜尋引擎）連接起來。 拆解 Kafka 的核心元件 要真正理解 Kafka 如何運作，需要認識幾個關鍵的名詞。 Kafka 流程圖: graph LR subgraph Producers P1[Producer 1] P2[Producer 2] end subgraph Kafka_Cluster[&quot;Kafka Cluster&quot;] subgraph Topic_A[&quot;Topic A&quot;] direction LR Part0[Partition 0] Part1[Partition 1] Part2[Partition 2] end end subgraph Consumer_Group[&quot;Consumer Group - data-processor&quot;] C1[Consumer 1] C2[Consumer 2] C3[&quot;Consumer 3 (Idle)&quot;] end %% --- Connections --- P1 -- writes --&gt; Topic_A P2 -- writes --&gt; Topic_A Part0 -- Assigned to --&gt; C1 Part1 -- Assigned to --&gt; C2 Part2 -- Assigned to --&gt; C2 style C3 fill:#f9f,stroke:#333,stroke-width:2px 1. 事件（Event / Record） 這是 Kafka 中最基本的資料單位，也就是寫入日誌本的那一筆「紀錄」。它由三個部分組成： Key：可選的鍵，用於決定事件要被送到哪個分割區（Partition）。 Value：事件的主要內容，通常是 JSON、Avro 或其他格式的資料。 Timestamp：事件發生的時間。 2. 主題（Topic） 主題是事件的分類名稱，就像是日誌本的「分類標籤」或資料庫中的「資料表」。例如，可以有一個 user-clicks 主題用來存放使用者點擊事件，一個 order-placed 主題用來存放訂單事件。 3. 分割區（Partition） 這是 Kafka 實現高吞吐量和可擴展性的關鍵！一個主題可以被分成多個分割區。 分割區的重要性： 平行處理：多個 Consumer 可以同時從不同的分割區讀取資料，大幅提升處理速度。 順序保證：在同一個分割區內，事件的順序是嚴格保證的。這對於需要依序處理的業務場景至關重要。 擴展性：可以透過增加分割區的數量來擴展主題的吞吐能力。 4. Broker 一台 Kafka 伺服器就是一個 Broker。在生產環境中，通常會由多個 Broker 組成一個 Kafka 叢集（Cluster）。叢集提供了容錯（Fault Tolerance）和高可用性。如果一個 Broker 掛了，其他 Broker 上的複本（Replicas）可以確保資料不遺失。 5. Producer &amp; Consumer Producer（生產者）：負責將事件發送到指定的 Topic。Producer 可以決定要將事件送到哪個 Partition。 Consumer（消費者）：負責從 Topic 訂閱並讀取事件。 6. 消費者群組（Consumer Group） 這是一個非常聰明的設計！多個 Consumer 可以組成一個「群組」來共同消費一個 Topic。Kafka 會自動將 Topic 的所有 Partition 平均分配給群組內的 Consumer。 如果群組內只有 1 個 Consumer，它會收到所有 Partition 的資料。 如果有 2 個 Consumer 和 4 個 Partition，每個 Consumer 會負責 2 個 Partition 的資料。 如果 Consumer 的數量超過了 Partition 的數量，多出來的 Consumer 將會閒置。 這個機制讓消費端的擴展變得非常簡單，只需要增加新的 Consumer 實例並將它們加入同一個群組即可。 7. Offset Offset 是一個不斷遞增的整數，可以看作是 Consumer 在 Partition 中的「書籤」。它標記了 Consumer 已經讀取到哪一條訊息。這個 Offset 是由 Consumer 自己管理和提交的，這給了 Kafka 極大的靈活性。 為什麼要選擇 Kafka？ 講了這麼多概念，那 Kafka 的真正優勢在哪裡？ 高吞吐量與低延遲：Kafka 在設計上就為高流量場景而生。它透過順序讀寫磁碟（Sequential I/O）和零拷貝（Zero-copy）等技術，能以極高的效率處理每秒數十萬甚至數百萬的訊息。 高擴展性：無論是 Broker、Topic 還是 Producer/Consumer，都可以輕易地水平擴展以應對不斷增長的業務需求。 持久化與容錯：資料會在磁碟上持久化儲存，並透過複寫（Replication）機制分散到多個 Broker 上，確保了極高的資料可靠性。 系統解耦：Kafka 扮演了系統間的緩衝區。生產者不需要知道消費者是誰、在哪裡，反之亦然。這讓微服務架構的實現變得更加優雅和健壯。 即時串流處理：結合 Kafka Streams 或其他串流處理框架（如 Flink、Spark），Kafka 不再只是一個訊息通道，而是一個強大的即時資料處理平台。 總結 Kafka 絕不僅僅是一個訊息佇列，它是一個為處理即時資料流而生的強大平台。它透過 Topic、Partition 和 Consumer Group 等巧妙設計，完美地兼顧了高效能、高可用與高擴展性，這也是為什麼它能成為 LinkedIn、Netflix、Uber 等無數科技巨頭背後的資料中樞。 Kafka 還有複寫機制、日誌壓縮、安全性等更多深入的主題等著我們去探索。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/08/17/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20Apache%20Kafka%20%E7%8F%BE%E4%BB%A3%E8%B3%87%E6%96%99%E5%B7%A5%E7%A8%8B%E7%9A%84%E5%9F%BA%E7%9F%B3/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一頁" aria-label="上一頁" href="/my-blog/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/my-blog/">1</a><span class="page-number current">2</span><a class="page-number" href="/my-blog/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/my-blog/page/8/">8</a><a class="extend next" rel="next" title="下一頁" aria-label="下一頁" href="/my-blog/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="上一頁" aria-label="上一頁" href="/my-blog/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/my-blog/">1</a><span class="page-number current">2</span><a class="page-number" href="/my-blog/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/my-blog/page/9/">9</a><a class="extend next" rel="next" title="下一頁" aria-label="下一頁" href="/my-blog/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

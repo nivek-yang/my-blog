@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="在數位時代，檔案傳輸是與網路互動最頻繁的活動之一。無論是部署網站、備份資料、共享文件，還是管理遠端伺服器，都離不開檔案傳輸協定。其中，FTP (File Transfer Protocol) 是歷史悠久的，而 SFTP (SSH File Transfer Protocol) 則是現代網路安全環境下誕生的新星。 了解它們之間的差異，並選擇正確的協定，對於保護資料安全至關重要。  FTP：網路世界的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="檔案傳輸的進化：從傳統 FTP 到安全的 SFTP">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/09/08/%E6%AA%94%E6%A1%88%E5%82%B3%E8%BC%B8%E7%9A%84%E9%80%B2%E5%8C%96%20%E5%BE%9E%E5%82%B3%E7%B5%B1%20FTP%20%E5%88%B0%E5%AE%89%E5%85%A8%E7%9A%84%20SFTP/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="在數位時代，檔案傳輸是與網路互動最頻繁的活動之一。無論是部署網站、備份資料、共享文件，還是管理遠端伺服器，都離不開檔案傳輸協定。其中，FTP (File Transfer Protocol) 是歷史悠久的，而 SFTP (SSH File Transfer Protocol) 則是現代網路安全環境下誕生的新星。 了解它們之間的差異，並選擇正確的協定，對於保護資料安全至關重要。  FTP：網路世界的">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-09-07T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-09-08T15:21:37.380Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Networking">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/09/08/%E6%AA%94%E6%A1%88%E5%82%B3%E8%BC%B8%E7%9A%84%E9%80%B2%E5%8C%96%20%E5%BE%9E%E5%82%B3%E7%B5%B1%20FTP%20%E5%88%B0%E5%AE%89%E5%85%A8%E7%9A%84%20SFTP/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/09/08/%E6%AA%94%E6%A1%88%E5%82%B3%E8%BC%B8%E7%9A%84%E9%80%B2%E5%8C%96%20%E5%BE%9E%E5%82%B3%E7%B5%B1%20FTP%20%E5%88%B0%E5%AE%89%E5%85%A8%E7%9A%84%20SFTP/","path":"2025/09/08/檔案傳輸的進化 從傳統 FTP 到安全的 SFTP/","title":"檔案傳輸的進化：從傳統 FTP 到安全的 SFTP"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>檔案傳輸的進化：從傳統 FTP 到安全的 SFTP | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">81</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">49</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(15)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(13)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ftp%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E7%9A%84%E5%B9%B3%E9%83%B5%E9%96%8B%E6%94%BE%E8%88%87%E6%95%88%E7%8E%87%E4%BD%86%E7%BC%BA%E4%B9%8F%E5%AE%89%E5%85%A8"><span class="nav-number">1.</span> <span class="nav-text"> FTP：網路世界的「平郵」——開放與效率（但缺乏安全）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ftp-%E5%A6%82%E4%BD%95%E9%81%8B%E4%BD%9C%E9%9B%99%E9%80%9A%E9%81%93%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text"> FTP 如何運作？雙通道模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ftp-%E7%9A%84%E6%9C%AC%E8%B3%AA%E5%BC%B1%E9%BB%9E%E9%80%8F%E6%98%8E%E7%9A%84%E9%A2%A8%E9%9A%AA"><span class="nav-number">1.2.</span> <span class="nav-text"> FTP 的本質弱點：透明的風險</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%A9%E7%94%A8%E5%A0%B4%E6%99%AF%E6%97%A5%E7%9B%8A%E6%B8%9B%E5%B0%91"><span class="nav-number">1.3.</span> <span class="nav-text"> 適用場景（日益減少）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sftp%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E7%9A%84%E5%8A%A0%E5%AF%86%E5%BF%AB%E9%81%9E%E5%AE%89%E5%85%A8%E8%88%87%E4%BE%BF%E5%88%A9"><span class="nav-number">2.</span> <span class="nav-text"> SFTP：網路世界的「加密快遞」——安全與便利</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#sftp-%E5%A6%82%E4%BD%95%E9%81%8B%E4%BD%9C%E5%96%AE%E4%B8%80%E5%AE%89%E5%85%A8%E9%80%9A%E9%81%93"><span class="nav-number">2.1.</span> <span class="nav-text"> SFTP 如何運作？單一安全通道</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%A9%E7%94%A8%E5%A0%B4%E6%99%AF%E7%8F%BE%E4%BB%A3%E7%B6%B2%E8%B7%AF%E9%A6%96%E9%81%B8"><span class="nav-number">2.2.</span> <span class="nav-text"> 適用場景（現代網路首選）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ftp-vs-sftp%E6%A0%B8%E5%BF%83%E5%B7%AE%E7%95%B0"><span class="nav-number">3.</span> <span class="nav-text"> FTP vs. SFTP：核心差異</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%99%82%E5%80%99%E8%A9%B2%E9%81%B8%E6%93%87%E8%AA%B0"><span class="nav-number">4.</span> <span class="nav-text"> 什麼時候該選擇誰？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">81</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/08/%E6%AA%94%E6%A1%88%E5%82%B3%E8%BC%B8%E7%9A%84%E9%80%B2%E5%8C%96%20%E5%BE%9E%E5%82%B3%E7%B5%B1%20FTP%20%E5%88%B0%E5%AE%89%E5%85%A8%E7%9A%84%20SFTP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="檔案傳輸的進化：從傳統 FTP 到安全的 SFTP | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          檔案傳輸的進化：從傳統 FTP 到安全的 SFTP
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-09-08 00:00:00 / 修改時間：23:21:37" itemprop="dateCreated datePublished" datetime="2025-09-08T00:00:00+08:00">2025-09-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在數位時代，檔案傳輸是與網路互動最頻繁的活動之一。無論是部署網站、備份資料、共享文件，還是管理遠端伺服器，都離不開檔案傳輸協定。其中，<strong>FTP</strong> (File Transfer Protocol) 是歷史悠久的，而 <strong>SFTP</strong> (SSH File Transfer Protocol) 則是現代網路安全環境下誕生的新星。</p>
+<p>了解它們之間的差異，並選擇正確的協定，對於保護資料安全至關重要。</p>
+<h1 id="ftp網路世界的平郵開放與效率但缺乏安全"><a class="markdownIt-Anchor" href="#ftp網路世界的平郵開放與效率但缺乏安全"></a> FTP：網路世界的「平郵」——開放與效率（但缺乏安全）</h1>
+<p><strong>FTP</strong>，全名為「<strong>檔案傳輸協定 (File Transfer Protocol)</strong>」，是一種用於在網際網路上的客戶端和伺服器之間傳輸檔案的標準協定。它工作在 <strong>OSI 模型的應用層 (Application Layer, Layer 7)</strong>。</p>
+<p>FTP 是網際網路最早期的應用層協定之一，設計之初主要考量效率和簡單性，而非資料安全。</p>
+<h2 id="ftp-如何運作雙通道模式"><a class="markdownIt-Anchor" href="#ftp-如何運作雙通道模式"></a> FTP 如何運作？雙通道模式</h2>
+<p>FTP 有一個獨特的設計：它使用兩個獨立的 TCP 連接來進行通訊：</p>
+<ol>
+<li><strong>控制通道 (Control Channel) - 埠號 21</strong>：
+<ul>
+<li>負責傳輸命令和回應。例如：登入、列出目錄、切換目錄、發送檔名等。</li>
+<li>這個通道在整個 FTP 會話期間保持活動。</li>
+</ul>
+</li>
+<li><strong>資料通道 (Data Channel) - 埠號 20 或隨機埠</strong>：
+<ul>
+<li>負責實際的檔案資料傳輸。當需要傳輸檔案或列出目錄內容時，會建立這個獨立的通道。</li>
+<li>資料通道的建立模式有兩種：
+<ul>
+<li><strong>主動模式 (Active Mode)</strong>：客戶端發送埠號給伺服器，伺服器從埠號 20 連接到客戶端指定埠。</li>
+<li><strong>被動模式 (Passive Mode)</strong>：客戶端要求伺服器打開一個隨機埠，並由客戶端發起連接到那個埠。此模式在防火牆環境下更常見。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="ftp-的本質弱點透明的風險"><a class="markdownIt-Anchor" href="#ftp-的本質弱點透明的風險"></a> FTP 的本質弱點：透明的風險</h2>
+<p>FTP 最大的問題在於其<strong>缺乏內建的安全機制</strong>：</p>
+<ol>
+<li><strong>資料未加密</strong>：所有在控制通道（如用戶名、密碼）和資料通道（實際檔案內容）上傳輸的資訊都是以<strong>純文字 (Plain Text)</strong> 形式傳遞。這意味著任何能夠監聽網路流量的人都可以輕易地截獲並讀取這些敏感資訊。</li>
+<li><strong>無身份驗證</strong>：雖然有用戶名和密碼，但伺服器不會驗證客戶端，客戶端也不會驗證伺服器。這使得中間人攻擊變得可能，攻擊者可以偽裝成合法伺服器。</li>
+<li><strong>資料完整性問題</strong>：傳輸中的資料沒有被檢查是否被篡改。</li>
+</ol>
+<p>想像一下，用<strong>透明的塑膠袋</strong>打包文件，貼上<strong>明信片</strong>寫著收件人資訊（用戶名、密碼），然後交給未經驗證的「郵差」傳送到遠方。這正是 FTP 的寫照，雖然直接，但毫無隱私和安全可言。</p>
+<h2 id="適用場景日益減少"><a class="markdownIt-Anchor" href="#適用場景日益減少"></a> 適用場景（日益減少）</h2>
+<ul>
+<li>過去：廣泛用於網站部署、內部非敏感文件交換。</li>
+<li>現在：<strong>極少推薦用於任何涉及敏感資訊的傳輸</strong>。偶爾用於匿名 FTP 伺服器（分發公開軟體或檔案）或在高度信任且隔離的內部網路環境中傳輸非敏感公開資料。</li>
+</ul>
+<h1 id="sftp網路世界的加密快遞安全與便利"><a class="markdownIt-Anchor" href="#sftp網路世界的加密快遞安全與便利"></a> SFTP：網路世界的「加密快遞」——安全與便利</h1>
+<p><strong>SFTP</strong>，全名為「<strong>SSH 檔案傳輸協定 (SSH File Transfer Protocol)</strong>」，它並非 FTP 的擴展，而是基於 <strong>SSH (Secure Shell)</strong> 協定的一個子系統。這意味著 SFTP 繼承了 SSH 的所有強大安全特性。它同樣工作在 <strong>OSI 模型的應用層</strong>。</p>
+<p>SFTP 在設計上就是為了在安全的前提下進行檔案傳輸。</p>
+<h2 id="sftp-如何運作單一安全通道"><a class="markdownIt-Anchor" href="#sftp-如何運作單一安全通道"></a> SFTP 如何運作？單一安全通道</h2>
+<p>SFTP 的核心優勢在於它完全依賴 SSH 提供的<strong>安全通道</strong>：</p>
+<ol>
+<li><strong>單一安全連接埠 - 埠號 22</strong>：
+<ul>
+<li>SFTP 使用與 SSH 相同的埠號 22。</li>
+<li>客戶端首先與伺服器建立一個加密的 SSH 連接。在這個連接建立後，所有的檔案傳輸命令、回應和實際的檔案資料都將在這個<strong>單一且加密的通道</strong>中進行。</li>
+</ul>
+</li>
+<li><strong>SSH 提供的強大安全特性</strong>：
+<ul>
+<li><strong>資料加密 (Encryption)</strong>：所有在 SSH 會話中傳輸的資料（包括用戶名、密碼、命令和檔案內容）都會被加密，防止竊聽。</li>
+<li><strong>伺服器身份驗證 (Server Authentication)</strong>：SSH 客戶端可以驗證伺服器的公鑰指紋，確保連接到的是預期的伺服器，而非冒充者。</li>
+<li><strong>用戶身份驗證 (User Authentication)</strong>：支持多種安全的用戶身份驗證方式，如密碼、公鑰/私鑰對 (SSH Key Pair) 認證等。公鑰認證尤其安全，不需在網路傳輸密碼。</li>
+<li><strong>資料完整性 (Data Integrity)</strong>：SSH 會檢查資料在傳輸過程中是否被篡改。</li>
+</ul>
+</li>
+</ol>
+<p>想像一下，將文件放入一個<strong>堅固的保險箱</strong>，並確保它只能透過<strong>加密的專屬通道</strong>，由<strong>經過嚴格身份驗證</strong>的「武裝押運車」運送。這正是 SFTP 的工作方式，為資料提供了最高等級的保護。</p>
+<h2 id="適用場景現代網路首選"><a class="markdownIt-Anchor" href="#適用場景現代網路首選"></a> 適用場景（現代網路首選）</h2>
+<ul>
+<li><strong>網站開發和部署</strong>：安全地將網站檔案上傳到伺服器。</li>
+<li><strong>資料備份和同步</strong>：在遠端伺服器和本地系統之間傳輸敏感或重要資料。</li>
+<li><strong>遠端伺服器管理</strong>：作為 SSH 的一部分，用於在遠端編輯、移動檔案等。</li>
+<li><strong>任何需要機密性和完整性的檔案傳輸</strong>。</li>
+</ul>
+<h1 id="ftp-vs-sftp核心差異"><a class="markdownIt-Anchor" href="#ftp-vs-sftp核心差異"></a> FTP vs. SFTP：核心差異</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">特性</th>
+<th style="text-align:left">FTP (File Transfer Protocol)</th>
+<th style="text-align:left">SFTP (SSH File Transfer Protocol)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>協定基礎</strong></td>
+<td style="text-align:left">基於 <strong>TCP/IP</strong> 協定</td>
+<td style="text-align:left">基於 <strong>SSH (Secure Shell)</strong> 協定</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>安全性</strong></td>
+<td style="text-align:left"><strong>無加密</strong>，純文字傳輸。</td>
+<td style="text-align:left"><strong>所有資料 (包括憑證和檔案) 皆加密</strong>，防止竊聽和篡改。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>連接埠</strong></td>
+<td style="text-align:left"><strong>21 (控制通道)</strong> 和 <strong>20 (資料通道)</strong> 或隨機埠</td>
+<td style="text-align:left"><strong>單一埠號 22</strong> (與 SSH 相同)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>傳輸模式</strong></td>
+<td style="text-align:left">主動/被動模式，需處理防火牆和 NAT 問題</td>
+<td style="text-align:left">在 SSH 通道內傳輸，通常不涉及額外埠問題</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>身份驗證</strong></td>
+<td style="text-align:left">僅用戶名/密碼，安全性低。</td>
+<td style="text-align:left">強大且可配置的驗證方式 (密碼、公鑰/私鑰對等)。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>資料完整性</strong></td>
+<td style="text-align:left">無內建保護機制。</td>
+<td style="text-align:left">SSH 提供資料完整性檢查，確保傳輸資料未被篡改。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>底層協定</strong></td>
+<td style="text-align:left">自己的傳輸協定</td>
+<td style="text-align:left">利用 SSH 的傳輸層協議 (如 TCP)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>複雜度</strong></td>
+<td style="text-align:left">協定本身較簡單，但網路配置可能複雜 (埠號)。</td>
+<td style="text-align:left">協定較為複雜，但由於依賴 SSH，使用上對防火牆等配置較簡便。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>性能</strong></td>
+<td style="text-align:left">在安全要求低的情況下，可能略快一點點。</td>
+<td style="text-align:left">加密解密需要額外計算資源，但現代硬體環境影響微乎其微。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>發展趨勢</strong></td>
+<td style="text-align:left">逐漸被淘汰，不推薦使用。</td>
+<td style="text-align:left">現代網路檔案傳輸的首選。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="什麼時候該選擇誰"><a class="markdownIt-Anchor" href="#什麼時候該選擇誰"></a> 什麼時候該選擇誰？</h1>
+<p>現在，這個問題的答案已經非常清晰了：</p>
+<ul>
+<li>
+<p><strong>選擇 SFTP (或 FTPS - FTP over SSL/TLS)</strong>：</p>
+<ul>
+<li><strong>永遠是首選</strong>。無論傳輸的資料是否敏感，都應優先考慮使用 SFTP。它提供全面的加密、身份驗證和資料完整性保護，是現代網路環境的標準。</li>
+<li>如果必須使用 FTP 協定，但又需要安全，可以考慮 <strong>FTPS</strong>。FTPS 是在 FTP 的基礎上，加入了 SSL/TLS 加密層，提供加密功能。不過，由於其仍然繼承了 FTP 雙通道的特性，在防火牆和 NAT 環境下，配置上仍可能比單一埠號的 SFTP 複雜一些。</li>
+</ul>
+</li>
+<li>
+<p><strong>避免使用 FTP</strong>：</p>
+<ul>
+<li>對於任何包含<strong>敏感資訊</strong>（如密碼、個人資料、程式碼、商業機密）的檔案傳輸，<strong>絕對不要使用純 FTP</strong>。</li>
+<li>由於其嚴重的安全缺陷，FTP 已經不適用於大多數的現代網路應用。</li>
+</ul>
+</li>
+</ul>
+<p>在網路安全日益嚴峻的今天，選擇一個安全的檔案傳輸協定，是對自身數據和客戶數據負責的表現。那多出來的一個 “S”，代表著資訊被嚴密保護。</p>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>從 FTP 到 SFTP，看到的是網路協定在面對不斷演進的安全威脅時的進化。雖然 FTP 曾是檔案傳輸的支柱，但其設計上的固有缺陷已使其不適用於當今的網路環境。</p>
+<p>SFTP 以其基於 SSH 的強大安全特性，成為了檔案傳輸的首選。它確保了資料在傳輸過程中的機密性、完整性和真實性。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Networking/" rel="tag"># Networking</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/09/07/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20DHCP/" rel="prev" title="網路世界的「自動化 IP 地址分配員」：深入解析 DHCP (Dynamic Host Configuration Protocol)">
+                  <i class="fa fa-angle-left"></i> 網路世界的「自動化 IP 地址分配員」：深入解析 DHCP (Dynamic Host Configuration Protocol)
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
