@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">81</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">82</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">49</span></a>
       <ul class="sub-menu">
   
@@ -302,7 +302,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Networking/">
         Networking
-        <span class="post-count">(13)</span>
+        <span class="post-count">(14)</span>
       </a>
     </li>
   
@@ -492,7 +492,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">81</span>
+          <span class="site-state-item-count">82</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -517,6 +517,98 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/17/python%E5%87%BD%E6%95%B8%E8%A3%9D%E9%A3%BE%E5%99%A8%E7%AD%86%E8%A8%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/04/17/python%E5%87%BD%E6%95%B8%E8%A3%9D%E9%A3%BE%E5%99%A8%E7%AD%86%E8%A8%98/" class="post-title-link" itemprop="url">
+              Python 函數裝飾器 (Function Decorator) 筆記
+            </a>
+            <a href="/my-blog/2025/04/17/python%E5%87%BD%E6%95%B8%E8%A3%9D%E9%A3%BE%E5%99%A8%E7%AD%86%E8%A8%98/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2025-04-17 00:00:00" itemprop="dateCreated datePublished" datetime="2025-04-17T00:00:00+08:00">2025-04-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-04-18 20:59:14" itemprop="dateModified" datetime="2025-04-18T20:59:14+08:00">2025-04-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">✅ 什麼是函數裝飾器？ 函數裝飾器(Function Decorator)是一種用來修改或擴展函數功能的設計模式。它允許在不改變函數本身的情況下，將額外的邏輯附加到函數上。 函數裝飾器是高階函數 Higher-order Function：接收一個函數作為參數，並返回一個包裹在該函數的新函數 (Wrapper)。 函數裝飾器是 Python 中一種強大的功能，允許我們修改或擴展現有函數的行為，而無需改變函數的代碼。它是一種語法糖，基於高階函數的概念，使得函數變得更加靈活和可重複使用。 函數裝飾器的結構 def decorator(func): def wrapper(*args, **kwargs): # 在此處進行一些處理或擴展功能 return func(*args, **kwargs) return wrapper decorator(func)：裝飾器函數，接收被裝飾的函數 func。 wrapper(*args, **kwargs)：內部包裝函數，可以修改或擴展 func 的行為。 return wrapper：返回包裝函數 wrapper，這樣我們就能在裝飾器中處理邏輯。 💡 為何要使用裝飾器？ 功能擴展：可以在不修改函數內容的情況下，擴展或修改其行為。 程式碼重用：可以將重複的邏輯提取出來，放在裝飾器中，減少重複代碼。 增強函數功能：通過裝飾器可以給函數增加額外的功能，像是日誌、權限檢查、緩存等。 📝 基本範例 def simple_decorator(func): def wrapper(): print(&quot;Before function call.&quot;) func() print(&quot;After function call.&quot;) return wrapper @simple_decorator def say_hello(): print(&quot;Hello!&quot;) say_hello() 輸出： Before function call. Hello! After function call. 如何運作： @simple_decorator 是裝飾器的語法糖，等同於 say_hello = simple_decorator(say_hello)。 裝飾器會包裝 say_hello 函數，使它在被調用時執行額外的邏輯。 🔄 帶參數的裝飾器 如果需要裝飾器接受參數，可以再定義一層函數。這樣可以讓裝飾器變得更加通用。 帶參數範例 def calculator(func): def calculate_height(weight, height): def square_height(height): height_in_meters = height / 100 return height_in_meters return func(weight, square_height(height)) return calculate_height @calculator def bmi_calculator(weight, height): return weight / (height * height) result = bmi_calculator(50, 160) print(result) # 19.531249999999996 解釋： calculator 是裝飾器，接受 bmi_calculator 作為參數。 在 calculate_height 函數內部，我們調用 square_height 函數來將身高轉換為米，然後再計算 BMI。 帶參數裝飾器的工作原理： @calculator 會讓 bmi_calculator 被 calculator 包裝。 裝飾器內的 calculate_height 會在 bmi_calculator 函數之前執行，進行額外處理。 🔑 函數裝飾器的好處： 可以動態地修改函數的行為。 使得原始函數更簡潔，擴展的邏輯集中於裝飾器內部，提升代碼可維護性。 允許代碼更加模組化和解耦。 📚 常見應用場景： 日誌記錄：記錄函數的調用及參數。 範例： def log_decorator(func): def wrapper(*args, **kwargs): print(f&quot;Calling &#123;func.__name__&#125; with arguments: &#123;args&#125;, &#123;kwargs&#125;&quot;) return func(*args, **kwargs) return wrapper @log_decorator def add(a, b): return a + b add(3, 4) # 輸出: Calling add with arguments: (3, 4), &#123;&#125; 計時器：計算函數執行所花的時間。 範例： import time def timer_decorator(func): def wrapper(*args, **kwargs): start_time = time.time() result = func(*args, **kwargs) end_time = time.time() print(f&quot;Execution time: &#123;end_time - start_time&#125; seconds&quot;) return result return wrapper @timer_decorator def slow_function(): time.sleep(2) slow_function() # 輸出: Execution time: 2.0xxxxxx seconds 權限檢查：在函數執行之前檢查用戶權限。 範例： def permission_check(func): def wrapper(user_role, *args, **kwargs): if user_role != &quot;admin&quot;: raise PermissionError(&quot;You do not have permission to access this function.&quot;) return func(user_role, *args, **kwargs) return wrapper @permission_check def delete_user(user_role, user_id): print(f&quot;User &#123;user_id&#125; deleted.&quot;) delete_user(&quot;admin&quot;, 123) # 正常執行 delete_user(&quot;guest&quot;, 123) # 會拋出 PermissionError 緩存：為函數結果加上緩存，避免重複計算。 範例： def cache_decorator(func): cache = &#123;&#125; def wrapper(*args, **kwargs): if args in cache: print(&quot;Returning cached result&quot;) return cache[args] result = func(*args, **kwargs) cache[args] = result return result return wrapper @cache_decorator def expensive_computation(x): print(&quot;Performing expensive computation...&quot;) return x * x expensive_computation(10) # 輸出: Performing expensive computation... expensive_computation(10) # 輸出: Returning cached result 這樣的範例可以幫助更好地理解每個應用場景，並將裝飾器的應用擴展到真實開發中。 對於新手來說，理解 function decorator 可以從以下幾個步驟入手： 理解函數是物件：首先，理解 Python 函數是物件，可以作為參數傳遞給其他函數。 學會基本裝飾器範例：如日誌記錄、計時等。先從簡單的範例開始，逐步理解其運作。 從簡單的實例開始：不要一開始就嘗試複雜的場景。實踐簡單的範例來熟悉裝飾器的結構。 了解如何使用 @ 語法：@decorator 是 Python 中簡化使用裝飾器的語法，它背後實際上是將函數傳遞給裝飾器。 學會裝飾器後，可以根據需求進行進一步的學習和應用。 面試時如何回答 function decorator 1. 簡單解釋： 裝飾器是一種用來修改或擴展函數功能的設計模式。它允許在不改變函數本身的情況下，將額外的邏輯附加到函數上。 2. 常見應用場景： 日誌記錄 計時 權限檢查 緩存 3. 基本結構： 裝飾器是高階函數：接收一個函數作為參數，並返回一個包裹該函數的新函數。 4. 示範範例： def decorator(func): def wrapper(): print(&quot;Before function execution&quot;) func() print(&quot;After function execution&quot;) return wrapper @decorator def greet(): print(&quot;Hello!&quot;) 5. 考試重點： 知道裝飾器的語法 @decorator 解釋如何將邏輯封裝到函數外部 理解裝飾器的用途與運作原理</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/04/17/python%E5%87%BD%E6%95%B8%E8%A3%9D%E9%A3%BE%E5%99%A8%E7%AD%86%E8%A8%98/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 

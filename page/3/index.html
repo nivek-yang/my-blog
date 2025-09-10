@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">81</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">82</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">49</span></a>
       <ul class="sub-menu">
   
@@ -302,7 +302,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Networking/">
         Networking
-        <span class="post-count">(13)</span>
+        <span class="post-count">(14)</span>
       </a>
     </li>
   
@@ -492,7 +492,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">81</span>
+          <span class="site-state-item-count">82</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -517,6 +517,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/18/%E6%8F%AD%E9%96%8B%E8%B3%87%E6%96%99%E5%BA%AB%E6%95%88%E8%83%BD%E7%9A%84%E7%A5%9E%E7%A7%98%E9%9D%A2%E7%B4%97%20%E6%9F%A5%E8%A9%A2%E5%84%AA%E5%8C%96%20Database%20Query%20Optimization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/08/18/%E6%8F%AD%E9%96%8B%E8%B3%87%E6%96%99%E5%BA%AB%E6%95%88%E8%83%BD%E7%9A%84%E7%A5%9E%E7%A7%98%E9%9D%A2%E7%B4%97%20%E6%9F%A5%E8%A9%A2%E5%84%AA%E5%8C%96%20Database%20Query%20Optimization/" class="post-title-link" itemprop="url">
+              揭開資料庫效能的神秘面紗：查詢優化 (Database Query Optimization)
+            </a>
+            <a href="/my-blog/2025/08/18/%E6%8F%AD%E9%96%8B%E8%B3%87%E6%96%99%E5%BA%AB%E6%95%88%E8%83%BD%E7%9A%84%E7%A5%9E%E7%A7%98%E9%9D%A2%E7%B4%97%20%E6%9F%A5%E8%A9%A2%E5%84%AA%E5%8C%96%20Database%20Query%20Optimization/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-08-18 00:00:00 / 修改時間：23:22:50" itemprop="dateCreated datePublished" datetime="2025-08-18T00:00:00+08:00">2025-08-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">有沒有遇過這種情況：應用程式的一個頁面載入特別緩慢，使用者抱怨連連，而追查到最後，發現元兇是一條執行了數十秒甚至數分鐘的資料庫查詢？ 這幾乎是每位開發者和資料庫管理員（DBA）都曾面對的夢魘。然而，效能的瓶頸往往不是資料庫本身不夠力，而是沒有「好好地」跟它溝通。這篇文章將揭開資料庫效能背後的神秘面紗，深入探討一個核心概念：查詢優化（Query Optimization）。 什麼是查詢優化？ 想像一下，走進一座巨大的圖書館，想找一本特定主題的書。有兩種方法： 蠻力法： 從第一排書架開始，一本一本地翻閱，直到找到想要的書為止。 智慧法： 前往圖書館的檢索系統（電腦或卡片目錄），輸入書名或作者，系統會立刻告訴你書在哪一排、哪一架、哪一層。 查詢優化，就是資料庫從「蠻力法」轉變為「智慧法」的過程。 查詢優化是資料庫管理系統（DBMS）在接收到一條 SQL 查詢後，分析並找出執行該查詢最有效率、成本最低的路徑（Execution Plan）的過程。 資料庫內部的「查詢優化器（Query Optimizer）」會評估數種可能的執行方式，並選擇它認為最快、最省資源的一種。 為什麼查詢優化如此重要？ 有些人可能會想：「現在硬體這麼便宜，伺服器規格開高一點不就好了？」這是一個危險的迷思。糟糕的查詢會像一個無底洞，再強大的硬體資源也會被它吞噬。做好查詢優化，能帶來四大好處： 提升使用者體驗： 快速的響應時間是使用者滿意度的關鍵。沒有人喜歡盯著載入中的圖示乾等。 增強系統擴展性： 優化過的查詢能用更少的資源完成工作，讓系統能同時服務更多的使用者，從容應對流量高峰。 降低營運成本： 無論是本地伺服器還是雲端服務，CPU、記憶體和 I/O 都是要錢的。高效的查詢意味著更低的資源消耗。 維護系統穩定性： 一條慢查詢可能會長時間鎖定資料表，阻塞其他正常的操作，甚至引發連鎖反應，導致整個應用程式崩潰。 查詢優化是如何運作的？核心概念解析 要讓查詢跑得快，需要理解優化器在做什麼，並為它提供有利的「線索」。以下是幾個最重要的核心概念： 1. 執行計畫（Execution Plan） 這是優化器最終決策的「作戰地圖」。它詳細描述了資料庫將如何一步步執行你的查詢：要先讀取哪張表、使用什麼索引、用哪種方式連接（Join）資料表等等。 學會讀懂執行計畫是每位開發者的必修課。大部分資料庫都提供 EXPLAIN 或 EXPLAIN ANALYZE 指令，讓你窺探查詢的內部執行細節。 -- 以 PostgreSQL 為例 EXPLAIN ANALYZE SELECT * FROM users WHERE email = &#x27;test@example.com&#x27;; 看到 Seq Scan (Sequential Scan，循序掃描) 這類字眼時，通常就是警訊，代表資料庫正在用「蠻力法」掃描整張表。 2. 索引（Indexing） 索引是查詢優化中最重要、最立竿見影的工具。 它就像書本的目錄，讓資料庫不必掃描整張表，就能快速定位到目標資料。 最常見的索引是 B-Tree 索引，特別適合用在 WHERE 條件句、JOIN 的連接鍵以及 ORDER BY 的排序欄位上。 -- 為 users 表的 email 欄位建立索引 CREATE INDEX idx_users_email ON users(email); 注意： 索引並非越多越好。它會佔用額外的儲存空間，並且在新增、修改、刪除資料時，資料庫需要額外花時間去維護索引，這會犧牲一部分寫入效能。因此只在「經常被查詢」的欄位上建立索引。 3. 撰寫高效的查詢語句 優化器雖然聰明，但仍然可以透過撰寫更清晰、更高效的 SQL 來幫助它。 避免 SELECT *： 只查詢需要的欄位。這能減少網路傳輸量和資料庫的 I/O 負擔。 WHERE 條件要明確： 確保 WHERE 子句中的篩選欄位有適當的索引。避免在索引欄位上使用函數，例如 WHERE LOWER(email) = 'test@example.com' 會導致索引失效。 理解 JOIN 的類型： 謹慎使用 LEFT JOIN 和 RIGHT JOIN，確保了解它們的運作方式。在可能的情況下，優先使用 INNER JOIN。 小心 OR 和 IN： 在某些情況下，使用 UNION ALL 可能比 OR 的效率更高。對於非常大的 IN 列表，可以考慮改寫為 JOIN 一個臨時表。 4. 維護資料庫統計數據 查詢優化器是根據資料的「統計數據」（例如某個欄位的值分佈情況、資料表的總行數等）來做決策的。如果這些數據過時或不準確，優化器就可能做出錯誤的判斷。 大部分資料庫都有自動更新統計數據的機制，但有時也需要手動執行指令（如 PostgreSQL 的 ANALYZE）來確保數據的即時性。 實戰演練：一個簡單的優化範例 假設有一個 orders 資料表，儲存了數百萬筆訂單資料。現在要查詢某位顧客（customer_id = 123）的所有訂單。 優化前： EXPLAIN SELECT * FROM orders WHERE customer_id = 123; 執行計畫可能會顯示 Seq Scan on orders，表示它正在掃描整張數百萬行的表。如果這是一張大表，查詢可能需要數秒鐘。 優化步驟： 發現 customer_id 是查詢的關鍵，所以在這個欄位上建立索引。 CREATE INDEX idx_orders_customer_id ON orders(customer_id); 優化後： 再次執行同樣的查詢： EXPLAIN SELECT * FROM orders WHERE customer_id = 123; 這次，執行計畫應該會顯示 Index Scan using idx_orders_customer_id。資料庫利用索引，像查字典一樣精準地找到了 customer_id = 123 的所有訂單，查詢時間可能縮短到幾毫秒。這就是優化的威力！ 結論 資料庫查詢優化是一門需要理論與實踐相結合的科學。它更像是一位偵探在辦案，透過 EXPLAIN 這個放大鏡，找出查詢緩慢的線索，再利用索引、改寫 SQL 等工具，將「兇手」繩之以法。 精通查詢優化是衡量一位優秀開發者或 DBA 的重要指標。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/08/18/%E6%8F%AD%E9%96%8B%E8%B3%87%E6%96%99%E5%BA%AB%E6%95%88%E8%83%BD%E7%9A%84%E7%A5%9E%E7%A7%98%E9%9D%A2%E7%B4%97%20%E6%9F%A5%E8%A9%A2%E5%84%AA%E5%8C%96%20Database%20Query%20Optimization/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1281,92 +1367,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/08/08/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20Rate%20Limiter%20%E6%89%93%E9%80%A0%E7%A9%A9%E5%9B%BA%E5%85%AC%E5%B9%B3%E4%B8%94%E5%AE%89%E5%85%A8%E7%9A%84%E7%B3%BB%E7%B5%B1%E9%98%B2%E7%B7%9A/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/07/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20Connection%20Pool%20%E6%89%93%E9%80%A0%E9%AB%98%E6%95%88%E8%83%BD%E6%87%89%E7%94%A8%E7%9A%84%E5%9F%BA%E7%9F%B3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/08/07/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20Connection%20Pool%20%E6%89%93%E9%80%A0%E9%AB%98%E6%95%88%E8%83%BD%E6%87%89%E7%94%A8%E7%9A%84%E5%9F%BA%E7%9F%B3/" class="post-title-link" itemprop="url">
-              深入淺出 Connection Pool：打造高效能應用的基石
-            </a>
-            <a href="/my-blog/2025/08/07/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20Connection%20Pool%20%E6%89%93%E9%80%A0%E9%AB%98%E6%95%88%E8%83%BD%E6%87%89%E7%94%A8%E7%9A%84%E5%9F%BA%E7%9F%B3/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-08-07 00:00:00 / 修改時間：23:26:20" itemprop="dateCreated datePublished" datetime="2025-08-07T00:00:00+08:00">2025-08-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">在開發應用程式時，我們都追求極致的效能與穩定性。是否曾經遇到過應用程式因為資料庫請求過多而變慢，甚至崩潰的情況？這背後往往隱藏著一個關鍵問題：資料庫連線管理。 本篇文章要來深入探討一個解決此問題的經典技術——Connection Pool (連線池)。它是建構任何高效能、高併發應用程式不可或缺的基石。 讀完這篇文章，將會明白： 什麼是 Connection Pool？ 為什麼極度需要它？ 它的內部是如何運作的？ 如何正確配置與使用，以及該避開哪些陷阱？ 什麼是 Connection Pool？想像一個「連線水庫」 在介紹 Connection Pool 之前，先來看看沒有它的世界是什麼樣子： 使用者發出請求 -&gt; 應用程式需要存取資料庫。 應用程式向資料庫發起一個新的連線請求 (包含 TCP 握手、資料庫驗證等)。 執行 SQL 操作。 關閉連線，釋放資源。 下一個請求進來，重複以上所有步驟。 這個過程最大的問題在於「建立連線」與「關閉連線」的成本極其昂貴！它消耗大量的 CPU 時間與網路資源。在高併發場景下，這種做法無疑是一場災難。 Connection Pool 正是為了解決這個問題而生。 Connection Pool 是一個預先建立並維護著一組資料庫連線的「快取」或「池子」。當應用程式需要存取資料庫時，它不是建立一個新連線，而是直接從池中「借用」一個已經建立好的連線。使用完畢後，也不是真的關閉它，而是將其「歸還」到池中，以供其他請求重複使用。 就像一個水庫，預先儲存了許多「水」（連線），需要時直接取用，用完再放回去，而不是每次都辛苦地重新鑽井取水。 為什麼需要 Connection Pool？四大核心優勢 使用連線池所帶來的好處是顯而易見的，主要體現在以下四個方面： 1. 顯著的效能提升 (Performance Boost) 這是最直接的好處。由於省去了頻繁建立和銷毀連線的開銷，應用程式的回應時間大幅縮短。對於使用者來說，這意味著更快的頁面載入速度和更流暢的操作體驗。 2. 資源管理與控制 (Resource Management) 資料庫能夠承受的連線數量是有限的。如果沒有連線池作為「守門員」，高併發的請求可能會瞬間耗盡所有可用的資料庫連線，導致資料庫崩潰或拒絕新的請求。連線池可以限制最大連線數，保護資料庫免於被過量請求打垮。 3. 降低延遲 (Reduced Latency) 當請求到達時，它可以立即從池中獲得一個可用連線，而不是等待一個全新的連線建立完成。這種即時性對於需要快速回應的線上服務至關重要。 4. 提升系統穩定性 (Increased Stability) 綜合以上幾點，連線池透過高效的資源複用和保護機制，讓整個應用系統的架構更加健壯、穩定，更能從容應對流量高峰。 Connection Pool 的運作原理：借用與歸還的藝術 一個設計良好的 Connection Pool（例如 Python 世界中的 SQLAlchemy Engine Pool、psycopg2 pool）通常包含以下核心運作流程： 初始化 (Initialization)： 應用程式啟動時，連線池會被建立。它會根據設定，預先建立一定數量的「初始連線」（pool_size），並將它們放入池中等待。 取得連線 (Borrowing a Connection)： 當應用程式請求連線時，連線池會介入。 它首先檢查池中是否有空閒的連線。 有：將一個空閒連線標記為「使用中」，並返回給應用程式。 沒有：如果當前連線數尚未達到「最大連線數」（pool_size + max_overflow），連線池會建立一個新的連線。 池已滿：如果連線數已達上限，新的請求將進入等待隊列，直到有連線被歸還或等待超時（pool_timeout）。 使用連線 (Using the Connection)： 應用程式拿到連線後，執行正常的資料庫操作（CRUD）。 歸還連線 (Returning a Connection)： 這一步至關重要！當應用程式呼叫 connection.close() 或 with 區塊結束時，這個動作被連線池攔截了。它並不會真的關閉物理連線，而是將該連線的狀態重設，並放回池中，標記為「空閒」，等待下一次的借用。 維護與監控 (Maintenance)： 連線池在背景會持續進行維護工作，例如： 回收閒置過久（pool_recycle）的連線，防止因網路防火牆策略而導致的連線失效。 監控池中連線的狀態。 核心配置參數 要讓連線池發揮最大效用，合理的配置是關鍵。以下是幾個最重要的參數（以 SQLAlchemy 為例）： pool_size (池大小): 池中保持的連線數量。這是最重要的參數，設定太小會導致請求排隊，太大則會消耗過多資料庫和應用程式的資源。 經驗法則：這取決於您的應用是 CPU 密集型還是 I/O 密集型。對於非同步框架，可以設定得更高。通常建議從一個較小的值開始（如 5-10），再根據壓力測試來調整。 max_overflow (最大溢出): 超出 pool_size 後，允許額外建立的連線數。總連線數為 pool_size + max_overflow。 pool_timeout (池超時): 當池中沒有可用連線時，一個請求願意等待的秒數。超過這個時間，會拋出 TimeoutError。 pool_recycle (池回收): 連線在被回收（關閉並重新建立）之前的最長存活秒數。設定略小於資料庫或防火牆的超時時間（如 3600 秒）是個好習慣，可以防止使用到「失效」的連線。 避開常見的陷阱 雖然連線池很強大，但使用不當也會帶來麻煩： 連線洩漏 (Connection Leak) 這是最致命的問題！指的是應用程式從池中借用了連線，但在使用完畢後，忘記將其歸還。 這會導致池中的可用連線越來越少，最終耗盡所有連線，使整個應用程式無法再存取資料庫。 解決方案：在 Python 中，務必使用 with 陳述式來管理連線。它能確保無論程式碼是否成功執行或發生異常，with 區塊結束時連線都會被自動歸還給池。 # 以 SQLAlchemy 為例 from sqlalchemy import create_engine, text from sqlalchemy.exc import SQLAlchemyError # 假設這是連線池 (Engine 在 SQLAlchemy 中管理著連線池) db_url = &quot;postgresql://user:password@host/dbname&quot; engine = create_engine(db_url, pool_size=10, max_overflow=5) # 推薦使用 with 陳述式 # 這樣可以保證連線在使用完畢後自動歸還給池 try: with engine.connect() as connection: # ... 在這裡執行資料庫操作 ... result = connection.execute(text(&quot;SELECT * FROM users WHERE id = :user_id&quot;), &#123;&quot;user_id&quot;: 1&#125;) for row in result: print(row) except SQLAlchemyError as e: # ... 處理資料庫相關的異常 ... print(f&quot;An error occurred: &#123;e&#125;&quot;) # 當 with 區塊結束時，connection 已被自動歸還，無需手動 close() 不合理的配置 如前所述，不合理的 pool_size、max_overflow 等參數都會帶來問題。務必結合業務場景和壓力測試來找到最優配置。 結論 Connection Pool 是現代應用程式架構中效能與穩定性的守護神。它透過智慧的資源複用機制，將昂貴的資料庫連線操作成本降至最低，讓我們能夠更從容地建構高併發、高可用的系統。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/08/07/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20Connection%20Pool%20%E6%89%93%E9%80%A0%E9%AB%98%E6%95%88%E8%83%BD%E6%87%89%E7%94%A8%E7%9A%84%E5%9F%BA%E7%9F%B3/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>

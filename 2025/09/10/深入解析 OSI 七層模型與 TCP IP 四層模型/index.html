@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="我們已經深入探討了網路的幾個重要組成部分，從 IP 地址的識別到 DNS 的導航，再到 DHCP 的自動分配，以及 FTP&#x2F;SFTP 的檔案傳輸。現在，是時候將這些零碎的知識點串聯起來，了解它們在一個宏觀的框架下是如何協同運作的。 網路世界的兩大「聖經」——OSI 七層模型 (Open Systems Interconnection Model) 與 TCP&#x2F;IP 四層模型 (Transmissi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="網路溝通的「設計藍圖」與「實戰指南」：深入解析 OSI 七層模型與 TCP&#x2F;IP 四層模型">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/09/10/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20OSI%20%E4%B8%83%E5%B1%A4%E6%A8%A1%E5%9E%8B%E8%88%87%20TCP%20IP%20%E5%9B%9B%E5%B1%A4%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="我們已經深入探討了網路的幾個重要組成部分，從 IP 地址的識別到 DNS 的導航，再到 DHCP 的自動分配，以及 FTP&#x2F;SFTP 的檔案傳輸。現在，是時候將這些零碎的知識點串聯起來，了解它們在一個宏觀的框架下是如何協同運作的。 網路世界的兩大「聖經」——OSI 七層模型 (Open Systems Interconnection Model) 與 TCP&#x2F;IP 四層模型 (Transmissi">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-09-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-09-10T07:59:45.252Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Networking">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/09/10/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20OSI%20%E4%B8%83%E5%B1%A4%E6%A8%A1%E5%9E%8B%E8%88%87%20TCP%20IP%20%E5%9B%9B%E5%B1%A4%E6%A8%A1%E5%9E%8B/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/09/10/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20OSI%20%E4%B8%83%E5%B1%A4%E6%A8%A1%E5%9E%8B%E8%88%87%20TCP%20IP%20%E5%9B%9B%E5%B1%A4%E6%A8%A1%E5%9E%8B/","path":"2025/09/10/深入解析 OSI 七層模型與 TCP IP 四層模型/","title":"網路溝通的「設計藍圖」與「實戰指南」：深入解析 OSI 七層模型與 TCP/IP 四層模型"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>網路溝通的「設計藍圖」與「實戰指南」：深入解析 OSI 七層模型與 TCP/IP 四層模型 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">82</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">49</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(15)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B6%B2%E8%B7%AF%E9%80%9A%E7%94%A8%E8%AA%9E%E8%A8%80osi-%E4%B8%83%E5%B1%A4%E6%A8%A1%E5%9E%8B-open-systems-interconnection-model"><span class="nav-number">1.</span> <span class="nav-text"> 網路通用語言：OSI 七層模型 (Open Systems Interconnection Model)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#osi-%E4%B8%83%E5%B1%A4%E6%A8%A1%E5%9E%8B%E8%A9%B3%E7%B4%B0%E8%A7%A3%E6%9E%90"><span class="nav-number">1.1.</span> <span class="nav-text"> OSI 七層模型詳細解析：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B6%B2%E9%9A%9B%E7%B6%B2%E8%B7%AF%E7%9A%84%E9%AA%A8%E5%B9%B9tcpip-%E5%9B%9B%E5%B1%A4%E6%A8%A1%E5%9E%8B-transmission-control-protocolinternet-protocol-model"><span class="nav-number">2.</span> <span class="nav-text"> 網際網路的骨幹：TCP&#x2F;IP 四層模型 (Transmission Control Protocol&#x2F;Internet Protocol Model)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tcpip-%E5%9B%9B%E5%B1%A4%E6%A8%A1%E5%9E%8B%E8%A9%B3%E7%B4%B0%E8%A7%A3%E6%9E%90"><span class="nav-number">2.0.1.</span> <span class="nav-text"> TCP&#x2F;IP 四層模型詳細解析：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%A9%E7%A8%AE%E6%A8%A1%E5%9E%8B%E5%85%A9%E7%A8%AE%E8%A6%96%E8%A7%92osi-%E8%88%87-tcpip-%E7%9A%84%E5%B0%8D%E6%AF%94%E8%88%87%E6%98%A0%E5%B0%84"><span class="nav-number">3.</span> <span class="nav-text"> 兩種模型，兩種視角：OSI 與 TCP&#x2F;IP 的對比與映射</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E4%BC%BC%E9%BB%9E"><span class="nav-number">3.1.</span> <span class="nav-text"> 相似點：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E5%B7%AE%E7%95%B0%E9%BB%9E"><span class="nav-number">3.2.</span> <span class="nav-text"> 主要差異點：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#osi-vs-tcpip-%E5%B1%A4%E6%AC%A1%E6%98%A0%E5%B0%84%E8%A1%A8"><span class="nav-number">3.3.</span> <span class="nav-text"> OSI V.S. TCP&#x2F;IP 層次映射表：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9C%80%E8%A6%81%E7%A0%94%E7%A9%B6%E5%AE%83%E5%80%91"><span class="nav-number">4.</span> <span class="nav-text"> 為什麼需要研究它們？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/10/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20OSI%20%E4%B8%83%E5%B1%A4%E6%A8%A1%E5%9E%8B%E8%88%87%20TCP%20IP%20%E5%9B%9B%E5%B1%A4%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="網路溝通的「設計藍圖」與「實戰指南」：深入解析 OSI 七層模型與 TCP&#x2F;IP 四層模型 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          網路溝通的「設計藍圖」與「實戰指南」：深入解析 OSI 七層模型與 TCP/IP 四層模型
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-09-10 00:00:00 / 修改時間：15:59:45" itemprop="dateCreated datePublished" datetime="2025-09-10T00:00:00+08:00">2025-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>我們已經深入探討了網路的幾個重要組成部分，從 IP 地址的識別到 DNS 的導航，再到 DHCP 的自動分配，以及 FTP/SFTP 的檔案傳輸。現在，是時候將這些零碎的知識點串聯起來，了解它們在一個宏觀的框架下是如何協同運作的。</p>
+<p>網路世界的兩大「聖經」——<strong>OSI 七層模型 (Open Systems Interconnection Model)</strong> 與 <strong>TCP/IP 四層模型 (Transmission Control Protocol/Internet Protocol Model)</strong>。它們就像是網路通訊的設計藍圖和實施指南，幫助我們理解數據如何在錯綜複雜的網路中穿梭。</p>
+<p>想像一下，如果要蓋一棟大樓，是不是需要一套詳細的設計圖和一份清楚的施工規範？網路通訊也是一樣。它是一個極其複雜的系統，需要一套標準化的架構來讓不同廠商、不同技術的設備能夠互相溝通。這就是這篇文章要探討的網路模型——<strong>OSI 七層模型</strong> 和 <strong>TCP/IP 四層模型</strong> 存在的意義。</p>
+<p>這兩個模型為我們理解網路通訊提供了一個分層的視角。透過它們，可以將複雜的網路操作分解成更容易理解和管理的獨立模組，這對於網路設計、開發、故障排除以及安全規劃都至關重要。</p>
+<h1 id="網路通用語言osi-七層模型-open-systems-interconnection-model"><a class="markdownIt-Anchor" href="#網路通用語言osi-七層模型-open-systems-interconnection-model"></a> 網路通用語言：OSI 七層模型 (Open Systems Interconnection Model)</h1>
+<p>OSI 模型是由國際標準化組織 (ISO) 在 1980 年代初期提出的，它不是一套實際的網路協定，而是一個<strong>概念性的、普適性的參考模型</strong>。它的目標是提供一個標準化的框架，讓任何兩個不同系統的電腦都能進行通訊。</p>
+<p>OSI 模型將網路通訊過程分解為七個獨立的、相互關聯的層次。每一層都向上提供服務，並向下使用服務。</p>
+<h2 id="osi-七層模型詳細解析"><a class="markdownIt-Anchor" href="#osi-七層模型詳細解析"></a> OSI 七層模型詳細解析：</h2>
+<ol>
+<li>
+<p><strong>第七層：應用層 (Application Layer)</strong></p>
+<ul>
+<li><strong>功能</strong>：為最終使用者應用程式提供網路服務。它直接與應用程式軟體互動，處理特定的網路應用需求。</li>
+<li><strong>數據單位</strong>：數據 (Data)</li>
+<li><strong>協定範例</strong>：HTTP (網頁瀏覽)、FTP (檔案傳輸)、SMTP (電子郵件)、DNS (域名解析)</li>
+<li><strong>口訣連想</strong>：應用程式的入口。瀏覽器、郵件客戶端都在這裡。</li>
+</ul>
+</li>
+<li>
+<p><strong>第六層：表示層 (Presentation Layer)</strong></p>
+<ul>
+<li><strong>功能</strong>：關注數據的「表示」方式。負責數據格式轉換、數據加密/解密、數據壓縮/解壓縮等。確保應用層接收到的數據是可以被理解的格式。</li>
+<li><strong>數據單位</strong>：數據 (Data)</li>
+<li><strong>協定範例</strong>：JPEG, MPEG (數據編碼格式)、SSL/TLS (安全加密通常在應用與表示層之間作用)</li>
+<li><strong>口訣連想</strong>：數據的翻譯官、加解密員。</li>
+</ul>
+</li>
+<li>
+<p><strong>第五層：會話層 (Session Layer)</strong></p>
+<ul>
+<li><strong>功能</strong>：建立、管理和終止應用程式之間的通訊會話。它負責同步兩個應用程式之間的對話、管理數據交換的模式（例如，單工、半雙工、全雙工）。</li>
+<li><strong>數據單位</strong>：數據 (Data)</li>
+<li><strong>協定範例</strong>：NetBIOS (網際網路基本輸入/輸出系統)、RPC (遠端程序呼叫)</li>
+<li><strong>口訣連想</strong>：通訊會話的管理者。</li>
+</ul>
+</li>
+<li>
+<p><strong>第四層：傳輸層 (Transport Layer)</strong></p>
+<ul>
+<li><strong>功能</strong>：提供端到端 (End-to-End) 的數據傳輸服務。負責數據的分段、重組、錯誤控制和流量控制。確保數據可靠或不可靠地從源主機傳輸到目的主機上的特定應用程式 (由埠號識別)。</li>
+<li><strong>數據單位</strong>：數據段 (Segment)</li>
+<li><strong>協定範例</strong>：TCP (傳輸控制協定，可靠連線)、UDP (使用者數據報協定，不可靠但快速)</li>
+<li><strong>口訣連想</strong>：門到門的派送服務，確保數據送達正確的應用程序。</li>
+</ul>
+</li>
+<li>
+<p><strong>第三層：網路層 (Network Layer)</strong></p>
+<ul>
+<li><strong>功能</strong>：處理邏輯定址 (如 IP 地址) 和路由選擇。它負責將數據封包從源主機路由到目的主機，即使它們在不同的網路中。</li>
+<li><strong>數據單位</strong>：數據封包 (Packet)</li>
+<li><strong>協定範例</strong>：IP (網際網路協定)、ICMP (網際網路控制訊息協定)</li>
+<li><strong>設備範例</strong>：路由器 (Router)</li>
+<li><strong>口訣連想</strong>：網路世界的 GPS 導航系統，負責尋路。</li>
+</ul>
+</li>
+<li>
+<p><strong>第二層：資料連結層 (Data Link Layer)</strong></p>
+<ul>
+<li><strong>功能</strong>：在直接相連的節點 (Node-to-Node) 之間提供可靠的數據傳輸。它處理實體定址 (如 MAC 地址)、錯誤檢測與修正、流量控制以及對實體媒介的存取控制。</li>
+<li><strong>數據單位</strong>：數據影格 (Frame)</li>
+<li><strong>協定範例</strong>：Ethernet (乙太網路)、PPP (點對點協定)、Wi-Fi (無線網路)</li>
+<li><strong>設備範例</strong>：交換器 (Switch)</li>
+<li><strong>口訣連想</strong>：局域網的小管家，確保數據在本地網路正確傳輸。</li>
+</ul>
+</li>
+<li>
+<p><strong>第一層：實體層 (Physical Layer)</strong></p>
+<ul>
+<li><strong>功能</strong>：定義了網路設備之間傳輸原始位元流的電氣、機械、功能和程序規格。例如，電壓、纜線類型、埠接口等。</li>
+<li><strong>數據單位</strong>：位元 (Bit)</li>
+<li><strong>協定範例</strong>：RJ45 連接器標準、光纖、銅纜的訊號編碼</li>
+<li><strong>設備範例</strong>：集線器 (Hub)、中繼器 (Repeater)、網線、光纖</li>
+<li><strong>口訣連想</strong>：數據傳輸的「硬體」基礎。</li>
+</ul>
+</li>
+</ol>
+<h1 id="網際網路的骨幹tcpip-四層模型-transmission-control-protocolinternet-protocol-model"><a class="markdownIt-Anchor" href="#網際網路的骨幹tcpip-四層模型-transmission-control-protocolinternet-protocol-model"></a> 網際網路的骨幹：TCP/IP 四層模型 (Transmission Control Protocol/Internet Protocol Model)</h1>
+<p>與 OSI 模型不同，TCP/IP 模型是<strong>基於實際協定和實作</strong>而發展起來的。它是網際網路的核心架構，也是目前實際應用中廣泛使用的模型。它將網路通訊劃分為四個層次。</p>
+<h3 id="tcpip-四層模型詳細解析"><a class="markdownIt-Anchor" href="#tcpip-四層模型詳細解析"></a> TCP/IP 四層模型詳細解析：</h3>
+<ol>
+<li>
+<p><strong>第四層：應用層 (Application Layer)</strong></p>
+<ul>
+<li><strong>功能</strong>：整合了 OSI 模型的應用層、表示層和會話層的功能。為使用者提供特定應用程式服務。</li>
+<li><strong>數據單位</strong>：數據 (Data)</li>
+<li><strong>協定範例</strong>：HTTP, FTP, SMTP, DNS 等所有 OSI L5, L6, L7 的協定。</li>
+<li><strong>口訣連想</strong>：用戶直接使用的所有網路服務。</li>
+</ul>
+</li>
+<li>
+<p><strong>第三層：傳輸層 (Transport Layer)</strong></p>
+<ul>
+<li><strong>功能</strong>：與 OSI 模型的傳輸層相同。提供端到端的數據傳輸服務，處理數據分段、流量控制和錯誤控制。</li>
+<li><strong>數據單位</strong>：數據段 (Segment)</li>
+<li><strong>協定範例</strong>：TCP, UDP</li>
+<li><strong>口訣連想</strong>：負責將數據安全或高效地送達目標應用程序。</li>
+</ul>
+</li>
+<li>
+<p><strong>第二層：網際網路層 (Internet Layer)</strong></p>
+<ul>
+<li><strong>功能</strong>：與 OSI 模型的網路層相同。處理邏輯定址 (IP 地址) 和數據封包在網路中的路由。</li>
+<li><strong>數據單位</strong>：數據封包 (Packet)</li>
+<li><strong>協定範例</strong>：IP, ICMP, ARP</li>
+<li><strong>設備範例</strong>：路由器 (Router)</li>
+<li><strong>口訣連想</strong>：定義 IP 地址，指導數據封包在網際網路中的路徑。</li>
+</ul>
+</li>
+<li>
+<p><strong>第一層：網路存取層 (Network Access Layer) / 連結層 (Link Layer)</strong></p>
+<ul>
+<li><strong>功能</strong>：整合了 OSI 模型的資料連結層和實體層的功能。負責實際的網絡媒體存取 (如乙太網路、Wi-Fi)，處理實體定址 (MAC 地址)、錯誤檢測以及位元流的實體傳輸。</li>
+<li><strong>數據單位</strong>：數據影格 (Frame) 或位元 (Bit)</li>
+<li><strong>協定範例</strong>：Ethernet, Wi-Fi, ARP</li>
+<li><strong>設備範例</strong>：交換器 (Switch), 網卡 (NIC)</li>
+<li><strong>口訣連想</strong>：負責將數據實際地放在網線上傳輸或接收。</li>
+</ul>
+</li>
+</ol>
+<h1 id="兩種模型兩種視角osi-與-tcpip-的對比與映射"><a class="markdownIt-Anchor" href="#兩種模型兩種視角osi-與-tcpip-的對比與映射"></a> 兩種模型，兩種視角：OSI 與 TCP/IP 的對比與映射</h1>
+<p>OSI 和 TCP/IP 模型雖然層次數量不同，但它們的核心概念和許多功能是互相對應的。</p>
+<h2 id="相似點"><a class="markdownIt-Anchor" href="#相似點"></a> 相似點：</h2>
+<ul>
+<li><strong>分層架構</strong>：都將複雜的網路通訊分解為更小、更易管理的功能模組。</li>
+<li><strong>上層對下層提供服務</strong>：每一層都依賴其下層的服務來完成自己的任務。</li>
+<li><strong>邏輯相似</strong>：應用層、傳輸層、網路層的功能概念類似。</li>
+<li><strong>標準化</strong>：都旨在提供一個通用的框架，促進不同系統間的互通性。</li>
+</ul>
+<h2 id="主要差異點"><a class="markdownIt-Anchor" href="#主要差異點"></a> 主要差異點：</h2>
+<ul>
+<li><strong>層次數量</strong>：OSI 有七層，TCP/IP 有四層。</li>
+<li><strong>理論與實作</strong>：OSI 是一個高度理論化、概念化的模型，目的是提供一個通用的參考標準；TCP/IP 則是直接基於網際網路協定集設計的，更注重實作。</li>
+<li><strong>層次整合</strong>：TCP/IP 模型將 OSI 的三層 (應用、表示、會話) 合併為一層 (應用層)，並將 OSI 的實體層和資料連結層合併為一層 (網路存取層)。</li>
+<li><strong>發展時機</strong>：OSI 模型在 TCP/IP 協定棧之後才出現，試圖統一當時已存在的各種網路協定。</li>
+</ul>
+<h2 id="osi-vs-tcpip-層次映射表"><a class="markdownIt-Anchor" href="#osi-vs-tcpip-層次映射表"></a> OSI V.S. TCP/IP 層次映射表：</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">OSI 七層模型</th>
+<th style="text-align:left">TCP/IP 四層模型</th>
+<th style="text-align:left">主要功能摘要</th>
+<th style="text-align:left">協定/設備範例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">7. 應用層 (Application)</td>
+<td style="text-align:left">\</td>
+<td style="text-align:left">為應用程序提供網路服務</td>
+<td style="text-align:left">HTTP, FTP, SMTP, DNS</td>
+</tr>
+<tr>
+<td style="text-align:left">6. 表示層 (Presentation)</td>
+<td style="text-align:left">\</td>
+<td style="text-align:left">處理數據格式化、加解密</td>
+<td style="text-align:left">JPEG, MPEG, SSL/TLS (部分功能)</td>
+</tr>
+<tr>
+<td style="text-align:left">5. 會話層 (Session)</td>
+<td style="text-align:left">\</td>
+<td style="text-align:left">建立、管理、終止會話</td>
+<td style="text-align:left">NetBIOS, RPC</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>(OSI 三層合一)</strong></td>
+<td style="text-align:left"><strong>4. 應用層 (Application)</strong></td>
+<td style="text-align:left"><strong>整合上記三層功能</strong></td>
+<td style="text-align:left"><strong>HTTP, FTP, SMTP, DNS, SSL/TLS</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">4. 傳輸層 (Transport)</td>
+<td style="text-align:left"><strong>3. 傳輸層 (Transport)</strong></td>
+<td style="text-align:left">端到端數據傳輸、流量/錯誤控制</td>
+<td style="text-align:left">TCP, UDP, 埠號</td>
+</tr>
+<tr>
+<td style="text-align:left">3. 網路層 (Network)</td>
+<td style="text-align:left"><strong>2. 網際網路層 (Internet)</strong></td>
+<td style="text-align:left">邏輯定址、路由</td>
+<td style="text-align:left">IP, ICMP, ARP, 路由器</td>
+</tr>
+<tr>
+<td style="text-align:left">2. 資料連結層 (Data Link)</td>
+<td style="text-align:left">\</td>
+<td style="text-align:left">實體定址、錯誤檢測、介質存取</td>
+<td style="text-align:left">MAC 地址, 交換器, Ethernet, Wi-Fi</td>
+</tr>
+<tr>
+<td style="text-align:left">1. 實體層 (Physical)</td>
+<td style="text-align:left">\</td>
+<td style="text-align:left">原始位元傳輸的電氣/機械規範</td>
+<td style="text-align:left">纜線、集線器、中繼器、光纖</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>(OSI 兩層合一)</strong></td>
+<td style="text-align:left"><strong>1. 網路存取層 (Network Access) / 連結層 (Link)</strong></td>
+<td style="text-align:left"><strong>整合上記兩層功能</strong></td>
+<td style="text-align:left"><strong>Ethernet, Wi-Fi, MAC 地址, 交換器, 網卡</strong></td>
+</tr>
+</tbody>
+</table>
+<h1 id="為什麼需要研究它們"><a class="markdownIt-Anchor" href="#為什麼需要研究它們"></a> 為什麼需要研究它們？</h1>
+<p>即使在實際網路操作中主要使用 TCP/IP 協定，OSI 模型仍然具有極高的教學和參考價值：</p>
+<ul>
+<li><strong>系統性理解</strong>：它提供了一個清晰的框架，幫助我們更系統地理解網路通訊的每一個環節，從應用到實體媒體。</li>
+<li><strong>故障排除</strong>：當網路出現問題時，遵循分層模型可以幫助我們逐步排查問題出在哪一層，從而更高效地定位和解決問題 (例如：<code>ping</code> 不通是網路層問題，<code>HTTP 500</code> 錯誤是應用層問題)。</li>
+<li><strong>標準化語言</strong>：IT 專業人員可以使用這些層次作為通用語言來討論網路概念和問題，不管使用的是何種具體技術。</li>
+<li><strong>新技術的基礎</strong>：無論出現什麼新的網路技術或協定，都可以將其放在這些模型中找到它的位置，理解其如何與其他部分協同工作。</li>
+</ul>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>OSI 七層模型和 TCP/IP 四層模型是網路世界不可或缺的基石。OSI 模型提供了一個理想化的、通用的網路通訊「藍圖」，幫助我們從概念上分解和理解複雜的網路功能；而 TCP/IP 模型則是網際網路的「實戰指南」，描述了數據在現實世界中是如何透過一系列協定實際傳輸的。</p>
+<p>理解這兩個模型，不僅能加深對網路運作原理的認識，也能擁有更強大的分析和解決網路問題的能力。它們是所有網路技術學習的起點，也是成為網路專家的必經之路。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Networking/" rel="tag"># Networking</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/09/08/%E6%AA%94%E6%A1%88%E5%82%B3%E8%BC%B8%E7%9A%84%E9%80%B2%E5%8C%96%20%E5%BE%9E%E5%82%B3%E7%B5%B1%20FTP%20%E5%88%B0%E5%AE%89%E5%85%A8%E7%9A%84%20SFTP/" rel="prev" title="檔案傳輸的進化：從傳統 FTP 到安全的 SFTP">
+                  <i class="fa fa-angle-left"></i> 檔案傳輸的進化：從傳統 FTP 到安全的 SFTP
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
