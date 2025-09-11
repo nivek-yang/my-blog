@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="隨著網路的日益普及，網路威脅也如影隨形。惡意軟體、未經授權的存取、資料竊取……這些都對數位資產構成了嚴峻挑戰。 面對這些威脅，需要一道堅固的防線，一個能夠監控、過濾並最終阻止惡意流量進入或離開我們網路的工具。這個工具就是防火牆 (Firewall)。 防火牆是網路安全的第一道防線，它的核心職責是根據預設的安全規則，監控和控制進出網路的流量。它決定了哪些通訊是被允許的，哪些則會被拒絕。   什麼是防">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入解析防火牆 (Firewall) 如何保護數位疆域">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/09/11/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%E9%98%B2%E7%81%AB%E7%89%86%20Firewall%20%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AD%B7%E6%95%B8%E4%BD%8D%E7%96%86%E5%9F%9F/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="隨著網路的日益普及，網路威脅也如影隨形。惡意軟體、未經授權的存取、資料竊取……這些都對數位資產構成了嚴峻挑戰。 面對這些威脅，需要一道堅固的防線，一個能夠監控、過濾並最終阻止惡意流量進入或離開我們網路的工具。這個工具就是防火牆 (Firewall)。 防火牆是網路安全的第一道防線，它的核心職責是根據預設的安全規則，監控和控制進出網路的流量。它決定了哪些通訊是被允許的，哪些則會被拒絕。   什麼是防">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-09-10T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-09-11T08:37:02.441Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Networking">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/09/11/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%E9%98%B2%E7%81%AB%E7%89%86%20Firewall%20%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AD%B7%E6%95%B8%E4%BD%8D%E7%96%86%E5%9F%9F/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/09/11/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%E9%98%B2%E7%81%AB%E7%89%86%20Firewall%20%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AD%B7%E6%95%B8%E4%BD%8D%E7%96%86%E5%9F%9F/","path":"2025/09/11/深入解析防火牆 Firewall 如何保護數位疆域/","title":"深入解析防火牆 (Firewall) 如何保護數位疆域"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>深入解析防火牆 (Firewall) 如何保護數位疆域 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">83</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">49</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(15)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(15)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF%E9%98%B2%E7%81%AB%E7%89%86%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD%E8%88%87%E9%87%8D%E8%A6%81%E6%80%A7"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是防火牆？核心功能與重要性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%B2%E7%81%AB%E7%89%86%E7%9A%84%E4%B8%BB%E8%A6%81%E5%8A%9F%E8%83%BD"><span class="nav-number">1.1.</span> <span class="nav-text"> 防火牆的主要功能：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%98%B2%E7%81%AB%E7%89%86%E5%A6%82%E6%AD%A4%E9%87%8D%E8%A6%81"><span class="nav-number">1.2.</span> <span class="nav-text"> 為什麼防火牆如此重要？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%98%B2%E7%81%AB%E7%89%86%E5%A6%82%E4%BD%95%E9%81%8B%E4%BD%9C%E5%BE%9E%E7%B0%A1%E5%96%AE%E5%AE%88%E8%A1%9B%E5%88%B0%E6%99%BA%E6%85%A7%E4%BF%9D%E5%85%A8"><span class="nav-number">2.</span> <span class="nav-text"> 防火牆如何運作？從「簡單守衛」到「智慧保全」</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%B0%81%E5%8C%85%E9%81%8E%E6%BF%BE%E9%98%B2%E7%81%AB%E7%89%86-packet-filtering-firewall"><span class="nav-number">2.1.</span> <span class="nav-text"> 1. 封包過濾防火牆 (Packet-Filtering Firewall)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%9C%89%E7%8B%80%E6%85%8B%E6%AA%A2%E6%9F%A5%E9%98%B2%E7%81%AB%E7%89%86-stateful-inspection-firewall"><span class="nav-number">2.2.</span> <span class="nav-text"> 2. 有狀態檢查防火牆 (Stateful Inspection Firewall)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E4%BB%A3%E7%90%86%E9%98%B2%E7%81%AB%E7%89%86-%E6%87%89%E7%94%A8%E5%B1%A4%E9%96%98%E9%81%93-proxy-firewall-application-gateway"><span class="nav-number">2.3.</span> <span class="nav-text"> 3. 代理防火牆 &#x2F; 應用層閘道 (Proxy Firewall &#x2F; Application Gateway)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E4%B8%8B%E4%B8%80%E4%BB%A3%E9%98%B2%E7%81%AB%E7%89%86-next-generation-firewall-ngfw"><span class="nav-number">2.4.</span> <span class="nav-text"> 4. 下一代防火牆 (Next-Generation Firewall - NGFW)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E7%B6%B2%E8%B7%AF%E6%87%89%E7%94%A8%E9%98%B2%E7%81%AB%E7%89%86-web-application-firewall-waf"><span class="nav-number">2.5.</span> <span class="nav-text"> 5. 網路應用防火牆 (Web Application Firewall - WAF)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%98%B2%E7%81%AB%E7%89%86%E7%9A%84%E9%A1%9E%E5%9E%8B%E7%A1%AC%E9%AB%94%E8%88%87%E8%BB%9F%E9%AB%94"><span class="nav-number">3.</span> <span class="nav-text"> 防火牆的類型：硬體與軟體</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%98%B2%E7%81%AB%E7%89%86%E8%A6%8F%E5%89%87%E8%88%87%E9%9A%B1%E5%90%AB%E6%8B%92%E7%B5%95%E5%8E%9F%E5%89%87"><span class="nav-number">4.</span> <span class="nav-text"> 防火牆規則與「隱含拒絕」原則</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/11/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%E9%98%B2%E7%81%AB%E7%89%86%20Firewall%20%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AD%B7%E6%95%B8%E4%BD%8D%E7%96%86%E5%9F%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="深入解析防火牆 (Firewall) 如何保護數位疆域 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深入解析防火牆 (Firewall) 如何保護數位疆域
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-09-11 00:00:00 / 修改時間：16:37:02" itemprop="dateCreated datePublished" datetime="2025-09-11T00:00:00+08:00">2025-09-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>隨著網路的日益普及，網路威脅也如影隨形。惡意軟體、未經授權的存取、資料竊取……這些都對數位資產構成了嚴峻挑戰。</p>
+<p>面對這些威脅，需要一道堅固的防線，一個能夠監控、過濾並最終阻止惡意流量進入或離開我們網路的工具。這個工具就是<strong>防火牆 (Firewall)</strong>。</p>
+<p>防火牆是網路安全的第一道防線，它的核心職責是<strong>根據預設的安全規則，監控和控制進出網路的流量</strong>。它決定了哪些通訊是被允許的，哪些則會被拒絕。</p>
+<hr />
+<h1 id="什麼是防火牆核心功能與重要性"><a class="markdownIt-Anchor" href="#什麼是防火牆核心功能與重要性"></a> 什麼是防火牆？核心功能與重要性</h1>
+<p><strong>防火牆 (Firewall)</strong> 是一種網路安全系統，它會根據一套既定的安全規則，監控並控制發送進出網路數據包的流量。它可以用軟體或硬體的形式實現。</p>
+<h2 id="防火牆的主要功能"><a class="markdownIt-Anchor" href="#防火牆的主要功能"></a> 防火牆的主要功能：</h2>
+<ol>
+<li><strong>流量過濾 (Traffic Filtering)</strong>：這是防火牆最基本的功能。它檢查數據包的來源、目的地、埠號、協定等資訊，並根據規則決定是放行、拒絕還是丟棄。</li>
+<li><strong>日誌記錄與審計 (Logging &amp; Auditing)</strong>：記錄通過或被阻止的流量資訊，這對於事後分析、系統監控和入侵檢測至關重要。</li>
+<li><strong>網路地址轉換 (Network Address Translation - NAT)</strong>：雖然不是防火牆的核心功能，但許多防火牆設備內建了 NAT 功能。它允許多個內部設備共用一個公共 IP 地址上網，同時隱藏了內部網路的拓撲結構，間接增加了安全性。</li>
+<li><strong>提供 VPN 連接 (Virtual Private Network)</strong>：許多企業級防火牆也兼具 VPN 伺服器的功能，為遠端用戶提供安全的加密連接。</li>
+</ol>
+<h2 id="為什麼防火牆如此重要"><a class="markdownIt-Anchor" href="#為什麼防火牆如此重要"></a> 為什麼防火牆如此重要？</h2>
+<ul>
+<li><strong>阻止未經授權的存取</strong>：防止潛在的攻擊者從外部進入我們的網路或設備。</li>
+<li><strong>防禦惡意軟體擴散</strong>：限制病毒、蠕蟲和特洛伊木馬等惡意軟體在網路中的傳播。</li>
+<li><strong>保護內部資源</strong>：確保敏感伺服器、資料庫和工作站免受外部攻擊。</li>
+<li><strong>執行安全策略</strong>：強制實施企業或個人設定的網路使用規則，例如阻止訪問特定網站。</li>
+<li><strong>隱藏內部網路結構</strong>：透過 NAT 等功能，讓外部網路無法直接探知內部網路的結構。</li>
+</ul>
+<h1 id="防火牆如何運作從簡單守衛到智慧保全"><a class="markdownIt-Anchor" href="#防火牆如何運作從簡單守衛到智慧保全"></a> 防火牆如何運作？從「簡單守衛」到「智慧保全」</h1>
+<p>防火牆的運作原理，從其發展歷程來看，可以分為幾個主要階段和技術：</p>
+<h2 id="1-封包過濾防火牆-packet-filtering-firewall"><a class="markdownIt-Anchor" href="#1-封包過濾防火牆-packet-filtering-firewall"></a> 1. 封包過濾防火牆 (Packet-Filtering Firewall)</h2>
+<ul>
+<li><strong>工作層次</strong>：主要在 <strong>OSI 模型的第一層 (實體層)</strong> 到 <strong>第三層 (網路層)</strong> 之間運作，也會考慮 <strong>第四層 (傳輸層)</strong> 的埠號。</li>
+<li><strong>原理</strong>：這是最基本、最快的防火牆。它會檢查每個獨立的數據包表頭資訊，例如<strong>來源 IP 地址、目的 IP 地址、來源埠號、目的埠號和使用的協定 (如 TCP、UDP、ICMP)</strong>。如果數據包與預設的規則集匹配，就會被允許通過，否則被丟棄。</li>
+<li><strong>優點</strong>：性能高，延遲低。</li>
+<li><strong>缺點</strong>：無法理解數據包之間的上下文關係，不檢查數據包內容，容易被更複雜的攻擊繞過。對高層次的應用攻擊無能為力。</li>
+</ul>
+<h2 id="2-有狀態檢查防火牆-stateful-inspection-firewall"><a class="markdownIt-Anchor" href="#2-有狀態檢查防火牆-stateful-inspection-firewall"></a> 2. 有狀態檢查防火牆 (Stateful Inspection Firewall)</h2>
+<ul>
+<li><strong>工作層次</strong>：從 <strong>OSI 模型的第二層 (資料連結層)</strong> 到 <strong>第四層 (傳輸層)</strong>。</li>
+<li><strong>原理</strong>：這是目前最常見的防火牆類型。它不僅檢查每個數據包的表頭，還能<strong>追蹤網路連接的「狀態」</strong>。換句話說，它會記住已經建立的連接 (例如，已經建立了一個從內部網路出去的網頁瀏覽會話)。
+<ul>
+<li>當內部設備向外部服務發送請求時，防火牆會記錄下這個會話狀態。</li>
+<li>當外部服務響應這個會話時，即使防火牆規則不允許從外部主動建立連接，只要它匹配已建立的會話，數據包就會被允許進入。</li>
+</ul>
+</li>
+<li><strong>優點</strong>：比封包過濾更智能、更安全，能有效防禦許多基於會話的攻擊。</li>
+<li><strong>缺點</strong>：仍然不檢查應用層的數據內容，對更高級的應用層攻擊效果有限。</li>
+</ul>
+<h2 id="3-代理防火牆-應用層閘道-proxy-firewall-application-gateway"><a class="markdownIt-Anchor" href="#3-代理防火牆-應用層閘道-proxy-firewall-application-gateway"></a> 3. 代理防火牆 / 應用層閘道 (Proxy Firewall / Application Gateway)</h2>
+<ul>
+<li><strong>工作層次</strong>： <strong>OSI 模型第七層 (應用層)</strong>。</li>
+<li><strong>原理</strong>：代理防火牆充當客戶端和伺服器之間的中介。客戶端與代理防火牆建立連接，防火牆檢查應用層協議的命令和數據，再代表客戶端與真正的伺服器建立連接。例如，一個 HTTP 代理會理解 HTTP 協議。</li>
+<li><strong>優點</strong>：提供最高級別的安全性，可以深度檢查應用層數據內容，防禦更複雜的攻擊。</li>
+<li><strong>缺點</strong>：性能開銷較大，可能會引起延遲，需要為每個應用層協議配置不同的代理。</li>
+</ul>
+<h2 id="4-下一代防火牆-next-generation-firewall-ngfw"><a class="markdownIt-Anchor" href="#4-下一代防火牆-next-generation-firewall-ngfw"></a> 4. 下一代防火牆 (Next-Generation Firewall - NGFW)</h2>
+<ul>
+<li><strong>工作層次</strong>：跨多個層次，特別強調 <strong>應用層 (L7)</strong>。</li>
+<li><strong>原理</strong>：NGFW 是傳統防火牆功能的進化，它整合了多種安全功能於一體。包括：
+<ul>
+<li><strong>深度封包檢測 (Deep Packet Inspection - DPI)</strong>：不僅檢查表頭，還檢查數據包的實際內容。</li>
+<li><strong>入侵防禦系統 (Intrusion Prevention System - IPS)</strong>：識別並阻止已知的攻擊模式。</li>
+<li><strong>應用程式感知與控制 (Application Awareness and Control)</strong>：能夠識別和控制特定的應用程式，而不僅僅是埠號 (例如，區分 Facebook 瀏覽和 Facebook 遊戲)。</li>
+<li><strong>身份識別 (Identity Awareness)</strong>：與用戶身份資訊整合，根據用戶身份應用規則。</li>
+</ul>
+</li>
+<li><strong>優點</strong>：提供全方位的高級威脅防護，是目前企業級解決方案的主流。</li>
+<li><strong>缺點</strong>：部署和管理更複雜，成本更高。</li>
+</ul>
+<h2 id="5-網路應用防火牆-web-application-firewall-waf"><a class="markdownIt-Anchor" href="#5-網路應用防火牆-web-application-firewall-waf"></a> 5. 網路應用防火牆 (Web Application Firewall - WAF)</h2>
+<ul>
+<li><strong>工作層次</strong>： <strong>OSI 模型第七層 (應用層)</strong>，專注於 HTTP/HTTPS 流量。</li>
+<li><strong>原理</strong>：WAF 專門設計用於保護 Web 應用程式 (網站、API) 免受針對 Web 應用層的攻擊，例如 SQL 注入、跨站腳本 (XSS)、命令執行等。它作為 Web 伺服器的反向代理而存在。</li>
+<li><strong>優點</strong>：專注於 Web 應用安全，能有效防禦 OWASP Top 10 等常見 Web 攻擊。</li>
+<li><strong>缺點</strong>：僅保護 Web 應用層，不提供其他網路層次的保護。</li>
+</ul>
+<h1 id="防火牆的類型硬體與軟體"><a class="markdownIt-Anchor" href="#防火牆的類型硬體與軟體"></a> 防火牆的類型：硬體與軟體</h1>
+<p>除了工作原理，防火牆還可以根據其實現形式分為：</p>
+<ul>
+<li><strong>硬體防火牆 (Hardware Firewall)</strong>：
+<ul>
+<li>通常是獨立的網路設備 (如路由器、專用安全設備)，有專門的硬體來執行過濾規則。</li>
+<li><strong>優點</strong>：性能高，能處理大量流量，提供整個網路的保護，通常包含多種安全功能。</li>
+<li><strong>適用場景</strong>：企業、數據中心、中大型家庭網路。</li>
+</ul>
+</li>
+<li><strong>軟體防火牆 (Software Firewall)</strong>：
+<ul>
+<li>安裝在單個電腦或伺服器上的應用程式 (如 Windows Defender Firewall、Linux 的 <code>iptables</code> 或第三方防毒軟體內建的防火牆)。</li>
+<li><strong>優點</strong>：成本低，靈活性高，可以為單個設備提供精細的保護。</li>
+<li><strong>適用場景</strong>：個人電腦、筆記型電腦、單個伺服器。</li>
+</ul>
+</li>
+</ul>
+<h1 id="防火牆規則與隱含拒絕原則"><a class="markdownIt-Anchor" href="#防火牆規則與隱含拒絕原則"></a> 防火牆規則與「隱含拒絕」原則</h1>
+<p>配置防火牆的核心是建立「規則集 (Rule Set)」。這些規則通常是按順序執行的，一旦流量匹配某條規則，就會執行對應的動作 (允許或拒絕)。</p>
+<p>一個非常重要的安全原則是 <strong>「隱含拒絕 (Implicit Deny)」</strong>：</p>
+<blockquote>
+<p>如果流量沒有明確地被某條規則允許，那麼它就會被預設拒絕。</p>
+</blockquote>
+<p>這意味著必須明確指定哪些流量是允許的，而不是允許所有流量然後再拒絕惡意的。這種「黑名單不如白名單」的策略，極大地提升了安全性。</p>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>防火牆是現代網路安全架構中不可或缺的基石。從最初的簡單封包過濾，到現今智能化的下一代防火牆和專用的 Web 應用防火牆，它一直在進化以應對不斷變化的威脅。</p>
+<p>無論經營的是大型企業網路、中小企業辦公室，還是個人電腦，都應該恰當地配置和使用防火牆，確保只有被允許的「資訊郵件」才能暢通無阻，未經授權的威脅則會被拒之門外。</p>
+<p>理解防火牆的種類與運作方式，是建立穩固網路安全防線的第一步</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Networking/" rel="tag"># Networking</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/09/10/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20OSI%20%E4%B8%83%E5%B1%A4%E6%A8%A1%E5%9E%8B%E8%88%87%20TCP%20IP%20%E5%9B%9B%E5%B1%A4%E6%A8%A1%E5%9E%8B/" rel="prev" title="網路溝通的「設計藍圖」與「實戰指南」：深入解析 OSI 七層模型與 TCP&#x2F;IP 四層模型">
+                  <i class="fa fa-angle-left"></i> 網路溝通的「設計藍圖」與「實戰指南」：深入解析 OSI 七層模型與 TCP/IP 四層模型
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

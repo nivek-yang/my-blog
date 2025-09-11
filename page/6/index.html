@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">82</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">83</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">49</span></a>
       <ul class="sub-menu">
   
@@ -302,7 +302,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Networking/">
         Networking
-        <span class="post-count">(14)</span>
+        <span class="post-count">(15)</span>
       </a>
     </li>
   
@@ -492,7 +492,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-count">83</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -517,6 +517,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/16/%E4%BB%80%E9%BA%BC%E6%98%AF%20AMQP%20%E9%80%B2%E9%9A%8E%E6%B6%88%E6%81%AF%E9%9A%8A%E5%88%97%E5%8D%94%E5%AE%9A/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/07/16/%E4%BB%80%E9%BA%BC%E6%98%AF%20AMQP%20%E9%80%B2%E9%9A%8E%E6%B6%88%E6%81%AF%E9%9A%8A%E5%88%97%E5%8D%94%E5%AE%9A/" class="post-title-link" itemprop="url">
+              什麼是 AMQP 進階消息隊列協定？
+            </a>
+            <a href="/my-blog/2025/07/16/%E4%BB%80%E9%BA%BC%E6%98%AF%20AMQP%20%E9%80%B2%E9%9A%8E%E6%B6%88%E6%81%AF%E9%9A%8A%E5%88%97%E5%8D%94%E5%AE%9A/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-07-16 00:00:00 / 修改時間：23:57:02" itemprop="dateCreated datePublished" datetime="2025-07-16T00:00:00+08:00">2025-07-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">AMQP 的全名是 Advanced Message Queuing Protocol (進階訊息隊列協定)。 可以把它想像成是訊息世界的「HTTP」。就像 HTTP 定義了瀏覽器（客戶端）如何與網頁伺服器溝通的規則一樣， AMQP 是一個開放標準的應用層協定，它定義了訊息發送者（Producer）和訊息接收者（Consumer）之間，如何透過一個中介（Broker）來傳遞訊息的標準化規則。 AMQP 的核心目標 AMQP (Advanced Message Queuing Protocol，進階消息隊列協定) 作為一個開放標準的應用層協定，它的設計初衷非常明確： 可靠性 (Reliability): 確保訊息在傳輸過程中絕不遺失。從發送到接收，每一步都有確認機制。 互通性 (Interoperability): 打破語言和平台的壁壘。一個用 Python 寫的服務可以和一個用 Java 寫的服務透過 AMQP 完美溝通，因為它們說的是同一種「語言」。 RabbitMQ 是市面上最流行、最穩定的 AMQP 協定實現者 (Message Broker) 之一。 AMQP 的核心概念與運作流程 要理解 AMQP 的運作模式，需要先認識幾個關鍵角色，把它們想像成一個高效率的數位郵局系統。 核心成員 Producer (生產者): 訊息的創建者與發送方。例如，一個網站後端，在使用者上傳圖片後，它會發送一個「請處理這張圖片」的訊息。 Consumer (消費者 / Worker): 訊息的接收者與處理方。例如，一個專門用來壓縮圖片、加上浮水印的背景服務。 Broker (中介 / 伺服器): 整個系統的核心，也就是 RabbitMQ 自身。它像一個郵政總局，負責接收、暫存並路由所有訊息。 Exchange (交換機): Broker 內部的「分揀中心」。它從 Producer 接收訊息，並根據路由規則 (Routing Key) 將訊息推送到一個或多個佇列中。 Queue (佇列): 儲存訊息的「信箱」。訊息會在這裡排隊，等待 Consumer 前來取用。 Binding (綁定): 連接 Exchange 和 Queue 的規則。一個 Binding 會告訴 Exchange：「符合這個規則的訊息，請幫我送到那個 Queue 去」。 運作流程 發布 (Publish): Producer 將訊息發送到 Broker 內的某個 Exchange。發送時通常會附帶一個 Routing Key，例如 image.process.new。 路由 (Route): Exchange 收到訊息後，會檢查其 Routing Key，並根據它與各個 Queue 之間的 Binding 規則，決定訊息的去向。 入隊 (Enqueue): 訊息被精準地放入指定的 Queue 中排隊等待。 消費 (Consume): Consumer 會訂閱 (subscribe) 它感興趣的 Queue。一旦 Queue 中有新訊息，Broker 就會將訊息推送給 Consumer。 處理與確認 (Process &amp; Acknowledge): Consumer 收到訊息後，開始執行任務（例如壓縮圖片）。任務完成後，它會向 Broker 發送一個確認信號 (Acknowledgement, ack)。這個 ack 至關重要，它等於在告訴 Broker：「這個訊息我已成功處理，你可以從 Queue 中將它安全刪除了」。如果 Consumer 在處理過程中崩潰且未發送 ack，Broker 會將該訊息重新交給另一個健康的 Consumer 處理，這就是 AMQP 可靠性的關鍵。 AMQP 的三大殺手級應用 AMQP 究竟如何解決真實世界的工程問題？以下是三個最經典的應用場景： 1. 非同步背景任務 (Asynchronous Background Jobs) 痛點: 使用者在網站註冊，點擊「提交」後，系統需要發送歡迎郵件。如果同步處理，使用者必須盯著加載圈圈，直到郵件伺服器回應為止，體驗極差。 AMQP 應用: 註冊服務 (Producer) 只需發送一條訊息 &#123;&quot;action&quot;: &quot;send_welcome_email&quot;, &quot;to&quot;: &quot;user@example.com&quot;&#125; 到 RabbitMQ，然後立刻回應用戶「註冊成功！」。另一個獨立的郵件服務 (Consumer) 會從 Queue 中取得訊息，在背景悠閒地發送郵件。使用者體驗瞬間提升。 2. 服務解耦 (Decoupling Services) 痛點: 在微服務架構中，訂單服務（Order Service）建立新訂單後，需要通知庫存服務（Inventory Service）減庫存，還要通知物流服務（Shipping Service）準備出貨。如果訂單服務直接呼叫這兩個服務的 API，它們就緊緊地耦合在一起了。未來若新增一個數據分析服務也需要訂單資料，就必須修改訂單服務的程式碼。 AMQP 應用: 訂單服務 (Producer) 只需發送一條「訂單 #123 已建立」的訊息到一個 “fanout” 型別的 Exchange。庫存和物流服務 (Consumers) 各自監聽自己的 Queue，而這些 Queue 都綁定到同一個 Exchange。訊息一到，所有 Queue 都會收到一份拷貝。未來新增數據分析服務時，只需讓它也建立一個 Queue 並綁定到該 Exchange 即可，訂單服務完全無感知。這就是真正的「高內聚，低耦合」。 3. 流量削峰 (Buffering for Load Spikes) 痛點: 舉辦「雙十一」限時秒殺活動，午夜 12 點整，數百萬用戶的請求像洪水一樣湧向你的資料庫，瞬間就可能導致資料庫過載崩潰。 AMQP 應用: Web 伺服器 (Producers) 不再直接寫入資料庫，而是將所有秒殺請求快速轉化為訊息，然後塞進 RabbitMQ 的 Queue 中。後端的資料庫寫入服務 (Consumers) 則按照自己的最大處理能力，平穩地、一個一個地從 Queue 中取出請求來處理。Queue 在這裡扮演了一個巨大的緩衝區，將瞬間的流量洪峰「削平」，保護了脆弱的後端系統。 總結 AMQP 不僅僅是一個協定，它更是一種設計哲學，旨在構建可靠、可擴展且具備彈性的分散式系統。透過它，我們可以輕鬆實現非同步處理、服務解耦和流量控制等現代應用架構的關鍵需求。 總結來說，AMQP 是一個強大的協定，而 RabbitMQ 則是這個協定的優秀實現者。它們共同構成的訊息系統是現代分散式應用程式架構中不可或缺的一環。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/07/16/%E4%BB%80%E9%BA%BC%E6%98%AF%20AMQP%20%E9%80%B2%E9%9A%8E%E6%B6%88%E6%81%AF%E9%9A%8A%E5%88%97%E5%8D%94%E5%AE%9A/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1281,98 +1367,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/06/21/%E8%B3%87%E6%96%99%E5%BA%AB%E7%B4%A2%E5%BC%95index%E7%9A%84%E5%84%AA%E9%BB%9E%E5%8F%8A%E7%BC%BA%E9%BB%9E/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/06/19/%E4%BB%80%E9%BA%BC%E6%98%AF%20SQL%20Injection%E5%8F%88%E8%A9%B2%E5%A6%82%E4%BD%95%E9%A0%90%E9%98%B2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/06/19/%E4%BB%80%E9%BA%BC%E6%98%AF%20SQL%20Injection%E5%8F%88%E8%A9%B2%E5%A6%82%E4%BD%95%E9%A0%90%E9%98%B2/" class="post-title-link" itemprop="url">
-              什麼是 SQL Injection？又該如何預防？
-            </a>
-            <a href="/my-blog/2025/06/19/%E4%BB%80%E9%BA%BC%E6%98%AF%20SQL%20Injection%E5%8F%88%E8%A9%B2%E5%A6%82%E4%BD%95%E9%A0%90%E9%98%B2/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-
-      <time title="創建時間：2025-06-19 00:00:00" itemprop="dateCreated datePublished" datetime="2025-06-19T00:00:00+08:00">2025-06-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新於</span>
-      <time title="修改時間：2025-06-20 01:26:27" itemprop="dateModified" datetime="2025-06-20T01:26:27+08:00">2025-06-20</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">在 Web 開發中，SQL Injection（SQL 注入） 是最常見且危害極大的資安漏洞之一。它可以讓攻擊者透過竄改 SQL 查詢語句來未授權地讀取、修改、甚至刪除資料庫中的資料。本文將帶你認識 SQL Injection 是什麼、實際攻擊範例，以及開發者該如何有效預防這種攻擊。 SQL Injection 是什麼？ SQL Injection 是一種將惡意 SQL 語句插入應用程式輸入欄位中的攻擊方式，目的是操控原本預期的 SQL 查詢邏輯。 舉例來說，假設以下是一段不安全的登入邏輯： # ❌ 極度危險的程式碼 username = input(&quot;請輸入帳號：&quot;) password = input(&quot;請輸入密碼：&quot;) query = f&quot;SELECT * FROM users WHERE username = &#x27;&#123;username&#125;&#x27; AND password = &#x27;&#123;password&#125;&#x27;&quot; cursor.execute(query) 當攻擊者輸入以下資料時： username: ' OR 1=1 -- password: 任意內容 查詢語句將變成： SELECT * FROM users WHERE username = &#x27;&#x27; OR 1=1 --&#x27; AND password = &#x27;任意內容&#x27; 由於 -- 是 SQL 的註解符號，後面的內容會被忽略，而 OR 1=1 永遠為真，攻擊者即可繞過密碼驗證成功登入！ SQL Injection 的潛在危害 繞過身份驗證：如上例，攻擊者可直接登入任意帳戶。 資料洩漏：SELECT 語句被竄改，可讀取整個資料表。 資料破壞：透過 INSERT/UPDATE/DELETE 修改或刪除資料。 系統控制：某些情況下可執行資料庫指令進而控制伺服器。 如何預防 SQL Injection？ 防範 SQL Injection 是開發者的責任，以下是幾種有效的預防方式： 1. 使用參數化查詢（Prepared Statements） 最根本的解法是使用參數化查詢，將使用者輸入與 SQL 語句分離。 以 Python（Django ORM）為例： # ✅ 安全寫法（ORM 自動處理 SQL 注入風險） User.objects.filter(username=username, password=password).exists() 以 Python 搭配 psycopg2 原生查詢為例： # ✅ 安全寫法（使用參數化） cursor.execute(&quot;SELECT * FROM users WHERE username = %s AND password = %s&quot;, (username, password)) 2. 使用 ORM（Object-Relational Mapping） ORM 框架（如 Django ORM、SQLAlchemy）天生會處理 SQL Injection 的風險，因為它們自動將參數轉義為安全格式。 3. 輸入驗證與清洗 雖不能取代參數化查詢，但針對表單輸入進行格式驗證（如 email 格式、字數限制）可降低惡意資料混入。 4. 最小權限原則（Least Privilege） 資料庫帳號應只授予應用程式所需的最低權限。避免使用擁有 DROP、GRANT 等高權限的帳號。 5. 使用 Web 應用防火牆（WAF） WAF 可自動攔截常見的 SQL Injection 攻擊模式，作為第二道防線。 如何檢測是否有 SQL Injection？ 使用自動化工具（如 sqlmap）對 API 或表單送出測試 payload。 開發階段可使用 lint 工具檢查潛在的不安全 SQL 組合。 確保有完整的測試覆蓋對外輸入的功能。 面試回答 SQL Injection 是一種資安攻擊手法，攻擊者在表單輸入或 URL 中注入惡意 SQL 語句，藉此操控原本的資料庫查詢邏輯，可能造成未授權的資料讀取、修改，甚至整個資料庫被破壞。 舉例來說，若在登入功能中直接把使用者輸入組合成 SQL 字串而未加防護，攻擊者就能透過像 ' OR 1=1 -- 的輸入繞過驗證。 預防方式主要有三個： 使用參數化查詢（Prepared Statements）：將輸入值與 SQL 語句分離，是最根本的解法。 使用 ORM 框架：像是 Django ORM、SQLAlchemy 會自動處理參數轉義。 避免直接拼接 SQL，並搭配輸入驗證與資料庫權限控管，從多層面加強安全性。 在我自己的專案中，例如使用 Django 框架時，會透過 ORM 查詢，確保使用者輸入不會直接進入 SQL 字串，並依角色限制資料庫操作權限，確保資安基本面不被忽略。 總結 安全措施 是否必要 備註 參數化查詢 ✅ 必須實作 最根本防禦方式 ORM 框架 ✅ 強烈建議 自動處理轉意 輸入驗證 ⚠️ 輔助防禦 不能單獨依賴 資料庫權限控制 ✅ 應落實 防止資料被大規模破壞 Web 防火牆 ⚠️ 加強防禦 作為額外保護 SQL Injection 是老生常談但仍極常見的安全漏洞，唯有落實安全開發習慣，才能避免這類攻擊發生。 延伸閱讀 OWASP: SQL Injection Django Security Docs</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/06/19/%E4%BB%80%E9%BA%BC%E6%98%AF%20SQL%20Injection%E5%8F%88%E8%A9%B2%E5%A6%82%E4%BD%95%E9%A0%90%E9%98%B2/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>
