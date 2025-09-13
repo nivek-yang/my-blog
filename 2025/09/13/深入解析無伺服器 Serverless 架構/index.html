@@ -19,27 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="前端開發常常會遇到「跨來源請求被阻擋」的錯誤訊息，比如： Access to fetch at &#39;https:&#x2F;&#x2F;api.example.com&#x2F;data&#39; from origin &#39;http:&#x2F;&#x2F;localhost:3000&#39; has been blocked by CORS policy: No &#39;Access-Control-Allow-Origin&#39; header is present..">
+    <meta name="description" content="「無伺服器 (Serverless) 架構」是一個極具前瞻性且日益普及的技術領域。它不僅改變了應用程式的部署和管理方式，更徹底顛覆了開發者對「伺服器」的傳統認知。 在傳統的軟體開發模式中，部署一個應用程式往往意味著需要購買、配置、維護實體或虛擬伺服器。要操心作業系統的更新、記憶體的使用率、CPU 的負載、網路的設定，甚至還要擔心伺服器的擴展性與高可用性。這些「伺服器管理」的瑣事，常常讓開發者無法專">
 <meta property="og:type" content="article">
-<meta property="og:title" content="什麼是 CORS（Cross-Origin Resource Sharing)？ 該怎麼解決跨來源請求問題？">
-<meta property="og:url" content="https://nivek-yang.github.io/2025/06/18/%E4%BB%80%E9%BA%BC%E6%98%AFCORS-%E8%A9%B2%E6%80%8E%E9%BA%BC%E8%A7%A3%E6%B1%BA%E8%B7%A8%E4%BE%86%E6%BA%90%E8%AB%8B%E6%B1%82%E5%95%8F%E9%A1%8C/index.html">
+<meta property="og:title" content="告別「伺服器管理」的煩惱：深入解析無伺服器 (Serverless) 架構，釋放雲端開發的無限潛力">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/09/13/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%E7%84%A1%E4%BC%BA%E6%9C%8D%E5%99%A8%20Serverless%20%E6%9E%B6%E6%A7%8B/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="前端開發常常會遇到「跨來源請求被阻擋」的錯誤訊息，比如： Access to fetch at &#39;https:&#x2F;&#x2F;api.example.com&#x2F;data&#39; from origin &#39;http:&#x2F;&#x2F;localhost:3000&#39; has been blocked by CORS policy: No &#39;Access-Control-Allow-Origin&#39; header is present..">
+<meta property="og:description" content="「無伺服器 (Serverless) 架構」是一個極具前瞻性且日益普及的技術領域。它不僅改變了應用程式的部署和管理方式，更徹底顛覆了開發者對「伺服器」的傳統認知。 在傳統的軟體開發模式中，部署一個應用程式往往意味著需要購買、配置、維護實體或虛擬伺服器。要操心作業系統的更新、記憶體的使用率、CPU 的負載、網路的設定，甚至還要擔心伺服器的擴展性與高可用性。這些「伺服器管理」的瑣事，常常讓開發者無法專">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2025-06-17T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-06-18T15:52:45.896Z">
+<meta property="article:published_time" content="2025-09-12T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-09-13T15:30:25.450Z">
 <meta property="article:author" content="Kaiwii">
-<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Serverless">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://nivek-yang.github.io/2025/06/18/%E4%BB%80%E9%BA%BC%E6%98%AFCORS-%E8%A9%B2%E6%80%8E%E9%BA%BC%E8%A7%A3%E6%B1%BA%E8%B7%A8%E4%BE%86%E6%BA%90%E8%AB%8B%E6%B1%82%E5%95%8F%E9%A1%8C/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/09/13/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%E7%84%A1%E4%BC%BA%E6%9C%8D%E5%99%A8%20Serverless%20%E6%9E%B6%E6%A7%8B/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/06/18/%E4%BB%80%E9%BA%BC%E6%98%AFCORS-%E8%A9%B2%E6%80%8E%E9%BA%BC%E8%A7%A3%E6%B1%BA%E8%B7%A8%E4%BE%86%E6%BA%90%E8%AB%8B%E6%B1%82%E5%95%8F%E9%A1%8C/","path":"2025/06/18/什麼是CORS-該怎麼解決跨來源請求問題/","title":"什麼是 CORS（Cross-Origin Resource Sharing)？ 該怎麼解決跨來源請求問題？"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/09/13/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%E7%84%A1%E4%BC%BA%E6%9C%8D%E5%99%A8%20Serverless%20%E6%9E%B6%E6%A7%8B/","path":"2025/09/13/深入解析無伺服器 Serverless 架構/","title":"告別「伺服器管理」的煩惱：深入解析無伺服器 (Serverless) 架構，釋放雲端開發的無限潛力"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>什麼是 CORS（Cross-Origin Resource Sharing)？ 該怎麼解決跨來源請求問題？ | 我的技術部落格</title>
+<title>告別「伺服器管理」的煩惱：深入解析無伺服器 (Serverless) 架構，釋放雲端開發的無限潛力 | 我的技術部落格</title>
   
 
 
@@ -489,7 +489,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#cors-%E6%98%AF%E4%BB%80%E9%BA%BC"><span class="nav-number">1.</span> <span class="nav-text"> CORS 是什麼？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF%E8%B7%A8%E4%BE%86%E6%BA%90"><span class="nav-number">1.1.</span> <span class="nav-text"> 什麼是「跨來源」？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E6%9C%83%E5%87%BA%E7%8F%BE-cors-%E9%8C%AF%E8%AA%A4"><span class="nav-number">2.</span> <span class="nav-text"> 為什麼會出現 CORS 錯誤？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AF%84%E4%BE%8B%E6%83%85%E5%A2%83"><span class="nav-number">2.1.</span> <span class="nav-text"> 範例情境</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A3%E6%B1%BA-cors-%E5%95%8F%E9%A1%8C%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text"> 解決 CORS 問題的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BF%AE%E6%94%B9%E5%BE%8C%E7%AB%AF%E8%A8%AD%E5%AE%9A"><span class="nav-number">3.1.</span> <span class="nav-text"> 1. 修改後端設定</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AF%84%E4%BE%8B%E4%BD%BF%E7%94%A8-express"><span class="nav-number">3.1.1.</span> <span class="nav-text"> 範例：使用 Express</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AF%84%E4%BE%8B%E4%BD%BF%E7%94%A8-django-django-cors-headers"><span class="nav-number">3.1.2.</span> <span class="nav-text"> 範例：使用 Django + django-cors-headers</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8-proxy-%E9%81%BF%E9%96%8B-cors"><span class="nav-number">3.2.</span> <span class="nav-text"> 2. 使用 Proxy 避開 CORS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%BE%8C%E7%AB%AF%E8%A8%AD%E5%AE%9A-access-control-headers"><span class="nav-number">3.3.</span> <span class="nav-text"> 3. 後端設定 Access-Control Headers</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%A2%E8%A9%A6%E9%A1%8C%E7%9B%AE"><span class="nav-number">4.</span> <span class="nav-text"> 面試題目</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E7%AD%94%E7%AF%84%E4%BE%8B"><span class="nav-number">4.1.</span> <span class="nav-text"> 回答範例：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A6%8B%E9%8C%AF%E8%AA%A4"><span class="nav-number">4.1.1.</span> <span class="nav-text"> 常見錯誤：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E6%B1%BA%E6%96%B9%E5%BC%8F"><span class="nav-number">4.1.2.</span> <span class="nav-text"> 解決方式：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">5.</span> <span class="nav-text"> 總結</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%B6%E4%BC%B8%E9%96%B1%E8%AE%80"><span class="nav-number">6.</span> <span class="nav-text"> 延伸閱讀</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF%E7%84%A1%E4%BC%BA%E6%9C%8D%E5%99%A8-serverless-%E6%9E%B6%E6%A7%8B"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是無伺服器 (Serverless) 架構？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#serverless-%E7%9A%84%E6%A0%B8%E5%BF%83%E6%9C%8D%E5%8B%99faas-%E7%82%BA%E9%AA%A8baas-%E7%82%BA%E7%BF%BC"><span class="nav-number">2.</span> <span class="nav-text"> Serverless 的核心服務：FaaS 為骨，BaaS 為翼</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B8%E5%8D%B3%E6%9C%8D%E5%8B%99-functions-as-a-service-faas"><span class="nav-number">2.1.</span> <span class="nav-text"> 函數即服務 (Functions as a Service - FaaS)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%8C%E7%AB%AF%E5%8D%B3%E6%9C%8D%E5%8B%99-backend-as-a-service-baas"><span class="nav-number">2.2.</span> <span class="nav-text"> 後端即服務 (Backend as a Service - BaaS)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#serverless-%E6%9E%B6%E6%A7%8B%E7%9A%84%E5%9B%9B%E5%A4%A7%E6%A0%B8%E5%BF%83%E5%84%AA%E5%8B%A2"><span class="nav-number">3.</span> <span class="nav-text"> Serverless 架構的四大核心優勢</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#serverless-%E7%9A%84%E9%81%A9%E7%94%A8%E5%A0%B4%E6%99%AF"><span class="nav-number">4.</span> <span class="nav-text"> Serverless 的適用場景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#serverless-%E6%9E%B6%E6%A7%8B%E7%9A%84%E6%BD%9B%E5%9C%A8%E6%8C%91%E6%88%B0"><span class="nav-number">5.</span> <span class="nav-text"> Serverless 架構的潛在挑戰</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">6.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -537,7 +537,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/06/18/%E4%BB%80%E9%BA%BC%E6%98%AFCORS-%E8%A9%B2%E6%80%8E%E9%BA%BC%E8%A7%A3%E6%B1%BA%E8%B7%A8%E4%BE%86%E6%BA%90%E8%AB%8B%E6%B1%82%E5%95%8F%E9%A1%8C/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/13/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%E7%84%A1%E4%BC%BA%E6%9C%8D%E5%99%A8%20Serverless%20%E6%9E%B6%E6%A7%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -550,12 +550,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="什麼是 CORS（Cross-Origin Resource Sharing)？ 該怎麼解決跨來源請求問題？ | 我的技術部落格">
+      <meta itemprop="name" content="告別「伺服器管理」的煩惱：深入解析無伺服器 (Serverless) 架構，釋放雲端開發的無限潛力 | 我的技術部落格">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          什麼是 CORS（Cross-Origin Resource Sharing)？ 該怎麼解決跨來源請求問題？
+          告別「伺服器管理」的煩惱：深入解析無伺服器 (Serverless) 架構，釋放雲端開發的無限潛力
         </h1>
 
         <div class="post-meta-container">
@@ -567,7 +567,7 @@
       <span class="post-meta-item-text">發表於</span>
       
 
-      <time title="創建時間：2025-06-18 00:00:00 / 修改時間：23:52:45" itemprop="dateCreated datePublished" datetime="2025-06-18T00:00:00+08:00">2025-06-18</time>
+      <time title="創建時間：2025-09-13 00:00:00 / 修改時間：23:30:25" itemprop="dateCreated datePublished" datetime="2025-09-13T00:00:00+08:00">2025-09-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -588,180 +588,111 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>前端開發常常會遇到「跨來源請求被阻擋」的錯誤訊息，比如：</p>
-<pre class="highlight"><code class="">Access to fetch at 'https://api.example.com/data' from origin 'http://localhost:3000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present...
-</code></pre>
-<p>這就是著名的 CORS 問題。本篇文章將說明 CORS 是什麼、為什麼會發生，以及常見的解法。</p>
-<hr />
-<h1 id="cors-是什麼"><a class="markdownIt-Anchor" href="#cors-是什麼"></a> CORS 是什麼？</h1>
-<p>CORS（Cross-Origin Resource Sharing，跨來源資源共享）是一種<strong>瀏覽器的安全機制</strong>，用來限制「不同網域」之間的請求。簡單來說，它防止了一個網站的 JavaScript 去隨意讀取另一個網站的資料。</p>
-<h2 id="什麼是跨來源"><a class="markdownIt-Anchor" href="#什麼是跨來源"></a> 什麼是「跨來源」？</h2>
-<p>只要以下任何一個不同，就會被視為「不同來源」：</p>
-<table>
-<thead>
-<tr>
-<th>區塊</th>
-<th>範例</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>協定</td>
-<td><code>http://example.com</code> vs <code>https://example.com</code></td>
-</tr>
-<tr>
-<td>網域</td>
-<td><code>api.example.com</code> vs <code>www.example.com</code></td>
-</tr>
-<tr>
-<td>Port</td>
-<td><code>example.com:3000</code> vs <code>example.com:8000</code></td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h1 id="為什麼會出現-cors-錯誤"><a class="markdownIt-Anchor" href="#為什麼會出現-cors-錯誤"></a> 為什麼會出現 CORS 錯誤？</h1>
-<p>瀏覽器會阻擋從網頁腳本對其他來源發起的請求（例如使用 <code>fetch</code>、<code>axios</code>）。除非 <strong>伺服器端主動聲明允許該請求的來源</strong>，否則請求會被攔截。</p>
-<h2 id="範例情境"><a class="markdownIt-Anchor" href="#範例情境"></a> 範例情境</h2>
-<p>假設前端使用 React (<code>http://localhost:3000</code>)，想從後端 API (<code>http://localhost:8000</code>) 取得資料：</p>
-<pre class="highlight"><code class="js"><span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;http://localhost:8000/api/data&#x27;</span>)
-</code></pre>
-<p>這是跨來源請求，除非後端有設定 CORS header，否則會被瀏覽器擋下來。</p>
-<hr />
-<h1 id="解決-cors-問題的方法"><a class="markdownIt-Anchor" href="#解決-cors-問題的方法"></a> 解決 CORS 問題的方法</h1>
-<h2 id="1-修改後端設定"><a class="markdownIt-Anchor" href="#1-修改後端設定"></a> 1. <strong>修改後端設定</strong></h2>
-<p>CORS 問題應由「伺服器端」解決。需要在伺服器回應中加上正確的 <code>Access-Control-Allow-Origin</code> header。</p>
-<h3 id="範例使用-express"><a class="markdownIt-Anchor" href="#範例使用-express"></a> 範例：使用 Express</h3>
-<pre class="highlight"><code class="js"><span class="hljs-keyword">const</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;express&#x27;</span>);
-<span class="hljs-keyword">const</span> cors = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;cors&#x27;</span>);
-
-<span class="hljs-keyword">const</span> app = <span class="hljs-title function_">express</span>();
-app.<span class="hljs-title function_">use</span>(<span class="hljs-title function_">cors</span>()); <span class="hljs-comment">// 允許所有來源</span>
-
-<span class="hljs-comment">// 或只允許特定來源</span>
-<span class="hljs-comment">// app.use(cors(&#123; origin: &#x27;http://localhost:3000&#x27; &#125;));</span>
-
-app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/data&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> &#123;
-  res.<span class="hljs-title function_">json</span>(&#123; <span class="hljs-attr">message</span>: <span class="hljs-string">&#x27;Hello from server!&#x27;</span> &#125;);
-&#125;);
-
-app.<span class="hljs-title function_">listen</span>(<span class="hljs-number">8000</span>);
-</code></pre>
-<h3 id="範例使用-django-django-cors-headers"><a class="markdownIt-Anchor" href="#範例使用-django-django-cors-headers"></a> 範例：使用 Django + <code>django-cors-headers</code></h3>
-<pre class="highlight"><code class="bash">pip install django-cors-headers
-</code></pre>
-<pre class="highlight"><code class="python"><span class="hljs-comment"># settings.py</span>
-INSTALLED_APPS = [
-    ...
-    <span class="hljs-string">&#x27;corsheaders&#x27;</span>,
-]
-
-MIDDLEWARE = [
-    <span class="hljs-string">&#x27;corsheaders.middleware.CorsMiddleware&#x27;</span>,
-    ...
-]
-
-<span class="hljs-comment"># 允許所有網域</span>
-CORS_ALLOW_ALL_ORIGINS = <span class="hljs-literal">True</span>
-
-<span class="hljs-comment"># 或只允許特定網域</span>
-<span class="hljs-comment"># CORS_ALLOWED_ORIGINS = [</span>
-<span class="hljs-comment">#     &quot;http://localhost:3000&quot;,</span>
-<span class="hljs-comment"># ]</span>
-</code></pre>
-<hr />
-<h2 id="2-使用-proxy-避開-cors"><a class="markdownIt-Anchor" href="#2-使用-proxy-避開-cors"></a> 2. <strong>使用 Proxy 避開 CORS</strong></h2>
-<p>開發時可使用前端代理轉發請求，例如 React：</p>
-<pre class="highlight"><code class="js"><span class="hljs-comment">// vite.config.js or package.json</span>
-<span class="hljs-attr">proxy</span>: &#123;
-  <span class="hljs-string">&#x27;/api&#x27;</span>: &#123;
-    <span class="hljs-attr">target</span>: <span class="hljs-string">&#x27;http://localhost:8000&#x27;</span>,
-    <span class="hljs-attr">changeOrigin</span>: <span class="hljs-literal">true</span>,
-  &#125;,
-&#125;
-</code></pre>
-<p>這樣 <code>fetch('/api/data')</code> 實際會被代理成後端的請求，不會被視為跨來源。</p>
-<hr />
-<h2 id="3-後端設定-access-control-headers"><a class="markdownIt-Anchor" href="#3-後端設定-access-control-headers"></a> 3. <strong>後端設定 Access-Control Headers</strong></h2>
-<p>除了 <code>Access-Control-Allow-Origin</code>，有時也需要加上這些 header：</p>
-<pre class="highlight"><code class="http"><span class="hljs-attribute">Access-Control-Allow-Origin</span><span class="hljs-punctuation">: </span>http://localhost:3000
-<span class="hljs-attribute">Access-Control-Allow-Methods</span><span class="hljs-punctuation">: </span>GET, POST, PUT, DELETE
-<span class="hljs-attribute">Access-Control-Allow-Headers</span><span class="hljs-punctuation">: </span>Content-Type, Authorization
-</code></pre>
-<p>這些設定也必須在「預檢請求（Preflight Request）」中正確處理。</p>
-<hr />
-<h1 id="面試題目"><a class="markdownIt-Anchor" href="#面試題目"></a> 面試題目</h1>
-<blockquote>
-<p>「請說明什麼是 CORS（Cross-Origin Resource Sharing），以及如果遇到 CORS 問題該如何解決？」</p>
-</blockquote>
-<hr />
-<h2 id="回答範例"><a class="markdownIt-Anchor" href="#回答範例"></a> 回答範例：</h2>
-<p><strong>CORS（Cross-Origin Resource Sharing）</strong> 是一種瀏覽器的安全機制，用來限制前端從不同來源（origin）去請求資源，避免惡意網站竊取資料。當前端的 JavaScript 嘗試向不同網域、協定或 port 發送請求時，如果伺服器沒有正確設定 CORS header，瀏覽器會阻擋這個請求。</p>
-<h3 id="常見錯誤"><a class="markdownIt-Anchor" href="#常見錯誤"></a> 常見錯誤：</h3>
-<p>例如使用 fetch 或 axios 向不同來源的 API 發送請求時，會看到類似錯誤：</p>
-<pre class="highlight"><code class="">Access to fetch at 'http://api.example.com' from origin 'http://localhost:3000' has been blocked by CORS policy
-</code></pre>
-<h3 id="解決方式"><a class="markdownIt-Anchor" href="#解決方式"></a> 解決方式：</h3>
+    <div class="post-body" itemprop="articleBody"><p>「無伺服器 (Serverless) 架構」是一個極具前瞻性且日益普及的技術領域。它不僅改變了應用程式的部署和管理方式，更徹底顛覆了開發者對「伺服器」的傳統認知。</p>
+<p>在傳統的軟體開發模式中，部署一個應用程式往往意味著需要購買、配置、維護實體或虛擬伺服器。要操心作業系統的更新、記憶體的使用率、CPU 的負載、網路的設定，甚至還要擔心伺服器的擴展性與高可用性。這些「伺服器管理」的瑣事，常常讓開發者無法專心於最重要的——<strong>撰寫業務邏輯</strong>。</p>
+<p>隨著雲端技術的快速發展，一種革命性的架構模式正在興起，它承諾讓開發者從這些繁重的基礎設施管理中解放出來。它就是——<strong>無伺服器 (Serverless) 架構</strong>。</p>
+<p>「無伺服器」這個詞聽起來有些矛盾，難道程式碼真的可以在沒有伺服器的地方運行嗎？當然不是。它的核心理念是：<strong>開發者不再需要主動管理伺服器</strong>。底層的伺服器運維、擴展、高可用性等一切複雜事務，都由雲端服務供應商全權負責。只需專注於程式碼，然後「上傳」它，讓雲平台來自動執行。</p>
+<p>這篇文章將深入了解 Serverless 的世界，包括它的核心概念、優勢、適用場景以及潛在的挑戰。</p>
+<h1 id="什麼是無伺服器-serverless-架構"><a class="markdownIt-Anchor" href="#什麼是無伺服器-serverless-架構"></a> 什麼是無伺服器 (Serverless) 架構？</h1>
+<p><code>Serverless</code> 字面上的意思是「沒有伺服器」，但這是一個常見的誤解。事實上，程式碼仍然在伺服器上運行，只不過這些伺服器的<strong>配置、維護、擴展等所有管理工作，都由雲端服務供應商 (如 AWS、Azure、GCP) 完全接管</strong>。</p>
+<p>對於開發者而言，只需要：</p>
+<ul>
+<li><strong>編寫程式碼 (Functions as a Service - FaaS)</strong>：將業務邏輯寫成一個個獨立的函數。</li>
+<li><strong>設定觸發器 (Triggers)</strong>：告訴雲平台什麼時候執行這些函數 (例如，當 HTTP 請求到達、資料庫有異動、檔案上傳到儲存桶時)。</li>
+</ul>
+<p>雲平台會根據請求自動分配資源來執行函數，並在函數執行完畢後釋放資源。因此只需要為<strong>程式碼實際執行的時間和消耗的資源</strong>付費，而不是為閒置的伺服器容量付費。</p>
+<p><strong>核心思想</strong>：開發者只需關注業務邏輯，將底層基礎設施的管理「外包」給雲供應商。</p>
+<h1 id="serverless-的核心服務faas-為骨baas-為翼"><a class="markdownIt-Anchor" href="#serverless-的核心服務faas-為骨baas-為翼"></a> Serverless 的核心服務：FaaS 為骨，BaaS 為翼</h1>
+<p>Serverless 架構通常由兩大類服務構成：</p>
+<h2 id="函數即服務-functions-as-a-service-faas"><a class="markdownIt-Anchor" href="#函數即服務-functions-as-a-service-faas"></a> 函數即服務 (Functions as a Service - FaaS)</h2>
+<ul>
+<li><strong>定義</strong>：這是 Serverless 的核心。它允許將程式碼部署為無狀態的函數，然後雲平台會根據事件觸發這些函數的執行。</li>
+<li><strong>代表服務</strong>：
+<ul>
+<li><strong>AWS Lambda</strong></li>
+<li><strong>Azure Functions</strong></li>
+<li><strong>Google Cloud Functions</strong></li>
+<li><strong>Cloudflare Workers</strong></li>
+</ul>
+</li>
+<li><strong>特點</strong>：
+<ul>
+<li><strong>事件驅動</strong>：函數由特定的事件觸發 (HTTP 請求、數據庫事件、定時任務等)。</li>
+<li><strong>無狀態 (Stateless)</strong>：函數執行環境是短暫的，每次執行都可能在新的環境中，因此函數本身不應儲存狀態，而是依賴外部儲存 (如數據庫、儲存桶)。</li>
+<li><strong>自動擴展</strong>：雲平台會自動根據請求量擴展函數的實例，無需人工干預。</li>
+<li><strong>按量計費</strong>：只為函數的執行時間和資源消耗付費，而不是為運行函數的伺服器時間付費。</li>
+</ul>
+</li>
+</ul>
+<h2 id="後端即服務-backend-as-a-service-baas"><a class="markdownIt-Anchor" href="#後端即服務-backend-as-a-service-baas"></a> 後端即服務 (Backend as a Service - BaaS)</h2>
+<ul>
+<li><strong>定義</strong>：BaaS 提供了應用程式所需的後端功能，而無需開發者維護自己的後端伺服器。這些包括數據庫、身份驗證、檔案儲存、即時通訊等。</li>
+<li><strong>代表服務</strong>：
+<ul>
+<li><strong>AWS S3 (儲存)</strong>，<strong>DynamoDB (數據庫)</strong>，<strong>Cognito (身份驗證)</strong></li>
+<li><strong>Firebase (Google)</strong>：整合了數據庫 (Firestore)、身份驗證、檔案儲存等功能。</li>
+</ul>
+</li>
+<li><strong>特點</strong>：
+<ul>
+<li>直接使用雲服務提供的現成功能。</li>
+<li>進一步減少後端開發和維護的負擔。</li>
+</ul>
+</li>
+</ul>
+<h1 id="serverless-架構的四大核心優勢"><a class="markdownIt-Anchor" href="#serverless-架構的四大核心優勢"></a> Serverless 架構的四大核心優勢</h1>
+<p>捨棄傳統伺服器管理模式，Serverless 帶來了以下顯著優勢：</p>
 <ol>
 <li>
-<p><strong>從伺服器端設定 CORS header</strong>（這是正確的做法）：</p>
+<p><strong>降低營運成本 (Cost Efficiency)</strong>：</p>
 <ul>
-<li>
-<p>設定 <code>Access-Control-Allow-Origin</code>，明確允許某個前端網域。</p>
-</li>
-<li>
-<p>可搭配套件，如：</p>
-<ul>
-<li>Node.js 可用 <code>cors</code> middleware</li>
-<li>Django 可用 <code>django-cors-headers</code></li>
-</ul>
-</li>
+<li><strong>按量計費</strong>：只需為函數實際運行的毫秒數、呼叫次數和消耗的記憶體付費。當函數沒有被呼叫時，幾乎無需付費。這對於流量波動大或低頻率執行的應用程式來說，能顯著降低成本。</li>
+<li><strong>告別閒置資源</strong>：傳統伺服器即使在閒置時也需付費，Serverless 則可避免此類浪費。</li>
 </ul>
 </li>
 <li>
-<p><strong>本地開發時使用 proxy 轉發請求</strong>，避開跨域問題（開發用）：</p>
+<p><strong>提升開發效率 (Developer Productivity)</strong>：</p>
 <ul>
-<li>例如 React 可以設定 <code>vite.config.js</code> 或 <code>webpack devServer proxy</code></li>
+<li><strong>專注程式碼</strong>：開發者將不再被伺服器佈建、修補、監控、擴展等瑣事困擾，得以將精力完全集中於業務邏輯的開發。</li>
+<li><strong>簡化部署</strong>：通常只需上傳程式碼，雲平台會自動處理部署細節。</li>
+</ul>
+</li>
+<li>
+<p><strong>自動擴展性 (Automatic Scalability)</strong>：</p>
+<ul>
+<li><strong>彈性應對流量峰值</strong>：雲平台會根據事件觸發的數量，自動、即時地擴展函數實例，以應對突發的大流量。當流量下降時，也會自動縮減，無需人工介入配置。</li>
+<li><strong>高可用性</strong>：底層的實例和服務由雲供應商維護，自帶高可用特性。</li>
+</ul>
+</li>
+<li>
+<p><strong>更快上市時間 (Faster Time-to-Market)</strong>：</p>
+<ul>
+<li>由於開發和部署流程簡化，新功能可以更快地開發、測試和部署上線，加速產品迭代週期。</li>
 </ul>
 </li>
 </ol>
-<hr />
-<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
-<table>
-<thead>
-<tr>
-<th>問題</th>
-<th>解法</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>跨來源請求被阻擋</td>
-<td>在後端加上 CORS Header</td>
-</tr>
-<tr>
-<td>特定網域允許</td>
-<td>設定 <code>Access-Control-Allow-Origin</code> 為指定來源</td>
-</tr>
-<tr>
-<td>多來源需求</td>
-<td>使用動態設定或 whitelist</td>
-</tr>
-<tr>
-<td>本地開發測試</td>
-<td>使用 Proxy 或開啟允許全部來源</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h1 id="延伸閱讀"><a class="markdownIt-Anchor" href="#延伸閱讀"></a> 延伸閱讀</h1>
+<h1 id="serverless-的適用場景"><a class="markdownIt-Anchor" href="#serverless-的適用場景"></a> Serverless 的適用場景</h1>
+<p>Serverless 並非萬靈丹，但它在許多特定場景下能發揮巨大作用：</p>
 <ul>
-<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">MDN - HTTP access control (CORS)</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.w3.org/TR/cors/">CORS 官方規範 (W3C)</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/adamchainz/django-cors-headers">django-cors-headers GitHub</a></li>
+<li><strong>API 和 Web 應用後端</strong>：快速部署和擴展 RESTful API 或動態網站的後端邏輯。</li>
+<li><strong>數據處理</strong>：事件驅動的數據轉換、ETL (Extract, Transform, Load) 流程、圖像處理、影片轉碼。例如，當一個新圖片上傳到 S3 時，觸發 Lambda 函數進行壓縮或生成縮略圖。</li>
+<li><strong>自動化與排程任務</strong>：定時執行的報表生成、數據備份、系統健康檢查。</li>
+<li><strong>聊天機器人 (Chatbots)</strong>：處理用戶輸入、與後端服務互動。</li>
+<li><strong>IoT 後端</strong>：處理來自大量 IoT 設備的數據流。</li>
+<li><strong>簡單的批次任務</strong>：無需全天候運行的短期計算任務。</li>
 </ul>
-<hr />
-<p>如果曾經在開發中遇過 CORS 錯誤，不妨回頭看看是不是跨來源造成的限制，並從伺服器端著手解決吧！</p>
+<h1 id="serverless-架構的潛在挑戰"><a class="markdownIt-Anchor" href="#serverless-架構的潛在挑戰"></a> Serverless 架構的潛在挑戰</h1>
+<p>儘管優勢明顯，Serverless 也面臨一些挑戰：</p>
+<ul>
+<li><strong>冷啟動 (Cold Start)</strong>：當一個函數長時間未被呼叫，或者需要新的實例來處理請求時，雲平台需要時間來初始化運行環境，這會導致第一次請求的延遲增加。</li>
+<li><strong>調試與監控 (Debugging &amp; Monitoring)</strong>：由於函數運行在雲供應商管理的環境中，且生命週期短暫，本地調試和跨多個函數的端到端追蹤可能會變得複雜。</li>
+<li><strong>供應商鎖定 (Vendor Lock-in)</strong>：不同的雲供應商提供自己獨特的 Serverless 服務 (如 Lambda, Azure Functions)，將應用程式從一個平台遷移到另一個平台可能需要大量重構。</li>
+<li><strong>執行時間限制</strong>：FaaS 函數通常有執行時間限制 (例如 AWS Lambda 預設為 15 分鐘)，不適合長時間運行的程序。</li>
+<li><strong>成本預估複雜性</strong>：按量計費雖然省錢，但在初次設計階段預估大規模應用程式的總運行成本可能較複雜。</li>
+</ul>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>Serverless 架構代表了雲端技術發展的一個重要方向，它讓開發者得以擺脫繁瑣的基礎設施管理，將更多精力投入到創造價值。它以其驚人的彈性、成本效益和開發效率，正在重塑我們構建和部署應用程式的方式。</p>
+<p>理解 Serverless 的核心概念與適用場景，並明智地選擇合適的雲服務，將是邁向高效、現代雲端開發的關鍵一步。</p>
 
     </div>
 
@@ -771,21 +702,18 @@ CORS_ALLOW_ALL_ORIGINS = <span class="hljs-literal">True</span>
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/my-blog/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/my-blog/tags/Serverless/" rel="tag"># Serverless</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/my-blog/2025/05/05/Supabase%20PostgreSQL%20%E9%81%A0%E7%AB%AF%E8%B3%87%E6%96%99%E5%BA%AB%E5%BB%BA%E7%AB%8B%E8%88%87%E9%80%A3%E6%8E%A5/" rel="prev" title="Supabase PostgreSQL 遠端資料庫建立與連接">
-                  <i class="fa fa-angle-left"></i> Supabase PostgreSQL 遠端資料庫建立與連接
+                <a href="/my-blog/2025/09/12/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20VPN%20%E8%99%9B%E6%93%AC%E7%A7%81%E4%BA%BA%E7%B6%B2%E8%B7%AF%20%E5%A6%82%E4%BD%95%E5%AE%88%E8%AD%B7%E9%9A%B1%E7%A7%81%E8%88%87%E5%AE%89%E5%85%A8/" rel="prev" title="網路世界的「加密通道」：深入解析 VPN (虛擬私人網路) 如何守護隱私與安全">
+                  <i class="fa fa-angle-left"></i> 網路世界的「加密通道」：深入解析 VPN (虛擬私人網路) 如何守護隱私與安全
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/my-blog/2025/06/19/%E4%BB%80%E9%BA%BC%E6%98%AF%20SQL%20Injection%E5%8F%88%E8%A9%B2%E5%A6%82%E4%BD%95%E9%A0%90%E9%98%B2/" rel="next" title="什麼是 SQL Injection？又該如何預防？">
-                  什麼是 SQL Injection？又該如何預防？ <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
