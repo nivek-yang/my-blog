@@ -19,27 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="功能概述 此功能實現了一個按讚（收藏）按鈕，使用者可以對特定的項目（如面試記錄）進行按讚或取消按讚操作。按鈕的狀態（已收藏或收藏）由後端決定，並通過 HTMX 局部更新頁面。   技術細節  1. 前端模板設計  favorite.html 這個模板負責渲染按讚按鈕，按鈕的狀態根據使用者是否已經按讚來決定。 &#123;% if user in interview.favorited_by.al">
+    <meta name="description" content="隨著雲端運算技術的日趨成熟，我們見證了從傳統本地部署到 IaaS (Infrastructure as a Service)、PaaS (Platform as a Service) 的演進。然而，近年來一個更為高效、更具彈性的運算模型正悄然崛起，它便是「無伺服器運算」(Serverless Computing)。而作為無伺服器核心基石之一的 FaaS (Functions as a Servic">
 <meta property="og:type" content="article">
-<meta property="og:title" content="HTMX 與 Django 實現局部更新與後端渲染">
-<meta property="og:url" content="https://nivek-yang.github.io/2025/04/29/HTMX%E5%92%8CDjango%E5%AF%A6%E7%8F%BE%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E8%88%87%E5%BE%8C%E7%AB%AF%E6%B8%B2%E6%9F%93/index.html">
+<meta property="og:title" content="FaaS 深度解析：擁抱無伺服器新時代的函數即服務">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/09/17/FaaS%20%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="功能概述 此功能實現了一個按讚（收藏）按鈕，使用者可以對特定的項目（如面試記錄）進行按讚或取消按讚操作。按鈕的狀態（已收藏或收藏）由後端決定，並通過 HTMX 局部更新頁面。   技術細節  1. 前端模板設計  favorite.html 這個模板負責渲染按讚按鈕，按鈕的狀態根據使用者是否已經按讚來決定。 &#123;% if user in interview.favorited_by.al">
+<meta property="og:description" content="隨著雲端運算技術的日趨成熟，我們見證了從傳統本地部署到 IaaS (Infrastructure as a Service)、PaaS (Platform as a Service) 的演進。然而，近年來一個更為高效、更具彈性的運算模型正悄然崛起，它便是「無伺服器運算」(Serverless Computing)。而作為無伺服器核心基石之一的 FaaS (Functions as a Servic">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2025-04-28T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-04-29T15:00:19.293Z">
+<meta property="article:published_time" content="2025-09-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-09-17T15:26:10.953Z">
 <meta property="article:author" content="Kaiwii">
-<meta property="article:tag" content="HTMX">
+<meta property="article:tag" content="Cloud Computing">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://nivek-yang.github.io/2025/04/29/HTMX%E5%92%8CDjango%E5%AF%A6%E7%8F%BE%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E8%88%87%E5%BE%8C%E7%AB%AF%E6%B8%B2%E6%9F%93/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/09/17/FaaS%20%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/04/29/HTMX%E5%92%8CDjango%E5%AF%A6%E7%8F%BE%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E8%88%87%E5%BE%8C%E7%AB%AF%E6%B8%B2%E6%9F%93/","path":"2025/04/29/HTMX和Django實現局部更新與後端渲染/","title":"HTMX 與 Django 實現局部更新與後端渲染"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/09/17/FaaS%20%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/","path":"2025/09/17/FaaS 深度解析/","title":"FaaS 深度解析：擁抱無伺服器新時代的函數即服務"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>HTMX 與 Django 實現局部更新與後端渲染 | 我的技術部落格</title>
+<title>FaaS 深度解析：擁抱無伺服器新時代的函數即服務 | 我的技術部落格</title>
   
 
 
@@ -496,7 +496,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text"> 功能概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8A%80%E8%A1%93%E7%B4%B0%E7%AF%80"><span class="nav-number">2.</span> <span class="nav-text"> 技術細節</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%89%8D%E7%AB%AF%E6%A8%A1%E6%9D%BF%E8%A8%AD%E8%A8%88"><span class="nav-number">2.1.</span> <span class="nav-text"> 1. 前端模板設計</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#favoritehtml"><span class="nav-number">2.1.1.</span> <span class="nav-text"> favorite.html</span></a></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-faas-functions-as-a-service"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是 FaaS (Functions as a Service)？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#faas-%E5%A6%82%E4%BD%95%E9%81%8B%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text"> FaaS 如何運作？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#faas-%E7%9A%84%E9%97%9C%E9%8D%B5%E5%84%AA%E5%8B%A2"><span class="nav-number">3.</span> <span class="nav-text"> FaaS 的關鍵優勢</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#faas-%E7%9A%84%E5%85%B8%E5%9E%8B%E6%87%89%E7%94%A8%E5%A0%B4%E6%99%AF"><span class="nav-number">4.</span> <span class="nav-text"> FaaS 的典型應用場景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#faas-%E8%88%87%E5%85%B6%E4%BB%96%E9%9B%B2%E7%AB%AF%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%AF%94%E8%BC%83"><span class="nav-number">5.</span> <span class="nav-text"> FaaS 與其他雲端模型的比較</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#faas-%E7%9A%84%E6%8C%91%E6%88%B0%E8%88%87%E8%80%83%E6%85%AE"><span class="nav-number">6.</span> <span class="nav-text"> FaaS 的挑戰與考慮</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">7.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -544,7 +544,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/29/HTMX%E5%92%8CDjango%E5%AF%A6%E7%8F%BE%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E8%88%87%E5%BE%8C%E7%AB%AF%E6%B8%B2%E6%9F%93/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/17/FaaS%20%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -557,12 +557,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="HTMX 與 Django 實現局部更新與後端渲染 | 我的技術部落格">
+      <meta itemprop="name" content="FaaS 深度解析：擁抱無伺服器新時代的函數即服務 | 我的技術部落格">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          HTMX 與 Django 實現局部更新與後端渲染
+          FaaS 深度解析：擁抱無伺服器新時代的函數即服務
         </h1>
 
         <div class="post-meta-container">
@@ -574,7 +574,7 @@
       <span class="post-meta-item-text">發表於</span>
       
 
-      <time title="創建時間：2025-04-29 00:00:00 / 修改時間：23:00:19" itemprop="dateCreated datePublished" datetime="2025-04-29T00:00:00+08:00">2025-04-29</time>
+      <time title="創建時間：2025-09-17 00:00:00 / 修改時間：23:26:10" itemprop="dateCreated datePublished" datetime="2025-09-17T00:00:00+08:00">2025-09-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -595,24 +595,155 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="功能概述"><a class="markdownIt-Anchor" href="#功能概述"></a> 功能概述</h1>
-<p>此功能實現了一個按讚（收藏）按鈕，使用者可以對特定的項目（如面試記錄）進行按讚或取消按讚操作。按鈕的狀態（已收藏或收藏）由後端決定，並通過 HTMX 局部更新頁面。</p>
-<hr />
-<h1 id="技術細節"><a class="markdownIt-Anchor" href="#技術細節"></a> 技術細節</h1>
-<h2 id="1-前端模板設計"><a class="markdownIt-Anchor" href="#1-前端模板設計"></a> 1. <strong>前端模板設計</strong></h2>
-<h3 id="favoritehtml"><a class="markdownIt-Anchor" href="#favoritehtml"></a> favorite.html</h3>
-<p>這個模板負責渲染按讚按鈕，按鈕的狀態根據使用者是否已經按讚來決定。</p>
-<pre class="highlight"><code class="html"><span class="hljs-comment">&#123;% if user in interview.favorited_by.all %&#125;
-    <button hx-swap="outerHTML" hx-post="&#123;% url 'interviews:favorite' interview.id %&#125;" class="btn btn-primary" >已收藏</button>
-&#123;% else %&#125;
-    <button hx-swap="outerHTML" hx-post="&#123;% url 'interviews:favorite' interview.id %&#125;" class="btn btn-ghost" >收藏</button>
-&#123;% endif %&#125;</span>
-</code></pre>
+    <div class="post-body" itemprop="articleBody"><p>隨著雲端運算技術的日趨成熟，我們見證了從傳統本地部署到 IaaS (Infrastructure as a Service)、PaaS (Platform as a Service) 的演進。然而，近年來一個更為高效、更具彈性的運算模型正悄然崛起，它便是「無伺服器運算」(Serverless Computing)。而作為無伺服器核心基石之一的 <strong>FaaS (Functions as a Service)</strong>，更是徹底顛覆了我們對應用程式部署與管理的傳統認知。</p>
+<p>是否曾夢想過，程式碼能夠在需要時瞬間啟動，執行完畢後即刻停止計費，而無需煩惱後端伺服器的設定、擴展或維護？ FaaS 正是將這個夢想變為現實的關鍵。</p>
+<h1 id="什麼是-faas-functions-as-a-service"><a class="markdownIt-Anchor" href="#什麼是-faas-functions-as-a-service"></a> 什麼是 FaaS (Functions as a Service)？</h1>
+<p>FaaS，即「函數即服務」，是一種雲端運算執行模型，它允許開發者以「函數」的形式部署程式碼。在 FaaS 模型中，雲端供應商會完全管理底層基礎設施，包括伺服器、作業系統、網路、運行時環境以及自動擴展機制。</p>
+<p>簡單來說，FaaS 的核心理念是：</p>
+<ol>
+<li><strong>專注於程式碼：</strong> 開發者只需編寫單一用途、無狀態的函數程式碼。</li>
+<li><strong>事件驅動：</strong> 這些函數會在特定「事件」發生時被觸發執行，例如 HTTP 請求、資料庫變更、檔案上傳、定時任務等等。</li>
+<li><strong>按需彈性：</strong> 函數會根據工作負載自動擴展（或縮減），提供幾乎無限的彈性。</li>
+<li><strong>按用量計費：</strong> 只需為函數實際運行的時間和資源付費，當函數閒置時，不會產生任何費用。</li>
+</ol>
+<p>與傳統伺服器或容器服務不同，FaaS 完全擺脫了伺服器管理（Provisioning/Operating Servers）的重擔，這也是「無伺服器」名稱的由來。</p>
+<h1 id="faas-如何運作"><a class="markdownIt-Anchor" href="#faas-如何運作"></a> FaaS 如何運作？</h1>
+<p>FaaS 的運作可概括為以下幾個步驟：</p>
+<ol>
+<li><strong>部署函數：</strong> 開發者將包含業務邏輯的程式碼以及其相依套件打包，部署到 FaaS 平台。</li>
+<li><strong>設定觸發器：</strong> 為函數配置一個或多個觸發事件。例如，當一個新的檔案被上傳到 S3 儲存桶時，或者當一個 HTTP API 請求到達時。</li>
+<li><strong>事件發生：</strong> 當設定的事件被觸發時，FaaS 平台會偵測到。</li>
+<li><strong>啟動執行環境：</strong> 平台會動態地為函數建立一個輕量級、隔離的執行環境（通常是容器或虛擬機）。</li>
+<li><strong>執行函數：</strong> 程式碼在這個環境中被執行，處理事件資料。</li>
+<li><strong>資源釋放：</strong> 函數執行完畢後，執行環境通常會被回收，節省資源。</li>
+</ol>
+<p>這個過程中的「冷啟動」(Cold Start) 是FaaS的一個特性：如果一個函數長時間未被呼叫，它可能需要一些時間來啟動新的執行環境。但對於頻繁啟用的函數，平台通常會維持一定數量的「暖」環境，以實現近乎即時的響應。</p>
+<h1 id="faas-的關鍵優勢"><a class="markdownIt-Anchor" href="#faas-的關鍵優勢"></a> FaaS 的關鍵優勢</h1>
+<p>FaaS 模型的崛起絕非偶然，它帶來了多項令人振奮的優勢：</p>
+<ol>
+<li>
+<p><strong>極致的成本效益 (Cost Efficiency)：</strong></p>
 <ul>
-<li><strong><code>hx-post</code></strong>: 當按鈕被點擊時，發送一個 POST 請求到指定的 URL。</li>
-<li><strong><code>hx-swap=&quot;outerHTML&quot;</code></strong>: 指定 HTMX 替換整個按鈕的 HTML，而不僅僅是按鈕內的內容。</li>
-<li><strong>按鈕狀態</strong>: 使用 Django 模板語法 `</li>
+<li><strong>按用量計費 (Pay-per-execution)：</strong> 只為函數執行時的實際計算資源付費，沒有閒置成本。這對低頻率或突發性工作負載來說是巨大的節省。</li>
+<li><strong>告別伺服器維護成本</strong>：平台承擔所有底層基礎設施維護費用。</li>
 </ul>
+</li>
+<li>
+<p><strong>彈性與擴展性 (Scalability &amp; Elasticity)：</strong></p>
+<ul>
+<li><strong>自動擴展：</strong> 根據接收到的事件數量，FaaS 平台能夠自動、快速地擴展函數的執行實例，以應對高併發流量。</li>
+<li><strong>自動縮減：</strong> 當流量減少時，資源也會自動縮減，確保資源的最佳利用。</li>
+</ul>
+</li>
+<li>
+<p><strong>降低營運負擔 (Reduced Operational Overhead)：</strong></p>
+<ul>
+<li><strong>免除伺服器管理：</strong> 無需擔心伺服器的設定、打補丁、安全更新、版本升級或容錯處理。</li>
+<li><strong>專注於核心業務邏輯：</strong> 開發團隊能夠將寶貴的時間和精力集中在編寫有價值的業務程式碼上，而非基礎設施管理。</li>
+</ul>
+</li>
+<li>
+<p><strong>加速開發迭代 (Faster Development &amp; Deployment)：</strong></p>
+<ul>
+<li><strong>更快的部署：</strong> 部署一個 FaaS 函數通常比部署一個完整的應用程式或容器要快得多。</li>
+<li><strong>微服務友好：</strong> FaaS 鼓勵開發者將應用程式拆分為更小的、獨立的函數，非常適合微服務架構，有助於實現更快的開發週期和更獨立的團隊協作。</li>
+</ul>
+</li>
+<li>
+<p><strong>高可用性 (High Availability)：</strong></p>
+<ul>
+<li>雲端供應商的 FaaS 服務通常在多個可用區域(Availability Zones)運行，具備內建的容錯和高可用性。</li>
+</ul>
+</li>
+</ol>
+<h1 id="faas-的典型應用場景"><a class="markdownIt-Anchor" href="#faas-的典型應用場景"></a> FaaS 的典型應用場景</h1>
+<p>FaaS 的靈活性使其適用於許多不同類型的應用：</p>
+<ul>
+<li><strong>API 後端：</strong> 為 Web 或行動應用程式提供無伺服器後端 API。</li>
+<li><strong>資料處理：</strong> 實時處理串流資料（例如：物聯網資料、日誌分析）、圖片上傳後的縮圖處理、影片編碼。</li>
+<li><strong>定時任務 (Cron Jobs)：</strong> 執行排程的批次處理任務、數據清除或報告生成。</li>
+<li><strong>Webhooks 處理：</strong> 作為第三方服務（如 GitHub, Slack）的回呼處理器。</li>
+<li><strong>聊天機器人與語音助手：</strong> 處理使用者輸入並生成回應。</li>
+<li><strong>物聯網 (IoT) 後端：</strong> 接收和處理來自 IoT 裝置的事件和資料。</li>
+</ul>
+<h1 id="faas-與其他雲端模型的比較"><a class="markdownIt-Anchor" href="#faas-與其他雲端模型的比較"></a> FaaS 與其他雲端模型的比較</h1>
+<p>為了更清楚地理解 FaaS 的定位，將它與其他常見的雲端服務模型進行比較：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">特性 / 模型</th>
+<th style="text-align:left">本地部署 (On-premises)</th>
+<th style="text-align:left">IaaS (Infrastructure as a Service)</th>
+<th style="text-align:left">PaaS (Platform as a Service)</th>
+<th style="text-align:left">FaaS (Functions as a Service)</th>
+<th style="text-align:left">SaaS (Software as a Service)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>自己管理</strong></td>
+<td style="text-align:left">網路、儲存、伺服器、虛擬化、OS、Runtime、應用程式、資料、擴展</td>
+<td style="text-align:left">OS、Runtime、應用程式、資料、擴展</td>
+<td style="text-align:left">應用程式、資料、部分Runtime配置、部分擴展</td>
+<td style="text-align:left"><strong>僅需管理程式碼和資料</strong></td>
+<td style="text-align:left">無 (僅使用)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>供應商管理</strong></td>
+<td style="text-align:left">無</td>
+<td style="text-align:left">虛擬化、伺服器、儲存、網路</td>
+<td style="text-align:left">OS、虛擬化、伺服器、儲存、網路、Runtime、基礎擴展</td>
+<td style="text-align:left"><strong>OS、Runtime、伺服器、儲存、網路、自動擴展等所有底層</strong></td>
+<td style="text-align:left">完整的應用程式與底層所有</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>彈性</strong></td>
+<td style="text-align:left">低</td>
+<td style="text-align:left">中</td>
+<td style="text-align:left">中高</td>
+<td style="text-align:left"><strong>極高</strong></td>
+<td style="text-align:left">極高</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>費用模式</strong></td>
+<td style="text-align:left">資本支出 + 營運支出</td>
+<td style="text-align:left">依實例用量付費</td>
+<td style="text-align:left">依平台用量付費</td>
+<td style="text-align:left"><strong>依函數執行次數與時間計費</strong></td>
+<td style="text-align:left">依每月/每年訂閱</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>開發者專注點</strong></td>
+<td style="text-align:left">所有層級</td>
+<td style="text-align:left">應用程式及部分基礎設施</td>
+<td style="text-align:left">應用程式與資料庫</td>
+<td style="text-align:left"><strong>核心業務邏輯</strong></td>
+<td style="text-align:left">零開發，僅使用者角色</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>範例</strong></td>
+<td style="text-align:left">自建機房</td>
+<td style="text-align:left">AWS EC2, Azure VM, GCP Compute Engine</td>
+<td style="text-align:left">Heroku, AWS Elastic Beanstalk, Azure App Service</td>
+<td style="text-align:left"><strong>AWS Lambda, Azure Functions, GCP Cloud Functions</strong></td>
+<td style="text-align:left">Gmail, Salesforce, Dropbox</td>
+</tr>
+</tbody>
+</table>
+<p>從上表可見，FaaS 將開發者的管理責任推到了極致的「無伺服器」境界，讓我們能心無旁騖地專注於程式碼本身。</p>
+<h1 id="faas-的挑戰與考慮"><a class="markdownIt-Anchor" href="#faas-的挑戰與考慮"></a> FaaS 的挑戰與考慮</h1>
+<p>儘管 FaaS 帶來了諸多好處，但在採用之前，也需要考慮一些潛在的挑戰：</p>
+<ul>
+<li><strong>冷啟動 (Cold Starts)：</strong> 首次啟動或長時間未啟動的函數，可能會由於需要初始化執行環境而產生輕微的延遲。</li>
+<li><strong>時間限制 (Execution Duration Limits)：</strong> 大多數 FaaS 平台對函數的執行時間設有上限，不適合長時間執行的任務。</li>
+<li><strong>無狀態性 (Statelessness)：</strong> 函數是無狀態的，這意味著它們不應該依賴於前一次執行的狀態。如果需要狀態，必須將其存儲在外部服務（如資料庫、儲存桶）。</li>
+<li><strong>本地測試與偵錯：</strong> 由於依賴雲端環境觸發，本地環境的完整測試和偵錯可能會稍微複雜一些。</li>
+<li><strong>廠商綁定 (Vendor Lock-in)：</strong> FaaS 平台有各自的 API 和生態系統，在不同供應商之間遷移可能需要一些調整。</li>
+<li><strong>複雜的分布式系統：</strong> 當應用程式由數十個甚至數百個微小函數組成時，整體的架構設計、監控和問題排除可能變得複雜。</li>
+</ul>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>FaaS 提供了一種前所未有的方式來構建和部署應用程式：更聚焦、更彈性、更具成本效益。它讓開發者從繁瑣的基礎設施管理中解放出來，將寶貴的精力投入到創造真正的業務價值之上。</p>
+<p>雖然 FaaS 也有其適用場景和需要考量的點，但對於許多現代應用程式，特別是那些需要高度彈性、事件驅動且具備微服務特性的工作負載，FaaS 提供了強大且具前瞻性的解決方案。</p>
 
     </div>
 
@@ -622,21 +753,18 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/my-blog/tags/HTMX/" rel="tag"># HTMX</a>
+              <a href="/my-blog/tags/Cloud-Computing/" rel="tag"># Cloud Computing</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/my-blog/2025/04/28/Django%20%E4%BD%BF%E7%94%A8%20%60ManyToMany%60%20%E9%97%9C%E8%81%AF%E6%A8%A1%E5%9E%8B%E8%99%95%E7%90%86%E3%80%8C%E5%8B%95%E6%85%8B%E5%88%87%E6%8F%9B%E6%8C%89%E8%AE%9A%E7%8B%80%E6%85%8B%E3%80%8D/" rel="prev" title="Django 使用 &#96;ManyToMany&#96; 關聯模型處理「動態切換按讚狀態」">
-                  <i class="fa fa-angle-left"></i> Django 使用 `ManyToMany` 關聯模型處理「動態切換按讚狀態」
+                <a href="/my-blog/2025/09/15/Platform%20as%20a%20Service%20%E5%8A%A0%E9%80%9F%E6%87%89%E7%94%A8%E7%A8%8B%E5%BC%8F%E9%83%A8%E7%BD%B2%E8%88%87%E5%89%B5%E6%96%B0/" rel="prev" title="Platform as a Service (PaaS) 加速應用程式部署與創新">
+                  <i class="fa fa-angle-left"></i> Platform as a Service (PaaS) 加速應用程式部署與創新
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/my-blog/2025/04/29/HTMX%E7%B0%A1%E4%BB%8B/" rel="next" title="HTMX 簡介">
-                  HTMX 簡介 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
