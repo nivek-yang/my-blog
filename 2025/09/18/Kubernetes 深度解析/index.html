@@ -19,27 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="在先前的文章，了解了 IP 地址如何進行全球定位，MAC 地址如何作為設備的實體身份，以及 ARP 如何在兩者之間建立橋樑。這些高層次的邏輯和地址解析機制，最終都需要依託於一個實際的物理傳輸介質和規則，才能讓資料真正「動起來」。 這個底層的驅動力，就是這篇文章的主角——乙太網路 (Ethernet)。它不僅是當今全球最普及的區域網路 (LAN) 技術，更是連接世界的重要管道，從家用路由器到大型企業">
+    <meta name="description" content="Docker 的出現無疑是軟體開發與部署領域的一場革命。它讓開發者能夠將應用程式與其所有依賴打包成一個輕量、可移植的映像（Image），並在任何支援 Docker 的環境中以容器（Container）的形式運行，完美解決了「在我的機器上可以跑」的問題。應用程式的隔離性、一致性與啟動速度都得到了極大的提升。 然而，當應用程式變得日益複雜，需要部署數十、數百甚至數千個容器時，僅僅依靠 Docker 就">
 <meta property="og:type" content="article">
-<meta property="og:title" content="深入淺出乙太網路 (Ethernet)">
-<meta property="og:url" content="https://nivek-yang.github.io/2025/09/03/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E4%B9%99%E5%A4%AA%E7%B6%B2%E8%B7%AF%20Ethernet/index.html">
+<meta property="og:title" content="Kubernetes (K8s) 深度解析">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/09/18/Kubernetes%20%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="在先前的文章，了解了 IP 地址如何進行全球定位，MAC 地址如何作為設備的實體身份，以及 ARP 如何在兩者之間建立橋樑。這些高層次的邏輯和地址解析機制，最終都需要依託於一個實際的物理傳輸介質和規則，才能讓資料真正「動起來」。 這個底層的驅動力，就是這篇文章的主角——乙太網路 (Ethernet)。它不僅是當今全球最普及的區域網路 (LAN) 技術，更是連接世界的重要管道，從家用路由器到大型企業">
+<meta property="og:description" content="Docker 的出現無疑是軟體開發與部署領域的一場革命。它讓開發者能夠將應用程式與其所有依賴打包成一個輕量、可移植的映像（Image），並在任何支援 Docker 的環境中以容器（Container）的形式運行，完美解決了「在我的機器上可以跑」的問題。應用程式的隔離性、一致性與啟動速度都得到了極大的提升。 然而，當應用程式變得日益複雜，需要部署數十、數百甚至數千個容器時，僅僅依靠 Docker 就">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2025-09-02T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-09-03T15:20:02.247Z">
+<meta property="article:published_time" content="2025-09-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-09-18T15:24:30.473Z">
 <meta property="article:author" content="Kaiwii">
-<meta property="article:tag" content="Networking">
+<meta property="article:tag" content="Cloud Computing">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://nivek-yang.github.io/2025/09/03/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E4%B9%99%E5%A4%AA%E7%B6%B2%E8%B7%AF%20Ethernet/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/09/18/Kubernetes%20%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/09/03/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E4%B9%99%E5%A4%AA%E7%B6%B2%E8%B7%AF%20Ethernet/","path":"2025/09/03/深入淺出乙太網路 Ethernet/","title":"深入淺出乙太網路 (Ethernet)"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/09/18/Kubernetes%20%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/","path":"2025/09/18/Kubernetes 深度解析/","title":"Kubernetes (K8s) 深度解析"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>深入淺出乙太網路 (Ethernet) | 我的技術部落格</title>
+<title>Kubernetes (K8s) 深度解析 | 我的技術部落格</title>
   
 
 
@@ -496,7 +496,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF%E4%B9%99%E5%A4%AA%E7%B6%B2%E8%B7%AF-ethernet"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是乙太網路 (Ethernet)？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B9%99%E5%A4%AA%E7%B6%B2%E8%B7%AF%E5%A6%82%E4%BD%95%E9%81%8B%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text"> 乙太網路如何運作？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B9%99%E5%A4%AA%E7%B6%B2%E8%B7%AF%E5%B9%80-ethernet-frame%E8%B3%87%E6%96%99%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%96%AE%E4%BD%8D"><span class="nav-number">2.1.</span> <span class="nav-text"> 1. 乙太網路幀 (Ethernet Frame)：資料的基本單位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%85%B1%E4%BA%AB%E4%BB%8B%E8%B3%AA%E7%9A%84%E8%A8%AA%E5%95%8F%E6%8E%A7%E5%88%B6csmacd-%E6%AD%B7%E5%8F%B2%E8%88%87%E6%BC%94%E9%80%B2"><span class="nav-number">2.2.</span> <span class="nav-text"> 2. 共享介質的訪問控制：CSMA&#x2F;CD (歷史與演進)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B9%99%E5%A4%AA%E7%B6%B2%E8%B7%AF%E7%9A%84%E7%A8%AE%E9%A1%9E%E8%88%87%E9%80%9F%E5%BA%A6%E7%99%BC%E5%B1%95"><span class="nav-number">3.</span> <span class="nav-text"> 乙太網路的種類與速度發展</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B9%99%E5%A4%AA%E7%B6%B2%E8%B7%AF%E8%88%87-iparp-%E5%A6%82%E4%BD%95%E5%8D%94%E5%90%8C%E9%81%8B%E4%BD%9C"><span class="nav-number">4.</span> <span class="nav-text"> 乙太網路與 IP&#x2F;ARP 如何協同運作？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B9%99%E5%A4%AA%E7%B6%B2%E8%B7%AF%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7%E8%88%87%E5%84%AA%E5%8B%A2"><span class="nav-number">5.</span> <span class="nav-text"> 乙太網路的重要性與優勢</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">6.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-kubernetes-k8s%E5%AE%B9%E5%99%A8%E7%9A%84%E6%99%BA%E6%85%A7%E7%AE%A1%E5%AE%B6"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是 Kubernetes (K8s)？容器的智慧管家</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#kubernetes-%E5%A6%82%E4%BD%95%E8%A7%A3%E6%B1%BA%E5%95%8F%E9%A1%8C%E6%A0%B8%E5%BF%83%E5%83%B9%E5%80%BC%E4%B8%80%E8%A6%BD"><span class="nav-number">2.</span> <span class="nav-text"> Kubernetes 如何解決問題？核心價值一覽</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#kubernetes-%E7%9A%84%E9%97%9C%E9%8D%B5%E5%85%83%E4%BB%B6%E5%8F%8A%E5%85%B6%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text"> Kubernetes 的關鍵元件及其工作原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6%E5%B9%B3%E9%9D%A2-control-plane-%E5%85%83%E4%BB%B6%E5%8F%A2%E9%9B%86%E7%9A%84%E5%A4%A7%E8%85%A6"><span class="nav-number">3.1.</span> <span class="nav-text"> 控制平面 (Control Plane) 元件：叢集的大腦</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E7%AF%80%E9%BB%9E-worker-node-%E5%85%83%E4%BB%B6%E5%9F%B7%E8%A1%8C%E7%9A%84%E7%8F%BE%E5%A0%B4"><span class="nav-number">3.2.</span> <span class="nav-text"> 工作節點 (Worker Node) 元件：執行的現場</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#kubernetes-%E7%9A%84%E9%97%9C%E9%8D%B5%E6%8A%BD%E8%B1%A1%E6%A6%82%E5%BF%B5%E6%A7%8B%E5%BB%BA%E6%87%89%E7%94%A8%E7%A8%8B%E5%BC%8F%E7%9A%84%E7%A9%8D%E6%9C%A8"><span class="nav-number">4.</span> <span class="nav-text"> Kubernetes 的關鍵抽象概念：構建應用程式的積木</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">5.</span> <span class="nav-text"> 總結</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -544,7 +544,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/03/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E4%B9%99%E5%A4%AA%E7%B6%B2%E8%B7%AF%20Ethernet/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/18/Kubernetes%20%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -557,12 +557,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="深入淺出乙太網路 (Ethernet) | 我的技術部落格">
+      <meta itemprop="name" content="Kubernetes (K8s) 深度解析 | 我的技術部落格">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          深入淺出乙太網路 (Ethernet)
+          Kubernetes (K8s) 深度解析
         </h1>
 
         <div class="post-meta-container">
@@ -574,7 +574,7 @@
       <span class="post-meta-item-text">發表於</span>
       
 
-      <time title="創建時間：2025-09-03 00:00:00 / 修改時間：23:20:02" itemprop="dateCreated datePublished" datetime="2025-09-03T00:00:00+08:00">2025-09-03</time>
+      <time title="創建時間：2025-09-18 00:00:00 / 修改時間：23:24:30" itemprop="dateCreated datePublished" datetime="2025-09-18T00:00:00+08:00">2025-09-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -595,110 +595,152 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>在先前的文章，了解了 IP 地址如何進行全球定位，MAC 地址如何作為設備的實體身份，以及 ARP 如何在兩者之間建立橋樑。這些高層次的邏輯和地址解析機制，最終都需要依託於一個<strong>實際的物理傳輸介質和規則</strong>，才能讓資料真正「動起來」。</p>
-<p>這個底層的驅動力，就是這篇文章的主角——<strong>乙太網路 (Ethernet)</strong>。它不僅是當今全球最普及的區域網路 (LAN) 技術，更是連接世界的重要管道，從家用路由器到大型企業資料中心的伺服器，幾乎所有地方都能看到它的身影。</p>
-<h1 id="什麼是乙太網路-ethernet"><a class="markdownIt-Anchor" href="#什麼是乙太網路-ethernet"></a> 什麼是乙太網路 (Ethernet)？</h1>
-<p><strong>乙太網路 (Ethernet)</strong> 是一種用於<strong>區域網路 (Local Area Network, LAN)</strong> 的網路技術規範，它定義了資料在纜線上的傳輸方式、幀的格式，以及如何處理多個設備共享通訊介質時可能發生的衝突。</p>
-<p>可以將乙太網路想像成鋪設在家裡、辦公室或資料中心的一套<strong>高速且標準化的「道路系統」</strong>。在這個系統上，不同類型的「車輛」（資料幀）可以在嚴格的交通規則下高效地運行。</p>
+    <div class="post-body" itemprop="articleBody"><p>Docker 的出現無疑是軟體開發與部署領域的一場革命。它讓開發者能夠將應用程式與其所有依賴打包成一個輕量、可移植的映像（Image），並在任何支援 Docker 的環境中以容器（Container）的形式運行，完美解決了「在我的機器上可以跑」的問題。應用程式的隔離性、一致性與啟動速度都得到了極大的提升。</p>
+<p>然而，當應用程式變得日益複雜，需要部署數十、數百甚至數千個容器時，僅僅依靠 Docker 就不足以應對生產環境中的諸多挑戰了：</p>
 <ul>
-<li><strong>起源與標準化</strong>：乙太網路最初由 Xerox 公司於 1970 年代開發，隨後由 IEEE (電機電子工程師學會) 進行標準化，成為 <strong>IEEE 802.3 系列標準</strong>。</li>
-<li><strong>工作層次</strong>：乙太網路橫跨 <strong>OSI 模型的兩個最低層</strong>：
+<li><strong>部署與協調的複雜性：</strong> 如何將數百個容器部署到多個主機上？它們之間如何互相溝通？</li>
+<li><strong>手動擴展的痛苦：</strong> 流量高峰時，如何快速增加容器數量？低峰時又如何縮減以節省成本？</li>
+<li><strong>服務發現的難題：</strong> 當容器的 IP 地址不斷變化時，其他服務如何找到並連接它？</li>
+<li><strong>故障恢復的重擔：</strong> 當某個容器或甚至整個伺服器掛掉時，如何自動將服務恢復正常，而無需人工介入？</li>
+<li><strong>配置與更新的混亂：</strong> 如何安全、平滑地更新應用程式版本，同時確保服務不中斷？</li>
+</ul>
+<p>面對這些挑戰，需要一位強大的「指揮家」來統一調度與管理這些容器，確保它們高效、穩定、有序地運行。這個指揮家，就是這篇文章的主角：<strong>Kubernetes (K8s)</strong>。</p>
+<h1 id="什麼是-kubernetes-k8s容器的智慧管家"><a class="markdownIt-Anchor" href="#什麼是-kubernetes-k8s容器的智慧管家"></a> 什麼是 Kubernetes (K8s)？容器的智慧管家</h1>
+<p><strong>Kubernetes (K8s)</strong> 是一個開源的容器編排平台，最初由 Google 設計並捐贈給 Cloud Native Computing Foundation (CNCF)。它的目標是自動化部署、擴展和管理容器化的應用程式。</p>
+<p>「Kubernetes」源自希臘語，意為「舵手」或「領航員」，恰如其分地描述了它在容器世界中的角色。而「K8s」則是 Kubernetes 的縮寫，數字「8」代表了「K」和「s」之間省略的八個字母。</p>
+<p>可以將 Kubernetes 想像成一個極其智慧、高效且自律的系統管理員，它負責：</p>
 <ul>
-<li><strong>實體層 (Physical Layer, Layer 1)</strong>：負責定義電氣訊號、傳輸介質（如銅纜、光纖）、連接器（如 RJ45 插頭）以及物理佈線的特性。</li>
-<li><strong>資料連結層 (Data Link Layer, Layer 2)</strong>：負責資料的成幀 (Framing)、錯誤檢測、以及 MAC 地址的尋址。</li>
+<li><strong>大規模容器部署：</strong> 規劃最佳的容器放置位置。</li>
+<li><strong>自動化管理容器的生命週期：</strong> 根據需求啟動、停止、監控容器。</li>
+<li><strong>彈性擴展：</strong> 當需求增加時自動擴容，減少時自動縮容。</li>
+<li><strong>服務發現與負載平衡：</strong> 確保流量能正確且均勻地導向可用的容器實例。</li>
+<li><strong>自我修復：</strong> 自動檢測並替換故障的容器或節點，確保應用程式持續運行。</li>
+<li><strong>滾動更新與回滾：</strong> 在不影響服務的前提下，安全地更新應用程式版本，並在需要時快速回滾到舊版本。</li>
 </ul>
-</li>
-</ul>
-<hr />
-<h1 id="乙太網路如何運作"><a class="markdownIt-Anchor" href="#乙太網路如何運作"></a> 乙太網路如何運作？</h1>
-<p>乙太網路的運作核心是它如何組織資料並在共享介質上傳輸。</p>
-<h2 id="1-乙太網路幀-ethernet-frame資料的基本單位"><a class="markdownIt-Anchor" href="#1-乙太網路幀-ethernet-frame資料的基本單位"></a> 1. 乙太網路幀 (Ethernet Frame)：資料的基本單位</h2>
-<p>當 IP 資料包從網路層傳遞下來時，在資料連結層會被乙太網路<strong>封裝 (Encapsulate)</strong> 成一個「<strong>乙太網路幀 (Ethernet Frame)</strong>」。這就好比把郵件（IP 資料包）放進一個信封裡（乙太網路幀），並在信封上寫上本地郵局能識別的地址（MAC 地址）。</p>
-<p>一個標準的乙太網路幀包含了以下主要部分：</p>
-<ul>
-<li><strong>目標 MAC 地址 (Destination MAC Address)</strong>：接收方的 Layer 2 物理地址。</li>
-<li><strong>來源 MAC 地址 (Source MAC Address)</strong>：發送方的 Layer 2 物理地址。</li>
-<li><strong>類型/長度 (Type/Length)</strong>：指示幀中承載的是什麼樣的資料（例如 IP 封包、ARP 封包）。</li>
-<li><strong>資料 (Data)</strong>：實際的酬載 (Payload)，也就是 IP 資料包或其他協議的資料。</li>
-<li><strong>幀校驗序列 (Frame Check Sequence, FCS)</strong>：用於檢測傳輸過程中是否發生錯誤。</li>
-</ul>
-<h2 id="2-共享介質的訪問控制csmacd-歷史與演進"><a class="markdownIt-Anchor" href="#2-共享介質的訪問控制csmacd-歷史與演進"></a> 2. 共享介質的訪問控制：CSMA/CD (歷史與演進)</h2>
-<p>在早期的乙太網路（特別是使用<strong>集線器 Hub</strong>）環境中，所有設備都共用同一條通訊介質。為了避免彼此通訊時「打架」，乙太網路使用了一種機制叫做 <strong>CSMA/CD (Carrier Sense Multiple Access with Collision Detection)</strong>：</p>
-<ul>
-<li><strong>載波偵聽 (Carrier Sense)</strong>：設備在發送資料前，會先「聽一聽」線路上是否有其他設備在傳輸資料。如果線路是空的，才開始發送。</li>
-<li><strong>多重存取 (Multiple Access)</strong>：多個設備可以共享同一條通訊介質。</li>
-<li><strong>碰撞偵測 (Collision Detection)</strong>：如果兩個設備幾乎同時發送資料，就會發生「<strong>碰撞 (Collision)</strong>」。設備偵測到碰撞後，會停止發送，等待一段隨機時間後再嘗試發送。</li>
-</ul>
-<p>然而，<strong>這種碰撞機制在現代乙太網路中已較少見</strong>。由於現在大多使用<strong>交換器 (Switch)</strong> 而非集線器：</p>
-<ul>
-<li><strong>交換器</strong>：能為每個連接的設備建立<strong>獨立的微網段 (Microsegmentation)</strong>，使它們可以<strong>全雙工 (Full-Duplex)</strong> 模式通訊（同時發送和接收），<strong>從根本上消除了碰撞</strong>。因此，現代乙太網路幾乎不再依賴 CSMA/CD。</li>
-</ul>
-<hr />
-<h1 id="乙太網路的種類與速度發展"><a class="markdownIt-Anchor" href="#乙太網路的種類與速度發展"></a> 乙太網路的種類與速度發展</h1>
-<p>乙太網路歷經數十年發展，從慢速到超高速，從笨重的粗同軸電纜到精巧的光纖，不斷演進。命名方式通常遵循 <code>[速度][基礎頻寬][介質類型]</code>：</p>
-<ul>
-<li><strong>經典乙太網路 (Classic Ethernet)</strong>：
-<ul>
-<li><code>10BASE-T</code> (10 Mbps, 雙絞線)：最早普及的形態，使用 Cat3 或更高的雙絞線。</li>
-</ul>
-</li>
-<li><strong>快速乙太網路 (Fast Ethernet)</strong>：
-<ul>
-<li><code>100BASE-TX</code> (100 Mbps, 雙絞線)：推動了區域網路的速度升級，使用 Cat5e 或更高的雙絞線。</li>
-</ul>
-</li>
-<li><strong>千兆乙太網路 (Gigabit Ethernet)</strong>：
-<ul>
-<li><code>1000BASE-T</code> (1 Gbps, 雙絞線)：目前最常見的家庭和小型辦公室網路標準，使用 Cat5e/Cat6 雙絞線。</li>
-<li><code>1000BASE-SX/LX</code> (1 Gbps, 光纖)：用於較長距離或需要電氣隔離的場合。</li>
-</ul>
-</li>
-<li><strong>萬兆乙太網路 (10 Gigabit Ethernet)</strong>：
-<ul>
-<li><code>10GBASE-T</code> (10 Gbps, 雙絞線)：用於伺服器連接、資料中心骨幹，需要 Cat6a/Cat7 等級的雙絞線。</li>
-<li><code>10GBASE-SR/LR</code> (10 Gbps, 光纖)：資料中心和企業網路的首選。</li>
-</ul>
-</li>
-<li><strong>更高速度的乙太網路</strong>：
-<ul>
-<li><code>25GE</code> (25 Gbps)</li>
-<li><code>40GE</code> (40 Gbps)</li>
-<li><code>100GE</code> (100 Gbps)</li>
-<li>乃至 <code>200GE</code> 和 <code>400GE</code>：在大型資料中心、ISP 骨幹網和高性能計算場景中廣泛應用，主要使用光纖傳輸。</li>
-</ul>
-</li>
-</ul>
-<p>這些不同標準的演進，都維持了乙太網路原有的幀格式和基本工作原理，提供了良好的向下兼容性。</p>
-<hr />
-<h1 id="乙太網路與-iparp-如何協同運作"><a class="markdownIt-Anchor" href="#乙太網路與-iparp-如何協同運作"></a> 乙太網路與 IP/ARP 如何協同運作？</h1>
-<p>乙太網路是網路世界賴以運行的基礎。當瀏覽網頁時，乙太網路扮演著關鍵的「載體」角色：</p>
+<p>簡而言之，Kubernetes 將容器從單打獨鬥的個體，組織成一個協同運作的、高可用且具備彈性的應用程式叢集。</p>
+<h1 id="kubernetes-如何解決問題核心價值一覽"><a class="markdownIt-Anchor" href="#kubernetes-如何解決問題核心價值一覽"></a> Kubernetes 如何解決問題？核心價值一覽</h1>
+<p>Kubernetes 透過其設計理念和強大的功能，完美地解決了單純使用 Docker 所遇到的問題：</p>
 <ol>
-<li><strong>應用層到傳輸層</strong>：瀏覽器（應用層）產生資料，TCP/UDP（傳輸層）為它加上端口號。</li>
-<li><strong>網路層</strong>：IP（網路層）為資料加上來源和目的 IP 地址，形成 IP 資料包。</li>
-<li><strong>資料連結層 (乙太網路)</strong>：
+<li><strong>大規模部署與管理：</strong> 透過<strong>聲明式配置 (Declarative Configuration)</strong>，只需告訴 K8s 希望系統達到什麼狀態（例如，運行 3 個 Nginx 容器），K8s 就會努力實現並維持這個狀態，而無需手動操作每一個容器的部署細節。</li>
+<li><strong>彈性擴展 (Scalability)：</strong> K8s 提供了內建的擴展機制，如 <strong>Horizontal Pod Autoscaler (HPA)</strong>，可以根據 CPU 使用率或其他自定義指標自動增加或減少 Pod 的數量，輕鬆應對流量波動。</li>
+<li><strong>自我修復 (Self-healing)：</strong>
 <ul>
-<li>如果目的 IP 和來源 IP 在同一個區域網路，發送方會使用 <strong>ARP</strong> 協定來查詢目的 IP 地址對應的 MAC 地址。</li>
-<li>如果目的 IP 在不同區域網路，發送方會把 IP 資料包的目標 MAC 地址設為<strong>預設閘道 (Default Gateway, 通常是路由器)</strong> 的 MAC 地址。</li>
-<li>乙太網路將 IP 資料包包裝成<strong>乙太網路幀</strong>，並在幀頭加上來源和目的 MAC 地址。</li>
+<li>如果一個容器故障，K8s 會自動重啟它。</li>
+<li>如果一個 Pod 無回應，K8s 會終止它並啟動一個新的 Pod。</li>
+<li>如果整個節點（運行容器的物理或虛擬機）變得不健康，K8s 會將該節點上的所有 Pod 遷移到健康的節點上。</li>
+<li>它提供健康檢查，確保服務始終可用。</li>
 </ul>
 </li>
-<li><strong>實體層 (乙太網路)</strong>：乙太網路幀被轉換成電氣訊號或光訊號，通過網線或光纖傳輸出去。</li>
+<li><strong>服務發現與負載平衡：</strong> K8s 提供了 <code>Service</code> 抽象，為一組 Pod 提供了穩定的網路端點。當流量進入時，K8s 會自動將請求負載平衡到這些 Pod。</li>
+<li><strong>環境一致性：</strong> 透過 <code>ConfigMap</code> 和 <code>Secret</code> 等資源，K8s 能夠統一管理應用程式的配置資料和敏感資訊，確保開發、測試和生產環境的一致性。</li>
 </ol>
-<p>換句話說，IP 負責全局導航，MAC 地址負責局部投遞，而乙太網路就是那個負責鋪設道路、制定交通規則，並承載著這些「信件」（資料幀）精準抵達目的地的<strong>物流系統</strong>。</p>
-<hr />
-<h1 id="乙太網路的重要性與優勢"><a class="markdownIt-Anchor" href="#乙太網路的重要性與優勢"></a> 乙太網路的重要性與優勢</h1>
-<p>乙太網路之所以能夠成為主導性的區域網路技術，得益於其多項顯著優勢：</p>
+<h1 id="kubernetes-的關鍵元件及其工作原理"><a class="markdownIt-Anchor" href="#kubernetes-的關鍵元件及其工作原理"></a> Kubernetes 的關鍵元件及其工作原理</h1>
+<p>Kubernetes 叢集（Cluster）由兩種類型的節點組成：<strong>控制平面 (Control Plane)</strong>（以前稱為 Master 節點）和<strong>工作節點 (Worker Nodes)</strong>。</p>
+<h2 id="控制平面-control-plane-元件叢集的大腦"><a class="markdownIt-Anchor" href="#控制平面-control-plane-元件叢集的大腦"></a> 控制平面 (Control Plane) 元件：叢集的大腦</h2>
+<p>控制平面負責管理和協調整個叢集，是 K8s 做出決策的地方。</p>
+<ol>
+<li><strong>kube-apiserver (API 伺服器)：</strong>
 <ul>
-<li><strong>通用性與互操作性</strong>：它是全球公認的標準，不同廠商的乙太網路設備之間都能良好互通。</li>
-<li><strong>穩定可靠</strong>：經過數十年的發展和完善，乙太網路技術非常成熟穩定。</li>
-<li><strong>成本效益</strong>：相對於其他網路技術，乙太網路的設備和佈線成本相對較低。</li>
-<li><strong>豐富的生態系統</strong>：從網卡、纜線、交換器到路由，都有非常成熟和廣泛的產品選擇。</li>
-<li><strong>持續發展</strong>：速度和技術不斷演進，以滿足不斷增長的頻寬需求。</li>
+<li>這是 Kubernetes 叢集的「入口」。所有對叢集的管理操作（如創建、更新、刪除 Pods、Services 等）都透過 API 伺服器進行。</li>
+<li>它是叢集內外所有通訊的核心介面。</li>
 </ul>
-<hr />
-<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
-<p>乙太網路，這個看似基礎卻又無比強大的技術，是我們今天能夠享受高速、可靠網路服務的基石。它不僅定義了資料如何在物理介質上流動，更與 IP、MAC、ARP 等協同合作，共同構築了我們所熟悉的網路世界。</p>
-<p>從家裡連接上網的電腦，到支撐全球雲計算的資料中心，乙太網路都以其卓越的性能和普適性，默默地扮演著連接一切的英雄角色。</p>
+</li>
+<li><strong>etcd (鍵值儲存)：</strong>
+<ul>
+<li>一個高可用、分佈式的鍵值儲存系統。</li>
+<li>它儲存了 Kubernetes 叢集的所有配置資料、狀態信息和元數據。可以想像成 K8s 的「記憶體」。</li>
+</ul>
+</li>
+<li><strong>kube-scheduler (排程器)：</strong>
+<ul>
+<li>負責根據資源需求、軟硬體限制、親和性/反親和性等策略，為新創建的 Pod 選擇最合適的工作節點來運行。</li>
+</ul>
+</li>
+<li><strong>kube-controller-manager (控制器管理器)：</strong>
+<ul>
+<li>運行多種控制器（Controller），這些控制器負責監控叢集的共享狀態，並嘗試將當前狀態改變為期望狀態。</li>
+<li>例如：
+<ul>
+<li><code>Node Controller</code>：監控節點狀態，處理節點故障。</li>
+<li><code>Replication Controller</code>：確保指定數量的 Pod 副本在運行。</li>
+<li><code>Endpoints Controller</code>：將 <code>Service</code> 和 <code>Pod</code> 連接起來。</li>
+<li><code>ServiceAccount Controller</code>：為 <code>Namespace</code> 創建預設的 <code>ServiceAccount</code>。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>cloud-controller-manager (雲端控制器管理器 - 選配)：</strong>
+<ul>
+<li>用於管理與特定雲端提供商的 API 互動的控制器，例如在雲端供應商中配置負載平衡器、持久卷等。</li>
+</ul>
+</li>
+</ol>
+<h2 id="工作節點-worker-node-元件執行的現場"><a class="markdownIt-Anchor" href="#工作節點-worker-node-元件執行的現場"></a> 工作節點 (Worker Node) 元件：執行的現場</h2>
+<p>工作節點（通常部署多個）是運行應用程式容器的地方。</p>
+<ol>
+<li><strong>kubelet：</strong>
+<ul>
+<li>運行在每個工作節點上的代理。</li>
+<li>它接收來自 API 伺服器的指令，確保 Pod 中的容器按照預期運行，並向控制平面報告節點和 Pod 的狀態。</li>
+</ul>
+</li>
+<li><strong>kube-proxy (網路代理)：</strong>
+<ul>
+<li>運行在每個工作節點上。</li>
+<li>負責為 <code>Service</code> 實現網路代理和負載平衡功能，允許 Pod 之間以及外部流量訪問叢集內的服務。</li>
+<li>它維護著節點上的網路規則（如 iptables），將請求路由到正確的 Pod。</li>
+</ul>
+</li>
+<li><strong>Container Runtime (容器運行時)：</strong>
+<ul>
+<li>負責運行容器的軟體，例如 Docker、containerd、CRI-O 等。<code>kubelet</code> 透過它來啟動、停止和管理容器。</li>
+</ul>
+</li>
+</ol>
+<h1 id="kubernetes-的關鍵抽象概念構建應用程式的積木"><a class="markdownIt-Anchor" href="#kubernetes-的關鍵抽象概念構建應用程式的積木"></a> Kubernetes 的關鍵抽象概念：構建應用程式的積木</h1>
+<p>理解了核心元件後，再來看看 K8s 提供的一些關鍵抽象概念，它們是構建容器化應用的基礎模組。</p>
+<ol>
+<li><strong>Pod (最小部署單元)：</strong>
+<ul>
+<li>Kubernetes 中最小且最基本的部署單元。</li>
+<li>一個 Pod 可以包含一個或多個容器（通常是緊密耦合的），這些容器共享相同的網路空間（IP 地址和端口）和儲存磁碟區 (<code>Volume</code>)。</li>
+<li>為什麼不是直接容器？Pod 是為了處理「應用程式」而設計的。例如，一個主應用容器可能需要一個輔助性的日誌收集容器，它們需要緊密協同，並共享相同的環境。Pod 提供了這種協同運作的組件。</li>
+</ul>
+</li>
+<li><strong>Deployment (部署)：</strong>
+<ul>
+<li>「部署」是 K8s 中最常用的控制器之一，用於管理無狀態應用程式的 Pod 集。</li>
+<li>它定義了希望有多少個 Pod 副本在運行，以及如何更新這些 Pod。</li>
+<li>Deployment 建立並管理 <code>ReplicaSet</code>，而 <code>ReplicaSet</code> 則負責維持指定數量的 Pod 副本。</li>
+<li>支援聲明式更新（Rollout）、版本回滾和暫停部署。</li>
+</ul>
+</li>
+<li><strong>Service (服務)：</strong>
+<ul>
+<li>Pod 的生命週期是短暫且動態的，它們會被創建、銷毀，IP 地址也會改變。<code>Service</code> 就是為了解決這個問題而生。</li>
+<li><code>Service</code> 為一組 Pod 提供一個<strong>穩定、抽象的網路介面</strong>（如 ClusterIP、DNS 名稱），無論 Pods 的實際 IP 地址如何變化，都可以透過 <code>Service</code> 來訪問它們。</li>
+<li>K8s 提供了多種 <code>Service</code> 類型：
+<ul>
+<li><code>ClusterIP</code>：給叢集內部使用的虛擬 IP。</li>
+<li><code>NodePort</code>：透過每個節點的特定端口向外部暴露服務。</li>
+<li><code>LoadBalancer</code>：整合雲端提供商的負載平衡器，向外部暴露服務。</li>
+<li><code>ExternalName</code>：將服務映射到外部 DNS 地址。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Namespace (命名空間)：</strong>
+<ul>
+<li>提供了一種將叢集內的資源（如 Pods, Deployments, Services 等）劃分成邏輯分組的方式，實現資源的隔離。</li>
+<li>適用於多租戶環境，或將不同環境（如開發、測試、生產）的資源隔離開來，避免資源名稱衝突。</li>
+<li>每個 K8s 叢集至少會包含 <code>default</code>、<code>kube-system</code>、<code>kube-public</code> 和 <code>kube-node-lease</code> 等預設命名空間。</li>
+</ul>
+</li>
+</ol>
+<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
+<p>Kubernetes 毫無疑問是當前雲原生時代的基石。它將容器的便利性提升到了一個全新的水平，讓開發者和營運團隊都能從繁瑣的基礎設施管理中解放出來，專注於打造更具價值的應用程式。</p>
+<p>從微服務架構的部署，到批次處理、機器學習訓練等複雜場景，K8s 都能提供強大而靈活的支援。它不僅僅是一個容器編排工具，更是一個完整的平台，為應用程式的自動化、擴展性、彈性和高可用性提供了堅實的基礎。</p>
+<p>雖然 Kubernetes 的學習曲線可能相對陡峭，但它所帶來的效率提升和營運便利性，絕對值得我們投入時間去探索和掌握。</p>
 
     </div>
 
@@ -708,21 +750,18 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/my-blog/tags/Networking/" rel="tag"># Networking</a>
+              <a href="/my-blog/tags/Cloud-Computing/" rel="tag"># Cloud Computing</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/my-blog/2025/09/02/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20MAC%20Address%20%E8%88%87%20ARP/" rel="prev" title="深入淺出 MAC Address 與 ARP：網路世界裡的「身分證」與「尋人啟事」">
-                  <i class="fa fa-angle-left"></i> 深入淺出 MAC Address 與 ARP：網路世界裡的「身分證」與「尋人啟事」
+                <a href="/my-blog/2025/09/17/FaaS%20%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/" rel="prev" title="FaaS 深度解析：擁抱無伺服器新時代的函數即服務">
+                  <i class="fa fa-angle-left"></i> FaaS 深度解析：擁抱無伺服器新時代的函數即服務
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/my-blog/2025/09/04/%E5%8D%80%E5%9F%9F%E7%B6%B2%E8%B7%AF%E7%9A%84%E5%B9%95%E5%BE%8C%E8%8B%B1%E9%9B%84%20%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%E4%BA%A4%E6%8F%9B%E5%99%A8%20Switch%20%E8%88%87%E9%9B%86%E7%B7%9A%E5%99%A8%20Hub%20%E7%9A%84%E5%B7%AE%E7%95%B0/" rel="next" title="區域網路的幕後英雄：深入解析交換器 (Switch) 與集線器 (Hub) 的差異">
-                  區域網路的幕後英雄：深入解析交換器 (Switch) 與集線器 (Hub) 的差異 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
