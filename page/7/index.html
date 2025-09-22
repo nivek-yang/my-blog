@@ -105,8 +105,8 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">90</span></a>
-  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">51</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">91</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">52</span></a>
       <ul class="sub-menu">
   
   
@@ -170,6 +170,13 @@
       <a href="/my-blog/tags/Cloud-Computing/">
         Cloud Computing
         <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Concurrency/">
+        Concurrency
+        <span class="post-count">(1)</span>
       </a>
     </li>
   
@@ -506,7 +513,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-count">91</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -514,7 +521,7 @@
     
       <div class="site-state-item site-state-tags">
           <a href="/my-blog/tags/">
-        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-count">52</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -531,6 +538,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/10/%E9%9D%9E%E5%90%8C%E6%AD%A5%E6%8A%80%E8%A1%93%E6%AF%94%E8%BC%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/07/10/%E9%9D%9E%E5%90%8C%E6%AD%A5%E6%8A%80%E8%A1%93%E6%AF%94%E8%BC%83/" class="post-title-link" itemprop="url">
+              非同步技術比較：async/await vs. Message Queues vs. setTimeout
+            </a>
+            <a href="/my-blog/2025/07/10/%E9%9D%9E%E5%90%8C%E6%AD%A5%E6%8A%80%E8%A1%93%E6%AF%94%E8%BC%83/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-07-10 00:00:00 / 修改時間：23:29:34" itemprop="dateCreated datePublished" datetime="2025-07-10T00:00:00+08:00">2025-07-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">在現代軟體架構中，非同步處理是提升系統吞吐量和響應能力的關鍵。然而，不同的非同步技術解決的是不同層次的問題。本文旨在精確剖析三種常見的非同步原語：async/await、Message Queue 和 setTimeout，闡明其核心差異與適用場景。 一句話總結：它們不能通用，因為它們是不同維度的工具。 async/await：是語言層面的語法糖，用來管理單一進程內的非阻塞 I/O 操作。它是「微觀」的。 Message Queue：是架構層面的組件，用來解耦多個獨立進程或服務之間的通訊。它是「宏觀」的。 setTimeout：是執行環境提供的 API，用來將一個函式的執行延遲到未來的某個時間點，通常在單一進程內。 讓我們用一個「餐廳廚房」的比喻來深入理解。 async/await：一位廚師的多工處理技巧 想像廚房裡只有一位廚師 (單一執行緒)。他需要同時做三道菜： 烤箱裡的牛排（需要 20 分鐘） 爐子上的湯（需要 10 分鐘） 切沙拉（需要 5 分鐘） 一個同步 (Synchronous) 的廚師會： 把牛排放進烤箱，然後呆呆地站在烤箱前等 20 分鐘。 20 分鐘後，拿出牛排，開始煮湯，又在爐子前等 10 分鐘。 10 分鐘後，湯好了，才開始切沙拉。 結果： 總共耗時 35 分鐘，效率極低。 一個使用 async/await (非同步) 的廚師會： await 烤牛排： 把牛排放進烤箱（發起一個 I/O 操作），然後立即轉身去做別的事。 await 煮湯： 把湯放上爐子（發起另一個 I/O 操作），然後立即轉身。 切沙拉： 這是一個 CPU 密集型操作，他現在就做。 在切沙拉的過程中，他會時不時地檢查（事件循環 Event Loop）烤箱和爐子好了沒有。烤箱的計時器響了（I/O 完成），他就去處理牛排。 結果： 大約 20 分鐘後，所有菜都做好了。 總結 async/await: 範疇： 單一進程/執行緒內。 目的： 避免在等待 I/O（網路請求、資料庫查詢、檔案讀寫）時阻塞整個執行緒，從而提高單一進程的併發處理能力。 核心： 事件循環 (Event Loop)。 不能做什麼： 它不能讓 CPU 密集型任務（如圖像處理、複雜計算）變快，也不能讓任務在另一個伺服器上執行。它只是讓等待時間被有效利用。 Message Queue (MQ)：一個分工明確的大型中央廚房 現在想像一個大型連鎖餐廳的中央廚房 (一個服務) 和遍布全市的多家分店 (多個其他服務)。 場景： 分店（例如，網頁前端）接到顧客的訂單（例如，使用者註冊）。這個註冊流程需要： 建立使用者帳號（立即完成）。 發送一封歡迎郵件（可能很慢）。 為使用者初始化數據分析報告（非常耗時，可能要幾分鐘）。 如果分店經理（主應用程式）自己做所有事，顧客就要在櫃台前等很久。 使用 Message Queue 的流程： 分店經理（主應用程式）完成使用者帳號建立後，立即告訴顧客：「好了，您可以點餐了」。 同時，他寫了兩張工作單：「給這位顧客發歡迎郵件」、「為這位顧客準備分析報告」。 他把這兩張工作單放進一個傳送帶 (Message Queue) 上。 傳送帶將工作單送到了中央廚房的後廚。 後廚裡有專門的郵件師傅 (Email Worker 進程) 和數據分析師傅 (Report Worker 進程)。他們從傳送帶上拿走屬於自己的工作單，然後開始工作。 總結 Message Queue: 範疇： 跨進程、跨服務、甚至跨伺服器。 目的： 解耦： 分店不需要知道後廚在哪，也不需要關心他們怎麼工作。 非同步執行： 將耗時的、非核心的任務交給背景去處理，讓主應用程式快速響應。 削峰填谷/可靠性： 即使後廚很忙，工作單也可以在傳送帶上排隊，不會丟失。 核心： 一個獨立的中介軟體 (Broker)，如 RabbitMQ, Kafka, Redis。 setTimeout：一個簡單的廚房計時器 setTimeout 是最簡單的非同步形式。 場景： 廚師把麵包放進烤箱，他需要 5 分鐘後回來檢查。 流程： 他設定了一個計時器 (setTimeout)，告訴計時器：「5 分鐘後提醒我（執行一個回呼函式）」。然後他就去做別的事了。5 分鐘後，計時器響了，他就回來處理麵包。 總結 setTimeout: 範疇： 單一進程/執行緒內。 目的： 將一個函式的執行延遲到一個確定的未來時間點。它只是推遲執行，不涉及併發或跨進程通訊。 核心： 由執行環境（瀏覽器、Node.js）提供的計時器功能。 總結 特性 async/await Message Queue (e.g., Celery) setTimeout 層次 語言語法 系統架構 環境 API 尺度 進程內 (微觀) 跨進程/跨服務 (宏觀) 進程內 (微觀) 解決問題 管理非阻塞 I/O，提高單進程併發 解耦服務，處理耗時/可靠的背景任務 延遲執行函式 持久性 無 (進程結束任務消失) 有 (Broker 持久化訊息) 無 (進程結束任務消失) 依賴 語言本身 外部中介軟體 (Broker) 執行環境 (瀏覽器/Node.js) 比喻 一位廚師的多工技巧 大型中央廚房與分店的協作 一個廚房計時器 結論：它們完全不能通用。 不能用 async/await 來代替 Message Queue，因為它無法將任務發送到另一台伺服器上的 Worker 去執行。 不能用 Message Queue 來代替 async/await，如果只是想在單一請求中非阻塞地查詢一下資料庫，引入 MQ 會是極其笨重和錯誤的設計。 不能用 setTimeout 來實現 async/await 的併發管理，也無法用它實現 MQ 的可靠任務處理。 它們是解決不同問題的工具，一個成熟的系統通常會同時使用它們： 在一個使用 FastAPI (async/await) 的 Web 服務中，當收到使用者請求後，它會非阻塞地從資料庫查詢一些資料，然後將一個耗時的任務（如生成報告）透過 Celery (Message Queue) 發送到背景 Worker，並立即返回響應給使用者。 下次當思考如何優化應用時，不妨問問自己：我需要的，是一位懂得時間管理的多工主廚，一個連接所有分店的中央廚房系統，還是一個簡單可靠的廚房計時器？</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/07/10/%E9%9D%9E%E5%90%8C%E6%AD%A5%E6%8A%80%E8%A1%93%E6%AF%94%E8%BC%83/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1312,94 +1405,8 @@
 
 
 
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/05/05/Supabase%20PostgreSQL%20%E9%81%A0%E7%AB%AF%E8%B3%87%E6%96%99%E5%BA%AB%E5%BB%BA%E7%AB%8B%E8%88%87%E9%80%A3%E6%8E%A5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/05/05/Supabase%20PostgreSQL%20%E9%81%A0%E7%AB%AF%E8%B3%87%E6%96%99%E5%BA%AB%E5%BB%BA%E7%AB%8B%E8%88%87%E9%80%A3%E6%8E%A5/" class="post-title-link" itemprop="url">
-              Supabase PostgreSQL 遠端資料庫建立與連接
-            </a>
-            <a href="/my-blog/2025/05/05/Supabase%20PostgreSQL%20%E9%81%A0%E7%AB%AF%E8%B3%87%E6%96%99%E5%BA%AB%E5%BB%BA%E7%AB%8B%E8%88%87%E9%80%A3%E6%8E%A5/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-05-05 00:00:00 / 修改時間：23:13:25" itemprop="dateCreated datePublished" datetime="2025-05-05T00:00:00+08:00">2025-05-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">使用 Supabase 替代本機安裝的 PostgreSQL 並連接至 Django 在開發應用程式時，許多開發者會選擇在本機安裝 PostgreSQL 資料庫。然而，隨著雲端技術的普及，使用遠端資料庫如 Supabase 提供的 PostgreSQL 不僅可以減少本機配置的麻煩，也能讓資料庫更容易在團隊間共享。 以下是完整的指南，教導如何取代本機安裝的 PostgreSQL，並利用 Django 連接至 Supabase 資料庫。 1. 在 Supabase 官網建立資料庫 前往 Supabase 官網 並註冊帳號。 登入後，點擊 “New Project” 按鈕建立新的專案。 填寫相關資訊： Project name: 為專案命名。 Database password: 設定資料庫的密碼（請妥善保存）。 Region: 選擇靠近的伺服器區域以減少延遲。 點擊 “Create New Project”，Supabase 將自動配置資料庫，這過程大約需 2-3 分鐘。 完成後，可以在專案的 Settings 頁面下找到資料庫的連線資訊，包括 Host、Port、Database name 和 User credentials。 2. 安裝 Django 和必要的套件 如果尚未安裝 Django，請在專案環境中安裝 Django 以及支援 PostgreSQL 的套件： uv add &quot;psycopg[binary]&quot; 3. 配置 Django 專案連接 Supabase 在 Django 專案中，修改 settings.py 文件，將資料庫設定更改為 Supabase 提供的連線資訊： import os from pathlib import Path import environ # env init env = environ.Env() # 預設會讀取專案根目錄的 `.env` environ.Env.read_env(os.path.join(BASE_DIR, &#x27;.env&#x27;)) DATABASES = &#123; &#x27;default&#x27;: &#123; &#x27;ENGINE&#x27;: &#x27;django.db.backends.postgresql&#x27;, &#x27;NAME&#x27;: env(&#x27;DB_NAME&#x27;), &#x27;USER&#x27;: env(&#x27;DB_USER&#x27;), &#x27;PASSWORD&#x27;: env(&#x27;DB_PASSWORD&#x27;), &#x27;HOST&#x27;: env(&#x27;DB_HOST&#x27;), &#x27;PORT&#x27;: env(&#x27;DB_PORT&#x27;), &#125; &#125; 在專案根目錄建立一個 .env 檔案，並填入以下設定（請將值替換為 Supabase 提供的實際資訊）： DB_NAME=your_database_name DB_USER=postgres DB_PASSWORD=your_database_password DB_HOST=db.xxxxxxxxxxxx.supabase.co DB_PORT=5432 請注意： 確保 .env 檔案已加入到 .gitignore 中，避免敏感資訊被上傳到版本控制系統。 資料庫使用者名稱通常是 postgres，這是 Supabase 的預設設定。 資料庫密碼是建立專案時設定的密碼。 主機名稱和連接埠可以在 Supabase 專案的設定頁面中找到。 4. 測試連線 執行以下指令以測試資料庫是否正確連接： uv run python manage.py migrate 如果配置無誤，會看到 Django 成功執行資料庫遷移。 5. 小結 至此，完成將本機 PostgreSQL 替換為 Supabase 遠端資料庫，並成功使用 Django 進行連接。不僅減少了本機安裝的負擔，還能利用 Supabase 提供的強大功能，如即時同步和 API 支援，提升開發效率。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/05/05/Supabase%20PostgreSQL%20%E9%81%A0%E7%AB%AF%E8%B3%87%E6%96%99%E5%BA%AB%E5%BB%BA%E7%AB%8B%E8%88%87%E9%80%A3%E6%8E%A5/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一頁" aria-label="上一頁" href="/my-blog/page/6/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/my-blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/my-blog/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/my-blog/page/8/">8</a><a class="page-number" href="/my-blog/page/9/">9</a><a class="extend next" rel="next" title="下一頁" aria-label="下一頁" href="/my-blog/page/8/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="上一頁" aria-label="上一頁" href="/my-blog/page/6/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/my-blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/my-blog/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/my-blog/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/my-blog/page/10/">10</a><a class="extend next" rel="next" title="下一頁" aria-label="下一頁" href="/my-blog/page/8/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="在程式碼世界中，並行處理（Concurrent Programming）是提升效率、優化使用者體驗的強大工具。然而，與之俱來的挑戰也同樣不容小覷，其中最讓人頭痛的莫過於「Race Condition」。它像一個潛伏在程式深處的幽靈，難以捉摸，卻能導致難以預料的錯誤。 這篇文章解析 Race Condition 的奧秘，了解它為何會發生、如何影響程式，以及最重要的是——該如何有效解決它，讓程式碼更加">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入解析 Race Condition：成因、影響與解方">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/09/22/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20Race%20Condition%20%E6%88%90%E5%9B%A0%E5%BD%B1%E9%9F%BF%E8%88%87%E8%A7%A3%E6%96%B9/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="在程式碼世界中，並行處理（Concurrent Programming）是提升效率、優化使用者體驗的強大工具。然而，與之俱來的挑戰也同樣不容小覷，其中最讓人頭痛的莫過於「Race Condition」。它像一個潛伏在程式深處的幽靈，難以捉摸，卻能導致難以預料的錯誤。 這篇文章解析 Race Condition 的奧秘，了解它為何會發生、如何影響程式，以及最重要的是——該如何有效解決它，讓程式碼更加">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-09-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-09-22T13:29:30.852Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Concurrency">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/09/22/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20Race%20Condition%20%E6%88%90%E5%9B%A0%E5%BD%B1%E9%9F%BF%E8%88%87%E8%A7%A3%E6%96%B9/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/09/22/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20Race%20Condition%20%E6%88%90%E5%9B%A0%E5%BD%B1%E9%9F%BF%E8%88%87%E8%A7%A3%E6%96%B9/","path":"2025/09/22/深入解析 Race Condition 成因影響與解方/","title":"深入解析 Race Condition：成因、影響與解方"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>深入解析 Race Condition：成因、影響與解方 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">91</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">52</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cloud-Computing/">
+        Cloud Computing
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Concurrency/">
+        Concurrency
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(15)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(16)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Serverless/">
+        Serverless
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-race-condition-%E7%AB%B6%E7%88%AD%E6%A2%9D%E4%BB%B6"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是 Race Condition (競爭條件)？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#race-condition-%E5%A6%82%E4%BD%95%E7%99%BC%E7%94%9F"><span class="nav-number">2.</span> <span class="nav-text"> Race Condition 如何發生？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B6%93%E5%85%B8%E7%AF%84%E4%BE%8B%E8%A8%88%E6%95%B8%E5%99%A8%E5%A2%9E%E6%B8%9B%E6%93%8D%E4%BD%9C"><span class="nav-number">2.1.</span> <span class="nav-text"> 經典範例：計數器增減操作</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#race-condition-%E7%9A%84%E5%8D%B1%E5%AE%B3"><span class="nav-number">3.</span> <span class="nav-text"> Race Condition 的危害</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%81%B5%E6%B8%AC-race-condition"><span class="nav-number">4.</span> <span class="nav-text"> 如何偵測 Race Condition？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%A7%A3%E6%B1%BA-race-condition"><span class="nav-number">5.</span> <span class="nav-text"> 如何解決 Race Condition？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%90%8C%E6%AD%A5%E6%A9%9F%E5%88%B6-synchronization-mechanisms"><span class="nav-number">5.1.</span> <span class="nav-text"> 1. 同步機制 (Synchronization Mechanisms)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C-atomic-operations"><span class="nav-number">5.2.</span> <span class="nav-text"> 2. 原子操作 (Atomic Operations)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E4%B8%8D%E5%8F%AF%E8%AE%8A%E8%B3%87%E6%96%99-immutability"><span class="nav-number">5.3.</span> <span class="nav-text"> 3. 不可變資料 (Immutability)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%9F%B7%E8%A1%8C%E7%B7%92%E5%AE%89%E5%85%A8%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B-thread-safe-data-structures"><span class="nav-number">5.4.</span> <span class="nav-text"> 4. 執行緒安全資料結構 (Thread-Safe Data Structures)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E8%A8%8A%E6%81%AF%E5%82%B3%E9%81%9E-message-passing"><span class="nav-number">5.5.</span> <span class="nav-text"> 5. 訊息傳遞 (Message Passing)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E4%BA%8B%E5%8B%99-transaction"><span class="nav-number">5.6.</span> <span class="nav-text"> 6. 事務 (Transaction)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AF%A6%E8%B8%90%E8%AC%B9%E6%85%8E%E8%A8%AD%E8%A8%88%E9%98%B2%E7%AF%84%E6%9C%AA%E7%84%B6"><span class="nav-number">6.</span> <span class="nav-text"> 最佳實踐：謹慎設計，防範未然</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">7.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">91</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/22/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20Race%20Condition%20%E6%88%90%E5%9B%A0%E5%BD%B1%E9%9F%BF%E8%88%87%E8%A7%A3%E6%96%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="深入解析 Race Condition：成因、影響與解方 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深入解析 Race Condition：成因、影響與解方
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-09-22 00:00:00 / 修改時間：21:29:30" itemprop="dateCreated datePublished" datetime="2025-09-22T00:00:00+08:00">2025-09-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在程式碼世界中，並行處理（Concurrent Programming）是提升效率、優化使用者體驗的強大工具。然而，與之俱來的挑戰也同樣不容小覷，其中最讓人頭痛的莫過於「Race Condition」。它像一個潛伏在程式深處的幽靈，難以捉摸，卻能導致難以預料的錯誤。</p>
+<p>這篇文章解析 Race Condition 的奧秘，了解它為何會發生、如何影響程式，以及最重要的是——該如何有效解決它，讓程式碼更加健壯與可靠！</p>
+<hr />
+<h1 id="什麼是-race-condition-競爭條件"><a class="markdownIt-Anchor" href="#什麼是-race-condition-競爭條件"></a> 什麼是 Race Condition (競爭條件)？</h1>
+<p>想像一下，多位跑者同時衝向只有一個終點線的賽跑。誰能第一個衝線，往往決定了比賽的結果。在程式設計中，Race Condition 就是指<strong>當多個執行緒（或進程）同時嘗試存取和修改同一個共享資源時，最終的結果卻取決於這些執行緒執行的非確定性順序。</strong></p>
+<p>簡單來說，它是一種時序上的 Bug。如果多個操作在錯誤的順序下執行，或者在不完整狀態下被另一個操作打斷，就可能導致預期之外的結果。這種結果是非確定性的 (Non-deterministic)，這意味著同一個程式，在不同的執行時機，可能會產生不同的結果，甚至有時正確，有時錯誤，這使得偵錯變得異常困難。</p>
+<h1 id="race-condition-如何發生"><a class="markdownIt-Anchor" href="#race-condition-如何發生"></a> Race Condition 如何發生？</h1>
+<p>Race Condition 的發生，通常需要滿足以下幾個條件：</p>
+<ol>
+<li><strong>共享資源 (Shared Resources)</strong>：存在可被多個執行緒同時存取的變數、記憶體、檔案、資料庫連線等。</li>
+<li><strong>多個執行緒/進程 (Multiple Threads/Processes)</strong>：至少兩個或更多執行單元嘗試存取該共享資源。</li>
+<li><strong>非原子性操作 (Non-atomic Operations)</strong>：對共享資源的操作不是「原子性」的。一個原子性操作意味著它不可被中斷，要馬完全執行，要馬不執行。如果一個操作可以被分解為多個步驟，並且在中間步驟被其他執行緒打斷，就可能引入 Race Condition。</li>
+</ol>
+<h2 id="經典範例計數器增減操作"><a class="markdownIt-Anchor" href="#經典範例計數器增減操作"></a> 經典範例：計數器增減操作</h2>
+<p>以一個最經典的例子來說明。假設有一個全域計數器 <code>counter</code>，多個執行緒需要對其進行增長操作 (<code>counter++</code>)。表面上看，<code>counter++</code> 是一個簡單的動作，但在機器碼層面，它通常會被分解成以下三個步驟：</p>
+<ol>
+<li><strong>讀取 (Read)</strong>：從記憶體中讀取 <code>counter</code> 的當前值。</li>
+<li><strong>修改 (Modify)</strong>：將讀取到的值加 1。</li>
+<li><strong>寫回 (Write)</strong>：將新值寫回記憶體中的 <code>counter</code>。</li>
+</ol>
+<p>現在，想像兩個執行緒 T1 和 T2 同時嘗試執行 <code>counter++</code>，<code>counter</code> 的初始值為 <code>0</code>：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">時間</th>
+<th style="text-align:left">執行緒 T1</th>
+<th style="text-align:left">執行緒 T2</th>
+<th style="text-align:left"><code>counter</code> 值</th>
+<th style="text-align:left">說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">T0</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">初始值為 0</td>
+</tr>
+<tr>
+<td style="text-align:left">T1</td>
+<td style="text-align:left"><code>讀取 counter</code> (值為 0)</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">T1 讀取 counter = 0</td>
+</tr>
+<tr>
+<td style="text-align:left">T2</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"><code>讀取 counter</code> (值為 0)</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">T2 也讀取 counter = 0 (此時 T1 尚未寫回)</td>
+</tr>
+<tr>
+<td style="text-align:left">T3</td>
+<td style="text-align:left"><code>修改 counter</code> (0 + 1)</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">T1 將其副本計算為 1</td>
+</tr>
+<tr>
+<td style="text-align:left">T4</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"><code>修改 counter</code> (0 + 1)</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">T2 也將其副本計算為 1</td>
+</tr>
+<tr>
+<td style="text-align:left">T5</td>
+<td style="text-align:left"><code>寫回 counter</code> (值為 1)</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">T1 將 1 寫回記憶體</td>
+</tr>
+<tr>
+<td style="text-align:left">T6</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"><code>寫回 counter</code> (值為 1)</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">T2 將 1 寫回記憶體 (T1 的結果被覆蓋，期望值應為 2)</td>
+</tr>
+</tbody>
+</table>
+<p>在這個情境下，雖然兩個執行緒都執行了增長操作，但最終 <code>counter</code> 的值卻是 <code>1</code>，而期望的結果應該是 <code>2</code>！這就是 Race Condition 導致的數據不一致。</p>
+<h1 id="race-condition-的危害"><a class="markdownIt-Anchor" href="#race-condition-的危害"></a> Race Condition 的危害</h1>
+<p>Race Condition 不僅僅是導致錯誤的計算結果，它還可能引發更嚴重的問題：</p>
+<ul>
+<li><strong>數據損毀 (Data Corruption)</strong>：例如在數據庫操作中，可能導致數據完整性被破壞。</li>
+<li><strong>程式崩潰 (Application Crashes)</strong>：不正確的狀態可能觸發空指針異常、陣列越界等問題。</li>
+<li><strong>邏輯錯誤 (Logical Errors)</strong>：導致業務邏輯無法正確執行，影響系統行為。</li>
+<li><strong>安全漏洞 (Security Vulnerabilities)</strong>：在某些特定場景下，Race Condition 可能被惡意利用，導致權限提升或拒絕服務。</li>
+<li><strong>難以偵錯 (Difficult to Debug)</strong>：其非確定性使得錯誤難以重現，往往在特定的負載或時間點才會暴露，給開發者帶來巨大挑戰。</li>
+</ul>
+<h1 id="如何偵測-race-condition"><a class="markdownIt-Anchor" href="#如何偵測-race-condition"></a> 如何偵測 Race Condition？</h1>
+<p>由於 Race Condition 的非確定性，傳統的單元測試很難完全覆蓋。偵測這類問題需要更專業的工具和方法：</p>
+<ol>
+<li><strong>嚴格的程式碼審查 (Code Review)</strong>：經驗豐富的開發者可以通過審查共享資源的使用情況，發現潛在的 Race Condition。</li>
+<li><strong>靜態分析工具 (Static Analysis Tools)</strong>：這類工具在程式碼編譯之前，通過分析程式碼結構，識別潛在的並行問題（例如，一些常見的靜態分析器）。</li>
+<li><strong>動態分析工具 (Dynamic Analysis Tools)</strong>：
+<ul>
+<li><strong>Valgrind (Helgrind)</strong>：Linux 平台下一個非常強大的記憶體錯誤和執行緒錯誤檢測工具，Helgrind 可以檢測 Race Condition。</li>
+<li><strong>ThreadSanitizer (TSan)</strong>：Google 開發的動態執行緒錯誤檢測工具，可以集成到編譯器中，高效地檢測數據競爭和死鎖。</li>
+<li><strong>壓力測試與負載測試 (Stress &amp; Load Testing)</strong>：在高併發環境下運行程式，可以增加 Race Condition 暴露的可能性。</li>
+</ul>
+</li>
+</ol>
+<h1 id="如何解決-race-condition"><a class="markdownIt-Anchor" href="#如何解決-race-condition"></a> 如何解決 Race Condition？</h1>
+<p>解決 Race Condition 的核心思想是確保在任何給定時間，只有一個執行緒能夠存取或修改共享資源，或者通過其他機制來保證操作的原子性與一致性。以下是幾種常見的解決方案：</p>
+<h2 id="1-同步機制-synchronization-mechanisms"><a class="markdownIt-Anchor" href="#1-同步機制-synchronization-mechanisms"></a> 1. 同步機制 (Synchronization Mechanisms)</h2>
+<ul>
+<li>
+<p><strong>互斥鎖 (Mutex / Lock)</strong></p>
+<ul>
+<li><strong>原理</strong>：Mutex 是一種最基本的同步機制。它確保在任何時刻，只有一個執行緒能夠「持有」鎖，從而獨佔性地存取被保護的共享資源。當一個執行緒持有鎖時，其他試圖獲取該鎖的執行緒必須等待，直到鎖被釋放。</li>
+<li><strong>應用</strong>：適用於需要對共享資源進行寫入操作的場景，例如前面提到的計數器問題。</li>
+<li><strong>範例</strong>：<pre class="highlight"><code class="python"><span class="hljs-keyword">import</span> threading
+
+counter = <span class="hljs-number">0</span>
+lock = threading.Lock()
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">increment</span>():
+    <span class="hljs-keyword">global</span> counter
+    <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">100000</span>):
+        lock.acquire() <span class="hljs-comment"># 獲取鎖</span>
+        <span class="hljs-keyword">try</span>:
+            counter += <span class="hljs-number">1</span>
+        <span class="hljs-keyword">finally</span>:
+            lock.release() <span class="hljs-comment"># 釋放鎖 (確保總會釋放，即使發生異常)</span>
+
+threads = [threading.Thread(target=increment) <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">5</span>)]
+<span class="hljs-keyword">for</span> t <span class="hljs-keyword">in</span> threads:
+    t.start()
+<span class="hljs-keyword">for</span> t <span class="hljs-keyword">in</span> threads:
+    t.join()
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;最終計數器值: <span class="hljs-subst">&#123;counter&#125;</span>&quot;</span>) <span class="hljs-comment"># 應該是 500000</span>
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>號誌 (Semaphore)</strong></p>
+<ul>
+<li><strong>原理</strong>：Semaphore 是一個計數器，它控制在任何時間點有多少個執行緒可以存取共享資源。它可以被理解為一個帶有計數功能的鎖。當計數器大於零時，執行緒可以進入並將計數器減一；當計數器為零時，執行緒必須等待。完成操作後，執行緒釋放號誌，計數器加一。</li>
+<li><strong>應用</strong>：常用於限制資源的並行存取數量，例如資料庫連接池、讀寫鎖 (Read-Write Lock)。</li>
+<li><strong>與 Mutex 區別</strong>：Mutex 只有兩種狀態（鎖定/解鎖），相當於計數為 1 的 Semaphore。Semaphore 可以允許多個執行緒（計數 N 個）同時存取。</li>
+</ul>
+</li>
+<li>
+<p><strong>條件變數 (Condition Variable)</strong></p>
+<ul>
+<li><strong>原理</strong>：與互斥鎖配合使用，允許執行緒在滿足特定條件時進行等待，並在條件滿足時被其他執行緒喚醒。</li>
+<li><strong>應用</strong>：用於執行緒之間的協調，例如生產者-消費者模型，當緩衝區滿時生產者等待，當緩衝區空時消費者等待。</li>
+</ul>
+</li>
+<li>
+<p><strong>監視器 (Monitor)</strong></p>
+<ul>
+<li><strong>原理</strong>：一種更高級的同步機制，它將互斥鎖和條件變數封裝在一個物件中，提供了一個物件級別的互斥訪問。</li>
+<li><strong>應用</strong>：在許多物件導向程式語言（如 Java）中，「<code>synchronized</code>」關鍵字實際上就是一種監視器的實現。</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-原子操作-atomic-operations"><a class="markdownIt-Anchor" href="#2-原子操作-atomic-operations"></a> 2. 原子操作 (Atomic Operations)</h2>
+<ul>
+<li><strong>原理</strong>：某些硬體指令天生就是原子性的，意味著它們在單一 CPU 時鐘週期內完成，不會被中斷。現代 CPU 和程式語言提供了原子操作的 API，例如原子加法、原子比較並交換（Compare-And-Swap, CAS）。</li>
+<li><strong>優點</strong>：通常比使用鎖有更高的效能，因為它們避免了作業系統上下文切換的開銷。</li>
+<li><strong>應用</strong>：對單一變數進行簡單的、無條件的修改操作，例如原子計數器。</li>
+</ul>
+<h2 id="3-不可變資料-immutability"><a class="markdownIt-Anchor" href="#3-不可變資料-immutability"></a> 3. 不可變資料 (Immutability)</h2>
+<ul>
+<li><strong>原理</strong>：如果共享的數據是不可變的（一旦創建就不能被修改），那麼多個執行緒同時讀取它就不會產生 Race Condition，因為數據不會被修改。</li>
+<li><strong>優點</strong>：從根本上消除了共享可變狀態，是避免 Race Condition 最強大的方法之一。</li>
+<li><strong>應用</strong>：函式式程式設計中常見的模式；許多程式語言中的 <code>final</code> (Java) 或 <code>const</code> (C++/JavaScript) 關鍵字可以幫助實現不可變性。</li>
+</ul>
+<h2 id="4-執行緒安全資料結構-thread-safe-data-structures"><a class="markdownIt-Anchor" href="#4-執行緒安全資料結構-thread-safe-data-structures"></a> 4. 執行緒安全資料結構 (Thread-Safe Data Structures)</h2>
+<ul>
+<li><strong>原理</strong>：許多程式語言的標準庫提供了專門為並行環境設計的資料結構（例如 Java 的 <code>ConcurrentHashMap</code>，Python 的 <code>queue</code> 模組）。這些資料結構內部處理了必要的同步，確保它們的操作是執行緒安全的。</li>
+<li><strong>優點</strong>：開箱即用，減少了開發者自己實現同步的複雜性與錯誤。</li>
+<li><strong>應用</strong>：任何需要在多執行緒環境下使用的集合或容器。</li>
+</ul>
+<h2 id="5-訊息傳遞-message-passing"><a class="markdownIt-Anchor" href="#5-訊息傳遞-message-passing"></a> 5. 訊息傳遞 (Message Passing)</h2>
+<ul>
+<li><strong>原理</strong>：並行程式設計的一種範式，強調通過傳遞訊息來通信，而不是共享記憶體。執行緒（或 Actor）之間不直接存取對方的記憶體，而是通過發送和接收消息來交換數據。</li>
+<li><strong>優點</strong>：避免了共享記憶體帶來的所有同步問題，使併發程式碼更易於理解和維護。</li>
+<li><strong>應用</strong>：Go 語言的 Channel、Actor 模型（如 Akka 框架），這些都是「<strong>不要通過共享記憶體來通信；而是通過通信來共享記憶體</strong>」哲學的體現。</li>
+</ul>
+<h2 id="6-事務-transaction"><a class="markdownIt-Anchor" href="#6-事務-transaction"></a> 6. 事務 (Transaction)</h2>
+<ul>
+<li><strong>原理</strong>：將一系列操作視為一個原子性的單元。如果所有操作都成功，則事務提交；任何一個操作失敗，則整個事務回滾，保證數據的一致性。</li>
+<li><strong>應用</strong>：主要用於資料庫系統，但也有些程式語言或框架提供了記憶體事務 (Software Transactional Memory, STM) 的概念，將數據庫事務的隔離性帶入應用程式層面。</li>
+</ul>
+<h1 id="最佳實踐謹慎設計防範未然"><a class="markdownIt-Anchor" href="#最佳實踐謹慎設計防範未然"></a> 最佳實踐：謹慎設計，防範未然</h1>
+<ul>
+<li><strong>最小化鎖的範圍 (Minimize Lock Scope)</strong>：只鎖定需要保護的共享資源，並且只在最短的時間內持有鎖。過大的鎖定範圍或過長的鎖持有時間會降低並行度，甚至導致死鎖。</li>
+<li><strong>避免遞歸鎖定 (Avoid Nested Locks)</strong>：盡量避免在持有一個鎖的同時嘗試獲取另一個鎖，這極易導致死鎖。</li>
+<li><strong>使用高階並行抽象 (Use High-Level Concurrency Abstractions)</strong>：優先使用語言或庫提供的執行緒安全資料結構、執行緒池、異步/反應式模型，而不是直接操作底層鎖。</li>
+<li><strong>擁抱不可變性 (Embrace Immutability)</strong>：盡可能將數據設計為不可變的，減少共享可變狀態。</li>
+<li><strong>清晰的設計與註釋 (Clear Design and Comments)</strong>：為所有共享資源和同步機制添加清晰的註釋，說明其目的和使用方式。</li>
+</ul>
+<hr />
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>Race Condition 是並行程式設計中一個既複雜又致命的問題。它的存在考驗著我們對程式執行時序的理解，以及對共享資源管理的嚴謹性。</p>
+<p>透過理解 Race Condition 的成因，並熟練掌握如互斥鎖、原子操作、不可變數據、執行緒安全資料結構以及訊息傳遞等解決方案，就能夠大大提升程式碼的健壯性與穩定性。這不僅是技術能力的提升，更是對程式碼品質和可靠性的一種責任。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Concurrency/" rel="tag"># Concurrency</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/09/19/%E6%B7%B7%E5%90%88%E9%9B%B2%E8%88%87%E5%A4%9A%E9%9B%B2%E7%AD%96%E7%95%A5%E7%9A%84%E4%BD%88%E5%B1%80%E8%88%87%E5%AF%A6%E8%B8%90/" rel="prev" title="超越單一雲端：揭秘混合雲與多雲策略的佈局與實踐">
+                  <i class="fa fa-angle-left"></i> 超越單一雲端：揭秘混合雲與多雲策略的佈局與實踐
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
