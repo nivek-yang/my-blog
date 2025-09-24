@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="在現代企業應用中，經常面臨這樣的挑戰：一方面，業務操作的複雜度日益增高，數據寫入（修改、新增）需要嚴格的業務規則與事務性保證；另一方面，使用者對數據查詢（讀取）的速度與靈活性要求也越來越高，報告與分析的需求往往涉及高度最佳化的視圖。 傳統的 CRUD (Create, Read, Update, Delete) 模型，雖然直觀易懂，但在面對上述這些「讀寫不平衡」的場景時，往往會顯得力不從心。它就像">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CQRS (Command Query Responsibility Segregation)：讀寫分離的藝術">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/09/24/CQRS%20%E8%AE%80%E5%AF%AB%E5%88%86%E9%9B%A2%E7%9A%84%E8%97%9D%E8%A1%93/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="在現代企業應用中，經常面臨這樣的挑戰：一方面，業務操作的複雜度日益增高，數據寫入（修改、新增）需要嚴格的業務規則與事務性保證；另一方面，使用者對數據查詢（讀取）的速度與靈活性要求也越來越高，報告與分析的需求往往涉及高度最佳化的視圖。 傳統的 CRUD (Create, Read, Update, Delete) 模型，雖然直觀易懂，但在面對上述這些「讀寫不平衡」的場景時，往往會顯得力不從心。它就像">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-09-23T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-09-24T05:01:18.190Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Database">
+<meta property="article:tag" content="Microservices">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/09/24/CQRS%20%E8%AE%80%E5%AF%AB%E5%88%86%E9%9B%A2%E7%9A%84%E8%97%9D%E8%A1%93/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/09/24/CQRS%20%E8%AE%80%E5%AF%AB%E5%88%86%E9%9B%A2%E7%9A%84%E8%97%9D%E8%A1%93/","path":"2025/09/24/CQRS 讀寫分離的藝術/","title":"CQRS (Command Query Responsibility Segregation)：讀寫分離的藝術"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>CQRS (Command Query Responsibility Segregation)：讀寫分離的藝術 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">93</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">52</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cloud-Computing/">
+        Cloud Computing
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Concurrency/">
+        Concurrency
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(17)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(16)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Serverless/">
+        Serverless
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-cqrs%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E8%A7%A3%E8%AE%80"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是 CQRS？核心概念解讀</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9C%80%E8%A6%81-cqrs%E5%AE%83%E8%A7%A3%E6%B1%BA%E4%BA%86%E5%93%AA%E4%BA%9B%E7%97%9B%E9%BB%9E"><span class="nav-number">2.</span> <span class="nav-text"> 為什麼需要 CQRS？它解決了哪些痛點？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cqrs-%E5%A6%82%E4%BD%95%E9%81%8B%E4%BD%9C%E5%9F%BA%E6%9C%AC%E6%9E%B6%E6%A7%8B%E8%A7%A3%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text"> CQRS 如何運作？基本架構解析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E5%90%88-event-sourcing-%E4%BA%8B%E4%BB%B6%E6%BA%AF%E6%BA%90"><span class="nav-number">3.1.</span> <span class="nav-text"> 結合 Event Sourcing (事件溯源)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%95%E6%99%82%E6%8E%A1%E7%94%A8-cqrs%E9%81%A9%E5%90%88%E7%9A%84%E5%A0%B4%E6%99%AF"><span class="nav-number">4.</span> <span class="nav-text"> 何時採用 CQRS？適合的場景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%95%E6%99%82%E4%B8%8D%E6%8E%A1%E7%94%A8-cqrs%E6%BD%9B%E5%9C%A8%E7%9A%84%E6%8C%91%E6%88%B0%E8%88%87%E4%BB%A3%E5%83%B9"><span class="nav-number">5.</span> <span class="nav-text"> 何時不採用 CQRS？潛在的挑戰與代價</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AF%A6%E8%B8%90%E8%88%87%E5%AF%A6%E6%96%BD%E5%BB%BA%E8%AD%B0"><span class="nav-number">6.</span> <span class="nav-text"> 最佳實踐與實施建議</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">7.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">93</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/24/CQRS%20%E8%AE%80%E5%AF%AB%E5%88%86%E9%9B%A2%E7%9A%84%E8%97%9D%E8%A1%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="CQRS (Command Query Responsibility Segregation)：讀寫分離的藝術 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CQRS (Command Query Responsibility Segregation)：讀寫分離的藝術
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-09-24 00:00:00 / 修改時間：13:01:18" itemprop="dateCreated datePublished" datetime="2025-09-24T00:00:00+08:00">2025-09-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在現代企業應用中，經常面臨這樣的挑戰：一方面，業務操作的複雜度日益增高，數據寫入（修改、新增）需要嚴格的業務規則與事務性保證；另一方面，使用者對數據查詢（讀取）的速度與靈活性要求也越來越高，報告與分析的需求往往涉及高度最佳化的視圖。</p>
+<p>傳統的 CRUD (Create, Read, Update, Delete) 模型，雖然直觀易懂，但在面對上述這些「讀寫不平衡」的場景時，往往會顯得力不從心。它就像一把瑞士刀，試圖用同一套機制來處理所有事情，最終可能導致寫入邏輯被查詢需求綁架，或查詢效能因寫入模型的複雜性而受損。</p>
+<p>這時候，一個強大的架構模式就浮現了——<strong>CQRS (Command Query Responsibility Segregation)</strong>。它承諾將讀寫操作的責任徹底分離，為我們打開一扇通往更高效能、更好擴展性與更靈活設計的大門。</p>
+<p>這篇文章將介紹 CQRS ，理解它的核心思想、運作方式，以及在什麼情境下，它能成為我們解決問題。</p>
+<hr />
+<h1 id="什麼是-cqrs核心概念解讀"><a class="markdownIt-Anchor" href="#什麼是-cqrs核心概念解讀"></a> 什麼是 CQRS？核心概念解讀</h1>
+<p><strong>CQRS</strong> 的全名是 <strong>Command Query Responsibility Segregation</strong>，直譯為「命令查詢職責分離」。顧名思義，它的核心思想就是將應用程式的「寫入操作（<strong>命令 Command</strong>）」與「讀取操作（<strong>查詢 Query</strong>）」的職責徹底分開，通常會由不同的模型、甚至不同的技術棧來處理。</p>
+<p>在傳統的 CRUD 架構中，通常使用單一的數據模型（例如一個 ORM 實體或一個資料庫表結構）來處理所有的讀寫操作。這意味著一個模型既要滿足寫入時的複雜業務規則（驗證、事務），又要滿足查詢時的最佳化（快速響應、多種查詢視圖）。當系統規模擴大或業務邏輯複雜化時，這個單一模型就可能成為瓶頸。</p>
+<p>CQRS 打破了這種「一體化」的思維，它建議：</p>
+<ul>
+<li><strong>命令 (Command)</strong>：代表著<strong>意圖 (Intent)</strong> 去改變系統的狀態。它們是對系統發出的指令，會觸發業務邏輯並導致數據的寫入。Command 本身不返回數據，只會通知操作成功或失敗。
+<ul>
+<li>範例：<code>CreateOrderCommand</code> (創建訂單)、<code>ChangeProductPriceCommand</code> (更改商品價格)。</li>
+</ul>
+</li>
+<li><strong>查詢 (Query)</strong>：代表著<strong>請求 (Request)</strong> 系統的數據。它們用於從系統中獲取資訊，不會改變系統的狀態。Query 總是返回數據。
+<ul>
+<li>範例：<code>GetProductDetailsQuery</code> (獲取產品詳情)、<code>GetCustomerOrdersQuery</code> (獲取客戶訂單列表)。</li>
+</ul>
+</li>
+</ul>
+<h1 id="為什麼需要-cqrs它解決了哪些痛點"><a class="markdownIt-Anchor" href="#為什麼需要-cqrs它解決了哪些痛點"></a> 為什麼需要 CQRS？它解決了哪些痛點？</h1>
+<p>CQRS 的出現，旨在解決傳統 CRUD 在高負載、複雜業務環境下的一些核心痛點，並帶來顯著的優勢：</p>
+<ol>
+<li>
+<p><strong>讀寫模型的衝突與限制 (Conflicting Optimization Goals)</strong></p>
+<ul>
+<li><strong>寫入 (Command) 的需求</strong>：需要嚴格的數據一致性、事務安全性、業務規則驗證。模型通常會被正規化以減少冗餘。</li>
+<li><strong>讀取 (Query) 的需求</strong>：需要極高的查詢效能、快速響應時間、針對不同 UI/報表需求的高度最佳化（ often involving denormalization and specific projections）。</li>
+<li><strong>痛點</strong>：在單一模型下，這兩種需求往往相互衝突。為寫入優化的模型可能不適合快速查詢，反之亦然。 CQRS 允許我們為讀寫操作設計各自獨立且最優化的模型。</li>
+</ul>
+</li>
+<li>
+<p><strong>效能與擴展性瓶頸 (Performance &amp; Scalability Bottlenecks)</strong></p>
+<ul>
+<li>通常，讀取操作的頻率遠高於寫入操作（例如電商網站，瀏覽商品的人數遠多於下訂單的人數）。</li>
+<li><strong>痛點</strong>：傳統架構下，擴展整個應用程式堆棧往往較為複雜且成本高昂。CQRS 允許我們獨立擴展讀寫兩側：
+<ul>
+<li><strong>讀取端</strong>：可以水平擴展多個讀取副本，甚至使用不同的資料庫技術 (例如 NoSQL for 快取、搜尋引擎 for 全文檢索)。</li>
+<li><strong>寫入端</strong>：可以專注於處理事務一致性，壓力較小時可維持較少資源。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>業務複雜度的挑戰 (Handling Business Complexity)</strong></p>
+<ul>
+<li>對於複雜的業務領域（特別是與 DDD 領域驅動設計結合時），寫入模型往往需要豐富的業務邏輯來維護業務不變條件。</li>
+<li><strong>痛點</strong>：將讀取邏輯摻雜其中會使模型變得臃腫、難以維護。CQRS 提供更清晰的職責劃分，讓業務邏輯專注於寫入端的狀態變更。</li>
+</ul>
+</li>
+<li>
+<p><strong>技術棧選擇的靈活性 (Technology Stack Flexibility)</strong></p>
+<ul>
+<li><strong>痛點</strong>：傳統上，讀寫可能共用一個 SQL 資料庫。CQRS 允許讀寫兩側使用最適合其需求的技術：
+<ul>
+<li><strong>寫入端</strong>：傳統關聯式資料庫 (RDB) 依然是事務性寫入的好選擇。</li>
+<li><strong>讀取端</strong>：可以是 RDB 的高度非正規化視圖，也可以是 NoSQL 資料庫 (如 MongoDB、Elasticsearch、Redis) 以應對不同查詢模式，或甚至快取層。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h1 id="cqrs-如何運作基本架構解析"><a class="markdownIt-Anchor" href="#cqrs-如何運作基本架構解析"></a> CQRS 如何運作？基本架構解析</h1>
+<p>CQRS 的架構通常包含以下核心元件：</p>
+<ol>
+<li>
+<p><strong>命令處理流程 (Command Processing Flow - 寫入端)</strong></p>
+<ul>
+<li><strong>命令 (Command)</strong>：一個不可變的物件，封裝了執行某項操作的所有必要資訊。例如：<code>&#123; &quot;orderId&quot;: &quot;abc&quot;, &quot;productId&quot;: &quot;xyz&quot;, &quot;quantity&quot;: 2 &#125;</code>。</li>
+<li><strong>命令發送器 (Command Bus/Dispatcher)</strong>：接收來自應用程式介面（API、UI）的命令，將其路由到正確的命令處理器。</li>
+<li><strong>命令處理器 (Command Handler)</strong>：接收特定命令，包含處理該命令所需的業務邏輯。它會驗證命令、執行業務規則、修改寫入模型（例如 DDD 中的聚合根 Aggregate Root），然後將結果持久化到資料庫。</li>
+<li><strong>寫入模型 (Write Model)</strong>：這是為寫入操作優化的數據模型。它可能是一個傳統的關聯式資料庫表、一個 NoSQL 文件、或是一個聚合根的狀態。重點是它專注於維護業務的一致性和事務性。</li>
+</ul>
+</li>
+<li>
+<p><strong>查詢處理流程 (Query Processing Flow - 讀取端)</strong></p>
+<ul>
+<li><strong>查詢 (Query)</strong>：一個物件，表示獲取特定數據的請求。例如：<code>GetUserDetailsQuery &#123; &quot;userId&quot;: &quot;123&quot; &#125;</code>。</li>
+<li><strong>查詢發送器 (Query Bus/Dispatcher)</strong>：接收查詢請求，將其路由到正確的查詢處理器。</li>
+<li><strong>查詢處理器 (Query Handler)</strong>：接收特定查詢，負責從讀取模型中檢索數據，並將其轉換為適合前端或 API 使用的格式。它通常不包含業務邏輯，只負責數據檢索。</li>
+<li><strong>讀取模型 (Read Model)</strong>：這是為讀取操作優化的數據模型。它通常是<strong>非正規化 (Denormalized)</strong> 的，可能是專門的資料庫視圖 (Views)、單獨的 NoSQL 資料庫、甚至是預先計算好的快取。其設計目標是使查詢盡可能快速、簡單。</li>
+</ul>
+</li>
+<li>
+<p><strong>連結讀寫兩端的橋樑：事件 (Events) 與事件匯流排 (Event Bus/Message Queue)</strong></p>
+<ul>
+<li>當寫入端成功處理一個命令後，它不會直接更新讀取模型。相反，它會發布一個或多個「<strong>事件 (Event)</strong>」。事件代表了系統中<strong>已經發生</strong>的事實（例如：<code>OrderCreatedEvent</code>、<code>ProductPriceChangedEvent</code>）。</li>
+<li>這些事件會被發布到一個<strong>事件匯流排 (Event Bus)</strong> 或<strong>訊息佇列 (Message Queue)</strong> 中。</li>
+<li>讀取模型側的<strong>訂閱者 (Subscriber) 或投影器 (Projector)</strong> 會監聽這些事件。當接收到相關事件時，它們會更新讀取模型，將數據轉換為適合查詢的格式。</li>
+<li>這個機制引入了<strong>最終一致性 (Eventual Consistency)</strong>：寫入端更新後，讀取端並不會立即同步更新，而是會在「一個不超過可接受時間的延遲」之後達到一致。這是 CQRS 的一個重要考慮點。</li>
+</ul>
+</li>
+</ol>
+<h2 id="結合-event-sourcing-事件溯源"><a class="markdownIt-Anchor" href="#結合-event-sourcing-事件溯源"></a> 結合 Event Sourcing (事件溯源)</h2>
+<p>CQRS 常常與 <strong>Event Sourcing</strong> 模式結合使用。在 Event Sourcing 中：</p>
+<ul>
+<li>寫入模型不直接儲存當前狀態，而是儲存所有導致狀態變化的「事件序列」。</li>
+<li>當需要取得當前狀態時，會重放所有歷史事件來構建。</li>
+<li>Events 作為系統的真實記錄，成為溝通讀寫兩端的天然媒介。</li>
+</ul>
+<h1 id="何時採用-cqrs適合的場景"><a class="markdownIt-Anchor" href="#何時採用-cqrs適合的場景"></a> 何時採用 CQRS？適合的場景</h1>
+<p>CQRS 雖然功能強大，但並非萬靈丹。它會引入額外的複雜性，因此應在真正需要時才考慮使用：</p>
+<ul>
+<li><strong>高併發且讀寫量差異大 (High Concurrency &amp; Skewed Workloads)</strong>：特別是讀取操作比寫入操作多很多的情況（例如大多數網站的瀏覽 vs. 購買）。</li>
+<li><strong>複雜的業務領域 (Complex Business Domains)</strong>：當業務邏輯非常豐富，且寫入操作需要嚴格的事務和不變條件時，與 DDD 結合的 CQRS 可以提供清晰的邊界。</li>
+<li><strong>需要不同讀取視圖 (Diverse Read Models)</strong>：當應用程式的不同部分需要以非常不同的方式查詢和呈現數據時（例如：管理員介面與用戶介面）。</li>
+<li><strong>需要極致的擴展性 (Extreme Scalability Needs)</strong>：能夠獨立地擴展讀取和寫入服務，甚至可以部署在不同的伺服器或資料庫上。</li>
+<li><strong>事件驅動的架構 (Event-Driven Architecture)</strong>：CQRS 自然地融入事件驅動的設計，事件成為系統組件間溝通的核心。</li>
+<li><strong>審計與歷史追溯 (Auditing &amp; Historical Data)</strong>：如果結合 Event Sourcing，系統能夠輕鬆地回溯所有狀態變更的歷史。</li>
+</ul>
+<h1 id="何時不採用-cqrs潛在的挑戰與代價"><a class="markdownIt-Anchor" href="#何時不採用-cqrs潛在的挑戰與代價"></a> 何時不採用 CQRS？潛在的挑戰與代價</h1>
+<p>在以下情況，可能需要慎重考慮或避免使用 CQRS：</p>
+<ul>
+<li><strong>簡單的 CRUD 應用 (Simple CRUD Applications)</strong>：對於那些業務邏輯不複雜、讀寫頻率相似的應用，CQRS 會引入不必要的複雜性。</li>
+<li><strong>開發團隊經驗不足 (Inexperienced Team)</strong>：CQRS 及其相關模式（如 Event Sourcing、最終一致性）需要團隊具備更高的並行程式設計和分布式系統知識。</li>
+<li><strong>引入複雜性 (Increased Complexity)</strong>：更多的組件、獨立的模型、事件處理邏輯、最終一致性處理，都會增加開發、測試、部署和維護的複雜度。</li>
+<li><strong>最終一致性問題 (Eventual Consistency Challenges)</strong>：這是 CQRS 最重要的代價之一。如何在用戶體驗上處理數據更新的延遲，以及如何確保數據最終達到一致，需要仔細設計和實現。這可能涉及補償機制、用戶通知、查詢重試等。</li>
+<li><strong>單一資料庫的限制 (Single Database Comfort)</strong>：如果團隊習慣於單一、嚴格事務的資料庫模型，轉向 CQRS 可能會是一個巨大的轉變。</li>
+<li><strong>操作和監控的開銷 (Operational Overhead)</strong>：管理兩個獨立的數據庫或模型，監控事件流的健康狀態，都會增加運維負擔。</li>
+</ul>
+<h1 id="最佳實踐與實施建議"><a class="markdownIt-Anchor" href="#最佳實踐與實施建議"></a> 最佳實踐與實施建議</h1>
+<p>如果決定擁抱 CQRS，以下是一些實踐建議：</p>
+<ol>
+<li><strong>漸進式導入 (Start Small)</strong>：不要試圖一次性將整個系統都改造成 CQRS。可以從系統中最複雜或最有性能需求的子域開始。</li>
+<li><strong>清晰的邊界 (Clear Boundaries)</strong>：確保 Command 和 Query 的職責真正分離。 Command Handler 不應該返回數據，Query Handler 不應該修改狀態。</li>
+<li><strong>處理最終一致性 (Manage Eventual Consistency)</strong>：這是最關鍵的挑戰。設計好用戶界面如何處理數據延遲，例如顯示「處理中」訊息、利用 WebSocket 即時通知更新、或允許用戶重新整理。</li>
+<li><strong>利用 Event Sourcing (Consider Event Sourcing)</strong>：雖然 CQRS 不強制使用 Event Sourcing，但兩者是天然的盟友，能提供完整的歷史追溯能力。</li>
+<li><strong>監控與日誌 (Monitoring &amp; Logging)</strong>：由於是分布式系統，強大的監控和日誌對於追蹤事件流、診斷問題至關重要。</li>
+<li><strong>測試策略 (Testing Strategy)</strong>：讀寫分離使得測試變得相對獨立，但同時也需要考慮端到端的一致性測試。</li>
+</ol>
+<hr />
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>CQRS 是一種強大的架構模式，它透過將讀寫責任徹底分離，為我們提供了設計高效能、高擴展性、高靈活度應用程式的藍圖。它不再強迫我們用一個模型去滿足南轅北轍的需求，而是讓我們為每個職責選擇最適合的工具和策略。</p>
+<p>然而，這份強大也伴隨著複雜性。對於簡單的應用而言，它可能過於沈重；但對於那些飽受讀寫瓶頸、業務複雜性困擾的系統，CQRS 無疑是一劑良方。</p>
+<p>就像任何架構模式一樣，理解其優勢與代價，並根據實際需求做出明智的權衡，才是邁向成功的關鍵。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Database/" rel="tag"># Database</a>
+              <a href="/my-blog/tags/Microservices/" rel="tag"># Microservices</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/09/23/%E9%97%9C%E8%81%AF%E5%BC%8F%E8%B3%87%E6%96%99%E5%BA%AB%E8%B3%87%E6%96%99%E6%A8%A1%E5%9E%8B%E8%A8%AD%E8%A8%88/" rel="prev" title="關聯式資料庫 (RDB) 資料模型設計：從概念到實踐的藝術">
+                  <i class="fa fa-angle-left"></i> 關聯式資料庫 (RDB) 資料模型設計：從概念到實踐的藝術
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
