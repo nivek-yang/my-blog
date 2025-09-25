@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="在軟體開發上，API 不僅是不同系統之間溝通的橋樑，更是實現複雜業務邏輯的基石。然而，網路的不確定性、分散式系統的複雜性，以及客戶端操作的重試機制，都為 API 的穩定性與數據完整性帶來了嚴峻的挑戰。 想像一下：點擊了兩次付款按鈕，卻擔心商品被重複購買；或者，發送的請求因為網路延遲而超時，當重試時，卻不確定原始操作是否已經成功？這些問題，輕則影響用戶體驗，重則導致業務數據混亂，甚至造成嚴重的財務損">
+<meta property="og:type" content="article">
+<meta property="og:title" content="API 冪等性 (Idempotency)：打造可靠穩健的 API">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/09/25/API%20%E5%86%AA%E7%AD%89%E6%80%A7%20Idempotency%20%E6%89%93%E9%80%A0%E5%8F%AF%E9%9D%A0%E7%A9%A9%E5%81%A5%E7%9A%84%20API/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="在軟體開發上，API 不僅是不同系統之間溝通的橋樑，更是實現複雜業務邏輯的基石。然而，網路的不確定性、分散式系統的複雜性，以及客戶端操作的重試機制，都為 API 的穩定性與數據完整性帶來了嚴峻的挑戰。 想像一下：點擊了兩次付款按鈕，卻擔心商品被重複購買；或者，發送的請求因為網路延遲而超時，當重試時，卻不確定原始操作是否已經成功？這些問題，輕則影響用戶體驗，重則導致業務數據混亂，甚至造成嚴重的財務損">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-09-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-09-25T06:26:17.740Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="System Design">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/09/25/API%20%E5%86%AA%E7%AD%89%E6%80%A7%20Idempotency%20%E6%89%93%E9%80%A0%E5%8F%AF%E9%9D%A0%E7%A9%A9%E5%81%A5%E7%9A%84%20API/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/09/25/API%20%E5%86%AA%E7%AD%89%E6%80%A7%20Idempotency%20%E6%89%93%E9%80%A0%E5%8F%AF%E9%9D%A0%E7%A9%A9%E5%81%A5%E7%9A%84%20API/","path":"2025/09/25/API 冪等性 Idempotency 打造可靠穩健的 API/","title":"API 冪等性 (Idempotency)：打造可靠穩健的 API"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>API 冪等性 (Idempotency)：打造可靠穩健的 API | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">94</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">52</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cloud-Computing/">
+        Cloud Computing
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Concurrency/">
+        Concurrency
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(17)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(16)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Serverless/">
+        Serverless
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF%E5%86%AA%E7%AD%89%E6%80%A7-idempotency"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是冪等性 (Idempotency)？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC-api-%E5%86%AA%E7%AD%89%E6%80%A7%E5%A6%82%E6%AD%A4%E9%87%8D%E8%A6%81%E5%AE%83%E8%A7%A3%E6%B1%BA%E4%BA%86%E5%93%AA%E4%BA%9B%E5%95%8F%E9%A1%8C"><span class="nav-number">2.</span> <span class="nav-text"> 為什麼 API 冪等性如此重要？它解決了哪些問題？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#http-%E6%96%B9%E6%B3%95%E8%88%87%E5%86%AA%E7%AD%89%E6%80%A7"><span class="nav-number">3.</span> <span class="nav-text"> HTTP 方法與冪等性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%AF%A6%E7%8F%BE-api-%E5%86%AA%E7%AD%89%E6%80%A7%E7%89%B9%E5%88%A5%E6%98%AF%E9%9D%9E%E5%86%AA%E7%AD%89%E6%96%B9%E6%B3%95-%E5%A6%82-post"><span class="nav-number">4.</span> <span class="nav-text"> 如何實現 API 冪等性？特別是非冪等方法 (如 POST)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%86%AA%E7%AD%89%E9%8D%B5-idempotency-key-%E7%9A%84%E9%80%9A%E7%94%A8%E6%B5%81%E7%A8%8B"><span class="nav-number">4.1.</span> <span class="nav-text"> 使用冪等鍵 (Idempotency Key) 的通用流程：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%A6%E9%9A%9B%E6%A1%88%E4%BE%8B%E5%9C%A8%E7%B7%9A%E6%94%AF%E4%BB%98"><span class="nav-number">4.2.</span> <span class="nav-text"> 實際案例：在線支付</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%A6%E7%8F%BE%E5%86%AA%E7%AD%89%E6%80%A7%E7%9A%84%E5%85%B6%E4%BB%96%E7%AD%96%E7%95%A5-%E8%88%87%E5%86%AA%E7%AD%89%E9%8D%B5%E7%B5%90%E5%90%88%E4%BD%BF%E7%94%A8"><span class="nav-number">5.</span> <span class="nav-text"> 實現冪等性的其他策略 (與冪等鍵結合使用)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%AA%E7%AD%89%E6%80%A7%E7%9A%84%E8%A8%AD%E8%A8%88%E8%80%83%E6%85%AE"><span class="nav-number">6.</span> <span class="nav-text"> 冪等性的設計考慮</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">7.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">94</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/25/API%20%E5%86%AA%E7%AD%89%E6%80%A7%20Idempotency%20%E6%89%93%E9%80%A0%E5%8F%AF%E9%9D%A0%E7%A9%A9%E5%81%A5%E7%9A%84%20API/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="API 冪等性 (Idempotency)：打造可靠穩健的 API | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          API 冪等性 (Idempotency)：打造可靠穩健的 API
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-09-25 00:00:00 / 修改時間：14:26:17" itemprop="dateCreated datePublished" datetime="2025-09-25T00:00:00+08:00">2025-09-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在軟體開發上，API 不僅是不同系統之間溝通的橋樑，更是實現複雜業務邏輯的基石。然而，網路的不確定性、分散式系統的複雜性，以及客戶端操作的重試機制，都為 API 的穩定性與數據完整性帶來了嚴峻的挑戰。</p>
+<p>想像一下：點擊了兩次付款按鈕，卻擔心商品被重複購買；或者，發送的請求因為網路延遲而超時，當重試時，卻不確定原始操作是否已經成功？這些問題，輕則影響用戶體驗，重則導致業務數據混亂，甚至造成嚴重的財務損失。</p>
+<p>如何才能讓 API 在這些不確定的環境中，依然能夠安全、可靠地工作，即使面對多次重複的請求，也能保證相同的最終結果？這一切的答案，都指向一個關鍵的設計原則：<strong>API 冪等性 (Idempotency)</strong>。</p>
+<hr />
+<h1 id="什麼是冪等性-idempotency"><a class="markdownIt-Anchor" href="#什麼是冪等性-idempotency"></a> 什麼是冪等性 (Idempotency)？</h1>
+<p><strong>冪等性 (Idempotency)</strong> 是一個數學概念，它指的是一個操作，即使重複執行多次，其<strong>效果 (effect)</strong> 也與執行一次完全相同。</p>
+<p>在 API 的語境中，一個冪等的 API 請求意味著：<br />
+<strong>無論客戶端發送多少次相同的請求，伺服器端的資源狀態只會發生一次變化，或達到相同的最終狀態。</strong></p>
+<p><strong>重點提示：</strong> 冪等性關注的是<strong>伺服器資源的狀態變更</strong>，而非每次響應的內容。即使多次請求返回的 HTTP 狀態碼或響應體略有不同（例如第一次請求成功返回 <code>200 OK</code>，第二次重複請求可能返回 <code>200 OK</code>、<code>204 No Content</code> 或 <code>409 Conflict</code> 表示已處理），只要資源的最終狀態一致，該操作就是冪等的。</p>
+<h1 id="為什麼-api-冪等性如此重要它解決了哪些問題"><a class="markdownIt-Anchor" href="#為什麼-api-冪等性如此重要它解決了哪些問題"></a> 為什麼 API 冪等性如此重要？它解決了哪些問題？</h1>
+<p>冪等性對於構建可靠的 API 至關重要，它主要解決了以下幾個在高併發和分散式系統中常見的問題：</p>
+<ol>
+<li>
+<p><strong>網路不穩定導致的請求重試 (Network Instability &amp; Retries)</strong>：</p>
+<ul>
+<li>當客戶端發送請求後，因為網路延遲、服務器響應慢或超時，無法接收到最終的響應。</li>
+<li>在不確定操作是否成功的情況下，客戶端通常會選擇重試請求。</li>
+<li>如果 API 不是冪等的，重試可能導致重複創建資源、重複扣款等嚴重問題。</li>
+<li><strong>冪等性確保</strong>：即使重試，後續的請求也不會產生意料之外的副作用。</li>
+</ul>
+</li>
+<li>
+<p><strong>分散式事務與補償機制 (Distributed Transactions &amp; Compensation)</strong>：</p>
+<ul>
+<li>在微服務架構中，一個業務操作可能涉及多個服務。中間服務的失敗可能需要重試，冪等性是保證一致性的基礎。</li>
+</ul>
+</li>
+<li>
+<p><strong>用戶體驗與數據正確性 (User Experience &amp; Data Correctness)</strong>：</p>
+<ul>
+<li>防止用戶因多次點擊按鈕或刷新頁面，導致重複扣款、重複提交表單等不良體驗和數據錯誤。</li>
+</ul>
+</li>
+<li>
+<p><strong>接口設計的穩健性 (Robust API Design)</strong>：</p>
+<ul>
+<li>使客戶端無需擔心重複發送請求所帶來的後果，簡化了客戶端邏輯，提升了整個系統的容錯能力。</li>
+</ul>
+</li>
+</ol>
+<h1 id="http-方法與冪等性"><a class="markdownIt-Anchor" href="#http-方法與冪等性"></a> HTTP 方法與冪等性</h1>
+<p>HTTP 規範已經定義了某些方法天生就是冪等的，而另一些則否。理解這些特性是設計冪等 API 的第一步。</p>
+<ul>
+<li>
+<p><strong>冪等方法 (Naturally Idempotent Methods)</strong>：</p>
+<ul>
+<li><strong>GET</strong>：獲取資源。無論請求多少次，伺服器上的資源狀態都不會改變。</li>
+<li><strong>HEAD</strong>：獲取資源頭。與 GET 類似，僅獲取元數據，不改變資源狀態。</li>
+<li><strong>OPTIONS</strong>：獲取伺服器支援的方法。</li>
+<li><strong>PUT</strong>：更新或替換資源。將請求體中的數據完整替換目標資源。即使發送多次，資源的最終狀態也是相同的（被替換成相同的值）。</li>
+<li><strong>DELETE</strong>：刪除資源。第一次請求可能刪除成功，返回 <code>200 OK</code> 或 <code>204 No Content</code>。後續的相同請求可能返回 <code>404 Not Found</code> (因為資源已不存在) 或 <code>204 No Content</code> (表示資源已不存在，無須再次操作)，但資源的「已刪除」狀態並不會改變。</li>
+</ul>
+</li>
+<li>
+<p><strong>非冪等方法 (Non-Idempotent Methods)</strong>：</p>
+<ul>
+<li><strong>POST</strong>：創建新資源。每次成功的 POST 請求通常都會在伺服器上創建一個新的、唯一的資源。例如，連續發送三次 POST 請求創建訂單，會創建三筆訂單。</li>
+<li><strong>PATCH</strong>：部分更新資源。雖然 PATCH 看似與 PUT 都是更新，但 PATCH 通常會對資源進行「增量修改」。如果 PATCH 操作本身不是原子性的，例如 <code>increment age by 1</code>，重複執行會導致 <code>age</code> 遞增多次。因此，PATCH 必須仔細設計才能達到冪等性。不過，如果 PATCH 是設定一個明確的值 (例如 <code>set age to 30</code>), 那麼它就是冪等的。</li>
+</ul>
+</li>
+</ul>
+<h1 id="如何實現-api-冪等性特別是非冪等方法-如-post"><a class="markdownIt-Anchor" href="#如何實現-api-冪等性特別是非冪等方法-如-post"></a> 如何實現 API 冪等性？特別是非冪等方法 (如 POST)</h1>
+<p>對於天生非冪等的 <code>POST</code> 等方法，必須採取主動措施來實現冪等性。核心思想是讓伺服器能夠辨識出重複的請求，並對其進行去重或特殊處理。最常見且推薦的做法是使用<strong>冪等鍵 (Idempotency Key)</strong>。</p>
+<h2 id="使用冪等鍵-idempotency-key-的通用流程"><a class="markdownIt-Anchor" href="#使用冪等鍵-idempotency-key-的通用流程"></a> 使用冪等鍵 (Idempotency Key) 的通用流程：</h2>
+<ol>
+<li>
+<p><strong>客戶端生成唯一 Idempotency Key</strong>：</p>
+<ul>
+<li>客戶端在發送請求前，生成一個<strong>全球唯一 (Globally Unique Identifier, GUID/UUID)</strong> 的字串，例如 <code>Idempotency-Key: some-unique-uuid-v4</code>。</li>
+<li>這個 Key 應該在<strong>一個業務操作的生命週期內保持不變</strong>。例如，用戶點擊「支付」後，直到支付成功或失敗，每次重試都應該使用相同的 Key。</li>
+<li>通常作為 HTTP Header 傳送，例如 <code>Idempotency-Key</code>。</li>
+</ul>
+</li>
+<li>
+<p><strong>伺服器端接收並檢查 Idempotency Key</strong>：</p>
+<ul>
+<li>當伺服器收到帶有 <code>Idempotency-Key</code> 的請求時，會先檢查其內部儲存（例如 Redis、專門的資料庫表或緩存）中是否存在這個 Key。</li>
+<li><strong>如果 Key 不存在</strong>：
+<ol>
+<li>將該 <code>Idempotency-Key</code> 儲存起來，並標記為「處理中」。</li>
+<li>正常執行業務邏輯（例如創建訂單、處理支付）。</li>
+<li>將業務邏輯的<strong>最終結果 (HTTP 狀態碼和響應體)</strong> 與 <code>Idempotency-Key</code> 一同儲存起來。</li>
+<li>將最終結果返回給客戶端。</li>
+</ol>
+</li>
+<li><strong>如果 Key 已存在且已標記為「處理中」</strong>：
+<ol>
+<li>這表示有一個相同的請求正在處理。</li>
+<li>伺服器可以選擇返回一個 <code>409 Conflict</code> 狀態碼（表示衝突正進行中），或者等待原始請求完成並返回其結果（需要非同步等待機制）。</li>
+</ol>
+</li>
+<li><strong>如果 Key 已存在且已標記為「已處理」</strong>：
+<ol>
+<li>這表示該業務操作已經完成。</li>
+<li>伺服器直接取出之前儲存的「最終結果」（HTTP 狀態碼和響應體），原封不動地返回給客戶端。<strong>不需要再次執行業務邏輯</strong>。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>冪等鍵的生命週期管理</strong>：</p>
+<ul>
+<li>冪等鍵需要有<strong>過期時間（TTL）</strong>。一個業務操作通常不會無限期地重試，過期後可以從儲存中移除，釋放資源。</li>
+<li>根據業務場景，這個時效可以是幾分鐘、幾小時甚至幾天。</li>
+</ul>
+</li>
+</ol>
+<h2 id="實際案例在線支付"><a class="markdownIt-Anchor" href="#實際案例在線支付"></a> 實際案例：在線支付</h2>
+<ol>
+<li>用戶點擊支付按鈕，前端生成 <code>Idempotency-Key: abc-123-xyz</code>。</li>
+<li>前端發送 POST 請求到 <code>/api/payments</code>，攜帶 <code>Idempotency-Key</code>。</li>
+<li>後端接收請求：
+<ul>
+<li>檢查 <code>abc-123-xyz</code>，發現不存在。</li>
+<li>將 <code>abc-123-xyz</code> 儲存，標記為 <code>PROCESSING</code>。</li>
+<li>調用支付網關處理支付。</li>
+<li><strong>此時網路斷開，前端未收到響應。</strong></li>
+</ul>
+</li>
+<li>前端重試發送 POST 請求，仍然使用 <code>Idempotency-Key: abc-123-xyz</code>。</li>
+<li>後端再次接收請求：
+<ul>
+<li>檢查 <code>abc-123-xyz</code>，發現已存在且標記為 <code>PROCESSING</code>。</li>
+<li>等待上一個請求處理完成（通過鎖機制或消息隊列確保順序）。</li>
+</ul>
+</li>
+<li>第一次支付網關響應支付成功，後端更新 <code>abc-123-xyz</code> 的狀態為 <code>COMPLETED</code>，並儲存支付結果 (<code>status: success</code>, <code>transaction_id: ...</code>)。</li>
+<li>後端將這個結果返回給前端。</li>
+<li>如果第二次請求等待到第一次請求結果，將直接返回第一次的結果，而不會再次調用支付網關。</li>
+</ol>
+<h1 id="實現冪等性的其他策略-與冪等鍵結合使用"><a class="markdownIt-Anchor" href="#實現冪等性的其他策略-與冪等鍵結合使用"></a> 實現冪等性的其他策略 (與冪等鍵結合使用)</h1>
+<ul>
+<li><strong>業務狀態檢查 (Business State Check)</strong>：在執行核心業務邏輯前，先檢查當前資源的狀態。例如，如果訂單已經是「已支付」狀態，那麼不管接收到多少次支付請求，都無需重複處理支付邏輯。</li>
+<li><strong>唯一的業務 ID (Unique Business ID)</strong>：除了 <code>Idempotency-Key</code>，許多業務操作本身就帶有唯一的業務識別碼（如 <code>order_id</code>、<code>trade_no</code>）。可以在這些 ID 上建立唯一索引，防止數據庫層面的重複創建。</li>
+<li><strong>樂觀鎖/悲觀鎖 (Optimistic/Pessimistic Locking)</strong>：在某些更新操作中，可以使用版本號（樂觀鎖）或行鎖（悲觀鎖）來確保數據更新的原子性，避免併發問題。</li>
+</ul>
+<h1 id="冪等性的設計考慮"><a class="markdownIt-Anchor" href="#冪等性的設計考慮"></a> 冪等性的設計考慮</h1>
+<ol>
+<li><strong>冪等鍵的範圍 (Scope of Idempotency Key)</strong>：
+<ul>
+<li>應該是在客戶端視角下，整個業務操作的唯一標識。</li>
+<li>通常一個 Key 對應一個完整的請求。如果一個請求可能會觸發多個子操作，則需要考慮這些子操作是否也需要內部冪等。</li>
+</ul>
+</li>
+<li><strong>存儲冪等狀態的選型 (Storage for Idempotency State)</strong>：
+<ul>
+<li>Redis 是常見選擇，因為它快速且支援 TTL。</li>
+<li>資料庫也是選項，但需要考慮讀寫性能。</li>
+</ul>
+</li>
+<li><strong>錯誤處理 (Error Handling)</strong>：
+<ul>
+<li>如果首次請求失敗，後續帶相同 <code>Idempotency-Key</code> 的重試該如何處理？通常可以再次執行業務邏輯，直到成功為止，並將成功結果與 <code>Idempotency-Key</code> 關聯。</li>
+<li><code>Idempotency-Key</code> 應與最終的請求結果（成功或失敗）綁定。</li>
+</ul>
+</li>
+<li><strong>最終一致性 vs. 強一致性 (Eventual vs. Strong Consistency)</strong>：
+<ul>
+<li>冪等性通常是為了保證<strong>最終一致性</strong>。對於需要強一致性的場景，還需要結合分散式事務協議。</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>在一個由不可靠網路和分散式組件組成的現代應用生態中，API 冪等性不再是一個可選項，而是構建 robust、高可靠系統的基石。它為我們提供了一種優雅的機制，以應對重試、網路不穩定和併發操作帶來的挑戰，確保了系統狀態的正確性與預期性。</p>
+<p>實作 API 的冪等性，不僅能提升用戶滿意度，減少潛在的業務錯誤和財務損失，更能讓系統在面對日益增長的需求和複雜性時，展現出卓越的穩健性。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/System-Design/" rel="tag"># System Design</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/09/24/CQRS%20%E8%AE%80%E5%AF%AB%E5%88%86%E9%9B%A2%E7%9A%84%E8%97%9D%E8%A1%93/" rel="prev" title="CQRS (Command Query Responsibility Segregation)：讀寫分離的藝術">
+                  <i class="fa fa-angle-left"></i> CQRS (Command Query Responsibility Segregation)：讀寫分離的藝術
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
