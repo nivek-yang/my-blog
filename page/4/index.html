@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">94</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">95</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">52</span></a>
       <ul class="sub-menu">
   
@@ -197,7 +197,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Database/">
         Database
-        <span class="post-count">(17)</span>
+        <span class="post-count">(18)</span>
       </a>
     </li>
   
@@ -414,7 +414,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/System-Design/">
         System Design
-        <span class="post-count">(3)</span>
+        <span class="post-count">(4)</span>
       </a>
     </li>
   
@@ -513,7 +513,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">94</span>
+          <span class="site-state-item-count">95</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -538,6 +538,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/21/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88%E4%B8%AD%E7%9A%84%20CAP%20%E7%90%86%E8%AB%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/08/21/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88%E4%B8%AD%E7%9A%84%20CAP%20%E7%90%86%E8%AB%96/" class="post-title-link" itemprop="url">
+              系統設計中的 CAP 理論
+            </a>
+            <a href="/my-blog/2025/08/21/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88%E4%B8%AD%E7%9A%84%20CAP%20%E7%90%86%E8%AB%96/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-08-21 00:00:00 / 修改時間：23:40:58" itemprop="dateCreated datePublished" datetime="2025-08-21T00:00:00+08:00">2025-08-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">當從單體應用程式 (Monolithic Application) 走向微服務或任何分散式架構時，享受了擴展性與彈性的好處，但也必須面對一個新的挑戰：如何在多個節點之間維持資料的可靠性與服務的可用性？ 想像一下這個場景：在一個全球知名的電商平台搶購限量版球鞋。當按下「購買」的瞬間，系統背後可能有數十甚至數百台伺服器在同時運作。系統如何確保你買到的這雙鞋不會同時被另一個人買走？又如何保證即使某個地區的機房發生網路問題，依然能順利完成交易？ 這就是 CAP 理論要解決的核心問題。 在分散式系統設計中，CAP 理論（CAP Theorem）是一個核心概念，用來描述在分散式資料庫中，系統無法同時滿足 一致性（Consistency）、可用性（Availability）、分區容錯性（Partition Tolerance） 這三大特性。理解 CAP 理論對於後端工程師在設計資料庫架構或分散式系統時至關重要。 什麼是 CAP 理論？ CAP 理論，又稱布魯爾定理 (Brewer’s Theorem)，由電腦科學家 Eric Brewer 在 2000 年提出。它指出，任何一個分散式資料儲存系統，最多只能同時滿足以下三個特性中的兩項。 在一個分散式系統中，一致性 (Consistency)、可用性 (Availability) 和 分區容錯性 (Partition Tolerance)，這三者無法兼得。 CAP 三大特性 1. 一致性（Consistency） 定義：所有節點在同一時間點讀取到的資料，必須是完全相同的。 白話解釋：當成功寫入一筆新資料後，任何後續的讀取操作，都應該要能讀到這筆最新的資料。系統就像只有一個「真相」來源，絕不允許讀到舊的或不一致的資料。 優點：避免資料不同步問題，提供強一致性體驗。 缺點：可能需要等待資料同步完成，導致延遲。 2. 可用性（Availability） 定義：每一次的請求，不論是讀取或寫入，都必須收到一個（非錯誤的）回應。 白話解釋：系統永遠處於「開機」狀態。只要使用者發出請求，系統就一定會回應，它不能因為內部忙碌或網路問題就直接拋出錯誤或無止盡地等待。不過，它不保證回傳的資料是最新的。 優點：系統可靠、不間斷服務。 缺點：可能回傳舊資料，導致一致性下降。 3. 分區容錯性（Partition Tolerance） 定義：即使叢集中的部分節點之間因為網路問題而無法互相通訊（也就是發生「網路分區」），系統整體仍然能夠繼續運作。 白話解釋：在現代雲端架構中，網路閃爍、交換機故障、機房斷線是家常便飯。分區容錯性意味著系統設計必須能容忍這些意外，不能因為兩個節點「失聯」就導致整個系統崩潰。 優點：保證系統在網路異常下仍能運行。 缺點：必須在一致性與可用性之間做取捨。 CAP 不可能三角 CAP 理論指出，在發生網路分區的情況下，系統只能同時滿足 一致性（C） 和 可用性（A） 其中之一，而無法同時兼顧。這就是所謂的 「不可能三角」。 用圖來表示如下： graph TD C[一致性&lt;br&gt;Consistency] --- A[可用性&lt;br&gt;Availability] A --- P[分區容錯性&lt;br&gt;Partition Tolerance] P --- C style C fill:#d6f0ff,stroke:#3399ff,stroke-width:2px style A fill:#d6f0ff,stroke:#3399ff,stroke-width:2px style P fill:#d6f0ff,stroke:#3399ff,stroke-width:2px CAP 理論最關鍵的部分在於：P (分區容錯性) 在現今的分散式系統中，是一個「必選項」，而不是「可選項」。 只要系統部署在多台機器上，就必須假設網路隨時可能出問題。因此，系統設計的真正權衡，其實是在網路分區發生時，必須在 C (一致性) 和 A (可用性) 之間做出抉擇。 用一個簡單的圖示來思考： [資料庫節點 A] &lt;---- 網路連線正常 ----&gt; [資料庫節點 B] (資料: v1) (資料: v1) 假設此時，一個寫入請求進來，將資料更新為 v2。資料成功寫入節點 A，並開始同步到節點 B。 [資料庫節點 A] &lt;---- 同步中 ----&gt; [資料庫節點 B] (資料: v2) (資料: v1) 就在這個瞬間，網路發生了分區！ [資料庫節點 A] &lt;---- X 網路中斷 X ----&gt; [資料庫節點 B] (資料: v2) (資料: v1) 現在，一個讀取請求進來了，它可以被路由到節點 A 或節點 B。這時面臨了抉擇： 選擇 C (一致性)，放棄 A (可用性) - 稱為 CP 系統 為了保證一致性，節點 B 因為無法與節點 A 同步以獲取最新的 v2 資料，它必須拒絕所有的讀取請求，或者回傳錯誤。 這樣做確保了任何讀取請求都不會讀到舊的資料 (v1)，維持了資料的強一致性。但犧牲了節點 B 的可用性。 選擇 A (可用性)，放棄 C (一致性) - 稱為 AP 系統 為了保證可用性，節點 B 即使知道自己可能不是最新的，它仍然會回傳它目前擁有的資料 (v1)。 這樣做確保了系統永遠可以回應使用者的請求，但犧牲了資料的一致性（使用者可能會讀到舊資料）。 現實世界的例子 CP 系統 (Consistency &gt; Availability) 當資料的正確性至關重要，不容許絲毫偏差時，就會選擇 CP。 應用場景：銀行交易、金融系統、訂單管理。絕對不希望因為讀到舊的餘額資料而造成超額提款，或因為庫存資料不一致而超賣商品。 代表技術：MongoDB、Redis、HBase。這些系統都提供了調整一致性等級的選項，在需要時可以配置為強一致性模式。 AP 系統 (Availability &gt; Consistency) 當使用者體驗和系統的永遠在線比短暫的資料不一致更重要時，就會選擇 AP。 應用場景：社群媒體的按讚數、貼文瀏覽次數、電商網站的商品評論。晚幾秒鐘看到最新的按讚數不會造成嚴重後果，但如果網站頻繁顯示錯誤訊息，使用者會立刻流失。 代表技術：Cassandra、DynamoDB (Amazon)、CouchDB。它們天生就是為了高可用性和高擴展性而設計的，採用的是「最終一致性」(Eventual Consistency) 模型。 那 CA 系統呢？ 理論上，一個沒有分區容錯需求的系統就是 CA 系統。這意味著什麼？它只有一個節點！傳統的單體關聯式資料庫（如 MySQL、PostgreSQL）可以被視為 CA 系統。它們在單機內保證了強大的 ACID 一致性與可用性，但一旦這台機器掛了，或是網路斷了，整個系統就無法服務了。這在分散式架構中是不可行的。 結論 CAP 理論不是一個僵硬的規則，而是一個幫助我們理解分散式系統設計權衡的框架。它提醒我們： 在分散式世界裡，網路分區 (P) 是必然的，必須為它設計。 你的選擇是在發生分區時，要 犧牲一致性 © 還是可用性 (A)。 這個選擇沒有絕對的好壞，完全取決於業務需求。問問自己：是「絕對不能出錯的資料」比較重要，還是「永不中斷的服務」比較重要？ 在設計分散式系統時，不可能同時兼顧 一致性、可用性、分區容錯性 三者，只能依照應用場景做出取捨。 金融或高敏感度資料 → CP 系統 高可用、用戶體驗優先 → AP 系統 小型單機系統 → CA 系統 理解 CAP 理論，能幫助我們在不同業務需求下選擇合適的架構，設計更可靠與合理的分散式系統。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/08/21/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88%E4%B8%AD%E7%9A%84%20CAP%20%E7%90%86%E8%AB%96/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1302,92 +1388,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/08/12/SQL%20Replication%20%E8%A9%B3%E8%A7%A3%20%E5%BE%9E%E5%95%8F%E9%A1%8C%E6%A0%B9%E6%BA%90%E5%88%B0%20PostgreSQL%20%E5%AF%A6%E6%88%B0%E6%BC%94%E7%B7%B4/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/10/API%20Gateway%20%E5%BE%AE%E6%9C%8D%E5%8B%99%E6%9E%B6%E6%A7%8B%E4%B8%8B%E7%9A%84%E6%B5%81%E9%87%8F%E5%AE%88%E9%96%80%E4%BA%BA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/08/10/API%20Gateway%20%E5%BE%AE%E6%9C%8D%E5%8B%99%E6%9E%B6%E6%A7%8B%E4%B8%8B%E7%9A%84%E6%B5%81%E9%87%8F%E5%AE%88%E9%96%80%E4%BA%BA/" class="post-title-link" itemprop="url">
-              API Gateway：微服務架構下的流量守門人
-            </a>
-            <a href="/my-blog/2025/08/10/API%20Gateway%20%E5%BE%AE%E6%9C%8D%E5%8B%99%E6%9E%B6%E6%A7%8B%E4%B8%8B%E7%9A%84%E6%B5%81%E9%87%8F%E5%AE%88%E9%96%80%E4%BA%BA/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-08-10 00:00:00 / 修改時間：23:25:47" itemprop="dateCreated datePublished" datetime="2025-08-10T00:00:00+08:00">2025-08-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">在如今所處的雲原生和微服務時代，系統的複雜性與日俱增。單體應用被拆分成數十、甚至數百個獨立運作的微服務。這樣的架構帶來了高度的靈活性和可擴展性，但同時也引出了一個新的挑戰：客戶端（Client）該如何與這些繁多的後端服務進行有效、安全且一致的溝通？ 這篇文章將介紹解決這個問題的關鍵元件——API Gateway。它不僅僅是一個中間件，更是現代分散式系統中不可或缺的「流量守門人」。 核心思想：與其讓客戶端直接與所有微服務混亂地溝通，不如設立一個統一的入口點。這個入口點就是 API Gateway，它負責將所有外部請求，聰明地路由到對應的內部服務。 什麼是 API Gateway？ 簡單來說，API Gateway 是一個伺服器，是 API 的單一入口點。它接收所有客戶端的請求，然後將它們轉發到適當的微服務。同時，它也可以處理一些共通性的任務，例如使用者認證、日誌記錄和速率限制等。 可以把它想像成一棟大型辦公樓的總機或前台接待員。 沒有接待員（傳統模式）：訪客（客戶端）需要自己記住每個部門（微服務）在哪個房間、分機號碼是多少，然後親自一個個去拜訪。如果部門搬家了（服務更新），訪客就找不到了。 有接待員（API Gateway 模式）：訪客只需要走到前台，告知接待員他想找誰、辦什麼事。接待員會負責驗證訪客身份、登記來訪資訊，然後引導他或通知對應的部門來處理。訪客完全不需要知道部門的具體位置。 為什麼需要 API Gateway？ 在微服務架構中，引入 API Gateway 的好處是顯而易見的： 1. 簡化客戶端邏輯 客戶端（例如手機 App 或網頁前端）不再需要維護一個複雜的服務端點列表。它只需要知道一個位址：API Gateway 的位址。這大大降低了前端的複雜度和耦合性。 2. 集中處理橫切關注點 (Cross-Cutting Concerns) 許多功能是所有微服務都需要的，例如： 使用者認證與授權 (Authentication &amp; Authorization)：確認請求者的身份和權限。 日誌與監控 (Logging &amp; Monitoring)：記錄請求日誌，監控 API 健康狀況。 速率限制 (Rate Limiting)：防止惡意或過度的請求拖垮系統。 快取 (Caching)：快取常用回應，減少後端負擔。 如果沒有 API Gateway，這些邏輯就必須在每個微服務中重複實現，這不僅浪費開發資源，也難以統一管理。API Gateway 讓我們能將這些「橫切關注點」集中處理，保持後端服務的純粹與簡潔。 3. 提供 API 抽象與適配 後端服務的 API 設計可能基於內部需求，並不總是適合直接暴露給外部客戶端。API Gateway 可以作為一個適配層 (Adapter)： 請求/回應轉換：轉換資料格式（如 XML 轉 JSON）。 API 組合：將多個內部微服務的呼叫組合成一個單一的外部 API 請求，減少客戶端的網路往返次數。 4. 提升安全性 API Gateway 是保護內部服務的第一道防線。所有流量都必須經過它，因此可以輕易地在此層實施安全策略，如 SSL 終止、IP 白名單/黑名單、防止常見的網路攻擊（如 SQL Injection, XSS）等。 API Gateway 的核心功能 一個成熟的 API Gateway 通常具備以下核心功能： 路由 (Routing)：根據請求的路徑、標頭 (Header) 或方法 (Method) 等資訊，將請求精準地轉發到正確的後端服務。 負載平衡 (Load Balancing)：如果同一個服務有多個實例 (Instance)，Gateway 可以將流量分散到這些實例上，確保系統穩定。 認證與授權 (Authentication &amp; Authorization)：與身份驗證服務（如 OAuth2, JWT）整合，保護 API 存取。 日誌、監控與追蹤 (Logging, Monitoring &amp; Tracing)：提供對 API 流量的可見性，是除錯和效能分析的基礎。 速率限制與熔斷 (Rate Limiting &amp; Circuit Breaking)：保護後端服務不被流量沖垮，並在後端服務故障時快速失敗 (Fail Fast)，防止連鎖反應。 快取 (Caching)：暫存 API 回應，提升效能並降低延遲。 優點與挑戰 儘管 API Gateway 如此強大，但在採用前，也必須坦誠地面對它的兩面性。 優點 解耦：客戶端與後端服務徹底解耦。 聚合：將分散的功能集中管理。 安全：統一的安全控制層。 監控：單點監控所有外部流量。 挑戰 單點故障 (Single Point of Failure)：如果 Gateway 檔機，整個系統的對外服務都會中斷。因此，Gateway 自身的高可用性至關重要。 潛在的效能瓶頸 (Potential Bottleneck)：所有流量都經過 Gateway，其效能必須非常高，否則會成為系統的瓶頸。 開發與維護成本：引入了一個新的元件，意味著需要額外的開發、部署和維護成本。 常見的 API Gateway 解決方案 市面上有許多成熟的 API Gateway 產品可供選擇，可以分為幾類： 雲端服務商提供: Amazon API Gateway Azure API Management Google Cloud API Gateway 開源自建: Kong: 基於 Nginx，高效能、可擴充。 Tyk: 功能豐富，提供友好的儀表板。 Spring Cloud Gateway: 為 Java Spring 生態系量身打造。 Ocelot: 針對 .NET 生態系的輕量級選擇。 選擇哪個方案取決於技術棧、團隊規模、預算以及對客製化程度的需求。 總結 在微服務的世界裡，API Gateway 是一個必需品。它像一位稱職的守門人，優雅地管理著進出系統的每一個請求，讓後端服務可以更專注於實現核心業務邏輯。 雖然它也帶來了單點故障和效能瓶頸等挑戰，但透過高可用部署和合理的效能規劃，這些風險是完全可控的。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/08/10/API%20Gateway%20%E5%BE%AE%E6%9C%8D%E5%8B%99%E6%9E%B6%E6%A7%8B%E4%B8%8B%E7%9A%84%E6%B5%81%E9%87%8F%E5%AE%88%E9%96%80%E4%BA%BA/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>
