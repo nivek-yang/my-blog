@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">95</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">96</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">52</span></a>
       <ul class="sub-menu">
   
@@ -414,7 +414,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/System-Design/">
         System Design
-        <span class="post-count">(4)</span>
+        <span class="post-count">(5)</span>
       </a>
     </li>
   
@@ -513,7 +513,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-count">96</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -538,6 +538,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/27/Cookie%20Session%20JWT%20%E7%9A%84%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%E8%88%87%E6%AF%94%E8%BC%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/09/27/Cookie%20Session%20JWT%20%E7%9A%84%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%E8%88%87%E6%AF%94%E8%BC%83/" class="post-title-link" itemprop="url">
+              Cookie, Session, JWT 的深度解析與比較
+            </a>
+            <a href="/my-blog/2025/09/27/Cookie%20Session%20JWT%20%E7%9A%84%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%E8%88%87%E6%AF%94%E8%BC%83/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-09-27 00:00:00 / 修改時間：20:55:51" itemprop="dateCreated datePublished" datetime="2025-09-27T00:00:00+08:00">2025-09-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">在瀏覽的網站和使用的應用程式背後，存在一個至關重要的任務：如何安全、有效地管理用戶的狀態與身份？ 無論是登入電商網站後，能繼續購物而無需重複登入；還是呼叫各種 API 服務，系統都能知道是誰、擁有什麼權限，這一切都離不開身份驗證和狀態管理的機制。 長久以來，Cookie 和 Session 一直是網頁應用領域的兩大基石。然而，隨著分散式系統、API 服務和行動應用的興起，一種新的、更具彈性的解決方案逐漸浮現——JWT (JSON Web Token)。這三者各有千秋，但它們的設計理念、工作方式和適用場景卻大相徑庭。 理解它們之間的差異，不僅能幫助在系統設計時做出更明智的選擇，更能在構建安全、高效和可擴展的應用程式時如虎添翼。 Cookie：客戶端的「小紙條」 什麼是 Cookie？ Cookie 是一小段文本信息，由網站的伺服器發送給瀏覽器，然後瀏覽器將其儲存在用戶的本地電腦上。當瀏覽器再次向同一伺服器發送請求時，會將這個 Cookie 攜帶回伺服器。它的主要目的是在無狀態的 HTTP 協議上實現狀態管理。 工作原理 當訪問一個網站時，伺服器通過 HTTP 響應頭的 Set-Cookie 字段發送一個或多個 Cookie 給瀏覽器。 瀏覽器接收到 Cookie 後，將其保存在本地。 之後每一次向該網站發送請求，瀏覽器都會自動將相關的 Cookie 附加在 HTTP 請求頭的 Cookie 字段中發送給伺服器。 伺服器根據接收到的 Cookie 識別用戶或獲取用戶的狀態信息。 主要屬性 Name=Value：Cookie 的名稱和值。 Expires / Max-Age：Cookie 的有效期，決定它是會話 Cookie (瀏覽器關閉即失效) 還是持久 Cookie。 Domain：指定哪些域名可以讀取這個 Cookie。 Path：指定哪些路徑下的請求會發送這個 Cookie。 HttpOnly：防止 JavaScript 讀取 Cookie，降低 XSS 攻擊風險。 Secure：只在 HTTPS 連接下發送 Cookie。 SameSite：防止 CSRF 攻擊 (Strict, Lax, None)。 優點 實現狀態管理：克服 HTTP 無狀態的限制。 數據持久化：可以將數據持久化在客戶端，即使瀏覽器關閉也能保留 (持久 Cookie)。 易於實現：瀏覽器和伺服器都內建支援。 缺點 安全性較差：容易受到 XSS (跨站腳本攻擊) 和 CSRF (跨站請求偽造) 攻擊，特別是沒有設置 HttpOnly 和 SameSite 的 Cookie。 容量限制：每個 Cookie 有大小限制 (通常 4KB)，每個域名下的 Cookie 數量也有限制。 性能開銷：每次 HTTP 請求都會攜帶 Cookie，增加請求頭大小，影響性能。 私隱問題：常用於追蹤用戶行為。 跨域限制：受同源策略限制，難以跨域共享。 適用場景 記住用戶登入狀態 (與 Session ID 配合)。 購物車信息。 用戶偏好設置、主題。 網站分析和追蹤用戶行為。 Session：伺服器端的「會客紀錄」 什麼是 Session？ Session 是一種伺服器端的機制，用於儲存用戶在某個網站上整個會話期間的狀態信息。由於 HTTP 是無狀態的，Session 提供了一種方式，讓伺服器能夠「記住」用戶從一個請求到另一個請求的上下文。 工作原理 當用戶首次訪問應用程式時，伺服器會創建一個唯一的 Session Id (會話 ID)。 這個 Session Id 通常會通過 Cookie (稱為 Session Cookie) 發送給客戶端，或者通過 URL 重寫的方式。 客戶端每次發送請求時，都會將這個 Session Id 帶回伺服器。 伺服器根據 Session Id 去查找對應的 Session 數據（通常儲存在記憶體、資料庫或快取中），從而識別用戶及其狀態。 主要特點 數據儲存在伺服器端：這意味著敏感數據不會暴露在客戶端。 依賴 Cookie：大多數情況下，Session Id 是透過 Cookie 傳遞的。 有限生命週期：Session 可以設定過期時間，也可以在瀏覽器關閉後失效。 優點 安全性高：所有用戶的敏感數據都儲存在伺服器端，客戶端只保留一個 Session ID，降低了數據洩露的風險。 容量無限制：只要伺服器儲存空間允許，Session 大小沒有理論限制。 易於管理：伺服器可以更好地控制和管理用戶狀態。 缺點 伺服器資源消耗：每個活躍的用戶 Session 都會佔用伺服器資源（記憶體、CPU），在高併發下可能會成為瓶頸。 擴展性問題：在分散式系統或負載均衡環境下，Session 共享變得複雜 (需要引入 Session 共享機制，如 Redis、資料庫集中儲存 Session)。 跨域困難：Session 天然綁定到特定伺服器和域名，跨域或多系統之間共享狀態比較困難。 適用場景 傳統的 Web 應用程式 (如使用 JSP, ASP.NET, PHP 等技術棧)。 需要儲存大量或敏感用戶狀態的場景 (如金融交易)。 用戶登入狀態管理。 JWT (JSON Web Token)：輕量級的「數位簽名令牌」 什麼是 JWT？ JWT (JSON Web Token) 是一個開放標準 (RFC 7519)，它定義了一種緊湊、自包含的方式，用於在各方之間安全地傳輸資訊作為 JSON 物件。這些資訊是數位簽名過的，因此可以被驗證和信任。 JWT 通常用於身份驗證和資訊交換。 結構 一個 JWT 包含了三部分，由點 (.) 分隔：Header.Payload.Signature。 Header (頭部)： 通常包含兩個字段：typ (Token 類型，通常為 “JWT”) 和 alg (使用的簽名算法，例如 HMACS SHA256 或 RSA)。 範例：&#123;&quot;alg&quot;: &quot;HS256&quot;, &quot;typ&quot;: &quot;JWT&quot;&#125; 接著會用 Base64URL 編碼。 Payload (載荷)： 包含實際需要傳輸的數據，稱為 claims (聲明)。 claims 又分為三種類型： 標準聲明 (Registered Claims)：如 iss (發布者), exp (過期時間), sub (主題), aud (接收者) 等，建議使用但非強制。 公開聲明 (Public Claims)：用戶自定義的聲明，但為避免衝突，建議將其定義為 URI 形式。 私有聲明 (Private Claims)：應用程式之間自定義的聲明，不需要唯一性。 範例：&#123;&quot;sub&quot;: &quot;1234567890&quot;, &quot;name&quot;: &quot;John Doe&quot;, &quot;admin&quot;: true, &quot;exp&quot;: 1678880000&#125; 接著也會用 Base64URL 編碼。 Signature (簽名)： 將編碼後的 Header 和 Payload，以及一個祕密 (secret) 或私鑰，使用 Header 中指定的算法進行簽名。 公式：HMACSHA256(base64UrlEncode(header) + &quot;.&quot; + base64UrlEncode(payload), secret) 簽名的目的是驗證 Token 的完整性（確保沒有被篡改）和真實性（證明是由已知簽發者簽發）。 工作原理 用戶登入時，伺服器驗證其憑證。 驗證成功後，伺服器生成一個 JWT，其中包含用戶的身份信息和權限。 伺服器將這個 JWT 返回給客戶端（通常在 HTTP 響應體中或作為 Cookie）。 客戶端（例如瀏覽器/行動應用）接收到 JWT 後，將其儲存在本地（例如 Local Storage、Session Storage 或 Cookie）。 之後每一次發送需要驗證的請求時，客戶端將 JWT 附加在 HTTP 請求頭的 Authorization 字段中（通常以 Bearer 方案）。 伺服器接收到請求後，會使用相同的祕密或公鑰驗證 JWT 的簽名。 驗證成功後，解析 Payload 獲取用戶身份和權限，然後處理請求。伺服器不需要儲存任何 Session 狀態。 優點 無狀態 (Stateless)：伺服器無需儲存用戶 Session 狀態，提升了伺服器擴展性 (特別是對於分佈式系統和微服務)。 可擴展性高：由於無狀態，容易在多個伺服器之間共享，非常適合微服務架構和負載均衡。 跨域/跨平台：可以在不同域名或不同應用程式 (Web, Mobile App) 之間傳遞和驗證。 資訊自包含：Token 中包含所有必要信息，減少資料庫查詢。 安全性 (簽名)：Token 經過簽名，防止篡改，保證數據完整性。 缺點 Token 無法作廢：一旦簽發，在過期時間之前，無法直接讓其失效（除非伺服器另設黑名單機制）。這對安全性有影響 (例如用戶登出或權限變更時)。 Secret 洩漏風險：如果用於簽名的 Secret 洩漏，Token 可能被偽造。 Token 容量：如果 Payload 包含過多信息，JWT 會變大，增加網絡傳輸開銷。 安全性 (未加密)：Payload 只是 Base64 編碼，並非加密，任何人都可解碼讀取。因此不適合儲存敏感數據。 XSS 風險：如果 JWT 儲存在 Local Storage，容易受到 XSS 攻擊而洩漏。 適用場景 API 身份驗證：特別是 RESTful API，不需要傳統 Session 狀態。 微服務架構：服務間進行身份和權限驗證。 單點登入 (SSO)：在多個應用程式之間共享用戶身份。 行動應用：作為身份驗證憑證。 Cookie, Session, JWT 的核心差異對照表 特性 Cookie Session JWT (JSON Web Token) 儲存位置 客戶端 (瀏覽器) 伺服器端 (記憶體、DB、Redis 等) 客戶端 (Local Storage, Session Storage, Cookie) 伺服器狀態 無狀態 (但與 Session 搭配時傳遞 Session ID) 有狀態 (伺服器需維護 Session 數據) 無狀態 (伺服器不儲存 Token 數據，只驗證簽名) 擴展性 差 (受限於同源策略和容量限制) 差 (須額外機制實現 Session 共享) 高 (天然支援分散式和負載均衡) 安全性 容易被 XSS/CSRF 攻擊 (若無適當防護) 高 (敏感數據在伺服器) 簽名防篡改，但數據公開，需防 XSS 洩漏 Token 數據容量 小 (通常 4KB) 大 (理論上無限，受限於伺服器資源) 通常較小 (越大傳輸開銷越大) 傳輸開銷 每次請求都會攜帶，增加請求頭大小。 攜帶 Session ID (通常較小)。 每次請求攜帶整個 Token，Token 越大開銷越大。 作廢機制 可直接設定過期時間或伺服器移除。 伺服器可隨時失效 Session。 需額外黑名單機制，否則過期前無法直接作廢。 主要用途 用戶偏好、狀態追蹤，傳遞 Session ID 用戶登入狀態、購物車、敏感數據儲存 API 身份驗證、單點登入、微服務認證 什麼時候選用誰？ 傳統的 Web 應用，且大部分操作圍繞單一伺服器 (單體架構) → Cookie + Session 這種組合在許多傳統 Web 框架中是預設且成熟的方案。 安全性較高，因為敏感數據仍保留在伺服器。 缺點是橫向擴展性差，需要考慮 Session 共享問題。 需要無狀態、高擴展性、跨域/跨平台的 API 認證，特別是微服務、前後端分離、行動應用 → JWT JWT 讓 API 變得真正無狀態，便於擴展和部署。 適用於需要為眾多客戶端（Web, iOS, Android）提供統一認證接口的場景。 但需要注意 Token 的安全儲存 (避免 XSS 攻擊) 和作廢機制。 在有狀態的應用中，需要儲存少量的非敏感信息在客戶端，或用於與 Session 搭配傳遞 Session ID → 純 Cookie 例如記錄用戶的語言偏好、夜間模式設置等。 HttpOnly 和 Secure 屬性必須嚴格設定以增強安全性。 最佳實踐與結合使用 有時候，甚至會將 JWT 和 Cookie 結合起來使用，以發揮各自的優勢並彌補不足： HttpOnly Cookie 儲存 JWT： 將 JWT 儲存在設定了 HttpOnly 和 Secure 屬性的 Cookie 中。 HttpOnly 可以防止 XSS 攻擊直接從 JavaScript 讀取 JWT。 Secure 可以確保 JWT 只在 HTTPS 連接中傳輸，防止中間人攻擊。 這樣做既利用了 JWT 的無狀態特點，又利用了 Cookie 的安全性優勢 (對抗 XSS)。 但仍可能面臨 CSRF 攻擊，需要搭配 SameSite 屬性或 CSRF Token 來防範。 結論 Cookie、Session 和 JWT 各自在 Web 應用和 API 身份驗證與狀態管理中扮演著不可或缺的角色。它們就像是工具箱中的不同工具，沒有絕對的優劣，只有最適合特定任務的選擇。 理解它們的設計哲學、技術細節和權衡考量，是成為一名優秀的系統設計者和開發者的關鍵一步。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/09/27/Cookie%20Session%20JWT%20%E7%9A%84%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%E8%88%87%E6%AF%94%E8%BC%83/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1302,92 +1388,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/09/15/Platform%20as%20a%20Service%20%E5%8A%A0%E9%80%9F%E6%87%89%E7%94%A8%E7%A8%8B%E5%BC%8F%E9%83%A8%E7%BD%B2%E8%88%87%E5%89%B5%E6%96%B0/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/14/%E5%9F%BA%E7%A4%8E%E8%A8%AD%E6%96%BD%E5%8D%B3%E7%A8%8B%E5%BC%8F%E7%A2%BC%20Infrastructure%20as%20Code,%20IaC%20%E5%85%A8%E9%9D%A2%E8%A7%A3%E6%9E%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/09/14/%E5%9F%BA%E7%A4%8E%E8%A8%AD%E6%96%BD%E5%8D%B3%E7%A8%8B%E5%BC%8F%E7%A2%BC%20Infrastructure%20as%20Code,%20IaC%20%E5%85%A8%E9%9D%A2%E8%A7%A3%E6%9E%90/" class="post-title-link" itemprop="url">
-              基礎設施即程式碼 (Infrastructure as Code, IaC) 全面解析
-            </a>
-            <a href="/my-blog/2025/09/14/%E5%9F%BA%E7%A4%8E%E8%A8%AD%E6%96%BD%E5%8D%B3%E7%A8%8B%E5%BC%8F%E7%A2%BC%20Infrastructure%20as%20Code,%20IaC%20%E5%85%A8%E9%9D%A2%E8%A7%A3%E6%9E%90/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-09-14 00:00:00 / 修改時間：23:31:42" itemprop="dateCreated datePublished" datetime="2025-09-14T00:00:00+08:00">2025-09-14</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">在現代軟體開發與雲端運算的世界裡，基礎設施即程式碼 (Infrastructure as Code, IaC) 已經成為 DevOps 及雲端自動化的核心理念之一。傳統上，基礎設施 (例如伺服器、網路、防火牆、資料庫) 的建置與管理往往依賴系統管理員手動操作，但這種方式隨著系統規模擴張，很快會變得緩慢、不一致且難以維護。IaC 的出現正是為了解決這些問題。 什麼是基礎設施即程式碼？ 基礎設施即程式碼 (IaC) 是一種透過程式碼來定義、配置與管理基礎設施的方式。換句話說，伺服器、網路設定、安全性規則等不再需要人為手動設定，而是寫成可版本控制的程式碼，並交由工具自動執行。 舉例來說，與其進入雲端管理控制台點選幾十個按鈕來建立 VM (Virtual Machine)，可以透過像 Terraform 或 AWS CloudFormation 的設定檔案，一鍵部署整個環境。 為什麼需要 IaC？ 一致性與可重現性 手動操作難免會有人為錯誤，導致「測試環境可以跑，但上線環境卻壞掉」。IaC 可保證不同環境之間的設定一致，避免「配置漂移 (configuration drift)」。 自動化與快速部署 一旦定義好基礎設施，只需執行部署指令，就能快速建立完整環境，適合 CI/CD 流程。 可追蹤與版本控制 IaC 通常與 Git 搭配使用，讓基礎設施的變更有完整的歷史紀錄，可回滾、可審查。 降低成本與風險 自動化與一致性意味著更少的人力操作錯誤與維運負擔，進而降低運行成本。 常見 IaC 工具 工具 特點 使用情境 Terraform 跨雲支援，宣告式語法 (HCL)，社群活躍 多雲部署、自動化 CI/CD AWS CloudFormation AWS 原生，深度整合 AWS 服務 完全使用 AWS 的團隊 Ansible 指令式，適合伺服器配置與應用程式安裝 VM / Container 配置管理 Pulumi 可用 TypeScript、Python、Go 撰寫 偏好通用程式語言的團隊 Chef / Puppet 偏向系統配置管理 傳統大型 IT 環境 IaC 的工作流程 一個典型的 IaC 工作流程如下： flowchart TD A[&quot;撰寫基礎設施程式碼&quot;] --&gt; B[&quot;提交到版本控制 (Git)&quot;] B --&gt; C[&quot;CI/CD Pipeline 驗證配置&quot;] C --&gt; D[&quot;執行 IaC 工具部署&quot;] D --&gt; E[&quot;雲端平台建立資源&quot;] E --&gt; F[&quot;監控與維護&quot;] 撰寫程式碼：使用 IaC 工具撰寫基礎設施定義檔案。 版本控制：將程式碼提交到 Git，以便協作與審查。 自動化流程：透過 CI/CD pipeline 驗證配置正確性。 部署：IaC 工具執行程式碼，建立或更新雲端資源。 監控：持續追蹤資源狀態，確保與程式碼一致。 宣告式 vs 指令式 IaC 工具可分為 宣告式 (Declarative) 與 指令式 (Imperative)： 模型 特點 工具範例 宣告式 (Declarative) 描述「期望狀態」，工具負責決定如何達成 Terraform, CloudFormation 指令式 (Imperative) 描述「步驟流程」，由人決定執行順序 Ansible, Chef 例如： 宣告式：「我要有三台 VM」 → 工具自動判斷需新增或刪除 VM。 指令式：「先建立 VM，再安裝套件，然後設定防火牆」 → 每個步驟都需明確描述。 實際應用場景 多環境管理：開發、測試、上線環境皆可用相同程式碼快速建立。 自動化 CI/CD 部署：新功能發布可同時更新應用程式與基礎設施。 災難復原 (Disaster Recovery)：發生問題時可用 IaC 快速重建整個環境。 混合雲與多雲管理：統一管理多個雲端平台的資源。 實務範例：Terraform 建立 AWS EC2 以下是一個最簡單的 Terraform 配置，建立一台 EC2： provider &quot;aws&quot; &#123; region = &quot;ap-northeast-1&quot; &#125; resource &quot;aws_instance&quot; &quot;example&quot; &#123; ami = &quot;ami-0c3fd0f5d33134a76&quot; # Amazon Linux 2 instance_type = &quot;t2.micro&quot; tags = &#123; Name = &quot;Hello-IaC&quot; &#125; &#125; 只要執行以下三個步驟，就能快速建置資源： terraform init terraform plan terraform apply IaC 常見挑戰 狀態管理 工具需要追蹤「現有資源」與「程式碼定義」是否一致。例如 Terraform 的 terraform.tfstate 檔案，必須妥善保存（通常放在 S3 + DynamoDB lock）。 安全性 API 金鑰、資料庫密碼等敏感資訊，不能直接寫在 IaC 檔案內，需搭配 Vault、AWS Secrets Manager 或 環境變數 管理。 配置漂移 (Configuration Drift) 如果有人手動修改雲端資源，IaC 記錄就會與實際環境不一致。解法是透過 terraform plan 定期檢查，或啟用 Policy as Code。 學習曲線 不同工具語法差異大，團隊需要時間建立共識與最佳實踐。 IaC 最佳實踐 模組化設計：將 VPC、EC2、RDS 拆成可重複使用的模組。 GitOps 流程：所有變更透過 Git Pull Request，並經過 CI/CD pipeline 驗證。 自動化測試：使用工具如 terraform validate、terratest 確保程式碼正確。 權限最小化：IaC 工具使用的帳號應採用最小權限原則。 監控與審查：整合 CloudWatch、Prometheus，追蹤基礎設施狀態。 結論 基礎設施即程式碼 (IaC) 不只是「取代手動操作」，而是讓基礎設施管理進入軟體工程化的層次。 它帶來的一致性、自動化與可追蹤性，使得團隊能更快、更穩定地交付產品。 對於剛接觸 IaC 的工程師，可以從 Terraform 開始，體驗將「點選式操作」轉換成「程式碼定義」的威力；而在企業級場景中，IaC 更能結合 CI/CD、監控、安全策略，成為整個 DevOps pipeline 的基石。 下一步，建議嘗試在本地寫一份 Terraform 配置檔，並將它與 GitHub Actions 整合，自動化建立與銷毀雲端環境，這會讓你真正體會到 「基礎設施也能像程式碼一樣敏捷開發」 的價值。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/09/14/%E5%9F%BA%E7%A4%8E%E8%A8%AD%E6%96%BD%E5%8D%B3%E7%A8%8B%E5%BC%8F%E7%A2%BC%20Infrastructure%20as%20Code,%20IaC%20%E5%85%A8%E9%9D%A2%E8%A7%A3%E6%9E%90/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>
