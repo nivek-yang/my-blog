@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">96</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">97</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">52</span></a>
       <ul class="sub-menu">
   
@@ -309,7 +309,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Microservices/">
         Microservices
-        <span class="post-count">(3)</span>
+        <span class="post-count">(4)</span>
       </a>
     </li>
   
@@ -513,7 +513,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-count">97</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -538,6 +538,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/22/%E9%9B%86%E4%B8%AD%E5%BC%8F%E8%88%87%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1%E5%B7%AE%E5%88%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/07/22/%E9%9B%86%E4%B8%AD%E5%BC%8F%E8%88%87%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1%E5%B7%AE%E5%88%A5/" class="post-title-link" itemprop="url">
+              系統設計基石：集中式 vs. 分散式系統，該選擇哪一個？
+            </a>
+            <a href="/my-blog/2025/07/22/%E9%9B%86%E4%B8%AD%E5%BC%8F%E8%88%87%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1%E5%B7%AE%E5%88%A5/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-07-22 00:00:00 / 修改時間：22:09:02" itemprop="dateCreated datePublished" datetime="2025-07-22T00:00:00+08:00">2025-07-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">在軟體工程的世界裡，當我們準備打造一個新的應用程式或服務時，第一個浮上心頭的重大決策就是：「系統架構該怎麼設計？」這個問題的核心，往往回歸到兩種最基本的架構模型：集中式系統 (Centralized System) 與 分散式系統 (Distributed System)。 這不只是一個技術術語的選擇，它將深刻影響系統的擴展性、可靠性、開發複雜度，甚至是最終的維運成本。 用一個簡單的比喻： 集中式系統 就像一個組織裡的「超級大腦」🧠。所有資訊的處理、決策和儲存都由它一手包辦。它非常強大，但一旦它累了或生病了，整個組織就停擺了。 分散式系統 則像一個「專家團隊」🤝。團隊裡有多位專家，每人負責一部分工作，他們透過密切溝通協同合作。即使某位專家請假，其他人也能頂上，團隊依然能完成任務。 讓我們深入挖掘這兩種架構的根本差別。 什麼是集中式系統？(The Super Brain) 集中式系統是最直覺的架構。它的核心理念是將所有的計算、資料和控制權限都放在一個單一的中央節點上，通常是一台或一組緊密耦合的高效能伺服器。 graph TD subgraph Clients C1[Client 1] C2[Client 2] C3[Client 3] C4[...] end S[&lt;b style='font-size:16px'&gt;Central Server&lt;/b&gt;&lt;br/&gt;All Logic &amp; Data Here] C1 --&gt; S C2 --&gt; S C3 --&gt; S C4 --&gt; S 優點 開發與管理簡單：所有邏輯都在一個地方，開發、部署和偵錯相對直接。 資料強一致性：由於只有一個資料來源，所以非常容易實現 ACID 事務，確保資料總是即時、一致的。 成本可控（初期）：對於小型應用，一台強大的伺服器成本可能比維護一個複雜的分散式系統來得低。 缺點 單點故障 (Single Point of Failure, SPOF)：這是它最致命的弱點。如果中央伺服器當機，整個系統就完全癱瘓。 擴展性瓶頸：當使用者和流量增加時，只能進行垂直擴展 (Vertical Scaling)，也就是不斷升級中央伺服器的硬體（更強的 CPU、更多的 RAM）。這種方式成本昂貴，且有物理上限。 效能瓶頸：所有請求都湧向同一個伺服器，當負載過高時，它會成為整個系統的效能瓶頸，導致延遲增加。 什麼是分散式系統？(The Expert Team) 分散式系統將一個大型任務拆解，分配給多個獨立、透過網路連接的電腦（稱為節點）來協同完成。每個節點都有自己的資源（CPU、記憶體），並共同為整個系統的目標服務。 當今我們所熟知的網際網路服務，幾乎都是分散式系統的典範。 graph LR subgraph Users C1[Client 1] C2[Client 2] end LB[Load Balancer] subgraph Service Cluster direction TB N1[Node 1] N2[Node 2] N3[Node 3] N4[Node 4] end %% Client to Load Balancer Flow C1 --&gt; LB C2 --&gt; LB %% Load Balancer to Nodes LB --&gt; N1 LB --&gt; N2 LB --&gt; N3 LB --&gt; N4 %% Inter-node Communication N1 &lt;--&gt; N2 N2 &lt;--&gt; N3 N3 &lt;--&gt; N4 N4 &lt;--&gt; N1 優點 高可用性與容錯性：透過冗餘設計，單一或多個節點的故障不會導致整個系統崩潰。系統可以自動將流量導向健康的節點。再見了，單點故障！ 卓越的擴展性：當流量增加時，可以輕鬆地進行水平擴展 (Horizontal Scaling)，也就是增加更多普通的伺服器節點。理論上，擴展性沒有上限。 高效能與高吞吐量：能夠同時並行處理大量請求，極大地提升了系統的總體處理能力（吞吐量）。 缺點 極高的複雜性：這是最大的挑戰。需要處理節點間的網路通訊、資料同步、狀態一致性、故障檢測與恢復等棘手問題。偵錯就像在一個龐大的迷宮裡找一隻會瞬間移動的蟲子。 一致性挑戰：在分散式系統中，實現強一致性非常困難且代價高昂（可參考 CAP 理論）。系統通常需要在一致性、可用性和分區容忍性之間做取捨，最終一致性 (Eventual Consistency) 是更常見的選擇。 網路依賴與延遲：節點間的通訊完全依賴網路。網路延遲或不穩定會直接影響系統的效能和可靠性。 核心差異 維度 集中式系統 (Centralized) 分散式系統 (Distributed) 核心架構 單一中央控制節點 多個獨立協作節點 擴展性 垂直擴展 (增強單機) 水平擴展 (增加機器) 可靠性 低 (有單點故障) 高 (透過冗餘實現容錯) 資料一致性 強一致性 (Strong Consistency) 通常為最終一致性 (Eventual Consistency) 開發複雜度 相對簡單 非常複雜 效能 易成瓶頸 高吞吐量，但有網路延遲 代表範例 傳統企業主機、單機資料庫 Google Search, Netflix, AWS, 微服務架構 如何選擇？ 這個問題沒有標準答案，完全取決於業務需求： ✅ 選擇集中式系統 應用規模較小，使用者量可預測。 對資料的即時強一致性有極高要求（例如：傳統的金融交易核心）。 開發時間和資源有限，希望快速上線。 可以容忍短暫的停機時間。 🚀 選擇分散式系統 預期會有海量使用者和高流量（例如：電商、社群媒體）。 系統需要 7x24 小時不間斷服務，對高可用性有嚴格要求。 需要為全球使用者提供低延遲的服務。 應用非常龐大，希望透過微服務 (Microservices) 架構來解耦。 結論 從單一的超級大腦到協同合作的專家團隊，集中式與分散式系統代表了兩種截然不同的設計哲學。 集中式以其簡單性和強一致性在特定场景下依然佔有一席之地。 分散式則以其擴展性和可靠性成為了現代大規模網際網路服務的基石。 許多成功的系統都是從一個簡單的集中式架構（或單體應用 Monolith）開始，隨著業務成長，再逐步演進為複雜但強大的分散式系統。 理解這兩者的核心權衡，是作為一名軟體工程師，在建立穩固、可擴展系統的道路上，必須掌握的關鍵第一步。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/07/22/%E9%9B%86%E4%B8%AD%E5%BC%8F%E8%88%87%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1%E5%B7%AE%E5%88%A5/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1320,92 +1406,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/07/07/%E5%BE%8C%E7%AB%AF%E5%90%8C%E6%AD%A5%E9%9D%9E%E5%90%8C%E6%AD%A5%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E6%A7%8B%E6%95%88%E8%83%BD%E8%88%87%E5%AF%A6%E5%8B%99%E5%B7%AE%E7%95%B0%E8%A7%A3%E6%9E%90/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/06/Nginx%E5%9C%A8%E5%B0%88%E6%A1%88%E4%B8%AD%E7%9A%84%E8%A7%92%E8%89%B2%E8%88%87%E8%A8%AD%E5%AE%9A%E5%AF%A6%E4%BE%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/07/06/Nginx%E5%9C%A8%E5%B0%88%E6%A1%88%E4%B8%AD%E7%9A%84%E8%A7%92%E8%89%B2%E8%88%87%E8%A8%AD%E5%AE%9A%E5%AF%A6%E4%BE%8B/" class="post-title-link" itemprop="url">
-              Nginx 在專案中的角色與設定實例
-            </a>
-            <a href="/my-blog/2025/07/06/Nginx%E5%9C%A8%E5%B0%88%E6%A1%88%E4%B8%AD%E7%9A%84%E8%A7%92%E8%89%B2%E8%88%87%E8%A8%AD%E5%AE%9A%E5%AF%A6%E4%BE%8B/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-07-06 00:00:00 / 修改時間：23:17:54" itemprop="dateCreated datePublished" datetime="2025-07-06T00:00:00+08:00">2025-07-06</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">Nginx 是現代 Web 架構中不可或缺的高效能反向代理伺服器。它能處理靜態檔案、反向代理、負載平衡、快取與安全性強化等多種任務。以下以 Django 專案為例，說明 Nginx 的功能與設定檔設計。 Nginx 的主要功能 反向代理 將外部請求轉發給後端應用（如 Gunicorn + Django），隱藏內部架構，提升安全性與彈性。 靜態檔案服務 直接由 Nginx 回應 CSS、JS、圖片等靜態檔案，減輕後端負擔，加速回應速度。 快取與壓縮 可設定快取策略（如 Cache-Control、expires），提升效能並減少頻寬消耗。 負載平衡 將請求分配到多個後端服務，提升可用性與擴展性。 安全性強化 可設定防火牆、限制來源、阻擋惡意請求、加強 HTTP 標頭等。 Nginx 生產環境設定（prod.conf）範例 server &#123; listen 80; server_name shr.today www.shr.today; location /static/ &#123; alias /staticfiles/; expires 7d; add_header Cache-Control &quot;public&quot;; &#125; location / &#123; proxy_pass http://backend:8000; proxy_set_header Host $host; proxy_set_header X-Real-IP $remote_addr; proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto; &#125; &#125; 設定重點說明 listen 80; 監聽 80 port，處理 HTTP 請求。 server_name shr.today www.shr.today; 指定服務的網域名稱。 location /static/ &#123; ... &#125; alias /staticfiles/;：將 /static/ 路徑對應到伺服器上的 /staticfiles/ 目錄（通常由 Django collectstatic 輸出）。 expires 7d;：設定瀏覽器快取靜態檔案 7 天。 add_header Cache-Control &quot;public&quot;;：允許快取。 location / &#123; ... &#125; proxy_pass http://backend:8000;：反向代理所有非靜態請求到後端 Django 服務（如 Gunicorn）。 其他 proxy_set_header：傳遞原始請求資訊給後端，方便日誌與安全性判斷。 Nginx 開發環境設定（dev.conf）範例 server &#123; listen 80; server_name localhost 127.0.0.1; location / &#123; proxy_pass http://backend:8000; proxy_set_header Host $host; proxy_set_header X-Real-IP $remote_addr; proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; proxy_set_header X-Forwarded-Proto $scheme; &#125; &#125; 說明 listen 80; 監聽本機 80 port，處理 HTTP 請求。 server_name localhost 127.0.0.1; 僅允許本機或 127.0.0.1 的請求，適合開發測試。 location / &#123; ... &#125; proxy_pass http://backend:8000; 將所有請求轉發到本機的 Django 服務（通常由 Gunicorn 或 runserver 啟動）。 其他 proxy_set_header 傳遞原始請求資訊給後端，方便日誌與除錯。 未設定靜態檔案服務 開發時通常由 Django 直接服務 static 檔案，Nginx 不需額外處理。 Nginx 負載平衡設定範例 當網站流量增加時，可用 Nginx 的負載平衡功能，將請求分散到多個 Django 應用實例： upstream django_app &#123; server backend1:8000; server backend2:8000; server backend3:8000; &#125; server &#123; listen 80; server_name shr.today www.shr.today; location /static/ &#123; alias /staticfiles/; expires 7d; add_header Cache-Control &quot;public&quot;; &#125; location / &#123; proxy_pass http://django_app; proxy_set_header Host $host; proxy_set_header X-Real-IP $remote_addr; proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto; &#125; &#125; upstream django_app &#123; ... &#125;：定義多個後端服務，Nginx 會自動分配請求。 proxy_pass http://django_app;：將請求分流到多個後端。 實務建議 生產環境：靜態檔案務必交給 Nginx 處理，並設定合理快取。高流量時建議啟用負載平衡。 開發環境：可簡化設定，讓 Django 直接服務 static，方便開發測試。 安全性：可進一步加上 HTTPS、限制來源、加強 header 等。 結論 Nginx 能大幅提升專案的效能、可用性與安全性。 理解設定檔的每一段功能，包含靜態檔案服務、反向代理與負載平衡，有助於打造穩定、可維護且可擴展的生產環境。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/07/06/Nginx%E5%9C%A8%E5%B0%88%E6%A1%88%E4%B8%AD%E7%9A%84%E8%A7%92%E8%89%B2%E8%88%87%E8%A8%AD%E5%AE%9A%E5%AF%A6%E4%BE%8B/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>

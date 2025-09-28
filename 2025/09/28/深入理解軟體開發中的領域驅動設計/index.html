@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="在軟體開發的旅程中，時常會遇到這樣的情境：業務需求看似清楚，但程式碼卻始終難以完美地反映業務邏輯；開發團隊與業務方之間，常常因為術語不同而產生溝通鴻溝；隨著業務發展，系統複雜度不斷飆升，修改和維護變得像是在走鋼索，寸步難行。 這些困境，核心都指向一個問題：我們的軟體是否真正理解並體現了它所服務的「領域」？ 當複雜的業務邏輯成為專案的核心挑戰時，單純的 CRUD (Create, Read, Upd">
+<meta property="og:type" content="article">
+<meta property="og:title" content="化繁為簡：深入理解軟體開發中的領域驅動設計 (Domain-Driven Design, DDD)">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/09/28/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%BB%9F%E9%AB%94%E9%96%8B%E7%99%BC%E4%B8%AD%E7%9A%84%E9%A0%98%E5%9F%9F%E9%A9%85%E5%8B%95%E8%A8%AD%E8%A8%88/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="在軟體開發的旅程中，時常會遇到這樣的情境：業務需求看似清楚，但程式碼卻始終難以完美地反映業務邏輯；開發團隊與業務方之間，常常因為術語不同而產生溝通鴻溝；隨著業務發展，系統複雜度不斷飆升，修改和維護變得像是在走鋼索，寸步難行。 這些困境，核心都指向一個問題：我們的軟體是否真正理解並體現了它所服務的「領域」？ 當複雜的業務邏輯成為專案的核心挑戰時，單純的 CRUD (Create, Read, Upd">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-09-27T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-09-28T04:33:03.499Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Microservices">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/09/28/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%BB%9F%E9%AB%94%E9%96%8B%E7%99%BC%E4%B8%AD%E7%9A%84%E9%A0%98%E5%9F%9F%E9%A9%85%E5%8B%95%E8%A8%AD%E8%A8%88/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/09/28/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%BB%9F%E9%AB%94%E9%96%8B%E7%99%BC%E4%B8%AD%E7%9A%84%E9%A0%98%E5%9F%9F%E9%A9%85%E5%8B%95%E8%A8%AD%E8%A8%88/","path":"2025/09/28/深入理解軟體開發中的領域驅動設計/","title":"化繁為簡：深入理解軟體開發中的領域驅動設計 (Domain-Driven Design, DDD)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>化繁為簡：深入理解軟體開發中的領域驅動設計 (Domain-Driven Design, DDD) | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">97</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">52</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cloud-Computing/">
+        Cloud Computing
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Concurrency/">
+        Concurrency
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(18)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(16)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Serverless/">
+        Serverless
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF%E9%A0%98%E5%9F%9F%E9%A9%85%E5%8B%95%E8%A8%AD%E8%A8%88-ddd"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是領域驅動設計 (DDD)？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9C%80%E8%A6%81%E9%A0%98%E5%9F%9F%E9%A9%85%E5%8B%95%E8%A8%AD%E8%A8%88%E5%AE%83%E8%A7%A3%E6%B1%BA%E4%BA%86%E5%93%AA%E4%BA%9B%E5%95%8F%E9%A1%8C"><span class="nav-number">2.</span> <span class="nav-text"> 為什麼需要領域驅動設計？它解決了哪些問題？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A0%98%E5%9F%9F%E9%A9%85%E5%8B%95%E8%A8%AD%E8%A8%88%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">3.</span> <span class="nav-text"> 領域驅動設計的核心概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%B0%E7%95%A5%E8%A8%AD%E8%A8%88-strategic-design%E5%A4%A7%E5%B1%80%E8%A7%80%E8%88%87%E7%B3%BB%E7%B5%B1%E6%9E%B6%E6%A7%8B"><span class="nav-number">3.1.</span> <span class="nav-text"> 戰略設計 (Strategic Design)：大局觀與系統架構</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%B0%E8%A1%93%E8%A8%AD%E8%A8%88-tactical-design%E7%A8%8B%E5%BC%8F%E7%A2%BC%E5%B1%A4%E9%9D%A2%E7%9A%84%E5%AF%A6%E7%8F%BE%E7%B4%B0%E7%AF%80"><span class="nav-number">3.2.</span> <span class="nav-text"> 戰術設計 (Tactical Design)：程式碼層面的實現細節</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%95%E6%99%82%E8%80%83%E6%85%AE%E4%BD%BF%E7%94%A8%E9%A0%98%E5%9F%9F%E9%A9%85%E5%8B%95%E8%A8%AD%E8%A8%88"><span class="nav-number">4.</span> <span class="nav-text"> 何時考慮使用領域驅動設計？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8C%91%E6%88%B0%E8%88%87%E8%80%83%E9%87%8F"><span class="nav-number">5.</span> <span class="nav-text"> 挑戰與考量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">6.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">97</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/28/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%BB%9F%E9%AB%94%E9%96%8B%E7%99%BC%E4%B8%AD%E7%9A%84%E9%A0%98%E5%9F%9F%E9%A9%85%E5%8B%95%E8%A8%AD%E8%A8%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="化繁為簡：深入理解軟體開發中的領域驅動設計 (Domain-Driven Design, DDD) | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          化繁為簡：深入理解軟體開發中的領域驅動設計 (Domain-Driven Design, DDD)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-09-28 00:00:00 / 修改時間：12:33:03" itemprop="dateCreated datePublished" datetime="2025-09-28T00:00:00+08:00">2025-09-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在軟體開發的旅程中，時常會遇到這樣的情境：業務需求看似清楚，但程式碼卻始終難以完美地反映業務邏輯；開發團隊與業務方之間，常常因為術語不同而產生溝通鴻溝；隨著業務發展，系統複雜度不斷飆升，修改和維護變得像是在走鋼索，寸步難行。</p>
+<p>這些困境，核心都指向一個問題：<strong>我們的軟體是否真正理解並體現了它所服務的「領域」？</strong></p>
+<p>當複雜的業務邏輯成為專案的核心挑戰時，單純的 CRUD (Create, Read, Update, Delete) 或技術導向的開發方法往往力不從心。這正是 <strong>領域驅動設計 (Domain-Driven Design, 簡稱 DDD)</strong> 登場的時刻。由 Eric Evans 在 2003 年提出的這套設計哲學，旨在幫助我們將複雜的業務領域知識，更清晰、更準確、更具維護性地映射到軟體設計和程式碼中。</p>
+<hr />
+<h1 id="什麼是領域驅動設計-ddd"><a class="markdownIt-Anchor" href="#什麼是領域驅動設計-ddd"></a> 什麼是領域驅動設計 (DDD)？</h1>
+<p><strong>領域驅動設計 (Domain-Driven Design, DDD)</strong> 是一種軟體開發方法論，它強調將<strong>核心業務領域 (Domain)</strong> 作為所有設計活動的中心。其宗旨是透過<strong>深入理解業務、密切與領域專家協作，並將業務邏輯清晰地體現在軟體模型中</strong>，來建立一個既能滿足業務需求，又易於理解、維護和擴展的複雜軟體系統。</p>
+<p>簡而言之，DDD 就是：<strong>讓程式碼說業務的語言，讓業務專家指導程式碼的設計。</strong></p>
+<h1 id="為什麼需要領域驅動設計它解決了哪些問題"><a class="markdownIt-Anchor" href="#為什麼需要領域驅動設計它解決了哪些問題"></a> 為什麼需要領域驅動設計？它解決了哪些問題？</h1>
+<p>DDD 並非適用於所有專案，但對於那些具有<strong>高度複雜業務邏輯</strong>的系統，它提供了強大的解決方案：</p>
+<ol>
+<li><strong>業務與技術脫節的鴻溝 (Bridging the Gap)</strong>：軟體開發最大的挑戰之一是開發者對業務的理解不足。DDD 強調開發者必須成為「領域專家」，與業務方建立<strong>無所不在的語言</strong>，確保雙方對業務概念有共同且一致的理解。</li>
+<li><strong>複雜性爆炸的挑戰 (Tackling Complexity)</strong>：當系統功能越來越多，相互依賴關係錯綜複雜時，程式碼會變得難以理解和修改。DDD 透過<strong>限界上下文</strong>等機制，將大而全的系統拆分成清晰、獨立的子系統，有效管理和降低複雜度。</li>
+<li><strong>程式碼維護性與可擴展性 (Maintainability &amp; Scalability)</strong>：透過將業務邏輯清晰地封裝在領域模型中，DDD 使得程式碼更具可讀性、可測試性。當業務需求變更時，更容易識別和修改受影響的範圍，減少副作用。</li>
+<li><strong>溝通效率低下 (Improving Communication)</strong>：統一的語言和模型讓團隊成員（包括業務方）能夠更有效地溝通，減少誤解和返工。</li>
+</ol>
+<h1 id="領域驅動設計的核心概念"><a class="markdownIt-Anchor" href="#領域驅動設計的核心概念"></a> 領域驅動設計的核心概念</h1>
+<p>DDD 的概念體系龐大而細緻，可以將其分為<strong>戰略設計 (Strategic Design)</strong> 和<strong>戰術設計 (Tactical Design)</strong> 兩大部分。</p>
+<h2 id="戰略設計-strategic-design大局觀與系統架構"><a class="markdownIt-Anchor" href="#戰略設計-strategic-design大局觀與系統架構"></a> 戰略設計 (Strategic Design)：大局觀與系統架構</h2>
+<p>戰略設計主要關注在<strong>宏觀層面</strong>如何劃分業務領域，以及不同子領域之間的關係。</p>
+<ol>
+<li>
+<p><strong>領域 (Domain)</strong>：</p>
+<ul>
+<li>代表業務知識的範疇。例如，「電商」是一個領域，「訂單處理」、「庫存管理」、「用戶管理」則是其子領域。</li>
+<li><strong>核心域 (Core Domain)</strong>：定義了產品或企業在市場上的核心競爭力。這就是 DDD 最應該投入精力的地方。</li>
+<li><strong>支撐域 (Supporting Domain)</strong>：為核心域提供輔助功能，但本身並不提供競爭優勢。</li>
+<li><strong>通用域 (Generic Domain)</strong>：通用的、與業務無關的功能，如身份驗證、日誌記錄，通常可以直接使用現成的解決方案。</li>
+</ul>
+</li>
+<li>
+<p><strong>無所不在的語言 (Ubiquitous Language, UL)</strong>：</p>
+<ul>
+<li><strong>定義</strong>：一套在開發團隊、業務專家和所有相關人員之間共享、一致、無歧義的語言。它是一個活的詞彙表，隨業務理解深入而不斷演進。</li>
+<li><strong>目的</strong>：消除溝通障礙，確保所有人對業務概念有相同的理解。程式碼（類名、方法名、變數名）應直接反映 UL。</li>
+<li><strong>範例</strong>：在一個電商系統中，<strong>商品 (Product)</strong>、<strong>訂單 (Order)</strong>、<strong>客戶 (Customer)</strong> 等術語，在團隊內部必須有唯一且清晰的定義。</li>
+</ul>
+</li>
+<li>
+<p><strong>限界上下文 (Bounded Context, BC)</strong>：</p>
+<ul>
+<li><strong>定義</strong>：一個明確的、邏輯上的邊界，在這個邊界內，<strong>無所不在的語是唯一的且語義一致</strong>。不同的限界上下文中的相同術語可能有不同的含義。</li>
+<li><strong>目的</strong>：管理複雜度。它允許我們將大型系統劃分為更小、更易於管理的獨立單元。每個 BC 擁有自己的領域模型，彼此之間通過明確的接口進行通信。</li>
+<li><strong>範例</strong>：在電商系統中：
+<ul>
+<li>在「訂單管理」限界上下文裡，「商品 (Product)」可能只關心商品 ID 和價格。</li>
+<li>在「商品目錄」限界上下文裡，「商品 (Product)」則關心商品的名稱、描述、圖片、屬性分類等詳細信息。</li>
+<li>這兩個 <code>Product</code> 在各自的 BC 內有不同的模型表示，但通過 ID 進行關聯。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>上下文映射 (Context Mapping)</strong>：</p>
+<ul>
+<li><strong>定義</strong>：描述不同限界上下文之間如何相互關聯和溝通的關係圖。它定義了集成策略。</li>
+<li><strong>目的</strong>：明確各 BC 之間的依賴關係、數據流向及通信方式，以防止集成混亂。</li>
+<li><strong>常見模式</strong>：例如「客戶 - 供應商 (Customer-Supplier)」關係、反腐層 (Anti-Corruption Layer, ACL) 等。</li>
+</ul>
+</li>
+</ol>
+<h2 id="戰術設計-tactical-design程式碼層面的實現細節"><a class="markdownIt-Anchor" href="#戰術設計-tactical-design程式碼層面的實現細節"></a> 戰術設計 (Tactical Design)：程式碼層面的實現細節</h2>
+<p>戰術設計將戰略設計中定義的領域模型，具體地實現為程式碼結構。</p>
+<ol>
+<li>
+<p><strong>實體 (Entity)</strong>：</p>
+<ul>
+<li><strong>定義</strong>：具有<strong>唯一標識符 (ID)</strong> 的對象，即使其屬性發生變化，也視為同一對象。它們有生命週期，且其狀態通常是可變的 (Mutable)。</li>
+<li><strong>特點</strong>：以其 ID 來識別，而不是其屬性。</li>
+<li><strong>範例</strong>：<code>Customer</code> (客戶), <code>Order</code> (訂單), <code>Product</code> (商品)。一個客戶的姓名可以改變，但它仍然是同一個客戶。</li>
+</ul>
+</li>
+<li>
+<p><strong>值物件 (Value Object)</strong>：</p>
+<ul>
+<li><strong>定義</strong>：描述領域中的一個概念，但<strong>沒有唯一標識符</strong>。它們是<strong>不可變的 (Immutable)</strong>，當所有屬性都相同時，即被視為相同的值物件。</li>
+<li><strong>特點</strong>：通常用於描述數量、金額、地址、日期範圍等。當其屬性改變時，會創建一個新的值物件。</li>
+<li><strong>範例</strong>：<code>Address</code> (街道、城市、郵遞區號), <code>Money</code> (金額、貨幣單位)。一個 <code>$100 USD</code> 的值物件和另一個 <code>$100 USD</code> 的值物件，它們是相等的。</li>
+</ul>
+</li>
+<li>
+<p><strong>聚合 (Aggregate)</strong>：</p>
+<ul>
+<li><strong>定義</strong>：一組相關的<strong>實體和值物件</strong>的集合，被視為一個單元，由一個<strong>聚合根 (Aggregate Root)</strong> 來管理、保護其內部的不變性。</li>
+<li><strong>目的</strong>：保證數據的<strong>一致性</strong>。所有對聚合內部的操作都必須通過聚合根來進行，聚合根負責維護聚合內部的完整性與業務規則。</li>
+<li><strong>範例</strong>：在訂單系統中，<code>Order</code> 可以是聚合根，它包含 <code>OrderItems</code> (訂單商品項) 等實體。對 <code>OrderItems</code> 的增刪改查都必須通過 <code>Order</code> 聚合根來操作，以確保訂單的總價、狀態等業務規則始終保持一致。</li>
+<li><strong>核心原則</strong>：<strong>一個事務只修改一個聚合</strong>。</li>
+</ul>
+</li>
+<li>
+<p><strong>領域服務 (Domain Service)</strong>：</p>
+<ul>
+<li><strong>定義</strong>：當某些業務操作不自然地屬於任何單一實體或值物件時，可以將其定義為領域服務。它們通常協調多個領域物件或聚合來完成一項業務邏輯。</li>
+<li><strong>特點</strong>：無狀態，代表一個行為，而不是一個數據。它位於領域層。</li>
+<li><strong>範例</strong>：<code>MoneyTransferService</code> 負責將錢從一個帳戶轉移到另一個帳戶（這涉及到兩個 <code>Account</code> 聚合）。</li>
+</ul>
+</li>
+<li>
+<p><strong>儲存庫 (Repository)</strong>：</p>
+<ul>
+<li><strong>定義</strong>：提供了一種抽象層，用於<strong>隔離領域模型與數據持久化細節</strong>。它讓領域物件可以從底層數據儲存中被檢索和儲存，而無需領域物件知道數據庫的具體操作。</li>
+<li><strong>特點</strong>：通常對應於聚合根。<code>Repository</code> 以聚合為單位進行查詢和持久化。</li>
+<li><strong>範例</strong>：<code>OrderRepository</code> 負責從資料庫中載入和保存 <code>Order</code> 聚合。</li>
+</ul>
+</li>
+<li>
+<p><strong>領域事件 (Domain Event)</strong>：</p>
+<ul>
+<li><strong>定義</strong>：在領域模型中發生了<strong>有意義的事情</strong>。它是一個不可變的事件記錄，表示系統狀態的某個變化。</li>
+<li><strong>目的</strong>：實現領域內或跨限界上下文的<strong>解耦和異步協作</strong>。當一個事件發生時，其他感興趣的組件可以訂閱並響應這個事件，而事件發送者無需知道誰會響閱。</li>
+<li><strong>範例</strong>：<code>OrderPlacedEvent</code> (訂單已下單事件)，<code>PaymentReceivedEvent</code> (收到付款事件)。</li>
+</ul>
+</li>
+</ol>
+<h1 id="何時考慮使用領域驅動設計"><a class="markdownIt-Anchor" href="#何時考慮使用領域驅動設計"></a> 何時考慮使用領域驅動設計？</h1>
+<p>DDD 並非萬靈丹，它有其最適用的場景：</p>
+<ul>
+<li><strong>業務複雜度高</strong>：當應用程式包含許多複雜的業務規則和概念時，DDD 能幫助更好地管理這種複雜性。</li>
+<li><strong>需要長期演進和維護的系統</strong>：DDD 強調模型與業務的對齊，使得系統在長期演進中更容易理解和修改。</li>
+<li><strong>與業務方有緊密合作的機會</strong>：無所不在的語言和持續的溝通是 DDD 成功的關鍵。</li>
+<li><strong>在微服務或鬆散耦合的架構中</strong>：限界上下文的概念天然適合劃分微服務邊界。</li>
+</ul>
+<h1 id="挑戰與考量"><a class="markdownIt-Anchor" href="#挑戰與考量"></a> 挑戰與考量</h1>
+<p>儘管 DDD 益處良多，但也伴隨著挑戰：</p>
+<ul>
+<li><strong>學習曲線陡峭</strong>：DDD 的概念和模式較多，入門需要時間和精力。</li>
+<li><strong>前期投入高</strong>：深入理解業務和建立領域模型需要時間，這意味著專案前期投入較大。</li>
+<li><strong>不適用於所有專案</strong>：對於業務邏輯簡單的 CRUD 應用程式，使用 DDD 可能會帶來過度設計的複雜性。</li>
+<li><strong>需要團隊共識與紀律</strong>：所有團隊成員都必須理解並遵守 DDD 的原則，尤其是在維護無所不在的語言和限界上下文的邊界。</li>
+</ul>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>領域驅動設計 (DDD) 是一套強大的工具集和思維框架，它將軟體開發的重心從純粹的技術實現，重新拉回到<strong>對核心業務的深刻理解與精準表達</strong>。它鼓勵我們跳出技術的框架，與業務專家並肩作戰，共同雕琢一個能夠真實反映業務本質的軟體模型。</p>
+<p>實踐 DDD 不僅僅是學習一堆術語和模式，更是一種<strong>思維方式的轉變</strong>。它要求我們不斷質問：「我的程式碼真的理解了業務嗎？」，「這個概念在當前上下文下，還有其他解讀嗎？」</p>
+<p>當下次面對一個複雜的業務挑戰時，不妨思考一下 DDD 的原則。從一個無所不在的語言開始，劃清限界上下文，並透過戰術設計將這些洞察轉化為清晰、健壯的程式碼。這不僅能提升寫出好程式碼的能力，更能讓軟體真正成為業務發展的引擎！</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Microservices/" rel="tag"># Microservices</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/09/27/Cookie%20Session%20JWT%20%E7%9A%84%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%E8%88%87%E6%AF%94%E8%BC%83/" rel="prev" title="Cookie, Session, JWT 的深度解析與比較">
+                  <i class="fa fa-angle-left"></i> Cookie, Session, JWT 的深度解析與比較
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
