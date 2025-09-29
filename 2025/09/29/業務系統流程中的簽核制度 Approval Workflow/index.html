@@ -19,27 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="在現代軟體開發與雲端運算的世界裡，基礎設施即程式碼 (Infrastructure as Code, IaC) 已經成為 DevOps 及雲端自動化的核心理念之一。傳統上，基礎設施 (例如伺服器、網路、防火牆、資料庫) 的建置與管理往往依賴系統管理員手動操作，但這種方式隨著系統規模擴張，很快會變得緩慢、不一致且難以維護。IaC 的出現正是為了解決這些問題。   什麼是基礎設施即程式碼？ 基礎設施即">
+    <meta name="description" content="在企業資訊系統中，簽核制度（Approval Workflow） 是非常常見且關鍵的一環。無論是費用報銷、採購申請、專案立案，還是人事異動，往往都需要經過多層級的審核與批准，確保流程合規、權責明確。 本文將介紹簽核制度的核心概念、常見模式，以及在系統設計上的考量。   為什麼需要簽核制度？  權責控管 不同層級的主管對應不同的審批權限，避免越權決策。 風險管理 透過層層把關，降低財務或流程上的風險">
 <meta property="og:type" content="article">
-<meta property="og:title" content="基礎設施即程式碼 (Infrastructure as Code, IaC) 全面解析">
-<meta property="og:url" content="https://nivek-yang.github.io/2025/09/14/%E5%9F%BA%E7%A4%8E%E8%A8%AD%E6%96%BD%E5%8D%B3%E7%A8%8B%E5%BC%8F%E7%A2%BC%20Infrastructure%20as%20Code,%20IaC%20%E5%85%A8%E9%9D%A2%E8%A7%A3%E6%9E%90/index.html">
+<meta property="og:title" content="業務系統流程中的簽核制度（Approval Workflow）">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/09/29/%E6%A5%AD%E5%8B%99%E7%B3%BB%E7%B5%B1%E6%B5%81%E7%A8%8B%E4%B8%AD%E7%9A%84%E7%B0%BD%E6%A0%B8%E5%88%B6%E5%BA%A6%20Approval%20Workflow/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="在現代軟體開發與雲端運算的世界裡，基礎設施即程式碼 (Infrastructure as Code, IaC) 已經成為 DevOps 及雲端自動化的核心理念之一。傳統上，基礎設施 (例如伺服器、網路、防火牆、資料庫) 的建置與管理往往依賴系統管理員手動操作，但這種方式隨著系統規模擴張，很快會變得緩慢、不一致且難以維護。IaC 的出現正是為了解決這些問題。   什麼是基礎設施即程式碼？ 基礎設施即">
+<meta property="og:description" content="在企業資訊系統中，簽核制度（Approval Workflow） 是非常常見且關鍵的一環。無論是費用報銷、採購申請、專案立案，還是人事異動，往往都需要經過多層級的審核與批准，確保流程合規、權責明確。 本文將介紹簽核制度的核心概念、常見模式，以及在系統設計上的考量。   為什麼需要簽核制度？  權責控管 不同層級的主管對應不同的審批權限，避免越權決策。 風險管理 透過層層把關，降低財務或流程上的風險">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2025-09-13T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-09-14T15:31:42.852Z">
+<meta property="article:published_time" content="2025-09-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-09-29T15:56:05.192Z">
 <meta property="article:author" content="Kaiwii">
-<meta property="article:tag" content="Cloud Computing">
+<meta property="article:tag" content="System design">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://nivek-yang.github.io/2025/09/14/%E5%9F%BA%E7%A4%8E%E8%A8%AD%E6%96%BD%E5%8D%B3%E7%A8%8B%E5%BC%8F%E7%A2%BC%20Infrastructure%20as%20Code,%20IaC%20%E5%85%A8%E9%9D%A2%E8%A7%A3%E6%9E%90/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/09/29/%E6%A5%AD%E5%8B%99%E7%B3%BB%E7%B5%B1%E6%B5%81%E7%A8%8B%E4%B8%AD%E7%9A%84%E7%B0%BD%E6%A0%B8%E5%88%B6%E5%BA%A6%20Approval%20Workflow/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/09/14/%E5%9F%BA%E7%A4%8E%E8%A8%AD%E6%96%BD%E5%8D%B3%E7%A8%8B%E5%BC%8F%E7%A2%BC%20Infrastructure%20as%20Code,%20IaC%20%E5%85%A8%E9%9D%A2%E8%A7%A3%E6%9E%90/","path":"2025/09/14/基礎設施即程式碼 Infrastructure as Code, IaC 全面解析/","title":"基礎設施即程式碼 (Infrastructure as Code, IaC) 全面解析"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/09/29/%E6%A5%AD%E5%8B%99%E7%B3%BB%E7%B5%B1%E6%B5%81%E7%A8%8B%E4%B8%AD%E7%9A%84%E7%B0%BD%E6%A0%B8%E5%88%B6%E5%BA%A6%20Approval%20Workflow/","path":"2025/09/29/業務系統流程中的簽核制度 Approval Workflow/","title":"業務系統流程中的簽核制度（Approval Workflow）"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>基礎設施即程式碼 (Infrastructure as Code, IaC) 全面解析 | 我的技術部落格</title>
+<title>業務系統流程中的簽核制度（Approval Workflow） | 我的技術部落格</title>
   
 
 
@@ -503,7 +503,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF%E5%9F%BA%E7%A4%8E%E8%A8%AD%E6%96%BD%E5%8D%B3%E7%A8%8B%E5%BC%8F%E7%A2%BC"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是基礎設施即程式碼？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9C%80%E8%A6%81-iac"><span class="nav-number">2.</span> <span class="nav-text"> 為什麼需要 IaC？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E8%A6%8B-iac-%E5%B7%A5%E5%85%B7"><span class="nav-number">3.</span> <span class="nav-text"> 常見 IaC 工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#iac-%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-number">4.</span> <span class="nav-text"> IaC 的工作流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%A3%E5%91%8A%E5%BC%8F-vs-%E6%8C%87%E4%BB%A4%E5%BC%8F"><span class="nav-number">5.</span> <span class="nav-text"> 宣告式 vs 指令式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%A6%E9%9A%9B%E6%87%89%E7%94%A8%E5%A0%B4%E6%99%AF"><span class="nav-number">6.</span> <span class="nav-text"> 實際應用場景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%A6%E5%8B%99%E7%AF%84%E4%BE%8Bterraform-%E5%BB%BA%E7%AB%8B-aws-ec2"><span class="nav-number">7.</span> <span class="nav-text"> 實務範例：Terraform 建立 AWS EC2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#iac-%E5%B8%B8%E8%A6%8B%E6%8C%91%E6%88%B0"><span class="nav-number">8.</span> <span class="nav-text"> IaC 常見挑戰</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#iac-%E6%9C%80%E4%BD%B3%E5%AF%A6%E8%B8%90"><span class="nav-number">9.</span> <span class="nav-text"> IaC 最佳實踐</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">10.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9C%80%E8%A6%81%E7%B0%BD%E6%A0%B8%E5%88%B6%E5%BA%A6"><span class="nav-number">1.</span> <span class="nav-text"> 為什麼需要簽核制度？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B0%BD%E6%A0%B8%E6%B5%81%E7%A8%8B%E7%9A%84%E5%B8%B8%E8%A6%8B%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text"> 簽核流程的常見模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%96%AE%E4%B8%80%E7%B0%BD%E6%A0%B8single-approval"><span class="nav-number">2.1.</span> <span class="nav-text"> 1. 單一簽核（Single Approval）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%9C%83%E7%B0%BDparallel-approval"><span class="nav-number">2.2.</span> <span class="nav-text"> 2. 會簽（Parallel Approval）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E9%80%90%E7%B4%9A%E7%B0%BD%E6%A0%B8sequential-approval"><span class="nav-number">2.3.</span> <span class="nav-text"> 3. 逐級簽核（Sequential Approval）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%A2%9D%E4%BB%B6%E5%BC%8F%E7%B0%BD%E6%A0%B8conditional-approval"><span class="nav-number">2.4.</span> <span class="nav-text"> 4. 條件式簽核（Conditional Approval）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B0%BD%E6%A0%B8%E6%B5%81%E7%A8%8B%E7%AF%84%E4%BE%8B%E5%9C%96%E8%A7%A3"><span class="nav-number">3.</span> <span class="nav-text"> 簽核流程範例圖解</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88%E4%B8%8A%E7%9A%84%E8%80%83%E9%87%8F"><span class="nav-number">4.</span> <span class="nav-text"> 系統設計上的考量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B0%BD%E6%A0%B8%E6%B5%81%E7%A8%8B%E7%9A%84%E8%B3%87%E6%96%99%E6%A8%A1%E5%9E%8B%E7%AF%84%E4%BE%8B%E4%BB%A5-postgresql-%E7%82%BA%E4%BE%8B"><span class="nav-number">5.</span> <span class="nav-text"> 簽核流程的資料模型範例（以 PostgreSQL 為例）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#django-orm-%E7%AF%84%E4%BE%8B"><span class="nav-number">6.</span> <span class="nav-text"> Django ORM 範例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%A6%E9%9A%9B%E4%B8%8A%E5%9C%A8%E5%81%9A%E4%BB%80%E9%BA%BC"><span class="nav-number">7.</span> <span class="nav-text"> 實際上在做什麼？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">8.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -551,7 +551,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/14/%E5%9F%BA%E7%A4%8E%E8%A8%AD%E6%96%BD%E5%8D%B3%E7%A8%8B%E5%BC%8F%E7%A2%BC%20Infrastructure%20as%20Code,%20IaC%20%E5%85%A8%E9%9D%A2%E8%A7%A3%E6%9E%90/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/29/%E6%A5%AD%E5%8B%99%E7%B3%BB%E7%B5%B1%E6%B5%81%E7%A8%8B%E4%B8%AD%E7%9A%84%E7%B0%BD%E6%A0%B8%E5%88%B6%E5%BA%A6%20Approval%20Workflow/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -564,12 +564,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="基礎設施即程式碼 (Infrastructure as Code, IaC) 全面解析 | 我的技術部落格">
+      <meta itemprop="name" content="業務系統流程中的簽核制度（Approval Workflow） | 我的技術部落格">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          基礎設施即程式碼 (Infrastructure as Code, IaC) 全面解析
+          業務系統流程中的簽核制度（Approval Workflow）
         </h1>
 
         <div class="post-meta-container">
@@ -581,7 +581,7 @@
       <span class="post-meta-item-text">發表於</span>
       
 
-      <time title="創建時間：2025-09-14 00:00:00 / 修改時間：23:31:42" itemprop="dateCreated datePublished" datetime="2025-09-14T00:00:00+08:00">2025-09-14</time>
+      <time title="創建時間：2025-09-29 00:00:00 / 修改時間：23:56:05" itemprop="dateCreated datePublished" datetime="2025-09-29T00:00:00+08:00">2025-09-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -602,177 +602,218 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>在現代軟體開發與雲端運算的世界裡，<strong>基礎設施即程式碼 (Infrastructure as Code, IaC)</strong> 已經成為 DevOps 及雲端自動化的核心理念之一。傳統上，基礎設施 (例如伺服器、網路、防火牆、資料庫) 的建置與管理往往依賴系統管理員手動操作，但這種方式隨著系統規模擴張，很快會變得緩慢、不一致且難以維護。IaC 的出現正是為了解決這些問題。</p>
+    <div class="post-body" itemprop="articleBody"><p>在企業資訊系統中，<strong>簽核制度（Approval Workflow）</strong> 是非常常見且關鍵的一環。無論是費用報銷、採購申請、專案立案，還是人事異動，往往都需要經過多層級的審核與批准，確保流程合規、權責明確。</p>
+<p>本文將介紹簽核制度的核心概念、常見模式，以及在系統設計上的考量。</p>
 <hr />
-<h1 id="什麼是基礎設施即程式碼"><a class="markdownIt-Anchor" href="#什麼是基礎設施即程式碼"></a> 什麼是基礎設施即程式碼？</h1>
-<p><strong>基礎設施即程式碼 (IaC)</strong> 是一種透過程式碼來定義、配置與管理基礎設施的方式。換句話說，伺服器、網路設定、安全性規則等不再需要人為手動設定，而是寫成可版本控制的程式碼，並交由工具自動執行。</p>
-<p>舉例來說，與其進入雲端管理控制台點選幾十個按鈕來建立 VM (Virtual Machine)，可以透過像 <strong>Terraform</strong> 或 <strong>AWS CloudFormation</strong> 的設定檔案，一鍵部署整個環境。</p>
-<hr />
-<h1 id="為什麼需要-iac"><a class="markdownIt-Anchor" href="#為什麼需要-iac"></a> 為什麼需要 IaC？</h1>
+<h1 id="為什麼需要簽核制度"><a class="markdownIt-Anchor" href="#為什麼需要簽核制度"></a> 為什麼需要簽核制度？</h1>
 <ol>
-<li><strong>一致性與可重現性</strong></li>
+<li><strong>權責控管</strong><br />
+不同層級的主管對應不同的審批權限，避免越權決策。</li>
+<li><strong>風險管理</strong><br />
+透過層層把關，降低財務或流程上的風險。</li>
+<li><strong>流程透明化</strong><br />
+所有簽核紀錄都能被追蹤，方便稽核與追責。</li>
+<li><strong>自動化效率</strong><br />
+系統化的簽核流程能取代人工傳遞，提高作業效率。</li>
 </ol>
-<p>手動操作難免會有人為錯誤，導致「測試環境可以跑，但上線環境卻壞掉」。IaC 可保證不同環境之間的設定一致，避免「配置漂移 (configuration drift)」。</p>
-<ol start="2">
-<li><strong>自動化與快速部署</strong></li>
-</ol>
-<p>一旦定義好基礎設施，只需執行部署指令，就能快速建立完整環境，適合 CI/CD 流程。</p>
-<ol start="3">
-<li><strong>可追蹤與版本控制</strong></li>
-</ol>
-<p>IaC 通常與 Git 搭配使用，讓基礎設施的變更有完整的歷史紀錄，可回滾、可審查。</p>
-<ol start="4">
-<li><strong>降低成本與風險</strong></li>
-</ol>
-<p>自動化與一致性意味著更少的人力操作錯誤與維運負擔，進而降低運行成本。</p>
 <hr />
-<h1 id="常見-iac-工具"><a class="markdownIt-Anchor" href="#常見-iac-工具"></a> 常見 IaC 工具</h1>
-<table>
-<thead>
-<tr>
-<th>工具</th>
-<th>特點</th>
-<th>使用情境</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Terraform</strong></td>
-<td>跨雲支援，宣告式語法 (HCL)，社群活躍</td>
-<td>多雲部署、自動化 CI/CD</td>
-</tr>
-<tr>
-<td><strong>AWS CloudFormation</strong></td>
-<td>AWS 原生，深度整合 AWS 服務</td>
-<td>完全使用 AWS 的團隊</td>
-</tr>
-<tr>
-<td><strong>Ansible</strong></td>
-<td>指令式，適合伺服器配置與應用程式安裝</td>
-<td>VM / Container 配置管理</td>
-</tr>
-<tr>
-<td><strong>Pulumi</strong></td>
-<td>可用 TypeScript、Python、Go 撰寫</td>
-<td>偏好通用程式語言的團隊</td>
-</tr>
-<tr>
-<td><strong>Chef / Puppet</strong></td>
-<td>偏向系統配置管理</td>
-<td>傳統大型 IT 環境</td>
-</tr>
-</tbody>
-</table>
+<h1 id="簽核流程的常見模式"><a class="markdownIt-Anchor" href="#簽核流程的常見模式"></a> 簽核流程的常見模式</h1>
+<h2 id="1-單一簽核single-approval"><a class="markdownIt-Anchor" href="#1-單一簽核single-approval"></a> 1. 單一簽核（Single Approval）</h2>
+<ul>
+<li>僅需一位主管或負責人批准即可完成。</li>
+<li>適用於金額較小或風險較低的流程。</li>
+</ul>
+<h2 id="2-會簽parallel-approval"><a class="markdownIt-Anchor" href="#2-會簽parallel-approval"></a> 2. 會簽（Parallel Approval）</h2>
+<ul>
+<li>多位主管需同時審核，全部通過後流程才往下走。</li>
+<li>常用於跨部門或跨職能的業務。</li>
+</ul>
+<h2 id="3-逐級簽核sequential-approval"><a class="markdownIt-Anchor" href="#3-逐級簽核sequential-approval"></a> 3. 逐級簽核（Sequential Approval）</h2>
+<ul>
+<li>依照組織層級逐層上報，每一層主管批准後才流轉到下一層。</li>
+<li>適合金額、風險逐層升高的情境，例如大型採購。</li>
+</ul>
+<h2 id="4-條件式簽核conditional-approval"><a class="markdownIt-Anchor" href="#4-條件式簽核conditional-approval"></a> 4. 條件式簽核（Conditional Approval）</h2>
+<ul>
+<li>根據金額、申請類型或部門決定簽核路徑。</li>
+<li>例如：金額低於 10 萬由部門主管簽核，高於 10 萬則需總經理批准。</li>
+</ul>
 <hr />
-<h1 id="iac-的工作流程"><a class="markdownIt-Anchor" href="#iac-的工作流程"></a> IaC 的工作流程</h1>
-<p>一個典型的 IaC 工作流程如下：</p>
+<h1 id="簽核流程範例圖解"><a class="markdownIt-Anchor" href="#簽核流程範例圖解"></a> 簽核流程範例圖解</h1>
+<p>以下是一個簡單的「逐級簽核」流程範例：</p>
 <pre class="highlight"><code class="mermaid">flowchart TD
-    A[&quot;撰寫基礎設施程式碼&quot;] --&gt; B[&quot;提交到版本控制 (Git)&quot;]
-    B --&gt; C[&quot;CI/CD Pipeline 驗證配置&quot;]
-    C --&gt; D[&quot;執行 IaC 工具部署&quot;]
-    D --&gt; E[&quot;雲端平台建立資源&quot;]
-    E --&gt; F[&quot;監控與維護&quot;]
+    A[申請人提交申請] --&gt; B[部門主管審核]
+    B --&gt;|通過| C[財務部審核]
+    B --&gt;|退回/駁回| R[結束流程]
+
+    C --&gt;|通過| D[總經理簽核]
+    C --&gt;|退回/駁回| R[結束流程]
+
+    D --&gt;|通過| E[完成批准]
+    D --&gt;|退回/駁回| R[結束流程]
 </code></pre>
-<ol>
-<li><strong>撰寫程式碼</strong>：使用 IaC 工具撰寫基礎設施定義檔案。</li>
-<li><strong>版本控制</strong>：將程式碼提交到 Git，以便協作與審查。</li>
-<li><strong>自動化流程</strong>：透過 CI/CD pipeline 驗證配置正確性。</li>
-<li><strong>部署</strong>：IaC 工具執行程式碼，建立或更新雲端資源。</li>
-<li><strong>監控</strong>：持續追蹤資源狀態，確保與程式碼一致。</li>
-</ol>
-<hr />
-<h1 id="宣告式-vs-指令式"><a class="markdownIt-Anchor" href="#宣告式-vs-指令式"></a> 宣告式 vs 指令式</h1>
-<p>IaC 工具可分為 <strong>宣告式 (Declarative)</strong> 與 <strong>指令式 (Imperative)</strong>：</p>
-<table>
-<thead>
-<tr>
-<th>模型</th>
-<th>特點</th>
-<th>工具範例</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>宣告式 (Declarative)</strong></td>
-<td>描述「期望狀態」，工具負責決定如何達成</td>
-<td>Terraform, CloudFormation</td>
-</tr>
-<tr>
-<td><strong>指令式 (Imperative)</strong></td>
-<td>描述「步驟流程」，由人決定執行順序</td>
-<td>Ansible, Chef</td>
-</tr>
-</tbody>
-</table>
-<p>例如：</p>
+<p>此流程顯示了：</p>
 <ul>
-<li>宣告式：<strong>「我要有三台 VM」</strong> → 工具自動判斷需新增或刪除 VM。</li>
-<li>指令式：<strong>「先建立 VM，再安裝套件，然後設定防火牆」</strong> → 每個步驟都需明確描述。</li>
+<li>申請人提交後，需依序經過 <strong>部門主管 → 財務部 → 總經理</strong>。</li>
+<li>任一節點駁回，流程即結束。</li>
+<li>全部通過後，申請才正式生效。</li>
 </ul>
 <hr />
-<h1 id="實際應用場景"><a class="markdownIt-Anchor" href="#實際應用場景"></a> 實際應用場景</h1>
-<ul>
-<li><strong>多環境管理</strong>：開發、測試、上線環境皆可用相同程式碼快速建立。</li>
-<li><strong>自動化 CI/CD 部署</strong>：新功能發布可同時更新應用程式與基礎設施。</li>
-<li><strong>災難復原 (Disaster Recovery)</strong>：發生問題時可用 IaC 快速重建整個環境。</li>
-<li><strong>混合雲與多雲管理</strong>：統一管理多個雲端平台的資源。</li>
-</ul>
-<hr />
-<h1 id="實務範例terraform-建立-aws-ec2"><a class="markdownIt-Anchor" href="#實務範例terraform-建立-aws-ec2"></a> 實務範例：Terraform 建立 AWS EC2</h1>
-<p>以下是一個最簡單的 Terraform 配置，建立一台 EC2：</p>
-<pre class="highlight"><code class="hcl">provider &quot;aws&quot; &#123;
-  region = &quot;ap-northeast-1&quot;
-&#125;
-
-resource &quot;aws_instance&quot; &quot;example&quot; &#123;
-  ami           = &quot;ami-0c3fd0f5d33134a76&quot; # Amazon Linux 2
-  instance_type = &quot;t2.micro&quot;
-
-  tags = &#123;
-    Name = &quot;Hello-IaC&quot;
-  &#125;
-&#125;
-</code></pre>
-<p>只要執行以下三個步驟，就能快速建置資源：</p>
-<pre class="highlight"><code class="bash">terraform init
-terraform plan
-terraform apply
-</code></pre>
-<hr />
-<h1 id="iac-常見挑戰"><a class="markdownIt-Anchor" href="#iac-常見挑戰"></a> IaC 常見挑戰</h1>
+<h1 id="系統設計上的考量"><a class="markdownIt-Anchor" href="#系統設計上的考量"></a> 系統設計上的考量</h1>
+<p>在實作簽核制度時，系統需具備以下特點：</p>
 <ol>
 <li>
-<p><strong>狀態管理</strong><br />
-工具需要追蹤「現有資源」與「程式碼定義」是否一致。例如 Terraform 的 <code>terraform.tfstate</code> 檔案，必須妥善保存（通常放在 S3 + DynamoDB lock）。</p>
+<p><strong>簽核流程定義</strong></p>
+<ul>
+<li>可使用資料庫紀錄簽核流程規則（如簽核層級、條件）。</li>
+<li>支援配置化，避免硬編碼。</li>
+</ul>
 </li>
 <li>
-<p><strong>安全性</strong><br />
-API 金鑰、資料庫密碼等敏感資訊，不能直接寫在 IaC 檔案內，需搭配 <strong>Vault</strong>、<strong>AWS Secrets Manager</strong> 或 <strong>環境變數</strong> 管理。</p>
+<p><strong>簽核狀態追蹤</strong></p>
+<ul>
+<li>每個簽核節點需有明確狀態（待審、通過、退回、駁回）。</li>
+<li>系統需能即時通知下一位簽核人。</li>
+</ul>
 </li>
 <li>
-<p><strong>配置漂移 (Configuration Drift)</strong><br />
-如果有人手動修改雲端資源，IaC 記錄就會與實際環境不一致。解法是透過 <code>terraform plan</code> 定期檢查，或啟用 <strong>Policy as Code</strong>。</p>
+<p><strong>權限控管</strong></p>
+<ul>
+<li>確保只有具備對應角色的使用者能簽核。</li>
+<li>與使用者角色（Role-Based Access Control, RBAC）整合。</li>
+</ul>
 </li>
 <li>
-<p><strong>學習曲線</strong><br />
-不同工具語法差異大，團隊需要時間建立共識與最佳實踐。</p>
+<p><strong>稽核紀錄</strong></p>
+<ul>
+<li>紀錄所有操作時間、使用者、意見，方便追溯。</li>
+</ul>
 </li>
 </ol>
 <hr />
-<h1 id="iac-最佳實踐"><a class="markdownIt-Anchor" href="#iac-最佳實踐"></a> IaC 最佳實踐</h1>
+<h1 id="簽核流程的資料模型範例以-postgresql-為例"><a class="markdownIt-Anchor" href="#簽核流程的資料模型範例以-postgresql-為例"></a> 簽核流程的資料模型範例（以 PostgreSQL 為例）</h1>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 簽核流程定義</span>
+<span class="hljs-keyword">CREATE TABLE</span> approval_flow (
+    id SERIAL <span class="hljs-keyword">PRIMARY KEY</span>,
+    name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">100</span>),
+    <span class="hljs-keyword">condition</span> JSONB,         <span class="hljs-comment">-- 簽核條件（例如金額門檻）</span>
+    sequence <span class="hljs-type">INT</span>             <span class="hljs-comment">-- 簽核順序</span>
+);
+
+<span class="hljs-comment">-- 簽核節點</span>
+<span class="hljs-keyword">CREATE TABLE</span> approval_step (
+    id SERIAL <span class="hljs-keyword">PRIMARY KEY</span>,
+    flow_id <span class="hljs-type">INT</span> <span class="hljs-keyword">REFERENCES</span> approval_flow(id),
+    approver_role <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">50</span>),
+    step_order <span class="hljs-type">INT</span>
+);
+
+<span class="hljs-comment">-- 簽核紀錄</span>
+<span class="hljs-keyword">CREATE TABLE</span> approval_record (
+    id SERIAL <span class="hljs-keyword">PRIMARY KEY</span>,
+    step_id <span class="hljs-type">INT</span> <span class="hljs-keyword">REFERENCES</span> approval_step(id),
+    applicant_id <span class="hljs-type">INT</span>,
+    approver_id <span class="hljs-type">INT</span>,
+    status <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">20</span>),      <span class="hljs-comment">-- pending, approved, rejected</span>
+    comments TEXT,
+    created_at <span class="hljs-type">TIMESTAMP</span> <span class="hljs-keyword">DEFAULT</span> NOW()
+);
+</code></pre>
+<p>這三張表對應到簽核制度的核心元件：</p>
+<ol>
+<li>
+<p><strong>approval_flow</strong></p>
 <ul>
-<li><strong>模組化設計</strong>：將 VPC、EC2、RDS 拆成可重複使用的模組。</li>
-<li><strong>GitOps 流程</strong>：所有變更透過 Git Pull Request，並經過 CI/CD pipeline 驗證。</li>
-<li><strong>自動化測試</strong>：使用工具如 <code>terraform validate</code>、<code>terratest</code> 確保程式碼正確。</li>
-<li><strong>權限最小化</strong>：IaC 工具使用的帳號應採用最小權限原則。</li>
-<li><strong>監控與審查</strong>：整合 CloudWatch、Prometheus，追蹤基礎設施狀態。</li>
+<li>定義一個簽核流程的基本資訊，例如名稱、條件（用 JSONB 記錄金額門檻、部門等規則）、以及流程的順序。</li>
+<li>相當於「這是一條簽核路徑」。</li>
 </ul>
+</li>
+<li>
+<p><strong>approval_step</strong></p>
+<ul>
+<li>定義該流程中的每一個簽核節點，例如「部門主管 → 財務 → 總經理」。</li>
+<li><code>approver_role</code> 表示這一步需要誰簽核（角色或職位），<code>step_order</code> 控制簽核順序。</li>
+</ul>
+</li>
+<li>
+<p><strong>approval_record</strong></p>
+<ul>
+<li>真正的簽核紀錄，對應到一次具體的「申請」與它的每一個簽核動作。</li>
+<li>包含申請人、審核人、狀態（待審、通過、駁回）、意見，以及時間。</li>
+<li>相當於「流水帳」或「稽核紀錄」。</li>
+</ul>
+</li>
+</ol>
+<p>👉 這樣的資料設計，可以讓簽核流程 <strong>可設定、可追蹤、可擴充</strong>。</p>
 <hr />
+<h1 id="django-orm-範例"><a class="markdownIt-Anchor" href="#django-orm-範例"></a> Django ORM 範例</h1>
+<pre class="highlight"><code class="python"><span class="hljs-keyword">from</span> django.db <span class="hljs-keyword">import</span> models
+<span class="hljs-keyword">from</span> django.contrib.auth.models <span class="hljs-keyword">import</span> User
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">ApprovalFlow</span>(models.Model):
+    name = models.CharField(max_length=<span class="hljs-number">100</span>)
+    condition = models.JSONField()
+    sequence = models.IntegerField()
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">ApprovalStep</span>(models.Model):
+    flow = models.ForeignKey(ApprovalFlow, on_delete=models.CASCADE)
+    approver_role = models.CharField(max_length=<span class="hljs-number">50</span>)
+    step_order = models.IntegerField()
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">ApprovalRecord</span>(models.Model):
+    step = models.ForeignKey(ApprovalStep, on_delete=models.CASCADE)
+    applicant = models.ForeignKey(User, related_name=<span class="hljs-string">&quot;applications&quot;</span>, on_delete=models.CASCADE)
+    approver = models.ForeignKey(User, related_name=<span class="hljs-string">&quot;approvals&quot;</span>, on_delete=models.CASCADE)
+    status = models.CharField(max_length=<span class="hljs-number">20</span>, choices=[
+        (<span class="hljs-string">&quot;pending&quot;</span>, <span class="hljs-string">&quot;Pending&quot;</span>),
+        (<span class="hljs-string">&quot;approved&quot;</span>, <span class="hljs-string">&quot;Approved&quot;</span>),
+        (<span class="hljs-string">&quot;rejected&quot;</span>, <span class="hljs-string">&quot;Rejected&quot;</span>),
+    ])
+    comments = models.TextField(blank=<span class="hljs-literal">True</span>, null=<span class="hljs-literal">True</span>)
+    created_at = models.DateTimeField(auto_now_add=<span class="hljs-literal">True</span>)
+</code></pre>
+<p>這段程式碼是把上面的資料表轉換成 Django ORM 的模型：</p>
+<ol>
+<li>
+<p><strong>ApprovalFlow</strong></p>
+<ul>
+<li>與 PostgreSQL 的 <code>approval_flow</code> 對應。</li>
+<li>存流程名稱、條件、順序。</li>
+<li>對應到流程本身，讓系統可以管理不同類型的簽核規則。</li>
+</ul>
+</li>
+<li>
+<p><strong>ApprovalStep</strong></p>
+<ul>
+<li>與 <code>approval_step</code> 對應。</li>
+<li>連到某一個流程（flow），定義每個流程的步驟與負責角色。</li>
+<li>例如：step 1 = 部門主管，step 2 = 財務，step 3 = 總經理。</li>
+</ul>
+</li>
+<li>
+<p><strong>ApprovalRecord</strong></p>
+<ul>
+<li>與 <code>approval_record</code> 對應。</li>
+<li>儲存每次實際申請的簽核狀態。</li>
+<li>連到某個簽核步驟（step），記錄申請人、審核人、狀態（approved/rejected/pending）等資訊。</li>
+<li>搭配 User 模型，可以知道是誰申請、誰簽核。</li>
+</ul>
+</li>
+</ol>
+<p>有了這些 Django model，就能用 ORM 來存取簽核紀錄，方便進一步實作 API（例如：送出申請、進行簽核、查詢流程狀態）。</p>
+<hr />
+<h1 id="實際上在做什麼"><a class="markdownIt-Anchor" href="#實際上在做什麼"></a> 實際上在做什麼？</h1>
+<ul>
+<li>建立流程：先定義一個 ApprovalFlow，加入不同的 ApprovalStep。</li>
+<li>送出申請：建立一筆 ApprovalRecord，狀態為 pending。</li>
+<li>進行簽核：審核人登入後，修改 ApprovalRecord 的 status 為 approved 或 rejected。</li>
+<li>流程推進：若當前步驟通過，系統會自動建立下一步的 ApprovalRecord，直到整個流程完成或中斷。</li>
+</ul>
 <h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
-<p><strong>基礎設施即程式碼 (IaC)</strong> 不只是「取代手動操作」，而是讓基礎設施管理進入軟體工程化的層次。<br />
-它帶來的一致性、自動化與可追蹤性，使得團隊能更快、更穩定地交付產品。</p>
-<p>對於剛接觸 IaC 的工程師，可以從 <strong>Terraform</strong> 開始，體驗將「點選式操作」轉換成「程式碼定義」的威力；而在企業級場景中，IaC 更能結合 <strong>CI/CD、監控、安全策略</strong>，成為整個 DevOps pipeline 的基石。</p>
-<p>下一步，建議嘗試在本地寫一份 Terraform 配置檔，並將它與 GitHub Actions 整合，自動化建立與銷毀雲端環境，這會讓你真正體會到 <strong>「基礎設施也能像程式碼一樣敏捷開發」</strong> 的價值。</p>
+<p>簽核制度（Approval Workflow）是企業資訊系統中不可或缺的核心機制。<br />
+透過 <strong>明確的流程設計</strong> 與 <strong>彈性的系統實作</strong>，可以在確保合規與安全的同時，兼顧效率與透明度。</p>
+<p>對後端工程師來說，理解簽核制度不僅是資料表設計的問題，更關乎 <strong>業務流程的建模能力</strong>。<br />
+在實務專案中，設計出可擴充、可配置的簽核流程，往往是系統成功的關鍵之一。</p>
 
     </div>
 
@@ -782,21 +823,18 @@ API 金鑰、資料庫密碼等敏感資訊，不能直接寫在 IaC 檔案內�
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/my-blog/tags/Cloud-Computing/" rel="tag"># Cloud Computing</a>
+              <a href="/my-blog/tags/System-design/" rel="tag"># System design</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/my-blog/2025/09/13/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%E7%84%A1%E4%BC%BA%E6%9C%8D%E5%99%A8%20Serverless%20%E6%9E%B6%E6%A7%8B/" rel="prev" title="告別「伺服器管理」的煩惱：深入解析無伺服器 (Serverless) 架構，釋放雲端開發的無限潛力">
-                  <i class="fa fa-angle-left"></i> 告別「伺服器管理」的煩惱：深入解析無伺服器 (Serverless) 架構，釋放雲端開發的無限潛力
+                <a href="/my-blog/2025/09/28/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%BB%9F%E9%AB%94%E9%96%8B%E7%99%BC%E4%B8%AD%E7%9A%84%E9%A0%98%E5%9F%9F%E9%A9%85%E5%8B%95%E8%A8%AD%E8%A8%88/" rel="prev" title="化繁為簡：深入理解軟體開發中的領域驅動設計 (Domain-Driven Design, DDD)">
+                  <i class="fa fa-angle-left"></i> 化繁為簡：深入理解軟體開發中的領域驅動設計 (Domain-Driven Design, DDD)
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/my-blog/2025/09/15/Platform%20as%20a%20Service%20%E5%8A%A0%E9%80%9F%E6%87%89%E7%94%A8%E7%A8%8B%E5%BC%8F%E9%83%A8%E7%BD%B2%E8%88%87%E5%89%B5%E6%96%B0/" rel="next" title="Platform as a Service (PaaS) 加速應用程式部署與創新">
-                  Platform as a Service (PaaS) 加速應用程式部署與創新 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
