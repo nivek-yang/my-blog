@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">98</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">99</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">52</span></a>
       <ul class="sub-menu">
   
@@ -197,7 +197,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Database/">
         Database
-        <span class="post-count">(18)</span>
+        <span class="post-count">(19)</span>
       </a>
     </li>
   
@@ -513,7 +513,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-count">99</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -538,6 +538,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/15/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E8%B3%87%E6%96%99%E5%BA%AB%E5%88%86%E7%89%87%20Sharding/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/08/15/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E8%B3%87%E6%96%99%E5%BA%AB%E5%88%86%E7%89%87%20Sharding/" class="post-title-link" itemprop="url">
+              深入淺出資料庫分片 (Sharding)：當單一資料庫撐不住時，下一步是什麼？
+            </a>
+            <a href="/my-blog/2025/08/15/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E8%B3%87%E6%96%99%E5%BA%AB%E5%88%86%E7%89%87%20Sharding/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-08-15 00:00:00 / 修改時間：23:25:14" itemprop="dateCreated datePublished" datetime="2025-08-15T00:00:00+08:00">2025-08-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">在軟體開發旅程中，隨著應用程式用戶量和資料量的爆炸性成長，經常會遇到一個令人頭痛卻又甜蜜的煩惱：資料庫效能瓶頸。當已經做完了所有能想到的優化，從索引調整、查詢改寫到讀寫分離，但資料庫的回應時間依然越來越慢，這或許是一個信號——資料庫需要的是結構性的擴展，而不僅僅是修補。 這篇文章就來聊聊解決這個問題的終極武器之一：資料庫分片 (Database Sharding)。 Sharding 是一個強大但複雜的概念。這篇文章的目標，是帶你用最直觀的方式理解它、了解它的優缺點，並知道何時該認真考慮它。 什麼是 Sharding？一切從水平擴展說起 在討論 Sharding 之前，先快速了解兩種資料庫擴展方式： 垂直擴展 (Vertical Scaling)：又稱「向上擴展」(Scale-up)，就像是為伺服器升級，給它更強的 CPU、更多的 RAM、更快的 SSD。這很直接，但成本昂貴，且有物理極限。總不能無限地加記憶體吧？ 水平擴展 (Horizontal Scaling)：又稱「向外擴展」(Scale-out)，不是讓一台伺服器變強，而是增加更多台伺服器，並將負載分散到這些伺服器上。 Sharding，本質上就是一種水平擴展的實踐。 Sharding 就是將一個龐大的資料庫，水平切割成多個更小、更易於管理的部分，這些部分被稱為「分片 (Shards)」。 每個 Shard 都包含整體資料的一部分，並且可以被部署在獨立的伺服器上。 用生活化的比喻來理解： 想像一下，經營著一個擁有全國所有圖書的「中央圖書館」。當藏書越來越多，讀者也越來越多時，找書和借書的速度變得很慢，圖書館變得擁擠不堪。 垂直擴展，就像是把這個中央圖書館蓋得更高、更大，換上更快的圖書輸送帶。 水平擴展 (Sharding)，則是決定在全國各地開設「分館」。例如，A-G 開頭的書放在台北分館，H-P 的書放在台中分館，Q-Z 的書放在高雄分館。如此一來，每個分館的壓力都變小了，讀者也可以就近、更快地找到自己想要的書。 在這個比喻中，每個「分館」就是一個 Shard。 為什麼需要 Sharding？三大核心優勢 當正確實施 Sharding 後，可以帶來幾個顯著的好處： 提升效能 (Improved Performance)：查詢不再需要掃描數十億筆資料，而是在一個規模小得多的 Shard 中進行。這大大降低了查詢延遲，提升了讀寫速度。 增強擴展性 (Enhanced Scalability)：當資料繼續增長時，不需要升級昂貴的單一伺服器，只需要增加更多的 Shard（也就是更多的伺服器）即可。這種擴展方式更具彈性且成本效益更高。 提高可用性 (Increased Availability)：如果某一個 Shard 因為硬體故障而離線，它只會影響到儲存在該 Shard 上的那部分資料。其他 Shards 仍然可以正常運作，整個系統不會完全癱瘓（相較於單一資料庫故障會導致所有服務中斷）。 Sharding 是如何運作的？關鍵的「分片鍵 (Shard Key)」 系統是如何知道「哪筆資料該存到哪個 Shard」以及「去哪個 Shard 查詢資料」的呢？答案是透過一個至關重要的元素：分片鍵 (Shard Key)。 Shard Key 是資料表中的一個（或多個）欄位，它的值會經過一個分片演算法，來決定這筆資料的最終歸屬地。選擇一個好的 Shard Key 是 Sharding 成敗的關鍵。 以下是幾種常見的 Sharding 策略： 1. 範圍分片 (Range-Based Sharding) 這是最直觀的方式。根據 Shard Key 的一個範圍來劃分資料。 範例：一個訂單資料表，可以用 order_date 作為 Shard Key。 Shard 1: 存放 2023 年 1 月 - 3 月的訂單。 Shard 2: 存放 2023 年 4 月 - 6 月的訂單。 …以此類推。 優點：容易實現，範圍查詢（例如查詢某個月份的所有訂單）非常高效，因為資料都在同一個 Shard 裡。 缺點：容易產生 熱點 (Hotspot) 問題。例如，所有新的訂單都會寫入最新的 Shard，導致該 Shard 負載極高，而舊的 Shard 則相對閒置。 2. 雜湊分片 (Hash-Based Sharding) 這種策略是將 Shard Key 經過一個雜湊函數（例如 MD5、SHA-256）處理，然後用雜湊結果來決定 Shard。 範例：一個用戶資料表，用 user_id 作為 Shard Key。 shard_id = hash(user_id) % 總Shard數量 優點：資料可以非常均勻地分佈到各個 Shard，有效避免了熱點問題。 優點：範圍查詢變得非常困難。例如，無法輕易地查詢 user_id 從 100 到 200 的所有用戶，因為他們的資料經過雜湊後，可能散落在所有 Shards 中。 3. 目錄分片 (Directory-Based Sharding) 這種方式需要維護一個獨立的「查詢表 (Lookup Table)」，就像書的目錄一樣，它記錄了每個 Shard Key 值與其對應 Shard 的映射關係。 範例：應用程式在寫入或讀取資料前，先去查詢這個目錄表，找到目標 Shard，然後再進行操作。 優點：分片邏輯非常靈活，可以隨時更改某個 Key 對應的 Shard。 缺點：目錄表本身可能成為新的效能瓶頸或單點故障。 Sharding 必須面對的挑戰 聽起來 Sharding 很美好，對吧？但在決定擁抱它之前，請務必了解它帶來的複雜性： 架構複雜度劇增：應用程式、部署流程、監控系統都需要重新設計，以適應分佈式的資料庫環境。 跨分片查詢 (Cross-Shard Queries)：如果一個查詢需要聯合 (JOIN) 不同 Shard 的資料，將會變得非常慢且複雜。通常需要應用程式層面進行多次查詢再組合結果。 資料重新平衡 (Rebalancing)：當新增一個 Shard 時，需要將部分資料從舊的 Shards 遷移到新的 Shard 中，這個過程被稱為 Rebalancing。這是一個非常複雜且具風險的操作。 交易一致性：在單一資料庫中，有 ACID 交易來保證資料的一致性。但在分佈式環境下，要維持跨 Shard 的交易一致性是一個巨大的技術挑戰。 結論 Sharding 是一個強大的工具，但它也是一把雙面刃。它通常被視為擴展的最後手段。 在考慮 Sharding 之前，請先確保已經窮盡了其他所有優化方案： 垂直擴展：伺服器硬體是否還有升級空間？ 快取 (Caching)：是否已經有效利用 Redis 或 Memcached 等工具來減少資料庫讀取壓力？ 讀寫分離：是否已經將讀取操作導向到唯讀副本 (Read Replicas)？ 資料庫與查詢優化：是否還有未加索引的欄位？是否有可以改寫的慢查詢？ 只有當上述方法都已無法滿足需求，且應用程式正面臨「超大規模」的資料量（通常是 TB 級別）和吞吐量時，Sharding 才應該被納入考慮範圍。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/08/15/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E8%B3%87%E6%96%99%E5%BA%AB%E5%88%86%E7%89%87%20Sharding/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1302,92 +1388,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/08/05/%E8%B3%87%E6%96%99%E5%BA%AB%E5%88%86%E5%89%B2%20Partitioning%20%E6%8C%87%E5%8D%97/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/04/Systemd%20vs%20Docker%20%E6%98%AF%E6%95%B5%E6%98%AF%E5%8F%8B%20%E8%AA%B0%E4%BE%86%E7%AE%A1%E7%90%86%E8%AA%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/08/04/Systemd%20vs%20Docker%20%E6%98%AF%E6%95%B5%E6%98%AF%E5%8F%8B%20%E8%AA%B0%E4%BE%86%E7%AE%A1%E7%90%86%E8%AA%B0/" class="post-title-link" itemprop="url">
-              Systemd vs. Docker：是敵是友？誰來管理誰？
-            </a>
-            <a href="/my-blog/2025/08/04/Systemd%20vs%20Docker%20%E6%98%AF%E6%95%B5%E6%98%AF%E5%8F%8B%20%E8%AA%B0%E4%BE%86%E7%AE%A1%E7%90%86%E8%AA%B0/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-08-04 00:00:00 / 修改時間：22:31:29" itemprop="dateCreated datePublished" datetime="2025-08-04T00:00:00+08:00">2025-08-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">在上一篇文章《解鎖 systemd：現代 Linux 開發者不可不知的服務管理利器》中，探討了如何利用 systemd 來優雅地管理應用程式。一個非常核心且重要的問題：「既然有了 Docker 和 Docker Compose，為什麼還需要 systemd 呢？ 如果用了 Docker，還需要 systemd 嗎？」 讓我們來深入剖析這兩者之間的關係，會發現，它們並非互相取代的競爭對手，而是一對相輔相成的黃金搭檔。 理解各自的職責：分層的藝術 要理解 systemd 和 Docker 的關係，最關鍵的一點是：它們解決的是不同層面的問題。 用一個生動的比喻來理解： Linux 作業系統：就像一棟辦公大樓，提供了基礎設施（水、電、空間）。 systemd：是這棟大樓的總務與保全系統。它的職責是確保大樓的基礎服務正常運轉，比如確保電力系統 (network.target) 在上班前就已啟動，並在伺服器（大樓）重啟時，自動化地讓各個辦公室（服務）恢復運作。它關心的是「程序是否在作業系統層級上運行」。 Docker：則像是一個個**「拎包入住」的模組化辦公室**。每個辦公室（Container）都自帶了所有必需的辦公用品、裝潢和特定環境（應用程式的函式庫、依賴、配置），與隔壁辦公室完全隔離。Docker 關心的是「應用程式能否在一個隔離且一致的環境中運行」。 Docker Compose：是部門規劃師。他拿著一張藍圖 (docker-compose.yml)，規劃：「這個部門需要三個辦公室，一個是前端，一個是後端，一個是資料庫，而且它們之間可以用內線電話（虛擬網路）溝通。」 從這個比喻中，可以清楚地了解：systemd 負責管理整棟大樓的運轉，而 Docker 則負責管理每個辦公室內部的環境。 為什麼不直接用 Docker 就好？ 可能會想說：「應用程式和它的所有依賴都在 Docker Compose 裡定義好了，只要 docker compose up -d 就能跑起來，為什麼還需要 systemd 這個『大樓管理員』呢？」 原因有二： 1. 誰來管理 Docker 自己？ Docker Engine (即 dockerd 服務) 本身就是一個需要在作業系統上運行的背景程序。當伺服器開機時，是什麼東西自動啟動了 dockerd 服務，讓你可以使用 docker 指令？ 答案正是 systemd！ 可以隨時在 Linux 伺服器上執行這個指令來驗證： sudo systemctl status docker.service 會看到 docker.service 正在被 systemd 管理著。systemd 確保了 Docker 這個「模組化辦公室的供應商」在伺服器啟動時就已經準備就緒。 2. 追求的是終極可靠性 Docker 和 Docker Compose 提供了優秀的內部管理機制。例如，可以在 docker-compose.yml 中為服務設定 restart: always。 # docker-compose.yml services: my-app: image: my-app-image restart: always # 當容器停止時，Docker 會自動重啟它 這在大部分情況下都很好用。但是，如果發生了更嚴重的問題，例如 Docker Engine (dockerd) 本身崩潰了或被意外停止了呢？ 這時，所有由它管理的容器（無論 restart 策略是什麼）都會停止運行，而且無法自行恢復。就像辦公室的電力總開關被關了，單個辦公室內的備用電源是沒用的。 這時，就需要更高層級的管理者——systemd——登場了。 用 systemd 來管理 Docker Compose 這就是最佳實踐的誕生：用 systemd 來啟動、停止和監控我們的 docker-compose 應用。 這樣做，我們就建立了一個強大的、多層次的可靠性保障： 容器層級：Docker 負責在容器內部保持應用程式健康。 主機層級：systemd 負責確保整個 Docker Compose 應用（作為一個整體單元）在主機上始終運行。 實戰：為 Docker Compose 建立一個 systemd 服務 假設 docker-compose.yml 放在 /home/user/my_docker_app/ 目錄下。可以像這樣為它建立一個 systemd 服務檔： # /etc/systemd/system/my-docker-compose-app.service [Unit] Description=My Docker Compose Application # 要求 docker.service 必須先啟動 Requires=docker.service # 在 docker.service 啟動之後再啟動本服務 After=docker.service [Service] # 使用你的使用者 User=myuser # Docker Compose 檔案所在的目錄 WorkingDirectory=/home/myuser/my_docker_app # 啟動指令：在背景中啟動 compose # 注意：我們不再使用 -d 參數，因為 systemd 會處理背景化 ExecStart=/usr/local/bin/docker-compose up # 停止指令 ExecStop=/usr/local/bin/docker-compose down # 讓 systemd 自動重啟我們的服務 Restart=always RestartSec=10s [Install] WantedBy=multi-user.target 注意：docker-compose 的路徑可能是 /usr/bin/docker-compose 或 /usr/local/bin/docker-compose，請用 which docker-compose 確認。 這樣做的好處是什麼？ 開機自啟：執行 sudo systemctl enable my-docker-compose-app.service，整個應用集群就會在伺服器啟動時自動運行。 終極守護：如果 Docker Engine 崩潰後重啟，systemd 會因為依賴關係（Requires 和 After）自動地重新啟動 my-docker-compose-app 服務。 統一管理介面：可以像管理普通系統服務一樣管理 Docker 應用，使用 systemctl start, systemctl stop, systemctl status。 集中日誌：docker-compose 的所有輸出（包含所有容器的 log）都會被 journald 捕獲。只需執行 sudo journalctl -u my-docker-compose-app.service -f 就可以查看應用集群的所有日誌，極其方便！ 結論 要管理一個獨立的、非容器化的程式嗎？ 👉 直接使用 systemd，如上一篇文章所示。 要打包一個含有多個組件、複雜依賴的應用程式，並確保它在任何地方都能一致地運行嗎？ 👉 使用 Docker 和 Docker Compose 來進行封裝。 希望將這個打包好的 Docker 應用，在生產環境的 Linux 伺服器上進行可靠、穩定、可維護的部署嗎？ 👉 將 Docker Compose 作為一個整體，用 systemd 來管理它。 systemd 和 Docker 它們各自填補了現代化應用部署體系中不可或缺的一環。systemd 是穩固的地基，Docker Compose 是精美的建築。只有當地基穩固時，上面的建築才能屹立不倒。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/08/04/Systemd%20vs%20Docker%20%E6%98%AF%E6%95%B5%E6%98%AF%E5%8F%8B%20%E8%AA%B0%E4%BE%86%E7%AE%A1%E7%90%86%E8%AA%B0/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>
