@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="回想一個你我可能都經歷過的場景：凌晨三點，警告系統的巨聲將我們從睡夢中驚醒。生產環境出錯了，使用者無法下單，而錯誤日誌只留下一句語焉不詳的 NullPointerException。接下來的幾個小時，就像在一個沒有燈的黑房間裡摸索，不斷地猜測、重啟、加日誌，希望能幸運地找到問題的根源。 這種無力感，正是傳統監控（Monitoring）在面對現代複雜系統時的極限。這篇文章要探討一個正在徹底改變這種窘">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入淺出「可觀測性 (Observability)」">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/10/02/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E5%8F%AF%E8%A7%80%E6%B8%AC%E6%80%A7%20Observability/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="回想一個你我可能都經歷過的場景：凌晨三點，警告系統的巨聲將我們從睡夢中驚醒。生產環境出錯了，使用者無法下單，而錯誤日誌只留下一句語焉不詳的 NullPointerException。接下來的幾個小時，就像在一個沒有燈的黑房間裡摸索，不斷地猜測、重啟、加日誌，希望能幸運地找到問題的根源。 這種無力感，正是傳統監控（Monitoring）在面對現代複雜系統時的極限。這篇文章要探討一個正在徹底改變這種窘">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-10-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-02T15:10:31.914Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="DevOps">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/10/02/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E5%8F%AF%E8%A7%80%E6%B8%AC%E6%80%A7%20Observability/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/10/02/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E5%8F%AF%E8%A7%80%E6%B8%AC%E6%80%A7%20Observability/","path":"2025/10/02/深入淺出可觀測性 Observability/","title":"深入淺出「可觀測性 (Observability)」"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>深入淺出「可觀測性 (Observability)」 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">100</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">53</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cloud-Computing/">
+        Cloud Computing
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Concurrency/">
+        Concurrency
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(19)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/DevOps/">
+        DevOps
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(16)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Serverless/">
+        Serverless
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-observability"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是 Observability？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%A3%E6%8E%A7-vs-%E5%8F%AF%E8%A7%80%E6%B8%AC%E6%80%A7%E5%95%8F%E5%B7%B2%E7%9F%A5%E7%9A%84%E5%95%8F%E9%A1%8C%E9%82%84%E6%98%AF%E6%8E%A2%E7%B4%A2%E6%9C%AA%E7%9F%A5"><span class="nav-number">2.</span> <span class="nav-text"> 監控 vs. 可觀測性：問已知的問題，還是探索未知？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%AF%E8%A7%80%E6%B8%AC%E6%80%A7%E7%9A%84%E4%B8%89%E5%A4%A7%E6%94%AF%E6%9F%B1-the-three-pillars"><span class="nav-number">3.</span> <span class="nav-text"> 可觀測性的三大支柱 (The Three Pillars)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%97%A5%E8%AA%8C-logs-%E7%99%BC%E7%94%9F%E4%BA%86%E4%BB%80%E9%BA%BC"><span class="nav-number">3.1.</span> <span class="nav-text"> 1. 日誌 (Logs) - 「發生了什麼？」</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%8C%87%E6%A8%99-metrics-%E6%83%85%E6%B3%81%E6%9C%89%E5%A4%9A%E5%9A%B4%E9%87%8D"><span class="nav-number">3.2.</span> <span class="nav-text"> 2. 指標 (Metrics) - 「情況有多嚴重？」</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%88%86%E6%95%A3%E5%BC%8F%E8%BF%BD%E8%B9%A4-traces-%E5%95%8F%E9%A1%8C%E7%99%BC%E7%94%9F%E5%9C%A8%E5%93%AA%E8%A3%A1%E7%82%BA%E4%BB%80%E9%BA%BC%E6%85%A2"><span class="nav-number">3.3.</span> <span class="nav-text"> 3. 分散式追蹤 (Traces) - 「問題發生在哪裡？為什麼慢？」</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E8%80%85%E5%8D%94%E5%90%8C%E7%9A%84%E5%8A%9B%E9%87%8F"><span class="nav-number">3.4.</span> <span class="nav-text"> 三者協同的力量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E5%8F%AF%E8%A7%80%E6%B8%AC%E6%80%A7%E5%A6%82%E6%AD%A4%E9%87%8D%E8%A6%81"><span class="nav-number">4.</span> <span class="nav-text"> 為什麼「可觀測性」如此重要？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%96%8B%E5%A7%8B%E5%8F%AF%E8%A7%80%E6%B8%AC%E6%80%A7%E4%B9%8B%E6%97%85"><span class="nav-number">5.</span> <span class="nav-text"> 如何開始可觀測性之旅？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%88%87-monitoring-%E7%9A%84%E6%AF%94%E8%BC%83"><span class="nav-number">6.</span> <span class="nav-text"> 與 Monitoring 的比較</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A6%8B%E5%B7%A5%E5%85%B7"><span class="nav-number">6.1.</span> <span class="nav-text"> 常見工具</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">7.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">100</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/02/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E5%8F%AF%E8%A7%80%E6%B8%AC%E6%80%A7%20Observability/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="深入淺出「可觀測性 (Observability)」 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深入淺出「可觀測性 (Observability)」
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-10-02 00:00:00 / 修改時間：23:10:31" itemprop="dateCreated datePublished" datetime="2025-10-02T00:00:00+08:00">2025-10-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>回想一個你我可能都經歷過的場景：凌晨三點，警告系統的巨聲將我們從睡夢中驚醒。生產環境出錯了，使用者無法下單，而錯誤日誌只留下一句語焉不詳的 <code>NullPointerException</code>。接下來的幾個小時，就像在一個沒有燈的黑房間裡摸索，不斷地猜測、重啟、加日誌，希望能幸運地找到問題的根源。</p>
+<p>這種無力感，正是傳統監控（Monitoring）在面對現代複雜系統時的極限。這篇文章要探討一個正在徹底改變這種窘境的關鍵概念——<strong>可觀測性（Observability）</strong>。它不是一個新工具，而是一種全新的思維模式，旨在將系統從一個難以捉摸的「黑盒子」，變成一個可以被理解、被探索的「白盒子」。</p>
+<hr />
+<h1 id="什麼是-observability"><a class="markdownIt-Anchor" href="#什麼是-observability"></a> 什麼是 Observability？</h1>
+<p><strong>Observability（可觀測性）</strong> 是系統工程與軟體工程中的一個概念，源自控制理論。</p>
+<p>它的核心是：<br />
+👉 <strong>透過外部輸出（logs、metrics、traces 等），能夠推斷出系統內部的狀態。</strong></p>
+<p>跟 <strong>Monitoring（監控）</strong> 不同，Monitoring 偏向「已知問題的監測」，而 Observability 更強調「從輸出推斷未知問題，找出根本原因」。</p>
+<hr />
+<h1 id="監控-vs-可觀測性問已知的問題還是探索未知"><a class="markdownIt-Anchor" href="#監控-vs-可觀測性問已知的問題還是探索未知"></a> 監控 vs. 可觀測性：問已知的問題，還是探索未知？</h1>
+<p>在深入之前，必須先釐清一個最常見的誤解：可觀測性不等於監控，而是監控的超集合。</p>
+<blockquote>
+<p><strong>監控 (Monitoring):</strong> 告訴我們<strong>系統是否正常</strong>。它基於<strong>預先定義好</strong>的儀表板和警報，用來回答<strong>已知</strong>的問題。</p>
+<ul>
+<li><strong>例子:</strong> 「伺服器的 CPU 使用率是否超過 90%？」「過去 5 分鐘的錯誤率是否高於 1%？」</li>
+<li><strong>比喻:</strong> 監控就像汽車的儀表板。它會告訴你引擎是否過熱、油量是否充足。但它不會告訴你<strong>為什麼</strong>引擎會過熱。</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>可觀測性 (Observability):</strong> 賦予<strong>理解系統為何會這樣運作</strong>的能力。它允許在不修改或部署新程式碼的情況下，提出<strong>全新</strong>的問題來探索<strong>未知</strong>的狀況。</p>
+<ul>
+<li><strong>例子:</strong> 「為什麼過去一小時，來自特定版本 App 的 iOS 使用者，在結帳流程的步驟三延遲特別高？」「哪些共用同一個資料庫實例的服務，是造成這次 CPU 飆高的元兇？」</li>
+<li><strong>比喻:</strong> 可觀測性就像給汽車配備了全套的診斷工具和一位經驗豐富的技師。當引擎過熱時，可以深入檢查冷卻系統、風扇轉速、機油壓力等任何想知道的細節，從而找到根本原因。</li>
+</ul>
+</blockquote>
+<p>簡單來說，監控讓我們看到「病徵」，而可觀測性則幫助我們進行「診斷」。</p>
+<h1 id="可觀測性的三大支柱-the-three-pillars"><a class="markdownIt-Anchor" href="#可觀測性的三大支柱-the-three-pillars"></a> 可觀測性的三大支柱 (The Three Pillars)</h1>
+<p>要實現可觀測性，通常依賴於三種核心的遙測數據類型（Telemetry Data）。它們不是孤立存在的，而是相輔相成，共同描繪出系統運作的全貌。</p>
+<h2 id="1-日誌-logs-發生了什麼"><a class="markdownIt-Anchor" href="#1-日誌-logs-發生了什麼"></a> 1. 日誌 (Logs) - 「發生了什麼？」</h2>
+<ul>
+<li>記錄系統發生的事件，包含錯誤、警告、info 訊息。</li>
+<li>幫助開發者在發生問題時追蹤發生了什麼事。</li>
+</ul>
+<p>日誌是記錄在系統運行過程中發生的、帶有時間戳的離散事件。它們提供了最詳細、最細粒度的上下文。</p>
+<ul>
+<li><strong>強項:</strong> 當需要深入細節時，日誌是無可替代的。一個格式良好的日誌可以告訴我們在特定時間點，程式碼執行的確切位置、變數狀態和錯誤堆疊。</li>
+<li><strong>挑戰:</strong> 傳統的純文字日誌就像一本流水帳，難以聚合和查詢。因此，<strong>結構化日誌 (Structured Logging)</strong> 至關重要。將日誌以 JSON 等格式輸出，讓每一條日誌都成為一個可被查詢的數據點（例如，<code>&#123;&quot;event&quot;: &quot;user_login&quot;, &quot;user_id&quot;: 123, &quot;status&quot;: &quot;success&quot;&#125;</code>）。</li>
+</ul>
+<h2 id="2-指標-metrics-情況有多嚴重"><a class="markdownIt-Anchor" href="#2-指標-metrics-情況有多嚴重"></a> 2. 指標 (Metrics) - 「情況有多嚴重？」</h2>
+<ul>
+<li>可量化的數值，通常是時間序列，例如：
+<ul>
+<li>CPU 使用率</li>
+<li>記憶體消耗</li>
+<li>每秒請求數 (RPS)</li>
+<li>錯誤率</li>
+</ul>
+</li>
+<li>讓團隊能快速判斷系統健康狀態。</li>
+</ul>
+<p>指標是在一段時間內測量和聚合的數值。它們是系統健康狀況的量化體現，非常適合用於儀表板和告警。</p>
+<ul>
+<li><strong>強項:</strong> 指標數據量小、效率高，非常適合用來觀察趨勢和設定告警閾值。例如：請求延遲（Latency）、每秒查詢率（QPS）、錯誤率（Error Rate）、CPU 使用率。</li>
+<li><strong>挑戰:</strong> 指標是高度聚合的數據，它會告訴你「有問題」，但會丟失導致問題的具體上下文。知道錯誤率上升了，但不知道是哪個使用者或哪筆交易導致的。</li>
+</ul>
+<h2 id="3-分散式追蹤-traces-問題發生在哪裡為什麼慢"><a class="markdownIt-Anchor" href="#3-分散式追蹤-traces-問題發生在哪裡為什麼慢"></a> 3. 分散式追蹤 (Traces) - 「問題發生在哪裡？為什麼慢？」</h2>
+<ul>
+<li>分散式系統中，請求會經過多個服務。</li>
+<li>Tracing 可以顯示一個請求從 <strong>進入</strong> 到 <strong>完成</strong> 的全流程，幫助找到瓶頸或延遲來源。</li>
+</ul>
+<p>分散式追蹤記錄了單一請求在複雜的分散式系統中（如微服務架構）的完整旅程。一個追蹤（Trace）由多個跨度（Span）組成，每個 Span 代表請求在單一服務或組件中的處理單元。</p>
+<ul>
+<li><strong>強項:</strong> 在微服務架構中，追蹤是除錯的超級武器。它可以清晰地展示一個請求流經了哪些服務、每個服務花費了多長時間、服務之間的依賴關係，讓我們一眼就能定位到效能瓶頸或出錯的環節。</li>
+<li><strong>挑戰:</strong> 實現分散式追蹤的侵入性相對較高，需要在程式碼層面進行插樁（instrumentation）。幸運的是，像 OpenTelemetry 這樣的開放標準正在極大地簡化這一過程。</li>
+</ul>
+<h2 id="三者協同的力量"><a class="markdownIt-Anchor" href="#三者協同的力量"></a> 三者協同的力量</h2>
+<p>真正的魔法發生在這三大支柱協同工作時：</p>
+<blockquote>
+<p>在<strong>指標</strong>儀表板上發現 P99 延遲突然飆高（病徵） -&gt; 透過關聯的<strong>追蹤</strong>數據，迅速定位到是後端的 <code>payment-service</code> 呼叫第三方支付 API 時變得極慢（診斷位置） -&gt; 篩選出該時間段內、屬於這個追蹤的<strong>日誌</strong>，發現了詳細的 <code>TimeoutException</code> 錯誤訊息和請求參數（根本原因）。</p>
+</blockquote>
+<hr />
+<h1 id="為什麼可觀測性如此重要"><a class="markdownIt-Anchor" href="#為什麼可觀測性如此重要"></a> 為什麼「可觀測性」如此重要？</h1>
+<p>可觀測性的崛起並非偶然，它是由現代軟體架構的演進所驅動的：</p>
+<ul>
+<li><strong>快速定位問題</strong>：不只是發現系統掛了，而是能找到「為什麼掛了」。</li>
+<li><strong>微服務與分散式架構:</strong> 過去的單體應用（Monolith）相對簡單，而現在的系統由數十甚至數百個微服務構成。一個請求的路徑變得極其複雜，傳統的單機日誌分析已完全失效。</li>
+<li><strong>雲原生與容器化:</strong> Kubernetes、Serverless 等技術讓基礎設施變得動態且短暫（Ephemeral）。服務的實例可能在幾秒鐘內被創建和銷毀，基於固定 IP 的監控方式不再可靠。</li>
+<li><strong>DevOps 文化:</strong> 當開發團隊需要「Build it, Run it」（自己開發、自己維運）時，必須擁有強大的工具來理解自己服務在生產環境中的真實表現。可觀測性賦予了團隊這種能力和信心。DevOps/SRE 團隊依靠 observability 來進行 incident response。</li>
+<li><strong>支援持續改進</strong>：幫助開發者分析效能問題與用戶行為。</li>
+</ul>
+<hr />
+<h1 id="如何開始可觀測性之旅"><a class="markdownIt-Anchor" href="#如何開始可觀測性之旅"></a> 如何開始可觀測性之旅？</h1>
+<p>不必一步到位。一個務實的起點是：</p>
+<ol>
+<li><strong>擁抱結構化日誌:</strong> 這是成本最低、見效最快的步驟。將現有的 <code>print</code> 或 <code>log.info(&quot;some string&quot;)</code> 改為輸出帶有豐富上下文的 JSON 格式日誌。</li>
+<li><strong>引入 OpenTelemetry:</strong> 這是一個開放原始碼的觀測性框架，由雲原生計算基金會（CNCF）維護。它提供了統一的 API 和 SDK，讓我們可以方便地從應用中採集日誌、指標和追蹤數據，並將它們發送到選擇的任何後端平台。</li>
+</ol>
+<hr />
+<h1 id="與-monitoring-的比較"><a class="markdownIt-Anchor" href="#與-monitoring-的比較"></a> 與 Monitoring 的比較</h1>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Monitoring（監控）</th>
+<th>Observability（可觀測性）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>定義</td>
+<td>檢查系統是否正常運作</td>
+<td>了解系統內部狀態與行為</td>
+</tr>
+<tr>
+<td>著重</td>
+<td>已知問題</td>
+<td>已知 + 未知問題</td>
+</tr>
+<tr>
+<td>工具</td>
+<td>儀表板、警報</td>
+<td>Logs, Metrics, Traces 整合</td>
+</tr>
+<tr>
+<td>問題範圍</td>
+<td>「是否壞掉？」</td>
+<td>「為什麼壞掉？」</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="常見工具"><a class="markdownIt-Anchor" href="#常見工具"></a> 常見工具</h2>
+<ul>
+<li><strong>Logs</strong>: ELK Stack (Elasticsearch + Logstash + Kibana), Fluentd</li>
+<li><strong>Metrics</strong>: Prometheus, Grafana</li>
+<li><strong>Traces</strong>: Jaeger, OpenTelemetry, Zipkin</li>
+</ul>
+<hr />
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>Observability = <strong>能從輸出觀察系統行為，並理解其內部狀態的能力</strong>。<br />
+它比監控更全面，能幫助工程師在系統出問題時，不只「知道壞了」，還能「理解為什麼壞了」。</p>
+<p>Observability 不僅僅是一堆工具或技術的集合，它更是一種文化和思維上的轉變。它鼓勵我們抱持著好奇心，去探索、去提問，去真正理解我們親手構建的系統。</p>
+<p>下一次當在深夜被警報喚醒時，希望面對的不再是一個冰冷的黑盒子，而是一個數據豐富、清晰透明、等待探索的白盒子。這就是可觀測性賦予我們的力量。</p>
+<hr />
+<p>✅ 總結：</p>
+<hr />
+<p>要不要我幫你畫一張 <strong>Observability 三大支柱的架構圖 (Mermaid)</strong>，讓你更直觀理解？</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/DevOps/" rel="tag"># DevOps</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/10/01/%E8%B3%87%E6%96%99%E5%BA%AB%E6%95%88%E8%83%BD%E8%AA%BF%E6%A0%A1%E6%8C%87%E5%8D%97/" rel="prev" title="資料庫效能調校指南：從根本上提升系統反應速度">
+                  <i class="fa fa-angle-left"></i> 資料庫效能調校指南：從根本上提升系統反應速度
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
