@@ -19,15 +19,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="回想一個你我可能都經歷過的場景：凌晨三點，警告系統的巨聲將我們從睡夢中驚醒。生產環境出錯了，使用者無法下單，而錯誤日誌只留下一句語焉不詳的 NullPointerException。接下來的幾個小時，就像在一個沒有燈的黑房間裡摸索，不斷地猜測、重啟、加日誌，希望能幸運地找到問題的根源。 這種無力感，正是傳統監控（Monitoring）在面對現代複雜系統時的極限。這篇文章要探討一個正在徹底改變這種窘">
+    <meta name="description" content="回想一個你我可能都經歷過的場景：凌晨三點，告警系統的巨聲將我們從睡夢中驚醒。生產環境出錯了，使用者無法下單，而錯誤日誌只留下一句語焉不詳的 NullPointerException。接下來的幾個小時，就像在一個沒有燈的黑房間裡摸索，不斷地猜測、重啟、加日誌，希望能幸運地找到問題的根源。 這種無力感，正是傳統監控（Monitoring）在面對現代複雜系統時的極限。這篇文章要探討一個正在徹底改變這種窘">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深入淺出「可觀測性 (Observability)」">
 <meta property="og:url" content="https://nivek-yang.github.io/2025/10/02/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E5%8F%AF%E8%A7%80%E6%B8%AC%E6%80%A7%20Observability/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="回想一個你我可能都經歷過的場景：凌晨三點，警告系統的巨聲將我們從睡夢中驚醒。生產環境出錯了，使用者無法下單，而錯誤日誌只留下一句語焉不詳的 NullPointerException。接下來的幾個小時，就像在一個沒有燈的黑房間裡摸索，不斷地猜測、重啟、加日誌，希望能幸運地找到問題的根源。 這種無力感，正是傳統監控（Monitoring）在面對現代複雜系統時的極限。這篇文章要探討一個正在徹底改變這種窘">
+<meta property="og:description" content="回想一個你我可能都經歷過的場景：凌晨三點，告警系統的巨聲將我們從睡夢中驚醒。生產環境出錯了，使用者無法下單，而錯誤日誌只留下一句語焉不詳的 NullPointerException。接下來的幾個小時，就像在一個沒有燈的黑房間裡摸索，不斷地猜測、重啟、加日誌，希望能幸運地找到問題的根源。 這種無力感，正是傳統監控（Monitoring）在面對現代複雜系統時的極限。這篇文章要探討一個正在徹底改變這種窘">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2025-10-01T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-10-02T15:10:31.914Z">
+<meta property="article:modified_time" content="2025-10-02T15:16:17.617Z">
 <meta property="article:author" content="Kaiwii">
 <meta property="article:tag" content="DevOps">
 <meta name="twitter:card" content="summary">
@@ -588,7 +588,7 @@
       <span class="post-meta-item-text">發表於</span>
       
 
-      <time title="創建時間：2025-10-02 00:00:00 / 修改時間：23:10:31" itemprop="dateCreated datePublished" datetime="2025-10-02T00:00:00+08:00">2025-10-02</time>
+      <time title="創建時間：2025-10-02 00:00:00 / 修改時間：23:16:17" itemprop="dateCreated datePublished" datetime="2025-10-02T00:00:00+08:00">2025-10-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -609,7 +609,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>回想一個你我可能都經歷過的場景：凌晨三點，警告系統的巨聲將我們從睡夢中驚醒。生產環境出錯了，使用者無法下單，而錯誤日誌只留下一句語焉不詳的 <code>NullPointerException</code>。接下來的幾個小時，就像在一個沒有燈的黑房間裡摸索，不斷地猜測、重啟、加日誌，希望能幸運地找到問題的根源。</p>
+    <div class="post-body" itemprop="articleBody"><p>回想一個你我可能都經歷過的場景：凌晨三點，告警系統的巨聲將我們從睡夢中驚醒。生產環境出錯了，使用者無法下單，而錯誤日誌只留下一句語焉不詳的 <code>NullPointerException</code>。接下來的幾個小時，就像在一個沒有燈的黑房間裡摸索，不斷地猜測、重啟、加日誌，希望能幸運地找到問題的根源。</p>
 <p>這種無力感，正是傳統監控（Monitoring）在面對現代複雜系統時的極限。這篇文章要探討一個正在徹底改變這種窘境的關鍵概念——<strong>可觀測性（Observability）</strong>。它不是一個新工具，而是一種全新的思維模式，旨在將系統從一個難以捉摸的「黑盒子」，變成一個可以被理解、被探索的「白盒子」。</p>
 <hr />
 <h1 id="什麼是-observability"><a class="markdownIt-Anchor" href="#什麼是-observability"></a> 什麼是 Observability？</h1>
@@ -742,10 +742,6 @@
 它比監控更全面，能幫助工程師在系統出問題時，不只「知道壞了」，還能「理解為什麼壞了」。</p>
 <p>Observability 不僅僅是一堆工具或技術的集合，它更是一種文化和思維上的轉變。它鼓勵我們抱持著好奇心，去探索、去提問，去真正理解我們親手構建的系統。</p>
 <p>下一次當在深夜被警報喚醒時，希望面對的不再是一個冰冷的黑盒子，而是一個數據豐富、清晰透明、等待探索的白盒子。這就是可觀測性賦予我們的力量。</p>
-<hr />
-<p>✅ 總結：</p>
-<hr />
-<p>要不要我幫你畫一張 <strong>Observability 三大支柱的架構圖 (Mermaid)</strong>，讓你更直觀理解？</p>
 
     </div>
 
