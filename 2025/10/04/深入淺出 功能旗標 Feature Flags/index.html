@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="經過數週甚至數月的奮鬥，一個巨大的功能分支終於要合併到主幹並部署上線了。整個團隊屏息以待，祈禱著一切順利。這是一場「全有或全無」的豪賭——成功了，皆大歡喜；失敗了，就是一場災難性的緊急回滾（Rollback）和深夜除錯。 這種傳統的發布模式，就像試圖一次性將一整列火車推上軌道。但如果，能將這列火車的每一節車廂都獨立控制呢？如果能將程式碼的「部署（Deploy）」與功能的「發布（Release）」徹">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入淺出「功能旗標 (Feature Flags)」">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/10/04/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20%E5%8A%9F%E8%83%BD%E6%97%97%E6%A8%99%20Feature%20Flags/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="經過數週甚至數月的奮鬥，一個巨大的功能分支終於要合併到主幹並部署上線了。整個團隊屏息以待，祈禱著一切順利。這是一場「全有或全無」的豪賭——成功了，皆大歡喜；失敗了，就是一場災難性的緊急回滾（Rollback）和深夜除錯。 這種傳統的發布模式，就像試圖一次性將一整列火車推上軌道。但如果，能將這列火車的每一節車廂都獨立控制呢？如果能將程式碼的「部署（Deploy）」與功能的「發布（Release）」徹">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-10-03T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-04T15:30:56.534Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="DevOps">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/10/04/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20%E5%8A%9F%E8%83%BD%E6%97%97%E6%A8%99%20Feature%20Flags/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/10/04/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20%E5%8A%9F%E8%83%BD%E6%97%97%E6%A8%99%20Feature%20Flags/","path":"2025/10/04/深入淺出 功能旗標 Feature Flags/","title":"深入淺出「功能旗標 (Feature Flags)」"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>深入淺出「功能旗標 (Feature Flags)」 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">101</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">53</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cloud-Computing/">
+        Cloud Computing
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Concurrency/">
+        Concurrency
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(19)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/DevOps/">
+        DevOps
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(16)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Serverless/">
+        Serverless
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF%E5%8A%9F%E8%83%BD%E6%97%97%E6%A8%99"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是「功能旗標」？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9C%80%E8%A6%81-feature-flags"><span class="nav-number">2.</span> <span class="nav-text"> 為什麼需要 Feature Flags？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%83%85%E5%A2%83"><span class="nav-number">3.</span> <span class="nav-text"> 使用情境</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD%E6%97%97%E6%A8%99%E7%9A%84%E9%A1%9E%E5%9E%8B%E4%B8%8D%E5%8F%AA%E6%98%AF%E4%B8%80%E7%A8%AE%E9%96%8B%E9%97%9C"><span class="nav-number">4.</span> <span class="nav-text"> 功能旗標的類型：不只是一種開關</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AF%A6%E8%B8%90%E8%88%87%E9%9C%80%E8%A6%81%E9%81%BF%E9%96%8B%E7%9A%84%E5%9D%91"><span class="nav-number">5.</span> <span class="nav-text"> 最佳實踐與需要避開的坑</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">6.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/04/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20%E5%8A%9F%E8%83%BD%E6%97%97%E6%A8%99%20Feature%20Flags/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="深入淺出「功能旗標 (Feature Flags)」 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深入淺出「功能旗標 (Feature Flags)」
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-10-04 00:00:00 / 修改時間：23:30:56" itemprop="dateCreated datePublished" datetime="2025-10-04T00:00:00+08:00">2025-10-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>經過數週甚至數月的奮鬥，一個巨大的功能分支終於要合併到主幹並部署上線了。整個團隊屏息以待，祈禱著一切順利。這是一場「全有或全無」的豪賭——成功了，皆大歡喜；失敗了，就是一場災難性的緊急回滾（Rollback）和深夜除錯。</p>
+<p>這種傳統的發布模式，就像試圖一次性將一整列火車推上軌道。但如果，能將這列火車的每一節車廂都獨立控制呢？如果能將程式碼的「部署（Deploy）」與功能的「發布（Release）」徹底分離呢？</p>
+<p>這就是這篇文章要探討的主角——<strong>功能旗標（Feature Flags，或稱 Feature Toggles）</strong>。它是一個看似簡單卻極其強大的概念，正在徹底改變交付軟體的方式，將開發團隊從「發布恐懼症」中解放出來。</p>
+<hr />
+<h1 id="什麼是功能旗標"><a class="markdownIt-Anchor" href="#什麼是功能旗標"></a> 什麼是「功能旗標」？</h1>
+<p><strong>Feature Flags（功能旗標）</strong> 又叫 <strong>Feature Toggles</strong>，是一種軟體開發技巧：<br />
+👉 透過程式中的「開關 (flag/toggle)」來動態控制某個功能是否啟用，而不需要重新部署程式碼。</p>
+<p>從本質上講，功能旗標是程式碼中的一個決策點，它允許在**運行時（Runtime）**決定某段程式碼路徑是否要被執行。</p>
+<p>它就像在程式裡加了一個「開關」，可以：</p>
+<ul>
+<li>打開功能（對部分或全部用戶可見）。</li>
+<li>關閉功能（程式碼仍在，但被隱藏）。</li>
+</ul>
+<p>最簡單的形式，就是一個 <code>if/else</code> 語句：</p>
+<pre class="highlight"><code class="python"><span class="hljs-comment"># 定義 feature flag</span>
+FEATURE_NEW_UI = <span class="hljs-literal">True</span>  
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">render_ui</span>():
+    <span class="hljs-keyword">if</span> FEATURE_NEW_UI:
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;顯示新介面 🎨&quot;</span>
+    <span class="hljs-keyword">else</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;顯示舊介面 🖥️&quot;</span>
+
+<span class="hljs-built_in">print</span>(render_ui())  <span class="hljs-comment"># 若 True 顯示新介面，False 顯示舊介面</span>
+</code></pre>
+<p>在真實專案中，旗標通常會存放在：</p>
+<ul>
+<li><strong>環境變數</strong>（例如 <code>FEATURE_NEW_UI=true</code>）</li>
+<li><strong>設定檔/資料庫</strong></li>
+<li><strong>第三方服務</strong>（如 LaunchDarkly, Unleash, ConfigCat）</li>
+</ul>
+<p><strong>核心思想：</strong> 將新功能的程式碼包裹在一個旗標內，然後將這段程式碼<strong>安全地</strong>部署到生產環境，即使它還未完成或未經充分測試。功能本身預設是「關閉」的，對使用者完全不可見。當準備好時，只需將旗標「開啟」，新功能便能瞬間呈現在使用者面前——完全無需重新部署。</p>
+<h1 id="為什麼需要-feature-flags"><a class="markdownIt-Anchor" href="#為什麼需要-feature-flags"></a> 為什麼需要 Feature Flags？</h1>
+<p>功能旗標遠不止是一個 <code>if</code> 判斷，它是一種策略，能為開發流程帶來革命性的好處：</p>
+<ul>
+<li><strong>部署與發布解耦 (Decouple Deploy from Release):</strong> 這是最核心的價值。可以每天，甚至每小時都將程式碼部署到生產環境，而不用擔心未完成的功能影響到使用者。<strong>「部署」變成了無聊的技術操作，而「發布」則成了可控的業務決策。</strong></li>
+<li><strong>A/B 測試與實驗 (A/B Testing &amp; Experimentation):</strong> 可以輕鬆地將特定功能只開放給 10% 的使用者，觀察他們的行為數據，用真實的數據來驗證新功能的成效，而不是依靠猜測。</li>
+<li><strong>金絲雀發布 (Canary Releases) 與漸進式交付 (Progressive Delivery):</strong> 不再需要一次性對所有使用者發布新功能。可以先對內部員工、Beta 測試者，或一小部分使用者開啟功能。如果一切順利，再逐步擴大開放比例，從 1% -&gt; 10% -&gt; 50% -&gt; 100%。這極大地降低了發布風險。</li>
+<li><strong>緊急關閉開關 (Kill Switch):</strong> 想像一下，新發布的功能出現了嚴重 Bug。在過去，需要緊急回滾整個版本。有了功能旗標，只需在管理後台點一下按鈕，將該功能的旗標關閉，就能在<strong>秒級</strong>內禁用問題功能，而系統的其他部分絲毫不受影響。</li>
+<li><strong>簡化分支管理 (Trunk-Based Development):</strong> 團隊成員可以放心地將未完成的功能合併回主分支（Trunk/Main），因為它們被旗標保護著。這避免了長期存在的功能分支（Feature Branch）帶來的合併地獄，讓程式碼庫始終保持在可發布的狀態。</li>
+</ul>
+<h1 id="使用情境"><a class="markdownIt-Anchor" href="#使用情境"></a> 使用情境</h1>
+<ul>
+<li><strong>灰度發布</strong>：只讓 5% 用戶先用新功能。</li>
+<li><strong>地區/平台控制</strong>：僅限台灣用戶或 iOS 用戶啟用功能。</li>
+<li><strong>開發測試</strong>：功能合併到主分支，但僅內部 QA 看得到。</li>
+</ul>
+<h1 id="功能旗標的類型不只是一種開關"><a class="markdownIt-Anchor" href="#功能旗標的類型不只是一種開關"></a> 功能旗標的類型：不只是一種開關</h1>
+<p>隨著實踐的深入，功能旗標也演化出了不同的生命週期和用途：</p>
+<ol>
+<li><strong>發布旗標 (Release Toggles):</strong> 最常見的類型，用來包裹正在開發中的新功能。它們的生命週期通常很短，一旦功能穩定發布給所有使用者後，就應該被<strong>清理和移除</strong>。</li>
+<li><strong>實驗旗標 (Experiment Toggles):</strong> 用於 A/B 測試，同時運行多個程式碼變體（例如，兩種不同的推薦演算法），並根據使用者群體來決定哪個變體被執行。</li>
+<li><strong>操作旗標 (Ops Toggles):</strong> 用於控制系統的操作行為。例如，在系統負載過高時，可以動態關閉一個非核心但消耗資源的功能，以保障核心交易的穩定性。這類旗標通常會長期存在。</li>
+<li><strong>權限旗標 (Permission Toggles):</strong> 用於控制不同使用者群體的功能可見性。例如，將某些進階功能只開放給付費的「Pro」使用者。這類旗標通常也是永久性的。</li>
+</ol>
+<h1 id="最佳實踐與需要避開的坑"><a class="markdownIt-Anchor" href="#最佳實踐與需要避開的坑"></a> 最佳實踐與需要避開的坑</h1>
+<p>功能旗標是良藥，但濫用也可能成為毒藥。以下是一些關鍵的最佳實踐：</p>
+<ul>
+<li><strong>制定清晰的命名規範:</strong> <code>new-checkout-flow</code> 比 <code>feature-x</code> 好得多。好的命名應該包含功能描述、建立日期或 JIRA 編號。</li>
+<li><strong>定期清理已無用的旗標:</strong> 這是最重要的原則！當一個「發布旗標」的使命完成後（功能已 100% 上線或被廢棄），必須將相關的 <code>if/else</code> 邏輯和舊程式碼從程式庫中移除。否則程式碼會迅速充斥著大量的「技術債」。</li>
+<li><strong>保持旗標決策的無狀態性:</strong> 功能旗標的判斷邏輯應該盡可能簡單，通常只基於使用者 ID、地區、訂閱等級等相對靜態的屬性，避免在判斷過程中執行複雜的 I/O 操作。</li>
+<li><strong>使用專業的管理工具:</strong> 當旗標數量增多時，依靠設定檔會變得難以管理。可以考慮使用開源工具（如 Unleash）或商業服務（如 LaunchDarkly, Optimizely），它們提供了動態更新、使用者分群、審計日誌等強大功能。</li>
+<li><strong>需要集中化管理工具</strong> 避免每個服務各自定義，造成混亂。</li>
+<li><strong>要配合觀測性 (Observability)</strong> 知道誰開了功能、誰遇到問題。</li>
+</ul>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>Feature Flags = <strong>程式碼中的開關</strong>，幫助團隊做 <strong>安全的功能發布、A/B 測試、快速回滾</strong>，是 DevOps 和 CI/CD 裡非常重要的技巧。</p>
+<p>功能旗標不僅僅是一項技術，它是一種賦予開發團隊<strong>控制力</strong>和<strong>信心</strong>的現代軟體工程實踐。它將高風險、壓力巨大的發布事件，轉變為低風險、可控、甚至可以隨時進行的常規操作。</p>
+<p>它讓我們得以快速迭代，從真實世界的反饋中學習，並在出現問題時優雅地應對。所以，下次當準備開發一個新功能時，不妨問問自己：是否可以為它加上一個功能旗標？</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/DevOps/" rel="tag"># DevOps</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/10/02/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E5%8F%AF%E8%A7%80%E6%B8%AC%E6%80%A7%20Observability/" rel="prev" title="深入淺出「可觀測性 (Observability)」">
+                  <i class="fa fa-angle-left"></i> 深入淺出「可觀測性 (Observability)」
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

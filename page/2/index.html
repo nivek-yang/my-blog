@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">100</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">101</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">53</span></a>
       <ul class="sub-menu">
   
@@ -204,7 +204,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/DevOps/">
         DevOps
-        <span class="post-count">(1)</span>
+        <span class="post-count">(2)</span>
       </a>
     </li>
   
@@ -520,7 +520,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">100</span>
+          <span class="site-state-item-count">101</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -545,6 +545,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/22/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20Race%20Condition%20%E6%88%90%E5%9B%A0%E5%BD%B1%E9%9F%BF%E8%88%87%E8%A7%A3%E6%96%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/09/22/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20Race%20Condition%20%E6%88%90%E5%9B%A0%E5%BD%B1%E9%9F%BF%E8%88%87%E8%A7%A3%E6%96%B9/" class="post-title-link" itemprop="url">
+              深入解析 Race Condition：成因、影響與解方
+            </a>
+            <a href="/my-blog/2025/09/22/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20Race%20Condition%20%E6%88%90%E5%9B%A0%E5%BD%B1%E9%9F%BF%E8%88%87%E8%A7%A3%E6%96%B9/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-09-22 00:00:00 / 修改時間：21:29:30" itemprop="dateCreated datePublished" datetime="2025-09-22T00:00:00+08:00">2025-09-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">在程式碼世界中，並行處理（Concurrent Programming）是提升效率、優化使用者體驗的強大工具。然而，與之俱來的挑戰也同樣不容小覷，其中最讓人頭痛的莫過於「Race Condition」。它像一個潛伏在程式深處的幽靈，難以捉摸，卻能導致難以預料的錯誤。 這篇文章解析 Race Condition 的奧秘，了解它為何會發生、如何影響程式，以及最重要的是——該如何有效解決它，讓程式碼更加健壯與可靠！ 什麼是 Race Condition (競爭條件)？ 想像一下，多位跑者同時衝向只有一個終點線的賽跑。誰能第一個衝線，往往決定了比賽的結果。在程式設計中，Race Condition 就是指當多個執行緒（或進程）同時嘗試存取和修改同一個共享資源時，最終的結果卻取決於這些執行緒執行的非確定性順序。 簡單來說，它是一種時序上的 Bug。如果多個操作在錯誤的順序下執行，或者在不完整狀態下被另一個操作打斷，就可能導致預期之外的結果。這種結果是非確定性的 (Non-deterministic)，這意味著同一個程式，在不同的執行時機，可能會產生不同的結果，甚至有時正確，有時錯誤，這使得偵錯變得異常困難。 Race Condition 如何發生？ Race Condition 的發生，通常需要滿足以下幾個條件： 共享資源 (Shared Resources)：存在可被多個執行緒同時存取的變數、記憶體、檔案、資料庫連線等。 多個執行緒/進程 (Multiple Threads/Processes)：至少兩個或更多執行單元嘗試存取該共享資源。 非原子性操作 (Non-atomic Operations)：對共享資源的操作不是「原子性」的。一個原子性操作意味著它不可被中斷，要馬完全執行，要馬不執行。如果一個操作可以被分解為多個步驟，並且在中間步驟被其他執行緒打斷，就可能引入 Race Condition。 經典範例：計數器增減操作 以一個最經典的例子來說明。假設有一個全域計數器 counter，多個執行緒需要對其進行增長操作 (counter++)。表面上看，counter++ 是一個簡單的動作，但在機器碼層面，它通常會被分解成以下三個步驟： 讀取 (Read)：從記憶體中讀取 counter 的當前值。 修改 (Modify)：將讀取到的值加 1。 寫回 (Write)：將新值寫回記憶體中的 counter。 現在，想像兩個執行緒 T1 和 T2 同時嘗試執行 counter++，counter 的初始值為 0： 時間 執行緒 T1 執行緒 T2 counter 值 說明 T0 0 初始值為 0 T1 讀取 counter (值為 0) 0 T1 讀取 counter = 0 T2 讀取 counter (值為 0) 0 T2 也讀取 counter = 0 (此時 T1 尚未寫回) T3 修改 counter (0 + 1) 0 T1 將其副本計算為 1 T4 修改 counter (0 + 1) 0 T2 也將其副本計算為 1 T5 寫回 counter (值為 1) 1 T1 將 1 寫回記憶體 T6 寫回 counter (值為 1) 1 T2 將 1 寫回記憶體 (T1 的結果被覆蓋，期望值應為 2) 在這個情境下，雖然兩個執行緒都執行了增長操作，但最終 counter 的值卻是 1，而期望的結果應該是 2！這就是 Race Condition 導致的數據不一致。 Race Condition 的危害 Race Condition 不僅僅是導致錯誤的計算結果，它還可能引發更嚴重的問題： 數據損毀 (Data Corruption)：例如在數據庫操作中，可能導致數據完整性被破壞。 程式崩潰 (Application Crashes)：不正確的狀態可能觸發空指針異常、陣列越界等問題。 邏輯錯誤 (Logical Errors)：導致業務邏輯無法正確執行，影響系統行為。 安全漏洞 (Security Vulnerabilities)：在某些特定場景下，Race Condition 可能被惡意利用，導致權限提升或拒絕服務。 難以偵錯 (Difficult to Debug)：其非確定性使得錯誤難以重現，往往在特定的負載或時間點才會暴露，給開發者帶來巨大挑戰。 如何偵測 Race Condition？ 由於 Race Condition 的非確定性，傳統的單元測試很難完全覆蓋。偵測這類問題需要更專業的工具和方法： 嚴格的程式碼審查 (Code Review)：經驗豐富的開發者可以通過審查共享資源的使用情況，發現潛在的 Race Condition。 靜態分析工具 (Static Analysis Tools)：這類工具在程式碼編譯之前，通過分析程式碼結構，識別潛在的並行問題（例如，一些常見的靜態分析器）。 動態分析工具 (Dynamic Analysis Tools)： Valgrind (Helgrind)：Linux 平台下一個非常強大的記憶體錯誤和執行緒錯誤檢測工具，Helgrind 可以檢測 Race Condition。 ThreadSanitizer (TSan)：Google 開發的動態執行緒錯誤檢測工具，可以集成到編譯器中，高效地檢測數據競爭和死鎖。 壓力測試與負載測試 (Stress &amp; Load Testing)：在高併發環境下運行程式，可以增加 Race Condition 暴露的可能性。 如何解決 Race Condition？ 解決 Race Condition 的核心思想是確保在任何給定時間，只有一個執行緒能夠存取或修改共享資源，或者通過其他機制來保證操作的原子性與一致性。以下是幾種常見的解決方案： 1. 同步機制 (Synchronization Mechanisms) 互斥鎖 (Mutex / Lock) 原理：Mutex 是一種最基本的同步機制。它確保在任何時刻，只有一個執行緒能夠「持有」鎖，從而獨佔性地存取被保護的共享資源。當一個執行緒持有鎖時，其他試圖獲取該鎖的執行緒必須等待，直到鎖被釋放。 應用：適用於需要對共享資源進行寫入操作的場景，例如前面提到的計數器問題。 範例：import threading counter = 0 lock = threading.Lock() def increment(): global counter for _ in range(100000): lock.acquire() # 獲取鎖 try: counter += 1 finally: lock.release() # 釋放鎖 (確保總會釋放，即使發生異常) threads = [threading.Thread(target=increment) for _ in range(5)] for t in threads: t.start() for t in threads: t.join() print(f&quot;最終計數器值: &#123;counter&#125;&quot;) # 應該是 500000 號誌 (Semaphore) 原理：Semaphore 是一個計數器，它控制在任何時間點有多少個執行緒可以存取共享資源。它可以被理解為一個帶有計數功能的鎖。當計數器大於零時，執行緒可以進入並將計數器減一；當計數器為零時，執行緒必須等待。完成操作後，執行緒釋放號誌，計數器加一。 應用：常用於限制資源的並行存取數量，例如資料庫連接池、讀寫鎖 (Read-Write Lock)。 與 Mutex 區別：Mutex 只有兩種狀態（鎖定/解鎖），相當於計數為 1 的 Semaphore。Semaphore 可以允許多個執行緒（計數 N 個）同時存取。 條件變數 (Condition Variable) 原理：與互斥鎖配合使用，允許執行緒在滿足特定條件時進行等待，並在條件滿足時被其他執行緒喚醒。 應用：用於執行緒之間的協調，例如生產者-消費者模型，當緩衝區滿時生產者等待，當緩衝區空時消費者等待。 監視器 (Monitor) 原理：一種更高級的同步機制，它將互斥鎖和條件變數封裝在一個物件中，提供了一個物件級別的互斥訪問。 應用：在許多物件導向程式語言（如 Java）中，「synchronized」關鍵字實際上就是一種監視器的實現。 2. 原子操作 (Atomic Operations) 原理：某些硬體指令天生就是原子性的，意味著它們在單一 CPU 時鐘週期內完成，不會被中斷。現代 CPU 和程式語言提供了原子操作的 API，例如原子加法、原子比較並交換（Compare-And-Swap, CAS）。 優點：通常比使用鎖有更高的效能，因為它們避免了作業系統上下文切換的開銷。 應用：對單一變數進行簡單的、無條件的修改操作，例如原子計數器。 3. 不可變資料 (Immutability) 原理：如果共享的數據是不可變的（一旦創建就不能被修改），那麼多個執行緒同時讀取它就不會產生 Race Condition，因為數據不會被修改。 優點：從根本上消除了共享可變狀態，是避免 Race Condition 最強大的方法之一。 應用：函式式程式設計中常見的模式；許多程式語言中的 final (Java) 或 const (C++/JavaScript) 關鍵字可以幫助實現不可變性。 4. 執行緒安全資料結構 (Thread-Safe Data Structures) 原理：許多程式語言的標準庫提供了專門為並行環境設計的資料結構（例如 Java 的 ConcurrentHashMap，Python 的 queue 模組）。這些資料結構內部處理了必要的同步，確保它們的操作是執行緒安全的。 優點：開箱即用，減少了開發者自己實現同步的複雜性與錯誤。 應用：任何需要在多執行緒環境下使用的集合或容器。 5. 訊息傳遞 (Message Passing) 原理：並行程式設計的一種範式，強調通過傳遞訊息來通信，而不是共享記憶體。執行緒（或 Actor）之間不直接存取對方的記憶體，而是通過發送和接收消息來交換數據。 優點：避免了共享記憶體帶來的所有同步問題，使併發程式碼更易於理解和維護。 應用：Go 語言的 Channel、Actor 模型（如 Akka 框架），這些都是「不要通過共享記憶體來通信；而是通過通信來共享記憶體」哲學的體現。 6. 事務 (Transaction) 原理：將一系列操作視為一個原子性的單元。如果所有操作都成功，則事務提交；任何一個操作失敗，則整個事務回滾，保證數據的一致性。 應用：主要用於資料庫系統，但也有些程式語言或框架提供了記憶體事務 (Software Transactional Memory, STM) 的概念，將數據庫事務的隔離性帶入應用程式層面。 最佳實踐：謹慎設計，防範未然 最小化鎖的範圍 (Minimize Lock Scope)：只鎖定需要保護的共享資源，並且只在最短的時間內持有鎖。過大的鎖定範圍或過長的鎖持有時間會降低並行度，甚至導致死鎖。 避免遞歸鎖定 (Avoid Nested Locks)：盡量避免在持有一個鎖的同時嘗試獲取另一個鎖，這極易導致死鎖。 使用高階並行抽象 (Use High-Level Concurrency Abstractions)：優先使用語言或庫提供的執行緒安全資料結構、執行緒池、異步/反應式模型，而不是直接操作底層鎖。 擁抱不可變性 (Embrace Immutability)：盡可能將數據設計為不可變的，減少共享可變狀態。 清晰的設計與註釋 (Clear Design and Comments)：為所有共享資源和同步機制添加清晰的註釋，說明其目的和使用方式。 結論 Race Condition 是並行程式設計中一個既複雜又致命的問題。它的存在考驗著我們對程式執行時序的理解，以及對共享資源管理的嚴謹性。 透過理解 Race Condition 的成因，並熟練掌握如互斥鎖、原子操作、不可變數據、執行緒安全資料結構以及訊息傳遞等解決方案，就能夠大大提升程式碼的健壯性與穩定性。這不僅是技術能力的提升，更是對程式碼品質和可靠性的一種責任。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/09/22/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20Race%20Condition%20%E6%88%90%E5%9B%A0%E5%BD%B1%E9%9F%BF%E8%88%87%E8%A7%A3%E6%96%B9/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1320,94 +1406,8 @@
 
 
 
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/08/%E6%AA%94%E6%A1%88%E5%82%B3%E8%BC%B8%E7%9A%84%E9%80%B2%E5%8C%96%20%E5%BE%9E%E5%82%B3%E7%B5%B1%20FTP%20%E5%88%B0%E5%AE%89%E5%85%A8%E7%9A%84%20SFTP/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/09/08/%E6%AA%94%E6%A1%88%E5%82%B3%E8%BC%B8%E7%9A%84%E9%80%B2%E5%8C%96%20%E5%BE%9E%E5%82%B3%E7%B5%B1%20FTP%20%E5%88%B0%E5%AE%89%E5%85%A8%E7%9A%84%20SFTP/" class="post-title-link" itemprop="url">
-              檔案傳輸的進化：從傳統 FTP 到安全的 SFTP
-            </a>
-            <a href="/my-blog/2025/09/08/%E6%AA%94%E6%A1%88%E5%82%B3%E8%BC%B8%E7%9A%84%E9%80%B2%E5%8C%96%20%E5%BE%9E%E5%82%B3%E7%B5%B1%20FTP%20%E5%88%B0%E5%AE%89%E5%85%A8%E7%9A%84%20SFTP/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-09-08 00:00:00 / 修改時間：23:21:37" itemprop="dateCreated datePublished" datetime="2025-09-08T00:00:00+08:00">2025-09-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">在數位時代，檔案傳輸是與網路互動最頻繁的活動之一。無論是部署網站、備份資料、共享文件，還是管理遠端伺服器，都離不開檔案傳輸協定。其中，FTP (File Transfer Protocol) 是歷史悠久的，而 SFTP (SSH File Transfer Protocol) 則是現代網路安全環境下誕生的新星。 了解它們之間的差異，並選擇正確的協定，對於保護資料安全至關重要。 FTP：網路世界的「平郵」——開放與效率（但缺乏安全） FTP，全名為「檔案傳輸協定 (File Transfer Protocol)」，是一種用於在網際網路上的客戶端和伺服器之間傳輸檔案的標準協定。它工作在 OSI 模型的應用層 (Application Layer, Layer 7)。 FTP 是網際網路最早期的應用層協定之一，設計之初主要考量效率和簡單性，而非資料安全。 FTP 如何運作？雙通道模式 FTP 有一個獨特的設計：它使用兩個獨立的 TCP 連接來進行通訊： 控制通道 (Control Channel) - 埠號 21： 負責傳輸命令和回應。例如：登入、列出目錄、切換目錄、發送檔名等。 這個通道在整個 FTP 會話期間保持活動。 資料通道 (Data Channel) - 埠號 20 或隨機埠： 負責實際的檔案資料傳輸。當需要傳輸檔案或列出目錄內容時，會建立這個獨立的通道。 資料通道的建立模式有兩種： 主動模式 (Active Mode)：客戶端發送埠號給伺服器，伺服器從埠號 20 連接到客戶端指定埠。 被動模式 (Passive Mode)：客戶端要求伺服器打開一個隨機埠，並由客戶端發起連接到那個埠。此模式在防火牆環境下更常見。 FTP 的本質弱點：透明的風險 FTP 最大的問題在於其缺乏內建的安全機制： 資料未加密：所有在控制通道（如用戶名、密碼）和資料通道（實際檔案內容）上傳輸的資訊都是以純文字 (Plain Text) 形式傳遞。這意味著任何能夠監聽網路流量的人都可以輕易地截獲並讀取這些敏感資訊。 無身份驗證：雖然有用戶名和密碼，但伺服器不會驗證客戶端，客戶端也不會驗證伺服器。這使得中間人攻擊變得可能，攻擊者可以偽裝成合法伺服器。 資料完整性問題：傳輸中的資料沒有被檢查是否被篡改。 想像一下，用透明的塑膠袋打包文件，貼上明信片寫著收件人資訊（用戶名、密碼），然後交給未經驗證的「郵差」傳送到遠方。這正是 FTP 的寫照，雖然直接，但毫無隱私和安全可言。 適用場景（日益減少） 過去：廣泛用於網站部署、內部非敏感文件交換。 現在：極少推薦用於任何涉及敏感資訊的傳輸。偶爾用於匿名 FTP 伺服器（分發公開軟體或檔案）或在高度信任且隔離的內部網路環境中傳輸非敏感公開資料。 SFTP：網路世界的「加密快遞」——安全與便利 SFTP，全名為「SSH 檔案傳輸協定 (SSH File Transfer Protocol)」，它並非 FTP 的擴展，而是基於 SSH (Secure Shell) 協定的一個子系統。這意味著 SFTP 繼承了 SSH 的所有強大安全特性。它同樣工作在 OSI 模型的應用層。 SFTP 在設計上就是為了在安全的前提下進行檔案傳輸。 SFTP 如何運作？單一安全通道 SFTP 的核心優勢在於它完全依賴 SSH 提供的安全通道： 單一安全連接埠 - 埠號 22： SFTP 使用與 SSH 相同的埠號 22。 客戶端首先與伺服器建立一個加密的 SSH 連接。在這個連接建立後，所有的檔案傳輸命令、回應和實際的檔案資料都將在這個單一且加密的通道中進行。 SSH 提供的強大安全特性： 資料加密 (Encryption)：所有在 SSH 會話中傳輸的資料（包括用戶名、密碼、命令和檔案內容）都會被加密，防止竊聽。 伺服器身份驗證 (Server Authentication)：SSH 客戶端可以驗證伺服器的公鑰指紋，確保連接到的是預期的伺服器，而非冒充者。 用戶身份驗證 (User Authentication)：支持多種安全的用戶身份驗證方式，如密碼、公鑰/私鑰對 (SSH Key Pair) 認證等。公鑰認證尤其安全，不需在網路傳輸密碼。 資料完整性 (Data Integrity)：SSH 會檢查資料在傳輸過程中是否被篡改。 想像一下，將文件放入一個堅固的保險箱，並確保它只能透過加密的專屬通道，由經過嚴格身份驗證的「武裝押運車」運送。這正是 SFTP 的工作方式，為資料提供了最高等級的保護。 適用場景（現代網路首選） 網站開發和部署：安全地將網站檔案上傳到伺服器。 資料備份和同步：在遠端伺服器和本地系統之間傳輸敏感或重要資料。 遠端伺服器管理：作為 SSH 的一部分，用於在遠端編輯、移動檔案等。 任何需要機密性和完整性的檔案傳輸。 FTP vs. SFTP：核心差異 特性 FTP (File Transfer Protocol) SFTP (SSH File Transfer Protocol) 協定基礎 基於 TCP/IP 協定 基於 SSH (Secure Shell) 協定 安全性 無加密，純文字傳輸。 所有資料 (包括憑證和檔案) 皆加密，防止竊聽和篡改。 連接埠 21 (控制通道) 和 20 (資料通道) 或隨機埠 單一埠號 22 (與 SSH 相同) 傳輸模式 主動/被動模式，需處理防火牆和 NAT 問題 在 SSH 通道內傳輸，通常不涉及額外埠問題 身份驗證 僅用戶名/密碼，安全性低。 強大且可配置的驗證方式 (密碼、公鑰/私鑰對等)。 資料完整性 無內建保護機制。 SSH 提供資料完整性檢查，確保傳輸資料未被篡改。 底層協定 自己的傳輸協定 利用 SSH 的傳輸層協議 (如 TCP) 複雜度 協定本身較簡單，但網路配置可能複雜 (埠號)。 協定較為複雜，但由於依賴 SSH，使用上對防火牆等配置較簡便。 性能 在安全要求低的情況下，可能略快一點點。 加密解密需要額外計算資源，但現代硬體環境影響微乎其微。 發展趨勢 逐漸被淘汰，不推薦使用。 現代網路檔案傳輸的首選。 什麼時候該選擇誰？ 現在，這個問題的答案已經非常清晰了： 選擇 SFTP (或 FTPS - FTP over SSL/TLS)： 永遠是首選。無論傳輸的資料是否敏感，都應優先考慮使用 SFTP。它提供全面的加密、身份驗證和資料完整性保護，是現代網路環境的標準。 如果必須使用 FTP 協定，但又需要安全，可以考慮 FTPS。FTPS 是在 FTP 的基礎上，加入了 SSL/TLS 加密層，提供加密功能。不過，由於其仍然繼承了 FTP 雙通道的特性，在防火牆和 NAT 環境下，配置上仍可能比單一埠號的 SFTP 複雜一些。 避免使用 FTP： 對於任何包含敏感資訊（如密碼、個人資料、程式碼、商業機密）的檔案傳輸，絕對不要使用純 FTP。 由於其嚴重的安全缺陷，FTP 已經不適用於大多數的現代網路應用。 在網路安全日益嚴峻的今天，選擇一個安全的檔案傳輸協定，是對自身數據和客戶數據負責的表現。那多出來的一個 “S”，代表著資訊被嚴密保護。 結論 從 FTP 到 SFTP，看到的是網路協定在面對不斷演進的安全威脅時的進化。雖然 FTP 曾是檔案傳輸的支柱，但其設計上的固有缺陷已使其不適用於當今的網路環境。 SFTP 以其基於 SSH 的強大安全特性，成為了檔案傳輸的首選。它確保了資料在傳輸過程中的機密性、完整性和真實性。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/09/08/%E6%AA%94%E6%A1%88%E5%82%B3%E8%BC%B8%E7%9A%84%E9%80%B2%E5%8C%96%20%E5%BE%9E%E5%82%B3%E7%B5%B1%20FTP%20%E5%88%B0%E5%AE%89%E5%85%A8%E7%9A%84%20SFTP/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一頁" aria-label="上一頁" href="/my-blog/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/my-blog/">1</a><span class="page-number current">2</span><a class="page-number" href="/my-blog/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/my-blog/page/10/">10</a><a class="extend next" rel="next" title="下一頁" aria-label="下一頁" href="/my-blog/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="上一頁" aria-label="上一頁" href="/my-blog/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/my-blog/">1</a><span class="page-number current">2</span><a class="page-number" href="/my-blog/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/my-blog/page/11/">11</a><a class="extend next" rel="next" title="下一頁" aria-label="下一頁" href="/my-blog/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
