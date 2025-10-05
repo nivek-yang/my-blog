@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">101</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">102</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">53</span></a>
       <ul class="sub-menu">
   
@@ -204,7 +204,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/DevOps/">
         DevOps
-        <span class="post-count">(2)</span>
+        <span class="post-count">(3)</span>
       </a>
     </li>
   
@@ -520,7 +520,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-count">102</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -545,6 +545,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/06/18/%E4%BB%80%E9%BA%BC%E6%98%AFCORS-%E8%A9%B2%E6%80%8E%E9%BA%BC%E8%A7%A3%E6%B1%BA%E8%B7%A8%E4%BE%86%E6%BA%90%E8%AB%8B%E6%B1%82%E5%95%8F%E9%A1%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/06/18/%E4%BB%80%E9%BA%BC%E6%98%AFCORS-%E8%A9%B2%E6%80%8E%E9%BA%BC%E8%A7%A3%E6%B1%BA%E8%B7%A8%E4%BE%86%E6%BA%90%E8%AB%8B%E6%B1%82%E5%95%8F%E9%A1%8C/" class="post-title-link" itemprop="url">
+              什麼是 CORS（Cross-Origin Resource Sharing)？ 該怎麼解決跨來源請求問題？
+            </a>
+            <a href="/my-blog/2025/06/18/%E4%BB%80%E9%BA%BC%E6%98%AFCORS-%E8%A9%B2%E6%80%8E%E9%BA%BC%E8%A7%A3%E6%B1%BA%E8%B7%A8%E4%BE%86%E6%BA%90%E8%AB%8B%E6%B1%82%E5%95%8F%E9%A1%8C/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-06-18 00:00:00 / 修改時間：23:52:45" itemprop="dateCreated datePublished" datetime="2025-06-18T00:00:00+08:00">2025-06-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">前端開發常常會遇到「跨來源請求被阻擋」的錯誤訊息，比如： Access to fetch at 'https://api.example.com/data' from origin 'http://localhost:3000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present... 這就是著名的 CORS 問題。本篇文章將說明 CORS 是什麼、為什麼會發生，以及常見的解法。 CORS 是什麼？ CORS（Cross-Origin Resource Sharing，跨來源資源共享）是一種瀏覽器的安全機制，用來限制「不同網域」之間的請求。簡單來說，它防止了一個網站的 JavaScript 去隨意讀取另一個網站的資料。 什麼是「跨來源」？ 只要以下任何一個不同，就會被視為「不同來源」： 區塊 範例 協定 http://example.com vs https://example.com 網域 api.example.com vs www.example.com Port example.com:3000 vs example.com:8000 為什麼會出現 CORS 錯誤？ 瀏覽器會阻擋從網頁腳本對其他來源發起的請求（例如使用 fetch、axios）。除非 伺服器端主動聲明允許該請求的來源，否則請求會被攔截。 範例情境 假設前端使用 React (http://localhost:3000)，想從後端 API (http://localhost:8000) 取得資料： fetch(&#x27;http://localhost:8000/api/data&#x27;) 這是跨來源請求，除非後端有設定 CORS header，否則會被瀏覽器擋下來。 解決 CORS 問題的方法 1. 修改後端設定 CORS 問題應由「伺服器端」解決。需要在伺服器回應中加上正確的 Access-Control-Allow-Origin header。 範例：使用 Express const express = require(&#x27;express&#x27;); const cors = require(&#x27;cors&#x27;); const app = express(); app.use(cors()); // 允許所有來源 // 或只允許特定來源 // app.use(cors(&#123; origin: &#x27;http://localhost:3000&#x27; &#125;)); app.get(&#x27;/api/data&#x27;, (req, res) =&gt; &#123; res.json(&#123; message: &#x27;Hello from server!&#x27; &#125;); &#125;); app.listen(8000); 範例：使用 Django + django-cors-headers pip install django-cors-headers # settings.py INSTALLED_APPS = [ ... &#x27;corsheaders&#x27;, ] MIDDLEWARE = [ &#x27;corsheaders.middleware.CorsMiddleware&#x27;, ... ] # 允許所有網域 CORS_ALLOW_ALL_ORIGINS = True # 或只允許特定網域 # CORS_ALLOWED_ORIGINS = [ # &quot;http://localhost:3000&quot;, # ] 2. 使用 Proxy 避開 CORS 開發時可使用前端代理轉發請求，例如 React： // vite.config.js or package.json proxy: &#123; &#x27;/api&#x27;: &#123; target: &#x27;http://localhost:8000&#x27;, changeOrigin: true, &#125;, &#125; 這樣 fetch('/api/data') 實際會被代理成後端的請求，不會被視為跨來源。 3. 後端設定 Access-Control Headers 除了 Access-Control-Allow-Origin，有時也需要加上這些 header： Access-Control-Allow-Origin: http://localhost:3000 Access-Control-Allow-Methods: GET, POST, PUT, DELETE Access-Control-Allow-Headers: Content-Type, Authorization 這些設定也必須在「預檢請求（Preflight Request）」中正確處理。 面試題目 「請說明什麼是 CORS（Cross-Origin Resource Sharing），以及如果遇到 CORS 問題該如何解決？」 回答範例： CORS（Cross-Origin Resource Sharing） 是一種瀏覽器的安全機制，用來限制前端從不同來源（origin）去請求資源，避免惡意網站竊取資料。當前端的 JavaScript 嘗試向不同網域、協定或 port 發送請求時，如果伺服器沒有正確設定 CORS header，瀏覽器會阻擋這個請求。 常見錯誤： 例如使用 fetch 或 axios 向不同來源的 API 發送請求時，會看到類似錯誤： Access to fetch at 'http://api.example.com' from origin 'http://localhost:3000' has been blocked by CORS policy 解決方式： 從伺服器端設定 CORS header（這是正確的做法）： 設定 Access-Control-Allow-Origin，明確允許某個前端網域。 可搭配套件，如： Node.js 可用 cors middleware Django 可用 django-cors-headers 本地開發時使用 proxy 轉發請求，避開跨域問題（開發用）： 例如 React 可以設定 vite.config.js 或 webpack devServer proxy 總結 問題 解法 跨來源請求被阻擋 在後端加上 CORS Header 特定網域允許 設定 Access-Control-Allow-Origin 為指定來源 多來源需求 使用動態設定或 whitelist 本地開發測試 使用 Proxy 或開啟允許全部來源 延伸閱讀 MDN - HTTP access control (CORS) CORS 官方規範 (W3C) django-cors-headers GitHub 如果曾經在開發中遇過 CORS 錯誤，不妨回頭看看是不是跨來源造成的限制，並從伺服器端著手解決吧！</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/06/18/%E4%BB%80%E9%BA%BC%E6%98%AFCORS-%E8%A9%B2%E6%80%8E%E9%BA%BC%E8%A7%A3%E6%B1%BA%E8%B7%A8%E4%BE%86%E6%BA%90%E8%AB%8B%E6%B1%82%E5%95%8F%E9%A1%8C/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1321,98 +1407,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/04/27/%E5%9F%BA%E6%96%BC%20Git%20Subtree%20%E7%9A%84%E5%A4%9A%E5%88%86%E6%94%AF%E5%B0%88%E6%A1%88%E7%AE%A1%E7%90%86%E8%88%87%E8%87%AA%E5%8B%95%E5%8C%96%E6%95%B4%E5%90%88/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/25/Git%20%E6%8C%87%E5%8D%97%EF%BC%9A%E5%BE%9E%E5%9F%BA%E7%A4%8E%E6%93%8D%E4%BD%9C%E5%88%B0%E9%80%B2%E9%9A%8E%E6%8A%80%E5%B7%A7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/04/25/Git%20%E6%8C%87%E5%8D%97%EF%BC%9A%E5%BE%9E%E5%9F%BA%E7%A4%8E%E6%93%8D%E4%BD%9C%E5%88%B0%E9%80%B2%E9%9A%8E%E6%8A%80%E5%B7%A7/" class="post-title-link" itemprop="url">
-              Git 指南：從基礎操作到進階技巧
-            </a>
-            <a href="/my-blog/2025/04/25/Git%20%E6%8C%87%E5%8D%97%EF%BC%9A%E5%BE%9E%E5%9F%BA%E7%A4%8E%E6%93%8D%E4%BD%9C%E5%88%B0%E9%80%B2%E9%9A%8E%E6%8A%80%E5%B7%A7/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-
-      <time title="創建時間：2025-04-25 00:00:00" itemprop="dateCreated datePublished" datetime="2025-04-25T00:00:00+08:00">2025-04-25</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新於</span>
-      <time title="修改時間：2025-04-26 02:21:44" itemprop="dateModified" datetime="2025-04-26T02:21:44+08:00">2025-04-26</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">1. Git 的核心概念 Git 的版本控制就像拍照一樣，能夠記錄當下的專案狀態（snapshot），並允許我們回到某個時間點的狀態。 版本控制：每次提交（commit）都像拍照，記錄當下的檔案狀態。 非破壞性操作：Git 的操作不會刪除歷史，只會新增記錄，讓我們可以隨時回溯。 2. 安裝 Git 在 macOS 上可以使用 Homebrew 來安裝 Git： brew install git git --version 3. 初始化專案 初始化一個 Git 儲存庫，會在專案目錄中建立 .git 資料夾： git init 4. 基本操作 查看狀態 檢查目前的檔案狀態： git status 追蹤檔案 將檔案加入暫存區： git add index.html 取消追蹤檔案 將檔案從暫存區移回工作目錄： git restore --staged index.html 提交變更 提交檔案並附加說明訊息： git commit -m &quot;feat: add index.html&quot; 5. git config 設定使用者資訊 設定全域的使用者名稱與信箱： git config --global user.name &#x27;YOURNAME&#x27; git config --global user.email &#x27;YOUR_EMAIL&#x27; 查看目前的 Git 設定： git config --list 6. 提交訊息的最佳實踐 避免使用模糊的訊息，例如： &quot;update&quot; &quot;bug fixed&quot; &quot;temp&quot; 推薦使用具體且有意義的訊息，例如： &quot;#23 bug fixed&quot; &quot;member sign in (WIP)&quot; 建議遵循 Conventional Commits 標準。 7. git log 查看歷史紀錄 使用指令 查看專案的提交歷史： git log 使用工具 在 VS Code 中可以使用 Git Graph 插件來視覺化歷史紀錄。 8. git restore 還原檔案 還原單一檔案 將檔案還原到最新一次的提交狀態： git restore index.html 還原所有檔案 將整個目錄還原到最新一次的提交狀態（不推薦）： git restore . 9. git branch 分支操作 查看分支 列出所有分支： git branch 建立分支 建立新分支： git branch cat 刪除分支 刪除分支： git branch -d git branch -d 用於刪除 已經合併到當前分支的分支。如果分支尚未合併，Git 會拒絕刪除，並提示錯誤，避免意外刪除未合併的工作。 git branch -d &lt;branch_name&gt; git branch -D git branch -D 是強制刪除分支的指令，無論分支是否已經合併到當前分支，都會直接刪除。 不需要檢查分支是否已合併。 適用於確定不需要該分支的情況，但需謹慎使用，因為未合併的工作可能會丟失（除非透過 git reflog 找回）。 找回被刪除的分支：如果誤刪分支，可以使用 git reflog 找回： git reflog git branch &lt;branch_name&gt; &lt;commit_id&gt; 切換分支 切換到指定分支： git switch cat 10. git merge 合併分支 快轉 (fast-forward) 合併 將目前分支快轉到另一個分支： git switch master git merge cat 合併前的 Git Graph： * C3 (cat) | * C2 (master) | * C1 合併後（快轉合併）： * C3 (cat, master) | * C2 | * C1 非快轉合併 如果想保留合併歷程，產生一個新的合併節點（merge commit），可以使用 --no-ff 參數： git merge cat --no-ff -m &quot;merge&quot; 合併後（非快轉合併）： * M (master) merge commit |\ | * C3 (cat) | | * | C2 |/ * C1 M（merge commit）：新的合併節點，記錄了 dog 和 cat 分支的合併歷史。 分支歷史：dog 分支的歷史現在包含了 cat 分支的提交。 合併歷程可視化：這種方式保留了分支的合併歷史，能在 Git Graph 中清楚地看到分支的合併過程。 適用場景：當需要保留分支的合併歷史，或在團隊協作中需要清楚記錄分支的來源時，使用非快轉合併是更好的選擇。 無法快轉的合併 在 Git 中，快轉合併（fast-forward merge）是指當目標分支的歷史是當前分支的直接延續時，Git 只需將當前分支的指標移動到目標分支的最新提交即可完成合併。 然而，當兩個分支的歷史路徑不同時，無法進行快轉合併，因為這兩個分支的提交歷史已經分叉。此時，Git 需要創建一個新的合併節點來將這兩條歷史路徑合併在一起。 當兩個分支的歷史路徑不同時，無法進行快轉合併（fast-forward merge），這種情況會產生一個新的合併節點（merge commit）。以下是詳細的解釋與範例。 git switch dog git merge cat -m &quot;Merge branch &#x27;cat&#x27; into dog&quot; 與快轉合併的比較 特性 快轉合併（Fast-Forward Merge） 無法快轉合併（Non-Fast-Forward Merge） 提交歷史 不產生新的合併節點 產生新的合併節點 分支歷史 無法保留分支的獨立歷史 保留分支的獨立歷史 適用場景 單人開發或簡單的分支合併 團隊協作或需要完整歷史記錄 11 Merge 衝突未解決的情況 當執行 git merge 時，如果發生衝突但未解決，Git 仍然允許合併完成，但這可能導致合併的內容不正確。 解決方法 檢查衝突：Git 會在衝突的檔案中標註衝突的區域，需要手動編輯檔案來解決衝突。 提交修正後的結果：git add . git commit -m &quot;Resolve merge conflict&quot; 如果決定放棄合併，可以使用以下指令取消合併過程：git merge --abort 12. git rebase 用於重新整理分支的提交歷史。它可以將一個分支的基底（base）換到另一個分支上，從而使提交歷史更加線性化，便於閱讀和管理。 git rebase 其實算是一個「危險」的指令，因為它會改寫整個commit 的歷史，實務上不會對團隊共同開發的穩定分支（像master, main, dev,…等）下這個指令 Rebase 的用途 清理提交歷史：將分支的提交歷史整理成一條直線，避免分支間的交錯。 整合功能分支：在將功能分支合併到主分支之前，使用 Rebase 將功能分支的基底更新到最新的主分支。 避免多餘的合併節點：與 merge 不同，Rebase 不會產生新的合併節點（merge commit）。 Rebase 的基本操作 以下是將 dog 分支的基底換到 cat 分支的範例： git switch dog git rebase cat 執行上述指令後，dog 分支的提交歷史會被重新整理，並接在 cat 分支的最新提交之後。 Rebase 的優缺點 優點： 簡化歷史：提交歷史更加線性，便於閱讀。 避免多餘的合併節點：不像 merge，Rebase 不會產生新的合併節點。 缺點： 破壞歷史：Rebase 會改變提交的哈希值（commit hash），因此不適合用於已經共享的分支。 衝突處理：如果 Rebase 過程中發生衝突，需要手動解決，並使用以下指令繼續 Rebase：git rebase --continue Rebase 與 Merge 的比較 特性 Rebase Merge 提交歷史 線性化，歷史更簡潔 保留完整的分支合併歷史 合併節點 不產生新的合併節點 產生新的合併節點（merge commit） 適用場景 清理歷史、更新基底 保留分支歷史 衝突處理 每個提交單獨解決衝突 一次解決所有衝突 注意事項 避免在共享分支上使用 Rebase：Rebase 會改變提交的哈希值，可能導致其他開發者的分支出現問題。 記住原始狀態： git rebase 是一個「危險」的指令，rebase 前，git 會自動保存原始狀態到 ORIG_HEAD，如果需要回到 rebase 前的狀態，可以使用以下指令： git reset ORIG_HEAD --hard 13. git reset 刪除與復原節點 刪除末端節點 將目前的分支重置到指定的提交： git reset &lt;ID&gt; 重置模式： --mixed（預設）：異動會出現在工作目錄（unstaged）。 --soft：異動會出現在 staging 區（已 add）。 --hard：異動會直接被丟棄。 使用 git reflog 找回節點 git reflog 紀錄 HEAD 的移動 如果分支被刪除，該節點會變成無名分支（dangling commit）。可以使用 git reflog 找回並重新貼上分支： git branch cat &lt;commit_id&gt; 14. 進階技巧 查詢檔案歷史 查看檔案每行程式的作者與修改時間： git blame index.html 在 VS Code 中可以使用 GitLens 插件直接查看。 修改分支名稱 重新命名分支： git branch -m new_name git branch 也可能造成 HEAD 移動: 改 branch 名字， HEAD 本身沒有動，但換指向另一個地方，reflog 有紀錄 15. 復原操作 復原 Merge git merge cat -m &quot;Merge&quot; git reset HEAD^ --hard # 回到 HEAD 的上一步 復原 Rebase git rebase cat git reset ORIG_HEAD --hard Rebase 前會自動存一份 ORIG_HEAD，方便回到舊狀態。 16. Reset 與 Reflog 的搭配使用 在 Git 中，reset 和 reflog 是一組強大的工具，能夠讓我們靈活地操作分支歷史： Reset：可以將目前的分支移動到任何指定的節點，讓分支的狀態回到該節點的樣子。這就像「飛行」一樣，可以快速跳轉到不同的提交。 Reflog：記錄了 HEAD 的所有移動歷史，就像一張「地圖」，幫助我們追蹤分支的變化。即使某些節點不再被分支指向，也可以透過 reflog 找回。 使用範例 查看 HEAD 的移動歷史： git reflog 將分支重置到某個歷史節點： git reset &lt;commit_id&gt; --hard 注意事項 reset 是一個強大的工具，但需謹慎使用，特別是 --hard 模式，因為它會丟棄未提交的變更。 reflog 是找回遺失節點的救命工具，即使分支被刪除，節點仍然可以透過 reflog 找回。 透過 reset 和 reflog 的搭配，可以靈活地操作分支歷史，並在需要時回到任何過去的狀態。 17. 隱形節點的產生 在 Git 中，每個分支都像一個便利貼，指向某個提交（commit）。當分支被刪除後，該分支指向的節點（末端節點）會變成無人看管的狀態，這些節點會「隱形」，但實際上它們仍然存在於 Git 的歷史中。 讓隱形節點重新現形 如果需要讓隱形的節點重新出現在分支中，可以將分支重新貼回該節點： 使用 git reflog 找到隱形節點的提交 ID。git reflog 建立一個新的分支，指向該提交：git branch &lt;branch_name&gt; &lt;commit_id&gt; 18. Git 的非破壞性操作 Git 的操作本質上是非破壞性的，所有的提交歷史都會被保留。即使使用 git rebase，原始的節點也不會被刪除，而是被隱藏。 Rebase 的背後原理 複製節點：git rebase 的操作實際上是複製原始節點，並將它們移動到新的基底（base）後面。 隱藏原始節點：原始的節點會被隱藏，但可以透過 git reflog 找回。 19. 結語 Git 是一個功能強大的版本控制工具，熟練掌握後可以大幅提升開發效率與團隊協作能力。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/04/25/Git%20%E6%8C%87%E5%8D%97%EF%BC%9A%E5%BE%9E%E5%9F%BA%E7%A4%8E%E6%93%8D%E4%BD%9C%E5%88%B0%E9%80%B2%E9%9A%8E%E6%8A%80%E5%B7%A7/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>
