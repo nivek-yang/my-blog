@@ -105,8 +105,8 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">102</span></a>
-  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">53</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">103</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">54</span></a>
       <ul class="sub-menu">
   
   
@@ -190,6 +190,13 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Cyber-Security/">
         Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cybersecurity/">
+        Cybersecurity
         <span class="post-count">(1)</span>
       </a>
     </li>
@@ -520,7 +527,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">103</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -528,7 +535,7 @@
     
       <div class="site-state-item site-state-tags">
           <a href="/my-blog/tags/">
-        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-count">54</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -545,6 +552,98 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/06/19/%E4%BB%80%E9%BA%BC%E6%98%AF%20SQL%20Injection%E5%8F%88%E8%A9%B2%E5%A6%82%E4%BD%95%E9%A0%90%E9%98%B2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/06/19/%E4%BB%80%E9%BA%BC%E6%98%AF%20SQL%20Injection%E5%8F%88%E8%A9%B2%E5%A6%82%E4%BD%95%E9%A0%90%E9%98%B2/" class="post-title-link" itemprop="url">
+              什麼是 SQL Injection？又該如何預防？
+            </a>
+            <a href="/my-blog/2025/06/19/%E4%BB%80%E9%BA%BC%E6%98%AF%20SQL%20Injection%E5%8F%88%E8%A9%B2%E5%A6%82%E4%BD%95%E9%A0%90%E9%98%B2/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2025-06-19 00:00:00" itemprop="dateCreated datePublished" datetime="2025-06-19T00:00:00+08:00">2025-06-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-06-20 01:26:27" itemprop="dateModified" datetime="2025-06-20T01:26:27+08:00">2025-06-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">在 Web 開發中，SQL Injection（SQL 注入） 是最常見且危害極大的資安漏洞之一。它可以讓攻擊者透過竄改 SQL 查詢語句來未授權地讀取、修改、甚至刪除資料庫中的資料。本文將帶你認識 SQL Injection 是什麼、實際攻擊範例，以及開發者該如何有效預防這種攻擊。 SQL Injection 是什麼？ SQL Injection 是一種將惡意 SQL 語句插入應用程式輸入欄位中的攻擊方式，目的是操控原本預期的 SQL 查詢邏輯。 舉例來說，假設以下是一段不安全的登入邏輯： # ❌ 極度危險的程式碼 username = input(&quot;請輸入帳號：&quot;) password = input(&quot;請輸入密碼：&quot;) query = f&quot;SELECT * FROM users WHERE username = &#x27;&#123;username&#125;&#x27; AND password = &#x27;&#123;password&#125;&#x27;&quot; cursor.execute(query) 當攻擊者輸入以下資料時： username: ' OR 1=1 -- password: 任意內容 查詢語句將變成： SELECT * FROM users WHERE username = &#x27;&#x27; OR 1=1 --&#x27; AND password = &#x27;任意內容&#x27; 由於 -- 是 SQL 的註解符號，後面的內容會被忽略，而 OR 1=1 永遠為真，攻擊者即可繞過密碼驗證成功登入！ SQL Injection 的潛在危害 繞過身份驗證：如上例，攻擊者可直接登入任意帳戶。 資料洩漏：SELECT 語句被竄改，可讀取整個資料表。 資料破壞：透過 INSERT/UPDATE/DELETE 修改或刪除資料。 系統控制：某些情況下可執行資料庫指令進而控制伺服器。 如何預防 SQL Injection？ 防範 SQL Injection 是開發者的責任，以下是幾種有效的預防方式： 1. 使用參數化查詢（Prepared Statements） 最根本的解法是使用參數化查詢，將使用者輸入與 SQL 語句分離。 以 Python（Django ORM）為例： # ✅ 安全寫法（ORM 自動處理 SQL 注入風險） User.objects.filter(username=username, password=password).exists() 以 Python 搭配 psycopg2 原生查詢為例： # ✅ 安全寫法（使用參數化） cursor.execute(&quot;SELECT * FROM users WHERE username = %s AND password = %s&quot;, (username, password)) 2. 使用 ORM（Object-Relational Mapping） ORM 框架（如 Django ORM、SQLAlchemy）天生會處理 SQL Injection 的風險，因為它們自動將參數轉義為安全格式。 3. 輸入驗證與清洗 雖不能取代參數化查詢，但針對表單輸入進行格式驗證（如 email 格式、字數限制）可降低惡意資料混入。 4. 最小權限原則（Least Privilege） 資料庫帳號應只授予應用程式所需的最低權限。避免使用擁有 DROP、GRANT 等高權限的帳號。 5. 使用 Web 應用防火牆（WAF） WAF 可自動攔截常見的 SQL Injection 攻擊模式，作為第二道防線。 如何檢測是否有 SQL Injection？ 使用自動化工具（如 sqlmap）對 API 或表單送出測試 payload。 開發階段可使用 lint 工具檢查潛在的不安全 SQL 組合。 確保有完整的測試覆蓋對外輸入的功能。 面試回答 SQL Injection 是一種資安攻擊手法，攻擊者在表單輸入或 URL 中注入惡意 SQL 語句，藉此操控原本的資料庫查詢邏輯，可能造成未授權的資料讀取、修改，甚至整個資料庫被破壞。 舉例來說，若在登入功能中直接把使用者輸入組合成 SQL 字串而未加防護，攻擊者就能透過像 ' OR 1=1 -- 的輸入繞過驗證。 預防方式主要有三個： 使用參數化查詢（Prepared Statements）：將輸入值與 SQL 語句分離，是最根本的解法。 使用 ORM 框架：像是 Django ORM、SQLAlchemy 會自動處理參數轉義。 避免直接拼接 SQL，並搭配輸入驗證與資料庫權限控管，從多層面加強安全性。 在我自己的專案中，例如使用 Django 框架時，會透過 ORM 查詢，確保使用者輸入不會直接進入 SQL 字串，並依角色限制資料庫操作權限，確保資安基本面不被忽略。 總結 安全措施 是否必要 備註 參數化查詢 ✅ 必須實作 最根本防禦方式 ORM 框架 ✅ 強烈建議 自動處理轉意 輸入驗證 ⚠️ 輔助防禦 不能單獨依賴 資料庫權限控制 ✅ 應落實 防止資料被大規模破壞 Web 防火牆 ⚠️ 加強防禦 作為額外保護 SQL Injection 是老生常談但仍極常見的安全漏洞，唯有落實安全開發習慣，才能避免這類攻擊發生。 延伸閱讀 OWASP: SQL Injection Django Security Docs</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/06/19/%E4%BB%80%E9%BA%BC%E6%98%AF%20SQL%20Injection%E5%8F%88%E8%A9%B2%E5%A6%82%E4%BD%95%E9%A0%90%E9%98%B2/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1315,98 +1414,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/04/28/Django%20%E4%BD%BF%E7%94%A8%20%60ManyToMany%60%20%E9%97%9C%E8%81%AF%E6%A8%A1%E5%9E%8B%E8%99%95%E7%90%86%E3%80%8C%E5%8B%95%E6%85%8B%E5%88%87%E6%8F%9B%E6%8C%89%E8%AE%9A%E7%8B%80%E6%85%8B%E3%80%8D/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/27/%E5%9F%BA%E6%96%BC%20Git%20Subtree%20%E7%9A%84%E5%A4%9A%E5%88%86%E6%94%AF%E5%B0%88%E6%A1%88%E7%AE%A1%E7%90%86%E8%88%87%E8%87%AA%E5%8B%95%E5%8C%96%E6%95%B4%E5%90%88/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/04/27/%E5%9F%BA%E6%96%BC%20Git%20Subtree%20%E7%9A%84%E5%A4%9A%E5%88%86%E6%94%AF%E5%B0%88%E6%A1%88%E7%AE%A1%E7%90%86%E8%88%87%E8%87%AA%E5%8B%95%E5%8C%96%E6%95%B4%E5%90%88/" class="post-title-link" itemprop="url">
-              基於 Git Subtree 的多分支專案管理與自動化整合
-            </a>
-            <a href="/my-blog/2025/04/27/%E5%9F%BA%E6%96%BC%20Git%20Subtree%20%E7%9A%84%E5%A4%9A%E5%88%86%E6%94%AF%E5%B0%88%E6%A1%88%E7%AE%A1%E7%90%86%E8%88%87%E8%87%AA%E5%8B%95%E5%8C%96%E6%95%B4%E5%90%88/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-
-      <time title="創建時間：2025-04-27 00:00:00" itemprop="dateCreated datePublished" datetime="2025-04-27T00:00:00+08:00">2025-04-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新於</span>
-      <time title="修改時間：2025-04-28 00:21:02" itemprop="dateModified" datetime="2025-04-28T00:21:02+08:00">2025-04-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">這篇筆記說明如何用 Git Subtree 設計一個在 GitHub 上「可重複練習、集中管理」的多分支專案架構，並透過 Makefile 實現自動化整合。 核心目標是： 從 template 分支快速建立開發練習分支，讓每次開發練習都從一致的起點開始 每個開發分支獨立開發、保有完整 commit 紀錄 最終成果自動整合到 master 分支的子資料夾，方便集中展示與維運管理 這樣的流程設計有以下優點： 快速複製練習環境，便於反覆練習與教學 每次練習皆為獨立專案，保留完整開發歷程 成果集中到 master，只需瀏覽一個分支即可看到所有進度 可搭配 GitHub Actions 等工具，自動化整合與部署流程 🧱 建立 template 分支 template 分支是所有練習的起始樣板，可以依照以下兩種方式建立： 建立初始開發環境：準備好基礎的資料夾架構、依賴設定檔（例如 package.json、requirements.txt）或共用的 utility function。 給予練習規格：可以只放入說明文件、範例輸入/輸出或 TODO 任務，讓想練習的人依據這份規格自行開發。 建立指令如下： # 從 master 建立 template 分支 git checkout -b template # 推送到遠端 git push origin template ⚙️ 更改預設分支（GitHub 操作） 前往 GitHub Repo 頁面 點擊「⚙ Settings」 左側選單中選擇「Branches」 將 Default branch 改為 template 這個設定是為了能夠先刪除 master 分支並重建，讓 master 存放練習後的成果 🗑️ 刪除 master 並重建 如果你想讓 master 分支只存放整合後的成果，而非開發內容，可以重新建立一個乾淨的 master 分支： # 刪除遠端 master 分支 git push origin --delete master # 本地切換並建立新的空 master 分支 git checkout --orphan master # 移除所有檔案（保留工作區） git rm -rf . # 建立 .gitignore 和 Makefile touch .gitignore Makefile # 提交並推送新的空白 master 分支 git add .gitignore Makefile git commit -m &quot;Initialize new master branch&quot; git push -u origin master ⚠️ 請記得將預設分支從 template 改回 master，以便未來集中展示成果與管理。 用 git subtree 將多分支專案整合 git subtree 是 Git 提供的工具，允許你將另一個分支的內容匯入到當前分支的某個子資料夾，並保留其完整的 commit 歷史。 git subtree add --prefix=&lt;資料夾路徑&gt; &lt;遠端名稱&gt;/&lt;分支名稱&gt; 這條指令的作用是將指定的遠端分支內容匯入到當前分支的某個子資料夾中，並保留該分支的完整 commit 歷史 --prefix=&lt;資料夾路徑&gt;： 指定將分支內容匯入到當前分支的哪個子資料夾。 如果該資料夾不存在，Git 會自動建立。 &lt;遠端名稱&gt;/&lt;分支名稱&gt;： 指定要匯入的遠端分支。 例如，origin/feature-1 表示從遠端 origin 的 feature-1 分支匯入。 在本專案中，我們使用 git subtree 的目的包括： 將每個練習分支（如 feature_1）的專案內容，整合匯入到 master 分支的對應子資料夾（如 feature_1/） 避免用 merge 或 cherry-pick 導致 commit 歷史混亂 可重複執行，不會影響其他資料夾內容 建立 Makefile 自動遷移腳本 以下是 master 分支根目錄的 Makefile 實作： .PHONY: archive archive-all # 將指定分支內容以 git subtree 匯入對應資料夾，保留完整 commit 紀錄 archive: ifndef name $(error Usage: make archive name=feature-&lt;X&gt;) endif @echo &quot;🌲 Archiving $(name) into master:$(name)/ using git subtree...&quot; # 確保在 master 分支 @git checkout master # 檢查有無未提交的變更 @if [ -n &quot;$$\(git status --porcelain)&quot; ]; then \ echo &quot;❌ master branch has uncommitted changes. Please commit or stash first.&quot;; \ exit 1; \ fi # 匯入分支內容到對應資料夾（不使用 --squash，可保留所有 commit） @git subtree add --prefix=$(name) origin/$(name) @echo &quot;✅ Done archiving $(name) into master:$(name)/&quot; # 批次對所有符合 feature-* 的分支執行 subtree 匯入 archive-all: @git fetch origin @git branch -r | grep &#x27;origin/feature_&#x27; | sed &#x27;s|origin/||&#x27; | while read branch; do \ $(MAKE) archive name=$$branch; \ done 📦 歸檔練習分支內容 每完成一個 feature_&lt;n&gt; 分支的專案後，執行： make archive name=feature_&lt;n&gt; 系統會自動將該分支所有檔案以 git subtree 匯入到 master 的 feature_&lt;n&gt;/ 資料夾中，保留完整 commit 歷史。 若要一鍵歸檔所有 feature_&lt;n&gt; 分支，可執行： make archive-all 🚀 後續可整合 GitHub Actions 自動化流程 未來可以使用 GitHub Actions 自動觸發 make archive name=feature_&lt;n&gt; 指令，將 PR 合併後的分支內容自動歸檔到 master 的對應子資料夾。建議流程如下： 當 PR 合併至 feature_&lt;n&gt; 分支時觸發 workflow 使用 actions/checkout 切換到 master 分支 使用 git fetch 確保能抓到對應的分支內容 執行 make archive name=feature_&lt;n&gt; 自動歸檔 將更新過的 master 分支 push 回遠端 這樣可以避免手動切換與操作，讓每個練習成果在合併 PR 後自動整理到展示區。你也可以加入條件判斷，只對分支名稱符合 feature_* 格式的情況執行此流程。 ✅ 結果展示 master ├── .gitignore ├── Makefile ├── feature_1/ │ ├── manage.py │ ├── app/ │ └── ... ├── feature_2/ │ └── ... └── feature_3/ └── ... 這樣的架構讓你可以： 保有一份可重複使用的範本分支（template） 在多個練習分支開發而不互相干擾 將成果統一集中到 master 展示，方便他人瀏覽 將 CI/CD、部屬、技術分享等操作聚焦於 master 管理 非常適合用於建立個人練習倉庫、技術文章範例、或團隊協作練習環境。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/04/27/%E5%9F%BA%E6%96%BC%20Git%20Subtree%20%E7%9A%84%E5%A4%9A%E5%88%86%E6%94%AF%E5%B0%88%E6%A1%88%E7%AE%A1%E7%90%86%E8%88%87%E8%87%AA%E5%8B%95%E5%8C%96%E6%95%B4%E5%90%88/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>

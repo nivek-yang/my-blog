@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="讓我們來談談一個經典的安全模型：城堡與護城河 (Castle-and-Moat)。數十年來，企業網路安全幾乎都建立在這個模型之上。我們耗費巨資建造了堅固的「城牆」（防火牆）、挖掘了深邃的「護城河」（入侵檢測系統），並在唯一的「吊橋」（VPN）上設置了森嚴的守衛。 這個模型的假設很簡單：牆外是危險的，牆內是安全的。 只要能通過驗證進入內部網路，就會被視為「受信任的」員工，可以在城堡內部相對自由地活動">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解新一代安全架構「零信任 (Zero Trust)」">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/10/07/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E6%96%B0%E4%B8%80%E4%BB%A3%E5%AE%89%E5%85%A8%E6%9E%B6%E6%A7%8B%20%E9%9B%B6%E4%BF%A1%E4%BB%BB%20Zero%20Trust/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="讓我們來談談一個經典的安全模型：城堡與護城河 (Castle-and-Moat)。數十年來，企業網路安全幾乎都建立在這個模型之上。我們耗費巨資建造了堅固的「城牆」（防火牆）、挖掘了深邃的「護城河」（入侵檢測系統），並在唯一的「吊橋」（VPN）上設置了森嚴的守衛。 這個模型的假設很簡單：牆外是危險的，牆內是安全的。 只要能通過驗證進入內部網路，就會被視為「受信任的」員工，可以在城堡內部相對自由地活動">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-10-06T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-07T15:17:02.274Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Cybersecurity">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/10/07/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E6%96%B0%E4%B8%80%E4%BB%A3%E5%AE%89%E5%85%A8%E6%9E%B6%E6%A7%8B%20%E9%9B%B6%E4%BF%A1%E4%BB%BB%20Zero%20Trust/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/10/07/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E6%96%B0%E4%B8%80%E4%BB%A3%E5%AE%89%E5%85%A8%E6%9E%B6%E6%A7%8B%20%E9%9B%B6%E4%BF%A1%E4%BB%BB%20Zero%20Trust/","path":"2025/10/07/深入理解新一代安全架構 零信任 Zero Trust/","title":"深入理解新一代安全架構「零信任 (Zero Trust)」"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>深入理解新一代安全架構「零信任 (Zero Trust)」 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">103</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">54</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cloud-Computing/">
+        Cloud Computing
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Concurrency/">
+        Concurrency
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cybersecurity/">
+        Cybersecurity
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(19)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/DevOps/">
+        DevOps
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(16)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Serverless/">
+        Serverless
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-zero-trust"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是 Zero Trust？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9C%80%E8%A6%81-zero-trust"><span class="nav-number">2.</span> <span class="nav-text"> 為什麼需要 Zero Trust？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#zero-trust-%E7%9A%84%E4%B8%89%E5%A4%A7%E5%8E%9F%E5%89%87"><span class="nav-number">3.</span> <span class="nav-text"> Zero Trust 的三大原則</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#zero-trust-%E6%9E%B6%E6%A7%8B%E7%9A%84%E9%97%9C%E9%8D%B5%E5%85%83%E7%B4%A0"><span class="nav-number">4.</span> <span class="nav-text"> Zero Trust 架構的關鍵元素</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B0%A1%E5%96%AE%E4%BE%8B%E5%AD%90"><span class="nav-number">5.</span> <span class="nav-text"> 簡單例子</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%82%B3%E7%B5%B1%E6%A8%A1%E5%BC%8F"><span class="nav-number">5.1.</span> <span class="nav-text"> 傳統模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zero-trust-%E6%A8%A1%E5%BC%8F"><span class="nav-number">5.2.</span> <span class="nav-text"> Zero Trust 模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E8%A6%8B-zero-trust-%E6%8A%80%E8%A1%93"><span class="nav-number">6.</span> <span class="nav-text"> 常見 Zero Trust 技術</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%B6%E4%BF%A1%E4%BB%BB%E4%B8%8D%E6%98%AF%E4%B8%80%E8%B9%B4%E5%8F%AF%E5%B9%BE%E8%80%8C%E6%98%AF%E4%B8%80%E8%B6%9F%E6%97%85%E7%A8%8B"><span class="nav-number">7.</span> <span class="nav-text"> 零信任不是一蹴可幾，而是一趟旅程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">8.</span> <span class="nav-text"> 總結</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">103</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">54</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/07/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E6%96%B0%E4%B8%80%E4%BB%A3%E5%AE%89%E5%85%A8%E6%9E%B6%E6%A7%8B%20%E9%9B%B6%E4%BF%A1%E4%BB%BB%20Zero%20Trust/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="深入理解新一代安全架構「零信任 (Zero Trust)」 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深入理解新一代安全架構「零信任 (Zero Trust)」
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-10-07 00:00:00 / 修改時間：23:17:02" itemprop="dateCreated datePublished" datetime="2025-10-07T00:00:00+08:00">2025-10-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>讓我們來談談一個經典的安全模型：<strong>城堡與護城河 (Castle-and-Moat)</strong>。數十年來，企業網路安全幾乎都建立在這個模型之上。我們耗費巨資建造了堅固的「城牆」（防火牆）、挖掘了深邃的「護城河」（入侵檢測系統），並在唯一的「吊橋」（VPN）上設置了森嚴的守衛。</p>
+<p>這個模型的假設很簡單：<strong>牆外是危險的，牆內是安全的。</strong> 只要能通過驗證進入內部網路，就會被視為「受信任的」員工，可以在城堡內部相對自由地活動。</p>
+<p>然而，在雲端服務、遠距辦公和行動裝置已成主流的今天，這座城堡的邊界早已模糊不清。當員工在咖啡廳用著個人筆電存取雲端 SaaS 服務時，「牆內」和「牆外」的區別在哪裡？更致命的是，一旦攻擊者（或內部威脅）通過釣魚郵件等方式騙取了 VPN 憑證，就等於直接越過了護城河，整個城堡的內部將暢行無阻。</p>
+<p>這個過時的信任模型，正是「零信任 (Zero Trust)」架構要徹底顛覆的對象。</p>
+<hr />
+<h1 id="什麼是-zero-trust"><a class="markdownIt-Anchor" href="#什麼是-zero-trust"></a> 什麼是 Zero Trust？</h1>
+<p><strong>Zero Trust（零信任）</strong> 是一種 <strong>網路安全架構理念</strong>，核心思想是：<br />
+👉 <strong>不要預設信任任何人或任何設備，不論它們在網路內部還是外部，每次存取資源都必須驗證。</strong></p>
+<p>Zero Trust 不是一個產品，也不是一套工具，而是一種<strong>安全策略和思維框架</strong>。它由前 Forrester 分析師 John Kindervag 在 2010 年提出，其核心理念極其簡單，卻又極具顛覆性：</p>
+<blockquote>
+<p><strong>Never Trust, Always Verify. (永不信任，一律驗證)</strong></p>
+</blockquote>
+<p>這意味著，我們必須拋棄傳統安全模型「公司內網可信，外網不可信」的二元假設。在零信任模型中，<strong>預設沒有任何使用者、裝置或網路流量是可信的——無論它來自內部網路還是外部網路。</strong> 每一次的存取請求，都必須像來自一個不受信任的網路一樣，經過嚴格的身份驗證、授權和加密，才能被放行。</p>
+<p><strong>簡單比喻：</strong></p>
+<ul>
+<li><strong>傳統模型：</strong> 像一個鄉村俱樂部。只要是會員（通過了 VPN 認證），進門後就可以自由使用所有設施。</li>
+<li><strong>零信任模型：</strong> 像一棟高度機密的政府大樓。刷卡進入大門後，要去 A 房間需要再次刷卡驗證；要去 B 檔案室，不僅要刷卡，可能還需要指紋和虹膜掃描。<strong>每一次穿越一道門，都需要重新證明身份和權限。</strong></li>
+</ul>
+<p>在 Zero Trust 模型下：</p>
+<ul>
+<li>沒有「安全區域」的概念。</li>
+<li>所有存取都需要 <strong>驗證 (Verify)</strong> 與 <strong>授權 (Authorize)</strong>。</li>
+</ul>
+<hr />
+<h1 id="為什麼需要-zero-trust"><a class="markdownIt-Anchor" href="#為什麼需要-zero-trust"></a> 為什麼需要 Zero Trust？</h1>
+<p>傳統的安全模式（perimeter-based, 邊界防禦）存在問題：</p>
+<ol>
+<li><strong>VPN/內網突破</strong>：一旦駭客進入內網，就能存取大量資源。</li>
+<li><strong>雲端與遠端工作普及</strong>：使用者可能來自不同地點與裝置。</li>
+<li><strong>內部威脅</strong>：員工或受感染的設備也可能帶來風險。</li>
+</ol>
+<p>Zero Trust 用來降低這些風險。</p>
+<hr />
+<h1 id="zero-trust-的三大原則"><a class="markdownIt-Anchor" href="#zero-trust-的三大原則"></a> Zero Trust 的三大原則</h1>
+<ol>
+<li>
+<p><strong>Verify Explicitly（明確驗證）</strong></p>
+<blockquote>
+<p>每次存取都要驗證身分（MFA、多因素驗證）、裝置狀態、地理位置等。</p>
+</blockquote>
+<p>這是「一律驗證」的具體化。每一次的存取請求，都必須基於所有可用的數據點進行全面的驗證，包括：</p>
+<ul>
+<li><strong>使用者身份：</strong> 是誰在請求？（強身份認證，如 MFA 多因子認證）</li>
+<li><strong>裝置健康狀況：</strong> 請求來自哪個裝置？這個裝置是否合規、有沒有中毒？</li>
+<li><strong>存取位置：</strong> 請求的地理位置是否正常？</li>
+<li><strong>服務或工作負載：</strong> 他們正在嘗試存取什麼？</li>
+<li><strong>數據分類：</strong> 正在被存取的數據是否敏感？</li>
+</ul>
+<p>只有綜合評估這些信號後，系統才會做出信任判斷。</p>
+</li>
+<li>
+<p><strong>Least Privilege Access（最小權限存取）</strong></p>
+<blockquote>
+<p>使用者或服務只擁有完成任務所需的最小權限，避免過度授權。</p>
+</blockquote>
+<p>這是「永不信任」的體現。一旦使用者通過驗證，也絕不給予他們完全的信任。他們只應被授予完成其特定任務所需的<strong>最小權限</strong>。</p>
+<ul>
+<li><strong>Just-in-Time (JIT) Access:</strong> 只在需要時才授予臨時權限，任務完成後立刻收回。</li>
+<li><strong>Just-Enough-Access (JEA):</strong> 權限範圍嚴格限制在必需的數據和資源上。</li>
+<li><strong>目標：</strong> 大幅縮小潛在的攻擊面。即使某個帳號被盜，攻擊者能造成的破壞也被限制在一個極小的範圍內。</li>
+</ul>
+</li>
+<li>
+<p><strong>Assume Breach（假設已被入侵）</strong></p>
+<blockquote>
+<p>系統假設隨時可能被突破，並持續監控與分段隔離。</p>
+</blockquote>
+<p>這是一種防禦性的思維轉變。必須假設，攻擊者<strong>已經</strong>存在於我們的網路之內。基於這個假設，所做的一切設計都是為了：</p>
+<ul>
+<li><strong>將爆炸半徑最小化：</strong> 通過<strong>微分段 (Micro-segmentation)</strong> 技術，將網路切分成許多微小的、相互隔離的區域。這樣，即使一個區域被攻破，攻擊者也無法輕易地橫向移動到其他區域。</li>
+<li><strong>端到端加密：</strong> 確保所有網路流量，即使是內部流量，都經過加密。</li>
+<li><strong>持續監控與分析：</strong> 利用分析工具持續監測網路活動，以便盡快偵測到威脅並做出反應。</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h1 id="zero-trust-架構的關鍵元素"><a class="markdownIt-Anchor" href="#zero-trust-架構的關鍵元素"></a> Zero Trust 架構的關鍵元素</h1>
+<ul>
+<li><strong>身分驗證 (Identity Verification)</strong> → SSO、MFA</li>
+<li><strong>裝置安全 (Device Security)</strong> → 僅允許合規裝置存取</li>
+<li><strong>網路微分段 (Micro-segmentation)</strong> → 不同應用、服務之間要分隔</li>
+<li><strong>持續監控 (Continuous Monitoring)</strong> → 偵測異常行為</li>
+<li><strong>動態授權 (Adaptive Access Control)</strong> → 根據情境決定是否允許</li>
+</ul>
+<hr />
+<h1 id="簡單例子"><a class="markdownIt-Anchor" href="#簡單例子"></a> 簡單例子</h1>
+<h2 id="傳統模式"><a class="markdownIt-Anchor" href="#傳統模式"></a> 傳統模式</h2>
+<ul>
+<li>員工進入內網後，就能存取所有內部資源。</li>
+<li>駭客只要破解 VPN 或某台內部機器，就能橫向移動，拿到更多資料。</li>
+</ul>
+<h2 id="zero-trust-模式"><a class="markdownIt-Anchor" href="#zero-trust-模式"></a> Zero Trust 模式</h2>
+<ul>
+<li>
+<p>員工登入公司雲端系統時，必須：</p>
+<ol>
+<li>使用 MFA 驗證身份</li>
+<li>驗證裝置是否安全（例如防毒軟體是否開啟）</li>
+<li>僅授權該員工所需的應用（例如只能開 HR 系統，不能開財務系統）</li>
+</ol>
+</li>
+<li>
+<p>若異常行為（如短時間內嘗試大量下載檔案），會被即時阻擋。</p>
+</li>
+</ul>
+<hr />
+<h1 id="常見-zero-trust-技術"><a class="markdownIt-Anchor" href="#常見-zero-trust-技術"></a> 常見 Zero Trust 技術</h1>
+<ul>
+<li><strong>Identity &amp; Access Management (IAM)</strong> → Okta, Azure AD</li>
+<li><strong>Multi-Factor Authentication (MFA)</strong></li>
+<li><strong>Zero Trust Network Access (ZTNA)</strong> → 替代傳統 VPN</li>
+<li><strong>Endpoint Detection &amp; Response (EDR)</strong> → CrowdStrike, SentinelOne</li>
+</ul>
+<hr />
+<h1 id="零信任不是一蹴可幾而是一趟旅程"><a class="markdownIt-Anchor" href="#零信任不是一蹴可幾而是一趟旅程"></a> 零信任不是一蹴可幾，而是一趟旅程</h1>
+<p>部署零信任架構並非購買一個工具就能完成。它是一個持續的過程，涉及到身份管理、端點安全、網路架構和應用程式等多個層面的整合與改造。一個務實的起步路徑可能包括：</p>
+<ol>
+<li><strong>從身份認證開始：</strong> 為所有員工和服務全面啟用 MFA（多因子認證）。</li>
+<li><strong>了解你的裝置：</strong> 建立裝置清單，監控其健康狀況。</li>
+<li><strong>實施微分段：</strong> 從最關鍵的應用程式或數據周圍開始，建立小型的安全區域。</li>
+<li><strong>重新評估權限：</strong> 審查現有權限，並朝著最小權限原則進行改革。</li>
+</ol>
+<hr />
+<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
+<p><strong>Zero Trust = 不預設信任任何人或設備 → 每次存取都必須驗證、授權、監控。</strong><br />
+它的目標是減少內外部攻擊風險，適合 <strong>遠端工作、雲端環境、微服務架構</strong> 的現代企業。</p>
+<p>它從根本上改變了我們的安全思維，從被動地防禦「外部」威脅，轉變為主動地管理「內部」風險。<br />
+通過擁抱「永不信任，一律驗證」的原則，我們將能構建更有彈性、更能適應未來挑戰的安全體系。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Cybersecurity/" rel="tag"># Cybersecurity</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/10/05/%E6%89%93%E7%A0%B4%E6%95%B8%E6%93%9A%E5%AD%A4%E5%B3%B6%EF%BC%9A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20Data%20Mesh/" rel="prev" title="打破數據孤島：深入理解「Data Mesh (數據網格)」">
+                  <i class="fa fa-angle-left"></i> 打破數據孤島：深入理解「Data Mesh (數據網格)」
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
