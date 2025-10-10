@@ -19,27 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="在上一篇文章《深入淺出 TCP：確保網路世界可靠通訊的幕後功臣》中，我們認識了那位嚴謹、可靠的「快遞員」——TCP。它確保了資料能完整無誤、依序送達。但在某些情境下，「可靠」並不是最重要的考量。 想像一下正在進行一場緊張刺激的線上遊戲，或是與朋友進行視訊通話。在這些場景中，最不能忍受的是什麼？是畫面偶爾出現一點點馬賽克，還是長達兩秒的延遲與卡頓？ 絕大多數人會選擇前者。這就是本篇文章的主角——UD">
+    <meta name="description" content="當瀏覽網頁、觀看串流影片時，設備正在與遠端的伺服器進行著海量的數據交換。這些數據的傳輸並非隨意進行，而是遵循著一套嚴格的規則，也就是協議 (Protocol)。在傳輸層 (Transport Layer)，有兩位主角幾乎主宰了整個網路世界：TCP 和 UDP。 它們就像郵政系統中的兩種不同服務：一種是提供全程追蹤、簽收保證的快遞服務，另一種則是投進郵筒、隨緣送達的平信明信片。理解它們的差異，是構建">
 <meta property="og:type" content="article">
-<meta property="og:title" content="深入淺出 UDP：速度至上，網路即時通訊的奔放先鋒">
-<meta property="og:url" content="https://nivek-yang.github.io/2025/08/26/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20UDP%20%E9%80%9F%E5%BA%A6%E8%87%B3%E4%B8%8A%20%E7%B6%B2%E8%B7%AF%E5%8D%B3%E6%99%82%E9%80%9A%E8%A8%8A%E7%9A%84%E5%A5%94%E6%94%BE%E5%85%88%E9%8B%92/index.html">
+<meta property="og:title" content="TCP vs. UDP：網路世界的快遞員與明信片">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/10/10/TCP%20vs%20UDP/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="在上一篇文章《深入淺出 TCP：確保網路世界可靠通訊的幕後功臣》中，我們認識了那位嚴謹、可靠的「快遞員」——TCP。它確保了資料能完整無誤、依序送達。但在某些情境下，「可靠」並不是最重要的考量。 想像一下正在進行一場緊張刺激的線上遊戲，或是與朋友進行視訊通話。在這些場景中，最不能忍受的是什麼？是畫面偶爾出現一點點馬賽克，還是長達兩秒的延遲與卡頓？ 絕大多數人會選擇前者。這就是本篇文章的主角——UD">
+<meta property="og:description" content="當瀏覽網頁、觀看串流影片時，設備正在與遠端的伺服器進行著海量的數據交換。這些數據的傳輸並非隨意進行，而是遵循著一套嚴格的規則，也就是協議 (Protocol)。在傳輸層 (Transport Layer)，有兩位主角幾乎主宰了整個網路世界：TCP 和 UDP。 它們就像郵政系統中的兩種不同服務：一種是提供全程追蹤、簽收保證的快遞服務，另一種則是投進郵筒、隨緣送達的平信明信片。理解它們的差異，是構建">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2025-08-25T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-08-26T15:25:08.518Z">
+<meta property="article:published_time" content="2025-10-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-10T15:25:24.476Z">
 <meta property="article:author" content="Kaiwii">
 <meta property="article:tag" content="Networking">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://nivek-yang.github.io/2025/08/26/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20UDP%20%E9%80%9F%E5%BA%A6%E8%87%B3%E4%B8%8A%20%E7%B6%B2%E8%B7%AF%E5%8D%B3%E6%99%82%E9%80%9A%E8%A8%8A%E7%9A%84%E5%A5%94%E6%94%BE%E5%85%88%E9%8B%92/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/10/10/TCP%20vs%20UDP/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/08/26/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20UDP%20%E9%80%9F%E5%BA%A6%E8%87%B3%E4%B8%8A%20%E7%B6%B2%E8%B7%AF%E5%8D%B3%E6%99%82%E9%80%9A%E8%A8%8A%E7%9A%84%E5%A5%94%E6%94%BE%E5%85%88%E9%8B%92/","path":"2025/08/26/深入淺出 UDP 速度至上 網路即時通訊的奔放先鋒/","title":"深入淺出 UDP：速度至上，網路即時通訊的奔放先鋒"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/10/10/TCP%20vs%20UDP/","path":"2025/10/10/TCP vs UDP/","title":"TCP vs. UDP：網路世界的快遞員與明信片"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>深入淺出 UDP：速度至上，網路即時通訊的奔放先鋒 | 我的技術部落格</title>
+<title>TCP vs. UDP：網路世界的快遞員與明信片 | 我的技術部落格</title>
   
 
 
@@ -524,7 +524,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-udp"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是 UDP？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BD%95%E9%9C%80%E8%A6%81%E4%B8%80%E5%80%8B%E4%B8%8D%E5%8F%AF%E9%9D%A0%E7%9A%84%E5%8D%94%E5%AE%9A"><span class="nav-number">2.</span> <span class="nav-text"> 為何需要一個「不可靠」的協定？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%A5%B5%E4%BD%8E%E7%9A%84%E5%BB%B6%E9%81%B2-extremely-low-latency"><span class="nav-number">2.1.</span> <span class="nav-text"> 1. 極低的延遲 (Extremely Low Latency)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%BC%95%E9%87%8F%E8%88%87%E9%AB%98%E6%95%88-lightweight-efficient"><span class="nav-number">2.2.</span> <span class="nav-text"> 2. 輕量與高效 (Lightweight &amp; Efficient)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%94%AF%E6%8F%B4%E5%BB%A3%E6%92%AD%E8%88%87%E5%A4%9A%E6%92%AD-broadcast-multicast"><span class="nav-number">2.3.</span> <span class="nav-text"> 3. 支援廣播與多播 (Broadcast &amp; Multicast)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tcp-vs-udp"><span class="nav-number">3.</span> <span class="nav-text"> TCP vs. UDP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">4.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#tcp-transmission-control-protocol%E5%8F%AF%E9%9D%A0%E7%9A%84%E5%BF%AB%E9%81%9E%E5%93%A1"><span class="nav-number">1.</span> <span class="nav-text"> TCP (Transmission Control Protocol)：可靠的快遞員</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#udp-user-datagram-protocol%E5%BF%AB%E9%80%9F%E7%9A%84%E6%98%8E%E4%BF%A1%E7%89%87"><span class="nav-number">2.</span> <span class="nav-text"> UDP (User Datagram Protocol)：快速的明信片</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tcp-vs-udp"><span class="nav-number">3.</span> <span class="nav-text"> TCP vs. UDP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%A6%E6%88%B0%E6%87%89%E7%94%A8%E7%B6%B2%E9%A0%81%E9%96%8B%E7%99%BC%E4%B8%AD%E7%9A%84-tcp-%E8%88%87-udp"><span class="nav-number">4.</span> <span class="nav-text"> 實戰應用：網頁開發中的 TCP 與 UDP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%97%A5%E5%B8%B8%E7%9A%84%E7%B6%B2%E9%A0%81%E7%80%8F%E8%A6%BD%E8%88%87-api-%E8%AB%8B%E6%B1%82-%E9%9A%B1%E8%97%8F%E7%9A%84-tcp"><span class="nav-number">4.1.</span> <span class="nav-text"> 1. 日常的網頁瀏覽與 API 請求 (隱藏的 TCP)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8D%B3%E6%99%82%E9%9B%99%E5%90%91%E9%80%9A%E8%A8%8A-%E5%9F%BA%E6%96%BC-tcp-%E7%9A%84-websocket"><span class="nav-number">4.2.</span> <span class="nav-text"> 2. 即時雙向通訊 (基於 TCP 的 WebSocket)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%BD%B1%E9%9F%B3%E4%B8%B2%E6%B5%81%E8%88%87%E9%81%8A%E6%88%B2-udp-%E7%9A%84%E4%B8%BB%E5%A0%B4-webrtc"><span class="nav-number">4.3.</span> <span class="nav-text"> 3. 影音串流與遊戲 (UDP 的主場 WebRTC)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E7%B6%B2%E8%B7%AF%E7%9A%84%E6%9C%AA%E4%BE%86-%E5%BB%BA%E7%AB%8B%E5%9C%A8-udp-%E4%B8%8A%E7%9A%84-http3"><span class="nav-number">4.4.</span> <span class="nav-text"> 4. 網路的未來 (建立在 UDP 上的 HTTP&#x2F;3)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90%E8%A1%A8%E7%B6%B2%E9%A0%81%E9%96%8B%E7%99%BC%E4%B8%AD%E7%9A%84%E9%81%B8%E6%93%87"><span class="nav-number">4.5.</span> <span class="nav-text"> 總結表：網頁開發中的選擇</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -572,7 +572,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/26/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20UDP%20%E9%80%9F%E5%BA%A6%E8%87%B3%E4%B8%8A%20%E7%B6%B2%E8%B7%AF%E5%8D%B3%E6%99%82%E9%80%9A%E8%A8%8A%E7%9A%84%E5%A5%94%E6%94%BE%E5%85%88%E9%8B%92/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/10/TCP%20vs%20UDP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -585,12 +585,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="深入淺出 UDP：速度至上，網路即時通訊的奔放先鋒 | 我的技術部落格">
+      <meta itemprop="name" content="TCP vs. UDP：網路世界的快遞員與明信片 | 我的技術部落格">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          深入淺出 UDP：速度至上，網路即時通訊的奔放先鋒
+          TCP vs. UDP：網路世界的快遞員與明信片
         </h1>
 
         <div class="post-meta-container">
@@ -602,7 +602,7 @@
       <span class="post-meta-item-text">發表於</span>
       
 
-      <time title="創建時間：2025-08-26 00:00:00 / 修改時間：23:25:08" itemprop="dateCreated datePublished" datetime="2025-08-26T00:00:00+08:00">2025-08-26</time>
+      <time title="創建時間：2025-10-10 00:00:00 / 修改時間：23:25:24" itemprop="dateCreated datePublished" datetime="2025-10-10T00:00:00+08:00">2025-10-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -623,79 +623,190 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>在上一篇文章《深入淺出 TCP：確保網路世界可靠通訊的幕後功臣》中，我們認識了那位嚴謹、可靠的「快遞員」——TCP。它確保了資料能完整無誤、依序送達。但在某些情境下，「可靠」並不是最重要的考量。</p>
-<p>想像一下正在進行一場緊張刺激的線上遊戲，或是與朋友進行視訊通話。在這些場景中，最不能忍受的是什麼？是畫面偶爾出現一點點馬賽克，還是長達兩秒的延遲與卡頓？</p>
-<p>絕大多數人會選擇前者。這就是本篇文章的主角——<strong>UDP (User Datagram Protocol)</strong>——大放異彩的舞台。</p>
-<h1 id="什麼是-udp"><a class="markdownIt-Anchor" href="#什麼是-udp"></a> 什麼是 UDP？</h1>
-<p><strong>UDP</strong>，全名為「使用者資料包協定」（User Datagram Protocol），和 TCP 一樣，同屬網際網路協定套組 (TCP/IP) 中<strong>傳輸層 (Transport Layer)</strong> 的核心協定。</p>
-<p>如果說 TCP 是一位確保簽收、會電話確認的快遞員，那麼 UDP 更像是一位<strong>郵差</strong>。他只負責將信件（資料）投入信箱，不保證對方一定能收到，也不關心信件的順序，但最大的優點是——<strong>快</strong>。</p>
-<p>UDP 的核心理念是<strong>簡潔與高效</strong>。它的特點可以歸納如下：</p>
-<ol>
-<li><strong>無連線 (Connectionless)</strong>：UDP 在傳送資料前，不需要像 TCP 那樣先進行「三向交握」。它拿到資料後就直接往目的地傳送，省去了建立和維護連線的開銷。</li>
-<li><strong>不可靠傳輸 (Unreliable)</strong>：UDP 不提供任何送達保證。資料在途中遺失了，它不會知道，也不會要求重傳。此外，也不保證資料的接收順序。</li>
-<li><strong>極簡的標頭 (Minimal Header)</strong>：UDP 的標頭只有 8 個位元組（Bytes），相比 TCP 的 20 個位元組以上，它的額外負擔非常小，這意味著每個資料包中，實際資料的佔比更高。</li>
-<li><strong>資料包導向 (Datagram-Oriented)</strong>：應用程式交給 UDP 多大的資料，UDP 就會原封不動地打包成一個資料包（Datagram）傳送出去，不會像 TCP 那樣進行拆分或合併。</li>
-</ol>
+    <div class="post-body" itemprop="articleBody"><p>當瀏覽網頁、觀看串流影片時，設備正在與遠端的伺服器進行著海量的數據交換。這些數據的傳輸並非隨意進行，而是遵循著一套嚴格的規則，也就是<strong>協議 (Protocol)</strong>。在傳輸層 (Transport Layer)，有兩位主角幾乎主宰了整個網路世界：<strong>TCP</strong> 和 <strong>UDP</strong>。</p>
+<p>它們就像郵政系統中的兩種不同服務：一種是提供全程追蹤、簽收保證的<strong>快遞服務</strong>，另一種則是投進郵筒、隨緣送達的<strong>平信明信片</strong>。理解它們的差異，是構建任何網路應用的基石。</p>
 <hr />
-<h1 id="為何需要一個不可靠的協定"><a class="markdownIt-Anchor" href="#為何需要一個不可靠的協定"></a> 為何需要一個「不可靠」的協定？</h1>
-<p>看到「不可靠」，可能會覺得 UDP 聽起來很不中用。但實際上，它的「缺點」正是它在特定領域無可取代的「優點」。UDP 的設計哲學是<strong>將可靠性的控制權交給應用程式本身</strong>，從而換取極致的效能。</p>
-<h2 id="1-極低的延遲-extremely-low-latency"><a class="markdownIt-Anchor" href="#1-極低的延遲-extremely-low-latency"></a> 1. 極低的延遲 (Extremely Low Latency)</h2>
-<p>這是 UDP 最核心的優勢。由於沒有建立連線、確認應答、重傳等複雜機制，資料可以幾乎在生成的瞬間就被傳送出去。</p>
+<h1 id="tcp-transmission-control-protocol可靠的快遞員"><a class="markdownIt-Anchor" href="#tcp-transmission-control-protocol可靠的快遞員"></a> TCP (Transmission Control Protocol)：可靠的快遞員</h1>
+<p>想像一下，要寄一份極其重要的合約文件。會選擇一家可靠的快遞公司。整個流程會是這樣的：</p>
+<ol>
+<li><strong>打電話確認 (建立連線):</strong> 先打電話給收件人，確保他在家，並且準備好接收文件。這就是 TCP 的 <strong>「三次交握」(Three-Way Handshake)</strong>。發送方 (SYN) -&gt; 接收方 (SYN-ACK) -&gt; 發送方 (ACK)，雙方建立了一個穩定可靠的連線通道。</li>
+<li><strong>包裹編號 (有序傳輸):</strong> 如果合約有好幾頁，會標上頁碼 (1/5, 2/5…)，確保對方能按正確順序閱讀。TCP 會為每個數據包 (Packet) 加上序號，保證接收方能按序重組數據。</li>
+<li><strong>要求簽收 (確認與重傳):</strong> 快遞員會要求收件人簽收 (ACK)。如果沒有收到簽收回條，會重新寄送一份。TCP 也有同樣的機制，如果發送方沒有收到對某個數據包的確認，它會<strong>重新發送</strong>，直到確認收到為止。</li>
+<li><strong>控制流量 (流量控制):</strong> 如果一次寄送太多包裹，快遞員的車子裝不下，他會請你慢一點。TCP 的<strong>流量控制 (Flow Control)</strong> 和<strong>擁塞控制 (Congestion Control)</strong> 機制確保不會因為發送過快而壓垮接收方或網路。</li>
+</ol>
 <blockquote>
-<p><strong>應用場景：線上遊戲</strong><br />
-在遊戲中，角色位置、開火指令等資訊，最重要的是「即時性」。傳送一則 2 秒前的角色位置資訊是毫无意義的。UDP 能確保最新的資訊被最快地傳遞出去，即使中途丟失一兩個封包，也比收到過時的資訊要好得多。</p>
+<p><strong>TCP 的核心承諾：穩定、可靠，數據不多不少、不亂序。</strong></p>
 </blockquote>
-<h2 id="2-輕量與高效-lightweight-efficient"><a class="markdownIt-Anchor" href="#2-輕量與高效-lightweight-efficient"></a> 2. 輕量與高效 (Lightweight &amp; Efficient)</h2>
-<p>因為標頭小、機制簡單，UDP 處理資料的成本非常低，無論是對於傳送方、接收方還是網路中的路由器，負擔都比較小。</p>
+<p><strong>何時使用 TCP？</strong><br />
+當數據的完整性和順序性至關重要，不容許任何差錯時：</p>
+<ul>
+<li><strong>網頁瀏覽 (HTTP/HTTPS):</strong> 不希望網頁的 HTML 標籤或圖片數據丟失一塊吧？</li>
+<li><strong>檔案傳輸 (FTP):</strong> 下載的檔案絕不能損壞。</li>
+<li><strong>電子郵件 (SMTP, IMAP):</strong> 郵件內容必須完整無缺。</li>
+</ul>
+<hr />
+<h1 id="udp-user-datagram-protocol快速的明信片"><a class="markdownIt-Anchor" href="#udp-user-datagram-protocol快速的明信片"></a> UDP (User Datagram Protocol)：快速的明信片</h1>
+<p>想像一下只是想快速地給朋友寄一張風景明信片，分享當下的喜悅。會怎麼做？</p>
+<p>寫上地址、貼上郵票，然後直接丟進郵筒。不會打電話確認，也不會要求對方簽收。追求的是<strong>簡單、快速</strong>。</p>
+<p>這就是 UDP 的工作哲學：</p>
+<ol>
+<li><strong>直接寄送 (無連線):</strong> 沒有三次交握。數據被打包成「數據報 (Datagram)」後，直接往目標地址扔出去。</li>
+<li><strong>盡力而為 (不可靠):</strong> 郵局會盡力寄送，但明信片可能會在途中遺失，也可能因為地址不清而無法送達。UDP 同樣是**「盡力而為」(Best-Effort)**，它不保證數據一定會到達。</li>
+<li><strong>順序隨緣 (無序傳輸):</strong> 如果連續寄了 10 張明信片，它們到達的順序可能是隨機的。UDP 不保證數據包的到達順序。</li>
+<li><strong>輕裝上陣 (低延遲):</strong> 因為省去了所有確認、重傳、排序的複雜機制，UDP 的數據包標頭 (Header) 非常小，開銷極低，傳輸速度非常快。</li>
+</ol>
 <blockquote>
-<p><strong>應用場景：DNS 查詢</strong><br />
-當在瀏覽器輸入 <code>www.google.com</code> 時，電腦需要向 DNS 伺服器查詢這個網域名稱對應的 IP 位址。這個查詢過程通常就使用 UDP。因為請求和回應的資料量都很小，使用 UDP 可以快速完成，如果查詢失敗，應用程式（瀏覽器）本身可以簡單地再次發起查詢。</p>
+<p><strong>UDP 的核心價值：速度至上，延遲極低，但不提供任何保證。</strong></p>
 </blockquote>
-<h2 id="3-支援廣播與多播-broadcast-multicast"><a class="markdownIt-Anchor" href="#3-支援廣播與多播-broadcast-multicast"></a> 3. 支援廣播與多播 (Broadcast &amp; Multicast)</h2>
-<p>TCP 的連線是點對點的，像一通私人電話。而 UDP 則可以實現一對多的通訊，就像廣播電台一樣。它可以將一個資料包同時傳送給網路中的多個、甚至所有裝置，這對於影音串流等應用至關重要。</p>
+<p><strong>何時使用 UDP？</strong><br />
+當速度和即時性遠比偶爾的數據丟失更重要時：</p>
+<ul>
+<li><strong>線上遊戲:</strong> 玩家的位置、動作需要被即時傳送。延遲一秒遠比丟失某一幀的位置更新更致命。</li>
+<li><strong>影音串流/直播 (Streaming):</strong> 觀看直播時，寧可畫面偶爾出現一點馬賽克（丟失了一些數據包），也不希望整個畫面為了等待一個遺失的數據包而卡住不動。</li>
+<li><strong>語音通話 (VoIP):</strong> 同樣，通話的流暢性比單詞的絕對完整更重要。</li>
+<li><strong>DNS 查詢:</strong> 一次快速的域名解析請求，如果失敗了，客戶端可以簡單地再問一次，比建立一個完整的 TCP 連線要快得多。</li>
+</ul>
 <hr />
 <h1 id="tcp-vs-udp"><a class="markdownIt-Anchor" href="#tcp-vs-udp"></a> TCP vs. UDP</h1>
 <table>
 <thead>
 <tr>
 <th style="text-align:left">特性</th>
-<th style="text-align:left"><strong>TCP (可靠的藝術家)</strong></th>
-<th style="text-align:left"><strong>UDP (奔放的運動員)</strong></th>
+<th style="text-align:left">TCP (Transmission Control Protocol)</th>
+<th style="text-align:left">UDP (User Datagram Protocol)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
+<td style="text-align:left"><strong>比喻</strong></td>
+<td style="text-align:left">可靠的快遞員</td>
+<td style="text-align:left">快速的明信片</td>
+</tr>
+<tr>
 <td style="text-align:left"><strong>連線</strong></td>
-<td style="text-align:left">連線導向 (精雕細琢，慢工出細活)</td>
-<td style="text-align:left">無連線 (拿到就跑，追求速度)</td>
+<td style="text-align:left">連線導向 (Connection-Oriented)</td>
+<td style="text-align:left">無連線 (Connectionless)</td>
 </tr>
 <tr>
 <td style="text-align:left"><strong>可靠性</strong></td>
-<td style="text-align:left">高 (絕不容許任何差錯)</td>
-<td style="text-align:left">低 (允許一定程度的失誤)</td>
+<td style="text-align:left">高，保證送達</td>
+<td style="text-align:left">低，盡力而為</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>順序性</strong></td>
+<td style="text-align:left">有序</td>
+<td style="text-align:left">無序</td>
 </tr>
 <tr>
 <td style="text-align:left"><strong>速度</strong></td>
-<td style="text-align:left">相對較慢</td>
+<td style="text-align:left">較慢</td>
 <td style="text-align:left">非常快</td>
 </tr>
 <tr>
-<td style="text-align:left"><strong>傳輸單位</strong></td>
-<td style="text-align:left">位元組流 (Stream)</td>
-<td style="text-align:left">資料包 (Datagram)</td>
+<td style="text-align:left"><strong>開銷 (Overhead)</strong></td>
+<td style="text-align:left">較高</td>
+<td style="text-align:left">非常低</td>
 </tr>
 <tr>
 <td style="text-align:left"><strong>使用場景</strong></td>
-<td style="text-align:left">網頁瀏覽、檔案傳輸、電子郵件</td>
-<td style="text-align:left">影音串流、線上遊戲、DNS、VoIP</td>
+<td style="text-align:left">網頁、檔案傳輸、電子郵件</td>
+<td style="text-align:left">遊戲、串流、語音通話、DNS</td>
 </tr>
 </tbody>
 </table>
-<p>這兩者之間沒有絕對的好壞，只有<strong>適用場景的不同</strong>。它們是為了解決不同問題而生的完美搭檔。</p>
+<hr />
+<h1 id="實戰應用網頁開發中的-tcp-與-udp"><a class="markdownIt-Anchor" href="#實戰應用網頁開發中的-tcp-與-udp"></a> 實戰應用：網頁開發中的 TCP 與 UDP</h1>
+<p>回到熟悉的網頁開發，一個關鍵問題是：<strong>該如何，或在何時，真正地「使用」TCP 或 UDP 呢？</strong></p>
+<p>答案可能有些意外：在網頁開發中，<strong>很少會直接</strong>去手動操作 TCP 或 UDP。相反地，是透過<strong>選擇使用更高層級的 Web API 或技術</strong>，來<strong>間接地決定</strong>使用哪種傳輸協定。</p>
+<p>簡單來說：<strong>選擇的「工具」，決定了底層用的是 TCP 還是 UDP。</strong></p>
+<h2 id="1-日常的網頁瀏覽與-api-請求-隱藏的-tcp"><a class="markdownIt-Anchor" href="#1-日常的網頁瀏覽與-api-請求-隱藏的-tcp"></a> 1. 日常的網頁瀏覽與 API 請求 (隱藏的 TCP)</h2>
+<p>這是佔據了 99% 網頁開發時間的場景。當在 JavaScript 中使用 <code>fetch</code> API、<code>Axios</code> 或傳統的 <code>XMLHttpRequest</code> 來獲取數據、提交表單時，已經在使用 TCP 了，只是你感覺不到。</p>
+<ul>
+<li><strong>技術:</strong> HTTP/1.1, HTTP/2</li>
+<li><strong>底層協定:</strong> <strong>TCP</strong></li>
+<li><strong>原因:</strong> 網頁內容的完整性至關重要。TCP 的可靠性完美地滿足了這個需求。</li>
+<li><strong>開發者視角:</strong><pre class="highlight"><code class="javascript"><span class="hljs-comment">// 當寫下這行程式碼時，瀏覽器就在底層處理了複雜的 TCP 連線</span>
+<span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://api.example.com/data&#x27;</span>)
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> response.<span class="hljs-title function_">json</span>())
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">data</span> =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(data));
+</code></pre>
+</li>
+</ul>
+<h2 id="2-即時雙向通訊-基於-tcp-的-websocket"><a class="markdownIt-Anchor" href="#2-即時雙向通訊-基於-tcp-的-websocket"></a> 2. 即時雙向通訊 (基於 TCP 的 WebSocket)</h2>
+<p>當需要建立一個持久性的、伺服器可以主動推送訊息給客戶端的場景時（例如：線上聊天室、股票即時報價），會使用 WebSockets。</p>
+<ul>
+<li><strong>技術:</strong> WebSocket (ws:// 或 wss://)</li>
+<li><strong>底層協定:</strong> <strong>TCP</strong></li>
+<li><strong>原因:</strong> 聊天訊息或協作指令這類數據，依然希望它們是可靠且按順序到達的。</li>
+<li><strong>開發者視角:</strong><pre class="highlight"><code class="javascript"><span class="hljs-comment">// 建立一個 WebSocket 物件，底層依然是基於 TCP 的長連線</span>
+<span class="hljs-keyword">const</span> socket = <span class="hljs-keyword">new</span> <span class="hljs-title class_">WebSocket</span>(<span class="hljs-string">&#x27;wss://api.example.com/chat&#x27;</span>);
+socket.<span class="hljs-property">onmessage</span> = <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> &#123;
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;收到伺服器訊息:&#x27;</span>, event.<span class="hljs-property">data</span>);
+&#125;;
+</code></pre>
+</li>
+</ul>
+<h2 id="3-影音串流與遊戲-udp-的主場-webrtc"><a class="markdownIt-Anchor" href="#3-影音串流與遊戲-udp-的主場-webrtc"></a> 3. 影音串流與遊戲 (UDP 的主場 WebRTC)</h2>
+<p>這是在瀏覽器中唯一一個可以大規模使用 UDP 的地方。當在開發視訊會議、語音通話或即時線上遊戲時，WebRTC 是首選。</p>
+<ul>
+<li><strong>技術:</strong> WebRTC (Web Real-Time Communication)</li>
+<li><strong>底層協定:</strong> <strong>主要是 UDP</strong></li>
+<li><strong>原因:</strong> 在即時影音場景中，<strong>低延遲比可靠性更重要</strong>。寧願丟失一瞬間的數據（畫面出現一點馬賽克），也要保證通話的流暢性。</li>
+<li><strong>開發者視角:</strong> WebRTC 的 API 相對複雜，但核心是建立 <code>RTCPeerConnection</code>，其數據通道 (Data Channel) 預設就運行在 UDP 之上以實現高速傳輸。</li>
+</ul>
+<h2 id="4-網路的未來-建立在-udp-上的-http3"><a class="markdownIt-Anchor" href="#4-網路的未來-建立在-udp-上的-http3"></a> 4. 網路的未來 (建立在 UDP 上的 HTTP/3)</h2>
+<p>新一代的 HTTP/3 協議，其底層不再是 TCP，而是基於 UDP 的一個全新協定叫做 <strong>QUIC</strong>。</p>
+<ul>
+<li><strong>技術:</strong> HTTP/3</li>
+<li><strong>底層協定:</strong> <strong>UDP</strong></li>
+<li><strong>原因:</strong> 為了徹底解決 TCP 的「隊頭阻塞」問題，QUIC 在 UDP 之上重新實現了可靠傳輸，極大地提升了網頁載入速度和弱網環境下的表現。</li>
+<li><strong>開發者視角:</strong> 這對網頁開發者<strong>幾乎是透明的</strong>！無需修改 <code>fetch</code> 程式碼。只要瀏覽器和伺服器都支援，它們會自動協商並使用 QUIC 通訊。</li>
+</ul>
+<h2 id="總結表網頁開發中的選擇"><a class="markdownIt-Anchor" href="#總結表網頁開發中的選擇"></a> 總結表：網頁開發中的選擇</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">技術 (Technology)</th>
+<th style="text-align:left">底層協定</th>
+<th style="text-align:left">主要應用場景</th>
+<th style="text-align:left">開發者如何間接使用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>HTTP/1.1, HTTP/2</strong></td>
+<td style="text-align:left"><strong>TCP</strong></td>
+<td style="text-align:left">網頁瀏覽、API 請求、檔案下載</td>
+<td style="text-align:left">使用 <code>fetch</code>, <code>axios</code> 等 API</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>WebSockets</strong></td>
+<td style="text-align:left"><strong>TCP</strong></td>
+<td style="text-align:left">即時聊天、協作工具、消息推送</td>
+<td style="text-align:left">實例化 <code>WebSocket</code> 物件</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>WebRTC</strong></td>
+<td style="text-align:left"><strong>主要是 UDP</strong></td>
+<td style="text-align:left">視訊會議、語音通話、線上直播</td>
+<td style="text-align:left">使用 <code>RTCPeerConnection</code> API</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>HTTP/3</strong></td>
+<td style="text-align:left"><strong>UDP (QUIC)</strong></td>
+<td style="text-align:left">下一代 Web 瀏覽，提升弱網體驗</td>
+<td style="text-align:left"><strong>透明</strong>，由瀏覽器和伺服器自動協商</td>
+</tr>
+</tbody>
+</table>
+<hr />
 <h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
-<p>UDP 並不是一個「有缺陷」的協定，而是一個經過深思熟慮的設計。它勇敢地捨棄了 TCP 的可靠性保障，將控制權交還給上層應用，以換取<strong>速度</strong>與<strong>效率</strong>。</p>
-<p>在當今這個對即時互動要求越來越高的世界裡，從視訊會議、直播串流到雲端遊戲，UDP 的地位變得日益重要。它像一位專注於衝刺的運動員，目標明確，摒棄一切不必要的負擔，只為將最新的資訊，以最快的速度送達彼方。</p>
-<p>了解 TCP 的穩重，也欣賞 UDP 的奔放，才能更全面地理解我們賴以生存的網路世界是如何運作的。</p>
+<p>TCP 和 UDP 並非競爭對手，而是網路工具箱中針對不同需求的兩種工具。</p>
+<p>作為網頁開發者，雖然很少直接編寫 TCP/UDP 程式碼，但深刻理解這兩種協議的權衡與取捨——<strong>可靠性 vs. 低延遲</strong>——至關重要。</p>
+<ul>
+<li>選擇 <strong>TCP</strong>，意味著願意為了<strong>數據的絕對可靠性</strong>而犧牲一點速度。</li>
+<li>選擇 <strong>UDP</strong>，意味著為了追求<strong>極致的速度和低延遲</strong>，可以容忍一定程度的數據丟失。</li>
+</ul>
 
     </div>
 
@@ -712,14 +823,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/my-blog/2025/08/25/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20TCP%20%E7%A2%BA%E4%BF%9D%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E5%8F%AF%E9%9D%A0%E9%80%9A%E8%A8%8A%E7%9A%84%E5%B9%95%E5%BE%8C%E5%8A%9F%E8%87%A3/" rel="prev" title="深入淺出 TCP：確保網路世界可靠通訊的幕後功臣">
-                  <i class="fa fa-angle-left"></i> 深入淺出 TCP：確保網路世界可靠通訊的幕後功臣
+                <a href="/my-blog/2025/10/08/%E6%B7%B1%E5%85%A5%E6%8E%A2%E7%B4%A2%E4%BA%8B%E4%BB%B6%E9%A9%85%E5%8B%95%E6%9E%B6%E6%A7%8B%20Event-Driven%20Architecture/" rel="prev" title="深入探索事件驅動架構 (Event-Driven Architecture)">
+                  <i class="fa fa-angle-left"></i> 深入探索事件驅動架構 (Event-Driven Architecture)
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/my-blog/2025/08/28/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20IP%20%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E7%9A%84%E5%9C%B0%E5%9D%80%E8%88%87%E8%BA%AB%E4%BB%BD%E8%AD%89/" rel="next" title="深入淺出 IP：網路世界的地址與身份證">
-                  深入淺出 IP：網路世界的地址與身份證 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
