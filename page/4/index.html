@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">105</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">106</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">55</span></a>
       <ul class="sub-menu">
   
@@ -197,7 +197,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Cybersecurity/">
         Cybersecurity
-        <span class="post-count">(1)</span>
+        <span class="post-count">(2)</span>
       </a>
     </li>
   
@@ -349,15 +349,15 @@
     </li>
   
     <li class="menu-item-child">
-      <a href="/my-blog/tags/PostgreSQL/">
-        PostgreSQL
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
         <span class="post-count">(1)</span>
       </a>
     </li>
   
     <li class="menu-item-child">
-      <a href="/my-blog/tags/Postgresql/">
-        Postgresql
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
         <span class="post-count">(1)</span>
       </a>
     </li>
@@ -534,7 +534,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">105</span>
+          <span class="site-state-item-count">106</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -559,6 +559,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/03/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E4%B9%99%E5%A4%AA%E7%B6%B2%E8%B7%AF%20Ethernet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/09/03/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E4%B9%99%E5%A4%AA%E7%B6%B2%E8%B7%AF%20Ethernet/" class="post-title-link" itemprop="url">
+              深入淺出乙太網路 (Ethernet)
+            </a>
+            <a href="/my-blog/2025/09/03/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E4%B9%99%E5%A4%AA%E7%B6%B2%E8%B7%AF%20Ethernet/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-09-03 00:00:00 / 修改時間：23:20:02" itemprop="dateCreated datePublished" datetime="2025-09-03T00:00:00+08:00">2025-09-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">在先前的文章，了解了 IP 地址如何進行全球定位，MAC 地址如何作為設備的實體身份，以及 ARP 如何在兩者之間建立橋樑。這些高層次的邏輯和地址解析機制，最終都需要依託於一個實際的物理傳輸介質和規則，才能讓資料真正「動起來」。 這個底層的驅動力，就是這篇文章的主角——乙太網路 (Ethernet)。它不僅是當今全球最普及的區域網路 (LAN) 技術，更是連接世界的重要管道，從家用路由器到大型企業資料中心的伺服器，幾乎所有地方都能看到它的身影。 什麼是乙太網路 (Ethernet)？ 乙太網路 (Ethernet) 是一種用於區域網路 (Local Area Network, LAN) 的網路技術規範，它定義了資料在纜線上的傳輸方式、幀的格式，以及如何處理多個設備共享通訊介質時可能發生的衝突。 可以將乙太網路想像成鋪設在家裡、辦公室或資料中心的一套高速且標準化的「道路系統」。在這個系統上，不同類型的「車輛」（資料幀）可以在嚴格的交通規則下高效地運行。 起源與標準化：乙太網路最初由 Xerox 公司於 1970 年代開發，隨後由 IEEE (電機電子工程師學會) 進行標準化，成為 IEEE 802.3 系列標準。 工作層次：乙太網路橫跨 OSI 模型的兩個最低層： 實體層 (Physical Layer, Layer 1)：負責定義電氣訊號、傳輸介質（如銅纜、光纖）、連接器（如 RJ45 插頭）以及物理佈線的特性。 資料連結層 (Data Link Layer, Layer 2)：負責資料的成幀 (Framing)、錯誤檢測、以及 MAC 地址的尋址。 乙太網路如何運作？ 乙太網路的運作核心是它如何組織資料並在共享介質上傳輸。 1. 乙太網路幀 (Ethernet Frame)：資料的基本單位 當 IP 資料包從網路層傳遞下來時，在資料連結層會被乙太網路封裝 (Encapsulate) 成一個「乙太網路幀 (Ethernet Frame)」。這就好比把郵件（IP 資料包）放進一個信封裡（乙太網路幀），並在信封上寫上本地郵局能識別的地址（MAC 地址）。 一個標準的乙太網路幀包含了以下主要部分： 目標 MAC 地址 (Destination MAC Address)：接收方的 Layer 2 物理地址。 來源 MAC 地址 (Source MAC Address)：發送方的 Layer 2 物理地址。 類型/長度 (Type/Length)：指示幀中承載的是什麼樣的資料（例如 IP 封包、ARP 封包）。 資料 (Data)：實際的酬載 (Payload)，也就是 IP 資料包或其他協議的資料。 幀校驗序列 (Frame Check Sequence, FCS)：用於檢測傳輸過程中是否發生錯誤。 2. 共享介質的訪問控制：CSMA/CD (歷史與演進) 在早期的乙太網路（特別是使用集線器 Hub）環境中，所有設備都共用同一條通訊介質。為了避免彼此通訊時「打架」，乙太網路使用了一種機制叫做 CSMA/CD (Carrier Sense Multiple Access with Collision Detection)： 載波偵聽 (Carrier Sense)：設備在發送資料前，會先「聽一聽」線路上是否有其他設備在傳輸資料。如果線路是空的，才開始發送。 多重存取 (Multiple Access)：多個設備可以共享同一條通訊介質。 碰撞偵測 (Collision Detection)：如果兩個設備幾乎同時發送資料，就會發生「碰撞 (Collision)」。設備偵測到碰撞後，會停止發送，等待一段隨機時間後再嘗試發送。 然而，這種碰撞機制在現代乙太網路中已較少見。由於現在大多使用交換器 (Switch) 而非集線器： 交換器：能為每個連接的設備建立獨立的微網段 (Microsegmentation)，使它們可以全雙工 (Full-Duplex) 模式通訊（同時發送和接收），從根本上消除了碰撞。因此，現代乙太網路幾乎不再依賴 CSMA/CD。 乙太網路的種類與速度發展 乙太網路歷經數十年發展，從慢速到超高速，從笨重的粗同軸電纜到精巧的光纖，不斷演進。命名方式通常遵循 [速度][基礎頻寬][介質類型]： 經典乙太網路 (Classic Ethernet)： 10BASE-T (10 Mbps, 雙絞線)：最早普及的形態，使用 Cat3 或更高的雙絞線。 快速乙太網路 (Fast Ethernet)： 100BASE-TX (100 Mbps, 雙絞線)：推動了區域網路的速度升級，使用 Cat5e 或更高的雙絞線。 千兆乙太網路 (Gigabit Ethernet)： 1000BASE-T (1 Gbps, 雙絞線)：目前最常見的家庭和小型辦公室網路標準，使用 Cat5e/Cat6 雙絞線。 1000BASE-SX/LX (1 Gbps, 光纖)：用於較長距離或需要電氣隔離的場合。 萬兆乙太網路 (10 Gigabit Ethernet)： 10GBASE-T (10 Gbps, 雙絞線)：用於伺服器連接、資料中心骨幹，需要 Cat6a/Cat7 等級的雙絞線。 10GBASE-SR/LR (10 Gbps, 光纖)：資料中心和企業網路的首選。 更高速度的乙太網路： 25GE (25 Gbps) 40GE (40 Gbps) 100GE (100 Gbps) 乃至 200GE 和 400GE：在大型資料中心、ISP 骨幹網和高性能計算場景中廣泛應用，主要使用光纖傳輸。 這些不同標準的演進，都維持了乙太網路原有的幀格式和基本工作原理，提供了良好的向下兼容性。 乙太網路與 IP/ARP 如何協同運作？ 乙太網路是網路世界賴以運行的基礎。當瀏覽網頁時，乙太網路扮演著關鍵的「載體」角色： 應用層到傳輸層：瀏覽器（應用層）產生資料，TCP/UDP（傳輸層）為它加上端口號。 網路層：IP（網路層）為資料加上來源和目的 IP 地址，形成 IP 資料包。 資料連結層 (乙太網路)： 如果目的 IP 和來源 IP 在同一個區域網路，發送方會使用 ARP 協定來查詢目的 IP 地址對應的 MAC 地址。 如果目的 IP 在不同區域網路，發送方會把 IP 資料包的目標 MAC 地址設為預設閘道 (Default Gateway, 通常是路由器) 的 MAC 地址。 乙太網路將 IP 資料包包裝成乙太網路幀，並在幀頭加上來源和目的 MAC 地址。 實體層 (乙太網路)：乙太網路幀被轉換成電氣訊號或光訊號，通過網線或光纖傳輸出去。 換句話說，IP 負責全局導航，MAC 地址負責局部投遞，而乙太網路就是那個負責鋪設道路、制定交通規則，並承載著這些「信件」（資料幀）精準抵達目的地的物流系統。 乙太網路的重要性與優勢 乙太網路之所以能夠成為主導性的區域網路技術，得益於其多項顯著優勢： 通用性與互操作性：它是全球公認的標準，不同廠商的乙太網路設備之間都能良好互通。 穩定可靠：經過數十年的發展和完善，乙太網路技術非常成熟穩定。 成本效益：相對於其他網路技術，乙太網路的設備和佈線成本相對較低。 豐富的生態系統：從網卡、纜線、交換器到路由，都有非常成熟和廣泛的產品選擇。 持續發展：速度和技術不斷演進，以滿足不斷增長的頻寬需求。 結論 乙太網路，這個看似基礎卻又無比強大的技術，是我們今天能夠享受高速、可靠網路服務的基石。它不僅定義了資料如何在物理介質上流動，更與 IP、MAC、ARP 等協同合作，共同構築了我們所熟悉的網路世界。 從家裡連接上網的電腦，到支撐全球雲計算的資料中心，乙太網路都以其卓越的性能和普適性，默默地扮演著連接一切的英雄角色。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/09/03/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E4%B9%99%E5%A4%AA%E7%B6%B2%E8%B7%AF%20Ethernet/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1323,92 +1409,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/08/23/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E5%BF%AB%E5%8F%96%E7%AD%96%E7%95%A5%20Cache%20Strategy/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/22/%E5%BE%9E%20CAP%20%E7%9A%84%E6%8A%89%E6%93%87%E5%88%B0%20BASE%20%E7%9A%84%E5%AF%A6%E8%B8%90%20%E7%8F%BE%E4%BB%A3%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1%E7%9A%84%E8%A8%AD%E8%A8%88%E5%93%B2%E5%AD%B8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/08/22/%E5%BE%9E%20CAP%20%E7%9A%84%E6%8A%89%E6%93%87%E5%88%B0%20BASE%20%E7%9A%84%E5%AF%A6%E8%B8%90%20%E7%8F%BE%E4%BB%A3%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1%E7%9A%84%E8%A8%AD%E8%A8%88%E5%93%B2%E5%AD%B8/" class="post-title-link" itemprop="url">
-              從 CAP 的抉擇到 BASE 的實踐：現代分散式系統的設計哲學
-            </a>
-            <a href="/my-blog/2025/08/22/%E5%BE%9E%20CAP%20%E7%9A%84%E6%8A%89%E6%93%87%E5%88%B0%20BASE%20%E7%9A%84%E5%AF%A6%E8%B8%90%20%E7%8F%BE%E4%BB%A3%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1%E7%9A%84%E8%A8%AD%E8%A8%88%E5%93%B2%E5%AD%B8/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-08-22 00:00:00 / 修改時間：23:31:04" itemprop="dateCreated datePublished" datetime="2025-08-22T00:00:00+08:00">2025-08-22</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">在上一篇文章《系統設計中的 CAP 理論》中，探討了分散式系統的「不可能三角」—— CAP 理論。它告訴我們，在面對網路分區時，必須在強一致性 (Consistency) 和高可用性 (Availability) 之間做出痛苦的抉擇。 那麼問題來了：當為了擴展性與彈性，選擇擁抱「可用性」而犧牲「強一致性」時，該遵循什麼樣的設計原則呢？ 這就是 BASE 理論 登場的時刻。BASE 理論不是 CAP 理論的替代品或競爭對手，恰恰相反，它是對 CAP 理論中 AP (Availability + Partition Tolerance) 路線的具體實踐與延伸。 快速複習：CAP 理論的核心 為了更好地理解 BASE，快速回顧一下 CAP： 在分散式系統中，一致性 (Consistency)、可用性 (Availability)、分區容錯性 (Partition tolerance) 三者不可兼得。 CP (一致性 + 分區容錯): 系統保證資料絕對正確，但在節點失聯時，可能暫時無法提供服務。 AP (可用性 + 分區容錯): 系統保證永遠在線，但可能在短時間內回傳舊的資料。 在現代雲端架構下，分區容錯 (P) 是基本要求。因此，設計的焦點變成了：該選擇 CP 還是 AP？ 如果答案是 AP，那麼代表已經踏入了 BASE 理論的世界。 BASE 理論是什麼？ BASE 理論由 eBay 的架構師 Dan Pritchett 提出，它是三個概念的縮寫，代表了一種與傳統 ACID (Atomicity, Consistency, Isolation, Durability) 強一致性模型截然不同的設計哲學： BA - 基本可用 (Basically Available) S - 軟狀態 (Soft State) E - 最終一致性 (Eventually Consistent) 讓我們來逐一解析： 1. 基本可用 (Basically Available) 這意味著系統保證其核心功能在任何時候都是可用的。它允許在系統出現故障時損失部分功能或響應時間變長，但絕不允許整個系統完全崩潰。 舉例：在電商大促銷期間，為了保證核心的「下單」功能可用，網站可能會暫時關閉「商品評論」或「精準推薦」等非核心功能。即使伺服器負載極高，頁面載入慢了一點，但使用者最終還是能完成購買。這就是「基本可用」。 2. 軟狀態 (Soft State) 相對於資料狀態一旦寫入就不會改變的「硬狀態」(Hard State)，「軟狀態」允許系統中的資料狀態在沒有外部操作介入的情況下，隨著時間的推移而發生變化。 為何需要軟狀態？ 因為資料的同步需要時間！在資料從一個節點同步到所有節點的過程中，系統的整體狀態就處於一個不斷變化的「中間狀態」。 舉例：在社群媒體上發布了一則新貼文， A 朋友立刻看到了，但遠在另一個國家的 B 朋友可能要過幾秒鐘才能看到。在這幾秒內，整個系統的資料狀態就是「軟」的，它正在自我演進，直到所有節點都同步完成。 3. 最終一致性 (Eventually Consistent) 這是 BASE 理論的基石。它不要求資料在任何時刻都保持強一致性，而是承諾「在未來某個時間點，如果沒有新的更新操作，所有節點的資料最終會達到一致的狀態」。 核心思想：「暫時的不一致」是可以接受的，只要系統能自我修復並最終趨於一致。 舉例：維基百科的編輯。當修改一個詞條後，全球各地的使用者不會在同一毫秒看到你的更新。但系統保證在一段時間後（可能是幾秒或幾分鐘），所有人最終都會看到編輯後的最新版本。 CAP vs. BASE：它們到底是什麼關係？ 很多人會誤以為 CAP 和 BASE 是對立的。事實上，它們的關係更像是「提問者」與「回答者」。 CAP 理論拋出了一個問題：當網路分區發生時，你要 C 還是 A？ BASE 理論給出了一個答案：如果選擇了 A (可用性)，這是我的一整套設計哲學與實踐方法。 可以透過下表更清晰地理解它們的區別與聯繫： 特性 CAP 理論 BASE 理論 本質 一個理論 (Theorem)，描述了客觀限制 一套設計哲學 (Philosophy)，指導如何實踐 關注點 關注系統設計的權衡與取捨 (Trade-off) 關注如何在犧牲強一致性的前提下獲得高可用性和擴展性 模型 偏向理論化、二元對立 (C or A) 偏向實踐化、彈性光譜 (從弱到強的多種一致性模型) 關係 BASE 是對 CAP 理論中 AP 選擇的具體化和實現 當系統設計選擇了 AP 路徑，就是在實踐 BASE 的思想。透過接受「軟狀態」和「最終一致性」，來換取系統的「基本可用」。 實踐中的抉擇：該用哪個？ 這個問題的答案完全取決於業務場景。 選擇 CP (遵循 ACID) 場景：金融交易、銀行轉帳、庫存管理、電信計費。 理由：在這些場景下，資料的正確性是第一位的。一分錢的錯誤都可能導致巨大的損失。使用者寧願在轉帳時看到「系統繁忙，請稍後再試」（犧牲可用性），也絕不接受帳戶餘額算錯（犧牲一致性）。 選擇 AP (遵循 BASE) 場景：社群媒體動態、使用者個人資料、影片觀看次數、IoT 裝置數據上報。 理由：在這些場景下，使用者體驗和系統的 24/7 在線更為重要。使用者可以接受新頭像晚幾秒鐘才在所有朋友那裡更新，但無法接受網站頻繁地無法訪問。 結論 CAP 理論是理解分散式系統限制的「地圖」，它清晰地標示出了無法通行的區域。而 BASE 理論則是這張地圖上一條通往「高可用性」與「大規模擴展」的、經過驗證的可靠路徑。 CAP 告訴我們「你必須選」。 BASE 告訴我們「如果你這樣選，可以這樣做」。 作為一名現代軟體架構師或開發者，深刻理解這兩者之間的關係，能讓你不再糾結於「哪個更好」，而是能根據實際業務需求，自信地回答：「在當前的場景下，哪種選擇更合適」。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/08/22/%E5%BE%9E%20CAP%20%E7%9A%84%E6%8A%89%E6%93%87%E5%88%B0%20BASE%20%E7%9A%84%E5%AF%A6%E8%B8%90%20%E7%8F%BE%E4%BB%A3%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1%E7%9A%84%E8%A8%AD%E8%A8%88%E5%93%B2%E5%AD%B8/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>

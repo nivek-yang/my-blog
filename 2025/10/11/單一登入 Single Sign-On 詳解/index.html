@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="是否曾覺得自己的大腦快被各種密碼塞爆了？一組用於電子郵件，另一組給公司的協作平台，第三組用於專案管理，第四組給雲端硬碟……這簡直是一場數位鑰匙的惡夢，也是一個巨大的安全隱患。 如果只需輸入一次主密碼，就能存取所有需要的工具，那該有多好？這並非幻想，而是單一登入 (Single Sign-On, SSO) 所實現的現實。 這篇文章將揭開 SSO 的神秘面紗。   SSO 之前的世界：每項設施都要單獨">
+<meta property="og:type" content="article">
+<meta property="og:title" content="單一登入 (Single Sign-On, SSO) 詳解">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/10/11/%E5%96%AE%E4%B8%80%E7%99%BB%E5%85%A5%20Single%20Sign-On%20%E8%A9%B3%E8%A7%A3/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="是否曾覺得自己的大腦快被各種密碼塞爆了？一組用於電子郵件，另一組給公司的協作平台，第三組用於專案管理，第四組給雲端硬碟……這簡直是一場數位鑰匙的惡夢，也是一個巨大的安全隱患。 如果只需輸入一次主密碼，就能存取所有需要的工具，那該有多好？這並非幻想，而是單一登入 (Single Sign-On, SSO) 所實現的現實。 這篇文章將揭開 SSO 的神秘面紗。   SSO 之前的世界：每項設施都要單獨">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-10-10T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-11T14:13:51.035Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Cybersecurity">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/10/11/%E5%96%AE%E4%B8%80%E7%99%BB%E5%85%A5%20Single%20Sign-On%20%E8%A9%B3%E8%A7%A3/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/10/11/%E5%96%AE%E4%B8%80%E7%99%BB%E5%85%A5%20Single%20Sign-On%20%E8%A9%B3%E8%A7%A3/","path":"2025/10/11/單一登入 Single Sign-On 詳解/","title":"單一登入 (Single Sign-On, SSO) 詳解"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>單一登入 (Single Sign-On, SSO) 詳解 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">106</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">55</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cloud-Computing/">
+        Cloud Computing
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Concurrency/">
+        Concurrency
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cybersecurity/">
+        Cybersecurity
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(19)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Design-Pattern/">
+        Design Pattern
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/DevOps/">
+        DevOps
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(17)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Serverless/">
+        Serverless
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#sso-%E4%B9%8B%E5%89%8D%E7%9A%84%E4%B8%96%E7%95%8C%E6%AF%8F%E9%A0%85%E8%A8%AD%E6%96%BD%E9%83%BD%E8%A6%81%E5%96%AE%E7%8D%A8%E8%B2%B7%E7%A5%A8"><span class="nav-number">1.</span> <span class="nav-text"> SSO 之前的世界：每項設施都要單獨買票</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sso-%E7%9A%84%E9%81%8B%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text"> SSO 的運作原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sso-%E7%9A%84%E6%B5%81%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text"> SSO 的流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sso-%E7%9A%84%E6%BA%9D%E9%80%9A%E8%AA%9E%E8%A8%80%E9%97%9C%E9%8D%B5%E5%8D%94%E8%AD%B0"><span class="nav-number">4.</span> <span class="nav-text"> SSO 的溝通語言：關鍵協議</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC-sso-%E8%83%BD%E5%89%B5%E9%80%A0%E4%B8%89%E8%B4%8F%E5%B1%80%E9%9D%A2"><span class="nav-number">5.</span> <span class="nav-text"> 為什麼 SSO 能創造三贏局面？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%96%8B%E7%99%BC%E8%80%85%E8%A6%96%E8%A7%92sso-%E5%AF%A6%E6%88%B0%E6%87%89%E7%94%A8%E8%88%87%E8%A7%80%E5%BF%B5%E9%87%90%E6%B8%85"><span class="nav-number">6.</span> <span class="nav-text"> 開發者視角：SSO 實戰應用與觀念釐清</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9C%A8%E9%96%8B%E7%99%BC%E7%B6%B2%E7%AB%99%E6%99%82%E8%A6%81%E5%A6%82%E4%BD%95%E6%87%89%E7%94%A8-sso"><span class="nav-number">6.1.</span> <span class="nav-text"> 1. 在開發網站時要如何應用 SSO？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-sso-%E8%88%87%E7%B6%B2%E7%AB%99%E8%87%AA%E8%BA%AB%E7%9A%84-jwt-%E8%AA%8D%E8%AD%89%E6%9C%89%E4%BD%95%E5%B7%AE%E5%88%A5"><span class="nav-number">6.2.</span> <span class="nav-text"> 2. SSO 與網站自身的 JWT 認證有何差別？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%96%AE%E4%B8%80%E7%B6%B2%E7%AB%99%E9%9C%80%E8%A6%81%E8%87%AA%E5%B7%B1%E5%BB%BA%E7%AB%8B%E4%B8%80%E5%80%8B-idp-%E5%97%8E"><span class="nav-number">6.3.</span> <span class="nav-text"> 3. 單一網站需要自己建立一個 IdP 嗎？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">7.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">106</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/11/%E5%96%AE%E4%B8%80%E7%99%BB%E5%85%A5%20Single%20Sign-On%20%E8%A9%B3%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="單一登入 (Single Sign-On, SSO) 詳解 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          單一登入 (Single Sign-On, SSO) 詳解
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-10-11 00:00:00 / 修改時間：22:13:51" itemprop="dateCreated datePublished" datetime="2025-10-11T00:00:00+08:00">2025-10-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>是否曾覺得自己的大腦快被各種密碼塞爆了？一組用於電子郵件，另一組給公司的協作平台，第三組用於專案管理，第四組給雲端硬碟……這簡直是一場數位鑰匙的惡夢，也是一個巨大的安全隱患。</p>
+<p>如果只需輸入一次主密碼，就能存取所有需要的工具，那該有多好？這並非幻想，而是<strong>單一登入 (Single Sign-On, SSO)</strong> 所實現的現實。</p>
+<p>這篇文章將揭開 SSO 的神秘面紗。</p>
+<hr />
+<h1 id="sso-之前的世界每項設施都要單獨買票"><a class="markdownIt-Anchor" href="#sso-之前的世界每項設施都要單獨買票"></a> SSO 之前的世界：每項設施都要單獨買票</h1>
+<p>想像一個超大型的主題樂園，在這裡，每一項遊樂設施、每一個食品攤、每一家紀念品店，都要求在它自己的售票亭單獨買票。想玩雲霄飛車，得排隊付錢；想買個椒鹽卷餅，得去另一個隊伍再付一次錢；想進鬼屋，又是一次排隊、一張新門票。</p>
+<p>這就是沒有 SSO 的網路世界。每個應用程式（Slack、Salesforce、Google Drive 等）都是一項獨立的設施。每一個都強迫你透過輸入使用者名稱和密碼來證明身份。這效率低下、令人沮喪，而且很可能弄丟其中一張「門票」（密碼）。</p>
+<hr />
+<h1 id="sso-的運作原理"><a class="markdownIt-Anchor" href="#sso-的運作原理"></a> SSO 的運作原理</h1>
+<p>想像一個現代化的主題樂園。抵達<strong>樂園正門</strong>，出示身份證明，一次性付清費用。作為回報，他們會給你一個安全、全通行的手環。</p>
+<p>在接下來的一整天，都可以自由暢行，再也不用買新的門票。設施的操作員不需要知道你的信用卡詳細資訊，只需要相信<strong>樂園正門</strong>給了你一個有效的手環。</p>
+<p>這正是 SSO 的運作方式。來定義一下這個比喻中的關鍵角色：</p>
+<ul>
+<li><strong>使用者 User:</strong> 主題樂園的遊客。</li>
+<li><strong>樂園正門 (身份提供者 Identity Provider - IdP):</strong> 這是驗證身份的中央權威機構。可以把它想像成 <strong>Google、Microsoft (Azure AD)，或是公司的登入入口網站</strong>。它們是保管密碼的地方。</li>
+<li><strong>遊樂設施 (服務提供者 Service Provider - SP):</strong> 這些是想要使用的應用程式，如 Salesforce、Slack 或 Dropbox。它們提供服務，但不會直接處理密碼。</li>
+<li><strong>魔法手環 (SSO 權杖 Token):</strong> 這是一小段安全的數位資訊（通常是 <strong>SAML Assertion</strong> 或 <strong>JWT</strong>），在成功登入後，由 IdP 交給瀏覽器。這是一個加密的憑證，相當於：「已經驗證了這個人。可以信任他。」</li>
+</ul>
+<hr />
+<h1 id="sso-的流程"><a class="markdownIt-Anchor" href="#sso-的流程"></a> SSO 的流程</h1>
+<p>將這趟樂園之旅轉化為技術流程。這一切通常在幾秒鐘內完成：</p>
+<ol>
+<li><strong>嘗試進入一項設施 (SP)：</strong> 瀏覽 <code>slack.com</code>。</li>
+<li><strong>設施將你引導至正門 (IdP)：</strong> Slack 發現尚未登入。它不會顯示自己的密碼輸入框，而是將你「重定向」到公司的 SSO 登入頁面（也就是 IdP）。</li>
+<li><strong>證明自己的身份：</strong> 在 IdP 的登入頁面，輸入帳號密碼（可能還需要多因子認證碼）。</li>
+<li><strong>獲得了魔法手環 (Token)：</strong> IdP 驗證身份後，會生成一個安全的 SSO 權杖，並將它傳回給瀏覽器。</li>
+<li><strong>瀏覽器向設施出示手環：</strong> 瀏覽器會自動將這個權杖發送給 Slack。</li>
+<li><strong>設施信任這個手環：</strong> Slack 收到權杖後，由於它已被設定為信任公司的 IdP，它會驗證權杖的數位簽章，確認是有效使用者，並授予存取權限。</li>
+</ol>
+<p>現在，已經成功登入 Slack，而 Slack 根本不知道你的密碼！更棒的是，當下一個目的地是 <code>dropbox.com</code> 時，Dropbox 可能會發現你已經擁有一個來自 IdP 的有效手環，於是自動就讓你登入了，完全無需任何操作。</p>
+<hr />
+<h1 id="sso-的溝通語言關鍵協議"><a class="markdownIt-Anchor" href="#sso-的溝通語言關鍵協議"></a> SSO 的溝通語言：關鍵協議</h1>
+<p>IdP 和 SP 之間需要一種通用的、安全的語言來交換權杖資訊。目前最常見的兩種協議是：</p>
+<ul>
+<li><strong>SAML (Security Assertion Markup Language):</strong> 企業級 SSO 的主力，尤其適用於網頁應用程式。它功能強大、安全，使用 XML 格式來傳遞資訊。可以把它想像成一份用於身份驗證的、正式且經過公證的信函。</li>
+<li><strong>OpenID Connect (OIDC) &amp; OAuth 2.0:</strong> 這是現代的標準，尤其適用於手機 App 和 API。嚴格來說，OAuth 2.0 用於<em>授權</em>（允許應用程式存取資源），而 OIDC 是建立在其之上的協定，用於<em>認證</em>（證明你是誰）。它通常使用一種更輕量的權杖格式，稱為 JSON Web Token (JWT)。</li>
+</ul>
+<hr />
+<h1 id="為什麼-sso-能創造三贏局面"><a class="markdownIt-Anchor" href="#為什麼-sso-能創造三贏局面"></a> 為什麼 SSO 能創造三贏局面？</h1>
+<p>採用 SSO 為所有相關方都帶來了巨大的好處。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">角色</th>
+<th style="text-align:left">帶來的好處</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>使用者</strong></td>
+<td style="text-align:left">✅ <strong>便利性：</strong> 登入一次，通行無阻。告別密碼疲勞。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>IT 與資安管理員</strong></td>
+<td style="text-align:left">✅ <strong>集中化的安全管理：</strong> 在單一位置強制執行強密碼策略和多因子認證 (MFA)。 <br> ✅ <strong>簡化的帳號管理：</strong> 新員工入職？只需建立一個帳號。員工離職？停用一個帳號即可立即撤銷所有存取權限。 <br> ✅ <strong>更佳的可見性：</strong> 從單一入口追蹤誰在存取哪些資源。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>企業</strong></td>
+<td style="text-align:left">✅ <strong>提升生產力：</strong> 減少因忘記密碼或等待 IT 重設而浪費的時間。 <br> ✅ <strong>降低風險：</strong> 杜絕密碼重用等危險行為，強化整體安全態勢。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="開發者視角sso-實戰應用與觀念釐清"><a class="markdownIt-Anchor" href="#開發者視角sso-實戰應用與觀念釐清"></a> 開發者視角：SSO 實戰應用與觀念釐清</h1>
+<p>作為一名網站開發者，最關心的問題是：</p>
+<ol>
+<li>該如何<strong>實作</strong> SSO？</li>
+<li>這跟平時用 JWT 做的登入功能，到底有什麼<strong>差別</strong>？</li>
+<li>如果網站只有一個，需要自己蓋一個 IdP 嗎？</li>
+</ol>
+<h2 id="1-在開發網站時要如何應用-sso"><a class="markdownIt-Anchor" href="#1-在開發網站時要如何應用-sso"></a> 1. 在開發網站時要如何應用 SSO？</h2>
+<p>在絕大多數情況下，網站會扮演<strong>服務提供者 (Service Provider - SP)</strong> 的角色。你的任務不是去「打造」一個 SSO 系統，而是去「整合」一個既有的 SSO 系統。</p>
+<p>實作的流程大致如下：</p>
+<ol>
+<li><strong>選擇對應的協議庫 (Library):</strong> 絕對不需要從零開始手刻 SAML 或 OIDC 協議。社群中已經有非常成熟的函式庫可以幫助處理掉 90% 的複雜工作。
+<ul>
+<li><strong>Node.js:</strong> <code>passport.js</code> 搭配對應的 SAML (<code>passport-saml</code>) 或 OIDC (<code>passport-openidconnect</code>) 策略。</li>
+<li><strong>Java:</strong> Spring Security 內建了強大的 SAML 和 OAuth 2.0/OIDC 支援。</li>
+<li><strong>Python/Django:</strong> <code>django-allauth</code> 或 <code>python-social-auth</code> 都是很棒的選擇。</li>
+</ul>
+</li>
+<li><strong>與 IdP 進行「信任交換」設定:</strong> 這是最關鍵的一步。需要在應用程式後台，以及 IdP 的管理後台（例如 Google、Okta、Azure AD）進行雙向設定。
+<ul>
+<li><strong>在 IdP 後台:</strong> 需要註冊你的應用程式，並提供一個重要的資訊：<strong>回調 URL (Callback URL / Redirect URI)</strong>。這個 URL 告訴 IdP 在使用者成功登入後，要把瀏覽器帶回到網站的哪個地址。IdP 會給一組 <strong>Client ID</strong> 和 <strong>Client Secret</strong>。</li>
+<li><strong>在應用程式後台:</strong> 需要配置 IdP 的資訊，例如它的登入端點 URL、發行者資訊 (Issuer)、以及剛才拿到的 Client ID 和 Secret。</li>
+</ul>
+</li>
+<li><strong>處理回調 (Handle the Callback):</strong> 當使用者從 IdP 被引導回來時，回調 URL 會收到一個授權碼 (Authorization Code) 或權杖 (Token)。
+<ul>
+<li>後端程式用這個 Code 向 IdP 換取真正的 Access Token 和 ID Token。</li>
+<li>選擇的函式庫會自動幫你驗證這個 Token 的簽章是否合法、是否過期。</li>
+<li>驗證通過後，從 Token 中解析出使用者資訊（如 Email、姓名）。</li>
+<li><strong>核心邏輯:</strong> 拿這個 Email 查詢你的資料庫。如果使用者已存在，就幫他建立一個登入狀態（例如 Session）；如果不存在，就為他自動建立一個新帳號，然後再建立登入狀態。</li>
+</ul>
+</li>
+</ol>
+<p>從頭到尾，<strong>網站都沒有接觸到使用者的密碼</strong>。這就是 SSO 作為 SP 的精髓。</p>
+<h2 id="2-sso-與網站自身的-jwt-認證有何差別"><a class="markdownIt-Anchor" href="#2-sso-與網站自身的-jwt-認證有何差別"></a> 2. SSO 與網站自身的 JWT 認證有何差別？</h2>
+<p>這是最容易混淆的地方。許多開發者會說：「自己用 JWT 做的登入也是一種 Token-based 認證啊？」是的，但核心區別在於<strong>信任的來源</strong>。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">特性</th>
+<th style="text-align:left"><strong>網站自身的 JWT 認證</strong></th>
+<th style="text-align:left"><strong>SSO (聯邦式認證)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>比喻</strong></td>
+<td style="text-align:left">自己家的鑰匙</td>
+<td style="text-align:left">公司大樓的門禁卡</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>誰驗證密碼？</strong></td>
+<td style="text-align:left"><strong>自己。</strong> 後端程式負責驗證使用者提交的帳號密碼是否正確。</td>
+<td style="text-align:left"><strong>外部的 IdP。</strong> 完全不管密碼，只相信 IdP 的驗證結果。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>誰簽發 Token？</strong></td>
+<td style="text-align:left"><strong>自己。</strong> 驗證密碼成功後，由伺服器簽發一個 JWT 給前端。</td>
+<td style="text-align:left"><strong>外部的 IdP。</strong> IdP 驗證成功後，簽發 Token (SAML/JWT) 並傳遞給你。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>誰驗證 Token？</strong></td>
+<td style="text-align:left"><strong>自己。</strong> 前端每次請求都帶著你發的 JWT，後端驗證這個 JWT 是不是自己簽的。</td>
+<td style="text-align:left"><strong>驗證 IdP 的簽章。</strong> 收到 IdP 發來的 Token，要驗證這個 Token 確實是由你所信任的那個 IdP 簽發的。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>信任範圍</strong></td>
+<td style="text-align:left"><strong>內部 (Internal Trust)。</strong> 網站只相信自己發行的 Token。</td>
+<td style="text-align:left"><strong>聯邦式 (Federated Trust)。</strong> 網站選擇信任一個外部權威機構發行的 Token。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>主要目的</strong></td>
+<td style="text-align:left">讓使用者在你的<strong>單一網站內</strong>保持登入狀態。</td>
+<td style="text-align:left">讓使用者用<strong>一組帳密</strong>登入<strong>多個互相信任的網站</strong>。</td>
+</tr>
+</tbody>
+</table>
+<p>簡單來說，傳統的 JWT 認證是 <strong>「我是法官，我說了算」</strong>；而 SSO 整合則是 <strong>「我信任隔壁的法官，他蓋了章的文件我都認」</strong>。</p>
+<h2 id="3-單一網站需要自己建立一個-idp-嗎"><a class="markdownIt-Anchor" href="#3-單一網站需要自己建立一個-idp-嗎"></a> 3. 單一網站需要自己建立一個 IdP 嗎？</h2>
+<p><strong>通常完全不需要。</strong></p>
+<p>建立和維護一個 IdP 是極其龐大且複雜的工程。它的核心價值在於為<strong>多個</strong>應用程式提供統一的身份驗證服務。如果只有一個網站，那自己就是所有使用者身份的「權威來源」。</p>
+<p>在這種情況下，應該選擇的架構是**「網站自身的 JWT 認證」**。由網站自己管理使用者資料庫（包含加密後的密碼）、自己處理登入邏輯、自己簽發和驗證 JWT。這就是絕大多數網站的標準做法。</p>
+<p>只有當你是一家大型企業，需要為內部數十個系統（HR、CRM、ERP…）提供統一登入，或者正在開發一個類似 Okta 的商業產品時，才需要考慮建立自己的 IdP。</p>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>從本質上，單一登入 (SSO) 的核心在於<strong>信任的集中化</strong>。不再讓每個應用程式各自為政地負責安全，而是將這項關鍵任務委託給一個單一、強大且高度可信的身份提供者 (IdP)。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Cybersecurity/" rel="tag"># Cybersecurity</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/10/10/TCP%20vs%20UDP/" rel="prev" title="TCP vs. UDP：網路世界的快遞員與明信片">
+                  <i class="fa fa-angle-left"></i> TCP vs. UDP：網路世界的快遞員與明信片
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
