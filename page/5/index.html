@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">106</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">107</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">55</span></a>
       <ul class="sub-menu">
   
@@ -197,7 +197,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Cybersecurity/">
         Cybersecurity
-        <span class="post-count">(2)</span>
+        <span class="post-count">(3)</span>
       </a>
     </li>
   
@@ -349,15 +349,15 @@
     </li>
   
     <li class="menu-item-child">
-      <a href="/my-blog/tags/Postgresql/">
-        Postgresql
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
         <span class="post-count">(1)</span>
       </a>
     </li>
   
     <li class="menu-item-child">
-      <a href="/my-blog/tags/PostgreSQL/">
-        PostgreSQL
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
         <span class="post-count">(1)</span>
       </a>
     </li>
@@ -534,7 +534,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">106</span>
+          <span class="site-state-item-count">107</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -559,6 +559,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/23/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E5%BF%AB%E5%8F%96%E7%AD%96%E7%95%A5%20Cache%20Strategy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/08/23/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E5%BF%AB%E5%8F%96%E7%AD%96%E7%95%A5%20Cache%20Strategy/" class="post-title-link" itemprop="url">
+              深入淺出快取策略 (Cache Strategy)
+            </a>
+            <a href="/my-blog/2025/08/23/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E5%BF%AB%E5%8F%96%E7%AD%96%E7%95%A5%20Cache%20Strategy/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-08-23 00:00:00 / 修改時間：23:34:41" itemprop="dateCreated datePublished" datetime="2025-08-23T00:00:00+08:00">2025-08-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">在日常開發中，總會遇到一個共同的挑戰：如何讓應用程式反應更快、處理更多請求，同時又不會讓資料庫不堪重負？ 答案往往指向一個強大的技術：快取 (Caching)。 然而，快取並不是一個簡單的「啟用/停用」開關。要真正發揮它的威力，需要理解並選擇正確的快取策略 (Cache Strategy)。這篇文章將深入淺出地探索幾種核心的快取策略，幫助應用程式做出最佳選擇。 為什麼需要快取策略？ 想像一下，書桌就是快取 (Cache)，而身後巨大的書櫃則是資料庫 (Database)。 當需要一本書（資料）時，如果它就在書桌上，隨手就能拿到，非常快。這就是 Cache Hit (快取命中)。如果書桌上沒有，就得轉身走到書櫃，花時間找到它，再拿回書桌。這就是 Cache Miss (快取未命中)，成本顯然高得多。 快取策略，就是決定「哪些書應該放在書桌上」以及「書本內容更新時，如何同步書桌和書櫃」的一套規則。一個好的策略能確保書桌上總有你最需要的書，而且資訊不會過時。 一個簡單的比喻：快取就像你的工作桌面，資料庫則是檔案櫃 核心快取讀寫策略 接下來，讓我們深入了解幾種最常見的讀寫策略。每種策略都有其獨特的運作模式、優缺點及適用場景。 1. Cache-Aside (旁路快取) 這是最常見、也最經典的快取策略，可能不知不覺中已經在使用它了。 核心思想：應用程式全權負責維護快取和資料庫，快取只是一個「旁路」儲存。 運作流程： 讀取 (Read): 應用程式先向快取請求資料。 如果快取命中 (Hit)，直接將資料返回給客戶端。 如果快取未命中 (Miss)，應用程式會向資料庫請求資料。 從資料庫取得資料後，先將資料寫入快取，然後再返回給客戶端。 寫入 (Write): 應用程式直接更新資料庫。 更新成功後，讓快取中的對應資料失效 (Invalidate)。 流程圖： // 讀取流程 Client ---&gt; App ---&gt; Cache? | (Miss) | | V V App ---&gt; Database ^ | | V +----- Cache (Set) 優點 (Pros): 邏輯簡單直觀：開發者完全掌控資料流。 高可用性：即使快取服務掛了，應用程式仍能從資料庫讀取資料，只是速度變慢。 資料庫與快取解耦：兩者可以獨立擴展和部署。 缺點 (Cons): 首次請求延遲：對於冷資料（第一次被請求的資料），總會發生一次 Cache Miss，延遲較高。 資料不一致性：在「寫入資料庫」和「讓快取失效」這兩個步驟之間，存在一個微小的時間窗口，可能導致讀到舊資料。 適用場景： 讀多寫少的應用場景，例如：商品目錄、新聞文章、使用者個人資料頁。 對資料一致性要求不是極端嚴格的系統。 2. Read-Through (讀取穿透) 這個策略將快取變成資料的主要入口，應用程式本身不用再關心資料庫。 核心思想：應用程式只跟快取打交道，由快取本身負責從資料庫載入資料。 運作流程： 讀取 (Read): 應用程式向快取請求資料。 如果快取命中 (Hit)，直接返回資料。 如果快取未命中 (Miss)，快取服務會自己去向資料庫請求資料。 快取從資料庫取得資料後，先存入自身，再返回給應用程式。 流程圖： Client ---&gt; App ---&gt; Cache? | (Miss) V Database (Loaded by Cache) 優點 (Pros): 簡化應用程式邏輯：應用程式的程式碼更乾淨，不用再寫快取未命中時去讀取資料庫的邏輯。 一致的資料來源：所有讀取請求都從同一個來源（快取）獲取。 缺點 (Cons): 實作複雜：通常需要快取函式庫或服務（如 Ehcache, Hazelcast）提供支援。 首次請求延遲：與 Cache-Aside 相同，冷資料的首次載入會比較慢。 適用場景： 適合那些希望將快取邏輯與業務邏輯分離的架構。 當使用的快取系統原生支援此模式時。 3. Write-Through (寫入穿透) 與 Read-Through 相對應，Write-Through 讓快取成為寫入操作的代理。 核心思想：應用程式的寫入操作只針對快取，由快取負責同步更新資料庫。 運作流程： 寫入 (Write): 應用程式將新資料寫入快取。 快取服務立即將該資料同步寫入資料庫。 只有當快取和資料庫都寫入成功後，才向應用程式返回成功。 流程圖： Client ---&gt; App ---&gt; Cache (Set) ---&gt; Database (Sync Write) 優點 (Pros): 強資料一致性：寫入操作是同步的，快取和資料庫的資料永遠一致，不會讀到舊資料。 簡化應用程式邏輯：寫入邏輯統一由快取處理。 缺點 (Cons): 寫入延遲高：每次寫入都要等待快取和資料庫兩次 I/O 操作完成，效能較差。 不適合寫入頻繁的場景：會給資料庫帶來巨大壓力。 適用場景： 對資料一致性要求極高，且不允許丟失任何寫入的場景，例如：銀行交易、訂單狀態更新。 讀取頻率遠大於寫入頻率的系統。 4. Write-Back (回寫 / 延遲寫入) 這是一種高效能的寫入策略，追求極致的寫入速度。 核心思想：寫入操作只更新快取，然後在未來的某個時間點（例如：延遲一段時間、累積一定數量）才將資料「批次」寫回資料庫。 運作流程： 寫入 (Write): 應用程式將新資料寫入快取。 快取將該資料標記為「髒資料 (Dirty)」，並立即向應用程式返回成功。 快取服務會在之後的某個時間點（例如：每隔 5 秒），將所有「髒資料」一次性寫入資料庫。 流程圖： // Step 1: Immediate Write Client ---&gt; App ---&gt; Cache (Set &amp; Mark as Dirty) // Step 2: Delayed Write Cache ---&gt; (Async Batch Write) ---&gt; Database 優點 (Pros): 極低的寫入延遲：應用程式幾乎感受不到資料庫的寫入耗時，響應速度極快。 降低資料庫壓力：將多次零散的寫入合併為一次批次寫入，大幅提升資料庫吞吐量。 缺點 (Cons): 可能遺失資料：如果在快取將髒資料寫回資料庫之前，快取服務崩潰或斷電，這部分資料將會永久遺失。 實作複雜：需要可靠的機制來管理髒資料的寫回。 適用場景： 寫入極其頻繁的場景，例如：即時數據監控、使用者行為追蹤、IoT 設備數據上報。 可以容忍在極端情況下丟失少量最新資料的系統。 策略選擇 策略 (Strategy) 資料一致性 寫入效能 讀取效能 實作複雜度 風險 Cache-Aside 中等 高 中等 低 資料不一致 Read-Through 中等 - 中等 中等 快取依賴 Write-Through 高 低 高 中等 寫延遲 Write-Back 低 極高 高 高 資料遺失 如何選擇？問自己幾個問題： 業務能容忍多大程度的資料不一致？ 如果完全不能容忍 -&gt; 考慮 Write-Through。 如果可以稍微容忍 -&gt; Cache-Aside 是個不錯的起點。 應用是讀多還是寫多？ 讀多寫少 -&gt; Cache-Aside / Read-Through 非常適合。 寫多讀少，且寫入效能是瓶頸 -&gt; Write-Back 是救星。 能接受資料遺失的風險嗎？ 絕不！ -&gt; 遠離 Write-Back。 可以接受丟失幾秒鐘的非核心資料 -&gt; Write-Back 可以大幅提升效能。 結論 快取策略是系統架構設計中的一門藝術，它關乎效能、成本和可靠性之間的精妙平衡。 Cache-Aside 是最靈活、最常見的萬金油策略。 Write-Through 提供了最強的資料一致性保證，但犧牲了寫入效能。 Write-Back 提供了極致的寫入效能，但伴隨著資料遺失的風險。 記住，最好的策略永遠是最適合當前業務場景的那一個。深入理解需求，然後勇敢地去實驗和選擇吧！</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/08/23/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E5%BF%AB%E5%8F%96%E7%AD%96%E7%95%A5%20Cache%20Strategy/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1323,92 +1409,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/08/14/%E8%A7%A3%E9%8E%96%E5%8D%B3%E6%99%82%E8%B3%87%E6%96%99%E7%9A%84%E5%A5%A7%E7%A7%98%20%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20CDC/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/13/%E5%BE%AE%E6%9C%8D%E5%8B%99%E6%9E%B6%E6%A7%8B%E4%B8%8B%E7%9A%84%20SQL%20%E8%B3%87%E6%96%99%E5%90%8C%E6%AD%A5%E6%8C%91%E6%88%B0%20%E8%B7%A8%E4%BC%BA%E6%9C%8D%E5%99%A8%20SQL%20Replication%20%E5%AF%A6%E6%88%B0%E8%A7%A3%E6%9E%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/08/13/%E5%BE%AE%E6%9C%8D%E5%8B%99%E6%9E%B6%E6%A7%8B%E4%B8%8B%E7%9A%84%20SQL%20%E8%B3%87%E6%96%99%E5%90%8C%E6%AD%A5%E6%8C%91%E6%88%B0%20%E8%B7%A8%E4%BC%BA%E6%9C%8D%E5%99%A8%20SQL%20Replication%20%E5%AF%A6%E6%88%B0%E8%A7%A3%E6%9E%90/" class="post-title-link" itemprop="url">
-              微服務架構下的 SQL 資料同步挑戰：跨伺服器 SQL Replication 實戰解析
-            </a>
-            <a href="/my-blog/2025/08/13/%E5%BE%AE%E6%9C%8D%E5%8B%99%E6%9E%B6%E6%A7%8B%E4%B8%8B%E7%9A%84%20SQL%20%E8%B3%87%E6%96%99%E5%90%8C%E6%AD%A5%E6%8C%91%E6%88%B0%20%E8%B7%A8%E4%BC%BA%E6%9C%8D%E5%99%A8%20SQL%20Replication%20%E5%AF%A6%E6%88%B0%E8%A7%A3%E6%9E%90/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-08-13 00:00:00 / 修改時間：23:20:22" itemprop="dateCreated datePublished" datetime="2025-08-13T00:00:00+08:00">2025-08-13</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">當我們擁抱微服務的彈性與獨立性時，一個經典的難題也隨之而來：資料。微服務強調「每個服務擁有自己的資料庫 (Database per Service)」，但現實世界中，總會遇到需要跨服務共享、讀取或匯總資料的情境。這時，「SQL Replication」就成了不可或缺的一把瑞士刀。 為什麼在微服務中需要 SQL Replication？ 讀寫分離 (Read Replicas)：這是最常見的場景。將主資料庫 (Primary) 的資料複製到一或多個唯讀資料庫 (Read Replica)，讓查詢、報表等讀取密集型的操作都去唯讀資料庫，從而大幅減輕主庫的壓力，提升整體效能。 資料匯總與分析 (Data Aggregation)：某個分析服務（例如報表系統、BI儀表板）需要來自多個不同微服務的資料。透過 Replication 將各服務的資料匯總到一個專用的分析資料庫中，可以避免直接查詢線上交易資料庫，影響效能。 提升可用性與災難恢復 (High Availability &amp; Disaster Recovery)：透過將資料即時複製到不同地理位置的備援伺服器，當主伺服器發生故障時，可以快速切換到備援伺服器，確保服務不中斷。 降低延遲 (Reduced Latency)：如果服務遍布全球，可以將資料複製到靠近用戶的資料中心，讓用戶能從最近的節點讀取資料，大大提升體驗。 請務必小心，不要將 Replication 當成解決微服務之間「強耦合」問題的萬靈丹。如果一個服務頻繁需要另一個服務的「即時」資料來完成核心交易，這可能代表服務邊界劃分需要重新思考。 跨伺服器 SQL Replication 的主流策略 在微服務架構中，實現資料複製主要有以下三種模式： 策略一：原生資料庫 Replication (Native Replication) 這是最傳統也最直接的方法。幾乎所有主流的 SQL 資料庫（如 PostgreSQL, MySQL, SQL Server）都內建了強大的 Replication 功能。 如何運作：通常基於資料庫的二進位日誌 (Binary Log) 或交易日誌 (Transaction Log)。主庫上的任何資料變更（INSERT, UPDATE, DELETE）都會被記錄下來，然後傳輸到從庫 (Replica) 去重放 (Replay) 這些操作，從而達到資料同步。 優點： 低延遲：接近即時，效能極高，因為是在資料庫底層實現。 成熟可靠：經過多年驗證，穩定性高。 資料一致性強：能保證主從資料的強一致性或最終一致性。 缺點： 緊耦合：主從資料庫之間有較強的依賴關係，版本、網路設定等需要緊密配合。 設定複雜：跨資料中心、跨雲平台的設定可能涉及複雜的網路配置 (如 VPN, VPC Peering)。 靈活性低：通常只能在同類型、同版本的資料庫之間進行。 策略二：變更資料捕獲 (Change Data Capture, CDC) + 訊息佇列 (Message Queue) 這是更現代、更符合微服務精神的模式。 如何運作： 捕獲 (Capture)：使用 Debezium 這類工具，或資料庫內建的 CDC 功能，監聽來源資料庫的交易日誌。 發布 (Publish)：將捕獲到的資料變更事件（如 &#123;&quot;action&quot;: &quot;create&quot;, &quot;data&quot;: &#123;...&#125;&#125;）發布到像 Kafka, RabbitMQ, 或 AWS Kinesis 這樣的訊息佇列中。 消費 (Consume)：需要資料的下游微服務作為消費者，訂閱相關主題 (Topic)，接收到變更事件後，再將資料寫入自己的資料庫。 優點： 高度解耦：來源服務完全不知道有誰在訂閱它的資料變更，新增或移除消費者都對來源無影響。 高彈性：一個資料變更可以被多個不同的服務消費，用於不同目的。消費者甚至可以用完全不同的資料庫技術（例如同步到 Elasticsearch 進行搜尋）。 高韌性：訊息佇列本身就是一個緩衝區。即使消費者服務短暫離線，上線後也能從上次的位置繼續消費，資料不會遺失。 缺點： 延遲較高：相比原生 Replication，中間多了訊息佇列的傳輸過程，屬於「近即時」而非「即時」。 架構複雜度：需要引入並維護一個訊息佇列系統。 最終一致性：資料同步是非同步的，需要接受短時間內的資料不一致。 策略三：ETL (Extract, Transform, Load) 批次處理 這是一種非即時的、定時執行的複製模式。 如何運作：透過排程工具（如 Airflow, Azure Data Factory, AWS Glue），定期（例如每小時或每天）從來源資料庫「提取」資料，經過必要的「轉換」（如格式清理、欄位合併），最後「載入」到目標資料庫。 優點： 適合大量資料與複雜轉換：非常適合資料倉儲、BI 分析等場景。 對來源系統影響小：通常在離峰時段執行，不影響線上交易。 缺點： 高延遲：資料不是即時的，延遲可能從幾分鐘到數小時不等。 不適用於交易型場景。 關鍵問題：雲端 PaaS/SaaS 資料庫能做 Replication 嗎？ 答案是：可以！而且在很多情況下，比自己手動設定更容易。 雲端供應商（如 AWS, Azure, Google Cloud）提供的資料庫即服務 (Platform as a Service, PaaS) 已經將 Replication 功能做得非常成熟且易於使用。 情境一：使用 PaaS 內建的 Replication 功能 這對應前面提到的「策略一：原生 Replication」。雲端供應商將其包裝成了簡單的點擊操作。 AWS RDS / Aurora： Read Replicas：可以在幾分鐘內，在同區域或跨區域為你的主資料庫建立多達數個唯讀複本。AWS 會自動處理所有底層的複製設定。 Multi-AZ：這主要是為了高可用性，它會自動在不同可用區 (Availability Zone) 建立一個同步的備援資料庫，當主庫故障時自動切換。這也是一種 Replication。 Azure SQL Database： Active Geo-Replication：允許為資料庫建立最多四個可讀的次要複本，這些複本可以分佈在任何 Azure 區域。設定非常簡單。 Auto-failover groups：在高可用性場景下，自動管理複本和故障轉移。 Google Cloud SQL： Read Replicas：同樣支援輕鬆建立唯讀複本，可以跨區域建立。 High Availability Configuration：提供區域級別的故障轉移能力。 結論：如果只是需要讀寫分離或高可用性，使用雲端 PaaS 內建的功能是最省心、最可靠的選擇。 情境二：在 PaaS/SaaS 上實現 CDC 或 ETL 如果需要更靈活的、解耦的「策略二」或「策略三」，雲端平台也提供了強大的支援。 CDC 模式： 許多 PaaS 資料庫（如 AWS RDS for PostgreSQL/MySQL, Azure SQL）都支援邏輯解碼或 CDC 功能。 可以使用雲端原生的服務，如 AWS Database Migration Service (DMS) 或 Azure Data Factory 中的 CDC Connector，來捕獲資料庫變更，並將其傳輸到目標（可以是另一個資料庫，也可以是 Kafka 這類訊息佇列）。 Google Cloud Datastream 也是一個專門為此設計的無伺服器 CDC 和複製服務。 ETL 模式： AWS Glue, Azure Data Factory, Google Cloud Dataflow/Dataproc 都是強大的、全託管的 ETL 服務。可以輕鬆設定排程，從 PaaS 資料庫中抽取資料，進行處理後，載入到資料倉儲（如 Redshift, BigQuery）或其他資料庫中。 結論：即使資料庫是 PaaS/SaaS，實現 CDC 或 ETL 模式也是完全可行的。雲端供應商甚至提供了專門的託管服務，不用自己去管理 Debezium 或 Airflow 這類複雜的開源工具。 總結 需求場景 推薦策略 在 PaaS/SaaS 上的實現方式 提升讀取效能、讀寫分離 原生 Replication 使用雲端平台（AWS/Azure/GCP）內建的 Read Replica 功能。 高可用性、災難備援 原生 Replication 使用雲端平台內建的 Multi-AZ / Geo-Replication 功能。 微服務間解耦的資料同步 CDC + Message Queue 使用 AWS DMS / Azure Data Factory / GCP Datastream 搭配 Kafka/Kinesis 等訊息服務。 資料倉儲、BI報表、批次分析 ETL 使用 AWS Glue / Azure Data Factory / GCP Dataflow 等託管 ETL 服務。 資料同步是門藝術，選擇正確的工具和策略，能讓系統既健壯又靈活。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/08/13/%E5%BE%AE%E6%9C%8D%E5%8B%99%E6%9E%B6%E6%A7%8B%E4%B8%8B%E7%9A%84%20SQL%20%E8%B3%87%E6%96%99%E5%90%8C%E6%AD%A5%E6%8C%91%E6%88%B0%20%E8%B7%A8%E4%BC%BA%E6%9C%8D%E5%99%A8%20SQL%20Replication%20%E5%AF%A6%E6%88%B0%E8%A7%A3%E6%9E%90/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>

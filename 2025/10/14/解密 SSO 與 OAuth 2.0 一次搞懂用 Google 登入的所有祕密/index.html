@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="你一定每天都在用它：在登入某個新服務時，毫不猶豫地點下「使用 Google 帳戶繼續」。幾秒鐘內，就完成了註冊和登入。 這個背後藏著網路世界最重要的幾個概念：SSO、OAuth 2.0、OIDC。它們是現代網路應用安全的基石。 這篇文章將從最核心的問題開始，用最簡單的比喻，一步步揭開「用 Google 登入」的所有祕密。   最根本的區別 - 身份驗證 vs. 授權？ 在開始之前，必須先釐清兩個基">
+<meta property="og:type" content="article">
+<meta property="og:title" content="解密 SSO 與 OAuth 2.0：一次搞懂「用 Google 登入」的所有祕密">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/10/14/%E8%A7%A3%E5%AF%86%20SSO%20%E8%88%87%20OAuth%202.0%20%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%E7%94%A8%20Google%20%E7%99%BB%E5%85%A5%E7%9A%84%E6%89%80%E6%9C%89%E7%A5%95%E5%AF%86/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="你一定每天都在用它：在登入某個新服務時，毫不猶豫地點下「使用 Google 帳戶繼續」。幾秒鐘內，就完成了註冊和登入。 這個背後藏著網路世界最重要的幾個概念：SSO、OAuth 2.0、OIDC。它們是現代網路應用安全的基石。 這篇文章將從最核心的問題開始，用最簡單的比喻，一步步揭開「用 Google 登入」的所有祕密。   最根本的區別 - 身份驗證 vs. 授權？ 在開始之前，必須先釐清兩個基">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-10-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-13T16:43:02.331Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Cybersecurity">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/10/14/%E8%A7%A3%E5%AF%86%20SSO%20%E8%88%87%20OAuth%202.0%20%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%E7%94%A8%20Google%20%E7%99%BB%E5%85%A5%E7%9A%84%E6%89%80%E6%9C%89%E7%A5%95%E5%AF%86/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/10/14/%E8%A7%A3%E5%AF%86%20SSO%20%E8%88%87%20OAuth%202.0%20%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%E7%94%A8%20Google%20%E7%99%BB%E5%85%A5%E7%9A%84%E6%89%80%E6%9C%89%E7%A5%95%E5%AF%86/","path":"2025/10/14/解密 SSO 與 OAuth 2.0 一次搞懂用 Google 登入的所有祕密/","title":"解密 SSO 與 OAuth 2.0：一次搞懂「用 Google 登入」的所有祕密"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>解密 SSO 與 OAuth 2.0：一次搞懂「用 Google 登入」的所有祕密 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">107</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">55</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cloud-Computing/">
+        Cloud Computing
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Concurrency/">
+        Concurrency
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cybersecurity/">
+        Cybersecurity
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(19)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Design-Pattern/">
+        Design Pattern
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/DevOps/">
+        DevOps
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(17)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Serverless/">
+        Serverless
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E6%A0%B9%E6%9C%AC%E7%9A%84%E5%8D%80%E5%88%A5-%E8%BA%AB%E4%BB%BD%E9%A9%97%E8%AD%89-vs-%E6%8E%88%E6%AC%8A"><span class="nav-number">1.</span> <span class="nav-text"> 最根本的區別 - 身份驗證 vs. 授權？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AA%8D%E8%AD%98%E5%85%A9%E4%BD%8D%E4%B8%BB%E8%A7%92-oauth-20-%E8%88%87-sso"><span class="nav-number">2.</span> <span class="nav-text"> 認識兩位主角 - OAuth 2.0 與 SSO</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#oauth-20%E5%AE%83%E6%98%AF%E6%8E%88%E6%AC%8A%E7%9A%84%E5%A7%94%E8%A8%97%E6%9B%B8"><span class="nav-number">2.1.</span> <span class="nav-text"> OAuth 2.0：它是「授權」的委託書</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sso%E5%AE%83%E6%98%AF%E8%BA%AB%E4%BB%BD%E9%A9%97%E8%AD%89%E7%9A%84%E9%80%9A%E8%A1%8C%E8%AD%89"><span class="nav-number">2.2.</span> <span class="nav-text"> SSO：它是「身份驗證」的通行證</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%9C%E9%8D%B5%E7%B5%90%E8%AB%96"><span class="nav-number">2.3.</span> <span class="nav-text"> 關鍵結論</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#oidc-%E5%A6%82%E4%BD%95%E5%B0%87%E5%85%A9%E8%80%85%E4%B8%B2%E9%80%A3%E8%B5%B7%E4%BE%86"><span class="nav-number">3.</span> <span class="nav-text"> OIDC 如何將兩者串連起來？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%A6%E6%88%B0%E6%BC%94%E7%B7%B4-%E5%BE%9E-slack-%E5%88%B0-dropbox-%E7%9A%84%E7%84%A1%E7%B8%AB%E7%99%BB%E5%85%A5"><span class="nav-number">4.</span> <span class="nav-text"> 實戰演練 - 從 Slack 到 Dropbox 的無縫登入</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90%E7%80%8F%E8%A6%BD%E5%99%A8%E4%B8%AD%E5%88%B0%E5%BA%95%E7%99%BC%E7%94%9F%E4%BA%86%E4%BB%80%E9%BA%BC"><span class="nav-number">5.</span> <span class="nav-text"> 深度剖析：瀏覽器中到底發生了什麼？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%8E%E6%AE%B5%E4%B8%80%E5%89%8D%E7%AB%AF%E9%87%8D%E5%AE%9A%E5%90%91-browser-side-redirects-%E8%B3%87%E8%A8%8A%E7%9A%84%E5%85%AC%E9%96%8B%E5%82%B3%E9%81%9E"><span class="nav-number">5.1.</span> <span class="nav-text"> 階段一：前端重定向 (Browser-side Redirects) - 資訊的公開傳遞</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%8E%E6%AE%B5%E4%BA%8C%E5%BE%8C%E7%AB%AF%E9%80%9A%E8%A8%8A-server-to-server-%E6%A9%9F%E5%AF%86%E8%B3%87%E8%A8%8A%E7%9A%84%E4%BA%A4%E6%8F%9B"><span class="nav-number">5.2.</span> <span class="nav-text"> 階段二：後端通訊 (Server-to-Server) - 機密資訊的交換</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8D%E6%AF%94%E6%A1%88%E4%BE%8B%E7%99%BB%E5%85%A5-dropbox-sso-%E5%84%AA%E5%8B%A2%E7%9A%84%E9%AB%94%E7%8F%BE"><span class="nav-number">5.3.</span> <span class="nav-text"> 對比案例：登入 Dropbox (SSO 優勢的體現)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%99%BB%E5%85%A5%E6%B5%81%E7%A8%8B%E5%B0%8D%E6%AF%94"><span class="nav-number">5.4.</span> <span class="nav-text"> 登入流程對比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%83%E8%A9%B1%E7%8B%80%E6%85%8B%E5%B0%8D%E6%AF%94"><span class="nav-number">5.5.</span> <span class="nav-text"> 會話狀態對比</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">6.</span> <span class="nav-text"> 總結</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">107</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/14/%E8%A7%A3%E5%AF%86%20SSO%20%E8%88%87%20OAuth%202.0%20%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%E7%94%A8%20Google%20%E7%99%BB%E5%85%A5%E7%9A%84%E6%89%80%E6%9C%89%E7%A5%95%E5%AF%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="解密 SSO 與 OAuth 2.0：一次搞懂「用 Google 登入」的所有祕密 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          解密 SSO 與 OAuth 2.0：一次搞懂「用 Google 登入」的所有祕密
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-10-14 00:00:00 / 修改時間：00:43:02" itemprop="dateCreated datePublished" datetime="2025-10-14T00:00:00+08:00">2025-10-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>你一定每天都在用它：在登入某個新服務時，毫不猶豫地點下「使用 Google 帳戶繼續」。幾秒鐘內，就完成了註冊和登入。</p>
+<p>這個背後藏著網路世界最重要的幾個概念：SSO、OAuth 2.0、OIDC。它們是現代網路應用安全的基石。</p>
+<p>這篇文章將從最核心的問題開始，用最簡單的比喻，一步步揭開「用 Google 登入」的所有祕密。</p>
+<hr />
+<h1 id="最根本的區別-身份驗證-vs-授權"><a class="markdownIt-Anchor" href="#最根本的區別-身份驗證-vs-授權"></a> 最根本的區別 - 身份驗證 vs. 授權？</h1>
+<p>在開始之前，必須先釐清兩個基本概念，這是一切的基礎：</p>
+<ol>
+<li>
+<p><strong>身份驗證 (Authentication - AuthN): 你是誰？</strong></p>
+<ul>
+<li>這是<strong>驗證身份</strong>的過程。就像在飯店櫃檯出示身份證，向櫃檯人員證明你就是預訂房間的人。</li>
+</ul>
+</li>
+<li>
+<p><strong>授權 (Authorization - AuthZ): 你能做什麼？</strong></p>
+<ul>
+<li>這是<strong>授予權限</strong>的過程。在證明是你之後，櫃檯會給一張房卡。這張房卡<strong>授權</strong>你進入 305 號房、使用健身房，但不能進入別人的房間。</li>
+</ul>
+</li>
+</ol>
+<p>記住這個區別，已經掌握了理解 SSO 和 OAuth 2.0 的鑰匙。</p>
+<hr />
+<h1 id="認識兩位主角-oauth-20-與-sso"><a class="markdownIt-Anchor" href="#認識兩位主角-oauth-20-與-sso"></a> 認識兩位主角 - OAuth 2.0 與 SSO</h1>
+<p>很多人會把這兩者劃上等號，但它們其實是解決不同問題的工具。</p>
+<h2 id="oauth-20它是授權的委託書"><a class="markdownIt-Anchor" href="#oauth-20它是授權的委託書"></a> OAuth 2.0：它是「授權」的委託書</h2>
+<p><strong>OAuth 2.0 的核心是「代理」或「委託」</strong>。它允許一個應用程式（例如 <code>Canva</code>）在<strong>不獲取密碼</strong>的情況下，去請求另一個應用程式（例如 <code>Google Drive</code>）中屬於你的資源。</p>
+<p><strong>比喻：泊車小弟 (Valet Key)</strong></p>
+<blockquote>
+<p>去一家高級餐廳，想讓泊車小弟幫你停車。不會把家裡所有的鑰匙都給他，只會給他一把<strong>功能受限的汽車鑰匙</strong>。這把鑰匙只能用來開車門和發動引擎，但不能打開後車廂。</p>
+<ul>
+<li><strong>你 (資源擁有者):</strong> 汽車的主人。</li>
+<li><strong>泊車小弟 (客戶端應用):</strong> <code>Canva</code>。</li>
+<li><strong>你的車 (資源伺服器):</strong> <code>Google Drive</code> 上的照片。</li>
+<li><strong>汽車鑰匙 (Access Token):</strong> 這是一把臨時的、有權限限制的鑰匙。</li>
+</ul>
+</blockquote>
+<p>當 <code>Canva</code> 提示「允許 Canva 存取您的 Google Drive 照片嗎？」，點擊「同意」時，就是在授權 <code>Google</code> 給 <code>Canva</code> 一把「泊車鑰匙」(Access Token)。自始至終，<code>Canva</code> 都不知道你的 Google 密碼。</p>
+<h2 id="sso它是身份驗證的通行證"><a class="markdownIt-Anchor" href="#sso它是身份驗證的通行證"></a> SSO：它是「身份驗證」的通行證</h2>
+<p><strong>SSO (Single Sign-On) 的核心是「信任」與「便利」</strong>。它的目標是讓你登入一次，就能存取多個互相信任的系統。</p>
+<p><strong>最佳比喻：主題樂園的魔法手環</strong></p>
+<blockquote>
+<p>在樂園正門（<strong>身份提供者 IdP</strong>，如 Google）驗證了身份，拿到了一個手環。之後，去玩雲霄飛車（<strong>服務提供者 SP 1</strong>，如 Slack）、去餐廳吃飯（<strong>SP 2</strong>，如 Dropbox），都只需要掃一下手環。每個設施都<strong>信任</strong>發行這個手環的樂園正門。</p>
+</blockquote>
+<h2 id="關鍵結論"><a class="markdownIt-Anchor" href="#關鍵結論"></a> 關鍵結論</h2>
+<ul>
+<li><strong>OAuth 2.0</strong> 解決的是<strong>授權</strong>問題（你能做什麼）。</li>
+<li><strong>SSO</strong> 解決的是<strong>身份驗證</strong>問題（你是誰）。</li>
+</ul>
+<hr />
+<h1 id="oidc-如何將兩者串連起來"><a class="markdownIt-Anchor" href="#oidc-如何將兩者串連起來"></a> OIDC 如何將兩者串連起來？</h1>
+<p>這時會問：既然 OAuth 2.0 是關於「授權」，為什麼「用 Google 登入」卻完成了「身份驗證」呢？</p>
+<p>答案是 <strong>OpenID Connect (OIDC)</strong>。</p>
+<p><strong>OIDC 是建立在 OAuth 2.0 之上的一個身份驗證層。</strong></p>
+<p>可以這樣理解：OIDC 借用了 OAuth 2.0 的「泊車小弟」流程，但在給出那把「汽車鑰匙 (Access Token)」的同時，還多給了一張 <strong>「數位身分證 (ID Token)」</strong>。</p>
+<p>這張數位身分證上清楚地寫著：「我是 Google，我證明這個用戶的 Email 是 <code>user@gmail.com</code>，他的名字是…」。</p>
+<p>因此，「用 Google 登入」的完整真相是：</p>
+<blockquote>
+<p><strong>它是一個 OIDC 流程，這個流程利用了 OAuth 2.0 的框架來安全地傳遞身份資訊，從而實現了 SSO 的體驗。</strong></p>
+</blockquote>
+<hr />
+<h1 id="實戰演練-從-slack-到-dropbox-的無縫登入"><a class="markdownIt-Anchor" href="#實戰演練-從-slack-到-dropbox-的無縫登入"></a> 實戰演練 - 從 Slack 到 Dropbox 的無縫登入</h1>
+<p>理論說完了，讓我們看看在真實世界中，這一切是如何運作的。</p>
+<p>假设瀏覽器是乾淨的，尚未登入任何服務。</p>
+<ol>
+<li>
+<p><strong>第一步：登入 Slack</strong></p>
+<ul>
+<li>前往 <a target="_blank" rel="noopener" href="http://Slack.com">Slack.com</a>，點擊「Continue with Google」。</li>
+<li>被重定向到 Google，輸入帳號密碼。</li>
+<li>此時，Google 在你的瀏覽器中建立了一個<strong>有效的 Google 會話</strong> (拿到了主題樂園的魔法手環)，然後把你送回 Slack。</li>
+<li>Slack 透過 OIDC 流程，收到了 Google 發來的數位身分證，確認了你的身份，並為你<strong>建立了 Slack 會話</strong>。</li>
+<li>結果：成功登入 Slack。</li>
+</ul>
+</li>
+<li>
+<p><strong>第二步：前往 Dropbox</strong></p>
+<ul>
+<li>打開一個新分頁，前往 <a target="_blank" rel="noopener" href="http://Dropbox.com">Dropbox.com</a>。會發現，<strong>並未</strong>登入 Dropbox。</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>核心釐清 - 登入 Slack 就等於登入 Dropbox 了嗎？</p>
+</blockquote>
+<p><strong>答案是：絕對沒有。</strong></p>
+<p>SSO 的「單一登入」並不是「登入一個，就自動登入了所有」。它的真正意思是「<strong>一次驗證，多次使用</strong>」。</p>
+<p>回到比喻：</p>
+<blockquote>
+<p>拿到手環後，去玩了雲霄飛車 (Slack)。<strong>此刻，你只在玩雲霄飛車，並沒有同時在吃披薩 (Dropbox)。</strong> 仍然需要親自走到披薩店門口，並再次出示你的手環。</p>
+</blockquote>
+<p>繼續剛才的流程：</p>
+<ol start="3">
+<li><strong>第三步：登入 Dropbox</strong>
+<ul>
+<li>在 Dropbox 頁面上點擊「Continue with Google」。</li>
+<li>被重定向到 Google。</li>
+<li><strong>【SSO 的便利性體現】</strong> Google 的伺服器檢查你的瀏覽器，發現已經有一個<strong>有效的 Google 會話</strong>了 (它看到了手環)！</li>
+<li>因為身份已經被驗證過了，Google <strong>跳過了要求你輸入密碼的步驟</strong>，直接把你送回 Dropbox，並告訴 Dropbox：「這個人是我認證過的，可信！」</li>
+<li>Dropbox 確認信號後，為你<strong>建立了 Dropbox 會話</strong>。</li>
+<li>結果：幾乎是「瞬間」登入了 Dropbox，完全沒有輸入密碼。</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h1 id="深度剖析瀏覽器中到底發生了什麼"><a class="markdownIt-Anchor" href="#深度剖析瀏覽器中到底發生了什麼"></a> 深度剖析：瀏覽器中到底發生了什麼？</h1>
+<p>瀏覽器、Slack 的伺服器和 Google 的伺服器之間，到底交換了哪些精密的資訊。</p>
+<p>這個過程可以分解為「<strong>前端重定向</strong>」和「<strong>後端通訊</strong>」兩個主要階段。</p>
+<h2 id="階段一前端重定向-browser-side-redirects-資訊的公開傳遞"><a class="markdownIt-Anchor" href="#階段一前端重定向-browser-side-redirects-資訊的公開傳遞"></a> 階段一：前端重定向 (Browser-side Redirects) - 資訊的公開傳遞</h2>
+<p>瀏覽器在這個階段扮演著一個「信使」的角色。</p>
+<p><strong>第 1 步：請求授權 (從 Slack 到 Google)</strong></p>
+<p>當在 Slack 點擊「Continue with Google」時，Slack 並不是隨便把你送到 <a target="_blank" rel="noopener" href="http://google.com">google.com</a>。它會精心建構一個 URL，然後讓你的瀏覽器跳轉過去。這個 URL 大致長這樣：</p>
+<pre class="highlight"><code class="url">https://accounts.google.com/o/oauth2/v2/auth?
+client_id=SLACK_CLIENT_ID.apps.googleusercontent.com&amp;
+redirect_uri=https://slack.com/oauth/google/callback&amp;
+response_type=code&amp;
+scope=openid%20profile%20email&amp;
+state=aRandomStringForSecurity
+</code></pre>
+<p>拆解這些「<strong>URL 參數</strong>」的意義：</p>
+<ul>
+<li><code>client_id</code>: 告訴 Google，是「Slack」這個已註冊的應用程式在發起請求。</li>
+<li><code>redirect_uri</code>: 告訴 Google，在完成授權後，要把使用者送回的<strong>確切地址</strong>。這是個重要的安全機制，防止憑證被送到惡意網站。</li>
+<li><code>response_type=code</code>: 指定我們想要的是一個<strong>授權碼 (Authorization Code)</strong>。這是目前最安全、最推薦的流程（稱為「授權碼流程」）。</li>
+<li><code>scope</code>: 請求的權限範圍。<code>openid</code> 是 OIDC 的標準要求，表示要進行身份驗證；<code>profile</code> 和 <code>email</code> 則表示希望獲取使用者的基本資料和 Email。</li>
+<li><code>state</code>: 一個由 Slack 產生的隨機字串，用於防止 CSRF (跨站請求偽造) 攻擊，確保整個流程的完整性。</li>
+</ul>
+<p><strong>第 2 步：使用者同意並取得授權碼 (從 Google 回到 Slack)</strong></p>
+<p>在 Google 的頁面登入並點擊「同意」後，Google 會把瀏覽器重定向回 <code>redirect_uri</code>，並在後面附上兩個重要的參數：</p>
+<pre class="highlight"><code class="url">https://slack.com/oauth/google/callback?
+code=A_VERY_LONG_TEMPORARY_AUTHORIZATION_CODE&amp;
+state=aRandomStringForSecurity
+</code></pre>
+<ul>
+<li><code>code</code>: 這就是<strong>授權碼</strong>！它是一個短期的、一次性的憑證。<strong>請注意：這還不是最終的登入令牌！</strong> 它更像一張「提貨券」。</li>
+<li><code>state</code>: Google 會原封不動地返回 Slack 最初傳送的 <code>state</code> 值。Slack 的伺服器會立刻檢查這個值是否與自己之前發送的一致，確保請求未被竄改。</li>
+</ul>
+<p>到此為止，所有在瀏覽器地址欄中可見的資訊交換就結束了。接下來，是更為機密的後端通訊。</p>
+<h2 id="階段二後端通訊-server-to-server-機密資訊的交換"><a class="markdownIt-Anchor" href="#階段二後端通訊-server-to-server-機密資訊的交換"></a> 階段二：後端通訊 (Server-to-Server) - 機密資訊的交換</h2>
+<p><strong>第 3 步：用授權碼交換權杖 (從 Slack 後端到 Google 後端)</strong></p>
+<p>現在，Slack 的後端伺服器拿到了這張「提貨券 (<code>code</code>)」。它會立刻在後端，向 Google 的一個專用 API 端點發起一個<strong>直接的、伺服器對伺服器的請求</strong>。這個請求是使用者完全看不到的。</p>
+<p>請求中包含了：</p>
+<ul>
+<li>剛剛收到的 <code>code</code> (授權碼)。</li>
+<li><code>client_id</code> (再次確認自己的身份)。</li>
+<li><code>client_secret</code> (這是 Slack 的應用程式密鑰，<strong>絕對不會在前端出現</strong>，如同應用的密碼)。</li>
+<li><code>redirect_uri</code> (再次驗證)。</li>
+<li><code>grant_type=authorization_code</code> (告知 Google 我是用授權碼來換東西)。</li>
+</ul>
+<p><strong>第 4 步：取得權杖 (Tokens)</strong></p>
+<p>Google 的後端驗證了所有資訊（特別是 <code>client_secret</code> 和 <code>code</code>）無誤後，就會回傳一個 JSON 物件給 Slack 的後端：</p>
+<pre class="highlight"><code class="json"><span class="hljs-punctuation">&#123;</span>
+  <span class="hljs-attr">&quot;access_token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;ACCESS_TOKEN_FOR_GOOGLE_API&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;expires_in&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">3599</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;scope&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;openid https://www.googleapis.com/auth/userinfo.profile ...&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;token_type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Bearer&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;id_token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;A_VERY_LONG_JWT_STRING&quot;</span>
+<span class="hljs-punctuation">&#125;</span>
+</code></pre>
+<p>這裡有兩個核心的權杖：</p>
+<ul>
+<li><strong>Access Token (存取權杖):</strong> 我們的「泊車鑰匙」。Slack 可以用它去呼叫 Google 的 API，例如讀取你授權的使用者基本資料。</li>
+<li><strong>ID Token (身份權杖):</strong> 我們的「數位身分證」。這是一個 JWT (JSON Web Token)，其中包含了經過 Google 數位簽章的使用者身份資訊（如 Email、姓名、頭像連結等）。Slack 的後端只需驗證這個簽章的有效性，就可以<strong>完全信任</strong>其中的資訊，並確認你的身份。</li>
+</ul>
+<p><strong>第 5 步：建立會話並完成登入</strong></p>
+<p>Slack 的後端驗證了 <code>id_token</code> 的簽章，從中解析出你的 Email，在自己的資料庫裡找到或創建了你的帳號，然後——這一步是關鍵——它會為你<strong>建立一個屬於 Slack 自己的登入會話</strong>，並將一個 Session Cookie 寫入你的瀏覽器。</p>
+<p>從這一刻起，瀏覽器和 Slack 之間就有了自己的信任關係。之所以能在 Slack 保持登入狀態，是因為這個 Session Cookie，而不是因為 Google 的權杖。Google 的權杖只在登入那一刻扮演了「身份驗證官」的角色。</p>
+<hr />
+<h2 id="對比案例登入-dropbox-sso-優勢的體現"><a class="markdownIt-Anchor" href="#對比案例登入-dropbox-sso-優勢的體現"></a> 對比案例：登入 Dropbox (SSO 優勢的體現)</h2>
+<p>現在，瀏覽器中已經有了兩樣東西：一個有效的 <strong>Google 會話</strong> (因為登入了 Slack) 和一個有效的 <strong>Slack 會話</strong>。</p>
+<p>當前往 <a target="_blank" rel="noopener" href="http://Dropbox.com">Dropbox.com</a> 並點擊「Continue with Google」時，一個相似但更快的流程開始了。</p>
+<p><strong>階段一：前端重定向 (幾乎瞬間完成)</strong></p>
+<p><strong>第 1 步：請求授權 (從 Dropbox 到 Google)</strong><br />
+與 Slack 一樣，Dropbox 會建構一個授權請求 URL，並讓你的瀏覽器跳轉過去，只是 <code>client_id</code> 和 <code>redirect_uri</code> 換成了 Dropbox 的資訊。</p>
+<p><strong>第 2 步：神奇之處 - 無需再次驗證</strong><br />
+這是與第一次登入 Slack 時最大的不同點：</p>
+<ol>
+<li>當瀏覽器帶著請求訪問 Google 時，它會自動附上 <code>google.com</code> 網域下的 Cookies。</li>
+<li>Google 伺服器檢查 Cookies，發現了一個<strong>有效的、活躍的 Google 登入會話</strong>。</li>
+<li>Google 判斷：「我認得這個使用者」，因此<strong>完全跳過了登入頁面</strong>。</li>
+<li>Google 立刻生成一個新的、專屬於 Dropbox 請求的<strong>授權碼 (<code>code</code>)</strong>，並直接將瀏覽器重定向回 Dropbox 的 <code>redirect_uri</code>。</li>
+</ol>
+<p>對使用者來說，這個過程可能只是一次螢幕的快速閃爍。</p>
+<p><strong>階段二：後端通訊 (與之前一致)</strong></p>
+<p>從這裡開始，後端的流程與 Slack 的情況完全相同，只是主角換成了 Dropbox：</p>
+<p><strong>第 3 &amp; 4 步：用授權碼交換權杖</strong></p>
+<ul>
+<li>Dropbox 後端拿到這個一次性的 <code>code</code>。</li>
+<li>它使用自己的 <code>client_id</code> 和 <code>client_secret</code>，向 Google 的後端交換 <code>access_token</code> 和 <code>id_token</code>。</li>
+</ul>
+<p><strong>第 5 步：建立會話並完成登入</strong></p>
+<ul>
+<li>Dropbox 後端驗證了 <code>id_token</code>，確認了你的身份。</li>
+<li>它在自己的系統中為你建立一個<strong>屬於 Dropbox 的登入會話</strong>，並將專屬於 <code>dropbox.com</code> 的 Session Cookie 寫入你的瀏覽器。</li>
+</ul>
+<h2 id="登入流程對比"><a class="markdownIt-Anchor" href="#登入流程對比"></a> 登入流程對比</h2>
+<p>用表格對比這兩次登入的關鍵差異：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">步驟</th>
+<th style="text-align:left">登入 Slack (首次)</th>
+<th style="text-align:left">登入 Dropbox (已登入Google)</th>
+<th style="text-align:left">差異說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>前端請求</strong></td>
+<td style="text-align:left">瀏覽器跳轉到 Google</td>
+<td style="text-align:left">瀏覽器跳轉到 Google</td>
+<td style="text-align:left">相同</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Google驗證</strong></td>
+<td style="text-align:left"><strong>顯示登入頁，使用者輸入帳號密碼</strong></td>
+<td style="text-align:left"><strong>檢測到有效Cookie，跳過登入頁</strong></td>
+<td style="text-align:left"><strong>這是 SSO 便利性的核心！</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>前端返回</strong></td>
+<td style="text-align:left">Google 攜帶 <code>code</code> 返回 Slack</td>
+<td style="text-align:left">Google 攜帶 <code>code</code> 返回 Dropbox</td>
+<td style="text-align:left">相同</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>後端交換</strong></td>
+<td style="text-align:left">Slack 後端用 <code>code</code> 換取權杖</td>
+<td style="text-align:left">Dropbox 後端用 <code>code</code> 換取權杖</td>
+<td style="text-align:left">相同</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>會話建立</strong></td>
+<td style="text-align:left">建立 <strong>Slack</strong> 會話</td>
+<td style="text-align:left">建立 <strong>Dropbox</strong> 會話</td>
+<td style="text-align:left">各自建立獨立的應用會話</td>
+</tr>
+</tbody>
+</table>
+<p>這個對比完美地解釋了 SSO 的真諦：<strong>一次身份驗證，多處無縫登入</strong>。你只需要向「身份提供者」(Google) 證明一次你是誰，之後所有信任它的「服務提供者」(Slack, Dropbox) 都能快速地確認你的身份，而無需你反覆輸入密碼。</p>
+<h2 id="會話狀態對比"><a class="markdownIt-Anchor" href="#會話狀態對比"></a> 會話狀態對比</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">執行的動作</th>
+<th style="text-align:left">Google 會話 (手環)</th>
+<th style="text-align:left">Slack 會話</th>
+<th style="text-align:left">Dropbox 會話</th>
+<th style="text-align:left">你的感受</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>(初始狀態)</strong></td>
+<td style="text-align:left">無</td>
+<td style="text-align:left">無</td>
+<td style="text-align:left">無</td>
+<td style="text-align:left">需要登入才能使用</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>用 Google 登入 Slack</strong></td>
+<td style="text-align:left"><strong>有效 ✅</strong></td>
+<td style="text-align:left"><strong>有效 ✅</strong></td>
+<td style="text-align:left">無 ❌</td>
+<td style="text-align:left">成功登入 Slack</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>用 Google 登入 Dropbox</strong></td>
+<td style="text-align:left"><strong>有效 ✅</strong></td>
+<td style="text-align:left"><strong>有效 ✅</strong></td>
+<td style="text-align:left"><strong>有效 ✅</strong></td>
+<td style="text-align:left">幾乎無感、瞬間登入 Dropbox</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
+<p>下次，當點擊「用 Google 登入」時，將清楚地知道背後發生的一切：</p>
+<ol>
+<li><strong>SSO</strong> 是我們的<strong>目標</strong>：一次驗證，暢行無阻。</li>
+<li><strong>OAuth 2.0</strong> 是底層的<strong>授權框架</strong>，像是一套安全的交通規則。</li>
+<li><strong>OIDC</strong> 是建立在這套規則之上的<strong>身份協議</strong>，它發放「數位身分證」。</li>
+<li><strong>Google 會話 (IdP Session)</strong> 是 SSO 便利性的<strong>核心</strong>，它讓你在不同服務間穿梭時，無需重複驗證自己。</li>
+</ol>
+<p>登入了一個服務，不代表自動登入了所有服務。但只要「魔法手環」還在，進入下一個服務將會變得無比輕鬆。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Cybersecurity/" rel="tag"># Cybersecurity</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/10/11/%E5%96%AE%E4%B8%80%E7%99%BB%E5%85%A5%20Single%20Sign-On%20%E8%A9%B3%E8%A7%A3/" rel="prev" title="單一登入 (Single Sign-On, SSO) 詳解">
+                  <i class="fa fa-angle-left"></i> 單一登入 (Single Sign-On, SSO) 詳解
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
