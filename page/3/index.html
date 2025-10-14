@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">107</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">108</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">55</span></a>
       <ul class="sub-menu">
   
@@ -204,7 +204,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Database/">
         Database
-        <span class="post-count">(19)</span>
+        <span class="post-count">(20)</span>
       </a>
     </li>
   
@@ -534,7 +534,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">107</span>
+          <span class="site-state-item-count">108</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -559,6 +559,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/17/FaaS%20%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/09/17/FaaS%20%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/" class="post-title-link" itemprop="url">
+              FaaS 深度解析：擁抱無伺服器新時代的函數即服務
+            </a>
+            <a href="/my-blog/2025/09/17/FaaS%20%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-09-17 00:00:00 / 修改時間：23:26:10" itemprop="dateCreated datePublished" datetime="2025-09-17T00:00:00+08:00">2025-09-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">隨著雲端運算技術的日趨成熟，我們見證了從傳統本地部署到 IaaS (Infrastructure as a Service)、PaaS (Platform as a Service) 的演進。然而，近年來一個更為高效、更具彈性的運算模型正悄然崛起，它便是「無伺服器運算」(Serverless Computing)。而作為無伺服器核心基石之一的 FaaS (Functions as a Service)，更是徹底顛覆了我們對應用程式部署與管理的傳統認知。 是否曾夢想過，程式碼能夠在需要時瞬間啟動，執行完畢後即刻停止計費，而無需煩惱後端伺服器的設定、擴展或維護？ FaaS 正是將這個夢想變為現實的關鍵。 什麼是 FaaS (Functions as a Service)？ FaaS，即「函數即服務」，是一種雲端運算執行模型，它允許開發者以「函數」的形式部署程式碼。在 FaaS 模型中，雲端供應商會完全管理底層基礎設施，包括伺服器、作業系統、網路、運行時環境以及自動擴展機制。 簡單來說，FaaS 的核心理念是： 專注於程式碼： 開發者只需編寫單一用途、無狀態的函數程式碼。 事件驅動： 這些函數會在特定「事件」發生時被觸發執行，例如 HTTP 請求、資料庫變更、檔案上傳、定時任務等等。 按需彈性： 函數會根據工作負載自動擴展（或縮減），提供幾乎無限的彈性。 按用量計費： 只需為函數實際運行的時間和資源付費，當函數閒置時，不會產生任何費用。 與傳統伺服器或容器服務不同，FaaS 完全擺脫了伺服器管理（Provisioning/Operating Servers）的重擔，這也是「無伺服器」名稱的由來。 FaaS 如何運作？ FaaS 的運作可概括為以下幾個步驟： 部署函數： 開發者將包含業務邏輯的程式碼以及其相依套件打包，部署到 FaaS 平台。 設定觸發器： 為函數配置一個或多個觸發事件。例如，當一個新的檔案被上傳到 S3 儲存桶時，或者當一個 HTTP API 請求到達時。 事件發生： 當設定的事件被觸發時，FaaS 平台會偵測到。 啟動執行環境： 平台會動態地為函數建立一個輕量級、隔離的執行環境（通常是容器或虛擬機）。 執行函數： 程式碼在這個環境中被執行，處理事件資料。 資源釋放： 函數執行完畢後，執行環境通常會被回收，節省資源。 這個過程中的「冷啟動」(Cold Start) 是FaaS的一個特性：如果一個函數長時間未被呼叫，它可能需要一些時間來啟動新的執行環境。但對於頻繁啟用的函數，平台通常會維持一定數量的「暖」環境，以實現近乎即時的響應。 FaaS 的關鍵優勢 FaaS 模型的崛起絕非偶然，它帶來了多項令人振奮的優勢： 極致的成本效益 (Cost Efficiency)： 按用量計費 (Pay-per-execution)： 只為函數執行時的實際計算資源付費，沒有閒置成本。這對低頻率或突發性工作負載來說是巨大的節省。 告別伺服器維護成本：平台承擔所有底層基礎設施維護費用。 彈性與擴展性 (Scalability &amp; Elasticity)： 自動擴展： 根據接收到的事件數量，FaaS 平台能夠自動、快速地擴展函數的執行實例，以應對高併發流量。 自動縮減： 當流量減少時，資源也會自動縮減，確保資源的最佳利用。 降低營運負擔 (Reduced Operational Overhead)： 免除伺服器管理： 無需擔心伺服器的設定、打補丁、安全更新、版本升級或容錯處理。 專注於核心業務邏輯： 開發團隊能夠將寶貴的時間和精力集中在編寫有價值的業務程式碼上，而非基礎設施管理。 加速開發迭代 (Faster Development &amp; Deployment)： 更快的部署： 部署一個 FaaS 函數通常比部署一個完整的應用程式或容器要快得多。 微服務友好： FaaS 鼓勵開發者將應用程式拆分為更小的、獨立的函數，非常適合微服務架構，有助於實現更快的開發週期和更獨立的團隊協作。 高可用性 (High Availability)： 雲端供應商的 FaaS 服務通常在多個可用區域(Availability Zones)運行，具備內建的容錯和高可用性。 FaaS 的典型應用場景 FaaS 的靈活性使其適用於許多不同類型的應用： API 後端： 為 Web 或行動應用程式提供無伺服器後端 API。 資料處理： 實時處理串流資料（例如：物聯網資料、日誌分析）、圖片上傳後的縮圖處理、影片編碼。 定時任務 (Cron Jobs)： 執行排程的批次處理任務、數據清除或報告生成。 Webhooks 處理： 作為第三方服務（如 GitHub, Slack）的回呼處理器。 聊天機器人與語音助手： 處理使用者輸入並生成回應。 物聯網 (IoT) 後端： 接收和處理來自 IoT 裝置的事件和資料。 FaaS 與其他雲端模型的比較 為了更清楚地理解 FaaS 的定位，將它與其他常見的雲端服務模型進行比較： 特性 / 模型 本地部署 (On-premises) IaaS (Infrastructure as a Service) PaaS (Platform as a Service) FaaS (Functions as a Service) SaaS (Software as a Service) 自己管理 網路、儲存、伺服器、虛擬化、OS、Runtime、應用程式、資料、擴展 OS、Runtime、應用程式、資料、擴展 應用程式、資料、部分Runtime配置、部分擴展 僅需管理程式碼和資料 無 (僅使用) 供應商管理 無 虛擬化、伺服器、儲存、網路 OS、虛擬化、伺服器、儲存、網路、Runtime、基礎擴展 OS、Runtime、伺服器、儲存、網路、自動擴展等所有底層 完整的應用程式與底層所有 彈性 低 中 中高 極高 極高 費用模式 資本支出 + 營運支出 依實例用量付費 依平台用量付費 依函數執行次數與時間計費 依每月/每年訂閱 開發者專注點 所有層級 應用程式及部分基礎設施 應用程式與資料庫 核心業務邏輯 零開發，僅使用者角色 範例 自建機房 AWS EC2, Azure VM, GCP Compute Engine Heroku, AWS Elastic Beanstalk, Azure App Service AWS Lambda, Azure Functions, GCP Cloud Functions Gmail, Salesforce, Dropbox 從上表可見，FaaS 將開發者的管理責任推到了極致的「無伺服器」境界，讓我們能心無旁騖地專注於程式碼本身。 FaaS 的挑戰與考慮 儘管 FaaS 帶來了諸多好處，但在採用之前，也需要考慮一些潛在的挑戰： 冷啟動 (Cold Starts)： 首次啟動或長時間未啟動的函數，可能會由於需要初始化執行環境而產生輕微的延遲。 時間限制 (Execution Duration Limits)： 大多數 FaaS 平台對函數的執行時間設有上限，不適合長時間執行的任務。 無狀態性 (Statelessness)： 函數是無狀態的，這意味著它們不應該依賴於前一次執行的狀態。如果需要狀態，必須將其存儲在外部服務（如資料庫、儲存桶）。 本地測試與偵錯： 由於依賴雲端環境觸發，本地環境的完整測試和偵錯可能會稍微複雜一些。 廠商綁定 (Vendor Lock-in)： FaaS 平台有各自的 API 和生態系統，在不同供應商之間遷移可能需要一些調整。 複雜的分布式系統： 當應用程式由數十個甚至數百個微小函數組成時，整體的架構設計、監控和問題排除可能變得複雜。 結論 FaaS 提供了一種前所未有的方式來構建和部署應用程式：更聚焦、更彈性、更具成本效益。它讓開發者從繁瑣的基礎設施管理中解放出來，將寶貴的精力投入到創造真正的業務價值之上。 雖然 FaaS 也有其適用場景和需要考量的點，但對於許多現代應用程式，特別是那些需要高度彈性、事件驅動且具備微服務特性的工作負載，FaaS 提供了強大且具前瞻性的解決方案。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/09/17/FaaS%20%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1323,92 +1409,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/09/06/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20DNS/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/05/HTTP%20vs%20HTTPS/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/09/05/HTTP%20vs%20HTTPS/" class="post-title-link" itemprop="url">
-              HTTP vs. HTTPS：為什麼多一個 "S" 如此重要？
-            </a>
-            <a href="/my-blog/2025/09/05/HTTP%20vs%20HTTPS/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-09-05 00:00:00 / 修改時間：23:24:59" itemprop="dateCreated datePublished" datetime="2025-09-05T00:00:00+08:00">2025-09-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">當打開瀏覽器，輸入網址，或是點擊一個連結時，我們都在無意識地使用著網路上最重要的應用層協定之一——HTTP。然而，隨著網路威脅的日益增長，單純的 HTTP 已經遠遠不足以保護資料安全。這就是為什麼需要它的安全進化版：HTTPS。 HTTP：網路世界的「公開信件」 HTTP，全名為「超文本傳輸協定 (Hypertext Transfer Protocol)」，是網際網路中最廣泛使用的協定，用於在全球資訊網 (World Wide Web) 上傳輸各種格式的超文本資料。它可以說是瀏覽器與網站伺服器之間進行「對話」的基本語言。 工作層次：HTTP 工作在 OSI 模型的應用層 (Application Layer, Layer 7)。 運作方式： 客戶端-伺服器模型：瀏覽器 (客戶端) 向網站伺服器 (伺服器端) 發出請求 (Request)，伺服器收到請求後，回應相應的網頁內容 (Response)。 請求-回應機制：每次溝通都由客戶端發起請求，伺服器進行回應。 無狀態 (Stateless)：HTTP 本身不保存客戶端的過去互動狀態。每個請求都是獨立的。 預設埠：HTTP 的預設埠號是 80。 用途：主要用於取得 HTML 文件、圖片、聲音、影片等多媒體資訊。 HTTP 的本質弱點：透明的溝通 想像一下，和朋友用明信片進行溝通。明信片上的內容清晰可見，任何人，路過的郵差、分揀員，甚至是好奇的旁觀者都能讀取你寫的訊息。 這正是 HTTP 的問題所在：它以純文字 (Plain Text) 的形式傳輸資料。這意味著： 資料未加密：輸入的用戶名、密碼、信用卡號碼等敏感資訊，在網路傳輸過程中是完全暴露的，任何人透過截取網路流量就能直接讀取。 無法驗證資訊來源：無法確定正在訪問的網站是否真的是預期的網站，還是有人偽裝了它。 資料完整性未受保護：傳輸途中的資料可能會被惡意篡改，卻渾然不知。 在沒有這些保護的情況下，瀏覽活動和個人資料很容易受到「中間人攻擊 (Man-in-the-Middle, MITM)」、網路竊聽、資料篡改等威脅。 HTTPS：加上「安全鎖」的溝通方式 HTTPS，全名為「超文本傳輸安全協定 (Hypertext Transfer Protocol Secure)」，是 HTTP 的安全版本。它本質上是在 HTTP 上層疊加了一個安全層 (SSL/TLS)，為資料加上了一道堅不可摧的保護網。 這個多出來的 S，代表的就是 Secure (安全)。 工作層次：HTTPS 雖然仍是應用層協定，但其安全性關鍵在於引入了傳輸層安全協議 (TLS, Transport Layer Security)，它取代了其前身 安全通訊端層 (SSL, Secure Sockets Layer)。TLS/SSL 工作在 OSI 模型的會話層、表示層和傳輸層之間。 運作方式： 在客戶端和伺服器建立 HTTP 通訊之前，會先建立一個 TLS/SSL 安全通道。 在這個通道內，所有通過 HTTP 傳輸的資料都會被加密。 HTTPS 的預設埠號是 443。 HTTPS 如何提供安全性？三大支柱： HTTPS 透過 TLS/SSL 協議，提供了三大核心安全特性，就像是把公開的明信片放進了一個加密的信封，並且加上了寄件人身份證明和防篡改印章： 資料加密 (Encryption)： 所有在客戶端和伺服器之間傳輸的資料都會被加密，使其變得不可讀。即使資料被截取，竊聽者也無法理解其內容。 這確保了敏感資訊（如登入憑證、交易細節）在傳輸過程中是安全的。 身份驗證 (Authentication)： 伺服器會向客戶端提供一個數位憑證 (Digital Certificate)，該憑證由受信任的憑證頒發機構 (Certificate Authority, CA) 簽發。 客戶端可以驗證這個憑證的有效性，從而確認網站的身份是真實的，而非惡意網站的偽裝。這有效防止了中間人攻擊。 資料完整性 (Data Integrity)： TLS/SSL 協議會使用訊息摘要 (Message Digest) 或雜湊函數 (Hash Function) 來檢測資料在傳輸過程中是否被篡改。 如果資料在途中被修改，接收方會立即發現並拒絕該資料。這保證了收到的資訊是期望收到的、未被動手腳的資訊。 HTTPS 的運作機制簡介：SSL/TLS 握手 當嘗試訪問一個 HTTPS 網站時，會發生一個複雜而精密的「SSL/TLS 握手」過程： 客戶端發送 Hello：瀏覽器向伺服器發送一個「Client Hello」，聲明它支持的 TLS 版本、加密演算法等。 伺服器回應 Hello 和憑證：伺服器回應「Server Hello」，選擇一個共同支持的加密組，並將自己的數位憑證發送給瀏覽器。 瀏覽器驗證憑證：瀏覽器檢查憑證的有效性（是否由受信任的 CA 簽發、是否過期等），以確認伺服器的真實身份。 密鑰交換：驗證成功後，瀏覽器生成一個對稱加密金鑰 (Symmetric Key)，使用伺服器憑證中的公開金鑰加密後發送給伺服器。只有擁有私有金鑰的伺服器才能解密這個對稱金鑰。 建立安全通道：雙方都獲得了相同的對稱金鑰後，這個金鑰將用於後續所有資料的加密和解密。 資料傳輸：之後，所有 HTTP 資料都在這個由對稱金鑰加密的 TLS 安全通道中傳輸，確保安全。 這個過程雖然看起來複雜，但都發生在毫秒之間，對使用者來說是完全透明的。 為什麼 HTTPS 不再是選項，而是必需？ 如今，HTTPS 已經不再是「錦上添花」的優勢，而是任何網站的必要條件： 保護用戶隱私與數據安全：這是最核心的價值。無論是個人資料、商務交易還是日常瀏覽，HTTPS 都能有效防止資料洩露和被篡改。 建立信任：網址列上的綠色小鎖頭和 https:// 已經成為用戶判斷網站是否安全可信的標誌。沒有 HTTPS 的網站會被瀏覽器標記為「不安全」，嚴重損害網站形象。 搜尋引擎優化 (SEO)：Google 等主流搜尋引擎已將 HTTPS 作為排名考量因素之一。使用 HTTPS 的網站會獲得更好的搜尋排名。 支援新網路技術：許多現代網路技術和協議（如 HTTP/2）都要求或強烈建議使用 TLS/SSL。HTTP/2 在 HTTPS 的基礎上提供了更快的連線速度和更高的效率。 遵守法規合規性：GDPR 等資料保護法規要求網站必須採取足夠的技術措施來保護用戶數據，HTTPS 是實現這一目標的基礎。 HTTP vs. HTTPS：核心差異一覽 特性 HTTP (Hypertext Transfer Protocol) HTTPS (Hypertext Transfer Protocol Secure) 安全性 無加密，資料以純文字傳輸，易被竊聽與篡改。 加密，資料透過 SSL/TLS 加密傳輸，防竊聽、防篡改。 連接埠 預設使用 80 埠。 預設使用 443 埠。 憑證 無需憑證。 需要 SSL/TLS 數位憑證，由 CA 簽發。 身份驗證 無伺服器身份驗證，無法確認網站真實性。 提供伺服器身份驗證，確認網站是可信的。 資料完整性 無資料完整性保護。 提供資料完整性檢查，確保資料未被篡改。 成本 零 (設定簡易)。 憑證費 (雖然現在有免費憑證如 Let’s Encrypt)，伺服器資源消耗略高。 SEO 影響 負面影響，可能降低搜尋排名。 正面影響，有助於提升搜尋排名。 瀏覽器顯示 顯示 http://，常被標示為「不安全」或無鎖圖示。 顯示 https://，有綠色鎖頭或安全標誌。 結論 在資訊安全日益重要的今天，HTTP 已經成為過時且危險的通訊方式。而 HTTPS 則作為現代網路的標準，以其強大的加密、身份驗證和資料完整性機制，為每一次點擊、每一次輸入提供保護。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/09/05/HTTP%20vs%20HTTPS/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>

@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">107</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">108</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">55</span></a>
       <ul class="sub-menu">
   
@@ -204,7 +204,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Database/">
         Database
-        <span class="post-count">(19)</span>
+        <span class="post-count">(20)</span>
       </a>
     </li>
   
@@ -534,7 +534,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">107</span>
+          <span class="site-state-item-count">108</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -559,6 +559,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/14/PostgreSQL%20%E7%82%BA%E4%BD%95%E8%83%BD%E8%B6%85%E8%B6%8A%20MySQL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/10/14/PostgreSQL%20%E7%82%BA%E4%BD%95%E8%83%BD%E8%B6%85%E8%B6%8A%20MySQL/" class="post-title-link" itemprop="url">
+              PostgreSQL 為何能超越 MySQL？從機制、一致性到擴展性的全面解析
+            </a>
+            <a href="/my-blog/2025/10/14/PostgreSQL%20%E7%82%BA%E4%BD%95%E8%83%BD%E8%B6%85%E8%B6%8A%20MySQL/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-10-14 00:00:00 / 修改時間：14:33:18" itemprop="dateCreated datePublished" datetime="2025-10-14T00:00:00+08:00">2025-10-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">PostgreSQL（PG）近年來在資料庫領域日益受到歡迎，甚至被視為超越 MySQL 登上最受歡迎資料庫的頂端。本篇文章將深入探討 PostgreSQL 相較於 MySQL 在索引、資料一致性、性能對比、擴展性及社群活躍度等方面的功能優勢。 靈活的索引架構與進階索引類型 MySQL 與 PostgreSQL 的基礎索引類型皆採用 B+樹（PostgreSQL 文件中習慣稱作 B-Tree，但已實現 B+樹的全部功能）。然而，兩者在資料與索引的儲存方式上存在根本差異： 特點 MySQL (InnoDB) PostgreSQL 優勢分析 主索引類型 聚簇索引 (Clustered Index) 僅有二級索引 (Secondary Index) PG 的索引與資料分離，便於擴展。 資料儲存 資料按主鍵順序存放在 B+樹葉子節點 資料存放在獨立的「堆表」（Heap Table）空間 PG 插入資料時直接追加到堆表末尾，有效避免隨機寫入導致的資料頁分裂。 二級索引 葉子節點儲存主鍵 ID，查詢需「回表」至聚簇索引 葉子節點儲存指向堆表的物理位置指標 (TID) PG 的主鍵索引與其他索引的實現方式保持一致，不存在性能差異。 1. 倒排索引 (GIN) PostgreSQL 支援通用倒排索引（Generalized Inverted Index, GIN）。傳統索引是從行到值進行查找，而倒排索引建立了從值到行的反向映射。GIN 適用於 JSON 資料、陣列或高效能的全文檢索。 通用倒排索引 (Generalized Inverted Index, GIN) 是一種專為處理「一個欄位包含多個值」的場景而設計的索引。 詳細解釋：想像一本書的目錄，傳統 B-Tree 索引就像是從「頁碼」找到「章節標題」。而倒排索引則像書末的「關鍵詞索引」，它是從「關鍵詞」反向找到所有包含該詞的「頁碼」。GIN 將一個欄位中的元素（例如陣列中的每個數字、JSON 中的每個鍵值對、一段文字中的每個詞彙）提取出來作為 key，並將包含該 key 的行位置作為 value 列表。 適用場景：特別適合陣列、JSONB 以及全文檢索。當想查詢哪些陣列包含特定數字，或哪些 JSON 文件包含特定屬性時，GIN 索引能提供極高的效能。 PG 程式碼範例：查詢商品標籤 -- 假設商品表有一個 text[] 類型的標籤字段 CREATE TABLE products ( id serial PRIMARY KEY, name text, tags text[] ); -- 在標籤字段上創建 GIN 索引 CREATE INDEX idx_gin_tags ON products USING gin (tags); -- 使用 GIN 索引快速查詢哪些商品同時包含 &#x27;electronics&#x27; 和 &#x27;new&#x27; 標籤 -- @&gt; 操作符代表「包含」 SELECT * FROM products WHERE tags @&gt; ARRAY[&#x27;electronics&#x27;, &#x27;new&#x27;]; PG 程式碼範例：建立 JSONB 的 GIN 索引 -- 假設 product 表包含 jsonb 類型的 build 字段 CREATE INDEX idx_gin_build ON product USING gin (build); -- 使用 GIN 索引快速查詢 JSONB 數據中是否包含某個鍵值 (使用 @&gt; 操作符) SELECT * FROM product WHERE build @&gt; &#x27;&#123;&quot;color&quot;: &quot;red&quot;&#125;&#x27;; 2. 通用搜索樹索引 (GiST) GiST (Generalized Search Tree) 並非一種具體的索引，而是一個索引框架。任何資料類型只要能實現 GiST 要求的介面，即可利用此框架建立索引。GiST 非常適合處理非線性資料，例如幾何圖形、地理位置、IP 位址、時間範圍等，用於查詢是否重疊或距離遠近。GiST 索引內部也是平衡樹，但節點儲存的是一個範圍，而非具體的值。MySQL 不支援 GiST 索引。 通用搜索樹 (Generalized Search Tree, GiST) 與其說是一種索引，不如說是一個強大的索引框架。 詳細解釋：GiST 允許開發者為複雜的非標準資料類型（如地理位置、時間範圍、IP 網段）定義它們自己的索引方式。它的核心思想是將不規則的資料「概括」成一個更容易比較的「範圍」或「邊界框」。例如，它會將一個複雜的多邊形概括成一個簡單的矩形。查詢時，它首先快速判斷查詢目標是否與這個矩形重疊，如果重疊，再進入下一層進行更精細的判斷。 適用場景：地理資訊系統（GIS）中的點、線、面查詢；時間範圍的重疊查詢；IP 位址段的包含關係查詢。 PG 程式碼範例：查詢附近的餐廳 -- 啟用 cube 和 earthdistance 擴展，它們提供了基於 GiST 的地理距離計算 CREATE EXTENSION cube; CREATE EXTENSION earthdistance; -- 創建餐廳表，並儲存經緯度 CREATE TABLE restaurants ( id serial PRIMARY KEY, name text, location point -- (經度, 緯度) ); -- 在地理位置上創建 GiST 索引 CREATE INDEX idx_gist_location ON restaurants USING gist (ll_to_earth(location[0], location[1])); -- 查詢距離 (25.0330, 121.5654) 5公里以內的餐廳 -- earth_box 和 earth_distance 都是擴展提供的函數 SELECT * FROM restaurants WHERE earth_box(ll_to_earth(25.0330, 121.5654), 5000) @&gt; ll_to_earth(location[0], location[1]) AND earth_distance(ll_to_earth(25.0330, 121.5654), ll_to_earth(location[0], location[1])) &lt; 5000; PG 程式碼範例：建立日期範圍 (daterange) 的 GiST 索引 -- 創建包含日期範圍的表，daterange 是 PostgreSQL 特有的數據類型 CREATE TABLE time_events ( id serial PRIMARY KEY, schedule daterange ); -- 在日期範圍字段上創建 GiST 索引 CREATE INDEX idx_gist_schedule ON time_events USING gist (schedule); -- 使用索引查詢與 &#x27;2023-01-08&#x27; 當天有時間重疊的範圍 (&amp;&amp; 是 GiST 提供的重疊運算符) SELECT * FROM time_events WHERE schedule &amp;&amp; daterange &#x27;2023-01-08&#x27;::date_range; -- 使用索引查詢與 &#x27;2023-01-08&#x27; 到 &#x27;2023-01-13&#x27; 有時間重疊的範圍 SELECT * FROM time_events WHERE schedule &amp;&amp; daterange(&#x27;2023-01-08&#x27;, &#x27;2023-01-14&#x27;); -- 使用索引查詢與 &#x27;2023-01-08&#x27; 到 &#x27;2023-01-13&#x27; 有時間重疊的範圍 SELECT * FROM time_events WHERE schedule &amp;&amp; daterange(&#x27;2023-01-08&#x27;, &#x27;2023-01-13&#x27;, &#x27;[]&#x27;); 3. 部分索引 (Partial Index) 部分索引允許在索引後面添加條件，使得該索引只對滿足特定條件的記錄生效。這對於實現邏輯刪除場景下的唯一性約束非常有用。它只管理滿足條件的行，從而在物理層面上縮小索引樹大小，加快查詢速度並減少磁碟佔用。MySQL 不支援部分索引。 部分索引 (Partial Index) 是一種只對表格中滿足特定條件的子集建立索引的機制。 詳細解釋：想像一個訂單表，其中 99% 的訂單都是「已完成」狀態，只有 1% 是「處理中」。如果你想快速查詢「處理中」的訂單，建立一個包含所有訂單的索引顯然是浪費的。部分索引允許你只為 status = 'processing' 的訂單建立索引。這樣做不僅能大幅縮小索引體積、節省磁碟空間，還能顯著提升查詢和寫入的效能。 適用場景：當查詢條件非常集中於表格中的一小部分資料時，例如未支付的訂單、未刪除的用戶等。 PG 程式碼範例：僅索引未支付的訂單 CREATE TABLE orders ( id serial PRIMARY KEY, amount numeric, paid boolean DEFAULT false ); -- 只為 paid = false 的訂單建立索引 CREATE INDEX idx_unpaid_orders ON orders (id) WHERE paid = false; -- 這個查詢將會非常高效 SELECT * FROM orders WHERE paid = false; PG 程式碼範例：僅索引啟用的電話 -- 只有 active = &#x27;y&#x27; 的記錄才會被納入索引管理， -- 被邏輯刪除（active = &#x27;n&#x27;）的記錄將不再佔用唯一性約束 CREATE UNIQUE INDEX idx_unique_phone ON users (phone) WHERE active = &#x27;y&#x27;; 4. 表達式索引 (Expression Index) 表達式索引支援將欄位的計算結果進行索引。PostgreSQL 在很早的版本就原生支援了真正的表達式索引。MySQL 雖然在 8.0.13 後支援，但其本質上是為表達式生成一個隱藏的虛擬列並在其上建立索引。 表達式索引 (Expression Index) 也稱為函數索引 (Functional Index)，它允許你對欄位的計算結果或函數調用結果建立索引。 詳細解釋：假設需要頻繁地進行不區分大小寫的郵件地址查詢。若無表達式索引，資料庫必須對每一行的 email 欄位都執行 lower() 函數，然後再進行比較，這是一個全表掃描操作。有了表達式索引，PostgreSQL 會預先計算好所有 lower(email) 的結果並儲存成一個 B-Tree 索引。查詢時，它能直接利用這個索引進行快速定位。 適用場景：不區分大小寫的查詢、基於日期欄位中的年份或月份的查詢、JSON 欄位中特定值的查詢。 PG 程式碼範例：查詢特定年份的用戶註冊 CREATE TABLE users ( id serial PRIMARY KEY, email text, created_at timestamp ); -- 對註冊日期的年份建立索引 CREATE INDEX idx_users_signup_year ON users (EXTRACT(YEAR FROM created_at)); -- 這個查詢可以直接使用索引，快速找出 2024 年註冊的所有用戶 SELECT * FROM users WHERE EXTRACT(YEAR FROM created_at) = 2024; PG 程式碼範例：建立表達式索引（電子郵件小寫化） -- 對 email 字段的小寫結果建立索引，以便進行不區分大小寫的查詢 CREATE INDEX idx_email_lower ON users (lower(email)); -- 查詢時可以直接針對計算結果進行查詢，高效利用索引 SELECT * FROM users WHERE lower(email) = &#x27;test@example.com&#x27;; 先進的資料一致性與事務管理 事務是保障資料一致性的核心機制。PostgreSQL 在事務管理上提供了兩個 MySQL 不具備的獨特功能： 1. DDL 語句的事務管理 在 PostgreSQL 內部，所有關於資料庫結構的資訊（如表、列、索引等）都儲存在一系列特殊的系統表裡。因此，執行 DDL（資料庫定義語言）語句（即修改表結構）等同於修改系統表裡的資料。 PostgreSQL 確實支援將 DDL 語句用事務進行管理。這意味著一系列複雜的表結構變更操作可以在同一個事務中執行，中間任何一個環節出錯，整體都可以進行回滾（Rollback）。這能確保資料庫中不會出現任何「髒資料」或多餘字段，保證資料庫結構的一致性。MySQL 無法將 DDL 語句加入事務管理。 詳細解釋：在 PostgreSQL 中，幾乎所有操作（包括修改資料庫結構的 DDL 指令，如 CREATE TABLE, ALTER TABLE）都在事務塊中執行。這帶來一個巨大的好處：結構變更的原子性。想像一個複雜的資料庫升級，你需要新增一個表、修改兩個表、刪除一個舊索引，並新增一個新索引。如果這個過程在第四步失敗了，MySQL 會留下一個不完整的、混亂的資料庫結構。而 PostgreSQL 則可以簡單地 ROLLBACK，整個資料庫會恢復到事務開始前的狀態，彷彿什麼都沒發生過。 適用場景：資料庫遷移、複雜的 schema 變更、自動化部署流程。 PG 程式碼範例：安全的資料庫結構升級 BEGIN; -- 開始一個事務 -- 步驟 1: 新增一個用戶配置表 CREATE TABLE user_settings ( user_id INT PRIMARY KEY, settings JSONB ); -- 步驟 2: 為 users 表新增一個關聯外鍵 ALTER TABLE users ADD COLUMN settings_id INT; ALTER TABLE users ADD CONSTRAINT fk_settings FOREIGN KEY (settings_id) REFERENCES user_settings(user_id); -- 假設步驟 3 出錯，例如欄位名稱寫錯 ALTER TABLE user_settings RENAME COLUMN settigns TO settings_data; -- 故意寫錯 settings -- 捕捉到錯誤後，執行回滾 ROLLBACK; -- 最終結果: user_settings 表和 users 表上的外鍵都不會存在，資料庫結構保持一致。 2. 可延遲約束 (Deferrable Constraints) 可延遲約束（DEFERRABLE）指的是只有在事務提交（COMMIT）時，才會對該約束進行檢查。這解決了在複雜資料交換或轉換場景中，需要暫時違反約束（例如，在兩條記錄交換名稱時，會暫時出現重複名稱）的「先有雞還是先有蛋」問題。MySQL 沒有此功能。 詳細解釋：標準的約束（如唯一約束、外鍵約束）是在每一條 SQL 語句執行完畢後立即檢查的。但在某些場景下，這會帶來麻煩。最經典的例子是交換兩個唯一值。假設有兩位員工 Alice 和 Bob，他們的員工編號 employee_id 是唯一主鍵。如果你想交換他們的 ID，UPDATE employees SET id = 'bob_id' WHERE id = 'alice_id' 會立刻失敗，因為 ‘bob_id’ 已經存在。可延遲約束允許將檢查推遲到整個事務要提交（COMMIT）的那一刻。這樣，就可以在事務內暫時違反約束，只要在提交前恢復資料的一致性即可。 適用場景：交換唯一鍵/主鍵、複雜的資料重構、處理循環外鍵依賴。 PG 程式碼範例：安全地交換兩個員工的主鍵 -- 創建表時，將主鍵定義為可延遲 CREATE TABLE employees ( id TEXT PRIMARY KEY DEFERRABLE INITIALLY IMMEDIATE, name TEXT ); INSERT INTO employees VALUES (&#x27;alice_id&#x27;, &#x27;Alice&#x27;), (&#x27;bob_id&#x27;, &#x27;Bob&#x27;); BEGIN; -- 在事務內，將約束檢查模式設置為延遲 SET CONSTRAINTS employees_pkey DEFERRED; -- 交換 ID UPDATE employees SET id = &#x27;temp_id&#x27; WHERE id = &#x27;alice_id&#x27;; UPDATE employees SET id = &#x27;alice_id&#x27; WHERE id = &#x27;bob_id&#x27;; UPDATE employees SET id = &#x27;bob_id&#x27; WHERE id = &#x27;temp_id&#x27;; COMMIT; -- 在提交時，PG 檢查發現最終的 id 仍然是唯一的，事務成功。 事務隔離級別的一致性表現 事務隔離級別定義了一個事務中的修改在何種程度上對其他併發事務可見。 PostgreSQL (預設: 讀已提交 Read Committed): 在此級別下，一個事務只能讀取到其他已經提交的事務的變更。PostgreSQL 透過其先進的多版本併發控制 (MVCC) 機制實現了這一點。每個 SQL 語句都會獲取一個新的資料「快照 (Snapshot)」。這確保了在單一語句的執行期間，資料是不會變的。 MySQL (InnoDB) (預設: 可重複讀 Repeatable Read): 此級別要求在同一個事務中，多次讀取同一行資料的結果必須一致。它雖然解決了「不可重複讀」的問題，但也帶來了一個奇特的副作用：讀寫不一致。在一個事務中，SELECT 會讀取事務開始時的快照，但 UPDATE 或 DELETE 卻會去讀取資料的「當前」版本（稱為 “current read”）。 範例：MySQL 中讀寫不一致的問題 假設有一個 products 表，其中 id=1 的商品庫存 (stock) 為 10。 時間 事務 A (Repeatable Read) 事務 B (自動提交) T1 BEGIN; T2 SELECT stock FROM products WHERE id = 1; (返回 10) T3 UPDATE products SET stock = 5 WHERE id = 1; COMMIT; T4 SELECT stock FROM products WHERE id = 1; (仍然返回 10，因為讀取的是 T1 的快照) T5 UPDATE products SET stock = stock - 1 WHERE id = 1; (操作成功！庫存變為 4) T6 SELECT stock FROM products WHERE id = 1; (依然返回 10) T7 COMMIT; 在 T5，事務 A 明明讀到庫存是 10，但它的更新操作卻是基於事務 B 已經提交的 stock = 5 來進行的。這種 SELECT 和 UPDATE 看到不同資料版本的行為，違反了開發者的直覺，可能導致隱蔽的 Bug。PostgreSQL 在所有隔離級別下都保證了讀寫的一致性。 性能與版本趨勢對比 根據權威性能測試，PostgreSQL 在高併發場景下的表現優於 MySQL： 高併發寫入測試： 在每秒寫入 1 萬次的場景下，PostgreSQL 以大約 兩倍 的性能優勢獲勝。 高併發查詢測試： 在對 7000 萬行的大表關聯查詢中，PostgreSQL 以大約 1.5 倍 的性能優勢獲勝。 值得注意的是，近年來的版本趨勢顯示：MySQL 的版本越新，性能反而越差（從 5.7 到 8.4 遞減），而最新的 PostgreSQL 17 相比六年前的版本甚至有 30% 到 70% 的提升。 萬物皆可擴展的生態系統 PostgreSQL 設計的核心理念是萬物皆可擴展。它是一個對象關係型資料庫，直接在資料庫層面提供對象支援。PG 的擴展性體現在四個方面：資料類型、函數、操作符，以及索引類型皆可擴展。 相較而言，MySQL 的擴展性主要體現在儲存引擎的可插拔性，但由於 99% 的場景都使用 InnoDB，其他引擎功能缺乏維護，實用性不高。MySQL 不支援自定義資料類型、自定義運算符和自定義索引類型。 截至 2025 年的統計數據顯示，由社群開發的 PostgreSQL 第三方插件數量為 375 個，遠高於 MySQL 的 47 個。 PostGIS 擴展範例 PostGIS 是 PostgreSQL 生態中最成功的擴展，它將 PG 轉變為功能全面的企業級地理資訊系統（GIS）資料庫，且並未修改一行 PG 的核心程式碼，完全基於 PG 的擴展機制構建。 PostGIS 體現了 PG 的四大擴展點： 自定義資料類型： geometry（用於儲存地理資訊）。 自定義函數： ST_Area（計算區域面積），ST_GeomFromText（將字串轉換為地理位置座標）。 自定義索引： 使用 GiST 索引來高效查找地理位置是否重疊或計算距離關係。 自定義操作符： &lt;-&gt; 運算符（形象地表示兩個地理位置之間的距離）。 PG 程式碼範例：PostGIS 的擴展能力 -- 啟用 PostGIS 插件 CREATE EXTENSION postgis; -- 創建一個表，使用 PostGIS 自定義的 geometry 數據類型 CREATE TABLE cities ( id serial PRIMARY KEY, name varchar(100), geom geometry(Point, 4326) -- 4326 是 GPS 座標系統代號 ); -- 使用自定義函數 ST_GeomFromText 插入數據 INSERT INTO cities (name, geom) VALUES (&#x27;Taipei 101&#x27;, ST_SetSRID(ST_MakePoint(121.5644, 25.0339), 4326)), (&#x27;Taipei Main Station&#x27;, ST_SetSRID(ST_MakePoint(121.5175, 25.0479), 4326)); -- 創建 GiST 索引以高效支持空間查詢 CREATE INDEX idx_cities_geom_gist ON cities USING gist (geom); -- 使用自定義操作符 &lt;-&gt; 查詢距離（查找距離台北 101 最近的三個地標） SELECT name, geom &lt;-&gt; ST_SetSRID(ST_MakePoint(121.5644, 25.0339), 4326) AS distance FROM cities ORDER BY distance LIMIT 3; 開源許可證與社群治理 PostgreSQL 採用寬鬆的 MIT/BSD 開源許可證，允許免費自由地使用、複製、修改和分發，並且允許將修改後的程式碼閉源使用。PG 由一個全球性的開發者社群管理，不屬於任何一家公司，其發展方向不會受到單一公司商業利益的左右，帶來極高的用戶信任度。 MySQL 的開源許可證較為複雜，社群版協議為 GPLv2。GPLv2 具有「傳染性」：如果你的程式包含或連結了 MySQL 的 GPL 程式碼，則整個應用程式也必須以 GPL 協議開源。若不想開源修改後的程式碼，則必須購買商業許可證。這種模式導致了社群的不安和分裂（如 MariaDB 的創立），而 PG 則形成了良性循環，社群專注於在其穩定的內核基礎上進行創新。 總結 MySQL 憑藉其簡單易用和早期的 Web 開發生態，至今仍是許多應用的可靠選擇。然而，隨著應用場景的日益複雜，對資料一致性、靈活性和擴展性的要求也水漲船高。 PostgreSQL 在這場競賽中脫穎而出，並非偶然。它從設計之初就堅持最嚴格的 SQL 標準和資料一致性，提供了事務化的 DDL 和可延遲約束等獨特功能，確保了資料的絕對可靠。其靈活的索引機制（GIN, GiST, 部分索引）和擴展性，使其能夠輕鬆應對從全文檢索到地理空間分析的各種現代化挑戰。 更重要的是，一個獨立、開放、繁榮的社群賦予了 PostgreSQL 持續的生命力。它不僅僅是一個資料庫，更是一個穩定、強大且不斷進化的數據平台。對於追求技術卓越、業務需要高度靈活性，並希望為未來做好準備的開發者和企業而言，PostgreSQL 無疑是那個更值得信賴的選擇。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/10/14/PostgreSQL%20%E7%82%BA%E4%BD%95%E8%83%BD%E8%B6%85%E8%B6%8A%20MySQL/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1323,92 +1409,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/10/01/%E8%B3%87%E6%96%99%E5%BA%AB%E6%95%88%E8%83%BD%E8%AA%BF%E6%A0%A1%E6%8C%87%E5%8D%97/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/29/%E6%A5%AD%E5%8B%99%E7%B3%BB%E7%B5%B1%E6%B5%81%E7%A8%8B%E4%B8%AD%E7%9A%84%E7%B0%BD%E6%A0%B8%E5%88%B6%E5%BA%A6%20Approval%20Workflow/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/09/29/%E6%A5%AD%E5%8B%99%E7%B3%BB%E7%B5%B1%E6%B5%81%E7%A8%8B%E4%B8%AD%E7%9A%84%E7%B0%BD%E6%A0%B8%E5%88%B6%E5%BA%A6%20Approval%20Workflow/" class="post-title-link" itemprop="url">
-              業務系統流程中的簽核制度（Approval Workflow）
-            </a>
-            <a href="/my-blog/2025/09/29/%E6%A5%AD%E5%8B%99%E7%B3%BB%E7%B5%B1%E6%B5%81%E7%A8%8B%E4%B8%AD%E7%9A%84%E7%B0%BD%E6%A0%B8%E5%88%B6%E5%BA%A6%20Approval%20Workflow/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-09-29 00:00:00 / 修改時間：23:56:05" itemprop="dateCreated datePublished" datetime="2025-09-29T00:00:00+08:00">2025-09-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">在企業資訊系統中，簽核制度（Approval Workflow） 是非常常見且關鍵的一環。無論是費用報銷、採購申請、專案立案，還是人事異動，往往都需要經過多層級的審核與批准，確保流程合規、權責明確。 本文將介紹簽核制度的核心概念、常見模式，以及在系統設計上的考量。 為什麼需要簽核制度？ 權責控管 不同層級的主管對應不同的審批權限，避免越權決策。 風險管理 透過層層把關，降低財務或流程上的風險。 流程透明化 所有簽核紀錄都能被追蹤，方便稽核與追責。 自動化效率 系統化的簽核流程能取代人工傳遞，提高作業效率。 簽核流程的常見模式 1. 單一簽核（Single Approval） 僅需一位主管或負責人批准即可完成。 適用於金額較小或風險較低的流程。 2. 會簽（Parallel Approval） 多位主管需同時審核，全部通過後流程才往下走。 常用於跨部門或跨職能的業務。 3. 逐級簽核（Sequential Approval） 依照組織層級逐層上報，每一層主管批准後才流轉到下一層。 適合金額、風險逐層升高的情境，例如大型採購。 4. 條件式簽核（Conditional Approval） 根據金額、申請類型或部門決定簽核路徑。 例如：金額低於 10 萬由部門主管簽核，高於 10 萬則需總經理批准。 簽核流程範例圖解 以下是一個簡單的「逐級簽核」流程範例： flowchart TD A[申請人提交申請] --&gt; B[部門主管審核] B --&gt;|通過| C[財務部審核] B --&gt;|退回/駁回| R[結束流程] C --&gt;|通過| D[總經理簽核] C --&gt;|退回/駁回| R[結束流程] D --&gt;|通過| E[完成批准] D --&gt;|退回/駁回| R[結束流程] 此流程顯示了： 申請人提交後，需依序經過 部門主管 → 財務部 → 總經理。 任一節點駁回，流程即結束。 全部通過後，申請才正式生效。 系統設計上的考量 在實作簽核制度時，系統需具備以下特點： 簽核流程定義 可使用資料庫紀錄簽核流程規則（如簽核層級、條件）。 支援配置化，避免硬編碼。 簽核狀態追蹤 每個簽核節點需有明確狀態（待審、通過、退回、駁回）。 系統需能即時通知下一位簽核人。 權限控管 確保只有具備對應角色的使用者能簽核。 與使用者角色（Role-Based Access Control, RBAC）整合。 稽核紀錄 紀錄所有操作時間、使用者、意見，方便追溯。 簽核流程的資料模型範例（以 PostgreSQL 為例） -- 簽核流程定義 CREATE TABLE approval_flow ( id SERIAL PRIMARY KEY, name VARCHAR(100), condition JSONB, -- 簽核條件（例如金額門檻） sequence INT -- 簽核順序 ); -- 簽核節點 CREATE TABLE approval_step ( id SERIAL PRIMARY KEY, flow_id INT REFERENCES approval_flow(id), approver_role VARCHAR(50), step_order INT ); -- 簽核紀錄 CREATE TABLE approval_record ( id SERIAL PRIMARY KEY, step_id INT REFERENCES approval_step(id), applicant_id INT, approver_id INT, status VARCHAR(20), -- pending, approved, rejected comments TEXT, created_at TIMESTAMP DEFAULT NOW() ); 這三張表對應到簽核制度的核心元件： approval_flow 定義一個簽核流程的基本資訊，例如名稱、條件（用 JSONB 記錄金額門檻、部門等規則）、以及流程的順序。 相當於「這是一條簽核路徑」。 approval_step 定義該流程中的每一個簽核節點，例如「部門主管 → 財務 → 總經理」。 approver_role 表示這一步需要誰簽核（角色或職位），step_order 控制簽核順序。 approval_record 真正的簽核紀錄，對應到一次具體的「申請」與它的每一個簽核動作。 包含申請人、審核人、狀態（待審、通過、駁回）、意見，以及時間。 相當於「流水帳」或「稽核紀錄」。 👉 這樣的資料設計，可以讓簽核流程 可設定、可追蹤、可擴充。 Django ORM 範例 from django.db import models from django.contrib.auth.models import User class ApprovalFlow(models.Model): name = models.CharField(max_length=100) condition = models.JSONField() sequence = models.IntegerField() class ApprovalStep(models.Model): flow = models.ForeignKey(ApprovalFlow, on_delete=models.CASCADE) approver_role = models.CharField(max_length=50) step_order = models.IntegerField() class ApprovalRecord(models.Model): step = models.ForeignKey(ApprovalStep, on_delete=models.CASCADE) applicant = models.ForeignKey(User, related_name=&quot;applications&quot;, on_delete=models.CASCADE) approver = models.ForeignKey(User, related_name=&quot;approvals&quot;, on_delete=models.CASCADE) status = models.CharField(max_length=20, choices=[ (&quot;pending&quot;, &quot;Pending&quot;), (&quot;approved&quot;, &quot;Approved&quot;), (&quot;rejected&quot;, &quot;Rejected&quot;), ]) comments = models.TextField(blank=True, null=True) created_at = models.DateTimeField(auto_now_add=True) 這段程式碼是把上面的資料表轉換成 Django ORM 的模型： ApprovalFlow 與 PostgreSQL 的 approval_flow 對應。 存流程名稱、條件、順序。 對應到流程本身，讓系統可以管理不同類型的簽核規則。 ApprovalStep 與 approval_step 對應。 連到某一個流程（flow），定義每個流程的步驟與負責角色。 例如：step 1 = 部門主管，step 2 = 財務，step 3 = 總經理。 ApprovalRecord 與 approval_record 對應。 儲存每次實際申請的簽核狀態。 連到某個簽核步驟（step），記錄申請人、審核人、狀態（approved/rejected/pending）等資訊。 搭配 User 模型，可以知道是誰申請、誰簽核。 有了這些 Django model，就能用 ORM 來存取簽核紀錄，方便進一步實作 API（例如：送出申請、進行簽核、查詢流程狀態）。 實際上在做什麼？ 建立流程：先定義一個 ApprovalFlow，加入不同的 ApprovalStep。 送出申請：建立一筆 ApprovalRecord，狀態為 pending。 進行簽核：審核人登入後，修改 ApprovalRecord 的 status 為 approved 或 rejected。 流程推進：若當前步驟通過，系統會自動建立下一步的 ApprovalRecord，直到整個流程完成或中斷。 結論 簽核制度（Approval Workflow）是企業資訊系統中不可或缺的核心機制。 透過 明確的流程設計 與 彈性的系統實作，可以在確保合規與安全的同時，兼顧效率與透明度。 對後端工程師來說，理解簽核制度不僅是資料表設計的問題，更關乎 業務流程的建模能力。 在實務專案中，設計出可擴充、可配置的簽核流程，往往是系統成功的關鍵之一。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/09/29/%E6%A5%AD%E5%8B%99%E7%B3%BB%E7%B5%B1%E6%B5%81%E7%A8%8B%E4%B8%AD%E7%9A%84%E7%B0%BD%E6%A0%B8%E5%88%B6%E5%BA%A6%20Approval%20Workflow/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>

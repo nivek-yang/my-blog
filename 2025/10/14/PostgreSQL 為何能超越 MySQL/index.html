@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="PostgreSQL（PG）近年來在資料庫領域日益受到歡迎，甚至被視為超越 MySQL 登上最受歡迎資料庫的頂端。本篇文章將深入探討 PostgreSQL 相較於 MySQL 在索引、資料一致性、性能對比、擴展性及社群活躍度等方面的功能優勢。   靈活的索引架構與進階索引類型 MySQL 與 PostgreSQL 的基礎索引類型皆採用 B+樹（PostgreSQL 文件中習慣稱作 B-Tree，但">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PostgreSQL 為何能超越 MySQL？從機制、一致性到擴展性的全面解析">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/10/14/PostgreSQL%20%E7%82%BA%E4%BD%95%E8%83%BD%E8%B6%85%E8%B6%8A%20MySQL/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="PostgreSQL（PG）近年來在資料庫領域日益受到歡迎，甚至被視為超越 MySQL 登上最受歡迎資料庫的頂端。本篇文章將深入探討 PostgreSQL 相較於 MySQL 在索引、資料一致性、性能對比、擴展性及社群活躍度等方面的功能優勢。   靈活的索引架構與進階索引類型 MySQL 與 PostgreSQL 的基礎索引類型皆採用 B+樹（PostgreSQL 文件中習慣稱作 B-Tree，但">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-10-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-14T06:33:18.696Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Database">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/10/14/PostgreSQL%20%E7%82%BA%E4%BD%95%E8%83%BD%E8%B6%85%E8%B6%8A%20MySQL/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/10/14/PostgreSQL%20%E7%82%BA%E4%BD%95%E8%83%BD%E8%B6%85%E8%B6%8A%20MySQL/","path":"2025/10/14/PostgreSQL 為何能超越 MySQL/","title":"PostgreSQL 為何能超越 MySQL？從機制、一致性到擴展性的全面解析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>PostgreSQL 為何能超越 MySQL？從機制、一致性到擴展性的全面解析 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">108</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">55</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cloud-Computing/">
+        Cloud Computing
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Concurrency/">
+        Concurrency
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cybersecurity/">
+        Cybersecurity
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(20)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Design-Pattern/">
+        Design Pattern
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/DevOps/">
+        DevOps
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(17)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Serverless/">
+        Serverless
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%88%E6%B4%BB%E7%9A%84%E7%B4%A2%E5%BC%95%E6%9E%B6%E6%A7%8B%E8%88%87%E9%80%B2%E9%9A%8E%E7%B4%A2%E5%BC%95%E9%A1%9E%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text"> 靈活的索引架構與進階索引類型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95-gin"><span class="nav-number">1.1.</span> <span class="nav-text"> 1. 倒排索引 (GIN)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%80%9A%E7%94%A8%E6%90%9C%E7%B4%A2%E6%A8%B9%E7%B4%A2%E5%BC%95-gist"><span class="nav-number">1.2.</span> <span class="nav-text"> 2. 通用搜索樹索引 (GiST)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E9%83%A8%E5%88%86%E7%B4%A2%E5%BC%95-partial-index"><span class="nav-number">1.3.</span> <span class="nav-text"> 3. 部分索引 (Partial Index)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E8%A1%A8%E9%81%94%E5%BC%8F%E7%B4%A2%E5%BC%95-expression-index"><span class="nav-number">1.4.</span> <span class="nav-text"> 4. 表達式索引 (Expression Index)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%88%E9%80%B2%E7%9A%84%E8%B3%87%E6%96%99%E4%B8%80%E8%87%B4%E6%80%A7%E8%88%87%E4%BA%8B%E5%8B%99%E7%AE%A1%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text"> 先進的資料一致性與事務管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-ddl-%E8%AA%9E%E5%8F%A5%E7%9A%84%E4%BA%8B%E5%8B%99%E7%AE%A1%E7%90%86"><span class="nav-number">2.1.</span> <span class="nav-text"> 1. DDL 語句的事務管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8F%AF%E5%BB%B6%E9%81%B2%E7%B4%84%E6%9D%9F-deferrable-constraints"><span class="nav-number">2.2.</span> <span class="nav-text"> 2. 可延遲約束 (Deferrable Constraints)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%8B%99%E9%9A%94%E9%9B%A2%E7%B4%9A%E5%88%A5%E7%9A%84%E4%B8%80%E8%87%B4%E6%80%A7%E8%A1%A8%E7%8F%BE"><span class="nav-number">2.3.</span> <span class="nav-text"> 事務隔離級別的一致性表現</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E8%88%87%E7%89%88%E6%9C%AC%E8%B6%A8%E5%8B%A2%E5%B0%8D%E6%AF%94"><span class="nav-number">3.</span> <span class="nav-text"> 性能與版本趨勢對比</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%90%AC%E7%89%A9%E7%9A%86%E5%8F%AF%E6%93%B4%E5%B1%95%E7%9A%84%E7%94%9F%E6%85%8B%E7%B3%BB%E7%B5%B1"><span class="nav-number">4.</span> <span class="nav-text"> 萬物皆可擴展的生態系統</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#postgis-%E6%93%B4%E5%B1%95%E7%AF%84%E4%BE%8B"><span class="nav-number">4.1.</span> <span class="nav-text"> PostGIS 擴展範例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%96%8B%E6%BA%90%E8%A8%B1%E5%8F%AF%E8%AD%89%E8%88%87%E7%A4%BE%E7%BE%A4%E6%B2%BB%E7%90%86"><span class="nav-number">5.</span> <span class="nav-text"> 開源許可證與社群治理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">6.</span> <span class="nav-text"> 總結</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">108</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/14/PostgreSQL%20%E7%82%BA%E4%BD%95%E8%83%BD%E8%B6%85%E8%B6%8A%20MySQL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="PostgreSQL 為何能超越 MySQL？從機制、一致性到擴展性的全面解析 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PostgreSQL 為何能超越 MySQL？從機制、一致性到擴展性的全面解析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-10-14 00:00:00 / 修改時間：14:33:18" itemprop="dateCreated datePublished" datetime="2025-10-14T00:00:00+08:00">2025-10-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>PostgreSQL（PG）近年來在資料庫領域日益受到歡迎，甚至被視為超越 MySQL 登上最受歡迎資料庫的頂端。本篇文章將深入探討 PostgreSQL 相較於 MySQL 在索引、資料一致性、性能對比、擴展性及社群活躍度等方面的功能優勢。</p>
+<hr />
+<h1 id="靈活的索引架構與進階索引類型"><a class="markdownIt-Anchor" href="#靈活的索引架構與進階索引類型"></a> 靈活的索引架構與進階索引類型</h1>
+<p>MySQL 與 PostgreSQL 的基礎索引類型皆採用 B+樹（PostgreSQL 文件中習慣稱作 B-Tree，但已實現 B+樹的全部功能）。然而，兩者在資料與索引的儲存方式上存在根本差異：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">特點</th>
+<th style="text-align:left">MySQL (InnoDB)</th>
+<th style="text-align:left">PostgreSQL</th>
+<th style="text-align:left">優勢分析</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>主索引類型</strong></td>
+<td style="text-align:left">聚簇索引 (Clustered Index)</td>
+<td style="text-align:left">僅有二級索引 (Secondary Index)</td>
+<td style="text-align:left">PG 的索引與資料分離，便於擴展。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>資料儲存</strong></td>
+<td style="text-align:left">資料按主鍵順序存放在 B+樹葉子節點</td>
+<td style="text-align:left">資料存放在獨立的「堆表」（Heap Table）空間</td>
+<td style="text-align:left">PG 插入資料時直接追加到堆表末尾，有效避免隨機寫入導致的資料頁分裂。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>二級索引</strong></td>
+<td style="text-align:left">葉子節點儲存主鍵 ID，查詢需「回表」至聚簇索引</td>
+<td style="text-align:left">葉子節點儲存指向堆表的物理位置指標 (TID)</td>
+<td style="text-align:left">PG 的主鍵索引與其他索引的實現方式保持一致，不存在性能差異。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="1-倒排索引-gin"><a class="markdownIt-Anchor" href="#1-倒排索引-gin"></a> 1. 倒排索引 (GIN)</h2>
+<p>PostgreSQL 支援通用倒排索引（Generalized Inverted Index, GIN）。傳統索引是從行到值進行查找，而倒排索引建立了<strong>從值到行的反向映射</strong>。GIN 適用於 JSON 資料、陣列或高效能的全文檢索。</p>
+<p><strong>通用倒排索引 (Generalized Inverted Index, GIN)</strong> 是一種專為處理「一個欄位包含多個值」的場景而設計的索引。</p>
+<ul>
+<li><strong>詳細解釋</strong>：想像一本書的目錄，傳統 B-Tree 索引就像是從「頁碼」找到「章節標題」。而倒排索引則像書末的「關鍵詞索引」，它是從「關鍵詞」反向找到所有包含該詞的「頁碼」。GIN 將一個欄位中的元素（例如陣列中的每個數字、JSON 中的每個鍵值對、一段文字中的每個詞彙）提取出來作為 key，並將包含該 key 的行位置作為 value 列表。</li>
+<li><strong>適用場景</strong>：特別適合陣列、JSONB 以及全文檢索。當想查詢哪些陣列包含特定數字，或哪些 JSON 文件包含特定屬性時，GIN 索引能提供極高的效能。</li>
+</ul>
+<p><strong>PG 程式碼範例：查詢商品標籤</strong></p>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 假設商品表有一個 text[] 類型的標籤字段</span>
+<span class="hljs-keyword">CREATE TABLE</span> products (
+    id serial <span class="hljs-keyword">PRIMARY KEY</span>,
+    name text,
+    tags text[]
+);
+
+<span class="hljs-comment">-- 在標籤字段上創建 GIN 索引</span>
+<span class="hljs-keyword">CREATE</span> INDEX idx_gin_tags <span class="hljs-keyword">ON</span> products <span class="hljs-keyword">USING</span> gin (tags);
+
+<span class="hljs-comment">-- 使用 GIN 索引快速查詢哪些商品同時包含 &#x27;electronics&#x27; 和 &#x27;new&#x27; 標籤</span>
+<span class="hljs-comment">-- @&gt; 操作符代表「包含」</span>
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> products <span class="hljs-keyword">WHERE</span> tags @<span class="hljs-operator">&gt;</span> <span class="hljs-keyword">ARRAY</span>[<span class="hljs-string">&#x27;electronics&#x27;</span>, <span class="hljs-string">&#x27;new&#x27;</span>];
+</code></pre>
+<p><strong>PG 程式碼範例：建立 JSONB 的 GIN 索引</strong></p>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 假設 product 表包含 jsonb 類型的 build 字段</span>
+<span class="hljs-keyword">CREATE</span> INDEX idx_gin_build <span class="hljs-keyword">ON</span> product <span class="hljs-keyword">USING</span> gin (build);
+
+<span class="hljs-comment">-- 使用 GIN 索引快速查詢 JSONB 數據中是否包含某個鍵值 (使用 @&gt; 操作符)</span>
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> product <span class="hljs-keyword">WHERE</span> build @<span class="hljs-operator">&gt;</span> <span class="hljs-string">&#x27;&#123;&quot;color&quot;: &quot;red&quot;&#125;&#x27;</span>;
+</code></pre>
+<h2 id="2-通用搜索樹索引-gist"><a class="markdownIt-Anchor" href="#2-通用搜索樹索引-gist"></a> 2. 通用搜索樹索引 (GiST)</h2>
+<p>GiST (Generalized Search Tree) 並非一種具體的索引，而是一個<strong>索引框架</strong>。任何資料類型只要能實現 GiST 要求的介面，即可利用此框架建立索引。GiST 非常適合處理非線性資料，例如幾何圖形、地理位置、IP 位址、時間範圍等，用於查詢<strong>是否重疊</strong>或<strong>距離遠近</strong>。GiST 索引內部也是平衡樹，但節點儲存的是<strong>一個範圍</strong>，而非具體的值。MySQL 不支援 GiST 索引。</p>
+<p><strong>通用搜索樹 (Generalized Search Tree, GiST)</strong> 與其說是一種索引，不如說是一個強大的<strong>索引框架</strong>。</p>
+<ul>
+<li><strong>詳細解釋</strong>：GiST 允許開發者為複雜的非標準資料類型（如地理位置、時間範圍、IP 網段）定義它們自己的索引方式。它的核心思想是將不規則的資料「概括」成一個更容易比較的「範圍」或「邊界框」。例如，它會將一個複雜的多邊形概括成一個簡單的矩形。查詢時，它首先快速判斷查詢目標是否與這個矩形重疊，如果重疊，再進入下一層進行更精細的判斷。</li>
+<li><strong>適用場景</strong>：地理資訊系統（GIS）中的點、線、面查詢；時間範圍的重疊查詢；IP 位址段的包含關係查詢。</li>
+</ul>
+<p><strong>PG 程式碼範例：查詢附近的餐廳</strong></p>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 啟用 cube 和 earthdistance 擴展，它們提供了基於 GiST 的地理距離計算</span>
+<span class="hljs-keyword">CREATE</span> EXTENSION <span class="hljs-keyword">cube</span>;
+<span class="hljs-keyword">CREATE</span> EXTENSION earthdistance;
+
+<span class="hljs-comment">-- 創建餐廳表，並儲存經緯度</span>
+<span class="hljs-keyword">CREATE TABLE</span> restaurants (
+    id serial <span class="hljs-keyword">PRIMARY KEY</span>,
+    name text,
+    location point <span class="hljs-comment">-- (經度, 緯度)</span>
+);
+
+<span class="hljs-comment">-- 在地理位置上創建 GiST 索引</span>
+<span class="hljs-keyword">CREATE</span> INDEX idx_gist_location <span class="hljs-keyword">ON</span> restaurants <span class="hljs-keyword">USING</span> gist (ll_to_earth(location[<span class="hljs-number">0</span>], location[<span class="hljs-number">1</span>]));
+
+<span class="hljs-comment">-- 查詢距離 (25.0330, 121.5654) 5公里以內的餐廳</span>
+<span class="hljs-comment">-- earth_box 和 earth_distance 都是擴展提供的函數</span>
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> restaurants
+<span class="hljs-keyword">WHERE</span> earth_box(ll_to_earth(<span class="hljs-number">25.0330</span>, <span class="hljs-number">121.5654</span>), <span class="hljs-number">5000</span>) @<span class="hljs-operator">&gt;</span> ll_to_earth(location[<span class="hljs-number">0</span>], location[<span class="hljs-number">1</span>])
+  <span class="hljs-keyword">AND</span> earth_distance(ll_to_earth(<span class="hljs-number">25.0330</span>, <span class="hljs-number">121.5654</span>), ll_to_earth(location[<span class="hljs-number">0</span>], location[<span class="hljs-number">1</span>])) <span class="hljs-operator">&lt;</span> <span class="hljs-number">5000</span>;
+</code></pre>
+<p><strong>PG 程式碼範例：建立日期範圍 (daterange) 的 GiST 索引</strong></p>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 創建包含日期範圍的表，daterange 是 PostgreSQL 特有的數據類型</span>
+<span class="hljs-keyword">CREATE TABLE</span> time_events (
+    id serial <span class="hljs-keyword">PRIMARY KEY</span>,
+    schedule daterange
+);
+
+<span class="hljs-comment">-- 在日期範圍字段上創建 GiST 索引</span>
+<span class="hljs-keyword">CREATE</span> INDEX idx_gist_schedule <span class="hljs-keyword">ON</span> time_events <span class="hljs-keyword">USING</span> gist (schedule);
+
+<span class="hljs-comment">-- 使用索引查詢與 &#x27;2023-01-08&#x27; 當天有時間重疊的範圍 (&amp;&amp; 是 GiST 提供的重疊運算符)</span>
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> time_events 
+<span class="hljs-keyword">WHERE</span> schedule <span class="hljs-operator">&amp;&amp;</span> daterange <span class="hljs-string">&#x27;2023-01-08&#x27;</span>::date_range;
+
+<span class="hljs-comment">-- 使用索引查詢與 &#x27;2023-01-08&#x27; 到 &#x27;2023-01-13&#x27; 有時間重疊的範圍</span>
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> time_events 
+<span class="hljs-keyword">WHERE</span> schedule <span class="hljs-operator">&amp;&amp;</span> daterange(<span class="hljs-string">&#x27;2023-01-08&#x27;</span>, <span class="hljs-string">&#x27;2023-01-14&#x27;</span>);
+
+<span class="hljs-comment">-- 使用索引查詢與 &#x27;2023-01-08&#x27; 到 &#x27;2023-01-13&#x27; 有時間重疊的範圍</span>
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> time_events 
+<span class="hljs-keyword">WHERE</span> schedule <span class="hljs-operator">&amp;&amp;</span> daterange(<span class="hljs-string">&#x27;2023-01-08&#x27;</span>, <span class="hljs-string">&#x27;2023-01-13&#x27;</span>, <span class="hljs-string">&#x27;[]&#x27;</span>);
+</code></pre>
+<h2 id="3-部分索引-partial-index"><a class="markdownIt-Anchor" href="#3-部分索引-partial-index"></a> 3. 部分索引 (Partial Index)</h2>
+<p>部分索引允許在索引後面添加條件，使得該索引只對滿足特定條件的記錄生效。這對於實現<strong>邏輯刪除</strong>場景下的唯一性約束非常有用。它只管理滿足條件的行，從而在物理層面上縮小索引樹大小，加快查詢速度並減少磁碟佔用。MySQL 不支援部分索引。</p>
+<p><strong>部分索引 (Partial Index)</strong> 是一種只對表格中滿足特定條件的子集建立索引的機制。</p>
+<ul>
+<li><strong>詳細解釋</strong>：想像一個訂單表，其中 99% 的訂單都是「已完成」狀態，只有 1% 是「處理中」。如果你想快速查詢「處理中」的訂單，建立一個包含所有訂單的索引顯然是浪費的。部分索引允許你只為 <code>status = 'processing'</code> 的訂單建立索引。這樣做不僅能大幅縮小索引體積、節省磁碟空間，還能顯著提升查詢和寫入的效能。</li>
+<li><strong>適用場景</strong>：當查詢條件非常集中於表格中的一小部分資料時，例如未支付的訂單、未刪除的用戶等。</li>
+</ul>
+<p><strong>PG 程式碼範例：僅索引未支付的訂單</strong></p>
+<pre class="highlight"><code class="sql"><span class="hljs-keyword">CREATE TABLE</span> orders (
+    id serial <span class="hljs-keyword">PRIMARY KEY</span>,
+    amount <span class="hljs-type">numeric</span>,
+    paid <span class="hljs-type">boolean</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-literal">false</span>
+);
+
+<span class="hljs-comment">-- 只為 paid = false 的訂單建立索引</span>
+<span class="hljs-keyword">CREATE</span> INDEX idx_unpaid_orders <span class="hljs-keyword">ON</span> orders (id) <span class="hljs-keyword">WHERE</span> paid <span class="hljs-operator">=</span> <span class="hljs-literal">false</span>;
+
+<span class="hljs-comment">-- 這個查詢將會非常高效</span>
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> orders <span class="hljs-keyword">WHERE</span> paid <span class="hljs-operator">=</span> <span class="hljs-literal">false</span>;
+</code></pre>
+<p><strong>PG 程式碼範例：僅索引啟用的電話</strong></p>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 只有 active = &#x27;y&#x27; 的記錄才會被納入索引管理，</span>
+<span class="hljs-comment">-- 被邏輯刪除（active = &#x27;n&#x27;）的記錄將不再佔用唯一性約束</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">UNIQUE</span> INDEX idx_unique_phone <span class="hljs-keyword">ON</span> users (phone) <span class="hljs-keyword">WHERE</span> active <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;y&#x27;</span>; 
+</code></pre>
+<h2 id="4-表達式索引-expression-index"><a class="markdownIt-Anchor" href="#4-表達式索引-expression-index"></a> 4. 表達式索引 (Expression Index)</h2>
+<p>表達式索引支援將欄位的計算結果進行索引。PostgreSQL 在很早的版本就原生支援了真正的表達式索引。MySQL 雖然在 8.0.13 後支援，但其本質上是為表達式生成一個隱藏的虛擬列並在其上建立索引。</p>
+<p><strong>表達式索引 (Expression Index)</strong> 也稱為<strong>函數索引 (Functional Index)</strong>，它允許你對欄位的計算結果或函數調用結果建立索引。</p>
+<ul>
+<li><strong>詳細解釋</strong>：假設需要頻繁地進行不區分大小寫的郵件地址查詢。若無表達式索引，資料庫必須對每一行的 <code>email</code> 欄位都執行 <code>lower()</code> 函數，然後再進行比較，這是一個全表掃描操作。有了表達式索引，PostgreSQL 會預先計算好所有 <code>lower(email)</code> 的結果並儲存成一個 B-Tree 索引。查詢時，它能直接利用這個索引進行快速定位。</li>
+<li><strong>適用場景</strong>：不區分大小寫的查詢、基於日期欄位中的年份或月份的查詢、JSON 欄位中特定值的查詢。</li>
+</ul>
+<p><strong>PG 程式碼範例：查詢特定年份的用戶註冊</strong></p>
+<pre class="highlight"><code class="sql"><span class="hljs-keyword">CREATE TABLE</span> users (
+    id serial <span class="hljs-keyword">PRIMARY KEY</span>,
+    email text,
+    created_at <span class="hljs-type">timestamp</span>
+);
+
+<span class="hljs-comment">-- 對註冊日期的年份建立索引</span>
+<span class="hljs-keyword">CREATE</span> INDEX idx_users_signup_year <span class="hljs-keyword">ON</span> users (<span class="hljs-built_in">EXTRACT</span>(<span class="hljs-keyword">YEAR</span> <span class="hljs-keyword">FROM</span> created_at));
+
+<span class="hljs-comment">-- 這個查詢可以直接使用索引，快速找出 2024 年註冊的所有用戶</span>
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> users <span class="hljs-keyword">WHERE</span> <span class="hljs-built_in">EXTRACT</span>(<span class="hljs-keyword">YEAR</span> <span class="hljs-keyword">FROM</span> created_at) <span class="hljs-operator">=</span> <span class="hljs-number">2024</span>;
+</code></pre>
+<p><strong>PG 程式碼範例：建立表達式索引（電子郵件小寫化）</strong></p>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 對 email 字段的小寫結果建立索引，以便進行不區分大小寫的查詢</span>
+<span class="hljs-keyword">CREATE</span> INDEX idx_email_lower <span class="hljs-keyword">ON</span> users (<span class="hljs-built_in">lower</span>(email));
+
+<span class="hljs-comment">-- 查詢時可以直接針對計算結果進行查詢，高效利用索引</span>
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> users <span class="hljs-keyword">WHERE</span> <span class="hljs-built_in">lower</span>(email) <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;test@example.com&#x27;</span>;
+</code></pre>
+<hr />
+<h1 id="先進的資料一致性與事務管理"><a class="markdownIt-Anchor" href="#先進的資料一致性與事務管理"></a> 先進的資料一致性與事務管理</h1>
+<p>事務是保障資料一致性的核心機制。PostgreSQL 在事務管理上提供了兩個 MySQL 不具備的獨特功能：</p>
+<h2 id="1-ddl-語句的事務管理"><a class="markdownIt-Anchor" href="#1-ddl-語句的事務管理"></a> 1. DDL 語句的事務管理</h2>
+<p>在 PostgreSQL 內部，所有關於資料庫結構的資訊（如表、列、索引等）都儲存在一系列特殊的系統表裡。因此，執行 DDL（資料庫定義語言）語句（即修改表結構）等同於修改系統表裡的資料。</p>
+<p>PostgreSQL <strong>確實支援將 DDL 語句用事務進行管理</strong>。這意味著一系列複雜的表結構變更操作可以在同一個事務中執行，中間任何一個環節出錯，整體都可以進行回滾（Rollback）。這能確保資料庫中不會出現任何「髒資料」或多餘字段，保證資料庫結構的一致性。MySQL 無法將 DDL 語句加入事務管理。</p>
+<ul>
+<li><strong>詳細解釋</strong>：在 PostgreSQL 中，幾乎所有操作（包括修改資料庫結構的 DDL 指令，如 <code>CREATE TABLE</code>, <code>ALTER TABLE</code>）都在事務塊中執行。這帶來一個巨大的好處：<strong>結構變更的原子性</strong>。想像一個複雜的資料庫升級，你需要新增一個表、修改兩個表、刪除一個舊索引，並新增一個新索引。如果這個過程在第四步失敗了，MySQL 會留下一個不完整的、混亂的資料庫結構。而 PostgreSQL 則可以簡單地 <code>ROLLBACK</code>，整個資料庫會恢復到事務開始前的狀態，彷彿什麼都沒發生過。</li>
+<li><strong>適用場景</strong>：資料庫遷移、複雜的 schema 變更、自動化部署流程。</li>
+</ul>
+<p><strong>PG 程式碼範例：安全的資料庫結構升級</strong></p>
+<pre class="highlight"><code class="sql"><span class="hljs-keyword">BEGIN</span>; <span class="hljs-comment">-- 開始一個事務</span>
+
+<span class="hljs-comment">-- 步驟 1: 新增一個用戶配置表</span>
+<span class="hljs-keyword">CREATE TABLE</span> user_settings (
+    user_id <span class="hljs-type">INT</span> <span class="hljs-keyword">PRIMARY KEY</span>,
+    settings JSONB
+);
+
+<span class="hljs-comment">-- 步驟 2: 為 users 表新增一個關聯外鍵</span>
+<span class="hljs-keyword">ALTER TABLE</span> users <span class="hljs-keyword">ADD</span> <span class="hljs-keyword">COLUMN</span> settings_id <span class="hljs-type">INT</span>;
+<span class="hljs-keyword">ALTER TABLE</span> users <span class="hljs-keyword">ADD CONSTRAINT</span> fk_settings <span class="hljs-keyword">FOREIGN KEY</span> (settings_id) <span class="hljs-keyword">REFERENCES</span> user_settings(user_id);
+
+<span class="hljs-comment">-- 假設步驟 3 出錯，例如欄位名稱寫錯</span>
+<span class="hljs-keyword">ALTER TABLE</span> user_settings RENAME <span class="hljs-keyword">COLUMN</span> settigns <span class="hljs-keyword">TO</span> settings_data; <span class="hljs-comment">-- 故意寫錯 settings</span>
+
+<span class="hljs-comment">-- 捕捉到錯誤後，執行回滾</span>
+<span class="hljs-keyword">ROLLBACK</span>;
+
+<span class="hljs-comment">-- 最終結果: user_settings 表和 users 表上的外鍵都不會存在，資料庫結構保持一致。</span>
+</code></pre>
+<h2 id="2-可延遲約束-deferrable-constraints"><a class="markdownIt-Anchor" href="#2-可延遲約束-deferrable-constraints"></a> 2. 可延遲約束 (Deferrable Constraints)</h2>
+<p>可延遲約束（DEFERRABLE）指的是只有在<strong>事務提交（COMMIT）時</strong>，才會對該約束進行檢查。這解決了在複雜資料交換或轉換場景中，需要暫時違反約束（例如，在兩條記錄交換名稱時，會暫時出現重複名稱）的「先有雞還是先有蛋」問題。MySQL 沒有此功能。</p>
+<ul>
+<li><strong>詳細解釋</strong>：標準的約束（如唯一約束、外鍵約束）是在每一條 SQL 語句執行完畢後立即檢查的。但在某些場景下，這會帶來麻煩。最經典的例子是<strong>交換兩個唯一值</strong>。假設有兩位員工 Alice 和 Bob，他們的員工編號 <code>employee_id</code> 是唯一主鍵。如果你想交換他們的 ID，<code>UPDATE employees SET id = 'bob_id' WHERE id = 'alice_id'</code> 會立刻失敗，因為 ‘bob_id’ 已經存在。<strong>可延遲約束</strong>允許將檢查推遲到整個事務要提交（COMMIT）的那一刻。這樣，就可以在事務內暫時違反約束，只要在提交前恢復資料的一致性即可。</li>
+<li><strong>適用場景</strong>：交換唯一鍵/主鍵、複雜的資料重構、處理循環外鍵依賴。</li>
+</ul>
+<p><strong>PG 程式碼範例：安全地交換兩個員工的主鍵</strong></p>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 創建表時，將主鍵定義為可延遲</span>
+<span class="hljs-keyword">CREATE TABLE</span> employees (
+    id TEXT <span class="hljs-keyword">PRIMARY KEY</span> DEFERRABLE INITIALLY IMMEDIATE,
+    name TEXT
+);
+
+<span class="hljs-keyword">INSERT INTO</span> employees <span class="hljs-keyword">VALUES</span> (<span class="hljs-string">&#x27;alice_id&#x27;</span>, <span class="hljs-string">&#x27;Alice&#x27;</span>), (<span class="hljs-string">&#x27;bob_id&#x27;</span>, <span class="hljs-string">&#x27;Bob&#x27;</span>);
+
+<span class="hljs-keyword">BEGIN</span>;
+    <span class="hljs-comment">-- 在事務內，將約束檢查模式設置為延遲</span>
+    <span class="hljs-keyword">SET</span> CONSTRAINTS employees_pkey DEFERRED;
+
+    <span class="hljs-comment">-- 交換 ID</span>
+    <span class="hljs-keyword">UPDATE</span> employees <span class="hljs-keyword">SET</span> id <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;temp_id&#x27;</span> <span class="hljs-keyword">WHERE</span> id <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;alice_id&#x27;</span>;
+    <span class="hljs-keyword">UPDATE</span> employees <span class="hljs-keyword">SET</span> id <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;alice_id&#x27;</span> <span class="hljs-keyword">WHERE</span> id <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;bob_id&#x27;</span>;
+    <span class="hljs-keyword">UPDATE</span> employees <span class="hljs-keyword">SET</span> id <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;bob_id&#x27;</span> <span class="hljs-keyword">WHERE</span> id <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;temp_id&#x27;</span>;
+
+<span class="hljs-keyword">COMMIT</span>; <span class="hljs-comment">-- 在提交時，PG 檢查發現最終的 id 仍然是唯一的，事務成功。</span>
+</code></pre>
+<h2 id="事務隔離級別的一致性表現"><a class="markdownIt-Anchor" href="#事務隔離級別的一致性表現"></a> 事務隔離級別的一致性表現</h2>
+<p>事務隔離級別定義了一個事務中的修改在何種程度上對其他併發事務可見。</p>
+<ul>
+<li>
+<p><strong>PostgreSQL (預設: 讀已提交 Read Committed)</strong>: 在此級別下，一個事務只能讀取到其他已經提交的事務的變更。PostgreSQL 透過其先進的多版本併發控制 (MVCC) 機制實現了這一點。每個 SQL 語句都會獲取一個新的資料「快照 (Snapshot)」。這確保了在單一語句的執行期間，資料是不會變的。</p>
+</li>
+<li>
+<p><strong>MySQL (InnoDB) (預設: 可重複讀 Repeatable Read)</strong>: 此級別要求在同一個事務中，多次讀取同一行資料的結果必須一致。它雖然解決了「不可重複讀」的問題，但也帶來了一個奇特的副作用：<strong>讀寫不一致</strong>。在一個事務中，<code>SELECT</code> 會讀取事務開始時的快照，但 <code>UPDATE</code> 或 <code>DELETE</code> 卻會去讀取資料的「當前」版本（稱為 “current read”）。</p>
+</li>
+</ul>
+<p><strong>範例：MySQL 中讀寫不一致的問題</strong></p>
+<p>假設有一個 <code>products</code> 表，其中 id=1 的商品庫存 (stock) 為 10。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">時間</th>
+<th style="text-align:left">事務 A (Repeatable Read)</th>
+<th style="text-align:left">事務 B (自動提交)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">T1</td>
+<td style="text-align:left"><code>BEGIN;</code></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">T2</td>
+<td style="text-align:left"><code>SELECT stock FROM products WHERE id = 1;</code> <strong>(返回 10)</strong></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">T3</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"><code>UPDATE products SET stock = 5 WHERE id = 1; COMMIT;</code></td>
+</tr>
+<tr>
+<td style="text-align:left">T4</td>
+<td style="text-align:left"><code>SELECT stock FROM products WHERE id = 1;</code> <strong>(仍然返回 10，因為讀取的是 T1 的快照)</strong></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">T5</td>
+<td style="text-align:left"><code>UPDATE products SET stock = stock - 1 WHERE id = 1;</code> <strong>(操作成功！庫存變為 4)</strong></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">T6</td>
+<td style="text-align:left"><code>SELECT stock FROM products WHERE id = 1;</code> <strong>(依然返回 10)</strong></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">T7</td>
+<td style="text-align:left"><code>COMMIT;</code></td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>在 T5，事務 A 明明讀到庫存是 10，但它的更新操作卻是基於事務 B 已經提交的 <code>stock = 5</code> 來進行的。這種 <code>SELECT</code> 和 <code>UPDATE</code> 看到不同資料版本的行為，違反了開發者的直覺，可能導致隱蔽的 Bug。PostgreSQL 在所有隔離級別下都保證了讀寫的一致性。</p>
+<hr />
+<h1 id="性能與版本趨勢對比"><a class="markdownIt-Anchor" href="#性能與版本趨勢對比"></a> 性能與版本趨勢對比</h1>
+<p>根據權威性能測試，PostgreSQL 在高併發場景下的表現優於 MySQL：</p>
+<ol>
+<li><strong>高併發寫入測試：</strong> 在每秒寫入 1 萬次的場景下，PostgreSQL 以大約 <strong>兩倍</strong> 的性能優勢獲勝。</li>
+<li><strong>高併發查詢測試：</strong> 在對 7000 萬行的大表關聯查詢中，PostgreSQL 以大約 <strong>1.5 倍</strong> 的性能優勢獲勝。</li>
+</ol>
+<p>值得注意的是，近年來的版本趨勢顯示：MySQL 的版本越新，性能反而越差（從 5.7 到 8.4 遞減），而最新的 PostgreSQL 17 相比六年前的版本甚至有 30% 到 70% 的提升。</p>
+<hr />
+<h1 id="萬物皆可擴展的生態系統"><a class="markdownIt-Anchor" href="#萬物皆可擴展的生態系統"></a> 萬物皆可擴展的生態系統</h1>
+<p>PostgreSQL 設計的核心理念是<strong>萬物皆可擴展</strong>。它是一個<strong>對象關係型資料庫</strong>，直接在資料庫層面提供對象支援。PG 的擴展性體現在四個方面：資料類型、函數、操作符，以及索引類型皆可擴展。</p>
+<p>相較而言，MySQL 的擴展性主要體現在儲存引擎的可插拔性，但由於 99% 的場景都使用 InnoDB，其他引擎功能缺乏維護，實用性不高。MySQL 不支援自定義資料類型、自定義運算符和自定義索引類型。</p>
+<p>截至 2025 年的統計數據顯示，由社群開發的 PostgreSQL 第三方插件數量為 <strong>375 個</strong>，遠高於 MySQL 的 47 個。</p>
+<h2 id="postgis-擴展範例"><a class="markdownIt-Anchor" href="#postgis-擴展範例"></a> PostGIS 擴展範例</h2>
+<p>PostGIS 是 PostgreSQL 生態中最成功的擴展，它將 PG 轉變為功能全面的企業級地理資訊系統（GIS）資料庫，且並未修改一行 PG 的核心程式碼，完全基於 PG 的擴展機制構建。</p>
+<p>PostGIS 體現了 PG 的四大擴展點：</p>
+<ol>
+<li><strong>自定義資料類型：</strong> <code>geometry</code>（用於儲存地理資訊）。</li>
+<li><strong>自定義函數：</strong> <code>ST_Area</code>（計算區域面積），<code>ST_GeomFromText</code>（將字串轉換為地理位置座標）。</li>
+<li><strong>自定義索引：</strong> 使用 GiST 索引來高效查找地理位置是否重疊或計算距離關係。</li>
+<li><strong>自定義操作符：</strong> <code>&lt;-&gt;</code> 運算符（形象地表示兩個地理位置之間的距離）。</li>
+</ol>
+<p><strong>PG 程式碼範例：PostGIS 的擴展能力</strong></p>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 啟用 PostGIS 插件</span>
+<span class="hljs-keyword">CREATE</span> EXTENSION postgis;
+
+<span class="hljs-comment">-- 創建一個表，使用 PostGIS 自定義的 geometry 數據類型</span>
+<span class="hljs-keyword">CREATE TABLE</span> cities (
+    id serial <span class="hljs-keyword">PRIMARY KEY</span>,
+    name <span class="hljs-type">varchar</span>(<span class="hljs-number">100</span>),
+    geom geometry(Point, <span class="hljs-number">4326</span>) <span class="hljs-comment">-- 4326 是 GPS 座標系統代號</span>
+);
+
+<span class="hljs-comment">-- 使用自定義函數 ST_GeomFromText 插入數據</span>
+<span class="hljs-keyword">INSERT INTO</span> cities (name, geom) <span class="hljs-keyword">VALUES</span>
+(<span class="hljs-string">&#x27;Taipei 101&#x27;</span>, ST_SetSRID(ST_MakePoint(<span class="hljs-number">121.5644</span>, <span class="hljs-number">25.0339</span>), <span class="hljs-number">4326</span>)),
+(<span class="hljs-string">&#x27;Taipei Main Station&#x27;</span>, ST_SetSRID(ST_MakePoint(<span class="hljs-number">121.5175</span>, <span class="hljs-number">25.0479</span>), <span class="hljs-number">4326</span>));
+
+<span class="hljs-comment">-- 創建 GiST 索引以高效支持空間查詢</span>
+<span class="hljs-keyword">CREATE</span> INDEX idx_cities_geom_gist <span class="hljs-keyword">ON</span> cities <span class="hljs-keyword">USING</span> gist (geom);
+
+<span class="hljs-comment">-- 使用自定義操作符 &lt;-&gt; 查詢距離（查找距離台北 101 最近的三個地標）</span>
+<span class="hljs-keyword">SELECT</span> name, geom <span class="hljs-operator">&lt;</span><span class="hljs-operator">-</span><span class="hljs-operator">&gt;</span> ST_SetSRID(ST_MakePoint(<span class="hljs-number">121.5644</span>, <span class="hljs-number">25.0339</span>), <span class="hljs-number">4326</span>) <span class="hljs-keyword">AS</span> distance
+<span class="hljs-keyword">FROM</span> cities
+<span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> distance
+LIMIT <span class="hljs-number">3</span>;
+</code></pre>
+<hr />
+<h1 id="開源許可證與社群治理"><a class="markdownIt-Anchor" href="#開源許可證與社群治理"></a> 開源許可證與社群治理</h1>
+<p>PostgreSQL 採用寬鬆的 MIT/BSD 開源許可證，允許免費自由地使用、複製、修改和分發，並且允許將修改後的程式碼<strong>閉源使用</strong>。PG 由一個全球性的開發者社群管理，不屬於任何一家公司，其發展方向不會受到單一公司商業利益的左右，帶來極高的用戶信任度。</p>
+<p>MySQL 的開源許可證較為複雜，社群版協議為 GPLv2。GPLv2 具有「傳染性」：如果你的程式包含或連結了 MySQL 的 GPL 程式碼，則整個應用程式也必須以 GPL 協議開源。若不想開源修改後的程式碼，則必須購買商業許可證。這種模式導致了社群的不安和分裂（如 MariaDB 的創立），而 PG 則形成了良性循環，社群專注於在其穩定的內核基礎上進行創新。</p>
+<hr />
+<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
+<p>MySQL 憑藉其簡單易用和早期的 Web 開發生態，至今仍是許多應用的可靠選擇。然而，隨著應用場景的日益複雜，對資料一致性、靈活性和擴展性的要求也水漲船高。</p>
+<p>PostgreSQL 在這場競賽中脫穎而出，並非偶然。它從設計之初就堅持最嚴格的 SQL 標準和資料一致性，提供了事務化的 DDL 和可延遲約束等獨特功能，確保了資料的絕對可靠。其靈活的索引機制（GIN, GiST, 部分索引）和擴展性，使其能夠輕鬆應對從全文檢索到地理空間分析的各種現代化挑戰。</p>
+<p>更重要的是，一個獨立、開放、繁榮的社群賦予了 PostgreSQL 持續的生命力。它不僅僅是一個資料庫，更是一個穩定、強大且不斷進化的數據平台。對於追求技術卓越、業務需要高度靈活性，並希望為未來做好準備的開發者和企業而言，PostgreSQL 無疑是那個更值得信賴的選擇。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Database/" rel="tag"># Database</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/10/14/%E8%A7%A3%E5%AF%86%20SSO%20%E8%88%87%20OAuth%202.0%20%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%E7%94%A8%20Google%20%E7%99%BB%E5%85%A5%E7%9A%84%E6%89%80%E6%9C%89%E7%A5%95%E5%AF%86/" rel="prev" title="解密 SSO 與 OAuth 2.0：一次搞懂「用 Google 登入」的所有祕密">
+                  <i class="fa fa-angle-left"></i> 解密 SSO 與 OAuth 2.0：一次搞懂「用 Google 登入」的所有祕密
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
