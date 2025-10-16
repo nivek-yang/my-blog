@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="B 樹 (B-Tree) 和 B+ 樹 (B+ Tree) 是資料結構領域中的重要課題，尤其在資料庫管理系統 (DBMS) 和檔案系統中扮演著關鍵角色。這兩種特殊的樹狀結構，是實現高效能資料檢索的基礎，它們的核心目標是透過自平衡和優化磁碟 I&#x2F;O來加速資料存取。  了解磁碟結構與索引的必要性 在探討 B 樹之前，必須先了解資料在磁碟上的儲存方式以及索引的重要性。  磁碟與區塊 (Blocks) 磁">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入解析 B 樹 (B-Tree) 與 B+ 樹 (B+ Tree)：資料庫索引的基石">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/10/16/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20B%20%E6%A8%B9%20%E8%88%87%20B+%20%E6%A8%B9/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="B 樹 (B-Tree) 和 B+ 樹 (B+ Tree) 是資料結構領域中的重要課題，尤其在資料庫管理系統 (DBMS) 和檔案系統中扮演著關鍵角色。這兩種特殊的樹狀結構，是實現高效能資料檢索的基礎，它們的核心目標是透過自平衡和優化磁碟 I&#x2F;O來加速資料存取。  了解磁碟結構與索引的必要性 在探討 B 樹之前，必須先了解資料在磁碟上的儲存方式以及索引的重要性。  磁碟與區塊 (Blocks) 磁">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-10-15T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-16T15:52:11.160Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Database">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/10/16/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20B%20%E6%A8%B9%20%E8%88%87%20B+%20%E6%A8%B9/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/10/16/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20B%20%E6%A8%B9%20%E8%88%87%20B+%20%E6%A8%B9/","path":"2025/10/16/深入解析 B 樹 與 B+ 樹/","title":"深入解析 B 樹 (B-Tree) 與 B+ 樹 (B+ Tree)：資料庫索引的基石"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>深入解析 B 樹 (B-Tree) 與 B+ 樹 (B+ Tree)：資料庫索引的基石 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">109</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">55</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cloud-Computing/">
+        Cloud Computing
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Concurrency/">
+        Concurrency
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cybersecurity/">
+        Cybersecurity
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(21)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Design-Pattern/">
+        Design Pattern
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/DevOps/">
+        DevOps
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(17)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Serverless/">
+        Serverless
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%86%E8%A7%A3%E7%A3%81%E7%A2%9F%E7%B5%90%E6%A7%8B%E8%88%87%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BF%85%E8%A6%81%E6%80%A7"><span class="nav-number">1.</span> <span class="nav-text"> 了解磁碟結構與索引的必要性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A3%81%E7%A2%9F%E8%88%87%E5%8D%80%E5%A1%8A-blocks"><span class="nav-number">1.1.</span> <span class="nav-text"> 磁碟與區塊 (Blocks)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E8%88%87%E5%A4%9A%E5%B1%A4%E6%AC%A1%E7%B4%A2%E5%BC%95"><span class="nav-number">1.2.</span> <span class="nav-text"> 索引與多層次索引</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#b-%E6%A8%B9-b-tree-%E7%9A%84%E7%B5%90%E6%A7%8B%E8%88%87%E8%A6%8F%E5%89%87"><span class="nav-number">2.</span> <span class="nav-text"> B 樹 (B-Tree) 的結構與規則</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#m-%E9%9A%8E%E6%90%9C%E5%B0%8B%E6%A8%B9-m-ary-search-tree"><span class="nav-number">2.1.</span> <span class="nav-text"> M 階搜尋樹 (M-ary Search Tree)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-%E6%A8%B9%E7%9A%84%E7%AF%80%E9%BB%9E%E7%B5%90%E6%A7%8B%E8%88%87%E6%A0%B8%E5%BF%83%E8%A6%8F%E5%89%87"><span class="nav-number">2.2.</span> <span class="nav-text"> B 樹的節點結構與核心規則</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AF%80%E9%BB%9E%E5%85%A7%E5%AE%B9"><span class="nav-number">2.2.1.</span> <span class="nav-text"> 節點內容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-%E6%A8%B9%E7%9A%84%E8%A6%8F%E5%89%87-b-tree-rules"><span class="nav-number">2.2.2.</span> <span class="nav-text"> B 樹的規則 (B-Tree Rules)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-%E6%A8%B9%E7%9A%84%E6%93%8D%E4%BD%9C%E6%8F%92%E5%85%A5%E8%88%87%E5%88%86%E8%A3%82-insertion-and-splitting"><span class="nav-number">2.3.</span> <span class="nav-text"> B 樹的操作：插入與分裂 (Insertion and Splitting)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#b-%E6%A8%B9%E7%9A%84%E6%93%8D%E4%BD%9C%E6%8F%92%E5%85%A5-insert"><span class="nav-number">2.3.1.</span> <span class="nav-text"> B 樹的操作：插入 (Insert)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-%E6%A8%B9%E7%9A%84%E6%93%8D%E4%BD%9C%E5%88%AA%E9%99%A4-deletion"><span class="nav-number">2.3.2.</span> <span class="nav-text"> B 樹的操作：刪除 (Deletion)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-%E6%A8%B9%E7%9A%84%E6%AA%A2%E7%B4%A2%E6%95%88%E7%8E%87"><span class="nav-number">2.4.</span> <span class="nav-text"> B 樹的檢索效率</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#b-%E6%A8%B9-b-tree-%E7%9A%84%E5%84%AA%E5%8C%96%E8%88%87%E5%B7%AE%E7%95%B0"><span class="nav-number">3.</span> <span class="nav-text"> B+ 樹 (B+ Tree) 的優化與差異</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#b-%E6%A8%B9%E7%9A%84%E7%B5%90%E6%A7%8B%E7%89%B9%E9%BB%9E"><span class="nav-number">3.1.</span> <span class="nav-text"> B+ 樹的結構特點</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-%E6%A8%B9%E7%9A%84%E7%B4%A2%E5%BC%95%E9%A1%9E%E5%9E%8B"><span class="nav-number">3.2.</span> <span class="nav-text"> B+ 樹的索引類型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-%E6%A8%B9%E7%9A%84%E5%84%AA%E5%8B%A2%E8%88%87%E6%87%89%E7%94%A8"><span class="nav-number">3.3.</span> <span class="nav-text"> B+ 樹的優勢與應用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#b-%E6%A8%B9%E8%88%87-b-%E6%A8%B9%E7%9A%84%E6%AF%94%E8%BC%83"><span class="nav-number">4.</span> <span class="nav-text"> B 樹與 B+ 樹的比較</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">109</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/16/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20B%20%E6%A8%B9%20%E8%88%87%20B+%20%E6%A8%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="深入解析 B 樹 (B-Tree) 與 B+ 樹 (B+ Tree)：資料庫索引的基石 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深入解析 B 樹 (B-Tree) 與 B+ 樹 (B+ Tree)：資料庫索引的基石
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-10-16 00:00:00 / 修改時間：23:52:11" itemprop="dateCreated datePublished" datetime="2025-10-16T00:00:00+08:00">2025-10-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>B 樹 (B-Tree) 和 B+ 樹 (B+ Tree) 是資料結構領域中的重要課題，尤其在資料庫管理系統 (DBMS) 和檔案系統中扮演著關鍵角色。這兩種特殊的樹狀結構，是實現高效能資料檢索的基礎，它們的核心目標是透過<strong>自平衡</strong>和<strong>優化磁碟 I/O</strong>來加速資料存取。</p>
+<h1 id="了解磁碟結構與索引的必要性"><a class="markdownIt-Anchor" href="#了解磁碟結構與索引的必要性"></a> 了解磁碟結構與索引的必要性</h1>
+<p>在探討 B 樹之前，必須先了解資料在磁碟上的儲存方式以及索引的重要性。</p>
+<h2 id="磁碟與區塊-blocks"><a class="markdownIt-Anchor" href="#磁碟與區塊-blocks"></a> 磁碟與區塊 (Blocks)</h2>
+<p>磁碟結構由同心圓軌道 (Track) 和扇區 (Sector) 組成。軌道和扇區的交集部分稱為<strong>區塊 (Block)</strong>。磁碟上的任何位置都可以透過軌道編號、扇區編號，以及區塊內的偏移量 (Offset) 來定位。</p>
+<p>資料庫資料（例如表格中的記錄）總是儲存在這些區塊中。當程式需要存取磁碟上的資料時，資料必須先被載入到主記憶體 (RAM) 中才能被處理。<strong>讀寫磁碟的最小單位始終是區塊</strong>。</p>
+<h2 id="索引與多層次索引"><a class="markdownIt-Anchor" href="#索引與多層次索引"></a> 索引與多層次索引</h2>
+<p>如果資料表很大（例如 100 筆記錄需要 25 個區塊來儲存），執行全表掃描 (Full Table Scan) 將需要存取大量的區塊。為了減少搜尋時間，需要建立<strong>索引</strong>。</p>
+<p>索引儲存了鍵值 (Key，例如員工 ID) 和指向磁碟上實際資料記錄的指標 (Record Pointer)。雖然索引本身也需要儲存在磁碟上（可能需要多個區塊），但搜尋索引所需的區塊存取次數遠少於搜尋整個資料表。</p>
+<p>當資料量持續增長，索引本身也會變大，這時就需要建立<strong>多層次索引 (Multi-Level Indexing)</strong>。多層次索引就像一個樹狀結構，更高層次的索引指向下一層索引的區塊，從而將搜尋空間切分得更小。</p>
+<p>B 樹和 B+ 樹正是源自於這種<strong>自管理 (Self-Manage)</strong> 的多層次索引概念。</p>
+<h1 id="b-樹-b-tree-的結構與規則"><a class="markdownIt-Anchor" href="#b-樹-b-tree-的結構與規則"></a> B 樹 (B-Tree) 的結構與規則</h1>
+<p>B 樹是 <strong>M 階搜尋樹 (M-ary Search Tree)</strong> 的延伸，並加入了特定的規則，使其能夠自平衡。</p>
+<h2 id="m-階搜尋樹-m-ary-search-tree"><a class="markdownIt-Anchor" href="#m-階搜尋樹-m-ary-search-tree"></a> M 階搜尋樹 (M-ary Search Tree)</h2>
+<p>在二元搜尋樹 (Binary Search Tree) 中，每個節點只有一個鍵和最多兩個子節點。M 階搜尋樹則允許每個節點擁有超過一個鍵和超過兩個子節點。</p>
+<p>一個 M 階搜尋樹的節點：</p>
+<ul>
+<li>最多可以有 <strong>M 個子節點 (Children)</strong>。</li>
+<li>最多可以儲存 <strong>M-1 個鍵 (Keys)</strong>。</li>
+</ul>
+<p>搜尋過程與二元搜尋樹類似：鍵值較小的往左，鍵值較大的往右，介於中間的則往中間的子樹移動。</p>
+<h2 id="b-樹的節點結構與核心規則"><a class="markdownIt-Anchor" href="#b-樹的節點結構與核心規則"></a> B 樹的節點結構與核心規則</h2>
+<p>B 樹的目標是確保樹的平衡，以保證一致的存取時間。</p>
+<h3 id="節點內容"><a class="markdownIt-Anchor" href="#節點內容"></a> 節點內容</h3>
+<p>在 B 樹中，<strong>所有節點</strong>（包括內部節點和葉節點）都可以儲存鍵值和資料指標 (Record Pointer)。每個鍵都會有一個記錄指標與之相關聯，指向磁碟上的資料記錄。</p>
+<p>B 樹節點包含：鍵、指向子節點的指標（區塊指標），以及記錄指標。</p>
+<h3 id="b-樹的規則-b-tree-rules"><a class="markdownIt-Anchor" href="#b-樹的規則-b-tree-rules"></a> B 樹的規則 (B-Tree Rules)</h3>
+<p>為了控制樹的高度並保證平衡，B 樹遵守以下規則：</p>
+<ol>
+<li><strong>葉節點層級一致 (All Leaves at Same Level)：</strong> 所有葉節點必須位於樹的同一層級。</li>
+<li><strong>節點最小填充 (Minimum Occupancy)：</strong> 每個節點（根節點除外）必須至少有 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mi mathvariant="normal">/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">M/2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mord">/</span><span class="mord">2</span></span></span></span>（取上限，M 為階數）個子節點。這確保了節點至少是半滿的。</li>
+<li><strong>根節點例外：</strong> 根節點可以少於最小限制，但必須至少有兩個子節點。</li>
+</ol>
+<h2 id="b-樹的操作插入與分裂-insertion-and-splitting"><a class="markdownIt-Anchor" href="#b-樹的操作插入與分裂-insertion-and-splitting"></a> B 樹的操作：插入與分裂 (Insertion and Splitting)</h2>
+<h3 id="b-樹的操作插入-insert"><a class="markdownIt-Anchor" href="#b-樹的操作插入-insert"></a> B 樹的操作：插入 (Insert)</h3>
+<p>B 樹的生成過程是<strong>由底向上 (Bottom-up)</strong> 的。</p>
+<p>當插入一個新鍵值時，如果目標節點未滿（少於 M-1 個鍵），則直接插入。如果節點已滿，則必須執行<strong>分裂 (Split)</strong> 操作：</p>
+<ol>
+<li>將該節點分裂成兩個新節點。</li>
+<li>將中間的鍵值推送到 (Push up) 父節點作為分隔鍵 (Separator)。</li>
+<li>如果父節點也因此滿溢，則遞迴地向上執行分裂，這就是 B 樹自平衡的機制。</li>
+<li>只有當根節點分裂時，樹的高度才會增加。</li>
+</ol>
+<h3 id="b-樹的操作刪除-deletion"><a class="markdownIt-Anchor" href="#b-樹的操作刪除-deletion"></a> B 樹的操作：刪除 (Deletion)</h3>
+<p>B 樹的刪除過程較為複雜，目的是保持平衡並滿足最小填充規則。</p>
+<ol>
+<li><strong>葉節點刪除：</strong> 如果刪除鍵後，節點仍滿足最小鍵數要求，則直接刪除。</li>
+<li><strong>下溢 (Underflow) 處理：</strong> 如果刪除後節點的鍵少於最小要求，則需要進行：
+<ul>
+<li><strong>向兄弟節點借鍵 (Borrowing)：</strong> 如果兄弟節點有多餘的鍵，可以從中借用一個鍵。</li>
+<li><strong>與兄弟節點合併 (Merging)：</strong> 如果兄弟節點也處於最小鍵數，則將該節點、兄弟節點及它們之間的父節點分隔鍵合併為一個節點。</li>
+</ul>
+</li>
+<li><strong>內部節點刪除：</strong> 如果要刪除的鍵位於內部節點（作為分隔鍵），則會用其<strong>前驅 (Predecessor)</strong> 或<strong>後繼 (Successor)</strong> 鍵替換，然後從葉節點刪除該前驅或後繼鍵。</li>
+</ol>
+<h2 id="b-樹的檢索效率"><a class="markdownIt-Anchor" href="#b-樹的檢索效率"></a> B 樹的檢索效率</h2>
+<p>B 樹的搜尋時間複雜度取決於樹的高度，約為 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msub><mo><mi>log</mi><mo>⁡</mo></mo><mi>M</mi></msub><mi>N</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(\log_M N)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mop"><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.23419099999999995em;"><span style="top:-2.4558600000000004em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">M</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.24414em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span>。由於樹的高度被嚴格控制，讀取資料只需存取少數幾個區塊 (I/O 操作)。</p>
+<h1 id="b-樹-b-tree-的優化與差異"><a class="markdownIt-Anchor" href="#b-樹-b-tree-的優化與差異"></a> B+ 樹 (B+ Tree) 的優化與差異</h1>
+<p>B+ 樹是 B 樹的一種變體，專門針對磁碟儲存系統和資料庫工作負載進行了優化。</p>
+<h2 id="b-樹的結構特點"><a class="markdownIt-Anchor" href="#b-樹的結構特點"></a> B+ 樹的結構特點</h2>
+<p>B+ 樹與 B 樹的主要區別在於資料和鍵的儲存位置以及節點之間的連結方式：</p>
+<ol>
+<li><strong>資料和記錄指標只在葉節點：</strong> 所有的鍵和資料（即記錄指標）都<strong>只</strong>儲存在葉節點中。</li>
+<li><strong>內部節點僅用於導航：</strong> 內部節點（非葉節點）只儲存鍵值，作為搜尋路徑的導航指標，不包含資料記錄指標。</li>
+<li><strong>鍵值重複：</strong> 樹中的每個鍵值都一定會出現在葉節點中。在非葉節點中，可能存在鍵的重複副本，用作導航。</li>
+<li><strong>葉節點連結 (Sequential Linking)：</strong> 所有的葉節點都透過<strong>鏈結串列 (Linked List)</strong> 依序連結在一起。</li>
+</ol>
+<h2 id="b-樹的索引類型"><a class="markdownIt-Anchor" href="#b-樹的索引類型"></a> B+ 樹的索引類型</h2>
+<p>由於葉節點包含所有資料和鍵，並按順序連結，B+ 樹的葉節點形成了<strong>稠密索引 (Dense Index)</strong>。葉節點上方的層級則形成<strong>稀疏索引 (Sparse Index)</strong>。</p>
+<h2 id="b-樹的優勢與應用"><a class="markdownIt-Anchor" href="#b-樹的優勢與應用"></a> B+ 樹的優勢與應用</h2>
+<p>相較於 B 樹，B+ 樹在資料庫中更受青睞，主要優勢包括：</p>
+<ul>
+<li><strong>高效能範圍查詢 (Range Queries)：</strong> 由於葉節點被連結在一起，一旦找到範圍的起始鍵，就可以通過鏈結串列快速地順序掃描所有相關記錄，無需重新遍歷樹。這使得範圍查詢的複雜度為 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>log</mi><mo>⁡</mo><mi>N</mi><mo>+</mo><mi>K</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(\log N + K)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mclose">)</span></span></span></span>（K 為結果大小）。</li>
+<li><strong>內部節點空間利用率高：</strong> 內部節點只儲存鍵值用於導航，不儲存記錄指標。這使得單個區塊 (Page) 可以容納更多的鍵，從而減少樹的高度。</li>
+<li><strong>優化磁碟 I/O：</strong> 由於內部節點更小，更高層次的索引區塊更容易完全載入到主記憶體中，從而加快搜尋速度。</li>
+<li><strong>一致的檢索時間：</strong> 所有資料都位於葉節點，且葉節點都在同一層級，因此檢索時間更具一致性。</li>
+</ul>
+<h1 id="b-樹與-b-樹的比較"><a class="markdownIt-Anchor" href="#b-樹與-b-樹的比較"></a> B 樹與 B+ 樹的比較</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">特徵 (Feature)</th>
+<th style="text-align:left">B 樹 (B-Tree)</th>
+<th style="text-align:left">B+ 樹 (B+ Tree)</th>
+<th style="text-align:left">備註 (Notes)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>資料/鍵儲存</strong></td>
+<td style="text-align:left">鍵和資料存在所有節點中。</td>
+<td style="text-align:left">鍵和資料只存在葉節點中。</td>
+<td style="text-align:left">B 樹節點因攜帶資料指標，單頁可容納的鍵數較少。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>記錄指標</strong></td>
+<td style="text-align:left">每個鍵都有記錄指標。</td>
+<td style="text-align:left">僅葉節點有記錄指標。</td>
+<td style="text-align:left">內部節點更小，提高空間效率。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>葉節點連結</strong></td>
+<td style="text-align:left">葉節點不連結。</td>
+<td style="text-align:left">葉節點透過鏈結串列按順序連結。</td>
+<td style="text-align:left">B+ 樹範圍查詢更有效率。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>範圍查詢效率</strong></td>
+<td style="text-align:left">效率較低。</td>
+<td style="text-align:left">效率較高。</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>空間效率</strong></td>
+<td style="text-align:left">可能使用較少空間，但 B+ 樹對於大型資料庫有更好的空間利用率。</td>
+<td style="text-align:left">對於大型資料庫，提供更好的空間利用率。</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>應用</strong></td>
+<td style="text-align:left">MongoDB 使用 B 樹結構。</td>
+<td style="text-align:left">廣泛應用於主流關聯式資料庫 (MySQL, PostgreSQL, Oracle) 和檔案系統。</td>
+<td style="text-align:left">B+ 樹更適合資料庫索引。</td>
+</tr>
+</tbody>
+</table>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>B 樹和 B+ 樹都是自平衡的結構，能夠處理海量資料並確保高效能的讀取操作，它們是現代資料庫和檔案系統賴以運作的關鍵技術。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Database/" rel="tag"># Database</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/10/14/PostgreSQL%20%E7%82%BA%E4%BD%95%E8%83%BD%E8%B6%85%E8%B6%8A%20MySQL/" rel="prev" title="PostgreSQL 為何能超越 MySQL？從機制、一致性到擴展性的全面解析">
+                  <i class="fa fa-angle-left"></i> PostgreSQL 為何能超越 MySQL？從機制、一致性到擴展性的全面解析
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">108</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">109</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">55</span></a>
       <ul class="sub-menu">
   
@@ -204,7 +204,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Database/">
         Database
-        <span class="post-count">(20)</span>
+        <span class="post-count">(21)</span>
       </a>
     </li>
   
@@ -534,7 +534,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">108</span>
+          <span class="site-state-item-count">109</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -559,6 +559,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/06/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20DNS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/09/06/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20DNS/" class="post-title-link" itemprop="url">
+              網際網路的「電話簿」與「導航系統」：深入解析 DNS (Domain Name System)
+            </a>
+            <a href="/my-blog/2025/09/06/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20DNS/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-09-06 00:00:00 / 修改時間：22:56:38" itemprop="dateCreated datePublished" datetime="2025-09-06T00:00:00+08:00">2025-09-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">想像一下，如果每次訪問網站，都必須記住或輸入一串如 172.217.160.142 這樣的 IP 地址，那將會是多麼繁瑣和惱人！ 幸好，我們不必這麼做。當輸入 www.google.com，或是點擊一個 techblog.com 的連結時，一個位於網路世界深處極其重要的系統，正在幕後迅速運作，幫助電腦找到正確的網路目的地。這個系統，就是這篇文章要深入探討的——網域名稱系統 (Domain Name System, DNS)。 DNS 就像是網際網路的「電話簿」或「GPS 導航系統」。它將人類易於記憶的網域名稱 (如 example.com) 轉換成機器可識別的 IP 地址 (如 192.0.2.1)，讓你無需記憶複雜的數字，就能暢遊網路。 什麼是 DNS？為什麼需要它？ DNS (Domain Name System) 是一個分散式的命名系統，用於將網域名稱 (Domain Names) 轉換為IP 地址 (IP Addresses)。 工作層次：DNS 主要工作在 OSI 模型的應用層 (Application Layer, Layer 7)，但它的運作是整個網路底層服務的基石。 核心功能：讓使用者可以使用具備語義的網域名稱（例如公司名稱或品牌名），而不是無意義的複雜數字串連。 為什麼需要 DNS？ 人類記憶的限制：對於人類來說，記住像 www.google.com 這樣的英文單字串比記住 142.250.199.100 這樣的數字串容易且直觀得多。 IP 地址的變動性：網站的 IP 地址可能會因為伺服器遷移、負載平衡等原因而改變。如果沒有 DNS，每次 IP 地址變更，可能都需要手動更新。DNS 則能自動處理這種變動。 網路的規模：網路上有數十億的設備和網站。如果沒有統一的名稱解析系統，網路將無法有效運作。 DNS 使得網際網路對使用者而言更加友善、便捷和穩定。 DNS 如何運作？ 當在瀏覽器中輸入 www.example.com 並按下 Enter 鍵時，DNS 會啟動一場精密的查詢之旅，為你找到正確的網站伺服器。 這場旅程通常涉及以下四種類型的伺服器： DNS 解析器 (DNS Resolver)：也稱為遞迴解析器 (Recursive Resolver)。這是電腦或路由器配置的 DNS 服務器（通常由網際網路服務供應商 ISP 提供，或手動設定，如 Google Public DNS 8.8.8.8）。它是發出查詢請求的第一站。 根 DNS 伺服器 (Root DNS Server)：全球只有 13 組根伺服器，它們是 DNS 階層的頂端，負責管理所有頂級網域 (TLD) 的資訊。 頂級網域 (TLD) DNS 伺服器：負責管理特定頂級網域（如 .com, .org, .net, .tw 等）下的所有網域資訊。 權威 DNS 伺服器 (Authoritative DNS Server)：這是最終存儲特定網域名稱（如 example.com）及其對應 IP 地址的伺服器。一個網站的所有 DNS 記錄都由它負責管理。 解析流程步驟： 用戶發起請求：在瀏覽器輸入 www.example.com。 檢查本地快取：電腦會先檢查本地 DNS 快取（本地電腦或瀏覽器內部）是否有 www.example.com 的 IP 地址。如果找到，直接返回 IP 地址，流程結束。 請求發送給 DNS 解析器：如果本地快取沒有，請求會發送給配置的 DNS 解析器。 解析器查詢根伺服器：DNS 解析器向根 DNS 伺服器發送查詢請求：「www.example.com 的 IP 是多少？」 根伺服器回應 TLD 伺服器地址：根伺服器不認識 example.com 的 IP，但它知道 .com 這個頂級網域由哪個 TLD 伺服器負責，因此會回應 DNS 解析器：「我不知道 www.example.com 的 IP，但可以去問 .com 的 TLD 伺服器，它的地址是 XXX。」 解析器查詢 TLD 伺服器：DNS 解析器接著向 .com 的 TLD DNS 伺服器發送查詢請求：「www.example.com 的 IP 是多少？」 TLD 伺服器回應權威伺服器地址：TLD 伺服器不認識 www.example.com 的 IP，但它知道管理 example.com 這個網域的權威 DNS 伺服器是誰，因此會回應 DNS 解析器：「我不知道 www.example.com 的 IP，但 example.com 的權威伺服器是 YYY，可以去問它。」 解析器查詢權威伺服器：DNS 解析器最後向 example.com 的權威 DNS 伺服器發送查詢請求：「www.example.com 的 IP 是多少？」 權威伺服器回應 IP 地址：權威 DNS 伺服器存儲著 www.example.com 的具體 IP 地址，它會回應 DNS 解析器：「www.example.com 的 IP 地址是 192.0.2.1。」 解析器返回 IP 地址並快取：DNS 解析器將 192.0.2.1 這個 IP 地址返回給電腦，並將結果快取起來，以便下次更快響應同一個查詢。 電腦連接網站：電腦收到 IP 地址後，就能向 192.0.2.1 發出 HTTP/HTTPS 請求，訪問 www.example.com 的網站內容了。 這個看似漫長的過程，通常在幾十到幾百毫秒內完成，因為大量的 DNS 查詢結果會被快取在電腦、路由器或 ISP 的 DNS 解析器中，從而大大加快了速度。 DNS 的重要組成部分與記錄類型 DNS 的分層結構 DNS 系統是一個分層的樹狀結構，具有以下幾級： 根域 (Root Domain)：位於層級的最頂端，以一個點 . 表示。 頂級網域 (Top-Level Domain, TLD)：根域之下，分為通用頂級網域 (gTLD，如 .com, .org, .net) 和國家代碼頂級網域 (ccTLD，如 .tw, .jp, .uk)。 二級網域 (Second-Level Domain)：TLD 之下，由用戶註冊使用，如 example.com 中的 example。 子網域 (Subdomain)：二級網域之下，如 www.example.com 中的 www。 常見的 DNS 記錄類型 (Resource Records) 權威 DNS 伺服器儲存著各種不同類型的 DNS 記錄，用於指導如何解析網域名稱： A 記錄 (Address Record)：將網域名稱映射到一個 IPv4 地址。例如：example.com -&gt; 192.0.2.1。 AAAA 記錄 (Quad-A Record)：將網域名稱映射到一個 IPv6 地址。例如：example.com -&gt; 2001:0db8::1。 CNAME 記錄 (Canonical Name Record)：將一個網域名稱（別名）映射到另一個網域名稱（規範名）。例如：www.example.com -&gt; example.com。常用於將多個服務指向同一台伺服器。 MX 記錄 (Mail Exchange Record)：指定用於接收域名的電子郵件的郵件伺服器。例如：example.com 的郵件由 mail.example.com 處理。 NS 記錄 (Name Server Record)：指定哪個 DNS 伺服器是該域名的權威 DNS 伺服器。用於建立 DNS 的委託鏈。 TXT 記錄 (Text Record)：儲存任意的文字資訊。常用於 SPF (Sender Policy Framework) 和 DKIM (DomainKeys Identified Mail) 等郵件認證機制，以及網站所有權驗證等。 DNS 的安全挑戰 儘管 DNS 是網際網路的基石，但它也面臨著嚴峻的安全挑戰： DNS 劫持 (DNS Hijacking)：惡意攻擊者控制 DNS 查詢過程，將用戶重新導向到惡意網站。 DNS 緩存中毒 (DNS Cache Poisoning)：攻擊者向 DNS 伺服器注入偽造的記錄，使其將錯誤的 IP 地址與網域名稱關聯起來。 DDoS 攻擊 (Distributed Denial of Service)：針對 DNS 伺服器的大規模流量攻擊，使其無法響應合法的查詢。 為了解決這些問題，DNSSEC (DNS Security Extensions) 技術被開發出來，它透過數位簽章來驗證 DNS 查詢的真實性和完整性，保護使用者免受偽造的 DNS 資料攻擊。 結論 DNS 是網際網路一個「看不見但不可或缺」的基礎服務。它默默地將熟悉的網域名稱轉換為機器能夠理解的 IP 地址，讓我們能夠輕而易舉地瀏覽數以億計的網站，並發送接收電子郵件。 理解 DNS 的運作原理，不僅能幫助更好地理解網路是如何協同工作的，也能在遇到網路連線問題時，幫助更快地定位和解決問題。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/09/06/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20DNS/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1323,92 +1409,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/08/26/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20UDP%20%E9%80%9F%E5%BA%A6%E8%87%B3%E4%B8%8A%20%E7%B6%B2%E8%B7%AF%E5%8D%B3%E6%99%82%E9%80%9A%E8%A8%8A%E7%9A%84%E5%A5%94%E6%94%BE%E5%85%88%E9%8B%92/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/25/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20TCP%20%E7%A2%BA%E4%BF%9D%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E5%8F%AF%E9%9D%A0%E9%80%9A%E8%A8%8A%E7%9A%84%E5%B9%95%E5%BE%8C%E5%8A%9F%E8%87%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/08/25/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20TCP%20%E7%A2%BA%E4%BF%9D%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E5%8F%AF%E9%9D%A0%E9%80%9A%E8%A8%8A%E7%9A%84%E5%B9%95%E5%BE%8C%E5%8A%9F%E8%87%A3/" class="post-title-link" itemprop="url">
-              深入淺出 TCP：確保網路世界可靠通訊的幕後功臣
-            </a>
-            <a href="/my-blog/2025/08/25/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20TCP%20%E7%A2%BA%E4%BF%9D%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E5%8F%AF%E9%9D%A0%E9%80%9A%E8%A8%8A%E7%9A%84%E5%B9%95%E5%BE%8C%E5%8A%9F%E8%87%A3/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-08-25 00:00:00 / 修改時間：23:37:19" itemprop="dateCreated datePublished" datetime="2025-08-25T00:00:00+08:00">2025-08-25</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">是否曾想過，當在瀏覽網頁、傳送重要郵件，或下載檔案時，為什麼資料總能完整無誤地到達目的地？即使網路環境偶爾不穩定，網頁的圖片也不會少一塊，郵件的文字也不會缺一段。這一切的背後，都有一位默默工作、確保可靠性的幕後功臣——TCP (Transmission Control Protocol)。 這篇文章讓我們一起揭開 TCP 的神秘面紗，了解它如何為我們的數位生活建立起穩固的信任橋樑。 什麼是 TCP？ TCP，全名為「傳輸控制協定」（Transmission Control Protocol），是網際網路協定套組 (TCP/IP) 中，位於傳輸層 (Transport Layer) 的核心協定之一。 可以把它想像成一位極度認真負責的快遞員。這位快遞員的使命不僅僅是「把包裹送達」，而是「確保包裹安全、完整、且按照正確順序送達」。 TCP 的主要特點可以歸納為三點： 連線導向 (Connection-Oriented)：在傳輸資料之前，傳送方和接收方必須先建立一個穩定的通訊管道。就像打電話一樣，必須先撥號、對方接聽，雙方確認可以通話後，才開始交談。 可靠傳輸 (Reliable)：TCP 擁有多種機制來保證資料的可靠性。如果資料在途中遺失或損毀，它會要求重新傳送，直到所有資料都正確無誤地被接收。 依序傳遞 (In-Order Delivery)：大型資料會被TCP拆分成許多小資料區段（Segments）來傳送。TCP 會為每個區段編號，確保接收方能將它們按照正確的順序重組，還原成原始資料。 TCP 的核心機制：可靠性是如何煉成的？ TCP 的可靠性並非空穴來風，而是建立在一系列精密的機制之上。讓我們來看看幾個最關鍵的設計： 1. 三向交握 (Three-Way Handshake) 這是建立 TCP 連線的經典過程，確保雙方都準備好進行通訊。 生活化比喻：打電話 你 (Client) 撥電話給朋友 (Server)：「喂，聽得到嗎？」 (發送 SYN 封包) 朋友聽到後回答：「聽得到，你聽得到我嗎？」 (回覆 SYN-ACK 封包) 你聽到朋友的回答後，確認可以開始聊天：「聽得到，那我們開始說話吧！」 (發送 ACK 封包) 經過這三步驟，一條穩定的通訊管道就建立完成了。 2. 序列號與確認應答 (Sequence Numbers &amp; Acknowledgments) 這是確保資料不丟失、不錯亂的關鍵。 序列號 (Sequence Number, SEQ)：傳送方為每個發出的資料區段都標上一個獨一無二的編號，就像為一本書的每一頁編上頁碼。 確認應答號 (Acknowledgment Number, ACK)：接收方每收到一個資料區段，就會回覆一個「確認」訊息，告訴傳送方：「我已經成功收到了編號 X 之前的所有資料，請從編號 X 開始傳送下一批。」 如果傳送方在一定的時間內沒有收到對某個資料區段的確認，它就會認定該區段可能在途中遺失了，並會重新傳送該區段。 3. 流量控制 (Flow Control) 這個機制是為了防止傳送方傳送速度太快，導致接收方來不及處理而造成資料遺失。 生活化比喻：倒水 接收方 (杯子) 會告訴傳送方 (水壺)：「我現在還有多少空間 (Window Size)」。水壺會根據杯子剩餘的空間來控制倒水的速度，避免水滿溢出來。 透過「滑動視窗 (Sliding Window)」機制，接收方可以動態地告知傳送方自己還有多少緩衝區空間可用，從而調節傳送速率。 4. 壅塞控制 (Congestion Control) 流量控制關心的是「點對點」的傳輸速率，而壅塞控制關心的則是整個網路的健康狀況。 當網路上有太多資料在傳輸，就像尖峰時段的公路一樣，會發生「塞車」。TCP 的壅塞控制機制會偵測這種情況，並主動降低傳送速率，以緩解網路的負擔。當網路狀況好轉時，再逐步提高傳輸速率。這是一種顧全大局的智慧機制，避免了網路的崩潰。 TCP vs. UDP：一對個性迥異的兄弟 在傳輸層，TCP 有一個廣為人知的兄弟——UDP (User Datagram Protocol)。相較於 TCP 的嚴謹可靠，UDP 追求的是速度與效率。 特性 TCP (可靠的快遞員) UDP (快速的郵差) 連線 連線導向 (需先建立連線) 無連線 (直接傳送) 可靠性 高 (保證送達、保證順序) 低 (不保證送達、不保證順序) 速度 較慢 (因確認與重傳機制) 較快 (無額外負擔) 使用場景 網頁瀏覽 (HTTP/S)、電子郵件 (SMTP)、檔案傳輸 (FTP) 線上遊戲、影音串流、DNS 查詢 簡單來說，當資料完整性至關重要時，選擇 TCP；當即時性比零失誤更重要時，UDP 則是更好的選擇。 結論 TCP 如同網路世界中一位值得信賴的工程師，它透過三向交握、序列號與確認、流量控制和壅塞控制等精密設計，在複雜多變的網路環境中，為我們的應用程式提供了一條穩定可靠的資料傳輸通道。 雖然它的機制相對複雜，帶來了一些效能上的開銷，但正是這份堅持，才讓我們可以安心地進行網頁瀏覽、檔案傳輸和收發郵件等各種數位活動。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/08/25/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20TCP%20%E7%A2%BA%E4%BF%9D%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E5%8F%AF%E9%9D%A0%E9%80%9A%E8%A8%8A%E7%9A%84%E5%B9%95%E5%BE%8C%E5%8A%9F%E8%87%A3/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>
