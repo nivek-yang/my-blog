@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">109</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">110</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">55</span></a>
       <ul class="sub-menu">
   
@@ -204,7 +204,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Database/">
         Database
-        <span class="post-count">(21)</span>
+        <span class="post-count">(22)</span>
       </a>
     </li>
   
@@ -534,7 +534,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">109</span>
+          <span class="site-state-item-count">110</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -559,6 +559,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/24/Python%20Celery%20%E5%85%A5%E9%96%80%20%E9%9D%9E%E5%90%8C%E6%AD%A5%E4%BB%BB%E5%8B%99%E7%9A%84%E5%BE%97%E5%8A%9B%E5%8A%A9%E6%89%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/07/24/Python%20Celery%20%E5%85%A5%E9%96%80%20%E9%9D%9E%E5%90%8C%E6%AD%A5%E4%BB%BB%E5%8B%99%E7%9A%84%E5%BE%97%E5%8A%9B%E5%8A%A9%E6%89%8B/" class="post-title-link" itemprop="url">
+              Python Celery 入門：非同步任務的得力助手
+            </a>
+            <a href="/my-blog/2025/07/24/Python%20Celery%20%E5%85%A5%E9%96%80%20%E9%9D%9E%E5%90%8C%E6%AD%A5%E4%BB%BB%E5%8B%99%E7%9A%84%E5%BE%97%E5%8A%9B%E5%8A%A9%E6%89%8B/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-07-24 00:00:00 / 修改時間：23:43:25" itemprop="dateCreated datePublished" datetime="2025-07-24T00:00:00+08:00">2025-07-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">Celery 是一套成熟的 Distributed Task Queue（分散式任務佇列）解決方案，讓開發者可以非同步地執行任務。在 Web 開發中，當遇到需要長時間執行的任務，例如匯出龐大的資料報表，我們無法要求使用者一直停留在網頁上等待。這時，Celery 就能派上用場，將這些耗時的任務移至背景執行，完成後再透過 Email 或其他方式通知使用者，大幅改善使用者體驗。 Celery 與 Message Queue 的關係 Celery 的運作核心與 Message Queue（訊息佇列） 密不可分。 事實上，Celery 本身不負責傳遞任務訊息，而是依賴一個稱為 Broker 的中介者來傳遞。 這個 Broker 就是所謂的 Message Queue 服務，例如常見的 RabbitMQ 或 Redis。 整個流程如下： 發布任務：當我們在應用程式中呼叫一個 Celery 任務時，Celery 會將這個任務的資訊（例如要執行的函式名稱、參數等）打包成一則任務訊息 (Task Message)。 訊息傳遞：這則任務訊息會被發送到指定的 Broker (Message Queue)。 背景執行：在背景運行的 Worker 會持續監聽 Message Queue，一旦收到新的任務訊息，便會取出並執行對應的任務。 透過這樣的架構，Celery 將任務的「發布」與「執行」解耦，讓主應用程式在發布任務後可以立即回應使用者，無需等待任務完成。 核心運作流程圖 用序列圖 (Sequence Diagram) 來視覺化整個流程： sequenceDiagram participant Client as (主應用程式) participant Celery App as (Celery 實例) participant Broker as (訊息中介者 Redis) participant Worker as (背景工作者) participant Result Backend as (結果儲存 Redis) Client-&gt;&gt;+Celery App: 呼叫 task.delay() Celery App-&gt;&gt;Broker: 發送任務訊息 Celery App--&gt;&gt;-Client: 立即返回 AsyncResult 物件 Note right of Worker: Worker 持續監聽 Broker Worker-&gt;&gt;Broker: 取得任務訊息 Worker-&gt;&gt;Worker: 執行任務 Worker-&gt;&gt;+Result Backend: 將執行狀態/結果寫入 Note left of Client: Client 可用 AsyncResult&lt;br/&gt;向 Result Backend 查詢結果 Celery 任務生命週期 1. 觸發任務 (Client → Celery App) 動作：主應用程式 (Client) 呼叫一個被 @app.task 裝飾的函式，並在其後附加 .delay() 或 .apply_async()。 說明：這是整個流程的起點。主應用程式決定將一個耗時的操作（例如發送郵件、生成報表）交給背景處理，而不是自己執行，以避免阻塞主執行緒。 2. 發送任務到中介者 (Celery App → Broker) 動作：Celery 實例 (Celery App) 將任務的相關資訊（函式名稱、參數等）序列化成一條訊息，然後發送到設定好的訊息中介者 (Broker)，在此例中是 Redis。 說明：Broker 就像一個任務的「待辦清單」或「郵箱」。任務被安全地存放在這裡，等待有空的 Worker 來領取。這一步是實現非同步的關鍵，因為主應用程式把任務「扔」進 Broker 後就不用再管了。 3. 立即返回憑證 (Celery App → Client) 動作：在將任務訊息成功發送到 Broker 後，Celery 幾乎是立即返回一個 AsyncResult 物件給主應用程式。 說明：這是非同步的核心優勢。主應用程式不會等待任務執行完成。它得到的是一個「任務憑證」或「追蹤號」（AsyncResult），裡面包含了獨一無二的 task_id。主應用程式可以繼續執行其他程式碼，使用者介面也能保持回應。 4. 背景工作者領取並執行任務 (Worker → Broker → Worker) 動作：一個或多個獨立運行的 Worker 行程持續監聽 (Polling) Broker。一旦發現有新的任務訊息，其中一個 Worker 就會領取它。 說明：Worker 是真正執行工作的角色。它從 Broker 取得訊息後，會反序列化內容，了解需要執行哪個函式以及使用什麼參數，然後在自己的行程中執行該函式。 5. 寫入執行結果 (Worker → Result Backend) 動作：任務執行完成後（無論成功或失敗），Worker 會將執行結果或狀態（例如 'SUCCESS'、'FAILURE'、回傳值、錯誤堆疊等）寫入到設定好的結果儲存 (Result Backend) 中。 說明：Result Backend 是一個用來儲存任務最終狀態的地方，它讓主應用程式有辦法查詢任務的執行情況。注意，它和 Broker 可以是同一個資料庫（如 Redis），但它們的角色和儲存的資料結構是完全不同的。Result Backend 是選用的，如果你的任務不需要回傳結果，可以不設定它。 6. （可選）查詢任務結果 (Client → Result Backend) 動作：主應用程式可以在任何時候，使用第 3 步中得到的 AsyncResult 物件，來查詢任務的狀態或獲取結果。 說明：當主應用程式呼叫 async_result.get() 或檢查 async_result.state 時，它會拿著 task_id 去 Result Backend 查詢對應的結果。這一步是選擇性的，但對於需要知道任務是否完成、是否成功或需要取得回傳值的場景至關重要。 如何應用 Celery 以下將以 Redis 作為 Broker 與 Result Backend，示範一個簡單的 Celery 應用。 核心名詞 在開始之前，先了解幾個 Celery 的核心名詞： Application (app)：Celery 的實例，是使用 Celery 的起點。 Task：Celery 執行的最小工作單元，通常是一個 Python 函式。 Worker：負責執行 Task 的背景進程。 Broker：訊息中介者，負責傳遞 Task Message，例如 RabbitMQ, Redis。 Result Backend：用於儲存 Task 的執行狀態與結果，例如 Redis。 實作步驟 1. 環境準備與安裝 首先，確保已經安裝了 Python 與 Redis。 接著透過 pip 安裝 Celery 及 Redis 相關套件： pip install celery pip install &quot;celery[redis]&quot; 2. 撰寫 Celery 應用 建立一個名為 tasks.py 的檔案，內容如下： # tasks.py from celery import Celery # 實例化 Celery，設定 Broker 和 Backend app = Celery( &#x27;tasks&#x27;, broker=&#x27;redis://127.0.0.1:6379/0&#x27;, backend=&#x27;redis://127.0.0.1:6379/1&#x27;, ) # 定義一個 Task @app.task def say_hello(): print(&#x27;Hello, Celery!&#x27;) 在這段程式碼中： 建立了一個名為 tasks 的 Celery Application。 將 Broker 設定為本機 Redis 的 0 號資料庫。 將 Result Backend 設定為本機 Redis 的 1 號資料庫。 使用 @app.task 裝飾器將 say_hello 函式定義為一個 Celery Task。 3. 啟動 Worker 接著，開啟一個終端機，在 tasks.py 所在的目錄下執行以下指令來啟動 Worker： celery -A tasks worker --loglevel=info 會看到 Worker 成功啟動並等待接收任務的畫面。 4. 非同步執行任務 現在，另開一個終端機，進入 Python 直譯器來實際執行任務： &gt;&gt;&gt; from tasks import say_hello # 使用 .delay() 來非同步執行任務 &gt;&gt;&gt; result = say_hello.delay() &gt;&gt;&gt; result &lt;AsyncResult: e8af98f2-920c-43e2-a8e8-175bb8cd88cb&gt; 執行 .delay() 後，會立即得到一個 AsyncResult 物件，這代表任務已經成功發送。 此時，可以回到 Worker 的終端機視窗，會發現 Hello, Celery! 的訊息已經被印出，代表 Worker 已經接收並執行了任務。 總結 透過以上步驟，便成功地利用 Celery 與 Redis 完成了一個非同步任務的執行。這只是 Celery 的初步應用，它還包含了任務排程、工作流設計（Workflow）等更進階的功能，是 Python 開發者處理非同步任務時非常值得學習的工具。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/07/24/Python%20Celery%20%E5%85%A5%E9%96%80%20%E9%9D%9E%E5%90%8C%E6%AD%A5%E4%BB%BB%E5%8B%99%E7%9A%84%E5%BE%97%E5%8A%9B%E5%8A%A9%E6%89%8B/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1341,92 +1427,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/07/10/%E9%9D%9E%E5%90%8C%E6%AD%A5%E6%8A%80%E8%A1%93%E6%AF%94%E8%BC%83/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/09/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20CSRF%20%E8%B7%A8%E7%AB%99%E8%AB%8B%E6%B1%82%E5%81%BD%E9%80%A0%E6%94%BB%E6%93%8A/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/07/09/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20CSRF%20%E8%B7%A8%E7%AB%99%E8%AB%8B%E6%B1%82%E5%81%BD%E9%80%A0%E6%94%BB%E6%93%8A/" class="post-title-link" itemprop="url">
-              深入淺出 CSRF 跨站請求偽造攻擊
-            </a>
-            <a href="/my-blog/2025/07/09/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20CSRF%20%E8%B7%A8%E7%AB%99%E8%AB%8B%E6%B1%82%E5%81%BD%E9%80%A0%E6%94%BB%E6%93%8A/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-07-09 00:00:00 / 修改時間：22:50:33" itemprop="dateCreated datePublished" datetime="2025-07-09T00:00:00+08:00">2025-07-09</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">我們每天都在打造各式各樣的 Web 應用，從電商網站到社群平台。專注於功能、效能和使用者體驗，但常常忽略一個潛伏在暗處的威脅——CSRF (Cross-Site Request Forgery)。 你可能聽過這個名詞，但真的了解它是如何運作的，以及它會帶來多大的危害嗎？這篇文章將用一個簡單的故事，搞懂 CSRF 是什麼、它想解決什麼問題，以及如何有效地防禦它。 一個關於「代簽」的故事：什麼是 CSRF？ 想像一下，你是一位公司大老闆，在你的銀行網站（my-bank.com）上登入了，瀏覽器就像一位忠誠的秘書，手上拿著你的「身份憑證」（Session Cookie），可以幫你處理各種事務。 這時，一位心懷不軌的攻擊者寄了一封有趣的 Email 給你，標題是「快來看超可愛的貓咪動圖！」。你好奇地點開了連結，進入了一個看似無害的網站（evil-cat-gifs.com）。 你不知道的是，這個網站的 HTML 裡藏了一段惡意的程式碼，例如一個看不見的表單： &lt;!-- evil-cat-gifs.com 的惡意程式碼 --&gt; &lt;body onload=&quot;document.forms[0].submit()&quot;&gt; &lt;form action=&quot;https://my-bank.com/api/transfer&quot; method=&quot;POST&quot; style=&quot;display:none;&quot;&gt; &lt;input type=&quot;hidden&quot; name=&quot;to&quot; value=&quot;Mallory&quot; /&gt; &lt;input type=&quot;hidden&quot; name=&quot;amount&quot; value=&quot;100000&quot; /&gt; &lt;/form&gt; &lt;/body&gt; 當你的瀏覽器載入這個頁面時，onload 事件觸發了 JavaScript，自動提交了這個隱藏的表單。 接下來發生的事，就是 CSRF 的核心： 請求發送： 瀏覽器向 https://my-bank.com/api/transfer 發送了一個 POST 請求。 憑證自動附加： 因為這個請求是發往 my-bank.com 的，你的瀏覽器秘書很「貼心」地把之前儲存的 my-bank.com 的身份憑證（Cookie）一起附上。 伺服器驗證： my-bank.com 的伺服器收到了這個請求。它檢查了 Cookie，發現身份憑證是合法的——「嗯，是大老闆本人沒錯！」 執行操作： 伺服器信任了這個請求，因為它通過了身份驗證。於是，它執行了轉帳操作，將 10 萬元轉給了攻擊者。 整個過程中，你只是點開了一個貓咪網站，錢就不翼而飛了。完全被蒙在鼓裡，因為這個請求是在不知情的情況下，被偽造並從你的瀏覽器發送出去的。 這就是 跨站請求偽造 (Cross-Site Request Forgery)。攻擊者利用了你已登入的狀態，誘騙瀏覽器發送一個非你本意的請求。 CSRF 想要解決的核心問題是什麼？ 從上面的故事我們可以總結出 CSRF 攻擊成功的兩個關鍵因素： 攻擊利用了瀏覽器在發送跨站請求時，會自動攜帶目標網站 Cookie 的特性。 受害網站的伺服器無法區分一個請求是來自於使用者在自家網站上的真實點擊，還是來自於第三方惡意網站的偽造請求。 因此，CSRF 防禦機制想要解決的核心問題是：如何驗證一個請求的「意圖」而非僅僅是「身份」？ 伺服器只驗證 Cookie，等於只問：「你是誰？」。答案是：「我是已登入的使用者」。這沒錯，但伺服器還需要問一個更重要的問題：「這個操作真的是你本人想要執行的嗎？」 CSRF 防禦的目標，就是讓伺服器有能力驗證後者，確保每一個會改變狀態的請求（如新增、修改、刪除）都是源自於使用者在我們自己網站上的真實意圖。 如何防禦 CSRF？——給請求一個「暗號」 既然問題在於伺服器無法驗證請求的來源與意圖，那我們就給它一個方法來驗證。以下是目前最主流且有效的防禦策略。 1. Anti-CSRF Token (同步權杖模式) 這是最經典也最可靠的防禦方式。 原理： 伺服器生成 Token： 當使用者登入或訪問一個包含表單的頁面時，伺服器會生成一個獨一無二、無法被預測的隨機字串，稱為「CSRF Token」。伺服器會將這個 Token 儲存在伺服器端的 Session 中。 前端嵌入 Token： 伺服器將這個 Token 傳遞給前端，前端在渲染頁面時，將它作為一個隱藏欄位嵌入到表單中。&lt;form action=&quot;/update-profile&quot; method=&quot;POST&quot;&gt; &lt;input type=&quot;text&quot; name=&quot;email&quot; value=&quot;user@example.com&quot;&gt; &lt;!-- 嵌入由伺服器給予的 Token --&gt; &lt;input type=&quot;hidden&quot; name=&quot;csrf_token&quot; value=&quot;aBcDeFgHiJkLmNoPqRsTuVwXyZ123456&quot;&gt; &lt;button type=&quot;submit&quot;&gt;更新資料&lt;/button&gt; &lt;/form&gt; 伺服器驗證 Token： 當使用者提交表單時，這個 csrf_token 會一起被送到伺服器。伺服器在處理請求前，會比較「表單送來的 Token」和「儲存在 Session 中的 Token」是否一致。 為什麼有效？ 攻擊者在 evil-cat-gifs.com 上無法得知這個 csrf_token 的值。因為瀏覽器的同源政策 (Same-Origin Policy) 會阻止惡意網站的腳本讀取 my-bank.com 的頁面內容，自然也就偷不到這個 Token。沒有正確的 Token，偽造的請求就會被伺服器拒絕。 2. SameSite Cookie 屬性 這是一種更現代、從瀏覽器層面進行防禦的策略。SameSite 是 HTTP Cookie 的一個屬性，用來告訴瀏覽器在跨站請求中是否應該攜帶 Cookie。 它有三個值： Strict： 最嚴格。完全禁止瀏覽器在任何跨站請求中攜帶 Cookie。例如，就算你從 Google 搜尋結果點擊連結到你的網站，如果你的 Cookie 是 SameSite=Strict，你也會是登出狀態。 Lax (常用預設值)： 較寬鬆。允許在一些安全的頂層導航（如點擊連結 &lt;a href=&quot;...&quot;&gt;）中攜帶 Cookie，但會阻止在 POST、PUT、DELETE 等可能改變狀態的跨站請求中攜帶 Cookie。這恰好能防禦我們故事中那個 POST 表單的 CSRF 攻擊。 None： 關閉 SameSite 限制。瀏覽器會在所有跨站請求中攜帶 Cookie，但必須同時設定 Secure 屬性（即只能在 HTTPS 下傳輸）。 如何使用？ 在設定 Cookie 時，加上 SameSite 屬性即可。 Set-Cookie: session_id=...; SameSite=Lax; HttpOnly; Secure 將 SameSite 設定為 Lax 或 Strict 是非常有效的 CSRF 防禦手段。目前主流瀏覽器已將 Lax 作為預設值，這大大降低了 CSRF 的風險。但為了兼容舊版瀏覽器和增加防禦深度，建議將 SameSite Cookie 與 Anti-CSRF Token 結合使用。 3. 檢查來源 (Origin/Referer Header) 伺服器也可以檢查 HTTP 請求頭中的 Origin 或 Referer 欄位，確保請求是從我們自己的網站域名發出的。 Referer：表示請求的來源頁面 URL。 Origin：更安全，只包含來源的域名，不含路徑。 為什麼不建議單獨使用？ 可靠性問題： Referer 可能因為使用者隱私設定或代理伺服器而被移除。 安全性問題： 在某些舊瀏覽器或特定情況下，Referer 可能被偽造。 因此，它可以作為輔助的防禦手段，但不應作為唯一的防線。 結論 CSRF 是什麼？ 一種攻擊，誘騙已登入使用者的瀏覽器，在他們不知情的情況下，向目標網站發送惡意的偽造請求。 它想解決什麼問題？ 解決伺服器無法驗證請求意圖的問題，確保狀態變更的請求確實源自使用者在我們網站上的真實操作。 如何防禦？ 首選方案： 使用 Anti-CSRF Token，為每個請求加上只有伺服器和合法前端才知道的「暗號」。 強力輔助： 設定 Cookie 的 SameSite=Lax 或 SameSite=Strict 屬性，從瀏覽器層面阻斷惡意請求。 縱深防禦： 結合上述兩者，並可考慮檢查 Origin Header，建立多層次的安全防護。 Web 安全是一個攻防不斷演進的領域。理解像 CSRF 這樣的經典漏洞，不僅能幫助我們寫出更安全的程式碼，更能培養我們「預設不信任」的安全思維。希望這篇文章能幫助你鞏固對 CSRF 的理解，並在你的下一個專案中，自信地築起堅固的防線！</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/07/09/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20CSRF%20%E8%B7%A8%E7%AB%99%E8%AB%8B%E6%B1%82%E5%81%BD%E9%80%A0%E6%94%BB%E6%93%8A/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>

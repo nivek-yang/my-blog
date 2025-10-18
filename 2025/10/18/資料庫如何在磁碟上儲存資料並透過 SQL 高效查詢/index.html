@@ -19,27 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="回想一個你我可能都經歷過的場景：凌晨三點，告警系統的巨聲將我們從睡夢中驚醒。生產環境出錯了，使用者無法下單，而錯誤日誌只留下一句語焉不詳的 NullPointerException。接下來的幾個小時，就像在一個沒有燈的黑房間裡摸索，不斷地猜測、重啟、加日誌，希望能幸運地找到問題的根源。 這種無力感，正是傳統監控（Monitoring）在面對現代複雜系統時的極限。這篇文章要探討一個正在徹底改變這種窘">
+    <meta name="description" content="身為開發者，我們使用 SELECT、INSERT 等 SQL 語法與資料庫互動，但是否曾深入思考：當執行一條查詢時，資料庫的「底層」究竟發生了什麼事？資料表中的數百萬筆紀錄，實際上是以何種形式存在硬碟上？為什麼一個簡單的索引就能讓查詢速度產生天壤之別？ 本篇文章將深入資料庫的儲存核心，從磁碟的物理結構開始，逐步揭開資料儲存的神秘面紗，並解析強大的 B-tree&#x2F;B+ tree 索引是如何幫助 SQ">
 <meta property="og:type" content="article">
-<meta property="og:title" content="深入淺出「可觀測性 (Observability)」">
-<meta property="og:url" content="https://nivek-yang.github.io/2025/10/02/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E5%8F%AF%E8%A7%80%E6%B8%AC%E6%80%A7%20Observability/index.html">
+<meta property="og:title" content="深入底層：資料庫如何在磁碟上儲存資料並透過 SQL 高效查詢？">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/10/18/%E8%B3%87%E6%96%99%E5%BA%AB%E5%A6%82%E4%BD%95%E5%9C%A8%E7%A3%81%E7%A2%9F%E4%B8%8A%E5%84%B2%E5%AD%98%E8%B3%87%E6%96%99%E4%B8%A6%E9%80%8F%E9%81%8E%20SQL%20%E9%AB%98%E6%95%88%E6%9F%A5%E8%A9%A2/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="回想一個你我可能都經歷過的場景：凌晨三點，告警系統的巨聲將我們從睡夢中驚醒。生產環境出錯了，使用者無法下單，而錯誤日誌只留下一句語焉不詳的 NullPointerException。接下來的幾個小時，就像在一個沒有燈的黑房間裡摸索，不斷地猜測、重啟、加日誌，希望能幸運地找到問題的根源。 這種無力感，正是傳統監控（Monitoring）在面對現代複雜系統時的極限。這篇文章要探討一個正在徹底改變這種窘">
+<meta property="og:description" content="身為開發者，我們使用 SELECT、INSERT 等 SQL 語法與資料庫互動，但是否曾深入思考：當執行一條查詢時，資料庫的「底層」究竟發生了什麼事？資料表中的數百萬筆紀錄，實際上是以何種形式存在硬碟上？為什麼一個簡單的索引就能讓查詢速度產生天壤之別？ 本篇文章將深入資料庫的儲存核心，從磁碟的物理結構開始，逐步揭開資料儲存的神秘面紗，並解析強大的 B-tree&#x2F;B+ tree 索引是如何幫助 SQ">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2025-10-01T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-10-02T15:16:17.617Z">
+<meta property="article:published_time" content="2025-10-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-18T15:33:42.510Z">
 <meta property="article:author" content="Kaiwii">
-<meta property="article:tag" content="DevOps">
+<meta property="article:tag" content="Database">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://nivek-yang.github.io/2025/10/02/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E5%8F%AF%E8%A7%80%E6%B8%AC%E6%80%A7%20Observability/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/10/18/%E8%B3%87%E6%96%99%E5%BA%AB%E5%A6%82%E4%BD%95%E5%9C%A8%E7%A3%81%E7%A2%9F%E4%B8%8A%E5%84%B2%E5%AD%98%E8%B3%87%E6%96%99%E4%B8%A6%E9%80%8F%E9%81%8E%20SQL%20%E9%AB%98%E6%95%88%E6%9F%A5%E8%A9%A2/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/10/02/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E5%8F%AF%E8%A7%80%E6%B8%AC%E6%80%A7%20Observability/","path":"2025/10/02/深入淺出可觀測性 Observability/","title":"深入淺出「可觀測性 (Observability)」"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/10/18/%E8%B3%87%E6%96%99%E5%BA%AB%E5%A6%82%E4%BD%95%E5%9C%A8%E7%A3%81%E7%A2%9F%E4%B8%8A%E5%84%B2%E5%AD%98%E8%B3%87%E6%96%99%E4%B8%A6%E9%80%8F%E9%81%8E%20SQL%20%E9%AB%98%E6%95%88%E6%9F%A5%E8%A9%A2/","path":"2025/10/18/資料庫如何在磁碟上儲存資料並透過 SQL 高效查詢/","title":"深入底層：資料庫如何在磁碟上儲存資料並透過 SQL 高效查詢？"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>深入淺出「可觀測性 (Observability)」 | 我的技術部落格</title>
+<title>深入底層：資料庫如何在磁碟上儲存資料並透過 SQL 高效查詢？ | 我的技術部落格</title>
   
 
 
@@ -524,7 +524,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-observability"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是 Observability？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%A3%E6%8E%A7-vs-%E5%8F%AF%E8%A7%80%E6%B8%AC%E6%80%A7%E5%95%8F%E5%B7%B2%E7%9F%A5%E7%9A%84%E5%95%8F%E9%A1%8C%E9%82%84%E6%98%AF%E6%8E%A2%E7%B4%A2%E6%9C%AA%E7%9F%A5"><span class="nav-number">2.</span> <span class="nav-text"> 監控 vs. 可觀測性：問已知的問題，還是探索未知？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%AF%E8%A7%80%E6%B8%AC%E6%80%A7%E7%9A%84%E4%B8%89%E5%A4%A7%E6%94%AF%E6%9F%B1-the-three-pillars"><span class="nav-number">3.</span> <span class="nav-text"> 可觀測性的三大支柱 (The Three Pillars)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%97%A5%E8%AA%8C-logs-%E7%99%BC%E7%94%9F%E4%BA%86%E4%BB%80%E9%BA%BC"><span class="nav-number">3.1.</span> <span class="nav-text"> 1. 日誌 (Logs) - 「發生了什麼？」</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%8C%87%E6%A8%99-metrics-%E6%83%85%E6%B3%81%E6%9C%89%E5%A4%9A%E5%9A%B4%E9%87%8D"><span class="nav-number">3.2.</span> <span class="nav-text"> 2. 指標 (Metrics) - 「情況有多嚴重？」</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%88%86%E6%95%A3%E5%BC%8F%E8%BF%BD%E8%B9%A4-traces-%E5%95%8F%E9%A1%8C%E7%99%BC%E7%94%9F%E5%9C%A8%E5%93%AA%E8%A3%A1%E7%82%BA%E4%BB%80%E9%BA%BC%E6%85%A2"><span class="nav-number">3.3.</span> <span class="nav-text"> 3. 分散式追蹤 (Traces) - 「問題發生在哪裡？為什麼慢？」</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E8%80%85%E5%8D%94%E5%90%8C%E7%9A%84%E5%8A%9B%E9%87%8F"><span class="nav-number">3.4.</span> <span class="nav-text"> 三者協同的力量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E5%8F%AF%E8%A7%80%E6%B8%AC%E6%80%A7%E5%A6%82%E6%AD%A4%E9%87%8D%E8%A6%81"><span class="nav-number">4.</span> <span class="nav-text"> 為什麼「可觀測性」如此重要？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%96%8B%E5%A7%8B%E5%8F%AF%E8%A7%80%E6%B8%AC%E6%80%A7%E4%B9%8B%E6%97%85"><span class="nav-number">5.</span> <span class="nav-text"> 如何開始可觀測性之旅？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%88%87-monitoring-%E7%9A%84%E6%AF%94%E8%BC%83"><span class="nav-number">6.</span> <span class="nav-text"> 與 Monitoring 的比較</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A6%8B%E5%B7%A5%E5%85%B7"><span class="nav-number">6.1.</span> <span class="nav-text"> 常見工具</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">7.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B3%87%E6%96%99%E5%AF%A6%E9%9A%9B%E5%84%B2%E5%AD%98%E5%9C%A8%E5%93%AA%E8%A3%A1"><span class="nav-number">1.</span> <span class="nav-text"> 資料實際儲存在哪裡？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A3%81%E7%A2%9F%E7%B5%90%E6%A7%8B%E8%88%87%E8%B3%87%E6%96%99%E5%96%AE%E4%BD%8D"><span class="nav-number">1.1.</span> <span class="nav-text"> 磁碟結構與資料單位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%9E%E8%B3%87%E6%96%99%E8%A1%A8%E5%88%B0%E5%8D%80%E5%A1%8A%E7%9A%84%E6%98%A0%E5%B0%84"><span class="nav-number">1.2.</span> <span class="nav-text"> 從資料表到區塊的映射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E8%A8%98%E6%86%B6%E9%AB%94%E8%88%87%E7%A3%81%E7%A2%9F%E7%9A%84%E9%97%9C%E4%BF%82"><span class="nav-number">1.3.</span> <span class="nav-text"> 主記憶體與磁碟的關係</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8-sql-%E8%AA%9E%E6%B3%95%E6%93%8D%E4%BD%9C%E8%B3%87%E6%96%99%E5%BA%AB%E6%99%82%E6%98%AF%E6%80%8E%E9%BA%BC%E5%81%9A%E7%9A%84"><span class="nav-number">2.</span> <span class="nav-text"> 用 SQL 語法操作資料庫時是怎麼做的？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BF%85%E8%A6%81%E6%80%A7%E8%88%87%E5%8A%9F%E8%83%BD"><span class="nav-number">2.1.</span> <span class="nav-text"> 索引的必要性與功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-%E6%A8%B9%E8%88%87-b-%E6%A8%B9%E4%BD%9C%E7%82%BA%E7%B4%A2%E5%BC%95"><span class="nav-number">2.2.</span> <span class="nav-text"> B 樹與 B+ 樹作為索引</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%8F%E9%81%8E%E7%B4%A2%E5%BC%95%E9%80%B2%E8%A1%8C%E6%90%9C%E5%B0%8B%E7%9A%84%E6%B5%81%E7%A8%8B-search-operation"><span class="nav-number">2.2.1.</span> <span class="nav-text"> 透過索引進行搜尋的流程 (Search Operation)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%9B%E5%B0%91-io-%E7%9A%84%E5%AF%A6%E9%9A%9B%E6%95%88%E7%9B%8A"><span class="nav-number">2.2.2.</span> <span class="nav-text"> 減少 I&#x2F;O 的實際效益</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%AB%E5%85%A5%E6%93%8D%E4%BD%9C%E8%88%87%E6%A8%B9%E7%9A%84%E8%87%AA%E5%B9%B3%E8%A1%A1-insert-delete"><span class="nav-number">2.2.3.</span> <span class="nav-text"> 寫入操作與樹的自平衡 (INSERT &#x2F; DELETE)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-%E6%A8%B9%E5%9C%A8%E7%AF%84%E5%9C%8D%E6%9F%A5%E8%A9%A2%E4%B8%8A%E7%9A%84%E5%84%AA%E5%8B%A2"><span class="nav-number">2.2.4.</span> <span class="nav-text"> B+ 樹在範圍查詢上的優勢</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">3.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -572,7 +572,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/02/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E5%8F%AF%E8%A7%80%E6%B8%AC%E6%80%A7%20Observability/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/18/%E8%B3%87%E6%96%99%E5%BA%AB%E5%A6%82%E4%BD%95%E5%9C%A8%E7%A3%81%E7%A2%9F%E4%B8%8A%E5%84%B2%E5%AD%98%E8%B3%87%E6%96%99%E4%B8%A6%E9%80%8F%E9%81%8E%20SQL%20%E9%AB%98%E6%95%88%E6%9F%A5%E8%A9%A2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -585,12 +585,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="深入淺出「可觀測性 (Observability)」 | 我的技術部落格">
+      <meta itemprop="name" content="深入底層：資料庫如何在磁碟上儲存資料並透過 SQL 高效查詢？ | 我的技術部落格">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          深入淺出「可觀測性 (Observability)」
+          深入底層：資料庫如何在磁碟上儲存資料並透過 SQL 高效查詢？
         </h1>
 
         <div class="post-meta-container">
@@ -602,7 +602,7 @@
       <span class="post-meta-item-text">發表於</span>
       
 
-      <time title="創建時間：2025-10-02 00:00:00 / 修改時間：23:16:17" itemprop="dateCreated datePublished" datetime="2025-10-02T00:00:00+08:00">2025-10-02</time>
+      <time title="創建時間：2025-10-18 00:00:00 / 修改時間：23:33:42" itemprop="dateCreated datePublished" datetime="2025-10-18T00:00:00+08:00">2025-10-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -623,139 +623,87 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>回想一個你我可能都經歷過的場景：凌晨三點，告警系統的巨聲將我們從睡夢中驚醒。生產環境出錯了，使用者無法下單，而錯誤日誌只留下一句語焉不詳的 <code>NullPointerException</code>。接下來的幾個小時，就像在一個沒有燈的黑房間裡摸索，不斷地猜測、重啟、加日誌，希望能幸運地找到問題的根源。</p>
-<p>這種無力感，正是傳統監控（Monitoring）在面對現代複雜系統時的極限。這篇文章要探討一個正在徹底改變這種窘境的關鍵概念——<strong>可觀測性（Observability）</strong>。它不是一個新工具，而是一種全新的思維模式，旨在將系統從一個難以捉摸的「黑盒子」，變成一個可以被理解、被探索的「白盒子」。</p>
+    <div class="post-body" itemprop="articleBody"><p>身為開發者，我們使用 <code>SELECT</code>、<code>INSERT</code> 等 SQL 語法與資料庫互動，但是否曾深入思考：當執行一條查詢時，資料庫的「底層」究竟發生了什麼事？資料表中的數百萬筆紀錄，實際上是以何種形式存在硬碟上？為什麼一個簡單的索引就能讓查詢速度產生天壤之別？</p>
+<p>本篇文章將深入資料庫的儲存核心，從磁碟的物理結構開始，逐步揭開資料儲存的神秘面紗，並解析強大的 B-tree/B+ tree 索引是如何幫助 SQL 實現高效的資料操作。</p>
+<h1 id="資料實際儲存在哪裡"><a class="markdownIt-Anchor" href="#資料實際儲存在哪裡"></a> 資料實際儲存在哪裡？</h1>
+<p>當資料儲存在資料庫（如 MySQL 或 PostgreSQL）中時，資料最終是<strong>以區塊（Blocks）的形式儲存在磁碟（Disk）上</strong>。</p>
+<h2 id="磁碟結構與資料單位"><a class="markdownIt-Anchor" href="#磁碟結構與資料單位"></a> 磁碟結構與資料單位</h2>
+<ul>
+<li><strong>磁碟的組成：</strong> 磁碟由多個同心圓（邏輯圓圈）組成，這些圓圈稱為<strong>磁軌（Tracks）</strong>。</li>
+<li><strong>區塊/扇區 (Blocks/Sectors)：</strong> 磁軌進一步被劃分成<strong>扇區（Sectors）</strong>。磁軌和扇區的交集部分就是<strong>區塊（Blocks）</strong>。</li>
+<li><strong>資料儲存單位：</strong> 資料庫（DBMS）中的資料總是<strong>以區塊為單位</strong>進行讀取和寫入。一個區塊的大小通常是固定的（例如，出於研究目的，假設為 512 位元組；但在實際資料庫中，例如 PostgreSQL，區塊大小通常為 8K）。</li>
+<li><strong>區塊位址：</strong> 磁碟上的任何位置都可以透過<strong>磁軌號碼</strong>和<strong>扇區號碼</strong>來定位，這就是<strong>區塊位址（Block Address）</strong>。若要存取區塊中的特定位元組，還需要知道<strong>偏移量（Offset）</strong>。DBMS 透過這個位址來精準定位資料</li>
+</ul>
+<h2 id="從資料表到區塊的映射"><a class="markdownIt-Anchor" href="#從資料表到區塊的映射"></a> 從資料表到區塊的映射</h2>
+<p>資料表 (Table) 在儲存時，會被 DBMS 進行切分，塞進一個個區塊中。</p>
+<ul>
+<li><strong>資料表轉換為區塊：</strong> 資料表中的每一行（Record/Row）都有特定的位元組大小。</li>
+<li><strong>記錄打包：</strong> 一個資料表由多筆記錄 (Records/Rows) 組成。DBMS 會計算一條記錄的大小，然後決定一個區塊能容納多少條記錄。如果一條記錄是 128 位元組，那麼一個 512 位元組的區塊就可以儲存 4 條記錄。</li>
+<li><strong>分散儲存：</strong> 整個資料表會被分割並儲存到多個磁碟區塊中。例如，包含 100 條記錄的表可能需要 25 個區塊來儲存。</li>
+</ul>
+<h2 id="主記憶體與磁碟的關係"><a class="markdownIt-Anchor" href="#主記憶體與磁碟的關係"></a> 主記憶體與磁碟的關係</h2>
+<p>資料的處理並非直接在磁碟上進行。任何運算都必須遵循「<strong>磁碟 -&gt; 記憶體 -&gt; CPU</strong>」的流程：</p>
+<ul>
+<li><strong>間接存取：</strong> 資料不能直接在磁碟上進行處理。</li>
+<li><strong>載入 (Load)：</strong> DBMS 根據請求，將儲存資料的磁碟區塊讀取到<strong>主記憶體 (Main Memory/RAM)</strong> 中。</li>
+<li><strong>處理 (Process)：</strong> 應用程式的程式碼 (例如 SQL 引擎) 在記憶體中對這些資料進行操作。</li>
+<li><strong>寫回 (Write-back)：</strong> 如果資料被修改，更新後的區塊會被寫回到磁碟上，完成持久化。</li>
+</ul>
+<p>DBMS 的核心職責之一，就是<strong>設計出一套高效的磁碟資料組織方式，以最小化昂貴的磁碟 I/O 次數</strong>。</p>
 <hr />
-<h1 id="什麼是-observability"><a class="markdownIt-Anchor" href="#什麼是-observability"></a> 什麼是 Observability？</h1>
-<p><strong>Observability（可觀測性）</strong> 是系統工程與軟體工程中的一個概念，源自控制理論。</p>
-<p>它的核心是：<br />
-👉 <strong>透過外部輸出（logs、metrics、traces 等），能夠推斷出系統內部的狀態。</strong></p>
-<p>跟 <strong>Monitoring（監控）</strong> 不同，Monitoring 偏向「已知問題的監測」，而 Observability 更強調「從輸出推斷未知問題，找出根本原因」。</p>
-<hr />
-<h1 id="監控-vs-可觀測性問已知的問題還是探索未知"><a class="markdownIt-Anchor" href="#監控-vs-可觀測性問已知的問題還是探索未知"></a> 監控 vs. 可觀測性：問已知的問題，還是探索未知？</h1>
-<p>在深入之前，必須先釐清一個最常見的誤解：可觀測性不等於監控，而是監控的超集合。</p>
-<blockquote>
-<p><strong>監控 (Monitoring):</strong> 告訴我們<strong>系統是否正常</strong>。它基於<strong>預先定義好</strong>的儀表板和警報，用來回答<strong>已知</strong>的問題。</p>
+<h1 id="用-sql-語法操作資料庫時是怎麼做的"><a class="markdownIt-Anchor" href="#用-sql-語法操作資料庫時是怎麼做的"></a> 用 SQL 語法操作資料庫時是怎麼做的？</h1>
+<p>當使用 SQL 語法（例如 <code>SELECT</code>）查詢資料時，資料庫的目標是<strong>最小化磁碟 I/O（Disk Input/Output）操作</strong>。這是透過**索引（Indexing）**機制來實現的，特別是透過 <strong>B 樹 (B-tree) 和 B+ 樹 (B+ tree)</strong> 結構。</p>
+<h2 id="索引的必要性與功能"><a class="markdownIt-Anchor" href="#索引的必要性與功能"></a> 索引的必要性與功能</h2>
 <ul>
-<li><strong>例子:</strong> 「伺服器的 CPU 使用率是否超過 90%？」「過去 5 分鐘的錯誤率是否高於 1%？」</li>
-<li><strong>比喻:</strong> 監控就像汽車的儀表板。它會告訴你引擎是否過熱、油量是否充足。但它不會告訴你<strong>為什麼</strong>引擎會過熱。</li>
+<li><strong>全表掃描的問題：</strong> 如果沒有索引，當要查詢一條記錄時，資料庫可能必須執行<strong>全表掃描（Full Table Scan）</strong>，即逐一存取所有儲存該資料表的磁碟區塊。這在大資料量時非常緩慢。</li>
+<li><strong>索引的目的：</strong> 索引就像一本書的目錄，它是一個獨立於資料的、經過優化的資料結構，可以讓資料庫<strong>快速定位</strong>所需的資料。</li>
+<li><strong>索引的儲存：</strong> 索引本身也儲存在磁碟上。索引通常包含一個<strong>鍵值（Key）<strong>和一個指向資料記錄的</strong>指標（Pointer）</strong>。</li>
 </ul>
-</blockquote>
-<blockquote>
-<p><strong>可觀測性 (Observability):</strong> 賦予<strong>理解系統為何會這樣運作</strong>的能力。它允許在不修改或部署新程式碼的情況下，提出<strong>全新</strong>的問題來探索<strong>未知</strong>的狀況。</p>
+<h2 id="b-樹與-b-樹作為索引"><a class="markdownIt-Anchor" href="#b-樹與-b-樹作為索引"></a> B 樹與 B+ 樹作為索引</h2>
+<p>B 樹和 B+ 樹是<strong>自管理的多級索引（Self-manage Multi-level Indexing）</strong>，它們是高效能資料庫索引的基礎。</p>
+<h3 id="透過索引進行搜尋的流程-search-operation"><a class="markdownIt-Anchor" href="#透過索引進行搜尋的流程-search-operation"></a> 透過索引進行搜尋的流程 (Search Operation)</h3>
+<p>當執行帶有 <code>WHERE</code> 條件的查詢時，DBMS 的執行流程如下：</p>
+<ol>
+<li><strong>搜尋索引：</strong> 資料庫從 B 樹或 B+ 樹的**根節點（Root Node）**開始。</li>
+<li><strong>節點遍歷：</strong> 根據查詢的鍵值（Key，例如 1007）與當前節點中的鍵值進行比較，決定要沿著哪個**子指標（Child Pointer）**向下遍歷。</li>
+<li><strong>減少 I/O：</strong> 由於 B 樹/B+ 樹具有高<strong>分岔度（Degree）</strong>，意味著一個節點可以有很多子節點。這使得樹的高度非常淺。例如，儲存上億筆記錄的索引樹，其高度可能只有 4-5 層。這也意味著，<strong>只需 4-5 次磁碟 I/O</strong>，就能從根節點遍歷到包含目標資料指標的葉節點。每往下一個層級，搜索空間就會迅速縮小。樹的高度（即層級數）非常淺，因此只需要存取極少的磁碟區塊就能找到目標。</li>
+<li><strong>取得記錄：</strong>
 <ul>
-<li><strong>例子:</strong> 「為什麼過去一小時，來自特定版本 App 的 iOS 使用者，在結帳流程的步驟三延遲特別高？」「哪些共用同一個資料庫實例的服務，是造成這次 CPU 飆高的元兇？」</li>
-<li><strong>比喻:</strong> 可觀測性就像給汽車配備了全套的診斷工具和一位經驗豐富的技師。當引擎過熱時，可以深入檢查冷卻系統、風扇轉速、機油壓力等任何想知道的細節，從而找到根本原因。</li>
-</ul>
-</blockquote>
-<p>簡單來說，監控讓我們看到「病徵」，而可觀測性則幫助我們進行「診斷」。</p>
-<h1 id="可觀測性的三大支柱-the-three-pillars"><a class="markdownIt-Anchor" href="#可觀測性的三大支柱-the-three-pillars"></a> 可觀測性的三大支柱 (The Three Pillars)</h1>
-<p>要實現可觀測性，通常依賴於三種核心的遙測數據類型（Telemetry Data）。它們不是孤立存在的，而是相輔相成，共同描繪出系統運作的全貌。</p>
-<h2 id="1-日誌-logs-發生了什麼"><a class="markdownIt-Anchor" href="#1-日誌-logs-發生了什麼"></a> 1. 日誌 (Logs) - 「發生了什麼？」</h2>
-<ul>
-<li>記錄系統發生的事件，包含錯誤、警告、info 訊息。</li>
-<li>幫助開發者在發生問題時追蹤發生了什麼事。</li>
-</ul>
-<p>日誌是記錄在系統運行過程中發生的、帶有時間戳的離散事件。它們提供了最詳細、最細粒度的上下文。</p>
-<ul>
-<li><strong>強項:</strong> 當需要深入細節時，日誌是無可替代的。一個格式良好的日誌可以告訴我們在特定時間點，程式碼執行的確切位置、變數狀態和錯誤堆疊。</li>
-<li><strong>挑戰:</strong> 傳統的純文字日誌就像一本流水帳，難以聚合和查詢。因此，<strong>結構化日誌 (Structured Logging)</strong> 至關重要。將日誌以 JSON 等格式輸出，讓每一條日誌都成為一個可被查詢的數據點（例如，<code>&#123;&quot;event&quot;: &quot;user_login&quot;, &quot;user_id&quot;: 123, &quot;status&quot;: &quot;success&quot;&#125;</code>）。</li>
-</ul>
-<h2 id="2-指標-metrics-情況有多嚴重"><a class="markdownIt-Anchor" href="#2-指標-metrics-情況有多嚴重"></a> 2. 指標 (Metrics) - 「情況有多嚴重？」</h2>
-<ul>
-<li>可量化的數值，通常是時間序列，例如：
-<ul>
-<li>CPU 使用率</li>
-<li>記憶體消耗</li>
-<li>每秒請求數 (RPS)</li>
-<li>錯誤率</li>
+<li><strong>B 樹：</strong> 鍵值與指向實際資料的指標（Record Pointer）可能儲存在樹的<strong>任何節點</strong>中。一旦找到鍵值，即獲得記錄指標，然後存取包含該記錄的磁碟區塊。</li>
+<li><strong>B+ 樹：</strong> 鍵值與實際資料（或資料指標）**只儲存在葉節點（Leaf Nodes）**中。找到葉節點後，即可取得資料。</li>
 </ul>
 </li>
-<li>讓團隊能快速判斷系統健康狀態。</li>
-</ul>
-<p>指標是在一段時間內測量和聚合的數值。它們是系統健康狀況的量化體現，非常適合用於儀表板和告警。</p>
-<ul>
-<li><strong>強項:</strong> 指標數據量小、效率高，非常適合用來觀察趨勢和設定告警閾值。例如：請求延遲（Latency）、每秒查詢率（QPS）、錯誤率（Error Rate）、CPU 使用率。</li>
-<li><strong>挑戰:</strong> 指標是高度聚合的數據，它會告訴你「有問題」，但會丟失導致問題的具體上下文。知道錯誤率上升了，但不知道是哪個使用者或哪筆交易導致的。</li>
-</ul>
-<h2 id="3-分散式追蹤-traces-問題發生在哪裡為什麼慢"><a class="markdownIt-Anchor" href="#3-分散式追蹤-traces-問題發生在哪裡為什麼慢"></a> 3. 分散式追蹤 (Traces) - 「問題發生在哪裡？為什麼慢？」</h2>
-<ul>
-<li>分散式系統中，請求會經過多個服務。</li>
-<li>Tracing 可以顯示一個請求從 <strong>進入</strong> 到 <strong>完成</strong> 的全流程，幫助找到瓶頸或延遲來源。</li>
-</ul>
-<p>分散式追蹤記錄了單一請求在複雜的分散式系統中（如微服務架構）的完整旅程。一個追蹤（Trace）由多個跨度（Span）組成，每個 Span 代表請求在單一服務或組件中的處理單元。</p>
-<ul>
-<li><strong>強項:</strong> 在微服務架構中，追蹤是除錯的超級武器。它可以清晰地展示一個請求流經了哪些服務、每個服務花費了多長時間、服務之間的依賴關係，讓我們一眼就能定位到效能瓶頸或出錯的環節。</li>
-<li><strong>挑戰:</strong> 實現分散式追蹤的侵入性相對較高，需要在程式碼層面進行插樁（instrumentation）。幸運的是，像 OpenTelemetry 這樣的開放標準正在極大地簡化這一過程。</li>
-</ul>
-<h2 id="三者協同的力量"><a class="markdownIt-Anchor" href="#三者協同的力量"></a> 三者協同的力量</h2>
-<p>真正的魔法發生在這三大支柱協同工作時：</p>
-<blockquote>
-<p>在<strong>指標</strong>儀表板上發現 P99 延遲突然飆高（病徵） -&gt; 透過關聯的<strong>追蹤</strong>數據，迅速定位到是後端的 <code>payment-service</code> 呼叫第三方支付 API 時變得極慢（診斷位置） -&gt; 篩選出該時間段內、屬於這個追蹤的<strong>日誌</strong>，發現了詳細的 <code>TimeoutException</code> 錯誤訊息和請求參數（根本原因）。</p>
-</blockquote>
-<hr />
-<h1 id="為什麼可觀測性如此重要"><a class="markdownIt-Anchor" href="#為什麼可觀測性如此重要"></a> 為什麼「可觀測性」如此重要？</h1>
-<p>可觀測性的崛起並非偶然，它是由現代軟體架構的演進所驅動的：</p>
-<ul>
-<li><strong>快速定位問題</strong>：不只是發現系統掛了，而是能找到「為什麼掛了」。</li>
-<li><strong>微服務與分散式架構:</strong> 過去的單體應用（Monolith）相對簡單，而現在的系統由數十甚至數百個微服務構成。一個請求的路徑變得極其複雜，傳統的單機日誌分析已完全失效。</li>
-<li><strong>雲原生與容器化:</strong> Kubernetes、Serverless 等技術讓基礎設施變得動態且短暫（Ephemeral）。服務的實例可能在幾秒鐘內被創建和銷毀，基於固定 IP 的監控方式不再可靠。</li>
-<li><strong>DevOps 文化:</strong> 當開發團隊需要「Build it, Run it」（自己開發、自己維運）時，必須擁有強大的工具來理解自己服務在生產環境中的真實表現。可觀測性賦予了團隊這種能力和信心。DevOps/SRE 團隊依靠 observability 來進行 incident response。</li>
-<li><strong>支援持續改進</strong>：幫助開發者分析效能問題與用戶行為。</li>
-</ul>
-<hr />
-<h1 id="如何開始可觀測性之旅"><a class="markdownIt-Anchor" href="#如何開始可觀測性之旅"></a> 如何開始可觀測性之旅？</h1>
-<p>不必一步到位。一個務實的起點是：</p>
-<ol>
-<li><strong>擁抱結構化日誌:</strong> 這是成本最低、見效最快的步驟。將現有的 <code>print</code> 或 <code>log.info(&quot;some string&quot;)</code> 改為輸出帶有豐富上下文的 JSON 格式日誌。</li>
-<li><strong>引入 OpenTelemetry:</strong> 這是一個開放原始碼的觀測性框架，由雲原生計算基金會（CNCF）維護。它提供了統一的 API 和 SDK，讓我們可以方便地從應用中採集日誌、指標和追蹤數據，並將它們發送到選擇的任何後端平台。</li>
 </ol>
-<hr />
-<h1 id="與-monitoring-的比較"><a class="markdownIt-Anchor" href="#與-monitoring-的比較"></a> 與 Monitoring 的比較</h1>
-<table>
-<thead>
-<tr>
-<th>特性</th>
-<th>Monitoring（監控）</th>
-<th>Observability（可觀測性）</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>定義</td>
-<td>檢查系統是否正常運作</td>
-<td>了解系統內部狀態與行為</td>
-</tr>
-<tr>
-<td>著重</td>
-<td>已知問題</td>
-<td>已知 + 未知問題</td>
-</tr>
-<tr>
-<td>工具</td>
-<td>儀表板、警報</td>
-<td>Logs, Metrics, Traces 整合</td>
-</tr>
-<tr>
-<td>問題範圍</td>
-<td>「是否壞掉？」</td>
-<td>「為什麼壞掉？」</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="常見工具"><a class="markdownIt-Anchor" href="#常見工具"></a> 常見工具</h2>
+<p>最終，DBMS 只需讀取少數幾個索引區塊和一個資料區塊，就能完成查詢，相較於全表掃描，效能提升是指數級的。</p>
+<h3 id="減少-io-的實際效益"><a class="markdownIt-Anchor" href="#減少-io-的實際效益"></a> 減少 I/O 的實際效益</h3>
 <ul>
-<li><strong>Logs</strong>: ELK Stack (Elasticsearch + Logstash + Kibana), Fluentd</li>
-<li><strong>Metrics</strong>: Prometheus, Grafana</li>
-<li><strong>Traces</strong>: Jaeger, OpenTelemetry, Zipkin</li>
+<li><strong>以 B+ 樹為例：</strong> 搜尋過程會讀取索引區塊（非葉節點），然後讀取包含實際資料的區塊。</li>
+<li>假設一個表有 25 個資料區塊，如果使用索引，可能只需要讀取 4 個索引區塊和 1 個資料區塊，<strong>總共只需存取 5 個區塊</strong>，而不是 25 個區塊。這極大地提升了查詢速度。</li>
 </ul>
+<h3 id="寫入操作與樹的自平衡-insert-delete"><a class="markdownIt-Anchor" href="#寫入操作與樹的自平衡-insert-delete"></a> 寫入操作與樹的自平衡 (<code>INSERT</code> / <code>DELETE</code>)</h3>
+<p>當執行 <code>INSERT</code> 或 <code>DELETE</code> 時，DBMS 不僅要修改資料區塊，還必須同步更新索引樹，並維持其平衡：</p>
+<ol>
+<li><strong>寫入資料區塊：</strong> 將實際資料寫入或從磁碟區塊中移除。</li>
+<li><strong>更新索引樹：</strong> 根據 B 樹或 B+ 樹的規則，在索引中插入或刪除對應的鍵值。</li>
+<li><strong>維持平衡：</strong>
+<ul>
+<li><strong>插入 (Insertion)：</strong> 若插入導致某個節點的鍵值數量超出上限，該節點會發生<strong>分裂 (Splitting)</strong>，並將一個中間鍵值<strong>上推 (Promoted)</strong> 至父節點。此過程可能沿著樹一路向上傳遞，最壞情況下會導致根節點分裂，使樹的高度增加一層。</li>
+<li><strong>刪除 (Deletion)：</strong> 若刪除導致節點的鍵值數量低於下限 (Underflow)，DBMS 會嘗試從相鄰的兄弟節點<strong>借用 (Borrowing)</strong> 鍵值，或者與兄弟節點<strong>合併 (Merging)</strong>。</li>
+</ul>
+</li>
+</ol>
+<p>這些自平衡機制確保了無論資料如何變動，索引樹總能維持極淺的高度，從而保障查詢效能的穩定。</p>
+<h3 id="b-樹在範圍查詢上的優勢"><a class="markdownIt-Anchor" href="#b-樹在範圍查詢上的優勢"></a> B+ 樹在範圍查詢上的優勢</h3>
+<p>B+ Tree 相較於 B-Tree 有一個重要的優化：<strong>所有的葉節點都透過一個雙向鏈結串列 (Doubly Linked List) 連接在一起，並且是按鍵值順序排序的</strong>。</p>
+<p>這個特性使得 B+ Tree 在處理<strong>範圍查詢 (Range Queries)</strong>（例如 <code>WHERE age BETWEEN 20 AND 30</code>）時極為高效：</p>
+<ol>
+<li>DBMS 只需透過樹結構找到範圍的起始點 (例如 <code>age = 20</code>)。</li>
+<li>然後，它可以順著葉節點的鏈結串列向後掃描，直到範圍的結束點 (例如 <code>age = 30</code>)，而無需反覆遍歷樹的上層結構。這使得 B+ 樹在處理資料排序和掃描（Sorting and Scanning）方面更有效率。</li>
+</ol>
+<p>這就是為什麼 B+ Tree 成為了現代關聯式資料庫索引結構的事實標準。</p>
 <hr />
 <h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
-<p>Observability = <strong>能從輸出觀察系統行為，並理解其內部狀態的能力</strong>。<br />
-它比監控更全面，能幫助工程師在系統出問題時，不只「知道壞了」，還能「理解為什麼壞了」。</p>
-<p>Observability 不僅僅是一堆工具或技術的集合，它更是一種文化和思維上的轉變。它鼓勵我們抱持著好奇心，去探索、去提問，去真正理解我們親手構建的系統。</p>
-<p>下一次當在深夜被警報喚醒時，希望面對的不再是一個冰冷的黑盒子，而是一個數據豐富、清晰透明、等待探索的白盒子。這就是可觀測性賦予我們的力量。</p>
+<p>從磁碟上零散的區塊，到記憶體中待處理的資料，再到 B+ Tree 索引的高效導航，我們可以看到，一個看似簡單的 SQL 查詢背後，是資料庫管理系統數十年來精心設計與優化的結果。理解這些底層原理，不僅能幫助我們寫出更高效能的 SQL，更能讓我們在面對複雜的系統設計與效能瓶頸時，擁有更深刻的洞察力。</p>
 
     </div>
 
@@ -765,21 +713,18 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/my-blog/tags/DevOps/" rel="tag"># DevOps</a>
+              <a href="/my-blog/tags/Database/" rel="tag"># Database</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/my-blog/2025/10/01/%E8%B3%87%E6%96%99%E5%BA%AB%E6%95%88%E8%83%BD%E8%AA%BF%E6%A0%A1%E6%8C%87%E5%8D%97/" rel="prev" title="資料庫效能調校指南：從根本上提升系統反應速度">
-                  <i class="fa fa-angle-left"></i> 資料庫效能調校指南：從根本上提升系統反應速度
+                <a href="/my-blog/2025/10/16/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20B%20%E6%A8%B9%20%E8%88%87%20B+%20%E6%A8%B9/" rel="prev" title="深入解析 B 樹 (B-Tree) 與 B+ 樹 (B+ Tree)：資料庫索引的基石">
+                  <i class="fa fa-angle-left"></i> 深入解析 B 樹 (B-Tree) 與 B+ 樹 (B+ Tree)：資料庫索引的基石
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/my-blog/2025/10/04/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20%E5%8A%9F%E8%83%BD%E6%97%97%E6%A8%99%20Feature%20Flags/" rel="next" title="深入淺出「功能旗標 (Feature Flags)」">
-                  深入淺出「功能旗標 (Feature Flags)」 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
