@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="分享程式技術">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的技術部落格">
+<meta property="og:url" content="https://nivek-yang.github.io/page/12/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="分享程式技術">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Python, Django, Javascript, Database, Git">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/page/12/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-TW","comments":"","permalink":"","path":"page/12/index.html","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">我的技術部落格</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">111</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">56</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cloud-Computing/">
+        Cloud Computing
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Concurrency/">
+        Concurrency
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cybersecurity/">
+        Cybersecurity
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(22)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Design-Pattern/">
+        Design Pattern
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/DevOps/">
+        DevOps
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(17)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/OOP/">
+        OOP
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Serverless/">
+        Serverless
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">111</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">56</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/16/%E5%BE%9E%E9%9B%B6%E9%96%8B%E5%A7%8B%E5%BB%BA%E7%AB%8B%E5%80%8B%E4%BA%BA%E9%83%A8%E8%90%BD%E6%A0%BC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/04/16/%E5%BE%9E%E9%9B%B6%E9%96%8B%E5%A7%8B%E5%BB%BA%E7%AB%8B%E5%80%8B%E4%BA%BA%E9%83%A8%E8%90%BD%E6%A0%BC/" class="post-title-link" itemprop="url">
+              從零開始建立個人部落格 (Hexo + Github Pages)
+            </a>
+            <a href="/my-blog/2025/04/16/%E5%BE%9E%E9%9B%B6%E9%96%8B%E5%A7%8B%E5%BB%BA%E7%AB%8B%E5%80%8B%E4%BA%BA%E9%83%A8%E8%90%BD%E6%A0%BC/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2025-04-16 00:00:00" itemprop="dateCreated datePublished" datetime="2025-04-16T00:00:00+08:00">2025-04-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-04-18 19:03:07" itemprop="dateModified" datetime="2025-04-18T19:03:07+08:00">2025-04-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">從零開始建立個人部落格 這篇文章將詳細記錄如何使用 Hexo 和 GitHub Pages 建立一個個人部落格的完整過程。從環境設置到部署上線，一步一步帶你了解整個流程。 1. 環境準備 1.1 安裝必要工具 首先，我們需要安裝以下工具： Node.js（包含 npm） Git 在 macOS 上，可以使用 Homebrew 安裝： # 安裝 Homebrew（如果還沒安裝的話） /bin/bash -c &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)&quot; # 安裝 Node.js brew install node # 安裝 Git brew install git 安裝完成後，確認版本： node -v # 應該顯示 v16 或更高版本 npm -v # 應該顯示 7.0 或更高版本 git --version 注意事項： 如果已經安裝過這些工具，可以跳過安裝步驟 如果版本不符合要求，需要先卸載舊版本再安裝新版本 1.2 安裝 Hexo 安裝 Hexo 命令行工具（全局安裝）： npm install -g hexo-cli 安裝完成後，確認安裝成功： hexo -v 2. 創建部落格 2.1 初始化專案 # 創建部落格目錄 hexo init my-blog cd my-blog # 初始化 npm 專案 npm init -y # 安裝依賴 npm install 執行 hexo init 後，會創建以下文件結構： my-blog/ ├── _config.yml # 網站配置文件 ├── package.json # 專案依賴配置 ├── scaffolds/ # 文章模板目錄 │ ├── draft.md # 草稿模板 │ ├── page.md # 頁面模板 │ └── post.md # 文章模板 ├── source/ # 源文件目錄 │ ├── _posts/ # 文章目錄 │ └── _drafts/ # 草稿目錄 ├── themes/ # 主題目錄 │ └── landscape/ # 默認主題 └── node_modules/ # 依賴包目錄 各目錄的用途： _config.yml：網站的配置文件，包含網站標題、描述、作者等基本資訊 package.json：記錄專案依賴的 npm 包 scaffolds/：存放文章模板，用於快速創建新文章 source/：存放源文件，包括文章、頁面、圖片等 themes/：存放主題文件，可以安裝多個主題 node_modules/：存放安裝的 npm 包 2.1.1 db.json 文件 當你執行 hexo generate 或 hexo g 命令時，Hexo 會生成一個 db.json 文件。這個文件位於部落格的根目錄，是 Hexo 的資料庫文件，用於存儲所有文章的元數據。 db.json 的生成過程： 當你執行 hexo generate 時： Hexo 會掃描 source/_posts/ 目錄下的所有文章 讀取每篇文章的 front-matter（文章頭部的 YAML 配置） 將這些資訊整理成結構化的數據 生成 db.json 文件 db.json 的內容包括： 所有文章的標題、日期、標籤、分類等元數據 文章之間的關聯關係 網站的基本配置資訊 用途： 用於生成靜態網站的導航、分類、標籤等頁面 提供文章搜索功能 用於生成 RSS feed 用於生成網站地圖 注意事項： npm init -y 會創建一個默認的 package.json 文件 如果 npm install 過程中出現錯誤，可以嘗試使用 npm install --force 確保在執行這些命令時有足夠的權限 所有安裝的套件都會保存在專案的 node_modules 目錄中 不要直接修改 themes/ 目錄下的主題文件，應該複製到 source/ 目錄下修改 source/ 目錄下的文件會被編譯到 public/ 目錄 _drafts/ 目錄下的文件不會被編譯，用於存放草稿 db.json 是自動生成的，不需要手動編輯 如果修改了文章或配置，需要重新執行 hexo generate 來更新 db.json 執行 hexo clean 會刪除 db.json，下次生成時會重新創建 如果 db.json 損壞，可以執行 hexo clean &amp;&amp; hexo generate 重新生成 2.2 安裝必要的插件 # 安裝 Git 部署插件（安裝到專案中） npm install hexo-deployer-git --save # 安裝其他有用的插件（安裝到專案中） npm install hexo-generator-feed --save # RSS feed npm install hexo-generator-sitemap --save # 網站地圖 注意事項： 使用 --save 參數會將套件添加到 package.json 的 dependencies 中 這些套件只會安裝在當前專案的 node_modules 目錄中 如果需要全局安裝套件，使用 -g 參數，例如：npm install -g 套件名稱 3. 配置部落格 3.1 基本配置 編輯 _config.yml 文件，設置基本信息。以下是配置前後的對比： 配置前： # Site title: Hexo subtitle: &#x27;&#x27; description: &#x27;&#x27; keywords: author: John Doe language: en timezone: &#x27;&#x27; # URL url: http://example.com root: / 配置後： # 網站資訊 title: 我的旅行部落格 # 修改為你的部落格標題 subtitle: &#x27;探索世界的腳步&#x27; # 修改為你的部落格副標題 description: &#x27;分享旅行故事和經驗&#x27; # 修改為你的部落格描述 keywords: 旅行,攝影,美食,文化 # 修改為你的部落格關鍵字 author: 你的名字 # 修改為你的名字 language: zh-TW timezone: &#x27;Asia/Taipei&#x27; # URL 設定 url: https://你的用戶名.github.io/你的部落格名.github.io # 修改為你的 GitHub 用戶名和部落格名稱 root: /你的部落格名.github.io/ # 修改為你的部落格名稱 permalink: :year/:month/:day/:title/ # 目錄設定 source_dir: source public_dir: public tag_dir: tags archive_dir: archives category_dir: categories 注意事項： 確保 url 和 root 設置正確，這會影響到部署後的訪問地址 建議使用 zh-TW 作為語言設置，以確保中文顯示正常 所有標記為「修改為…」的部分都需要根據你的個人資訊進行修改 3.2 主題設置 我們使用了 Next 主題： # 安裝 Next 主題 git clone https://github.com/theme-next/hexo-theme-next themes/next 在 _config.yml 中設置主題： theme: next 4. GitHub 設置 4.1 創建 GitHub Repository 在 GitHub 上創建一個新的 repository： 名稱格式必須為：你的部落格名.github.io 例如：my_blog.github.io 設置 repository 為 public 不要初始化 README 文件 設置 GitHub Pages： 進入 repository 的 Settings 找到 Pages 選項 在 Source 部分選擇 “Deploy from a branch” 在 Branch 部分選擇 “gh-pages” 分支 點擊 Save 注意事項： Repository 名稱必須完全匹配 你的部落格名.github.io 確保 repository 設置為 public 不要選擇任何初始化選項 4.2 配置部署設置 在 _config.yml 中添加部署配置： deploy: type: git repo: git@github.com:你的用戶名/你的部落格名.github.io.git # 修改為你的 GitHub 用戶名跟你的部落格名 branch: gh-pages 注意事項： 建議使用 SSH 格式的 URL，避免每次部署都要輸入密碼 如果使用 HTTPS 格式的 URL，每次部署都需要輸入 GitHub 的用戶名和密碼 4.3 設置 SSH 金鑰 生成 SSH 金鑰： ssh-keygen -t ed25519 -C &quot;你的電子郵件&quot; # 修改為你的 GitHub 註冊郵箱 查看公鑰： cat ~/.ssh/id_ed25519.pub 複製顯示的整個內容，包括開頭的 ssh-ed25519 和結尾的郵件地址 將公鑰添加到 GitHub： 進入 GitHub 設置 找到 SSH and GPG keys 點擊 New SSH key Title: 可以隨意命名（例如：My Blog） Key: 貼上剛才複製的公鑰內容 點擊 Add SSH key 測試 SSH 連接： ssh -T git@github.com 如果看到 “Hi 你的用戶名!” 的歡迎信息，表示設置成功 5. 創建內容 5.1 創建新文章 # 創建新文章 hexo new &quot;文章標題&quot; 文章模板位於 scaffolds/post.md，包含以下內容： --- title: &#123;&#123; title &#125;&#125; date: &#123;&#123; date &#125;&#125; categories: tags: --- 5.2 創建關於頁面 # 創建關於頁面 hexo new page about 這會創建一個新的頁面檔案 source/about/index.md。編輯這個檔案，加入你的自我介紹。以下是一個範例： --- title: 關於我 date: 2024-04-16 14:00:00 --- 嗨！我是 Test User，一個熱愛旅行的部落客。 在這個部落格中，我會分享： - 旅行故事 - 景點介紹 - 旅遊攻略 - 美食推薦 歡迎追蹤我的社群媒體，一起探索世界的美好！ 5.3 編輯文章內容 使用 Markdown 語法編輯你的文章。以下是一個範例： --- title: 我的第一次日本之旅 date: 2024-04-16 14:00:00 tags: - 旅行 - 日本 categories: 旅遊 --- # 我的第一次日本之旅 這是我第一次去日本旅行的故事... ## 第一天：抵達東京 早上抵達成田機場，搭乘 Skyliner 前往市區... ## 第二天：淺草寺 參觀了著名的淺草寺，品嚐了當地的美食... ## 心得分享 這次旅行讓我收穫滿滿，期待下次再訪！ 注意事項： 每篇文章都需要包含 front-matter（文章頭部信息） front-matter 必須使用 --- 包圍 至少需要包含 title 和 date 兩個欄位 可以根據需要添加 tags 和 categories 6. 本地預覽 # 啟動本地服務器 hexo server 訪問 http://localhost:4000 預覽部落格。 注意事項： 如果 4000 端口被占用，可以使用 hexo server -p 5000 指定其他端口 按 Ctrl+C 可以停止服務器 7. 部署流程 每次更新內容後，執行以下命令部署到 GitHub Pages： # 清理舊的生成文件 hexo clean # 生成新的靜態文件 hexo generate # 部署到 GitHub Pages hexo deploy 或者使用簡寫形式： hexo clean &amp;&amp; hexo g &amp;&amp; hexo d 注意事項： 如果使用 HTTPS 格式的 repository URL，每次部署都需要輸入 GitHub 的用戶名和密碼 建議使用 SSH 格式的 URL，避免每次部署都要輸入密碼 7.1 故障排除指南 如果在部署過程中遇到問題，請參考以下解決方法： 部署失敗：無法連接到 GitHub 檢查 SSH 金鑰是否正確設置 執行 ssh -T git@github.com 測試連接 如果提示 “Permission denied”，重新生成 SSH 金鑰 部署失敗：找不到 repository 檢查 repository 名稱是否正確 確認 repository 是否設置為 public 確認你有權限訪問該 repository 部署成功但網站顯示 404 等待幾分鐘讓 GitHub Pages 完成部署 檢查 URL 是否正確 在 GitHub repository 的 Settings &gt; Pages 中確認部署狀態 本地預覽正常但部署後樣式錯誤 執行 hexo clean 清理緩存 重新執行 hexo g 生成文件 檢查 _config.yml 中的 URL 設置 部署時出現權限錯誤 確認使用的是 SSH 格式的 URL 檢查 GitHub 的 SSH 設置 嘗試重新生成 SSH 金鑰 部署時出現文件衝突 執行 git pull 更新本地文件 解決衝突後重新部署 如果問題持續，可以嘗試刪除 public/ 目錄後重新部署 部署完成後，訪問 https://你的用戶名.github.io/你的部落格名.github.io 查看你的部落格。例如：https://nivek-yang.github.io/test_blog.github.io 8. 自定義設置 8.1 導航菜單 在 Next 主題的 _config.yml 中設置導航菜單： menu: home: / || fa fa-home archives: /archives/ || fa fa-archive about: /about/ || fa fa-user 8.2 社交鏈接 social: GitHub: https://github.com/你的用戶名 || fab fa-github E-Mail: mailto:你的電子郵件 || fa fa-envelope 9. 維護和更新 9.1 日常維護 定期更新 Hexo 和主題： npm update 備份源文件： 將 source 目錄下的文件定期備份 可以使用 Git 進行版本控制 9.2 故障排除 常見問題的解決方法： 部署失敗： 檢查 GitHub 設置 確認 SSH key 設置正確 檢查部署配置 嘗試重新生成 SSH key 本地預覽問題： 清理緩存：hexo clean 重新安裝依賴：npm install 檢查端口是否被占用 主題顯示問題： 確認主題文件是否完整 檢查主題配置是否正確 嘗試重新安裝主題 10. 結語 通過以上步驟，我們成功建立了一個個人部落格。這個部落格具有以下特點： 使用 Hexo 靜態網站生成器 採用 Next 主題，簡潔美觀 部署在 GitHub Pages，無需額外伺服器 支持 Markdown 寫作 具有分類、標籤等功能 響應式設計，支持多設備訪問 持續更新和維護這個部落格，它將成為記錄生活和分享知識的好平台。如果遇到任何問題，可以參考： Hexo 官方文檔 Next 主題文檔 GitHub Pages 文檔 希望這篇教學對你建立自己的部落格有所幫助！ 11. 更新和部署文章 11.1 更新現有文章 編輯現有文章： 在 source/_posts/ 目錄下找到要修改的文章 使用編輯器修改文章內容 保存修改 本地預覽修改： # 啟動本地服務器 hexo server 訪問 http://localhost:4000 查看修改效果 確認修改符合預期後，按 Ctrl+C 停止服務器 11.2 新增文章 創建新文章： # 創建新文章 hexo new &quot;新文章標題&quot; 這會在 source/_posts/ 目錄下創建一個新的 Markdown 文件 文件名格式為：年-月-日-新文章標題.md 編輯新文章： 使用編輯器打開新創建的文章文件 添加文章內容 設置適當的標籤和分類 保存文件 本地預覽新文章： # 啟動本地服務器 hexo server 訪問 http://localhost:4000 查看新文章效果 確認文章顯示正常後，按 Ctrl+C 停止服務器 11.3 部署更新 完成文章修改或新增後，執行以下命令部署到 GitHub Pages： # 清理舊的生成文件 hexo clean # 生成新的靜態文件 hexo generate # 部署到 GitHub Pages hexo deploy 或者使用簡寫形式： hexo clean &amp;&amp; hexo g &amp;&amp; hexo d 注意事項： 部署後需要等待幾分鐘讓 GitHub Pages 完成更新 如果看到 404 頁面，請等待幾分鐘後重新整理 可以使用 hexo clean &amp;&amp; hexo g &amp;&amp; hexo d 命令快速部署 部署前建議先在本地預覽，確認內容正確 11.4 檢查部署狀態 在 GitHub 上檢查： 進入你的 repository 點擊 Actions 標籤 查看最新的部署狀態 等待部署完成（顯示綠色勾號） 訪問你的部落格： 訪問 https://你的用戶名.github.io/你的部落格名.github.io 檢查新文章或修改是否正確顯示 如果內容未更新，請等待幾分鐘後重新整理 11.5 常見問題 部署後內容未更新 等待幾分鐘讓 GitHub Pages 完成更新 執行 hexo clean 清理緩存 重新執行部署命令 新文章未顯示 檢查文章文件名格式是否正確 確認文章是否包含正確的 front-matter 檢查 _config.yml 中的 URL 設置 修改未生效 確認修改已保存 執行 hexo clean 清理緩存 重新執行部署命令 部署失敗 檢查 GitHub 設置 確認 SSH key 設置正確 檢查部署配置 嘗試重新生成 SSH key 部署完成後，訪問 https://你的用戶名.github.io/你的部落格名.github.io 查看你的部落格。例如：https://nivek-yang.github.io/test_blog.github.io 12. 自定義設置 12.1 導航菜單 在 Next 主題的 _config.yml 中設置導航菜單： menu: home: / || fa fa-home archives: /archives/ || fa fa-archive about: /about/ || fa fa-user 12.2 社交鏈接 social: GitHub: https://github.com/你的用戶名 || fab fa-github E-Mail: mailto:你的電子郵件 || fa fa-envelope 13. 維護和更新 13.1 日常維護 定期更新 Hexo 和主題： npm update 備份源文件： 將 source 目錄下的文件定期備份 可以使用 Git 進行版本控制 13.2 故障排除 常見問題的解決方法： 部署失敗： 檢查 GitHub 設置 確認 SSH key 設置正確 檢查部署配置 嘗試重新生成 SSH key 本地預覽問題： 清理緩存：hexo clean 重新安裝依賴：npm install 檢查端口是否被占用 主題顯示問題： 確認主題文件是否完整 檢查主題配置是否正確 嘗試重新安裝主題 14. 結語 通過以上步驟，我們成功建立了一個個人部落格。這個部落格具有以下特點： 使用 Hexo 靜態網站生成器 採用 Next 主題，簡潔美觀 部署在 GitHub Pages，無需額外伺服器 支持 Markdown 寫作 具有分類、標籤等功能 響應式設計，支持多設備訪問 持續更新和維護這個部落格，它將成為記錄生活和分享知識的好平台。如果遇到任何問題，可以參考： Hexo 官方文檔 Next 主題文檔 GitHub Pages 文檔 希望這篇教學對你建立自己的部落格有所幫助！ 15. 部署後的後續工作 15.1 檢查網站功能 部署完成後，需要檢查以下功能是否正常： 基本功能檢查： 首頁是否能正常訪問 文章列表是否正確顯示 文章內容是否完整 圖片是否正常顯示 導航菜單是否正常運作 互動功能檢查： 分類頁面是否正常 標籤頁面是否正常 搜索功能是否正常 評論功能（如果有的話）是否正常 響應式設計檢查： 在手機上訪問是否正常 在不同瀏覽器中訪問是否正常 頁面縮放是否正常 15.2 優化網站性能 圖片優化： 使用適當的圖片格式（WebP、JPEG、PNG） 壓縮圖片大小 使用延遲加載（lazy loading） SEO 優化： 確保每篇文章都有適當的標題和描述 添加適當的 meta 標籤 提交網站地圖到搜索引擎 性能監控： 使用 Google Analytics 或類似工具監控訪問量 使用 PageSpeed Insights 檢查網站性能 定期檢查網站加載速度 15.3 定期維護 內容更新： 定期發布新文章 更新舊文章的內容 維護分類和標籤 技術維護： 定期更新 Hexo 和主題 更新依賴包 備份源文件 安全維護： 定期檢查 GitHub 設置 更新 SSH 金鑰 檢查訪問權限 15.4 推廣和互動 社群媒體推廣： 在社群媒體上分享文章 與讀者互動 收集反饋 SEO 優化： 使用適當的關鍵字 建立外部連結 優化文章結構 內容策略： 制定發布計劃 分析讀者反饋 調整內容方向 15.5 備份策略 源文件備份： 定期備份 source 目錄 使用 Git 進行版本控制 保存到雲端存儲 配置備份： 備份 _config.yml 文件 備份主題配置 記錄重要的修改 恢復計劃： 制定網站恢復流程 測試備份文件 準備應急方案 15.6 持續學習 技術學習： 學習新的 Markdown 技巧 了解 Hexo 的新功能 學習前端開發知識 內容創作： 提高寫作技巧 學習攝影技巧 研究 SEO 最佳實踐 社群參與： 參與 Hexo 社群 分享經驗 學習他人經驗 通過這些後續工作，你可以不斷優化和改進你的部落格，提供更好的閱讀體驗，吸引更多讀者。記住，建立部落格只是一個開始，持續的維護和改進才是關鍵。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/04/16/%E5%BE%9E%E9%9B%B6%E9%96%8B%E5%A7%8B%E5%BB%BA%E7%AB%8B%E5%80%8B%E4%BA%BA%E9%83%A8%E8%90%BD%E6%A0%BC/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" title="上一頁" aria-label="上一頁" href="/my-blog/page/11/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/my-blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/my-blog/page/11/">11</a><span class="page-number current">12</span>
+  </nav>
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

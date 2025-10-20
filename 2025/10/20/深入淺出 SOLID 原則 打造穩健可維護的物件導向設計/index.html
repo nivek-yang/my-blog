@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="在軟體開發的領域中，我們都追求撰寫出「好」的程式碼。但什麼是「好」的程式碼？除了能夠正確執行外，它還必須具備可讀性、可擴展性、可維護性。隨著專案規模擴大、需求不斷變更，混亂的程式碼結構會成為開發團隊的夢魘。 為了解決這個問題，軟體設計大師 Robert C. Martin (人稱 “Uncle Bob”) 提出了五個物件導向設計的基本原則，也就是著名的 SOLID 原則。遵循這些原則，可以幫助我們">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入淺出 SOLID 原則：打造穩健、可維護的物件導向設計">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/10/20/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20SOLID%20%E5%8E%9F%E5%89%87%20%E6%89%93%E9%80%A0%E7%A9%A9%E5%81%A5%E5%8F%AF%E7%B6%AD%E8%AD%B7%E7%9A%84%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91%E8%A8%AD%E8%A8%88/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="在軟體開發的領域中，我們都追求撰寫出「好」的程式碼。但什麼是「好」的程式碼？除了能夠正確執行外，它還必須具備可讀性、可擴展性、可維護性。隨著專案規模擴大、需求不斷變更，混亂的程式碼結構會成為開發團隊的夢魘。 為了解決這個問題，軟體設計大師 Robert C. Martin (人稱 “Uncle Bob”) 提出了五個物件導向設計的基本原則，也就是著名的 SOLID 原則。遵循這些原則，可以幫助我們">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-10-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-20T07:22:34.701Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="OOP">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/10/20/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20SOLID%20%E5%8E%9F%E5%89%87%20%E6%89%93%E9%80%A0%E7%A9%A9%E5%81%A5%E5%8F%AF%E7%B6%AD%E8%AD%B7%E7%9A%84%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91%E8%A8%AD%E8%A8%88/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/10/20/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20SOLID%20%E5%8E%9F%E5%89%87%20%E6%89%93%E9%80%A0%E7%A9%A9%E5%81%A5%E5%8F%AF%E7%B6%AD%E8%AD%B7%E7%9A%84%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91%E8%A8%AD%E8%A8%88/","path":"2025/10/20/深入淺出 SOLID 原則 打造穩健可維護的物件導向設計/","title":"深入淺出 SOLID 原則：打造穩健、可維護的物件導向設計"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>深入淺出 SOLID 原則：打造穩健、可維護的物件導向設計 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">111</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">56</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cloud-Computing/">
+        Cloud Computing
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Concurrency/">
+        Concurrency
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cybersecurity/">
+        Cybersecurity
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(22)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Design-Pattern/">
+        Design Pattern
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/DevOps/">
+        DevOps
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(17)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/OOP/">
+        OOP
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Serverless/">
+        Serverless
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#why-solid-%E7%82%BA%E4%BD%95%E9%9C%80%E8%A6%81%E9%80%99%E5%A5%97%E5%8E%9F%E5%89%87"><span class="nav-number">1.</span> <span class="nav-text"> Why SOLID? 為何需要這套原則？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%89%93%E9%80%A0%E6%98%93%E6%96%BC%E7%B6%AD%E8%AD%B7%E7%9A%84%E7%A8%8B%E5%BC%8F%E7%A2%BC-maintainability"><span class="nav-number">1.1.</span> <span class="nav-text"> 1. 打造易於維護的程式碼 (Maintainability)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%8F%90%E5%8D%87%E7%B3%BB%E7%B5%B1%E7%9A%84%E6%93%B4%E5%B1%95%E6%80%A7-extensibility"><span class="nav-number">1.2.</span> <span class="nav-text"> 2. 提升系統的擴展性 (Extensibility)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E9%99%8D%E4%BD%8E%E8%80%A6%E5%90%88%E6%8F%90%E9%AB%98%E9%9D%88%E6%B4%BB%E6%80%A7-decoupling-flexibility"><span class="nav-number">1.3.</span> <span class="nav-text"> 3. 降低耦合，提高靈活性 (Decoupling &amp; Flexibility)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%A2%9E%E5%BC%B7%E7%A8%8B%E5%BC%8F%E7%A2%BC%E7%9A%84%E5%8F%AF%E8%AE%80%E6%80%A7%E8%88%87%E5%9C%98%E9%9A%8A%E5%8D%94%E4%BD%9C-readability-collaboration"><span class="nav-number">1.4.</span> <span class="nav-text"> 4. 增強程式碼的可讀性與團隊協作 (Readability &amp; Collaboration)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E8%AE%93%E6%B8%AC%E8%A9%A6%E6%9B%B4%E5%AE%B9%E6%98%93-testability"><span class="nav-number">1.5.</span> <span class="nav-text"> 5. 讓測試更容易 (Testability)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-solid"><span class="nav-number">2.</span> <span class="nav-text"> 什麼是 SOLID？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#s%E5%96%AE%E4%B8%80%E8%81%B7%E8%B2%AC%E5%8E%9F%E5%89%87-single-responsibility-principle-srp"><span class="nav-number">2.1.</span> <span class="nav-text"> S：單一職責原則 (Single Responsibility Principle, SRP)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">2.1.1.</span> <span class="nav-text"> 核心概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%82%BA%E4%BD%95%E9%87%8D%E8%A6%81"><span class="nav-number">2.1.2.</span> <span class="nav-text"> 為何重要？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A8%8B%E5%BC%8F%E7%A2%BC%E7%AF%84%E4%BE%8B"><span class="nav-number">2.1.3.</span> <span class="nav-text"> 程式碼範例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%8D%E9%9D%A2%E6%95%99%E6%9D%90%E4%B8%80%E5%80%8B%E9%A1%9E%E5%88%A5%E8%99%95%E7%90%86%E5%A4%AA%E5%A4%9A%E4%BA%8B"><span class="nav-number">2.1.3.1.</span> <span class="nav-text"> ❌ 反面教材：一個類別處理太多事</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%89%AF%E5%A5%BD%E5%AF%A6%E8%B8%90%E8%81%B7%E8%B2%AC%E5%88%86%E9%9B%A2"><span class="nav-number">2.1.3.2.</span> <span class="nav-text"> ✅ 良好實踐：職責分離</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#o%E9%96%8B%E6%94%BE%E5%B0%81%E9%96%89%E5%8E%9F%E5%89%87-openclosed-principle-ocp"><span class="nav-number">2.2.</span> <span class="nav-text"> O：開放封閉原則 (Open&#x2F;Closed Principle, OCP)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5-2"><span class="nav-number">2.2.1.</span> <span class="nav-text"> 核心概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%82%BA%E4%BD%95%E9%87%8D%E8%A6%81-2"><span class="nav-number">2.2.2.</span> <span class="nav-text"> 為何重要？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A8%8B%E5%BC%8F%E7%A2%BC%E7%AF%84%E4%BE%8B-2"><span class="nav-number">2.2.3.</span> <span class="nav-text"> 程式碼範例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%8D%E9%9D%A2%E6%95%99%E6%9D%90%E7%94%A8-if-else-%E6%87%89%E5%B0%8D%E6%96%B0%E9%9C%80%E6%B1%82"><span class="nav-number">2.2.3.1.</span> <span class="nav-text"> ❌ 反面教材：用 if-else 應對新需求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%89%AF%E5%A5%BD%E5%AF%A6%E8%B8%90%E4%BD%BF%E7%94%A8%E6%8A%BD%E8%B1%A1%E5%92%8C%E5%A4%9A%E5%9E%8B"><span class="nav-number">2.2.3.2.</span> <span class="nav-text"> ✅ 良好實踐：使用抽象和多型</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#l%E9%87%8C%E6%B0%8F%E6%9B%BF%E6%8F%9B%E5%8E%9F%E5%89%87-liskov-substitution-principle-lsp"><span class="nav-number">2.3.</span> <span class="nav-text"> L：里氏替換原則 (Liskov Substitution Principle, LSP)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5-3"><span class="nav-number">2.3.1.</span> <span class="nav-text"> 核心概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%82%BA%E4%BD%95%E9%87%8D%E8%A6%81-3"><span class="nav-number">2.3.2.</span> <span class="nav-text"> 為何重要？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A8%8B%E5%BC%8F%E7%A2%BC%E7%AF%84%E4%BE%8B-3"><span class="nav-number">2.3.3.</span> <span class="nav-text"> 程式碼範例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%8D%E9%9D%A2%E6%95%99%E6%9D%90%E7%A0%B4%E5%A3%9E%E7%88%B6%E9%A1%9E%E5%88%A5%E8%A1%8C%E7%82%BA%E7%9A%84%E5%AD%90%E9%A1%9E%E5%88%A5"><span class="nav-number">2.3.3.1.</span> <span class="nav-text"> ❌ 反面教材：破壞父類別行為的子類別</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%89%AF%E5%A5%BD%E5%AF%A6%E8%B8%90%E4%BD%BF%E7%94%A8%E7%B5%84%E5%90%88%E6%88%96%E6%8A%BD%E8%B1%A1"><span class="nav-number">2.3.3.2.</span> <span class="nav-text"> ✅ 良好實踐：使用組合或抽象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%95%8F%E9%A1%8C%E5%9B%9E%E9%A1%A7%E7%82%BA%E4%BB%80%E9%BA%BC%E7%B9%BC%E6%89%BF%E6%98%AF%E9%8C%AF%E7%9A%84"><span class="nav-number">2.3.3.3.</span> <span class="nav-text"> 問題回顧：為什麼繼承是錯的？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A7%A3%E6%B1%BA%E6%96%B9%E6%A1%88%E5%BE%9E%E6%98%AF%E4%B8%80%E7%A8%AEis-a-%E8%BD%89%E5%90%91%E9%83%BD%E5%B1%AC%E6%96%BCis-a-type-of"><span class="nav-number">2.3.3.4.</span> <span class="nav-text"> 解決方案：從「是一種」(Is-A) 轉向「都屬於」(Is-A-Type-Of)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B7%E9%AB%94%E5%AF%A6%E4%BD%9C%E6%AD%A5%E9%A9%9F"><span class="nav-number">2.3.3.5.</span> <span class="nav-text"> 具體實作步驟</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F-1%E5%AE%9A%E7%BE%A9%E5%85%B1%E9%80%9A%E7%9A%84%E6%8A%BD%E8%B1%A1%E4%BB%8B%E9%9D%A2-shape"><span class="nav-number">2.3.3.5.1.</span> <span class="nav-text"> 步驟 1：定義共通的抽象介面 Shape</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F-2%E8%AE%93-rectangle-%E5%92%8C-square-%E9%83%BD%E5%8E%BB%E5%AF%A6%E4%BD%9C-shape-%E4%BB%8B%E9%9D%A2"><span class="nav-number">2.3.3.5.2.</span> <span class="nav-text"> 步驟 2：讓 Rectangle 和 Square 都去實作 Shape 介面</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F-3%E4%BF%AE%E6%94%B9%E5%AE%A2%E6%88%B6%E7%AB%AF%E7%A8%8B%E5%BC%8F%E7%A2%BC%E4%BD%BF%E5%85%B6%E4%BE%9D%E8%B3%B4%E6%96%BC%E6%8A%BD%E8%B1%A1-shape"><span class="nav-number">2.3.3.5.3.</span> <span class="nav-text"> 步驟 3：修改客戶端程式碼，使其依賴於抽象 Shape</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#i%E4%BB%8B%E9%9D%A2%E9%9A%94%E9%9B%A2%E5%8E%9F%E5%89%87-interface-segregation-principle-isp"><span class="nav-number">2.4.</span> <span class="nav-text"> I：介面隔離原則 (Interface Segregation Principle, ISP)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5-4"><span class="nav-number">2.4.1.</span> <span class="nav-text"> 核心概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%82%BA%E4%BD%95%E9%87%8D%E8%A6%81-4"><span class="nav-number">2.4.2.</span> <span class="nav-text"> 為何重要？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A8%8B%E5%BC%8F%E7%A2%BC%E7%AF%84%E4%BE%8B-4"><span class="nav-number">2.4.3.</span> <span class="nav-text"> 程式碼範例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%8D%E9%9D%A2%E6%95%99%E6%9D%90%E4%B8%80%E5%80%8B%E8%83%96%E4%BB%8B%E9%9D%A2"><span class="nav-number">2.4.3.1.</span> <span class="nav-text"> ❌ 反面教材：一個胖介面</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%89%AF%E5%A5%BD%E5%AF%A6%E8%B8%90%E6%8B%86%E5%88%86%E4%BB%8B%E9%9D%A2"><span class="nav-number">2.4.3.2.</span> <span class="nav-text"> ✅ 良好實踐：拆分介面</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#d%E4%BE%9D%E8%B3%B4%E5%8F%8D%E8%BD%89%E5%8E%9F%E5%89%87-dependency-inversion-principle-dip"><span class="nav-number">2.5.</span> <span class="nav-text"> D：依賴反轉原則 (Dependency Inversion Principle, DIP)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5-5"><span class="nav-number">2.5.1.</span> <span class="nav-text"> 核心概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%82%BA%E4%BD%95%E9%87%8D%E8%A6%81-5"><span class="nav-number">2.5.2.</span> <span class="nav-text"> 為何重要？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A8%8B%E5%BC%8F%E7%A2%BC%E7%AF%84%E4%BE%8B-5"><span class="nav-number">2.5.3.</span> <span class="nav-text"> 程式碼範例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%8D%E9%9D%A2%E6%95%99%E6%9D%90%E9%AB%98%E9%9A%8E%E6%A8%A1%E7%B5%84%E4%BE%9D%E8%B3%B4%E5%85%B7%E9%AB%94%E5%AF%A6%E4%BD%9C"><span class="nav-number">2.5.3.1.</span> <span class="nav-text"> ❌ 反面教材：高階模組依賴具體實作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%89%AF%E5%A5%BD%E5%AF%A6%E8%B8%90%E4%BE%9D%E8%B3%B4%E6%96%BC%E6%8A%BD%E8%B1%A1"><span class="nav-number">2.5.3.2.</span> <span class="nav-text"> ✅ 良好實踐：依賴於抽象</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">3.</span> <span class="nav-text"> 總結</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">111</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">56</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/20/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20SOLID%20%E5%8E%9F%E5%89%87%20%E6%89%93%E9%80%A0%E7%A9%A9%E5%81%A5%E5%8F%AF%E7%B6%AD%E8%AD%B7%E7%9A%84%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91%E8%A8%AD%E8%A8%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="深入淺出 SOLID 原則：打造穩健、可維護的物件導向設計 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深入淺出 SOLID 原則：打造穩健、可維護的物件導向設計
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-10-20 00:00:00 / 修改時間：15:22:34" itemprop="dateCreated datePublished" datetime="2025-10-20T00:00:00+08:00">2025-10-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在軟體開發的領域中，我們都追求撰寫出「好」的程式碼。但什麼是「好」的程式碼？除了能夠正確執行外，它還必須具備<strong>可讀性、可擴展性、可維護性</strong>。隨著專案規模擴大、需求不斷變更，混亂的程式碼結構會成為開發團隊的夢魘。</p>
+<p>為了解決這個問題，軟體設計大師 Robert C. Martin (人稱 “Uncle Bob”) 提出了五個物件導向設計的基本原則，也就是著名的 <strong>SOLID</strong> 原則。遵循這些原則，可以幫助我們建立更穩健、更有彈性、更易於維護的軟體架構。</p>
+<p>本篇文章將逐一深入了解 SOLID 的五大原則，並透過簡單的程式碼範例，掌握其核心思想。</p>
+<hr />
+<h1 id="why-solid-為何需要這套原則"><a class="markdownIt-Anchor" href="#why-solid-為何需要這套原則"></a> Why SOLID? 為何需要這套原則？</h1>
+<p>在深入每個原則的細節之前，必須先回答一個根本的問題：為什麼需要關心 SOLID？它僅僅是一套學術理論，還是能解決真實世界問題的實用工具？</p>
+<p>想像一下，是否遇過以下情境：</p>
+<ul>
+<li><strong>脆弱的程式碼</strong>：只不過修改了一個看似無關緊要的小地方，卻意外地導致系統其他部分崩潰。</li>
+<li><strong>僵化的系統</strong>：一個簡單的需求變更，卻需要花費數天甚至數週的時間，在程式碼中進行大規模的修改。</li>
+<li><strong>難以重複使用的元件</strong>：某個模組的邏輯與系統其他部分緊緊綁在一起，導致無法將它抽出來用在新的專案或功能上。</li>
+</ul>
+<p>這些都是「軟體腐敗」(Software Rot) 的典型症狀。SOLID 原則就是對抗這種腐敗的強力武器。它不是一套生硬的規則，而是一套設計哲學，旨在幫助我們從一開始就建立健康的軟體架構。</p>
+<p>遵循 SOLID 原則能為帶來以下核心價值：</p>
+<h2 id="1-打造易於維護的程式碼-maintainability"><a class="markdownIt-Anchor" href="#1-打造易於維護的程式碼-maintainability"></a> 1. 打造易於維護的程式碼 (Maintainability)</h2>
+<p>這是最直接的好處。透過<strong>單一職責</strong>和<strong>介面隔離</strong>，每個類別的職責都變得清晰且專一。當 bug 出現或需求變更時，能更快地定位到需要修改的程式碼，並且修改所造成的「漣漪效應」也會被控制在最小範圍內。</p>
+<h2 id="2-提升系統的擴展性-extensibility"><a class="markdownIt-Anchor" href="#2-提升系統的擴展性-extensibility"></a> 2. 提升系統的擴展性 (Extensibility)</h2>
+<p>商業需求總是不斷變化的。<strong>開放封閉原則</strong>是實現高擴展性的核心。它指導我們設計出這樣的系統：在增加新功能時，只需要<strong>新增</strong>程式碼，而不是去<strong>修改</strong>那些已經穩定運行的舊程式碼。這讓系統在成長的過程中依然保持穩定。</p>
+<h2 id="3-降低耦合提高靈活性-decoupling-flexibility"><a class="markdownIt-Anchor" href="#3-降低耦合提高靈活性-decoupling-flexibility"></a> 3. 降低耦合，提高靈活性 (Decoupling &amp; Flexibility)</h2>
+<p><strong>依賴反轉原則</strong>是實現「解耦」的關鍵。當高階模組（業務邏輯）與低階模組（實作細節，如資料庫、API）分離開來，並同時依賴於抽象介面時，系統就變得極其靈活。可以輕易抽換掉某個元件（例如，將資料庫從 MySQL 換成 PostgreSQL），而不需要改動核心的業務邏輯。</p>
+<h2 id="4-增強程式碼的可讀性與團隊協作-readability-collaboration"><a class="markdownIt-Anchor" href="#4-增強程式碼的可讀性與團隊協作-readability-collaboration"></a> 4. 增強程式碼的可讀性與團隊協作 (Readability &amp; Collaboration)</h2>
+<p>一個遵循 SOLID 原則的專案，其架構是清晰的、可預測的。團隊中的任何人都能更容易地理解每個模組的用途和它們之間的關係，這大大降低了溝通成本，使得團隊協作更加順暢。</p>
+<h2 id="5-讓測試更容易-testability"><a class="markdownIt-Anchor" href="#5-讓測試更容易-testability"></a> 5. 讓測試更容易 (Testability)</h2>
+<p>當類別職責單一且依賴於抽象時，進行單元測試會變得非常簡單。可以輕鬆地為其依賴的抽象介面建立一個「測試替身」(Test Double 或 Mock Object)，從而專注於測試當前類別的邏輯，而不用擔心其依賴項的複雜性。</p>
+<p>投入時間學習和實踐 SOLID 原則，是對專案未來的一項重要投資。它能幫助我們避免陷入維護的泥沼，打造出能夠從容應對變化、可持續發展的軟體系統。</p>
+<hr />
+<h1 id="什麼是-solid"><a class="markdownIt-Anchor" href="#什麼是-solid"></a> 什麼是 SOLID？</h1>
+<p>SOLID 是五個設計原則的縮寫，分別代表：</p>
+<ul>
+<li><strong>S</strong> - <strong>單一職責原則 (Single Responsibility Principle)</strong></li>
+<li><strong>O</strong> - <strong>開放封閉原則 (Open/Closed Principle)</strong></li>
+<li><strong>L</strong> - <strong>里氏替換原則 (Liskov Substitution Principle)</strong></li>
+<li><strong>I</strong> - <strong>介面隔離原則 (Interface Segregation Principle)</strong></li>
+<li><strong>D</strong> - <strong>依賴反轉原則 (Dependency Inversion Principle)</strong></li>
+</ul>
+<hr />
+<ul>
+<li><strong>單一職責 (SRP)</strong>：讓類別保持專注。</li>
+<li><strong>開放封閉 (OCP)</strong>：擁抱擴展，避免修改。</li>
+<li><strong>里氏替換 (LSP)</strong>：確保繼承不會帶來意外。</li>
+<li><strong>介面隔離 (ISP)</strong>：保持介面的精簡與專一。</li>
+<li><strong>依賴反轉 (DIP)</strong>：依賴抽象，而非具體實現。</li>
+</ul>
+<hr />
+<h2 id="s單一職責原則-single-responsibility-principle-srp"><a class="markdownIt-Anchor" href="#s單一職責原則-single-responsibility-principle-srp"></a> S：單一職責原則 (Single Responsibility Principle, SRP)</h2>
+<h3 id="核心概念"><a class="markdownIt-Anchor" href="#核心概念"></a> 核心概念</h3>
+<blockquote>
+<p>一個類別 (Class) 應該只有一個引起它變更的原因。</p>
+</blockquote>
+<p>簡單來說，一個類別只應該做好一件事情。如果一個類別承擔了過多的職責，那麼當其中任何一個職責需要變更時，都可能影響到其他的職責，導致類別變得脆弱且難以維護。</p>
+<h3 id="為何重要"><a class="markdownIt-Anchor" href="#為何重要"></a> 為何重要？</h3>
+<ul>
+<li><strong>降低複雜度</strong>：每個類別的職責清晰，更容易被理解。</li>
+<li><strong>提高內聚力</strong>：相關的功能被集中在同一個類別中。</li>
+<li><strong>降低耦合度</strong>：職責分離，修改一個職責不會影響到另一個。</li>
+<li><strong>易於測試</strong>：可以針對單一職責進行單元測試。</li>
+</ul>
+<h3 id="程式碼範例"><a class="markdownIt-Anchor" href="#程式碼範例"></a> 程式碼範例</h3>
+<h4 id="反面教材一個類別處理太多事"><a class="markdownIt-Anchor" href="#反面教材一個類別處理太多事"></a> ❌ 反面教材：一個類別處理太多事</h4>
+<p>假設有一個 <code>User</code> 類別，它不僅管理使用者資料，還負責將資料存入資料庫。</p>
+<pre class="highlight"><code class="python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">User</span>:
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, name: <span class="hljs-built_in">str</span>, email: <span class="hljs-built_in">str</span></span>):
+        <span class="hljs-variable language_">self</span>.name = name
+        <span class="hljs-variable language_">self</span>.email = email
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">get_user_info</span>(<span class="hljs-params">self</span>) -&gt; <span class="hljs-built_in">dict</span>:
+        <span class="hljs-keyword">return</span> &#123;<span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-variable language_">self</span>.name, <span class="hljs-string">&quot;email&quot;</span>: <span class="hljs-variable language_">self</span>.email&#125;
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">save_to_database</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-comment"># 複雜的資料庫連線與儲存邏輯...</span>
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Saving <span class="hljs-subst">&#123;self.name&#125;</span> to the database...&quot;</span>)
+</code></pre>
+<p>這個 <code>User</code> 類別違反了 SRP，因為它有兩個變更的理由：</p>
+<ol>
+<li>使用者資料結構的變更 (例如新增年齡屬性)。</li>
+<li>資料庫儲存邏輯的變更 (例如從 MySQL 換成 PostgreSQL)。</li>
+</ol>
+<h4 id="良好實踐職責分離"><a class="markdownIt-Anchor" href="#良好實踐職責分離"></a> ✅ 良好實踐：職責分離</h4>
+<p>應該將職責拆分開來，讓 <code>User</code> 只負責管理使用者資料，並建立一個 <code>UserRepository</code> 專門負責資料庫操作。</p>
+<pre class="highlight"><code class="python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">User</span>:
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, name: <span class="hljs-built_in">str</span>, email: <span class="hljs-built_in">str</span></span>):
+        <span class="hljs-variable language_">self</span>.name = name
+        <span class="hljs-variable language_">self</span>.email = email
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">get_user_info</span>(<span class="hljs-params">self</span>) -&gt; <span class="hljs-built_in">dict</span>:
+        <span class="hljs-keyword">return</span> &#123;<span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-variable language_">self</span>.name, <span class="hljs-string">&quot;email&quot;</span>: <span class="hljs-variable language_">self</span>.email&#125;
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">UserRepository</span>:
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">save</span>(<span class="hljs-params">self, user: User</span>):
+        <span class="hljs-comment"># 複雜的資料庫連線與儲存邏輯...</span>
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Saving <span class="hljs-subst">&#123;user.name&#125;</span> to the database...&quot;</span>)
+</code></pre>
+<p>如此一來，當資料庫邏輯需要修改時，只需要改動 <code>UserRepository</code>，完全不會影響到 <code>User</code> 類別。</p>
+<hr />
+<h2 id="o開放封閉原則-openclosed-principle-ocp"><a class="markdownIt-Anchor" href="#o開放封閉原則-openclosed-principle-ocp"></a> O：開放封閉原則 (Open/Closed Principle, OCP)</h2>
+<h3 id="核心概念-2"><a class="markdownIt-Anchor" href="#核心概念-2"></a> 核心概念</h3>
+<blockquote>
+<p>軟體實體 (類別、模組、函式) 應該對於擴展是開放的，但對於修改是封閉的。</p>
+</blockquote>
+<p>這意味著當需要為軟體增加新功能時，應該是透過<strong>增加新的程式碼</strong>來實現，而不是去<strong>修改已經存在的程式碼</strong>。</p>
+<h3 id="為何重要-2"><a class="markdownIt-Anchor" href="#為何重要-2"></a> 為何重要？</h3>
+<ul>
+<li><strong>穩定性</strong>：避免修改現有且穩定的程式碼，減少引入新 Bug 的風險。</li>
+<li><strong>擴展性</strong>：系統可以輕鬆地增加新功能，而不需要重構核心邏輯。</li>
+<li><strong>可維護性</strong>：新舊功能彼此獨立，降低維護成本。</li>
+</ul>
+<h3 id="程式碼範例-2"><a class="markdownIt-Anchor" href="#程式碼範例-2"></a> 程式碼範例</h3>
+<h4 id="反面教材用-if-else-應對新需求"><a class="markdownIt-Anchor" href="#反面教材用-if-else-應對新需求"></a> ❌ 反面教材：用 <code>if-else</code> 應對新需求</h4>
+<p>假設有一個 <code>AreaCalculator</code> 用來計算不同形狀的面積。</p>
+<pre class="highlight"><code class="python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Rectangle</span>:
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, width, height</span>):
+        <span class="hljs-variable language_">self</span>.width = width
+        <span class="hljs-variable language_">self</span>.height = height
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">AreaCalculator</span>:
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">calculate</span>(<span class="hljs-params">self, shapes: <span class="hljs-built_in">list</span></span>) -&gt; <span class="hljs-built_in">float</span>:
+        total_area = <span class="hljs-number">0</span>
+        <span class="hljs-keyword">for</span> shape <span class="hljs-keyword">in</span> shapes:
+            <span class="hljs-keyword">if</span> <span class="hljs-built_in">isinstance</span>(shape, Rectangle):
+                total_area += shape.width * shape.height
+            <span class="hljs-comment"># 如果要新增 Circle，就必須修改這裡！</span>
+            <span class="hljs-comment"># if isinstance(shape, Circle):</span>
+            <span class="hljs-comment">#     total_area += shape.radius ** 2 * 3.14</span>
+        <span class="hljs-keyword">return</span> total_area
+</code></pre>
+<p>每當需要支援新的形狀 (如 <code>Circle</code>)，就必須回到 <code>AreaCalculator</code> 中增加 <code>if-else</code> 判斷，這就違反了 OCP。</p>
+<h4 id="良好實踐使用抽象和多型"><a class="markdownIt-Anchor" href="#良好實踐使用抽象和多型"></a> ✅ 良好實踐：使用抽象和多型</h4>
+<p>可以定義一個抽象的 <code>Shape</code> 介面 (或基底類別)，讓所有具體的形狀去實作它。</p>
+<pre class="highlight"><code class="python"><span class="hljs-keyword">from</span> abc <span class="hljs-keyword">import</span> ABC, abstractmethod
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Shape</span>(<span class="hljs-title class_ inherited__">ABC</span>):
+<span class="hljs-meta">    @abstractmethod</span>
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">area</span>(<span class="hljs-params">self</span>) -&gt; <span class="hljs-built_in">float</span>:
+        <span class="hljs-keyword">pass</span>
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Rectangle</span>(<span class="hljs-title class_ inherited__">Shape</span>):
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, width, height</span>):
+        <span class="hljs-variable language_">self</span>.width = width
+        <span class="hljs-variable language_">self</span>.height = height
+  
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">area</span>(<span class="hljs-params">self</span>) -&gt; <span class="hljs-built_in">float</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">self</span>.width * <span class="hljs-variable language_">self</span>.height
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Circle</span>(<span class="hljs-title class_ inherited__">Shape</span>):
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, radius</span>):
+        <span class="hljs-variable language_">self</span>.radius = radius
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">area</span>(<span class="hljs-params">self</span>) -&gt; <span class="hljs-built_in">float</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">self</span>.radius ** <span class="hljs-number">2</span> * <span class="hljs-number">3.14159</span>
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">AreaCalculator</span>:
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">calculate</span>(<span class="hljs-params">self, shapes: <span class="hljs-built_in">list</span>[Shape]</span>) -&gt; <span class="hljs-built_in">float</span>:
+        total_area = <span class="hljs-number">0</span>
+        <span class="hljs-keyword">for</span> shape <span class="hljs-keyword">in</span> shapes:
+            total_area += shape.area() <span class="hljs-comment"># 不需要知道具體形狀</span>
+        <span class="hljs-keyword">return</span> total_area
+</code></pre>
+<p>現在，<code>AreaCalculator</code> 對於修改是封閉的。無論未來增加多少種新形狀 (例如 <code>Triangle</code>)，只要它實作了 <code>Shape</code> 介面，<code>AreaCalculator</code> 的程式碼就完全不需要變動。只需要新增一個 <code>Triangle</code> 類別，這就是對擴展開放。</p>
+<hr />
+<h2 id="l里氏替換原則-liskov-substitution-principle-lsp"><a class="markdownIt-Anchor" href="#l里氏替換原則-liskov-substitution-principle-lsp"></a> L：里氏替換原則 (Liskov Substitution Principle, LSP)</h2>
+<h3 id="核心概念-3"><a class="markdownIt-Anchor" href="#核心概念-3"></a> 核心概念</h3>
+<blockquote>
+<p>子類別必須可以替換掉它們的父類別，而不會產生錯誤或破壞程式的行為。</p>
+</blockquote>
+<p>簡單來說，任何使用父類別的地方，都應該能夠透明地使用其子類別的物件，而程式的邏輯不應該因此被破壞。子類別不應該改變父類別預期的行為。</p>
+<h3 id="為何重要-3"><a class="markdownIt-Anchor" href="#為何重要-3"></a> 為何重要？</h3>
+<ul>
+<li><strong>確保繼承的正確性</strong>：防止繼承被濫用，確保子類別與父類別行為的一致性。</li>
+<li><strong>可預測性</strong>：程式的行為不會因為傳入的是子類別物件而產生意外。</li>
+</ul>
+<h3 id="程式碼範例-3"><a class="markdownIt-Anchor" href="#程式碼範例-3"></a> 程式碼範例</h3>
+<h4 id="反面教材破壞父類別行為的子類別"><a class="markdownIt-Anchor" href="#反面教材破壞父類別行為的子類別"></a> ❌ 反面教材：破壞父類別行為的子類別</h4>
+<p>一個經典的例子是「長方形」和「正方形」。在數學上，正方形是一種特殊的長方形。但在程式設計中，直接繼承可能會出問題。</p>
+<pre class="highlight"><code class="python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Rectangle</span>:
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, width, height</span>):
+        <span class="hljs-variable language_">self</span>.width = width
+        <span class="hljs-variable language_">self</span>.height = height
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">set_width</span>(<span class="hljs-params">self, width</span>):
+        <span class="hljs-variable language_">self</span>.width = width
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">set_height</span>(<span class="hljs-params">self, height</span>):
+        <span class="hljs-variable language_">self</span>.height = height
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">get_area</span>(<span class="hljs-params">self</span>) -&gt; <span class="hljs-built_in">float</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">self</span>.width * <span class="hljs-variable language_">self</span>.height
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Square</span>(<span class="hljs-title class_ inherited__">Rectangle</span>):
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, size</span>):
+        <span class="hljs-built_in">super</span>().__init__(size, size)
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">set_width</span>(<span class="hljs-params">self, width</span>):
+        <span class="hljs-variable language_">self</span>.width = width
+        <span class="hljs-variable language_">self</span>.height = width <span class="hljs-comment"># 正方形的寬高必須相等</span>
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">set_height</span>(<span class="hljs-params">self, height</span>):
+        <span class="hljs-variable language_">self</span>.width = height
+        <span class="hljs-variable language_">self</span>.height = height
+</code></pre>
+<p>讓我們看看一個使用 <code>Rectangle</code> 的函式：</p>
+<pre class="highlight"><code class="python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">test_area</span>(<span class="hljs-params">rect: Rectangle</span>):
+    rect.set_width(<span class="hljs-number">5</span>)
+    rect.set_height(<span class="hljs-number">4</span>)
+    <span class="hljs-comment"># 我們預期面積是 5 * 4 = 20</span>
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Expected 20, Got: <span class="hljs-subst">&#123;rect.get_area()&#125;</span>&quot;</span>)
+
+<span class="hljs-comment"># 使用父類別，行為正常</span>
+r = Rectangle(<span class="hljs-number">2</span>, <span class="hljs-number">3</span>)
+test_area(r) <span class="hljs-comment"># &gt;&gt; Expected 20, Got: 20</span>
+
+<span class="hljs-comment"># 使用子類別，行為異常！</span>
+s = Square(<span class="hljs-number">2</span>)
+test_area(s) <span class="hljs-comment"># &gt;&gt; Expected 20, Got: 16</span>
+</code></pre>
+<p>當 <code>test_area</code> 函式傳入 <code>Square</code> 物件時，<code>set_height(4)</code> 意外地改變了 <code>width</code>，破壞了函式原本的預期行為。這就違反了 LSP。</p>
+<h4 id="良好實踐使用組合或抽象"><a class="markdownIt-Anchor" href="#良好實踐使用組合或抽象"></a> ✅ 良好實踐：使用組合或抽象</h4>
+<p>解決方案通常是避免不恰當的繼承，可以考慮使用抽象基底類別，讓 <code>Rectangle</code> 和 <code>Square</code> 實作共同的 <code>Shape</code> 介面，而不是讓 <code>Square</code> 繼承 <code>Rectangle</code>。</p>
+<h4 id="問題回顧為什麼繼承是錯的"><a class="markdownIt-Anchor" href="#問題回顧為什麼繼承是錯的"></a> 問題回顧：為什麼繼承是錯的？</h4>
+<p><code>Square</code> 繼承 <code>Rectangle</code> 的問題在於，子類 <code>Square</code> 為了維持「寬高必須相等」這個屬於自己的規則，<strong>改變了父類 <code>Rectangle</code> 的預期行為</strong>（<code>set_width</code> 和 <code>set_height</code> 應該是獨立的）。這就破壞了父類的「契約」(contract)，導致使用父類別的地方無法安全地替換成子類別。</p>
+<h4 id="解決方案從是一種is-a-轉向都屬於is-a-type-of"><a class="markdownIt-Anchor" href="#解決方案從是一種is-a-轉向都屬於is-a-type-of"></a> 解決方案：從「是一種」(Is-A) 轉向「都屬於」(Is-A-Type-Of)</h4>
+<p>思維需要轉變：</p>
+<ul>
+<li><strong>錯誤的思維</strong>：一個正方形「是一種」長方形 (A <code>Square</code> <strong>is a</strong> <code>Rectangle</code>)。這在數學上對，但在程式行為上是錯的。</li>
+<li><strong>正確的思維</strong>：一個正方形和一個長方形「都屬於」形狀的一種類型 (A <code>Square</code> and a <code>Rectangle</code> <strong>are both types of</strong> <code>Shape</code>)。</li>
+</ul>
+<p>這個思維轉變引導我們去找出共通的抽象——<code>Shape</code>。</p>
+<hr />
+<h4 id="具體實作步驟"><a class="markdownIt-Anchor" href="#具體實作步驟"></a> 具體實作步驟</h4>
+<h5 id="步驟-1定義共通的抽象介面-shape"><a class="markdownIt-Anchor" href="#步驟-1定義共通的抽象介面-shape"></a> 步驟 1：定義共通的抽象介面 <code>Shape</code></h5>
+<p>使用 Python 的 <code>abc</code> (Abstract Base Classes) 模組來建立一個抽象介面。這個介面的作用是定義一個「契約」：任何自稱是 <code>Shape</code> 的東西，都必須要有一個計算面積 (<code>area</code>) 的方法。</p>
+<pre class="highlight"><code class="python"><span class="hljs-keyword">from</span> abc <span class="hljs-keyword">import</span> ABC, abstractmethod
+
+<span class="hljs-comment"># 定義一個抽象的 Shape 介面</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Shape</span>(<span class="hljs-title class_ inherited__">ABC</span>):
+    <span class="hljs-string">&quot;&quot;&quot;
+    這是一個 Shape 的抽象基底類別 (介面)。
+    它定義了所有 &#x27;形狀&#x27; 都應該具備的行為契約。
+    &quot;&quot;&quot;</span>
+<span class="hljs-meta">    @abstractmethod</span>
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">area</span>(<span class="hljs-params">self</span>) -&gt; <span class="hljs-built_in">float</span>:
+        <span class="hljs-string">&quot;&quot;&quot;
+        任何繼承 Shape 的子類別，都必須實作這個 area 方法。
+        &quot;&quot;&quot;</span>
+        <span class="hljs-keyword">pass</span>
+</code></pre>
+<ul>
+<li><code>ABC</code>: 表示這是一個抽象基底類別。</li>
+<li><code>@abstractmethod</code>: 裝飾器，標明這是一個抽象方法，子類別必須覆寫 (override) 它。</li>
+</ul>
+<h5 id="步驟-2讓-rectangle-和-square-都去實作-shape-介面"><a class="markdownIt-Anchor" href="#步驟-2讓-rectangle-和-square-都去實作-shape-介面"></a> 步驟 2：讓 <code>Rectangle</code> 和 <code>Square</code> 都去實作 <code>Shape</code> 介面</h5>
+<p>讓 <code>Rectangle</code> 和 <code>Square</code> 成為平等的類別，它們不再有繼承關係，而是共同去遵守 <code>Shape</code> 這個契約。</p>
+<p><strong>實作 <code>Rectangle</code> 類別：</strong></p>
+<pre class="highlight"><code class="python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Rectangle</span>(<span class="hljs-title class_ inherited__">Shape</span>):
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, width: <span class="hljs-built_in">float</span>, height: <span class="hljs-built_in">float</span></span>):
+        <span class="hljs-variable language_">self</span>.width = width
+        <span class="hljs-variable language_">self</span>.height = height
+  
+    <span class="hljs-comment"># 遵守 Shape 契約，提供 area 方法</span>
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">area</span>(<span class="hljs-params">self</span>) -&gt; <span class="hljs-built_in">float</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">self</span>.width * <span class="hljs-variable language_">self</span>.height
+      
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">set_width</span>(<span class="hljs-params">self, width: <span class="hljs-built_in">float</span></span>):
+        <span class="hljs-variable language_">self</span>.width = width
+      
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">set_height</span>(<span class="hljs-params">self, height: <span class="hljs-built_in">float</span></span>):
+        <span class="hljs-variable language_">self</span>.height = height
+
+</code></pre>
+<p><strong>實作 <code>Square</code> 類別：</strong></p>
+<pre class="highlight"><code class="python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Square</span>(<span class="hljs-title class_ inherited__">Shape</span>):
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, side_length: <span class="hljs-built_in">float</span></span>):
+        <span class="hljs-variable language_">self</span>.side_length = side_length
+
+    <span class="hljs-comment"># 同樣遵守 Shape 契約，提供自己的 area 實作</span>
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">area</span>(<span class="hljs-params">self</span>) -&gt; <span class="hljs-built_in">float</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">self</span>.side_length ** <span class="hljs-number">2</span>
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">set_side_length</span>(<span class="hljs-params">self, side_length: <span class="hljs-built_in">float</span></span>):
+        <span class="hljs-variable language_">self</span>.side_length = side_length
+</code></pre>
+<ol>
+<li><code>Square</code> 不再繼承 <code>Rectangle</code>。它們都直接繼承 <code>Shape</code>。</li>
+<li>它們各自擁有最適合自己的屬性 (<code>width</code>, <code>height</code> vs <code>side_length</code>) 和方法。</li>
+<li>它們都履行了 <code>Shape</code> 的契約，提供了 <code>area()</code> 方法。</li>
+</ol>
+<h5 id="步驟-3修改客戶端程式碼使其依賴於抽象-shape"><a class="markdownIt-Anchor" href="#步驟-3修改客戶端程式碼使其依賴於抽象-shape"></a> 步驟 3：修改客戶端程式碼，使其依賴於抽象 <code>Shape</code></h5>
+<p>現在，任何需要使用形狀計算面積的函式，不應該依賴於具體的 <code>Rectangle</code> 或 <code>Square</code>，而應該依賴於抽象的 <code>Shape</code>。</p>
+<pre class="highlight"><code class="python"><span class="hljs-comment"># 這個函式依賴於抽象的 Shape，而不是具體的類別</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">print_area</span>(<span class="hljs-params">shape: Shape</span>):
+    <span class="hljs-string">&quot;&quot;&quot;
+    這個函式可以接受任何 &#x27;Shape&#x27; 類型的物件，
+    並印出它的面積，它不在乎傳進來的是 Rectangle 還是 Square。
+    &quot;&quot;&quot;</span>
+    calculated_area = shape.area()
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;The area of the shape is: <span class="hljs-subst">&#123;calculated_area&#125;</span>&quot;</span>)
+
+<span class="hljs-comment"># --- 現在來使用它 ---</span>
+
+<span class="hljs-comment"># 建立一個 Rectangle 物件</span>
+rect = Rectangle(<span class="hljs-number">5</span>, <span class="hljs-number">4</span>)
+
+<span class="hljs-comment"># 建立一個 Square 物件</span>
+sq = Square(<span class="hljs-number">5</span>)
+
+<span class="hljs-comment"># 將不同類型的物件傳入同一個函式</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Testing with a Rectangle:&quot;</span>)
+print_area(rect)  <span class="hljs-comment"># 輸出: The area of the shape is: 20.0</span>
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Testing with a Square:&quot;</span>)
+print_area(sq)    <span class="hljs-comment"># 輸出: The area of the shape is: 25.0</span>
+</code></pre>
+<p>在這個新的設計中，<code>print_area</code> 函式可以安全地接收任何 <code>Shape</code> 的子類別，因為它只使用了 <code>Shape</code> 契約中保證存在的方法 (<code>area()</code>)。它完全不會觸發之前那個因為 <code>set_width</code> 帶來副作用的 bug。</p>
+<p>這種做法帶來了顯而易見的好處：</p>
+<ol>
+<li><strong>完全符合 LSP</strong>：任何 <code>Shape</code> 的子類別（<code>Rectangle</code>, <code>Square</code>）都可以無縫替換 <code>Shape</code>，而不會產生任何非預期的行為。</li>
+<li><strong>高內聚，低耦合</strong>：<code>Square</code> 和 <code>Rectangle</code> 的內部邏輯是獨立的（高內聚）。它們之間沒有了繼承關係，耦合度降到最低，只透過 <code>Shape</code> 介面產生關聯。</li>
+<li><strong>程式碼更清晰穩定</strong>：<code>Square</code> 就是 <code>Square</code>，<code>Rectangle</code> 就是 <code>Rectangle</code>。它們的屬性和方法都清晰直觀，符合各自的定義。</li>
+<li><strong>更好的擴展性（符合 OCP）</strong>：如果想新增一個 <code>Circle</code> 類別，只需要讓 <code>Circle</code> 也去繼承 <code>Shape</code> 並實作 <code>area</code> 方法，完全不需要修改 <code>print_area</code> 這個函式。</li>
+</ol>
+<p>透過這個重構，不僅解決了 LSP 的問題，還讓整個設計變得更加靈活、穩健和可維護。</p>
+<hr />
+<h2 id="i介面隔離原則-interface-segregation-principle-isp"><a class="markdownIt-Anchor" href="#i介面隔離原則-interface-segregation-principle-isp"></a> I：介面隔離原則 (Interface Segregation Principle, ISP)</h2>
+<h3 id="核心概念-4"><a class="markdownIt-Anchor" href="#核心概念-4"></a> 核心概念</h3>
+<blockquote>
+<p>客戶端 (使用介面的類別) 不應該被強迫依賴它們用不到的方法。</p>
+</blockquote>
+<p>與其建立一個龐大、臃腫的「胖介面」(fat interface)，不如將其拆分成多個更小、更具體的介面。</p>
+<h3 id="為何重要-4"><a class="markdownIt-Anchor" href="#為何重要-4"></a> 為何重要？</h3>
+<ul>
+<li><strong>降低耦合</strong>：客戶端只需要關心與自己相關的方法。</li>
+<li><strong>提高內聚力</strong>：每個介面都只服務於一個特定的目的。</li>
+<li><strong>靈活性</strong>：類別可以根據需要選擇實作哪些小介面。</li>
+</ul>
+<h3 id="程式碼範例-4"><a class="markdownIt-Anchor" href="#程式碼範例-4"></a> 程式碼範例</h3>
+<h4 id="反面教材一個胖介面"><a class="markdownIt-Anchor" href="#反面教材一個胖介面"></a> ❌ 反面教材：一個胖介面</h4>
+<p>假設有一個 <code>IWorker</code> 介面，定義了工作者的所有行為。</p>
+<pre class="highlight"><code class="python"><span class="hljs-keyword">from</span> abc <span class="hljs-keyword">import</span> ABC, abstractmethod
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">IWorker</span>(<span class="hljs-title class_ inherited__">ABC</span>):
+<span class="hljs-meta">    @abstractmethod</span>
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">work</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-keyword">pass</span>
+
+<span class="hljs-meta">    @abstractmethod</span>
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">eat</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-keyword">pass</span>
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">HumanWorker</span>(<span class="hljs-title class_ inherited__">IWorker</span>):
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">work</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Human working...&quot;</span>)
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">eat</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Human eating...&quot;</span>)
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">RobotWorker</span>(<span class="hljs-title class_ inherited__">IWorker</span>):
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">work</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Robot working...&quot;</span>)
+  
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">eat</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-comment"># 機器人不需要吃東西，但被迫實作這個方法！</span>
+        <span class="hljs-keyword">pass</span> 
+</code></pre>
+<p><code>RobotWorker</code>被迫實作一個它根本用不到的 <code>eat</code> 方法，這就是胖介面的問題。</p>
+<h4 id="良好實踐拆分介面"><a class="markdownIt-Anchor" href="#良好實踐拆分介面"></a> ✅ 良好實踐：拆分介面</h4>
+<p>應該將介面拆分成更小的、職責單一的介面。</p>
+<pre class="highlight"><code class="python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">IWorkable</span>(<span class="hljs-title class_ inherited__">ABC</span>):
+<span class="hljs-meta">    @abstractmethod</span>
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">work</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-keyword">pass</span>
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">IFeedable</span>(<span class="hljs-title class_ inherited__">ABC</span>):
+<span class="hljs-meta">    @abstractmethod</span>
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">eat</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-keyword">pass</span>
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">HumanWorker</span>(IWorkable, IFeedable):
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">work</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Human working...&quot;</span>)
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">eat</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Human eating...&quot;</span>)
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">RobotWorker</span>(<span class="hljs-title class_ inherited__">IWorkable</span>):
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">work</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Robot working...&quot;</span>)
+</code></pre>
+<p>現在，<code>HumanWorker</code> 同時實作了 <code>IWorkable</code> 和 <code>IFeedable</code>，而 <code>RobotWorker</code> 只需要實作它真正需要的 <code>IWorkable</code> 介面。</p>
+<hr />
+<h2 id="d依賴反轉原則-dependency-inversion-principle-dip"><a class="markdownIt-Anchor" href="#d依賴反轉原則-dependency-inversion-principle-dip"></a> D：依賴反轉原則 (Dependency Inversion Principle, DIP)</h2>
+<h3 id="核心概念-5"><a class="markdownIt-Anchor" href="#核心概念-5"></a> 核心概念</h3>
+<blockquote>
+<ol>
+<li>高階模組不應該依賴於低階模組，兩者都應該依賴於抽象。</li>
+<li>抽象不應該依賴於細節，細節應該依賴於抽象。</li>
+</ol>
+</blockquote>
+<p>簡單來說，就是要「面向介面程式設計」，而不是「面向實作程式設計」。程式碼的依賴關係應該是指向抽象 (介面、抽象類別)，而不是具體的實作類別。</p>
+<h3 id="為何重要-5"><a class="markdownIt-Anchor" href="#為何重要-5"></a> 為何重要？</h3>
+<ul>
+<li><strong>解耦合</strong>：高階模組和低階模組之間的耦合度大大降低。</li>
+<li><strong>靈活性與可替換性</strong>：可以輕易地替換掉低階模組的具體實作，而不影響高階模組。</li>
+<li><strong>易於測試</strong>：在測試高階模組時，可以輕易地傳入一個「測試用的假物件」(Mock Object)。</li>
+</ul>
+<h3 id="程式碼範例-5"><a class="markdownIt-Anchor" href="#程式碼範例-5"></a> 程式碼範例</h3>
+<h4 id="反面教材高階模組依賴具體實作"><a class="markdownIt-Anchor" href="#反面教材高階模組依賴具體實作"></a> ❌ 反面教材：高階模組依賴具體實作</h4>
+<p>假設有一個 <code>Notification</code> 服務，它需要發送 Email。</p>
+<pre class="highlight"><code class="python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">EmailSender</span>:
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">send</span>(<span class="hljs-params">self, message: <span class="hljs-built_in">str</span></span>):
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Sending email: <span class="hljs-subst">&#123;message&#125;</span>&quot;</span>)
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Notification</span>:
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-comment"># 直接依賴具體的 EmailSender</span>
+        <span class="hljs-variable language_">self</span>.sender = EmailSender()
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">send_notification</span>(<span class="hljs-params">self, message: <span class="hljs-built_in">str</span></span>):
+        <span class="hljs-variable language_">self</span>.sender.send(message)
+</code></pre>
+<p>這裡，高階模組 <code>Notification</code> 直接依賴了低階模組 <code>EmailSender</code>。如果未來需要增加發送 SMS 或 Push Notification 的功能，就必須修改 <code>Notification</code> 類別，違反了 OCP。</p>
+<h4 id="良好實踐依賴於抽象"><a class="markdownIt-Anchor" href="#良好實踐依賴於抽象"></a> ✅ 良好實踐：依賴於抽象</h4>
+<p>應該定義一個抽象的 <code>IMessageSender</code> 介面，讓高階模組依賴它。</p>
+<pre class="highlight"><code class="python"><span class="hljs-keyword">from</span> abc <span class="hljs-keyword">import</span> ABC, abstractmethod
+
+<span class="hljs-comment"># 1. 定義抽象</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">IMessageSender</span>(<span class="hljs-title class_ inherited__">ABC</span>):
+<span class="hljs-meta">    @abstractmethod</span>
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">send</span>(<span class="hljs-params">self, message: <span class="hljs-built_in">str</span></span>):
+        <span class="hljs-keyword">pass</span>
+
+<span class="hljs-comment"># 2. 低階模組依賴 (實作) 抽象</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">EmailSender</span>(<span class="hljs-title class_ inherited__">IMessageSender</span>):
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">send</span>(<span class="hljs-params">self, message: <span class="hljs-built_in">str</span></span>):
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Sending email: <span class="hljs-subst">&#123;message&#125;</span>&quot;</span>)
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">SmsSender</span>(<span class="hljs-title class_ inherited__">IMessageSender</span>):
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">send</span>(<span class="hljs-params">self, message: <span class="hljs-built_in">str</span></span>):
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Sending SMS: <span class="hljs-subst">&#123;message&#125;</span>&quot;</span>)
+
+<span class="hljs-comment"># 3. 高階模組依賴抽象</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Notification</span>:
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, sender: IMessageSender</span>): <span class="hljs-comment"># 透過依賴注入</span>
+        <span class="hljs-variable language_">self</span>.sender = sender
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">send_notification</span>(<span class="hljs-params">self, message: <span class="hljs-built_in">str</span></span>):
+        <span class="hljs-variable language_">self</span>.sender.send(message)
+
+<span class="hljs-comment"># 使用方式</span>
+email_sender = EmailSender()
+notification_email = Notification(email_sender)
+notification_email.send_notification(<span class="hljs-string">&quot;Hello via Email!&quot;</span>)
+
+sms_sender = SmsSender()
+notification_sms = Notification(sms_sender)
+notification_sms.send_notification(<span class="hljs-string">&quot;Hello via SMS!&quot;</span>)
+</code></pre>
+<p>現在，<code>Notification</code> 不再關心是誰在發送訊息，它只依賴於 <code>IMessageSender</code> 這個抽象。可以輕易地注入不同的發送器 (<code>EmailSender</code>, <code>SmsSender</code>) 來改變其行為，而無需修改 <code>Notification</code> 的任何程式碼。這也常被稱為<strong>依賴注入 (Dependency Injection)</strong>，是實現 DIP 的一種常見模式。</p>
+<hr />
+<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
+<p>SOLID 原則不是生硬的教條，而是一套經過業界長期實踐、能引導我們寫出更優秀程式碼的設計哲學。</p>
+<ul>
+<li><strong>單一職責 (SRP)</strong>：讓類別保持專注。</li>
+<li><strong>開放封閉 (OCP)</strong>：擁抱擴展，避免修改。</li>
+<li><strong>里氏替換 (LSP)</strong>：確保繼承不會帶來意外。</li>
+<li><strong>介面隔離 (ISP)</strong>：保持介面的精簡與專一。</li>
+<li><strong>依賴反轉 (DIP)</strong>：依賴抽象，而非具體實現。</li>
+</ul>
+<p>初學者可能覺得要一次遵循所有原則很困難，但不必氣餒。從理解它們背後的思想開始，在下一個專案或下一次重構中，嘗試應用其中一兩個原則。久而久之，將會自然地將這些思想融入程式設計風格中，並體會到它們為專案帶來的巨大好處。</p>
+<p>打造一個穩健、可維護的系統，就從實踐 SOLID 開始吧！</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/OOP/" rel="tag"># OOP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/10/18/%E8%B3%87%E6%96%99%E5%BA%AB%E5%A6%82%E4%BD%95%E5%9C%A8%E7%A3%81%E7%A2%9F%E4%B8%8A%E5%84%B2%E5%AD%98%E8%B3%87%E6%96%99%E4%B8%A6%E9%80%8F%E9%81%8E%20SQL%20%E9%AB%98%E6%95%88%E6%9F%A5%E8%A9%A2/" rel="prev" title="深入底層：資料庫如何在磁碟上儲存資料並透過 SQL 高效查詢？">
+                  <i class="fa fa-angle-left"></i> 深入底層：資料庫如何在磁碟上儲存資料並透過 SQL 高效查詢？
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
