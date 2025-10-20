@@ -19,27 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="在前兩篇文章中，分別認識了TCP這位嚴謹可靠的「快遞員」，以及UDP這位追求速度的「奔放郵差」。它們負責將資料或可靠地、或快速地送達。 但無論是哪種方式，要將資料成功送出去，首先得知道「送往哪裡？」 這就像要寄一封信，即使知道要用平信（UDP 的速度）還是掛號（TCP 的可靠），還是需要一個明確的地址才能寄出。在網際網路中，扮演這個「地址」與「導航系統」角色的，就是本篇文章的主角——IP (Int">
+    <meta name="description" content="軟體開發中，需要考慮理想架構與現實速度的權衡。if-else 加上 Feature Flag 的組合，是快速回應需求的利器；而 SOLID 原則，則是追求程式碼長期健康的方案。 這兩者是水火不容的嗎？不。它們其實是功能生命週期的不同階段，一位成熟的工程師，懂得如何在正確的時機使用正確的工具。   The Tactical Choice: if-else + Feature Flag 的戰術價值 首">
 <meta property="og:type" content="article">
-<meta property="og:title" content="深入淺出 IP：網路世界的地址與身份證">
-<meta property="og:url" content="https://nivek-yang.github.io/2025/08/28/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20IP%20%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E7%9A%84%E5%9C%B0%E5%9D%80%E8%88%87%E8%BA%AB%E4%BB%BD%E8%AD%89/index.html">
+<meta property="og:title" content="從 if-else 到 SOLID：在理想架構與現實速度之間，該如何抉擇？">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/10/20/%E5%BE%9E%20if-else%20%E5%88%B0%20SOLID%20%E5%9C%A8%E7%90%86%E6%83%B3%E6%9E%B6%E6%A7%8B%E8%88%87%E7%8F%BE%E5%AF%A6%E9%80%9F%E5%BA%A6%E4%B9%8B%E9%96%93%E8%A9%B2%E5%A6%82%E4%BD%95%E6%8A%89%E6%93%87/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="在前兩篇文章中，分別認識了TCP這位嚴謹可靠的「快遞員」，以及UDP這位追求速度的「奔放郵差」。它們負責將資料或可靠地、或快速地送達。 但無論是哪種方式，要將資料成功送出去，首先得知道「送往哪裡？」 這就像要寄一封信，即使知道要用平信（UDP 的速度）還是掛號（TCP 的可靠），還是需要一個明確的地址才能寄出。在網際網路中，扮演這個「地址」與「導航系統」角色的，就是本篇文章的主角——IP (Int">
+<meta property="og:description" content="軟體開發中，需要考慮理想架構與現實速度的權衡。if-else 加上 Feature Flag 的組合，是快速回應需求的利器；而 SOLID 原則，則是追求程式碼長期健康的方案。 這兩者是水火不容的嗎？不。它們其實是功能生命週期的不同階段，一位成熟的工程師，懂得如何在正確的時機使用正確的工具。   The Tactical Choice: if-else + Feature Flag 的戰術價值 首">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2025-08-27T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-08-28T15:12:18.503Z">
+<meta property="article:published_time" content="2025-10-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-20T08:03:00.483Z">
 <meta property="article:author" content="Kaiwii">
-<meta property="article:tag" content="Networking">
+<meta property="article:tag" content="OOP">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://nivek-yang.github.io/2025/08/28/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20IP%20%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E7%9A%84%E5%9C%B0%E5%9D%80%E8%88%87%E8%BA%AB%E4%BB%BD%E8%AD%89/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/10/20/%E5%BE%9E%20if-else%20%E5%88%B0%20SOLID%20%E5%9C%A8%E7%90%86%E6%83%B3%E6%9E%B6%E6%A7%8B%E8%88%87%E7%8F%BE%E5%AF%A6%E9%80%9F%E5%BA%A6%E4%B9%8B%E9%96%93%E8%A9%B2%E5%A6%82%E4%BD%95%E6%8A%89%E6%93%87/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/08/28/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20IP%20%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E7%9A%84%E5%9C%B0%E5%9D%80%E8%88%87%E8%BA%AB%E4%BB%BD%E8%AD%89/","path":"2025/08/28/深入淺出 IP 網路世界的地址與身份證/","title":"深入淺出 IP：網路世界的地址與身份證"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/10/20/%E5%BE%9E%20if-else%20%E5%88%B0%20SOLID%20%E5%9C%A8%E7%90%86%E6%83%B3%E6%9E%B6%E6%A7%8B%E8%88%87%E7%8F%BE%E5%AF%A6%E9%80%9F%E5%BA%A6%E4%B9%8B%E9%96%93%E8%A9%B2%E5%A6%82%E4%BD%95%E6%8A%89%E6%93%87/","path":"2025/10/20/從 if-else 到 SOLID 在理想架構與現實速度之間該如何抉擇/","title":"從 if-else 到 SOLID：在理想架構與現實速度之間，該如何抉擇？"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>深入淺出 IP：網路世界的地址與身份證 | 我的技術部落格</title>
+<title>從 if-else 到 SOLID：在理想架構與現實速度之間，該如何抉擇？ | 我的技術部落格</title>
   
 
 
@@ -531,7 +531,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-ip"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是 IP？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ip-%E5%9C%B0%E5%9D%80%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E7%9A%84%E8%BA%AB%E4%BB%BD%E8%AD%89%E8%88%87%E5%B0%8E%E8%88%AA"><span class="nav-number">2.</span> <span class="nav-text"> IP 地址：網路世界的身份證與導航</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-ipv4-internet-protocol-version-4"><span class="nav-number">2.1.</span> <span class="nav-text"> 1. IPv4 (Internet Protocol version 4)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-ipv6-internet-protocol-version-6"><span class="nav-number">2.2.</span> <span class="nav-text"> 2. IPv6 (Internet Protocol version 6)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ip-%E5%A6%82%E4%BD%95%E6%8C%87%E5%BC%95%E8%B3%87%E6%96%99%E5%8C%85%E6%96%B9%E5%90%91"><span class="nav-number">3.</span> <span class="nav-text"> IP 如何指引資料包方向？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ip-%E5%9C%B0%E5%9D%80-vs-mac-%E5%9C%B0%E5%9D%80%E9%82%8F%E8%BC%AF%E8%88%87%E7%89%A9%E7%90%86%E7%9A%84%E5%8D%80%E5%88%A5"><span class="nav-number">4.</span> <span class="nav-text"> IP 地址 vs. MAC 地址：邏輯與物理的區別</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#the-tactical-choice-if-else-feature-flag-%E7%9A%84%E6%88%B0%E8%A1%93%E5%83%B9%E5%80%BC"><span class="nav-number">1.</span> <span class="nav-text"> The Tactical Choice: if-else + Feature Flag 的戰術價值</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%84%AA%E9%BB%9E"><span class="nav-number">1.1.</span> <span class="nav-text"> 優點：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%BA%E9%BB%9E"><span class="nav-number">1.2.</span> <span class="nav-text"> 缺點：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#the-strategic-goal-solid-%E5%8E%9F%E5%89%87%E7%9A%84%E6%88%B0%E7%95%A5%E8%97%8D%E5%9C%96"><span class="nav-number">2.</span> <span class="nav-text"> The Strategic Goal: SOLID 原則的戰略藍圖</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%84%AA%E9%BB%9E-2"><span class="nav-number">2.1.</span> <span class="nav-text"> 優點：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%BA%E9%BB%9E-2"><span class="nav-number">2.2.</span> <span class="nav-text"> 缺點：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%A6%E8%B8%90%E4%B9%8B%E9%81%93%E4%B8%80%E5%80%8B%E5%8B%99%E5%AF%A6%E7%9A%84%E5%85%A9%E9%9A%8E%E6%AE%B5%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="nav-number">3.</span> <span class="nav-text"> 實踐之道：一個務實的兩階段工作流</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%8E%E6%AE%B5%E4%B8%80%E6%88%B0%E8%A1%93%E6%80%A7%E9%83%A8%E7%BD%B2-tactical-deployment"><span class="nav-number">3.1.</span> <span class="nav-text"> 階段一：戰術性部署 (Tactical Deployment)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%8E%E6%AE%B5%E4%BA%8C%E6%88%B0%E7%95%A5%E6%80%A7%E9%87%8D%E6%A7%8B-strategic-refactoring"><span class="nav-number">3.2.</span> <span class="nav-text"> 階段二：戰略性重構 (Strategic Refactoring)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">4.</span> <span class="nav-text"> 總結</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -579,7 +579,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/28/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20IP%20%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E7%9A%84%E5%9C%B0%E5%9D%80%E8%88%87%E8%BA%AB%E4%BB%BD%E8%AD%89/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/20/%E5%BE%9E%20if-else%20%E5%88%B0%20SOLID%20%E5%9C%A8%E7%90%86%E6%83%B3%E6%9E%B6%E6%A7%8B%E8%88%87%E7%8F%BE%E5%AF%A6%E9%80%9F%E5%BA%A6%E4%B9%8B%E9%96%93%E8%A9%B2%E5%A6%82%E4%BD%95%E6%8A%89%E6%93%87/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -592,12 +592,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="深入淺出 IP：網路世界的地址與身份證 | 我的技術部落格">
+      <meta itemprop="name" content="從 if-else 到 SOLID：在理想架構與現實速度之間，該如何抉擇？ | 我的技術部落格">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          深入淺出 IP：網路世界的地址與身份證
+          從 if-else 到 SOLID：在理想架構與現實速度之間，該如何抉擇？
         </h1>
 
         <div class="post-meta-container">
@@ -609,7 +609,7 @@
       <span class="post-meta-item-text">發表於</span>
       
 
-      <time title="創建時間：2025-08-28 00:00:00 / 修改時間：23:12:18" itemprop="dateCreated datePublished" datetime="2025-08-28T00:00:00+08:00">2025-08-28</time>
+      <time title="創建時間：2025-10-20 00:00:00 / 修改時間：16:03:00" itemprop="dateCreated datePublished" datetime="2025-10-20T00:00:00+08:00">2025-10-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -630,59 +630,147 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>在前兩篇文章中，分別認識了<strong>TCP</strong>這位嚴謹可靠的「快遞員」，以及<strong>UDP</strong>這位追求速度的「奔放郵差」。它們負責將資料或可靠地、或快速地送達。</p>
-<p>但無論是哪種方式，要將資料成功送出去，首先得知道「<strong>送往哪裡？</strong>」</p>
-<p>這就像要寄一封信，即使知道要用平信（UDP 的速度）還是掛號（TCP 的可靠），還是需要一個<strong>明確的地址</strong>才能寄出。在網際網路中，扮演這個「地址」與「導航系統」角色的，就是本篇文章的主角——<strong>IP (Internet Protocol)</strong>。</p>
-<h1 id="什麼是-ip"><a class="markdownIt-Anchor" href="#什麼是-ip"></a> 什麼是 IP？</h1>
-<p><strong>IP</strong>，全名為「網際網路協定」（Internet Protocol），它是網際網路協定套組 (TCP/IP) 中<strong>網路層 (Network Layer)</strong> 的核心協定。</p>
-<p>如果說 TCP 和 UDP 負責「送貨的方式」，那麼 IP 則負責「<strong>送貨的目的地</strong>」。它定義了資料在網際網路中傳輸的<strong>基本格式</strong>和<strong>尋址方式</strong>。</p>
-<p>可以把 IP 想像成現實世界中的<strong>郵寄地址</strong>。無論是電腦、手機、伺服器還是任何連網設備，只要它想在網路上進行通訊，就必須擁有一個 IP 地址，就像每棟建築物都必須有門牌號碼一樣。</p>
-<p>IP 的主要特點包括：</p>
+    <div class="post-body" itemprop="articleBody"><p>軟體開發中，需要考慮<strong>理想架構</strong>與<strong>現實速度</strong>的權衡。<code>if-else</code> 加上 Feature Flag 的組合，是快速回應需求的利器；而 SOLID 原則，則是追求程式碼長期健康的方案。</p>
+<p>這兩者是水火不容的嗎？不。它們其實是功能生命週期的不同階段，一位成熟的工程師，懂得如何在正確的時機使用正確的工具。</p>
+<hr />
+<h1 id="the-tactical-choice-if-else-feature-flag-的戰術價值"><a class="markdownIt-Anchor" href="#the-tactical-choice-if-else-feature-flag-的戰術價值"></a> The Tactical Choice: <code>if-else</code> + Feature Flag 的戰術價值</h1>
+<p>首先必須承認，用 <code>if-else</code> 快速增加新功能分支，並不是一種「壞」的實踐，而是一種<strong>戰術性選擇</strong>。它的核心價值不在於程式碼的優雅，而在於<strong>風險控制</strong>與<strong>快速部署</strong>。</p>
+<h2 id="優點"><a class="markdownIt-Anchor" href="#優點"></a> 優點：</h2>
+<ul>
+<li><strong>極致的速度</strong>：在既有邏輯上增加一個判斷分支，是實現需求最快的方式。</li>
+<li><strong>強大的風險控制</strong>：新功能有 Bug？關掉 Feature Flag，系統立即恢復舊有行為，無需緊急回滾。</li>
+<li><strong>靈活的部署策略</strong>：可以輕鬆實現 A/B 測試、灰度發布（Canary Release），將新功能逐步開放給特定用戶群。</li>
+</ul>
+<h2 id="缺點"><a class="markdownIt-Anchor" href="#缺點"></a> 缺點：</h2>
+<ul>
+<li><strong>違反開放封閉原則 (OCP)</strong>：直接修改了現有的、本應穩定的程式碼。</li>
+<li><strong>累積技術債</strong>：每個 <code>if-else</code> 都是一個需要被記住的決策點。當這些分支越積越多，程式碼的複雜度會呈指數級增長，最終變得難以維護。</li>
+</ul>
+<p><strong>範例程式碼：</strong></p>
+<pre class="highlight"><code class="python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">handle_payment</span>(<span class="hljs-params">request</span>):
+    <span class="hljs-comment"># 用一個 flag 快速切換新舊邏輯</span>
+    <span class="hljs-keyword">if</span> feature_flags.is_enabled(<span class="hljs-string">&#x27;new-payment-gateway&#x27;</span>):
+        <span class="hljs-comment"># 快速實現的新支付邏輯</span>
+        <span class="hljs-keyword">return</span> new_payment_service.process(request)
+    <span class="hljs-keyword">else</span>:
+        <span class="hljs-comment"># 原有的穩定邏輯</span>
+        <span class="hljs-keyword">return</span> old_payment_service.process(request)
+</code></pre>
+<blockquote>
+<p><strong>結論</strong>：Feature Flag 是一種強大的<strong>部署工具</strong>，而非<strong>設計工具</strong>。它讓我們能安全地「把鷹架搭在正在行駛的火車上」，但它本身不該成為火車結構的一部分。</p>
+</blockquote>
+<hr />
+<h1 id="the-strategic-goal-solid-原則的戰略藍圖"><a class="markdownIt-Anchor" href="#the-strategic-goal-solid-原則的戰略藍圖"></a> The Strategic Goal: SOLID 原則的戰略藍圖</h1>
+<p>與戰術性的 <code>if-else</code> 相對的，是以 SOLID（特別是開放封閉原則）為代表的<strong>戰略性架構</strong>。它的目標不是眼前的苟且，而是系統的<strong>長期健康</strong>與<strong>可持續發展</strong>。</p>
+<h2 id="優點-2"><a class="markdownIt-Anchor" href="#優點-2"></a> 優點：</h2>
+<ul>
+<li><strong>結構清晰</strong>：職責被清晰地劃分到不同的類別中（符合單一職責）。</li>
+<li><strong>易於擴展</strong>：未來再增加第三、第四種支付方式時，只需<strong>新增</strong>對應的策略類別，完全不需碰觸現有穩定程式碼。</li>
+<li><strong>可測試性高</strong>：每個支付策略都可以被獨立進行單元測試。</li>
+</ul>
+<h2 id="缺點-2"><a class="markdownIt-Anchor" href="#缺點-2"></a> 缺點：</h2>
+<ul>
+<li><strong>前期成本較高</strong>：為了一個小功能，需要建立介面、建立新類別、修改依賴注入的配置，投入時間較多。</li>
+<li><strong>過度設計風險</strong>：對於一個不確定是否會長期存在的功能，一開始就投入完整的設計，可能是一種浪費。</li>
+</ul>
+<p><strong>範例程式碼 (使用策略模式重構)：</strong></p>
+<pre class="highlight"><code class="python"><span class="hljs-keyword">from</span> abc <span class="hljs-keyword">import</span> ABC, abstractmethod
+
+<span class="hljs-comment"># 1. 定義一個抽象的 &quot;契約&quot;</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">PaymentGateway</span>(<span class="hljs-title class_ inherited__">ABC</span>):
+<span class="hljs-meta">    @abstractmethod</span>
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">process</span>(<span class="hljs-params">self, request</span>):
+        <span class="hljs-keyword">pass</span>
+
+<span class="hljs-comment"># 2. 建立具體的 &quot;策略&quot;</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">OldPaymentService</span>(<span class="hljs-title class_ inherited__">PaymentGateway</span>):
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">process</span>(<span class="hljs-params">self, request</span>):
+        <span class="hljs-comment"># 原有的穩定邏輯</span>
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Processing with old gateway...&quot;</span>)
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">NewPaymentService</span>(<span class="hljs-title class_ inherited__">PaymentGateway</span>):
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">process</span>(<span class="hljs-params">self, request</span>):
+        <span class="hljs-comment"># 新的支付邏輯</span>
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Processing with NEW gateway...&quot;</span>)
+
+<span class="hljs-comment"># 3. 執行程式依賴於 &quot;契約&quot;，而非具體實作</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">PaymentHandler</span>:
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, gateway: PaymentGateway</span>):
+        <span class="hljs-variable language_">self</span>._gateway = gateway
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">handle_payment</span>(<span class="hljs-params">self, request</span>):
+        <span class="hljs-comment"># 這裡不再有 if-else</span>
+        <span class="hljs-variable language_">self</span>._gateway.process(request)
+
+<span class="hljs-comment"># 在應用程式的配置層或工廠中，決定要注入哪個實例</span>
+<span class="hljs-comment"># 這部分可以根據設定檔或環境變數來決定</span>
+<span class="hljs-keyword">if</span> settings.USE_NEW_GATEWAY:
+    gateway_instance = NewPaymentService()
+<span class="hljs-keyword">else</span>:
+    gateway_instance = OldPaymentService()
+payment_handler = PaymentHandler(gateway_instance)
+payment_handler.handle_payment(some_request)
+</code></pre>
+<blockquote>
+<p><strong>結論</strong>：SOLID 設計是我們追求的<strong>最終穩態</strong>。它像是一座設計精良的城市，道路寬闊，分區明確，無論未來要蓋新學校還是新醫院，都能輕鬆地找到合適的位置，而不會造成交通堵塞。</p>
+</blockquote>
+<hr />
+<h1 id="實踐之道一個務實的兩階段工作流"><a class="markdownIt-Anchor" href="#實踐之道一個務實的兩階段工作流"></a> 實踐之道：一個務實的兩階段工作流</h1>
+<p>既然兩者各有優劣，該如何結合它們的長處？答案是：<strong>將功能開發視為一個從「戰術」到「戰略」的演進過程。</strong></p>
+<h2 id="階段一戰術性部署-tactical-deployment"><a class="markdownIt-Anchor" href="#階段一戰術性部署-tactical-deployment"></a> 階段一：戰術性部署 (Tactical Deployment)</h2>
+<p>當接到一個<strong>不確定性高</strong>或<strong>需要快速驗證</strong>的需求時：</p>
 <ol>
-<li><strong>邏輯地址 (Logical Addressing)</strong>：IP 地址是可變的，依附在網路卡上的。不像 MAC 地址是固定在硬體上的「物理地址」。這使得資料可以跨越不同的物理網路進行路由。</li>
-<li><strong>無連線 (Connectionless)</strong>：IP 協定本身不建立、不維護與目的地的「連線」。它只管接收到資料包 (Packet) 後，根據目標 IP 地址盡力而為地轉發出去。</li>
-<li><strong>不可靠 (Unreliable)</strong>：單純的 IP 協定並不保證資料包會被成功送達、不重複、不失序。這些可靠性保證是由上層的 TCP 協定提供的。IP 只負責「找到路徑並傳遞」。</li>
-<li><strong>資料包導向 (Packet-Oriented)</strong>：IP 將上層傳下來的資料分割成許多獨立的「資料包」（或稱 IP 包、IP Datagram），每個資料包都帶有獨立的來源 IP 和目的 IP 資訊，獨立地在網路中傳輸。</li>
+<li><strong>擁抱 Feature Flag</strong>：大膽地使用 <code>if-else</code> + Feature Flag 的方式，快速將功能交付上線。</li>
+<li><strong>安全驗證</strong>：在生產環境中，透過開關 Flag 來驗證功能的正確性與市場反應。</li>
+<li><strong>【最關鍵的一步】建立技術債門票</strong>：在專案管理工具（如 Jira, Trello）中，<strong>立刻</strong>為自己建立一張技術債票，標題為：「<strong>重構支付功能的 Feature Flag，將其改為策略模式</strong>」。給它設定一個合理的到期日（例如：兩週內）。</li>
 </ol>
+<h2 id="階段二戰略性重構-strategic-refactoring"><a class="markdownIt-Anchor" href="#階段二戰略性重構-strategic-refactoring"></a> 階段二：戰略性重構 (Strategic Refactoring)</h2>
+<p>當新功能被證明是成功的、會長期存在的，就是償還技術債的時候了。</p>
+<ol>
+<li><strong>規劃重構</strong>：將技術債門票排入近期的開發週期 (Sprint)。這一步驟必須像開發新功能一樣被正式對待。</li>
+<li><strong>實踐 SOLID</strong>：動手移除 <code>if-else</code>，將其重構成前面提到的策略模式。</li>
+<li><strong>清理 Flag</strong>：在重構完成並上線穩定後，將無用的 Feature Flag 從程式碼和配置系統中徹底移除。</li>
+</ol>
+<blockquote>
+<p><strong>一個絕佳的比喻是「鷹架」</strong>：</p>
+<p>Feature Flag 就像蓋大樓時搭的<strong>鷹架</strong>。它是施工期間保證安全的必要工具，但大樓竣工後，必須把它拆掉。沒有人會住在一個滿是鷹架的房子裡。</p>
+<p>SOLID 設計則是大樓<strong>穩固的鋼骨結構</strong>。</p>
+</blockquote>
 <hr />
-<h1 id="ip-地址網路世界的身份證與導航"><a class="markdownIt-Anchor" href="#ip-地址網路世界的身份證與導航"></a> IP 地址：網路世界的身份證與導航</h1>
-<p>IP 地址是網路中一個設備的唯一識別碼。目前主流有兩種版本：</p>
-<h2 id="1-ipv4-internet-protocol-version-4"><a class="markdownIt-Anchor" href="#1-ipv4-internet-protocol-version-4"></a> 1. IPv4 (Internet Protocol version 4)</h2>
-<ul>
-<li><strong>格式</strong>：由 32 個二進位位元組成，通常表示為四組十進位數字，每組數字之間用點 (<code>.</code>) 分隔，例如 <code>192.168.1.1</code>。每組數字的範圍是 0 到 255。</li>
-<li><strong>地址數量</strong>：理論上可以提供約 43 億個唯一地址。</li>
-<li><strong>困境</strong>：隨著網際網路的爆炸式成長，IPv4 地址已經<strong>枯竭</strong>。這導致了許多技術的產生，例如 NAT (網路地址轉換)，來緩解地址短缺的問題。</li>
-<li><strong>私有 IP 地址</strong>：為了解決地址枯竭問題，並增加內部網路安全性，RFC 1918 定義了三段私有 IP 範圍（例如 <code>192.168.0.0/16</code>、<code>10.0.0.0/8</code>、<code>172.16.0.0/12</code>）。這些地址只能在局域網內部使用，無法直接在公網上路由，需要通過 NAT 轉換成公有 IP 才能訪問網際網路。</li>
-</ul>
-<h2 id="2-ipv6-internet-protocol-version-6"><a class="markdownIt-Anchor" href="#2-ipv6-internet-protocol-version-6"></a> 2. IPv6 (Internet Protocol version 6)</h2>
-<ul>
-<li><strong>格式</strong>：為了應對 IPv4 的枯竭，IPv6 應運而生。它由 128 個二進位位元組成，通常表示為八組十六進位數字，每組之間用冒號 (<code>:</code>) 分隔，例如 <code>2001:0db8:85a3:0000:0000:8a2e:0370:7334</code>。為了簡化，會有縮寫規則。</li>
-<li><strong>地址數量</strong>：數量驚人，可以提供約 <code>3.4 x 10^38</code> 個地址，足以保證地球上每個沙粒都能有自己的 IP 地址！</li>
-<li><strong>優勢</strong>：
-<ul>
-<li><strong>海量地址</strong>：徹底解決地址枯竭問題。</li>
-<li><strong>簡化協定標頭</strong>：提高了路由效率。</li>
-<li><strong>更好的安全特性</strong>：內建 IPSec。</li>
-<li><strong>自動配置</strong>：支援無狀態地址自動配置 (SLAAC)，設備可以自動生成 IPv6 地址。</li>
-</ul>
-</li>
-</ul>
-<hr />
-<h1 id="ip-如何指引資料包方向"><a class="markdownIt-Anchor" href="#ip-如何指引資料包方向"></a> IP 如何指引資料包方向？</h1>
-<p>當發送一個資料包時，它會如何找到遠在天邊的接收者呢？這要歸功於<strong>路由器 (Router)</strong> 和 <strong>IP 地址</strong>的完美配合。</p>
-<p>想像一下在一個城市中，每棟建築物都有一個 IP 地址。當一個資料包從來源地發出，它會被傳送到最近的路由器。路由器就像一個<strong>中央轉運站</strong>，它會查看資料包的<strong>目的 IP 地址</strong>，然後查詢自己的<strong>路由表 (Routing Table)</strong>，找出將這個資料包轉發到下一個最佳「轉運站」（另一個路由器）的路徑，直到資料包到達最終的目的地網路，最後再由該網路的設備接收。</p>
-<p>這個過程就如同寄送國際包裹，包裹上的目的地國家、城市地址（IP 地址）引導它：先從本地郵局，到集散中心，再到國際中轉站，最終到達目的國家的各級郵局分發，直到最後派送給你。</p>
-<hr />
-<h1 id="ip-地址-vs-mac-地址邏輯與物理的區別"><a class="markdownIt-Anchor" href="#ip-地址-vs-mac-地址邏輯與物理的區別"></a> IP 地址 vs. MAC 地址：邏輯與物理的區別</h1>
-<p>這是一個常常讓初學者感到困惑的地方。簡而言之：</p>
-<ul>
-<li><strong>IP 地址</strong>：是<strong>邏輯地址 (Logical Address)</strong>。就像<strong>家鄉地址</strong>或<strong>公司地址</strong>。這個地址可能會變動（例如搬家了，或是連線到不同的網路），它用於<strong>跨網路</strong>的資料路由。</li>
-<li><strong>MAC 地址</strong>：是<strong>物理地址 (Physical Address)</strong>，也稱為硬體地址。就像<strong>身份證上的身份證字號</strong>，或是電腦網路卡的<strong>出廠編號</strong>。這個地址在產品出廠時就燒錄在硬體裡，全球唯一且通常固定不變（除非透過軟體 spoofing）。它主要用於<strong>局域網內部</strong>的設備識別。</li>
-</ul>
-<p>在同一個局域網內，資料傳輸需要知道對方的 MAC 地址；但當資料要跨越網路時，IP 地址就成了決定方向的關鍵。這兩者在不同的網路層次中各司其職，共同確保了資料的準確傳輸。</p>
-<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
-<p>IP 協定是整個網際網路最基礎、最核心的「地圖與導航系統」。沒有 IP 地址，資料將寸步難行，無法在廣大的網路中找到方向。</p>
-<p>從 IPv4 的精巧到 IPv6 的宏大，IP 協定在確保網路通訊的連通性上扮演著無可取代的角色。理解 IP，就如同掌握了網路世界的基本「方位感」，能幫助我們更好地構建和理解複雜的網路架構。</p>
+<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
+<p>回到最初的問題：實務上該如何選擇？答案是，不必在「單一風格」的死胡同裡打轉，而應該<strong>兩者兼顧</strong>，並建立一套清晰的團隊紀律。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">情境</th>
+<th style="text-align:left">初期選擇</th>
+<th style="text-align:left">後續行動</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>高度不確定的實驗性功能</strong></td>
+<td style="text-align:left"><code>if-else</code> + Feature Flag</td>
+<td style="text-align:left">若功能成功，<strong>必須</strong>排程重構成 SOLID 設計</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>需要 A/B 測試或灰度發布</strong></td>
+<td style="text-align:left"><code>if-else</code> + Feature Flag</td>
+<td style="text-align:left">測試結束後，移除失敗分支並重構保留的分支</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>確定會長期存在的變化</strong></td>
+<td style="text-align:left"><strong>優先考慮 SOLID 設計</strong></td>
+<td style="text-align:left">若時間緊迫，可先用 Flag，但要立即建立技術債票</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>臨時性活動功能</strong></td>
+<td style="text-align:left"><code>if-else</code> + Feature Flag</td>
+<td style="text-align:left">活動結束後，<strong>必須</strong>將整個分支和 Flag 移除</td>
+</tr>
+</tbody>
+</table>
+<p>實務上，一個優秀的工程師，既懂得如何利用「鷹架」快速安全地完成工作，也懂得在工作完成後，拆除鷹架，留下一個乾淨、堅固、美觀的建築。兩者兼顧，才是專業的體現。</p>
 
     </div>
 
@@ -692,21 +780,18 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/my-blog/tags/Networking/" rel="tag"># Networking</a>
+              <a href="/my-blog/tags/OOP/" rel="tag"># OOP</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/my-blog/2025/08/26/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20UDP%20%E9%80%9F%E5%BA%A6%E8%87%B3%E4%B8%8A%20%E7%B6%B2%E8%B7%AF%E5%8D%B3%E6%99%82%E9%80%9A%E8%A8%8A%E7%9A%84%E5%A5%94%E6%94%BE%E5%85%88%E9%8B%92/" rel="prev" title="深入淺出 UDP：速度至上，網路即時通訊的奔放先鋒">
-                  <i class="fa fa-angle-left"></i> 深入淺出 UDP：速度至上，網路即時通訊的奔放先鋒
+                <a href="/my-blog/2025/10/20/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20SOLID%20%E5%8E%9F%E5%89%87%20%E6%89%93%E9%80%A0%E7%A9%A9%E5%81%A5%E5%8F%AF%E7%B6%AD%E8%AD%B7%E7%9A%84%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91%E8%A8%AD%E8%A8%88/" rel="prev" title="深入淺出 SOLID 原則：打造穩健、可維護的物件導向設計">
+                  <i class="fa fa-angle-left"></i> 深入淺出 SOLID 原則：打造穩健、可維護的物件導向設計
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/my-blog/2025/08/29/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E8%B7%AF%E7%94%B1%20Routing%20%E8%B3%87%E6%96%99%E5%8C%85%E6%97%85%E8%A1%8C%E7%9A%84%E8%B7%AF%E5%BE%91%E8%A6%8F%E5%8A%83%E5%B8%AB/" rel="next" title="深入淺出路由 (Routing)：資料包旅行的路徑規劃師，如何在茫茫網路中指引方向？">
-                  深入淺出路由 (Routing)：資料包旅行的路徑規劃師，如何在茫茫網路中指引方向？ <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
