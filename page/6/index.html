@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">112</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">113</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">56</span></a>
       <ul class="sub-menu">
   
@@ -449,7 +449,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/System-design/">
         System design
-        <span class="post-count">(5)</span>
+        <span class="post-count">(6)</span>
       </a>
     </li>
   
@@ -541,7 +541,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">112</span>
+          <span class="site-state-item-count">113</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -566,6 +566,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/19/%E8%B3%87%E6%96%99%E5%BA%AB%E7%9A%84%E5%9F%BA%E7%9F%B3%20%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%E4%BA%A4%E6%98%93%E7%9A%84%E5%9B%9B%E5%A4%A7%E5%AE%88%E8%AD%B7%E7%A5%9E%20ACID/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/08/19/%E8%B3%87%E6%96%99%E5%BA%AB%E7%9A%84%E5%9F%BA%E7%9F%B3%20%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%E4%BA%A4%E6%98%93%E7%9A%84%E5%9B%9B%E5%A4%A7%E5%AE%88%E8%AD%B7%E7%A5%9E%20ACID/" class="post-title-link" itemprop="url">
+              資料庫的基石：一次搞懂交易的四大守護神 ACID
+            </a>
+            <a href="/my-blog/2025/08/19/%E8%B3%87%E6%96%99%E5%BA%AB%E7%9A%84%E5%9F%BA%E7%9F%B3%20%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%E4%BA%A4%E6%98%93%E7%9A%84%E5%9B%9B%E5%A4%A7%E5%AE%88%E8%AD%B7%E7%A5%9E%20ACID/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-08-19 00:00:00 / 修改時間：23:23:18" itemprop="dateCreated datePublished" datetime="2025-08-19T00:00:00+08:00">2025-08-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">當開發應用程式時，無論是電商網站的訂單系統、銀行的轉帳功能，還是社群平台的發文留言，背後都離不開與資料庫的互動。我們都希望資料是正確、可靠且一致的。但要如何確保在高併發、網路不穩定甚至系統當機的複雜環境下，資料依然能保持「高枕無憂」的狀態呢？ 答案，就藏在資料庫系統的核心設計哲學中——ACID 原則。 什麼是「交易」(Transaction)？ 在深入 ACID 之前，必須先理解什麼是「交易」。 在資料庫中，交易是一連串操作的集合，這些操作被視為一個不可分割的最小工作單元。這個單元裡的所有操作，要麼全部成功，要麼全部失敗。 最經典的例子就是銀行轉帳： 從 A 帳戶扣除 1000 元。 在 B 帳戶增加 1000 元。 這兩個動作必須被綁定在一個「交易」中。絕對不希望只完成了第一步，系統就當機了，那 A 的錢就憑空消失了！而 ACID 原則，正是為了確保這種交易能夠安全可靠地完成。 ACID 的四大核心成員 ACID 是四個單字的首字母縮寫，分別代表著： Atomicity (原子性) Consistency (一致性) Isolation (隔離性) Durability (持久性) A - Atomicity (原子性)：成敗與共，絕不單飛 原子性確保一個交易中的所有操作是「一個完整的整體」，就像化學中的原子一樣，不可再分割。這意味著：所有操作要麼全部完成，要麼全部都不做。如果交易中的任何一個環節失敗，整個交易就會被回滾 (Rollback) 到最初的狀態，彷彿什麼事都沒發生過。 生活化比喻： 這就像去 ATM 提款。整個「交易」包含：插卡 -&gt; 輸入密碼 -&gt; 輸入金額 -&gt; 吐鈔 -&gt; 帳戶扣款 -&gt; 退卡。 如果在「吐鈔」環節機器卡住了，絕對不希望「帳戶扣款」這個動作還被執行。原子性能保證，一旦吐鈔失敗，整個交易就會被取消，帳戶餘額會恢復原狀。 在 SQL 中，通常使用 BEGIN TRANSACTION, COMMIT (提交) 和 ROLLBACK (回滾) 來控制交易的原子性。 BEGIN TRANSACTION; -- 步驟 1: 從 A 帳戶扣款 UPDATE Accounts SET balance = balance - 1000 WHERE user_id = &#x27;A&#x27;; -- 假設此處發生了某個錯誤！ -- 例如：B 帳戶不存在或系統崩潰 -- 步驟 2: 為 B 帳戶存款 UPDATE Accounts SET balance = balance + 1000 WHERE user_id = &#x27;B&#x27;; -- 如果中間出錯，整個交易會被 ROLLBACK -- 如果一切順利，執行 COMMIT COMMIT; C - Consistency (一致性)：規則至上，絕不妥協 一致性確保資料庫的狀態在交易開始前和結束後，都必須滿足所有的預設規則和約束 (例如：欄位類型、不得為空、主鍵唯一性、外鍵關聯等)。換句話說，一個交易不能破壞資料庫的「完整性」。 資料庫本身並不創造一致性，而是提供機制來維持開發者定義的一致性。 生活化比喻： 想像一個圖書館的借書系統，規則是「每個用戶最多只能借 5 本書」。 當一個已經借了 5 本書的用戶再來借書時，一個符合一致性的交易會拒絕這次操作，因為執行後會破壞「最多 5 本」這個規則。交易結束後，資料庫的狀態依然是合法的。它確保了資料庫永遠不會進入一個「矛盾」或「非法」的狀態。 I - Isolation (隔離性)：你的世界，與我無關 在多使用者環境下，多個交易可能會同時發生 (併發)。隔離性確保一個交易的執行不會被其他正在同時執行的交易所干擾。從任何一個交易的角度來看，它都感覺好像是系統中唯一在運行的交易。 如果沒有隔離性，可能會發生以下問題： 髒讀 (Dirty Read): 一個交易讀取了另一個尚未提交的交易所修改的資料。 不可重複讀 (Non-repeatable Read): 一個交易內兩次讀取同一筆資料，結果卻不同，因為中間被其他交易修改並提交了。 幻讀 (Phantom Read): 一個交易內兩次執行相同的範圍查詢，但第二次查詢返回了第一次沒有的「幻影」行，因為其他交易在此期間插入了新資料。 生活化比喻： 你和另一個人同時在網上搶購最後一張演唱會門票。 隔離性確保系統會將你們倆的操作隔離開來。系統會先處理一個人的請求（比如你的），鎖定這張票，完成整個付款流程。在這期間，另一個人看到的狀態可能是「正在處理」或「已售罄」，而不會讓他也能進入付款頁面，導致一張票賣給兩個人。 資料庫通常提供不同的隔離級別 (如 Read Uncommitted, Read Committed, Repeatable Read, Serializable)，讓開發者在效能和資料一致性之間做取捨。 D - Durability (持久性)：一諾千金，永不遺失 持久性保證一旦交易被成功提交 (Commit)，它對資料庫所做的更改就是永久性的。即使之後系統發生崩潰、斷電或其他故障，這些已提交的修改也不會丟失。 資料庫通常透過預寫日誌 (Write-Ahead Logging, WAL) 等技術來實現持久性。在修改實際資料前，系統會先把操作記錄到一個穩定的日誌檔案中。這樣即使系統崩潰，重啟後也能透過日誌來恢復資料，確保已提交的交易不會遺失。 生活化比喻： 當在網路上完成付款，並收到「交易成功」的確認訊息時，這個結果就是持久的。不用擔心商家下一秒說因為他們伺服器斷電了，所以訂單不算數。這個「承諾」已經被永久地記錄下來了。 總結：為何 ACID 如此重要？ 原則 核心概念 口語化解釋 Atomicity 不可分割 一家人要整整齊齊，要麼一起成功，要麼一起失敗。 Consistency 狀態合法 做人要有底線，做事要守規矩，不能讓資料庫陷入混亂。 Isolation 互不干擾 你走你的陽關道，我過我的獨木橋，我們互不影響。 Durability 永久保存 說出去的話，潑出去的水，一旦承諾，永久有效。 ACID 原則是關聯式資料庫管理系統 (RDBMS) 如 MySQL、PostgreSQL 等的基石。它為我們提供了一個強大的承諾：資料是可靠的。這使得開發者可以專注於業務邏輯，而不必過度擔心底層資料在各種極端情況下的完整性問題。 當然，在某些場景下（特別是需要極高吞吐量的 NoSQL 資料庫），人們會選擇犧牲部分 ACID 特性（尤其是 C 和 I），來換取更高的效能和可用性，這就是所謂的 BASE 理論 (Basically Available, Soft state, Eventually consistent)，但這就是另一個有趣的話題了。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/08/19/%E8%B3%87%E6%96%99%E5%BA%AB%E7%9A%84%E5%9F%BA%E7%9F%B3%20%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%E4%BA%A4%E6%98%93%E7%9A%84%E5%9B%9B%E5%A4%A7%E5%AE%88%E8%AD%B7%E7%A5%9E%20ACID/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1330,92 +1416,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/08/09/Rate%20Limiter%20%E5%BE%9E%E7%90%86%E8%AB%96%E5%88%B0%E5%AF%A6%E6%88%B0%20%E4%B8%89%E5%A4%A7%E4%B8%BB%E6%B5%81%E5%AF%A6%E4%BD%9C%E6%96%B9%E6%A1%88%E8%A9%B3%E8%A7%A3/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/08/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20Rate%20Limiter%20%E6%89%93%E9%80%A0%E7%A9%A9%E5%9B%BA%E5%85%AC%E5%B9%B3%E4%B8%94%E5%AE%89%E5%85%A8%E7%9A%84%E7%B3%BB%E7%B5%B1%E9%98%B2%E7%B7%9A/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/08/08/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20Rate%20Limiter%20%E6%89%93%E9%80%A0%E7%A9%A9%E5%9B%BA%E5%85%AC%E5%B9%B3%E4%B8%94%E5%AE%89%E5%85%A8%E7%9A%84%E7%B3%BB%E7%B5%B1%E9%98%B2%E7%B7%9A/" class="post-title-link" itemprop="url">
-              深入淺出 Rate Limiter：打造穩固、公平且安全的系統防線
-            </a>
-            <a href="/my-blog/2025/08/08/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20Rate%20Limiter%20%E6%89%93%E9%80%A0%E7%A9%A9%E5%9B%BA%E5%85%AC%E5%B9%B3%E4%B8%94%E5%AE%89%E5%85%A8%E7%9A%84%E7%B3%BB%E7%B5%B1%E9%98%B2%E7%B7%9A/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-08-08 00:00:00 / 修改時間：23:29:43" itemprop="dateCreated datePublished" datetime="2025-08-08T00:00:00+08:00">2025-08-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">想像一下，精心打造的服務上線後大受歡迎，流量一飛沖天。但很快，發現伺服器時常過載、回應緩慢，甚至有用戶抱怨，正常的請求也被惡意程式的刷屏攻擊所淹沒。 這時候，需要一位智慧的「交通警察」來指揮系統的流量，而這位警察的名字，就叫做 Rate Limiter (速率限制器)。 Rate Limiter 不僅僅是一個防禦工具，它更是一種精密的系統設計模式，是現代後端架構中不可或缺的一環。它確保了系統的穩定性、公平性與安全性。 在這篇文章中將探索： 為什麼迫切需要 Rate Limiter？ 在哪些真實情境中它能發揮奇效？ 如何從零開始，設計一個強大的 Rate Limiter？（包含多種經典演算法） 無論你是後端工程師、系統架構師，或是對建構高可用服務充滿熱情的開發者，這篇文章都將為你帶來紮實的收穫。 為什麼需要 Rate Limiter？不只是為了防禦 很多人對 Rate Limiter 的第一印象是「防止 DDoS 攻擊」，這當然沒錯，但它的價值遠不止於此。一個好的 Rate Limiter 能為系統帶來四大核心好處： 1. 防止惡意攻擊與資源濫用 這是最直接的價值。它可以有效抵禦： 暴力破解 (Brute-force Attack)：限制登入、忘記密碼等 API 的嘗試次數，防止帳號被破解。 憑證填充 (Credential Stuffing)：減緩自動化腳本使用外洩帳密來嘗試登入的攻擊。 DDoS 攻擊：透過限制單一來源的請求速率，緩解應用層的 DDoS 攻擊。 資源濫用：防止惡意用戶透過爬蟲或腳本，大量消耗簡訊、郵件或昂貴的第三方 API 額度。 2. 確保系統穩定與服務品質 (QoS) 伺服器、資料庫、快取等後端資源都不是無限的。Rate Limiter 就像一個保險絲，保護下游服務不被突發的流量沖垮，確保整個系統的穩定運行。 3. 維護使用者之間的公平性 如果沒有速率限制，一個「超級用戶」或一個寫得不好的機器人，可能會佔用掉絕大部分系統資源，導致其他所有正常用戶的體驗急遽下降。Rate Limiter 確保每個用戶都能在一個公平的資源配額下使用服務。 4. 滿足商業需求與成本控制 在 SaaS 服務中，Rate Limiter 是實現商業模式的利器。可以為不同的付費方案設定不同的 API 呼叫速率，例如： 免費版用戶：每分鐘 10 次請求 專業版用戶：每分鐘 600 次請求 企業版用戶：無限制或更高的速率 這不僅創造了商業價值，也能有效控制因 API 濫用而產生的運算成本。 Rate Limiter 的典型應用情境 在以下場景中發現 Rate Limiter 的身影： 使用者登入/註冊 API：限制單一 IP 或用戶在短時間內的嘗試次數。 發送簡訊/郵件驗證碼：限制單一手機號碼或信箱在一天內的發送次數，防止「簡訊轟炸」。 對外開放的 Public API：幾乎所有開放平台（如 Twitter, GitHub）都會對 API 進行速率限制。 耗費資源的操作：如圖片上傳處理、報表生成等，限制用戶的發起頻率。 防止網路爬蟲：對爬蟲行為進行限速，保護網站內容與效能。 如何設計一個 Rate Limiter？從演算法到架構 設計 Rate Limiter 的核心問題是：「如何在特定時間窗口內，追蹤並限制一個實體（如用戶 ID、IP 地址）的請求次數？」 讓我們來看看幾種經典的實現演算法，從簡單到複雜，各有千秋。 演算法一：固定視窗計數器 (Fixed Window Counter) 這是最簡單直觀的演算法。 原理：在一個固定的時間視窗內（例如，每分鐘），維護一個計數器。每當有請求進來，計數器就加一。如果計數器超過了閾值，就拒絕請求。當下一個時間視窗開始時，計數器重置為 0。 優點：實現簡單，記憶體消耗小。 缺點：存在邊界問題 (Edge Condition)。如果用戶在時間視窗的邊緣（例如 00:59 和 01:00）發動集中攻擊，他可以在極短時間內發出兩倍於限制的請求，可能導致瞬間流量超標。 演算法二：滑動視窗日誌 (Sliding Window Log) 為了修正固定視窗的邊界問題，這個演算法應運而生。 原理：記錄下每個請求的時間戳。當新請求到來時，計算過去一個時間視窗內（例如，從現在回推 60 秒）有多少個時間戳。如果數量超過閾值，則拒絕請求。 優點：非常精確，完美解決了邊界問題。 缺點：記憶體消耗巨大！因為需要為每個請求儲存時間戳，當流量極大時，這完全不可行。 演算法三：滑動視窗計數器 (Sliding Window Counter) 這是對前兩種演算法的完美平衡，也是業界非常流行的一種方案。 原理：它結合了固定視窗的低記憶體消耗和滑動視窗的平滑性。它將時間視窗切分成更小的格子，並計算當前視窗和前一個視窗的請求數，再根據當前時間在視窗中的比例進行加權計算。 優點：在準確性和資源消耗之間取得了很好的平衡。 缺點：實現比固定視窗複雜一些，但仍比滑動日誌簡單。 演算法四：令牌桶 (Token Bucket) 這是一個非常經典且強大的演算法，能夠應對突發流量 (Bursty Traffic)。 原理：想像一個固定容量的桶，系統會以恆定的速率往桶裡放入「令牌 (Token)」。每個請求都需要從桶裡拿走一個令牌才能被處理。如果桶是空的，那麼請求就會被拒絕或排隊等待。 優點：允許一定程度的突發請求（只要桶裡還有令牌），實現了平滑的速率限制，非常靈活。 缺點：相較於計數器，實現稍微複雜，需要考慮令牌生成和消耗的原子性。 演算法五：漏桶 (Leaky Bucket) 漏桶和令牌桶很像，但目標不同。 原理：請求進來時，先放入一個固定容量的「隊列（桶）」。系統以恆定的速率從隊列中取出請求並處理（就像水從桶底的洞口勻速漏出）。如果隊列已滿，新來的請求將被丟棄。 優點：能強制讓請求以一個平滑、固定的速率被處理，非常適合用來保護下游服務。 缺點：無法應對突發流量，即使系統有空閒資源，請求也必須排隊等待。 演算法比較 演算法 優點 缺點 適用情境 固定視窗計數器 實現簡單，記憶體佔用少 有邊界問題，可能允許瞬間兩倍流量 對精度要求不高的簡單場景 滑動視窗日誌 精確無邊界問題 記憶體消耗巨大 流量不大但對精度要求極高的場景 滑動視窗計數器 精度與性能的良好平衡 實現相對複雜 大多數現代 Web 應用的通用選擇 令牌桶 允許突發流量，靈活性高 實現稍複雜 需要應對突發請求的 API 閘道 漏桶 強制平滑輸出速率 靈活性差，無法應對突發流量 需要保護下游服務，使其穩定接收請求 架構設計上的考量 除了演算法，還有幾個關鍵的架構問題需要思考： 限制誰？(Granularity)：是針對單一 IP、用戶 ID、API Key，還是某個全局的資源？ 計數器存哪裡？(Storage)： 記憶體：最快，但無法在多台伺服器間共享，且服務重啟後資料會遺失。 Redis：業界首選！速度極快、支援多種資料結構（如 HASH、ZSET）、具備原子操作（如 INCR），非常適合在分散式環境中共享狀態。 分散式環境的挑戰：當服務部署在多台機器上時，必須確保它們共享同一個計數器。這也是 Redis 如此流行的原因。同時，要小心競態條件 (Race Condition)，最好使用 Redis 的 Lua 腳本或原子命令來確保「讀取-修改-寫入」操作的原子性。 如何回應被拒絕的請求？：一個友好的 Rate Limiter，在拒絕請求時應返回 429 Too Many Requests 狀態碼，並透過 HTTP Header 告知用戶相關資訊，例如： X-RateLimit-Limit: 總請求限制數 X-RateLimit-Remaining: 剩餘可用請求數 Retry-After: 建議客戶端在多少秒後再試一次 結論 Rate Limiter 絕非一個簡單的「if-else」計數器，它是一門關於平衡、取捨與保護的藝術。它像一道堅固的防線，保護著我們的系統免受惡意攻擊與流量洪峰的衝擊，同時也為用戶提供了公平、穩定的服務體驗。 從簡單的固定視窗到靈活的令牌桶，每種演算法都有其適用的舞台。理解它們的原理與權衡，並結合 Redis 等工具，就能在架構設計上更有信心，打造出企業級的穩固服務。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/08/08/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20Rate%20Limiter%20%E6%89%93%E9%80%A0%E7%A9%A9%E5%9B%BA%E5%85%AC%E5%B9%B3%E4%B8%94%E5%AE%89%E5%85%A8%E7%9A%84%E7%B3%BB%E7%B5%B1%E9%98%B2%E7%B7%9A/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>

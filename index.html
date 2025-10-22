@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">112</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">113</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">56</span></a>
       <ul class="sub-menu">
   
@@ -449,7 +449,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/System-design/">
         System design
-        <span class="post-count">(5)</span>
+        <span class="post-count">(6)</span>
       </a>
     </li>
   
@@ -541,7 +541,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">112</span>
+          <span class="site-state-item-count">113</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -566,6 +566,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/22/The%20Twelve-Factor%20App%20%E6%96%B9%E6%B3%95%E8%AB%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/10/22/The%20Twelve-Factor%20App%20%E6%96%B9%E6%B3%95%E8%AB%96/" class="post-title-link" itemprop="url">
+              The Twelve-Factor App 方法論
+            </a>
+            <a href="/my-blog/2025/10/22/The%20Twelve-Factor%20App%20%E6%96%B9%E6%B3%95%E8%AB%96/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-10-22 00:00:00 / 修改時間：23:48:06" itemprop="dateCreated datePublished" datetime="2025-10-22T00:00:00+08:00">2025-10-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">在複雜的現代軟體世界裡，為了解決以及應對雲端時代帶來的挑戰，一套旨在建立穩健、可擴展、易於維護的應用程式的最佳實踐——The Twelve-Factor App——應運而生。 這套方法論最初由 Heroku 的工程師們提出，它不僅僅是一套技術規範，更是一種開發哲學。它為建構「軟體即服務 (SaaS)」應用程式提供了一個清晰的藍圖。無論是在開發一個新創公司的 MVP，還是在維護一個大型企業的複雜系統，理解並實踐這十二個原則，都將使應用程式更具彈性與生命力。 讓我們逐一深入探討這十二個要素。 The Twelve Factors I. 基線 (Codebase) 一份基線，追蹤在版本控制系統中，可N次部署。 一個應用程式的所有程式碼都應該儲存在一個單一的版本控制儲存庫中（例如 Git）。這份程式碼庫將是所有部署（開發、測試、正式環境）的唯一來源 (Single Source of Truth)。 為何重要？：確保了程式碼的一致性。團隊成員可以輕鬆協作，追蹤變更歷史，並避免因程式碼版本混亂而導致的部署災難。 實踐：使用 Git，並為你的專案建立一個獨立的 repository。 II. 依賴 (Dependencies) 明確地宣告與隔離依賴。 應用程式永遠不應該依賴系統環境中隱含的套件或函式庫。所有依賴都必須透過依賴宣告檔案（如 Python 的 requirements.txt、Node.js 的 package.json）來明確定義，並使用依賴隔離工具（如 virtualenv、npm、Docker 容器）來確保環境的純粹性。 為何重要？：消除了「在我電腦上可以跑」的窘境。讓新進開發者或自動化建置系統可以簡單、可靠地設定開發環境。 實踐：在專案根目錄下維護 package.json 或 requirements.txt 檔案，並在 README 中說明如何安裝依賴。 III. 設定 (Config) 將設定儲存在環境變數中。 設定（Config）是指那些在不同部署環境中會變動的資訊，例如資料庫連線資訊、第三方服務的 API Key 等。這些資訊絕對不能寫死在程式碼中，而應該儲存在環境變數裡。 為何重要？： 安全性：避免將敏感資訊（如密碼、金鑰）洩漏在程式碼庫中。 靈活性：同一份程式碼，不需任何修改，就可以部署到不同的環境。 實踐：# Bad: 硬編碼在程式碼中 db_url = &quot;postgres://user:password@host:port/dbname&quot; # Good: 從環境變數讀取 import os db_url = os.getenv(&quot;DATABASE_URL&quot;) IV. 後端服務 (Backing Services) 將後端服務視為附加資源。 後端服務是指應用程式在運行時所依賴的任何服務，例如資料庫 (MySQL, PostgreSQL)、快取系統 (Redis)、訊息佇列 (RabbitMQ) 等。對應用程式而言，這些服務都應該是可替換的資源，透過一個 URL 或其他定位資訊來存取。 為何重要？：實現了應用程式與底層服務的鬆耦合。可以輕易地將本地的 MySQL 資料庫換成雲端的 RDS 服務，而不需要修改任何程式碼，只需更改環境變數中的 DATABASE_URL 即可。 V. 建置、發行、執行 (Build, Release, Run) 嚴格區分建置、發行、執行三個階段。 建置 (Build)：將程式碼轉換為可執行包的過程，包含編譯、打包、安裝依賴等。 發行 (Release)：將「建置」階段的產出，與「設定」結合，形成一個不可變的版本。一旦建立，就不能再修改。 執行 (Run)：在特定環境中運行「發行」階段的產物。 為何重要？：確保部署的穩定性與可追溯性。任何修改都必須經過新的 Build -&gt; Release 流程，禁止直接在線上環境修改程式碼，這為 CI/CD 提供了堅實的基礎。 VI. 行程 (Processes) 應用程式應作為一個或多個無狀態 (Stateless) 的行程來執行。 任何需要被持久化的資料，都必須儲存在後端服務（如資料庫或檔案儲存）中。應用程式本身應該是無狀態 (Stateless) 且無共享 (Share-Nothing) 的。這意味著來自同一個用戶的兩次請求，可能會被路由到兩個完全不同的行程處理，而不影響功能。 為何重要？：這是水平擴展 (Horizontal Scaling) 的關鍵。當流量增加時，可以簡單地增加更多的行程實例來分擔負載，而不用擔心狀態同步的問題。 VII. 埠號綁定 (Port Binding) 透過埠號綁定來對外提供服務。 應用程式應該是自我包含的，不依賴於外部的網路伺服器（如 Apache, Nginx）來啟動。它應該自己綁定一個埠號，並監聽來自該埠號的請求。 為何重要？：使應用程式可以作為其他服務的後端服務。例如，一個 API 服務可以綁定 8000 埠，然後由另一個路由層（如 Nginx）將外部請求轉發給它。 實踐：在 Node.js 中使用 app.listen(port)，在 Python Django 中使用 runserver。 VIII. 並行 (Concurrency) 透過行程模型來達成擴展。 基於第六點「無狀態行程」，應用程式應該能夠透過水平擴展來增加並行處理能力。這意味著不應該依賴垂直擴展（增加單一機器的 CPU/RAM），而是透過增加更多的行程實例來應對負載。 為何重要？：提供了彈性且成本效益高的擴展方式，完美契合雲端環境的特性。 實踐：在 Docker Swarm 或 Kubernetes 環境中，只需調整服務的 replicas 數量即可。 IX. 易處理 (Disposability) 快速啟動與優雅地關閉，以最大化系統的穩健性。 應用程式的行程應該是可拋棄的，意味著它們可以隨時被啟動或停止。這要求它們啟動時間要快，並能優雅地關閉（例如，在收到 SIGTERM 信號時，完成當前請求後再退出）。 為何重要？：這對於彈性擴展、快速部署和從故障中恢復至關重要。當系統需要增減實例，或部署新版本時，快速啟動與關閉的能力是必需的。 X. 開發/正式環境對等 (Dev/Prod Parity) 讓開發、測試、正式環境盡可能地相似。 傳統開發模式中，開發環境（開發者的筆電）與正式環境（伺服器）之間存在巨大差異，這導致許多「在我電腦上可以跑」的問題。應該盡力縮小這些差距。 為何重要？：減少因環境差異導致的 Bug，提升開發信心，實現持續部署。 實踐：使用 Docker、Vagrant 等容器化或虛擬化技術，確保所有環境（開發、測試、生產）使用相同的作業系統、依賴版本和後端服務。 XI. 日誌 (Logs) 將日誌視為事件串流 (Event Stream)。 應用程式本身不應該關心日誌的儲存與管理。它只需將所有日誌訊息，作為一個不間斷的事件串流，輸出到標準輸出 stdout 和標準錯誤 stderr。 為何重要？：將應用程式與日誌處理邏輯解耦。在雲端環境中，日誌的收集、彙總、分析應該交由專門的平台（如 ELK Stack, Splunk, Datadog）來處理。 實踐：在程式碼中直接使用 print() 或 console.log()，而非寫入到特定的檔案。 XII. 管理程序 (Admin Processes) 將管理或維護任務，作為一次性的行程來執行。 諸如資料庫遷移 (Database Migration)、執行一次性腳本等管理任務，應該在與應用程式正常運行時相同的環境中執行。這些腳本應該與應用程式的程式碼一同發布，以避免版本不一致的問題。 為何重要？：確保管理任務與應用程式使用相同的設定和依賴，避免因環境不一致導致操作失敗。 實踐：將管理腳本放在程式碼庫中，並透過如 heroku run bash 或 kubectl exec 等機制來執行。 總結 The Twelve-Factor App 並不是一套僵化的法律，而是一套經過實戰驗證的、極具價值的指導原則。它描繪了一個理想的雲原生應用應有的樣貌：高內聚、低耦合、易於擴展、穩健可靠。 在下一個專案中，或是在重構現有系統時，不妨將這十二個要素作為檢查清單。也許無法一次全部達成，但每朝著這些原則邁進一步，應用程式就會離現代化、雲原生的目標更近一步。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/10/22/The%20Twelve-Factor%20App%20%E6%96%B9%E6%B3%95%E8%AB%96/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1330,92 +1416,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/10/08/%E6%B7%B1%E5%85%A5%E6%8E%A2%E7%B4%A2%E4%BA%8B%E4%BB%B6%E9%A9%85%E5%8B%95%E6%9E%B6%E6%A7%8B%20Event-Driven%20Architecture/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/07/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E6%96%B0%E4%B8%80%E4%BB%A3%E5%AE%89%E5%85%A8%E6%9E%B6%E6%A7%8B%20%E9%9B%B6%E4%BF%A1%E4%BB%BB%20Zero%20Trust/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/10/07/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E6%96%B0%E4%B8%80%E4%BB%A3%E5%AE%89%E5%85%A8%E6%9E%B6%E6%A7%8B%20%E9%9B%B6%E4%BF%A1%E4%BB%BB%20Zero%20Trust/" class="post-title-link" itemprop="url">
-              深入理解新一代安全架構「零信任 (Zero Trust)」
-            </a>
-            <a href="/my-blog/2025/10/07/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E6%96%B0%E4%B8%80%E4%BB%A3%E5%AE%89%E5%85%A8%E6%9E%B6%E6%A7%8B%20%E9%9B%B6%E4%BF%A1%E4%BB%BB%20Zero%20Trust/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-10-07 00:00:00 / 修改時間：23:17:02" itemprop="dateCreated datePublished" datetime="2025-10-07T00:00:00+08:00">2025-10-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">讓我們來談談一個經典的安全模型：城堡與護城河 (Castle-and-Moat)。數十年來，企業網路安全幾乎都建立在這個模型之上。我們耗費巨資建造了堅固的「城牆」（防火牆）、挖掘了深邃的「護城河」（入侵檢測系統），並在唯一的「吊橋」（VPN）上設置了森嚴的守衛。 這個模型的假設很簡單：牆外是危險的，牆內是安全的。 只要能通過驗證進入內部網路，就會被視為「受信任的」員工，可以在城堡內部相對自由地活動。 然而，在雲端服務、遠距辦公和行動裝置已成主流的今天，這座城堡的邊界早已模糊不清。當員工在咖啡廳用著個人筆電存取雲端 SaaS 服務時，「牆內」和「牆外」的區別在哪裡？更致命的是，一旦攻擊者（或內部威脅）通過釣魚郵件等方式騙取了 VPN 憑證，就等於直接越過了護城河，整個城堡的內部將暢行無阻。 這個過時的信任模型，正是「零信任 (Zero Trust)」架構要徹底顛覆的對象。 什麼是 Zero Trust？ Zero Trust（零信任） 是一種 網路安全架構理念，核心思想是： 👉 不要預設信任任何人或任何設備，不論它們在網路內部還是外部，每次存取資源都必須驗證。 Zero Trust 不是一個產品，也不是一套工具，而是一種安全策略和思維框架。它由前 Forrester 分析師 John Kindervag 在 2010 年提出，其核心理念極其簡單，卻又極具顛覆性： Never Trust, Always Verify. (永不信任，一律驗證) 這意味著，我們必須拋棄傳統安全模型「公司內網可信，外網不可信」的二元假設。在零信任模型中，預設沒有任何使用者、裝置或網路流量是可信的——無論它來自內部網路還是外部網路。 每一次的存取請求，都必須像來自一個不受信任的網路一樣，經過嚴格的身份驗證、授權和加密，才能被放行。 簡單比喻： 傳統模型： 像一個鄉村俱樂部。只要是會員（通過了 VPN 認證），進門後就可以自由使用所有設施。 零信任模型： 像一棟高度機密的政府大樓。刷卡進入大門後，要去 A 房間需要再次刷卡驗證；要去 B 檔案室，不僅要刷卡，可能還需要指紋和虹膜掃描。每一次穿越一道門，都需要重新證明身份和權限。 在 Zero Trust 模型下： 沒有「安全區域」的概念。 所有存取都需要 驗證 (Verify) 與 授權 (Authorize)。 為什麼需要 Zero Trust？ 傳統的安全模式（perimeter-based, 邊界防禦）存在問題： VPN/內網突破：一旦駭客進入內網，就能存取大量資源。 雲端與遠端工作普及：使用者可能來自不同地點與裝置。 內部威脅：員工或受感染的設備也可能帶來風險。 Zero Trust 用來降低這些風險。 Zero Trust 的三大原則 Verify Explicitly（明確驗證） 每次存取都要驗證身分（MFA、多因素驗證）、裝置狀態、地理位置等。 這是「一律驗證」的具體化。每一次的存取請求，都必須基於所有可用的數據點進行全面的驗證，包括： 使用者身份： 是誰在請求？（強身份認證，如 MFA 多因子認證） 裝置健康狀況： 請求來自哪個裝置？這個裝置是否合規、有沒有中毒？ 存取位置： 請求的地理位置是否正常？ 服務或工作負載： 他們正在嘗試存取什麼？ 數據分類： 正在被存取的數據是否敏感？ 只有綜合評估這些信號後，系統才會做出信任判斷。 Least Privilege Access（最小權限存取） 使用者或服務只擁有完成任務所需的最小權限，避免過度授權。 這是「永不信任」的體現。一旦使用者通過驗證，也絕不給予他們完全的信任。他們只應被授予完成其特定任務所需的最小權限。 Just-in-Time (JIT) Access: 只在需要時才授予臨時權限，任務完成後立刻收回。 Just-Enough-Access (JEA): 權限範圍嚴格限制在必需的數據和資源上。 目標： 大幅縮小潛在的攻擊面。即使某個帳號被盜，攻擊者能造成的破壞也被限制在一個極小的範圍內。 Assume Breach（假設已被入侵） 系統假設隨時可能被突破，並持續監控與分段隔離。 這是一種防禦性的思維轉變。必須假設，攻擊者已經存在於我們的網路之內。基於這個假設，所做的一切設計都是為了： 將爆炸半徑最小化： 通過微分段 (Micro-segmentation) 技術，將網路切分成許多微小的、相互隔離的區域。這樣，即使一個區域被攻破，攻擊者也無法輕易地橫向移動到其他區域。 端到端加密： 確保所有網路流量，即使是內部流量，都經過加密。 持續監控與分析： 利用分析工具持續監測網路活動，以便盡快偵測到威脅並做出反應。 Zero Trust 架構的關鍵元素 身分驗證 (Identity Verification) → SSO、MFA 裝置安全 (Device Security) → 僅允許合規裝置存取 網路微分段 (Micro-segmentation) → 不同應用、服務之間要分隔 持續監控 (Continuous Monitoring) → 偵測異常行為 動態授權 (Adaptive Access Control) → 根據情境決定是否允許 簡單例子 傳統模式 員工進入內網後，就能存取所有內部資源。 駭客只要破解 VPN 或某台內部機器，就能橫向移動，拿到更多資料。 Zero Trust 模式 員工登入公司雲端系統時，必須： 使用 MFA 驗證身份 驗證裝置是否安全（例如防毒軟體是否開啟） 僅授權該員工所需的應用（例如只能開 HR 系統，不能開財務系統） 若異常行為（如短時間內嘗試大量下載檔案），會被即時阻擋。 常見 Zero Trust 技術 Identity &amp; Access Management (IAM) → Okta, Azure AD Multi-Factor Authentication (MFA) Zero Trust Network Access (ZTNA) → 替代傳統 VPN Endpoint Detection &amp; Response (EDR) → CrowdStrike, SentinelOne 零信任不是一蹴可幾，而是一趟旅程 部署零信任架構並非購買一個工具就能完成。它是一個持續的過程，涉及到身份管理、端點安全、網路架構和應用程式等多個層面的整合與改造。一個務實的起步路徑可能包括： 從身份認證開始： 為所有員工和服務全面啟用 MFA（多因子認證）。 了解你的裝置： 建立裝置清單，監控其健康狀況。 實施微分段： 從最關鍵的應用程式或數據周圍開始，建立小型的安全區域。 重新評估權限： 審查現有權限，並朝著最小權限原則進行改革。 總結 Zero Trust = 不預設信任任何人或設備 → 每次存取都必須驗證、授權、監控。 它的目標是減少內外部攻擊風險，適合 遠端工作、雲端環境、微服務架構 的現代企業。 它從根本上改變了我們的安全思維，從被動地防禦「外部」威脅，轉變為主動地管理「內部」風險。 通過擁抱「永不信任，一律驗證」的原則，我們將能構建更有彈性、更能適應未來挑戰的安全體系。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/10/07/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E6%96%B0%E4%B8%80%E4%BB%A3%E5%AE%89%E5%85%A8%E6%9E%B6%E6%A7%8B%20%E9%9B%B6%E4%BF%A1%E4%BB%BB%20Zero%20Trust/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>

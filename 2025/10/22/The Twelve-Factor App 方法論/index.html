@@ -19,27 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="在軟體開發旅程中，隨著應用程式用戶量和資料量的爆炸性成長，經常會遇到一個令人頭痛卻又甜蜜的煩惱：資料庫效能瓶頸。當已經做完了所有能想到的優化，從索引調整、查詢改寫到讀寫分離，但資料庫的回應時間依然越來越慢，這或許是一個信號——資料庫需要的是結構性的擴展，而不僅僅是修補。 這篇文章就來聊聊解決這個問題的終極武器之一：資料庫分片 (Database Sharding)。  Sharding 是一個強大">
+    <meta name="description" content="在複雜的現代軟體世界裡，為了解決以及應對雲端時代帶來的挑戰，一套旨在建立穩健、可擴展、易於維護的應用程式的最佳實踐——The Twelve-Factor App——應運而生。 這套方法論最初由 Heroku 的工程師們提出，它不僅僅是一套技術規範，更是一種開發哲學。它為建構「軟體即服務 (SaaS)」應用程式提供了一個清晰的藍圖。無論是在開發一個新創公司的 MVP，還是在維護一個大型企業的複雜系統">
 <meta property="og:type" content="article">
-<meta property="og:title" content="深入淺出資料庫分片 (Sharding)：當單一資料庫撐不住時，下一步是什麼？">
-<meta property="og:url" content="https://nivek-yang.github.io/2025/08/15/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E8%B3%87%E6%96%99%E5%BA%AB%E5%88%86%E7%89%87%20Sharding/index.html">
+<meta property="og:title" content="The Twelve-Factor App 方法論">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/10/22/The%20Twelve-Factor%20App%20%E6%96%B9%E6%B3%95%E8%AB%96/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="在軟體開發旅程中，隨著應用程式用戶量和資料量的爆炸性成長，經常會遇到一個令人頭痛卻又甜蜜的煩惱：資料庫效能瓶頸。當已經做完了所有能想到的優化，從索引調整、查詢改寫到讀寫分離，但資料庫的回應時間依然越來越慢，這或許是一個信號——資料庫需要的是結構性的擴展，而不僅僅是修補。 這篇文章就來聊聊解決這個問題的終極武器之一：資料庫分片 (Database Sharding)。  Sharding 是一個強大">
+<meta property="og:description" content="在複雜的現代軟體世界裡，為了解決以及應對雲端時代帶來的挑戰，一套旨在建立穩健、可擴展、易於維護的應用程式的最佳實踐——The Twelve-Factor App——應運而生。 這套方法論最初由 Heroku 的工程師們提出，它不僅僅是一套技術規範，更是一種開發哲學。它為建構「軟體即服務 (SaaS)」應用程式提供了一個清晰的藍圖。無論是在開發一個新創公司的 MVP，還是在維護一個大型企業的複雜系統">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2025-08-14T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-08-15T15:25:14.521Z">
+<meta property="article:published_time" content="2025-10-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-22T15:48:06.618Z">
 <meta property="article:author" content="Kaiwii">
-<meta property="article:tag" content="Database">
+<meta property="article:tag" content="System design">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://nivek-yang.github.io/2025/08/15/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E8%B3%87%E6%96%99%E5%BA%AB%E5%88%86%E7%89%87%20Sharding/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/10/22/The%20Twelve-Factor%20App%20%E6%96%B9%E6%B3%95%E8%AB%96/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/08/15/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E8%B3%87%E6%96%99%E5%BA%AB%E5%88%86%E7%89%87%20Sharding/","path":"2025/08/15/深入淺出資料庫分片 Sharding/","title":"深入淺出資料庫分片 (Sharding)：當單一資料庫撐不住時，下一步是什麼？"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/10/22/The%20Twelve-Factor%20App%20%E6%96%B9%E6%B3%95%E8%AB%96/","path":"2025/10/22/The Twelve-Factor App 方法論/","title":"The Twelve-Factor App 方法論"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>深入淺出資料庫分片 (Sharding)：當單一資料庫撐不住時，下一步是什麼？ | 我的技術部落格</title>
+<title>The Twelve-Factor App 方法論 | 我的技術部落格</title>
   
 
 
@@ -531,7 +531,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-sharding%E4%B8%80%E5%88%87%E5%BE%9E%E6%B0%B4%E5%B9%B3%E6%93%B4%E5%B1%95%E8%AA%AA%E8%B5%B7"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是 Sharding？一切從水平擴展說起</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9C%80%E8%A6%81-sharding%E4%B8%89%E5%A4%A7%E6%A0%B8%E5%BF%83%E5%84%AA%E5%8B%A2"><span class="nav-number">2.</span> <span class="nav-text"> 為什麼需要 Sharding？三大核心優勢</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sharding-%E6%98%AF%E5%A6%82%E4%BD%95%E9%81%8B%E4%BD%9C%E7%9A%84%E9%97%9C%E9%8D%B5%E7%9A%84%E5%88%86%E7%89%87%E9%8D%B5-shard-key"><span class="nav-number">3.</span> <span class="nav-text"> Sharding 是如何運作的？關鍵的「分片鍵 (Shard Key)」</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%AF%84%E5%9C%8D%E5%88%86%E7%89%87-range-based-sharding"><span class="nav-number">3.1.</span> <span class="nav-text"> 1. 範圍分片 (Range-Based Sharding)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%9B%9C%E6%B9%8A%E5%88%86%E7%89%87-hash-based-sharding"><span class="nav-number">3.2.</span> <span class="nav-text"> 2. 雜湊分片 (Hash-Based Sharding)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%9B%AE%E9%8C%84%E5%88%86%E7%89%87-directory-based-sharding"><span class="nav-number">3.3.</span> <span class="nav-text"> 3. 目錄分片 (Directory-Based Sharding)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sharding-%E5%BF%85%E9%A0%88%E9%9D%A2%E5%B0%8D%E7%9A%84%E6%8C%91%E6%88%B0"><span class="nav-number">4.</span> <span class="nav-text"> Sharding 必須面對的挑戰</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#the-twelve-factors"><span class="nav-number">1.</span> <span class="nav-text"> The Twelve Factors</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#i-%E5%9F%BA%E7%B7%9A-codebase"><span class="nav-number">1.1.</span> <span class="nav-text"> I. 基線 (Codebase)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ii-%E4%BE%9D%E8%B3%B4-dependencies"><span class="nav-number">1.2.</span> <span class="nav-text"> II. 依賴 (Dependencies)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iii-%E8%A8%AD%E5%AE%9A-config"><span class="nav-number">1.3.</span> <span class="nav-text"> III. 設定 (Config)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iv-%E5%BE%8C%E7%AB%AF%E6%9C%8D%E5%8B%99-backing-services"><span class="nav-number">1.4.</span> <span class="nav-text"> IV. 後端服務 (Backing Services)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#v-%E5%BB%BA%E7%BD%AE-%E7%99%BC%E8%A1%8C-%E5%9F%B7%E8%A1%8C-build-release-run"><span class="nav-number">1.5.</span> <span class="nav-text"> V. 建置、發行、執行 (Build, Release, Run)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vi-%E8%A1%8C%E7%A8%8B-processes"><span class="nav-number">1.6.</span> <span class="nav-text"> VI. 行程 (Processes)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vii-%E5%9F%A0%E8%99%9F%E7%B6%81%E5%AE%9A-port-binding"><span class="nav-number">1.7.</span> <span class="nav-text"> VII. 埠號綁定 (Port Binding)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#viii-%E4%B8%A6%E8%A1%8C-concurrency"><span class="nav-number">1.8.</span> <span class="nav-text"> VIII. 並行 (Concurrency)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ix-%E6%98%93%E8%99%95%E7%90%86-disposability"><span class="nav-number">1.9.</span> <span class="nav-text"> IX. 易處理 (Disposability)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#x-%E9%96%8B%E7%99%BC%E6%AD%A3%E5%BC%8F%E7%92%B0%E5%A2%83%E5%B0%8D%E7%AD%89-devprod-parity"><span class="nav-number">1.10.</span> <span class="nav-text"> X. 開發&#x2F;正式環境對等 (Dev&#x2F;Prod Parity)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xi-%E6%97%A5%E8%AA%8C-logs"><span class="nav-number">1.11.</span> <span class="nav-text"> XI. 日誌 (Logs)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xii-%E7%AE%A1%E7%90%86%E7%A8%8B%E5%BA%8F-admin-processes"><span class="nav-number">1.12.</span> <span class="nav-text"> XII. 管理程序 (Admin Processes)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">2.</span> <span class="nav-text"> 總結</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -579,7 +579,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/15/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E8%B3%87%E6%96%99%E5%BA%AB%E5%88%86%E7%89%87%20Sharding/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/22/The%20Twelve-Factor%20App%20%E6%96%B9%E6%B3%95%E8%AB%96/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -592,12 +592,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="深入淺出資料庫分片 (Sharding)：當單一資料庫撐不住時，下一步是什麼？ | 我的技術部落格">
+      <meta itemprop="name" content="The Twelve-Factor App 方法論 | 我的技術部落格">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          深入淺出資料庫分片 (Sharding)：當單一資料庫撐不住時，下一步是什麼？
+          The Twelve-Factor App 方法論
         </h1>
 
         <div class="post-meta-container">
@@ -609,7 +609,7 @@
       <span class="post-meta-item-text">發表於</span>
       
 
-      <time title="創建時間：2025-08-15 00:00:00 / 修改時間：23:25:14" itemprop="dateCreated datePublished" datetime="2025-08-15T00:00:00+08:00">2025-08-15</time>
+      <time title="創建時間：2025-10-22 00:00:00 / 修改時間：23:48:06" itemprop="dateCreated datePublished" datetime="2025-10-22T00:00:00+08:00">2025-10-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -630,86 +630,135 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>在軟體開發旅程中，隨著應用程式用戶量和資料量的爆炸性成長，經常會遇到一個令人頭痛卻又甜蜜的煩惱：資料庫效能瓶頸。當已經做完了所有能想到的優化，從索引調整、查詢改寫到讀寫分離，但資料庫的回應時間依然越來越慢，這或許是一個信號——資料庫需要的是結構性的擴展，而不僅僅是修補。</p>
-<p>這篇文章就來聊聊解決這個問題的終極武器之一：<strong>資料庫分片 (Database Sharding)</strong>。</p>
+    <div class="post-body" itemprop="articleBody"><p>在複雜的現代軟體世界裡，為了解決以及應對雲端時代帶來的挑戰，一套旨在建立穩健、可擴展、易於維護的應用程式的最佳實踐——<strong>The Twelve-Factor App</strong>——應運而生。</p>
+<p>這套方法論最初由 Heroku 的工程師們提出，它不僅僅是一套技術規範，更是一種開發哲學。它為建構「軟體即服務 (SaaS)」應用程式提供了一個清晰的藍圖。無論是在開發一個新創公司的 MVP，還是在維護一個大型企業的複雜系統，理解並實踐這十二個原則，都將使應用程式更具彈性與生命力。</p>
+<p>讓我們逐一深入探討這十二個要素。</p>
+<hr />
+<h1 id="the-twelve-factors"><a class="markdownIt-Anchor" href="#the-twelve-factors"></a> The Twelve Factors</h1>
+<h2 id="i-基線-codebase"><a class="markdownIt-Anchor" href="#i-基線-codebase"></a> I. 基線 (Codebase)</h2>
 <blockquote>
-<p>Sharding 是一個強大但複雜的概念。這篇文章的目標，是帶你用最直觀的方式理解它、了解它的優缺點，並知道何時該認真考慮它。</p>
+<p><strong>一份基線，追蹤在版本控制系統中，可N次部署。</strong></p>
 </blockquote>
-<h1 id="什麼是-sharding一切從水平擴展說起"><a class="markdownIt-Anchor" href="#什麼是-sharding一切從水平擴展說起"></a> 什麼是 Sharding？一切從水平擴展說起</h1>
-<p>在討論 Sharding 之前，先快速了解兩種資料庫擴展方式：</p>
-<ol>
-<li><strong>垂直擴展 (Vertical Scaling)</strong>：又稱「向上擴展」(Scale-up)，就像是為伺服器升級，給它更強的 CPU、更多的 RAM、更快的 SSD。這很直接，但成本昂貴，且有物理極限。總不能無限地加記憶體吧？</li>
-<li><strong>水平擴展 (Horizontal Scaling)</strong>：又稱「向外擴展」(Scale-out)，不是讓一台伺服器變強，而是增加更多台伺服器，並將負載分散到這些伺服器上。</li>
-</ol>
-<p><strong>Sharding，本質上就是一種水平擴展的實踐。</strong></p>
-<p><strong>Sharding 就是將一個龐大的資料庫，水平切割成多個更小、更易於管理的部分，這些部分被稱為「分片 (Shards)」。</strong> 每個 Shard 都包含整體資料的一部分，並且可以被部署在獨立的伺服器上。</p>
-<p>用生活化的比喻來理解：</p>
+<p>一個應用程式的所有程式碼都應該儲存在一個<strong>單一</strong>的版本控制儲存庫中（例如 Git）。這份程式碼庫將是所有部署（開發、測試、正式環境）的唯一來源 (Single Source of Truth)。</p>
+<ul>
+<li><strong>為何重要？</strong>：確保了程式碼的一致性。團隊成員可以輕鬆協作，追蹤變更歷史，並避免因程式碼版本混亂而導致的部署災難。</li>
+<li><strong>實踐</strong>：使用 Git，並為你的專案建立一個獨立的 repository。</li>
+</ul>
+<h2 id="ii-依賴-dependencies"><a class="markdownIt-Anchor" href="#ii-依賴-dependencies"></a> II. 依賴 (Dependencies)</h2>
 <blockquote>
-<p>想像一下，經營著一個擁有全國所有圖書的「中央圖書館」。當藏書越來越多，讀者也越來越多時，找書和借書的速度變得很慢，圖書館變得擁擠不堪。</p>
-<p><strong>垂直擴展</strong>，就像是把這個中央圖書館蓋得更高、更大，換上更快的圖書輸送帶。</p>
-<p><strong>水平擴展 (Sharding)</strong>，則是決定在全國各地開設「分館」。例如，A-G 開頭的書放在台北分館，H-P 的書放在台中分館，Q-Z 的書放在高雄分館。如此一來，每個分館的壓力都變小了，讀者也可以就近、更快地找到自己想要的書。</p>
+<p><strong>明確地宣告與隔離依賴。</strong></p>
 </blockquote>
-<p>在這個比喻中，每個「分館」就是一個 Shard。</p>
-<h1 id="為什麼需要-sharding三大核心優勢"><a class="markdownIt-Anchor" href="#為什麼需要-sharding三大核心優勢"></a> 為什麼需要 Sharding？三大核心優勢</h1>
-<p>當正確實施 Sharding 後，可以帶來幾個顯著的好處：</p>
+<p>應用程式永遠不應該依賴系統環境中隱含的套件或函式庫。所有依賴都必須透過<strong>依賴宣告檔案</strong>（如 Python 的 <code>requirements.txt</code>、Node.js 的 <code>package.json</code>）來明確定義，並使用<strong>依賴隔離工具</strong>（如 <code>virtualenv</code>、<code>npm</code>、Docker 容器）來確保環境的純粹性。</p>
 <ul>
-<li><strong>提升效能 (Improved Performance)</strong>：查詢不再需要掃描數十億筆資料，而是在一個規模小得多的 Shard 中進行。這大大降低了查詢延遲，提升了讀寫速度。</li>
-<li><strong>增強擴展性 (Enhanced Scalability)</strong>：當資料繼續增長時，不需要升級昂貴的單一伺服器，只需要增加更多的 Shard（也就是更多的伺服器）即可。這種擴展方式更具彈性且成本效益更高。</li>
-<li><strong>提高可用性 (Increased Availability)</strong>：如果某一個 Shard 因為硬體故障而離線，它只會影響到儲存在該 Shard 上的那部分資料。其他 Shards 仍然可以正常運作，整個系統不會完全癱瘓（相較於單一資料庫故障會導致所有服務中斷）。</li>
+<li><strong>為何重要？</strong>：消除了「在我電腦上可以跑」的窘境。讓新進開發者或自動化建置系統可以簡單、可靠地設定開發環境。</li>
+<li><strong>實踐</strong>：在專案根目錄下維護 <code>package.json</code> 或 <code>requirements.txt</code> 檔案，並在 README 中說明如何安裝依賴。</li>
 </ul>
-<h1 id="sharding-是如何運作的關鍵的分片鍵-shard-key"><a class="markdownIt-Anchor" href="#sharding-是如何運作的關鍵的分片鍵-shard-key"></a> Sharding 是如何運作的？關鍵的「分片鍵 (Shard Key)」</h1>
-<p>系統是如何知道「哪筆資料該存到哪個 Shard」以及「去哪個 Shard 查詢資料」的呢？答案是透過一個至關重要的元素：<strong>分片鍵 (Shard Key)</strong>。</p>
-<p>Shard Key 是資料表中的一個（或多個）欄位，它的值會經過一個分片演算法，來決定這筆資料的最終歸屬地。選擇一個好的 Shard Key 是 Sharding 成敗的關鍵。</p>
-<p>以下是幾種常見的 Sharding 策略：</p>
-<h2 id="1-範圍分片-range-based-sharding"><a class="markdownIt-Anchor" href="#1-範圍分片-range-based-sharding"></a> 1. 範圍分片 (Range-Based Sharding)</h2>
-<p>這是最直觀的方式。根據 Shard Key 的一個範圍來劃分資料。</p>
+<h2 id="iii-設定-config"><a class="markdownIt-Anchor" href="#iii-設定-config"></a> III. 設定 (Config)</h2>
+<blockquote>
+<p><strong>將設定儲存在環境變數中。</strong></p>
+</blockquote>
+<p>設定（Config）是指那些在不同部署環境中會變動的資訊，例如資料庫連線資訊、第三方服務的 API Key 等。這些資訊<strong>絕對不能</strong>寫死在程式碼中，而應該儲存在<strong>環境變數</strong>裡。</p>
 <ul>
-<li><strong>範例</strong>：一個訂單資料表，可以用 <code>order_date</code> 作為 Shard Key。
-<ul>
-<li>Shard 1: 存放 2023 年 1 月 - 3 月的訂單。</li>
-<li>Shard 2: 存放 2023 年 4 月 - 6 月的訂單。</li>
-<li>…以此類推。</li>
-</ul>
-</li>
-<li><strong>優點</strong>：容易實現，範圍查詢（例如查詢某個月份的所有訂單）非常高效，因為資料都在同一個 Shard 裡。</li>
-<li><strong>缺點</strong>：容易產生 <strong>熱點 (Hotspot)</strong> 問題。例如，所有新的訂單都會寫入最新的 Shard，導致該 Shard 負載極高，而舊的 Shard 則相對閒置。</li>
-</ul>
-<h2 id="2-雜湊分片-hash-based-sharding"><a class="markdownIt-Anchor" href="#2-雜湊分片-hash-based-sharding"></a> 2. 雜湊分片 (Hash-Based Sharding)</h2>
-<p>這種策略是將 Shard Key 經過一個雜湊函數（例如 MD5、SHA-256）處理，然後用雜湊結果來決定 Shard。</p>
-<ul>
-<li><strong>範例</strong>：一個用戶資料表，用 <code>user_id</code> 作為 Shard Key。
-<ul>
-<li><code>shard_id = hash(user_id) % 總Shard數量</code></li>
-</ul>
-</li>
-<li><strong>優點</strong>：資料可以非常均勻地分佈到各個 Shard，有效避免了熱點問題。</li>
-<li><strong>優點</strong>：範圍查詢變得非常困難。例如，無法輕易地查詢 <code>user_id</code> 從 100 到 200 的所有用戶，因為他們的資料經過雜湊後，可能散落在所有 Shards 中。</li>
-</ul>
-<h2 id="3-目錄分片-directory-based-sharding"><a class="markdownIt-Anchor" href="#3-目錄分片-directory-based-sharding"></a> 3. 目錄分片 (Directory-Based Sharding)</h2>
-<p>這種方式需要維護一個獨立的「查詢表 (Lookup Table)」，就像書的目錄一樣，它記錄了每個 Shard Key 值與其對應 Shard 的映射關係。</p>
-<ul>
-<li><strong>範例</strong>：應用程式在寫入或讀取資料前，先去查詢這個目錄表，找到目標 Shard，然後再進行操作。</li>
-<li><strong>優點</strong>：分片邏輯非常靈活，可以隨時更改某個 Key 對應的 Shard。</li>
-<li><strong>缺點</strong>：目錄表本身可能成為新的效能瓶頸或單點故障。</li>
-</ul>
-<h1 id="sharding-必須面對的挑戰"><a class="markdownIt-Anchor" href="#sharding-必須面對的挑戰"></a> Sharding 必須面對的挑戰</h1>
-<p>聽起來 Sharding 很美好，對吧？但在決定擁抱它之前，請務必了解它帶來的複雜性：</p>
+<li><strong>為何重要？</strong>：
 <ol>
-<li><strong>架構複雜度劇增</strong>：應用程式、部署流程、監控系統都需要重新設計，以適應分佈式的資料庫環境。</li>
-<li><strong>跨分片查詢 (Cross-Shard Queries)</strong>：如果一個查詢需要聯合 (JOIN) 不同 Shard 的資料，將會變得非常慢且複雜。通常需要應用程式層面進行多次查詢再組合結果。</li>
-<li><strong>資料重新平衡 (Rebalancing)</strong>：當新增一個 Shard 時，需要將部分資料從舊的 Shards 遷移到新的 Shard 中，這個過程被稱為 Rebalancing。這是一個非常複雜且具風險的操作。</li>
-<li><strong>交易一致性</strong>：在單一資料庫中，有 ACID 交易來保證資料的一致性。但在分佈式環境下，要維持跨 Shard 的交易一致性是一個巨大的技術挑戰。</li>
+<li><strong>安全性</strong>：避免將敏感資訊（如密碼、金鑰）洩漏在程式碼庫中。</li>
+<li><strong>靈活性</strong>：同一份程式碼，不需任何修改，就可以部署到不同的環境。</li>
 </ol>
-<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
-<p>Sharding 是一個強大的工具，但它也是一把雙面刃。它通常被視為<strong>擴展的最後手段</strong>。</p>
-<p>在考慮 Sharding 之前，請先確保已經窮盡了其他所有優化方案：</p>
-<ul>
-<li><strong>垂直擴展</strong>：伺服器硬體是否還有升級空間？</li>
-<li><strong>快取 (Caching)</strong>：是否已經有效利用 Redis 或 Memcached 等工具來減少資料庫讀取壓力？</li>
-<li><strong>讀寫分離</strong>：是否已經將讀取操作導向到唯讀副本 (Read Replicas)？</li>
-<li><strong>資料庫與查詢優化</strong>：是否還有未加索引的欄位？是否有可以改寫的慢查詢？</li>
+</li>
+<li><strong>實踐</strong>：<pre class="highlight"><code class="python"><span class="hljs-comment"># Bad: 硬編碼在程式碼中</span>
+db_url = <span class="hljs-string">&quot;postgres://user:password@host:port/dbname&quot;</span>
+
+<span class="hljs-comment"># Good: 從環境變數讀取</span>
+<span class="hljs-keyword">import</span> os
+db_url = os.getenv(<span class="hljs-string">&quot;DATABASE_URL&quot;</span>)
+</code></pre>
+</li>
 </ul>
-<p>只有當上述方法都已無法滿足需求，且應用程式正面臨「超大規模」的資料量（通常是 TB 級別）和吞吐量時，Sharding 才應該被納入考慮範圍。</p>
+<h2 id="iv-後端服務-backing-services"><a class="markdownIt-Anchor" href="#iv-後端服務-backing-services"></a> IV. 後端服務 (Backing Services)</h2>
+<blockquote>
+<p><strong>將後端服務視為附加資源。</strong></p>
+</blockquote>
+<p>後端服務是指應用程式在運行時所依賴的任何服務，例如資料庫 (MySQL, PostgreSQL)、快取系統 (Redis)、訊息佇列 (RabbitMQ) 等。對應用程式而言，這些服務都應該是<strong>可替換的資源</strong>，透過一個 URL 或其他定位資訊來存取。</p>
+<ul>
+<li><strong>為何重要？</strong>：實現了應用程式與底層服務的<strong>鬆耦合</strong>。可以輕易地將本地的 MySQL 資料庫換成雲端的 RDS 服務，而不需要修改任何程式碼，只需更改環境變數中的 <code>DATABASE_URL</code> 即可。</li>
+</ul>
+<h2 id="v-建置-發行-執行-build-release-run"><a class="markdownIt-Anchor" href="#v-建置-發行-執行-build-release-run"></a> V. 建置、發行、執行 (Build, Release, Run)</h2>
+<blockquote>
+<p><strong>嚴格區分建置、發行、執行三個階段。</strong></p>
+</blockquote>
+<ol>
+<li><strong>建置 (Build)</strong>：將程式碼轉換為可執行包的過程，包含編譯、打包、安裝依賴等。</li>
+<li><strong>發行 (Release)</strong>：將「建置」階段的產出，與「設定」結合，形成一個<strong>不可變</strong>的版本。一旦建立，就不能再修改。</li>
+<li><strong>執行 (Run)</strong>：在特定環境中運行「發行」階段的產物。</li>
+</ol>
+<ul>
+<li><strong>為何重要？</strong>：確保部署的穩定性與可追溯性。任何修改都必須經過新的 Build -&gt; Release 流程，禁止直接在線上環境修改程式碼，這為 CI/CD 提供了堅實的基礎。</li>
+</ul>
+<h2 id="vi-行程-processes"><a class="markdownIt-Anchor" href="#vi-行程-processes"></a> VI. 行程 (Processes)</h2>
+<blockquote>
+<p><strong>應用程式應作為一個或多個無狀態 (Stateless) 的行程來執行。</strong></p>
+</blockquote>
+<p>任何需要被持久化的資料，都必須儲存在後端服務（如資料庫或檔案儲存）中。應用程式本身應該是<strong>無狀態 (Stateless)</strong> 且<strong>無共享 (Share-Nothing)</strong> 的。這意味著來自同一個用戶的兩次請求，可能會被路由到兩個完全不同的行程處理，而不影響功能。</p>
+<ul>
+<li><strong>為何重要？</strong>：這是<strong>水平擴展 (Horizontal Scaling)</strong> 的關鍵。當流量增加時，可以簡單地增加更多的行程實例來分擔負載，而不用擔心狀態同步的問題。</li>
+</ul>
+<h2 id="vii-埠號綁定-port-binding"><a class="markdownIt-Anchor" href="#vii-埠號綁定-port-binding"></a> VII. 埠號綁定 (Port Binding)</h2>
+<blockquote>
+<p><strong>透過埠號綁定來對外提供服務。</strong></p>
+</blockquote>
+<p>應用程式應該是<strong>自我包含的</strong>，不依賴於外部的網路伺服器（如 Apache, Nginx）來啟動。它應該自己綁定一個埠號，並監聽來自該埠號的請求。</p>
+<ul>
+<li><strong>為何重要？</strong>：使應用程式可以作為其他服務的後端服務。例如，一個 API 服務可以綁定 8000 埠，然後由另一個路由層（如 Nginx）將外部請求轉發給它。</li>
+<li><strong>實踐</strong>：在 Node.js 中使用 <code>app.listen(port)</code>，在 Python Django 中使用 <code>runserver</code>。</li>
+</ul>
+<h2 id="viii-並行-concurrency"><a class="markdownIt-Anchor" href="#viii-並行-concurrency"></a> VIII. 並行 (Concurrency)</h2>
+<blockquote>
+<p><strong>透過行程模型來達成擴展。</strong></p>
+</blockquote>
+<p>基於第六點「無狀態行程」，應用程式應該能夠透過<strong>水平擴展</strong>來增加並行處理能力。這意味著不應該依賴垂直擴展（增加單一機器的 CPU/RAM），而是透過增加更多的行程實例來應對負載。</p>
+<ul>
+<li><strong>為何重要？</strong>：提供了彈性且成本效益高的擴展方式，完美契合雲端環境的特性。</li>
+<li><strong>實踐</strong>：在 Docker Swarm 或 Kubernetes 環境中，只需調整服務的 <code>replicas</code> 數量即可。</li>
+</ul>
+<h2 id="ix-易處理-disposability"><a class="markdownIt-Anchor" href="#ix-易處理-disposability"></a> IX. 易處理 (Disposability)</h2>
+<blockquote>
+<p><strong>快速啟動與優雅地關閉，以最大化系統的穩健性。</strong></p>
+</blockquote>
+<p>應用程式的行程應該是<strong>可拋棄的</strong>，意味著它們可以隨時被啟動或停止。這要求它們<strong>啟動時間要快</strong>，並能<strong>優雅地關閉</strong>（例如，在收到 <code>SIGTERM</code> 信號時，完成當前請求後再退出）。</p>
+<ul>
+<li><strong>為何重要？</strong>：這對於彈性擴展、快速部署和從故障中恢復至關重要。當系統需要增減實例，或部署新版本時，快速啟動與關閉的能力是必需的。</li>
+</ul>
+<h2 id="x-開發正式環境對等-devprod-parity"><a class="markdownIt-Anchor" href="#x-開發正式環境對等-devprod-parity"></a> X. 開發/正式環境對等 (Dev/Prod Parity)</h2>
+<blockquote>
+<p><strong>讓開發、測試、正式環境盡可能地相似。</strong></p>
+</blockquote>
+<p>傳統開發模式中，開發環境（開發者的筆電）與正式環境（伺服器）之間存在巨大差異，這導致許多「在我電腦上可以跑」的問題。應該盡力縮小這些差距。</p>
+<ul>
+<li><strong>為何重要？</strong>：減少因環境差異導致的 Bug，提升開發信心，實現持續部署。</li>
+<li><strong>實踐</strong>：使用 Docker、Vagrant 等容器化或虛擬化技術，確保所有環境（開發、測試、生產）使用相同的作業系統、依賴版本和後端服務。</li>
+</ul>
+<h2 id="xi-日誌-logs"><a class="markdownIt-Anchor" href="#xi-日誌-logs"></a> XI. 日誌 (Logs)</h2>
+<blockquote>
+<p><strong>將日誌視為事件串流 (Event Stream)。</strong></p>
+</blockquote>
+<p>應用程式本身<strong>不應該</strong>關心日誌的儲存與管理。它只需將所有日誌訊息，作為一個不間斷的<strong>事件串流</strong>，輸出到標準輸出 <code>stdout</code> 和標準錯誤 <code>stderr</code>。</p>
+<ul>
+<li><strong>為何重要？</strong>：將應用程式與日誌處理邏輯解耦。在雲端環境中，日誌的收集、彙總、分析應該交由專門的平台（如 ELK Stack, Splunk, Datadog）來處理。</li>
+<li><strong>實踐</strong>：在程式碼中直接使用 <code>print()</code> 或 <code>console.log()</code>，而非寫入到特定的檔案。</li>
+</ul>
+<h2 id="xii-管理程序-admin-processes"><a class="markdownIt-Anchor" href="#xii-管理程序-admin-processes"></a> XII. 管理程序 (Admin Processes)</h2>
+<blockquote>
+<p><strong>將管理或維護任務，作為一次性的行程來執行。</strong></p>
+</blockquote>
+<p>諸如資料庫遷移 (Database Migration)、執行一次性腳本等管理任務，應該在與應用程式正常運行時相同的環境中執行。這些腳本應該與應用程式的程式碼一同發布，以避免版本不一致的問題。</p>
+<ul>
+<li><strong>為何重要？</strong>：確保管理任務與應用程式使用相同的設定和依賴，避免因環境不一致導致操作失敗。</li>
+<li><strong>實踐</strong>：將管理腳本放在程式碼庫中，並透過如 <code>heroku run bash</code> 或 <code>kubectl exec</code> 等機制來執行。</li>
+</ul>
+<hr />
+<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
+<p>The Twelve-Factor App 並不是一套僵化的法律，而是一套經過實戰驗證的、極具價值的指導原則。它描繪了一個理想的雲原生應用應有的樣貌：<strong>高內聚、低耦合、易於擴展、穩健可靠</strong>。</p>
+<p>在下一個專案中，或是在重構現有系統時，不妨將這十二個要素作為檢查清單。也許無法一次全部達成，但每朝著這些原則邁進一步，應用程式就會離現代化、雲原生的目標更近一步。</p>
 
     </div>
 
@@ -719,21 +768,18 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/my-blog/tags/Database/" rel="tag"># Database</a>
+              <a href="/my-blog/tags/System-design/" rel="tag"># System design</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/my-blog/2025/08/14/%E8%A7%A3%E9%8E%96%E5%8D%B3%E6%99%82%E8%B3%87%E6%96%99%E7%9A%84%E5%A5%A7%E7%A7%98%20%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20CDC/" rel="prev" title="解鎖即時資料的奧秘：深入淺出 CDC (Change Data Capture)">
-                  <i class="fa fa-angle-left"></i> 解鎖即時資料的奧秘：深入淺出 CDC (Change Data Capture)
+                <a href="/my-blog/2025/10/20/%E5%BE%9E%20if-else%20%E5%88%B0%20SOLID%20%E5%9C%A8%E7%90%86%E6%83%B3%E6%9E%B6%E6%A7%8B%E8%88%87%E7%8F%BE%E5%AF%A6%E9%80%9F%E5%BA%A6%E4%B9%8B%E9%96%93%E8%A9%B2%E5%A6%82%E4%BD%95%E6%8A%89%E6%93%87/" rel="prev" title="從 if-else 到 SOLID：在理想架構與現實速度之間，該如何抉擇？">
+                  <i class="fa fa-angle-left"></i> 從 if-else 到 SOLID：在理想架構與現實速度之間，該如何抉擇？
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/my-blog/2025/08/16/%E6%90%9E%E6%87%82%E4%B8%BB%E5%BE%9E%E5%BC%8F%E8%B3%87%E6%96%99%E5%BA%AB%20Master-Slave%20Replication/" rel="next" title="搞懂主從式資料庫 (Master-Slave Replication)，提升效能與備援的關鍵第一步">
-                  搞懂主從式資料庫 (Master-Slave Replication)，提升效能與備援的關鍵第一步 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>

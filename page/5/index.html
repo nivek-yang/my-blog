@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">112</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">113</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">56</span></a>
       <ul class="sub-menu">
   
@@ -449,7 +449,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/System-design/">
         System design
-        <span class="post-count">(5)</span>
+        <span class="post-count">(6)</span>
       </a>
     </li>
   
@@ -541,7 +541,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">112</span>
+          <span class="site-state-item-count">113</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -566,6 +566,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/31/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20NAT%20%E4%BF%9D%E8%AD%B7%E5%85%A7%E9%83%A8%E7%B6%B2%E8%B7%AF%E4%B8%A6%E6%87%89%E5%B0%8D%20IPv4%20%E6%9E%AF%E7%AB%AD%E7%9A%84%E6%95%91%E6%98%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/08/31/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20NAT%20%E4%BF%9D%E8%AD%B7%E5%85%A7%E9%83%A8%E7%B6%B2%E8%B7%AF%E4%B8%A6%E6%87%89%E5%B0%8D%20IPv4%20%E6%9E%AF%E7%AB%AD%E7%9A%84%E6%95%91%E6%98%9F/" class="post-title-link" itemprop="url">
+              深入淺出 NAT：保護內部網路並應對 IPv4 枯竭的救星
+            </a>
+            <a href="/my-blog/2025/08/31/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20NAT%20%E4%BF%9D%E8%AD%B7%E5%85%A7%E9%83%A8%E7%B6%B2%E8%B7%AF%E4%B8%A6%E6%87%89%E5%B0%8D%20IPv4%20%E6%9E%AF%E7%AB%AD%E7%9A%84%E6%95%91%E6%98%9F/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-08-31 00:00:00 / 修改時間：22:29:43" itemprop="dateCreated datePublished" datetime="2025-08-31T00:00:00+08:00">2025-08-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">隨著對 IP 地址和路由的深入了解，可能已經開始意識到，儘管 IP 地址 是網路世界中每個設備的唯一「身份證」，但 IPv4 地址的數量是有限的。全球有數十億甚至更多的設備需要連接到網際網路，這對於總量約 43 億的 IPv4 地址來說，無疑是杯水車薪。 那麼，現代家庭或辦公室裡，為什麼數十個設備（手機、電腦、平板、智慧家電）都可以同時上網，卻只需要一個「公網 IP」呢？這背後的神奇技術，就是這篇文章要深入探討的「網路地址轉換」—— NAT (Network Address Translation)。 什麼是 NAT？ NAT (Network Address Translation) 是一種在 IP 封包到達路由器邊界時，透過修改其 IP 地址資訊，使得多個設備可以共用一個公共 IP 地址上網的技術。它主要工作在 OSI 模型的第三層（網路層），或 TCP/IP 模型中的網路層。 可以將 NAT 想像成一位網路世界的「翻譯官」或「前台接待員」。 比喻：公司前台的電話機 一家公司對外只有一個總機號碼（公網 IP）。 公司內部有許多分機（私有 IP），員工用分機打電話。 當內部員工打電話給外部時，總機負責將分機號碼「偽裝」成總機號碼打出去。 當外部電話打進總機，總機會根據之前的紀錄（或指示），將電話轉接到內部特定的分機。 在這個比喻中，路由器就是總機，公網 IP 是總機號碼，內部電腦的私有 IP 就是分機號碼。 NAT 的主要目的 NAT 的出現，主要解決了以下幾個關鍵問題： 緩解 IPv4 地址枯竭：這是最主要的原因。透過讓多個內部設備共用少量的公共 IP 地址，極大地延緩了 IPv4 地址的耗盡速度。 提升網路安全性：由於外部網路無法直接看到或存取內部網路設備的私有 IP 地址，這為內部網路提供了一層額外的保護，像是一個「隱形披風」。 靈活性與簡化網路管理：當內部網路需要修改 IP 配置時（例如更換 ISP），只需修改路由器的公網 IP，內部私有 IP 配置可以不變，減少了管理複雜性。 NAT 的運作方式：主要類型 根據轉換方式的不同，NAT 主要有三種類型： 1. 靜態 NAT (Static NAT) 定義：將內部網路的一個特定私有 IP 地址，一對一地永久映射到一個公有 IP 地址。 用途：主要用於讓外部網路能夠存取內部網路中的特定伺服器（例如：Web 伺服器、FTP 伺服器），因為這些伺服器需要一個固定的公共入口。 優點：簡單、穩定，外部可直接訪問。 缺點：每個內部 IP 都需要一個獨特的公網 IP，無法節省公共 IP 地址，也不提供隱蔽性。 比喻：公司為某位高管分配了一個專屬的直撥號碼，外部可以直接撥打到他/她的分機，但這個號碼不能給其他人用。 2. 動態 NAT (Dynamic NAT) 定義：路由器維護一個可用的公共 IP 地址池 (Pool)。當內部設備需要上網時，路由器會從這個池中動態地分配一個未被使用的公有 IP 地址給它，進行一對一映射。 用途：主要用於那些需要臨時公網 IP 訪問的內部設備，例如普通員工的電腦。 優點：節省了公共 IP 地址，因為公網 IP 可以重複利用（當設備離線時，其分配到的公網 IP 會被釋放回池中）。 缺點：仍然受限於公共 IP 地址池的大小，如果內部設備數量超過地址池數量，部分設備將無法獲得公網 IP。 比喻：公司有一組對外公開的客服專線號碼。當員工需要打外部電話時，系統會自動分配一個當前空閒的客服專線號碼給他/她。 3. 埠地址轉換 / 網路地址埠轉換 (PAT / NAT Overload) 定義：這是日常生活中最常用、最常見的 NAT 形式。它允許多個內部私有 IP 地址，共用一個單一的公共 IP 地址來訪問網際網路。它通過為每個連線分配不同的埠號 (Port Number) 來區分不同的內部會話。 用途：絕大多數家用路由器、小型辦公室網路都使用 PAT。它極大地節省了 IPv4 地址。 優點：最大限度地節省公共 IP 地址，一個公網 IP 可以支持數千個內部設備同時上網。 缺點： 無法直接從外部主動連接內部設備：因為外部設備只看到路由器的公網 IP 和埠號，不知道對應哪個內部設備。除非透過「埠轉發 (Port Forwarding)」或「DMZ 主機」進行特殊配置。 對某些應用程式可能產生兼容性問題：尤其是一些對 IP 和埠號有嚴格要求的舊應用程式。 比喻：公司對外只有一個總機號碼。當內部員工打電話給外部時，總機會在撥出的號碼後面加上一個分機號碼（埠號）來標示是哪個員工打的。外部電話回撥到總機時，總機就知道要轉接給哪個分機。 PAT 範例： 想像一下，家庭路由器只有一個公網 IP：203.0.113.10 你的電腦 (192.168.1.100) 訪問 Google 網站 (假設目的埠 80)。 路由器會記錄：內部 192.168.1.100:12345 -&gt; 外部 203.0.113.10:50000 (這裡的 12345 和 50000 都是源埠號，50000 是路由器為此次連接分配的唯一埠) 你的手機 (192.168.1.101) 同時訪問 Facebook 網站 (假設目的埠 80)。 路由器會記錄：內部 192.168.1.101:54321 -&gt; 外部 203.0.113.10:50001 (又分配了一個不同的埠) 當 Google 或 Facebook 的伺服器回應資料時，它們將資料發送到 203.0.113.10 和路由器為其分配的特定埠（例如 50000 或 50001）。路由器收到後，查詢其 NAT 表，就能準確地將回應轉發回你的電腦或手機。 NAT 的安全性考量：好處與限制 NAT 在提供地址隱蔽性的同時，也帶來了一些安全上的特性： 隱藏內部拓撲：外部攻擊者無法直接掃描內部網路的 IP 地址，提高了匿名性。 自然的防火牆作用：由於外部無法主動發起對內部私有 IP 的連線（除非設定特殊規則），NAT 在某種程度上扮演了非狀態防火牆的角色，阻擋了許多未經請求的外部連線。 「埠轉發 (Port Forwarding)」為突破口：如果要讓外部主動存取內部伺服器，就需要在路由器上設定「埠轉發」，將特定埠從公網 IP 映射到內部私有 IP 的特定埠。這會打開一個「孔」，需要謹慎配置。 結論 NAT 是一項實用的網路技術，它在解決 IPv4 地址枯竭問題上功不可沒，同時也為我們的內部網路提供了一層隱形的保護。無論是家用的 Wi-Fi 路由器，還是企業級的網路設備，NAT 都扮演著不可或缺的翻譯官角色，讓私有網路設備能夠順暢無阻地與網際網路進行溝通。 理解 NAT 的原理和不同類型，能幫助我們更好地配置和管理自己的網路，並對資料流動有更清晰的認識。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/08/31/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20NAT%20%E4%BF%9D%E8%AD%B7%E5%85%A7%E9%83%A8%E7%B6%B2%E8%B7%AF%E4%B8%A6%E6%87%89%E5%B0%8D%20IPv4%20%E6%9E%AF%E7%AB%AD%E7%9A%84%E6%95%91%E6%98%9F/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1330,92 +1416,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/08/20/%E7%90%86%E8%A7%A3%20BASE%20%E7%90%86%E8%AB%96%20%E5%9C%A8%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1%E4%B8%AD%E7%9A%84%E8%B3%87%E6%96%99%E4%B8%80%E8%87%B4%E6%80%A7%E5%8F%96%E6%8D%A8/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/19/%E8%B3%87%E6%96%99%E5%BA%AB%E7%9A%84%E5%9F%BA%E7%9F%B3%20%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%E4%BA%A4%E6%98%93%E7%9A%84%E5%9B%9B%E5%A4%A7%E5%AE%88%E8%AD%B7%E7%A5%9E%20ACID/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/08/19/%E8%B3%87%E6%96%99%E5%BA%AB%E7%9A%84%E5%9F%BA%E7%9F%B3%20%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%E4%BA%A4%E6%98%93%E7%9A%84%E5%9B%9B%E5%A4%A7%E5%AE%88%E8%AD%B7%E7%A5%9E%20ACID/" class="post-title-link" itemprop="url">
-              資料庫的基石：一次搞懂交易的四大守護神 ACID
-            </a>
-            <a href="/my-blog/2025/08/19/%E8%B3%87%E6%96%99%E5%BA%AB%E7%9A%84%E5%9F%BA%E7%9F%B3%20%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%E4%BA%A4%E6%98%93%E7%9A%84%E5%9B%9B%E5%A4%A7%E5%AE%88%E8%AD%B7%E7%A5%9E%20ACID/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-08-19 00:00:00 / 修改時間：23:23:18" itemprop="dateCreated datePublished" datetime="2025-08-19T00:00:00+08:00">2025-08-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">當開發應用程式時，無論是電商網站的訂單系統、銀行的轉帳功能，還是社群平台的發文留言，背後都離不開與資料庫的互動。我們都希望資料是正確、可靠且一致的。但要如何確保在高併發、網路不穩定甚至系統當機的複雜環境下，資料依然能保持「高枕無憂」的狀態呢？ 答案，就藏在資料庫系統的核心設計哲學中——ACID 原則。 什麼是「交易」(Transaction)？ 在深入 ACID 之前，必須先理解什麼是「交易」。 在資料庫中，交易是一連串操作的集合，這些操作被視為一個不可分割的最小工作單元。這個單元裡的所有操作，要麼全部成功，要麼全部失敗。 最經典的例子就是銀行轉帳： 從 A 帳戶扣除 1000 元。 在 B 帳戶增加 1000 元。 這兩個動作必須被綁定在一個「交易」中。絕對不希望只完成了第一步，系統就當機了，那 A 的錢就憑空消失了！而 ACID 原則，正是為了確保這種交易能夠安全可靠地完成。 ACID 的四大核心成員 ACID 是四個單字的首字母縮寫，分別代表著： Atomicity (原子性) Consistency (一致性) Isolation (隔離性) Durability (持久性) A - Atomicity (原子性)：成敗與共，絕不單飛 原子性確保一個交易中的所有操作是「一個完整的整體」，就像化學中的原子一樣，不可再分割。這意味著：所有操作要麼全部完成，要麼全部都不做。如果交易中的任何一個環節失敗，整個交易就會被回滾 (Rollback) 到最初的狀態，彷彿什麼事都沒發生過。 生活化比喻： 這就像去 ATM 提款。整個「交易」包含：插卡 -&gt; 輸入密碼 -&gt; 輸入金額 -&gt; 吐鈔 -&gt; 帳戶扣款 -&gt; 退卡。 如果在「吐鈔」環節機器卡住了，絕對不希望「帳戶扣款」這個動作還被執行。原子性能保證，一旦吐鈔失敗，整個交易就會被取消，帳戶餘額會恢復原狀。 在 SQL 中，通常使用 BEGIN TRANSACTION, COMMIT (提交) 和 ROLLBACK (回滾) 來控制交易的原子性。 BEGIN TRANSACTION; -- 步驟 1: 從 A 帳戶扣款 UPDATE Accounts SET balance = balance - 1000 WHERE user_id = &#x27;A&#x27;; -- 假設此處發生了某個錯誤！ -- 例如：B 帳戶不存在或系統崩潰 -- 步驟 2: 為 B 帳戶存款 UPDATE Accounts SET balance = balance + 1000 WHERE user_id = &#x27;B&#x27;; -- 如果中間出錯，整個交易會被 ROLLBACK -- 如果一切順利，執行 COMMIT COMMIT; C - Consistency (一致性)：規則至上，絕不妥協 一致性確保資料庫的狀態在交易開始前和結束後，都必須滿足所有的預設規則和約束 (例如：欄位類型、不得為空、主鍵唯一性、外鍵關聯等)。換句話說，一個交易不能破壞資料庫的「完整性」。 資料庫本身並不創造一致性，而是提供機制來維持開發者定義的一致性。 生活化比喻： 想像一個圖書館的借書系統，規則是「每個用戶最多只能借 5 本書」。 當一個已經借了 5 本書的用戶再來借書時，一個符合一致性的交易會拒絕這次操作，因為執行後會破壞「最多 5 本」這個規則。交易結束後，資料庫的狀態依然是合法的。它確保了資料庫永遠不會進入一個「矛盾」或「非法」的狀態。 I - Isolation (隔離性)：你的世界，與我無關 在多使用者環境下，多個交易可能會同時發生 (併發)。隔離性確保一個交易的執行不會被其他正在同時執行的交易所干擾。從任何一個交易的角度來看，它都感覺好像是系統中唯一在運行的交易。 如果沒有隔離性，可能會發生以下問題： 髒讀 (Dirty Read): 一個交易讀取了另一個尚未提交的交易所修改的資料。 不可重複讀 (Non-repeatable Read): 一個交易內兩次讀取同一筆資料，結果卻不同，因為中間被其他交易修改並提交了。 幻讀 (Phantom Read): 一個交易內兩次執行相同的範圍查詢，但第二次查詢返回了第一次沒有的「幻影」行，因為其他交易在此期間插入了新資料。 生活化比喻： 你和另一個人同時在網上搶購最後一張演唱會門票。 隔離性確保系統會將你們倆的操作隔離開來。系統會先處理一個人的請求（比如你的），鎖定這張票，完成整個付款流程。在這期間，另一個人看到的狀態可能是「正在處理」或「已售罄」，而不會讓他也能進入付款頁面，導致一張票賣給兩個人。 資料庫通常提供不同的隔離級別 (如 Read Uncommitted, Read Committed, Repeatable Read, Serializable)，讓開發者在效能和資料一致性之間做取捨。 D - Durability (持久性)：一諾千金，永不遺失 持久性保證一旦交易被成功提交 (Commit)，它對資料庫所做的更改就是永久性的。即使之後系統發生崩潰、斷電或其他故障，這些已提交的修改也不會丟失。 資料庫通常透過預寫日誌 (Write-Ahead Logging, WAL) 等技術來實現持久性。在修改實際資料前，系統會先把操作記錄到一個穩定的日誌檔案中。這樣即使系統崩潰，重啟後也能透過日誌來恢復資料，確保已提交的交易不會遺失。 生活化比喻： 當在網路上完成付款，並收到「交易成功」的確認訊息時，這個結果就是持久的。不用擔心商家下一秒說因為他們伺服器斷電了，所以訂單不算數。這個「承諾」已經被永久地記錄下來了。 總結：為何 ACID 如此重要？ 原則 核心概念 口語化解釋 Atomicity 不可分割 一家人要整整齊齊，要麼一起成功，要麼一起失敗。 Consistency 狀態合法 做人要有底線，做事要守規矩，不能讓資料庫陷入混亂。 Isolation 互不干擾 你走你的陽關道，我過我的獨木橋，我們互不影響。 Durability 永久保存 說出去的話，潑出去的水，一旦承諾，永久有效。 ACID 原則是關聯式資料庫管理系統 (RDBMS) 如 MySQL、PostgreSQL 等的基石。它為我們提供了一個強大的承諾：資料是可靠的。這使得開發者可以專注於業務邏輯，而不必過度擔心底層資料在各種極端情況下的完整性問題。 當然，在某些場景下（特別是需要極高吞吐量的 NoSQL 資料庫），人們會選擇犧牲部分 ACID 特性（尤其是 C 和 I），來換取更高的效能和可用性，這就是所謂的 BASE 理論 (Basically Available, Soft state, Eventually consistent)，但這就是另一個有趣的話題了。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/08/19/%E8%B3%87%E6%96%99%E5%BA%AB%E7%9A%84%E5%9F%BA%E7%9F%B3%20%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%E4%BA%A4%E6%98%93%E7%9A%84%E5%9B%9B%E5%A4%A7%E5%AE%88%E8%AD%B7%E7%A5%9E%20ACID/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>
