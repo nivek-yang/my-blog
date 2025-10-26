@@ -19,28 +19,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="在現代應用開發中，「即時」和「事件驅動」已經成為標配。當討論這些技術時，Pub&#x2F;Sub 和 SSE (Server-Sent Events) 這兩個名詞經常被提及，也因此常常被混淆。許多開發者會問：「應該用 Pub&#x2F;Sub 還是 SSE 來實現即時功能？」 這個問題的答案是：可能兩個都需要。 因為它們根本不是競爭關係，而是在軟體架構中扮演不同角色的合作夥伴。本文將徹底釐清這兩者的差異，並展示它們如">
+    <meta name="description" content="“這個查詢在測試環境只要 0.5 秒，為什麼在正式環境要跑 30 秒？”  這句話，可能是每個與資料庫打交道的工程師都曾面臨的惡夢。一個緩慢的 SQL 查詢，輕則影響使用者體驗，重則可能拖垮整個系統。 當問題發生時，不能像無頭蒼蠅一樣亂猜。幸運的是，資料庫本身提供了豐富的線索，我們需要的是一套系統性的偵探方法，從蛛絲馬跡中找出真正的元兇。 這篇文章將提供一個從宏觀到微觀的診斷框架，幫助一步步定位">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Pub&#x2F;Sub vs SSE：別再搞混了！一個是後端架構，一個是前端協定">
-<meta property="og:url" content="https://nivek-yang.github.io/2025/07/23/PubSub%20vs%20SSE%20%E5%88%A5%E5%86%8D%E6%90%9E%E6%B7%B7%E4%BA%86%20%E4%B8%80%E5%80%8B%E6%98%AF%E5%BE%8C%E7%AB%AF%E6%9E%B6%E6%A7%8B%E4%B8%80%E5%80%8B%E6%98%AF%E5%89%8D%E7%AB%AF%E5%8D%94%E5%AE%9A/index.html">
+<meta property="og:title" content="SQL 效能調校：當查詢變慢時，該如何找出問題癥結？">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/10/26/SQL%20%E6%95%88%E8%83%BD%E8%AA%BF%E6%A0%A1/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="在現代應用開發中，「即時」和「事件驅動」已經成為標配。當討論這些技術時，Pub&#x2F;Sub 和 SSE (Server-Sent Events) 這兩個名詞經常被提及，也因此常常被混淆。許多開發者會問：「應該用 Pub&#x2F;Sub 還是 SSE 來實現即時功能？」 這個問題的答案是：可能兩個都需要。 因為它們根本不是競爭關係，而是在軟體架構中扮演不同角色的合作夥伴。本文將徹底釐清這兩者的差異，並展示它們如">
+<meta property="og:description" content="“這個查詢在測試環境只要 0.5 秒，為什麼在正式環境要跑 30 秒？”  這句話，可能是每個與資料庫打交道的工程師都曾面臨的惡夢。一個緩慢的 SQL 查詢，輕則影響使用者體驗，重則可能拖垮整個系統。 當問題發生時，不能像無頭蒼蠅一樣亂猜。幸運的是，資料庫本身提供了豐富的線索，我們需要的是一套系統性的偵探方法，從蛛絲馬跡中找出真正的元兇。 這篇文章將提供一個從宏觀到微觀的診斷框架，幫助一步步定位">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2025-07-22T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-07-23T06:40:31.935Z">
+<meta property="article:published_time" content="2025-10-25T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-26T15:24:20.414Z">
 <meta property="article:author" content="Kaiwii">
-<meta property="article:tag" content="Pub&#x2F;Sub">
-<meta property="article:tag" content="SSE">
+<meta property="article:tag" content="Database">
+<meta property="article:tag" content="SQL">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://nivek-yang.github.io/2025/07/23/PubSub%20vs%20SSE%20%E5%88%A5%E5%86%8D%E6%90%9E%E6%B7%B7%E4%BA%86%20%E4%B8%80%E5%80%8B%E6%98%AF%E5%BE%8C%E7%AB%AF%E6%9E%B6%E6%A7%8B%E4%B8%80%E5%80%8B%E6%98%AF%E5%89%8D%E7%AB%AF%E5%8D%94%E5%AE%9A/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/10/26/SQL%20%E6%95%88%E8%83%BD%E8%AA%BF%E6%A0%A1/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/07/23/PubSub%20vs%20SSE%20%E5%88%A5%E5%86%8D%E6%90%9E%E6%B7%B7%E4%BA%86%20%E4%B8%80%E5%80%8B%E6%98%AF%E5%BE%8C%E7%AB%AF%E6%9E%B6%E6%A7%8B%E4%B8%80%E5%80%8B%E6%98%AF%E5%89%8D%E7%AB%AF%E5%8D%94%E5%AE%9A/","path":"2025/07/23/PubSub vs SSE 別再搞混了 一個是後端架構一個是前端協定/","title":"Pub/Sub vs SSE：別再搞混了！一個是後端架構，一個是前端協定"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/10/26/SQL%20%E6%95%88%E8%83%BD%E8%AA%BF%E6%A0%A1/","path":"2025/10/26/SQL 效能調校/","title":"SQL 效能調校：當查詢變慢時，該如何找出問題癥結？"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Pub/Sub vs SSE：別再搞混了！一個是後端架構，一個是前端協定 | 我的技術部落格</title>
+<title>SQL 效能調校：當查詢變慢時，該如何找出問題癥結？ | 我的技術部落格</title>
   
 
 
@@ -532,7 +532,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#pubsub-%E7%B3%BB%E7%B5%B1%E5%BE%8C%E5%8F%B0%E7%9A%84%E4%B8%AD%E5%A4%AE%E9%83%B5%E6%94%BF%E7%B3%BB%E7%B5%B1"><span class="nav-number">1.</span> <span class="nav-text"> Pub&#x2F;Sub - 系統後台的「中央郵政系統」</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E8%A6%81%E7%94%A8-pubsub"><span class="nav-number">1.1.</span> <span class="nav-text"> 為什麼要用 Pub&#x2F;Sub？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sse-%E5%B0%8D%E7%80%8F%E8%A6%BD%E5%99%A8%E7%9A%84%E5%8D%B3%E6%99%82%E5%BB%A3%E6%92%AD%E9%9B%BB%E5%8F%B0"><span class="nav-number">2.</span> <span class="nav-text"> SSE - 對瀏覽器的「即時廣播電台」</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E8%A6%81%E7%94%A8-sse"><span class="nav-number">2.1.</span> <span class="nav-text"> 為什麼要用 SSE？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pubsub-vs-sse"><span class="nav-number">3.</span> <span class="nav-text"> Pub&#x2F;Sub vs SSE</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%A6%E6%88%B0%E5%A0%B4%E6%99%AF%E5%8D%B3%E6%99%82%E7%89%A9%E6%B5%81%E8%BF%BD%E8%B9%A4%E7%B3%BB%E7%B5%B1"><span class="nav-number">4.</span> <span class="nav-text"> 實戰場景：即時物流追蹤系統</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%E6%89%BE%E5%87%BA%E6%9C%89%E5%95%8F%E9%A1%8C%E7%9A%84-sql"><span class="nav-number">1.</span> <span class="nav-text"> 第一步：找出有問題的 SQL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E5%B7%A5%E5%85%B7%E6%85%A2%E6%9F%A5%E8%A9%A2%E6%97%A5%E8%AA%8C-slow-query-log"><span class="nav-number">1.1.</span> <span class="nav-text"> 主要工具：慢查詢日誌 (Slow Query Log)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E5%88%86%E6%9E%90%E5%9F%B7%E8%A1%8C%E8%A8%88%E7%95%AB-execution-plan"><span class="nav-number">2.</span> <span class="nav-text"> 第二步：分析執行計畫 (Execution Plan)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E5%B7%A5%E5%85%B7explain-execution-plan"><span class="nav-number">2.1.</span> <span class="nav-text"> 主要工具：EXPLAIN &#x2F; Execution Plan</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A9%B2%E9%97%9C%E6%B3%A8%E7%9A%84%E9%97%9C%E9%8D%B5%E6%8C%87%E6%A8%99"><span class="nav-number">2.2.</span> <span class="nav-text"> 該關注的關鍵指標：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%E6%B7%B1%E5%85%A5%E8%AA%BF%E6%9F%A5-%E5%B8%B8%E8%A6%8B%E7%9A%84%E6%95%88%E8%83%BD%E5%85%83%E5%85%87"><span class="nav-number">3.</span> <span class="nav-text"> 第三步：深入調查 — 常見的效能元兇</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%B4%A2%E5%BC%95%E5%95%8F%E9%A1%8C-the-usual-suspect"><span class="nav-number">3.1.</span> <span class="nav-text"> 1. 索引問題 (The Usual Suspect)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%9F%A5%E8%A9%A2%E8%AA%9E%E5%8F%A5%E6%9C%AC%E8%BA%AB%E7%9A%84%E5%95%8F%E9%A1%8C"><span class="nav-number">3.2.</span> <span class="nav-text"> 2. 查詢語句本身的問題</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%B3%87%E6%96%99%E5%BA%AB%E7%8B%80%E6%85%8B%E5%95%8F%E9%A1%8C"><span class="nav-number">3.3.</span> <span class="nav-text"> 3. 資料庫狀態問題</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E7%B3%BB%E7%B5%B1%E5%B1%A4%E9%9D%A2%E7%9A%84%E5%95%8F%E9%A1%8C"><span class="nav-number">3.4.</span> <span class="nav-text"> 4. 系統層面的問題</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">4.</span> <span class="nav-text"> 總結</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -580,7 +580,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/23/PubSub%20vs%20SSE%20%E5%88%A5%E5%86%8D%E6%90%9E%E6%B7%B7%E4%BA%86%20%E4%B8%80%E5%80%8B%E6%98%AF%E5%BE%8C%E7%AB%AF%E6%9E%B6%E6%A7%8B%E4%B8%80%E5%80%8B%E6%98%AF%E5%89%8D%E7%AB%AF%E5%8D%94%E5%AE%9A/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/26/SQL%20%E6%95%88%E8%83%BD%E8%AA%BF%E6%A0%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -593,12 +593,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Pub&#x2F;Sub vs SSE：別再搞混了！一個是後端架構，一個是前端協定 | 我的技術部落格">
+      <meta itemprop="name" content="SQL 效能調校：當查詢變慢時，該如何找出問題癥結？ | 我的技術部落格">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Pub/Sub vs SSE：別再搞混了！一個是後端架構，一個是前端協定
+          SQL 效能調校：當查詢變慢時，該如何找出問題癥結？
         </h1>
 
         <div class="post-meta-container">
@@ -610,7 +610,7 @@
       <span class="post-meta-item-text">發表於</span>
       
 
-      <time title="創建時間：2025-07-23 00:00:00 / 修改時間：14:40:31" itemprop="dateCreated datePublished" datetime="2025-07-23T00:00:00+08:00">2025-07-23</time>
+      <time title="創建時間：2025-10-26 00:00:00 / 修改時間：23:24:20" itemprop="dateCreated datePublished" datetime="2025-10-26T00:00:00+08:00">2025-10-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -631,153 +631,135 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>在現代應用開發中，「即時」和「事件驅動」已經成為標配。當討論這些技術時，Pub/Sub 和 SSE (Server-Sent Events) 這兩個名詞經常被提及，也因此常常被混淆。許多開發者會問：「應該用 Pub/Sub 還是 SSE 來實現即時功能？」</p>
-<p>這個問題的答案是：<strong>可能兩個都需要。</strong></p>
-<p>因為它們根本不是競爭關係，而是在軟體架構中扮演不同角色的合作夥伴。本文將徹底釐清這兩者的差異，並展示它們如何協同工作，打造出強大、可擴展的即時系統。</p>
-<hr />
-<h1 id="pubsub-系統後台的中央郵政系統"><a class="markdownIt-Anchor" href="#pubsub-系統後台的中央郵政系統"></a> Pub/Sub - 系統後台的「中央郵政系統」</h1>
-<p>想像一下訂閱 YouTube 頻道。作為一個訂閱者，只關心訂閱的頻道有沒有發布新影片。不需要認識影片創作者，更不用關心他什麼時候上傳。反過來，創作者也只需要將影片發布到他的頻道，完全不用理會是誰訂閱了他。</p>
-<p>這就是 <strong>發布/訂閱 (Publish/Subscribe, or Pub/Sub)</strong> 模式的精髓。</p>
-<blockquote>
-<p><strong>Pub/Sub 是一種非同步訊息傳遞的設計模式，主要用於實現後端服務之間的解耦。</strong></p>
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>“這個查詢在測試環境只要 0.5 秒，為什麼在正式環境要跑 30 秒？”</p>
 </blockquote>
-<p>它由三個核心角色組成：</p>
-<ul>
-<li><strong>發布者 (Publisher)</strong>：事件的產生者（例如：訂單服務、用戶註冊服務）。它只負責將訊息發布到一個特定的「主題」。</li>
-<li><strong>主題 (Topic)</strong>：一個訊息分類的頻道或中介（例如：一個名為 <code>order-created</code> 的主題）。</li>
-<li><strong>訂閱者 (Subscriber)</strong>：事件的消費者（例如：庫存服務、通知服務）。它對特定主題感興趣，並接收來自該主題的所有訊息。</li>
-</ul>
-<h2 id="為什麼要用-pubsub"><a class="markdownIt-Anchor" href="#為什麼要用-pubsub"></a> 為什麼要用 Pub/Sub？</h2>
-<p>核心目的只有一個：<strong>解耦 (Decoupling)！</strong></p>
-<ul>
-<li><strong>位置解耦</strong>：發布者和訂閱者不需要知道對方的網路位置。</li>
-<li><strong>時間解耦</strong>：發布者和訂閱者不需要同時在線。發布者發送訊息後，訂閱者可以在稍後有空時再去處理。</li>
-<li><strong>同步解耦</strong>：兩者之間的通訊是非同步的，發布者發送訊息後可以立即去做其他事，不必等待訂閱者回應。</li>
-</ul>
-<p><strong>這在哪裡使用？</strong><br />
-幾乎完全在<strong>後端服務之間</strong>。需要一個稱為<strong>訊息中介 (Message Broker)</strong> 的工具來實現它。</p>
-<ul>
-<li><strong>常見工具</strong>：Apache Kafka, RabbitMQ, Google Cloud Pub/Sub, Redis Pub/Sub。</li>
-</ul>
-<p>** Pub/Sub 是一個強大的後端架構模式，用於打造可擴展、有彈性的分散式系統。**</p>
+<p>這句話，可能是每個與資料庫打交道的工程師都曾面臨的惡夢。一個緩慢的 SQL 查詢，輕則影響使用者體驗，重則可能拖垮整個系統。</p>
+<p>當問題發生時，不能像無頭蒼蠅一樣亂猜。幸運的是，資料庫本身提供了豐富的線索，我們需要的是一套系統性的偵探方法，從蛛絲馬跡中找出真正的元兇。</p>
+<p>這篇文章將提供一個從宏觀到微觀的診斷框架，幫助一步步定位並解決 SQL 效能問題。</p>
 <hr />
-<h1 id="sse-對瀏覽器的即時廣播電台"><a class="markdownIt-Anchor" href="#sse-對瀏覽器的即時廣播電台"></a> SSE - 對瀏覽器的「即時廣播電台」</h1>
-<p>現在，想像在網頁上追蹤一場體育比賽的比分。不需要手動刷新頁面，比分、安打、出局數都會自動更新。</p>
-<p>這就是 <strong>伺服器發送事件 (Server-Sent Events, or SSE)</strong> 的典型場景。</p>
-<blockquote>
-<p><strong>SSE 是一種基於標準 HTTP 的網頁通訊協定，允許伺服器單向地、即時地向客戶端（瀏覽器）推送數據。</strong></p>
-</blockquote>
-<p>它的運作方式非常簡單：</p>
+<h1 id="第一步找出有問題的-sql"><a class="markdownIt-Anchor" href="#第一步找出有問題的-sql"></a> 第一步：找出有問題的 SQL</h1>
+<p>先確定「誰」是效能不佳的查詢。</p>
+<h2 id="主要工具慢查詢日誌-slow-query-log"><a class="markdownIt-Anchor" href="#主要工具慢查詢日誌-slow-query-log"></a> 主要工具：慢查詢日誌 (Slow Query Log)</h2>
+<p>這是生產環境中最直接的線索來源。資料庫可以被設定為自動記錄執行時間超過特定閾值（例如 1 秒）的所有查詢。</p>
+<ul>
+<li><strong>如何使用</strong>：在資料庫設定檔 (<code>my.cnf</code> for MySQL) 中啟用 <code>slow_query_log</code>，並設定 <code>long_query_time</code>。</li>
+<li><strong>可以發現</strong>：
+<ul>
+<li>哪些查詢經常執行緩慢。</li>
+<li>查詢的執行時間、掃描的行數等關鍵指標。</li>
+<li>是否有特定使用者或應用程式頻繁發出慢查詢。</li>
+</ul>
+</li>
+</ul>
+<p><strong>重點</strong>：定期檢視慢查詢日誌，是主動發現效能隱患的最佳實踐。</p>
+<hr />
+<h1 id="第二步分析執行計畫-execution-plan"><a class="markdownIt-Anchor" href="#第二步分析執行計畫-execution-plan"></a> 第二步：分析執行計畫 (Execution Plan)</h1>
+<p>找到了慢查詢，下一步就是深入理解資料庫「打算如何執行」這個查詢。這一步是整個效能調校過程的核心。</p>
+<h2 id="主要工具explain-execution-plan"><a class="markdownIt-Anchor" href="#主要工具explain-execution-plan"></a> 主要工具：<code>EXPLAIN</code> / <code>Execution Plan</code></h2>
+<p>在 SQL 查詢語句前加上 <code>EXPLAIN</code> (MySQL/PostgreSQL) 或檢視 <code>Execution Plan</code> (SQL Server)，資料庫會回傳一份詳細的「執行計畫」，告訴我們它將如何讀取資料、使用索引、以及連接資料表。</p>
+<pre class="highlight"><code class="sql">EXPLAIN <span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> orders o
+<span class="hljs-keyword">JOIN</span> users u <span class="hljs-keyword">ON</span> o.user_id <span class="hljs-operator">=</span> u.id
+<span class="hljs-keyword">WHERE</span> o.created_at <span class="hljs-operator">&gt;</span> <span class="hljs-string">&#x27;2023-01-01&#x27;</span>;
+</code></pre>
+<h2 id="該關注的關鍵指標"><a class="markdownIt-Anchor" href="#該關注的關鍵指標"></a> 該關注的關鍵指標：</h2>
 <ol>
-<li>瀏覽器向伺服器的某個端點發起一個普通的 HTTP GET 請求。</li>
-<li>伺服器「抓住」這個請求不放，保持連線開啟。</li>
-<li>伺服器的 <code>Content-Type</code> 回應標頭設為 <code>text/event-stream</code>。</li>
-<li>每當有新事件發生時，伺服器就沿著這條開啟的連線，將格式化好的文字數據（<code>data: ...\n\n</code>）推送給瀏覽器。</li>
+<li>
+<p><strong><code>type</code> (訪問類型)</strong>：這是最重要的指標之一。</p>
+<ul>
+<li><strong>極差 (<code>ALL</code>)</strong>：<strong>全資料表掃描 (Full Table Scan)</strong>。這是最大的警訊，意味著資料庫需要逐行檢查整張表，沒有使用任何索引。</li>
+<li><strong>尚可 (<code>index</code>)</strong>：掃描了整個索引，比 <code>ALL</code> 好，但仍有優化空間。</li>
+<li><strong>良好 (<code>range</code>, <code>ref</code>, <code>eq_ref</code>)</strong>：有效地使用了索引進行範圍查找或精準匹配。</li>
+<li><strong>最佳 (<code>const</code>, <code>system</code>)</strong>：查詢常數或結果只有一行，速度極快。</li>
+</ul>
+</li>
+<li>
+<p><strong><code>key</code> (使用的索引)</strong>：顯示資料庫實際決定使用的索引。如果這個欄位是 <code>NULL</code>，而且 <code>type</code> 是 <code>ALL</code>，那幾乎可以確定是索引問題。</p>
+</li>
+<li>
+<p><strong><code>rows</code> (掃描的行數)</strong>：資料庫預估為了找出結果需要掃描的資料行數。這個數字愈小愈好。如果它遠大於實際返回的行數，代表查詢效率很低。</p>
+</li>
+<li>
+<p><strong><code>Extra</code> (額外資訊)</strong>：</p>
+<ul>
+<li><strong><code>Using filesort</code></strong>：當索引無法滿足排序需求時，資料庫需要將資料拉到記憶體或磁碟中進行額外排序，這會消耗大量資源。</li>
+<li><strong><code>Using temporary</code></strong>：資料庫需要建立一個暫存資料表來處理查詢，通常發生在 <code>GROUP BY</code> 或 <code>UNION</code> 操作中，同樣是效能瓶頸。</li>
+</ul>
+</li>
 </ol>
-<h2 id="為什麼要用-sse"><a class="markdownIt-Anchor" href="#為什麼要用-sse"></a> 為什麼要用 SSE？</h2>
-<ul>
-<li><strong>簡單</strong>：前端只需使用內建的 <code>EventSource</code> API，後端也只需遵循簡單的文本格式。</li>
-<li><strong>標準與相容</strong>：它就是 HTTP，可以無縫通過各種防火牆和代理。</li>
-<li><strong>自動重連</strong>：這是 SSE 的一大殺手級特性。如果連線意外中斷（例如網路切換），瀏覽器的 <code>EventSource</code> 會自動嘗試重新連線。</li>
-</ul>
-<p><strong>這在哪裡使用？</strong><br />
-在<strong>伺服器 (Server) 和前端瀏覽器 (Client)</strong> 之間。</p>
-<ul>
-<li><strong>典型場景</strong>：即時新聞、股票行情更新、訂單狀態追蹤、進度條顯示。</li>
-</ul>
-<p><strong>SSE 是一種輕量、可靠、專為「伺服器到客戶端」單向數據推送而生的網頁技術。</strong></p>
+<p><strong>結論</strong>：執行計畫是破案地圖。學會解讀它，就掌握了 SQL 調校的 80% 技巧。</p>
 <hr />
-<h1 id="pubsub-vs-sse"><a class="markdownIt-Anchor" href="#pubsub-vs-sse"></a> Pub/Sub vs SSE</h1>
-<p>用一張表格來清晰地對比它們：</p>
+<h1 id="第三步深入調查-常見的效能元兇"><a class="markdownIt-Anchor" href="#第三步深入調查-常見的效能元兇"></a> 第三步：深入調查 — 常見的效能元兇</h1>
+<p>根據執行計畫提供的線索，可以開始聚焦在幾個常見的問題點上。</p>
+<h2 id="1-索引問題-the-usual-suspect"><a class="markdownIt-Anchor" href="#1-索引問題-the-usual-suspect"></a> 1. 索引問題 (The Usual Suspect)</h2>
+<p>這是最常見、也最容易解決的問題。</p>
+<ul>
+<li><strong>缺少索引</strong>：<code>WHERE</code> 條件、<code>JOIN</code> 的關聯欄位 (<code>ON</code> 後面的欄位)、<code>ORDER BY</code> 的欄位沒有建立適當的索引。</li>
+<li><strong>索引失效 (Non-SARGable)</strong>：在索引欄位上使用函數、進行計算或型別轉換，會導致資料庫無法使用索引。<pre class="highlight"><code class="sql"><span class="hljs-comment">-- Bad: 索引失效</span>
+<span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">YEAR</span>(order_date) <span class="hljs-operator">=</span> <span class="hljs-number">2023</span> 
+
+<span class="hljs-comment">-- Good: 讓索引有效</span>
+<span class="hljs-keyword">WHERE</span> order_date <span class="hljs-operator">&gt;=</span> <span class="hljs-string">&#x27;2023-01-01&#x27;</span> <span class="hljs-keyword">AND</span> order_date <span class="hljs-operator">&lt;</span> <span class="hljs-string">&#x27;2024-01-01&#x27;</span>
+</code></pre>
+</li>
+<li><strong>複合索引順序錯誤</strong>：對於 <code>WHERE a = 1 AND b = 2</code> 的查詢，<code>INDEX(a, b)</code> 的效率遠高於 <code>INDEX(b, a)</code>。</li>
+</ul>
+<h2 id="2-查詢語句本身的問題"><a class="markdownIt-Anchor" href="#2-查詢語句本身的問題"></a> 2. 查詢語句本身的問題</h2>
+<ul>
+<li><strong><code>SELECT *</code></strong>：請求了不必要的欄位，增加了網路傳輸和資料庫 I/O 的負擔。</li>
+<li><strong>不必要的 <code>JOIN</code></strong>：關聯了過多的資料表，或進行了複雜的子查詢。</li>
+<li><strong><code>OR</code> 條件過多</strong>：有時將 <code>OR</code> 查詢拆成多個 <code>UNION ALL</code> 查詢，效率反而更高。</li>
+</ul>
+<h2 id="3-資料庫狀態問題"><a class="markdownIt-Anchor" href="#3-資料庫狀態問題"></a> 3. 資料庫狀態問題</h2>
+<ul>
+<li><strong>統計資訊過時 (Outdated Statistics)</strong>：資料庫的查詢優化器依賴統計資訊來制定最佳執行計畫。如果資料表經過大量增刪改後沒有更新統計資訊 (<code>ANALYZE TABLE</code>)，優化器可能會做出錯誤的判斷。</li>
+<li><strong>資料庫鎖 (Locking / Deadlock)</strong>：查詢可能不慢，但它正在等待其他事務釋放鎖。在高併發的系統中，長時間的交易或不當的鎖定策略會導致查詢阻塞。</li>
+</ul>
+<h2 id="4-系統層面的問題"><a class="markdownIt-Anchor" href="#4-系統層面的問題"></a> 4. 系統層面的問題</h2>
+<p>如果查詢本身和索引都已優化，問題可能出在更底層。</p>
+<ul>
+<li><strong>硬體瓶頸</strong>：CPU 使用率過高、記憶體不足、或是磁碟 I/O 達到上限。</li>
+<li><strong>資料庫設定不當</strong>：例如 MySQL 的 <code>innodb_buffer_pool_size</code> 設定過小，導致資料庫頻繁地從磁碟讀取資料，而非記憶體。</li>
+</ul>
+<hr />
+<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
 <table>
 <thead>
 <tr>
-<th style="text-align:left">特性 / 方面</th>
-<th style="text-align:left">Pub/Sub (發布/訂閱)</th>
-<th style="text-align:left">SSE (伺服器發送事件)</th>
+<th style="text-align:left">步驟</th>
+<th style="text-align:left">目標</th>
+<th style="text-align:left">核心工具/方法</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left"><strong>類型</strong></td>
-<td style="text-align:left"><strong>後端架構模式</strong></td>
-<td style="text-align:left"><strong>前端通訊協定</strong></td>
+<td style="text-align:left"><strong>1. 發現</strong></td>
+<td style="text-align:left">從生產環境中找出具體的慢查詢</td>
+<td style="text-align:left"><code>Slow Query Log</code>、應用效能監控 (APM)</td>
 </tr>
 <tr>
-<td style="text-align:left"><strong>參與者</strong></td>
-<td style="text-align:left">後端服務 ↔ 訊息中介 ↔ 後端服務</td>
-<td style="text-align:left">後端伺服器 → 前端瀏覽器</td>
+<td style="text-align:left"><strong>2. 分析</strong></td>
+<td style="text-align:left">理解資料庫如何執行該查詢</td>
+<td style="text-align:left"><code>EXPLAIN</code> / <code>Execution Plan</code></td>
 </tr>
 <tr>
-<td style="text-align:left"><strong>通訊方向</strong></td>
-<td style="text-align:left">由中介管理的多對多 (Many-to-Many)</td>
-<td style="text-align:left">嚴格的單向 (One-Way)</td>
+<td style="text-align:left"><strong>3. 診斷</strong></td>
+<td style="text-align:left">根據執行計畫，定位根本原因</td>
+<td style="text-align:left">檢查索引、查詢寫法、鎖定情況</td>
 </tr>
 <tr>
-<td style="text-align:left"><strong>核心目的</strong></td>
-<td style="text-align:left">服務解耦，系統彈性</td>
-<td style="text-align:left">向網頁推送即時更新</td>
+<td style="text-align:left"><strong>4. 優化</strong></td>
+<td style="text-align:left">修正問題並驗證效果</td>
+<td style="text-align:left">建立/修改索引、重寫 SQL、調整設定</td>
 </tr>
 <tr>
-<td style="text-align:left"><strong>比喻</strong></td>
-<td style="text-align:left"><strong>訂閱雜誌/YouTube 頻道</strong></td>
-<td style="text-align:left"><strong>廣播電台 / P.A. 系統</strong></td>
+<td style="text-align:left"><strong>5. 監控</strong></td>
+<td style="text-align:left">持續觀察，防止問題復發</td>
+<td style="text-align:left">定期檢視日誌，設定警報</td>
 </tr>
 </tbody>
 </table>
-<h1 id="實戰場景即時物流追蹤系統"><a class="markdownIt-Anchor" href="#實戰場景即時物流追蹤系統"></a> 實戰場景：即時物流追蹤系統</h1>
-<p>讓我們看看它們如何協同工作。為了讓這個流程更加視覺化，讓我們用一張圖來表示一個即時物流追蹤系統的數據流：</p>
-<pre class="highlight"><code class="mermaid">graph TD;
-    subgraph &quot;後端架構 (Pub/Sub 模式)&quot;
-        A[&quot;貨車 GPS 裝置&quot;] --&gt; B[&quot;位置服務 (Publisher)&quot;];
-        B -- &quot;發布事件&quot; --&gt; C&#123;&quot;Pub/Sub 主題&lt;br&gt;location-updates&quot;&#125;;
-        C -- &quot;分發給訂閱者&quot; --&gt; D[&quot;數據庫存檔服務 (Subscriber)&quot;];
-        C -- &quot;分發給訂閱者&quot; --&gt; E[&quot;即時分發服務 (Subscriber)&quot;];
-        D --&gt; F[(&quot;歷史軌跡數據庫&quot;)];
-    end
-
-    subgraph &quot;前端通訊&quot;
-        G[&quot;使用者瀏覽器&quot;];
-    end
-
-    E -- &quot;即時推送&lt;br&gt;(SSE 連線)&quot; --&gt; G;
-
-    %% Styling
-    style C fill:#FFE3E3,stroke:#B40000,stroke-width:2px;
-    style E fill:#D6E8FF,stroke:#0042A3,stroke-width:2px;
-
-</code></pre>
-<p>流程：</p>
-<ol>
-<li>
-<p><strong>事件產生 (Publisher)</strong>：貨車的 GPS 裝置上報位置給「位置服務」。該服務處理後，將訊息**發布(Publish)**到 <code>location-updates</code> 這個主題上。</p>
-</li>
-<li>
-<p><strong>後端處理 (Subscribers)</strong>：</p>
-<ul>
-<li><code>Pub/Sub 主題</code>（如 Kafka 或 RabbitMQ）將事件分發給所有訂閱者。</li>
-<li>「數據庫存檔服務」收到事件，將其存入資料庫備份。</li>
-<li>「即時分發服務」也收到同一個事件，準備將其推送給前端。</li>
-<li><strong>以上所有後端內部的通訊，都由 Pub/Sub 模式完成，服務之間互不干擾。</strong></li>
-</ul>
-</li>
-<li>
-<p><strong>前端推送 (SSE 連線)</strong>：</p>
-<ul>
-<li>當使用者打開追蹤頁面時，他的瀏覽器會與「即時分發服務」建立一條 SSE 連線。</li>
-<li>「即時分發服務」收到來自 Pub/Sub 的新位置後，立刻透過這條 SSE 連線，將新座標推送給對應的使用者瀏覽器。</li>
-<li><strong>這最後一哩路，從後端到前端的即時數據傳遞，由 SSE 完美勝任。</strong></li>
-</ul>
-</li>
-</ol>
-<p>在這個架構中，Pub/Sub 完美地解耦了後端複雜的業務邏輯，而 SSE 則作為最後一哩路，高效、可靠地將最終結果呈現在使用者面前。</p>
-<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
-<p>不要再問「Pub/Sub 和 SSE 哪個好？」，而應該問「在系統中，哪部分應該用 Pub/Sub，哪部分適合用 SSE？」。</p>
-<ul>
-<li>當需要<strong>在系統內部（後端）進行非同步、一對多或多對多的服務通訊</strong>時，請使用 <strong>Pub/Sub</strong> 模式。</li>
-<li>當需要<strong>將後端的事件結果，單向、即時地推送給網頁前端</strong>時，請使用 <strong>SSE</strong> 協定。</li>
-</ul>
-<p>理解它們各自的定位和職責，就能設計出更清晰、更強大、更具擴展性的現代化應用程式。</p>
+<p>SQL 效能調校是一門結合了科學與經驗的藝術。掌握這個系統化的流程，就能自信地應對資料庫效能難題。</p>
 
     </div>
 
@@ -787,22 +769,19 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/my-blog/tags/Pub-Sub/" rel="tag"># Pub/Sub</a>
-              <a href="/my-blog/tags/SSE/" rel="tag"># SSE</a>
+              <a href="/my-blog/tags/Database/" rel="tag"># Database</a>
+              <a href="/my-blog/tags/SQL/" rel="tag"># SQL</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/my-blog/2025/07/23/%E7%94%A8%20Server-Sent%20Events%20%E6%89%93%E9%80%A0%E5%8D%B3%E6%99%82%E9%80%8F%E6%98%8E%E7%9A%84%E5%BE%8C%E7%AB%AF%E4%BB%BB%E5%8B%99%E9%AB%94%E9%A9%97/" rel="prev" title="告別無盡的轉圈圈：用 Server-Sent Events (SSE) 打造即時、透明的後端任務體驗">
-                  <i class="fa fa-angle-left"></i> 告別無盡的轉圈圈：用 Server-Sent Events (SSE) 打造即時、透明的後端任務體驗
+                <a href="/my-blog/2025/10/22/The%20Twelve-Factor%20App%20%E6%96%B9%E6%B3%95%E8%AB%96/" rel="prev" title="The Twelve-Factor App 方法論">
+                  <i class="fa fa-angle-left"></i> The Twelve-Factor App 方法論
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/my-blog/2025/07/24/Python%20Celery%20%E5%85%A5%E9%96%80%20%E9%9D%9E%E5%90%8C%E6%AD%A5%E4%BB%BB%E5%8B%99%E7%9A%84%E5%BE%97%E5%8A%9B%E5%8A%A9%E6%89%8B/" rel="next" title="Python Celery 入門：非同步任務的得力助手">
-                  Python Celery 入門：非同步任務的得力助手 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>

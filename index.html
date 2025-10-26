@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">113</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">114</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">56</span></a>
       <ul class="sub-menu">
   
@@ -204,7 +204,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Database/">
         Database
-        <span class="post-count">(22)</span>
+        <span class="post-count">(23)</span>
       </a>
     </li>
   
@@ -421,7 +421,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/SQL/">
         SQL
-        <span class="post-count">(7)</span>
+        <span class="post-count">(8)</span>
       </a>
     </li>
   
@@ -541,7 +541,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">113</span>
+          <span class="site-state-item-count">114</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -566,6 +566,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/26/SQL%20%E6%95%88%E8%83%BD%E8%AA%BF%E6%A0%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/10/26/SQL%20%E6%95%88%E8%83%BD%E8%AA%BF%E6%A0%A1/" class="post-title-link" itemprop="url">
+              SQL 效能調校：當查詢變慢時，該如何找出問題癥結？
+            </a>
+            <a href="/my-blog/2025/10/26/SQL%20%E6%95%88%E8%83%BD%E8%AA%BF%E6%A0%A1/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-10-26 00:00:00 / 修改時間：23:24:20" itemprop="dateCreated datePublished" datetime="2025-10-26T00:00:00+08:00">2025-10-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">“這個查詢在測試環境只要 0.5 秒，為什麼在正式環境要跑 30 秒？” 這句話，可能是每個與資料庫打交道的工程師都曾面臨的惡夢。一個緩慢的 SQL 查詢，輕則影響使用者體驗，重則可能拖垮整個系統。 當問題發生時，不能像無頭蒼蠅一樣亂猜。幸運的是，資料庫本身提供了豐富的線索，我們需要的是一套系統性的偵探方法，從蛛絲馬跡中找出真正的元兇。 這篇文章將提供一個從宏觀到微觀的診斷框架，幫助一步步定位並解決 SQL 效能問題。 第一步：找出有問題的 SQL 先確定「誰」是效能不佳的查詢。 主要工具：慢查詢日誌 (Slow Query Log) 這是生產環境中最直接的線索來源。資料庫可以被設定為自動記錄執行時間超過特定閾值（例如 1 秒）的所有查詢。 如何使用：在資料庫設定檔 (my.cnf for MySQL) 中啟用 slow_query_log，並設定 long_query_time。 可以發現： 哪些查詢經常執行緩慢。 查詢的執行時間、掃描的行數等關鍵指標。 是否有特定使用者或應用程式頻繁發出慢查詢。 重點：定期檢視慢查詢日誌，是主動發現效能隱患的最佳實踐。 第二步：分析執行計畫 (Execution Plan) 找到了慢查詢，下一步就是深入理解資料庫「打算如何執行」這個查詢。這一步是整個效能調校過程的核心。 主要工具：EXPLAIN / Execution Plan 在 SQL 查詢語句前加上 EXPLAIN (MySQL/PostgreSQL) 或檢視 Execution Plan (SQL Server)，資料庫會回傳一份詳細的「執行計畫」，告訴我們它將如何讀取資料、使用索引、以及連接資料表。 EXPLAIN SELECT * FROM orders o JOIN users u ON o.user_id = u.id WHERE o.created_at &gt; &#x27;2023-01-01&#x27;; 該關注的關鍵指標： type (訪問類型)：這是最重要的指標之一。 極差 (ALL)：全資料表掃描 (Full Table Scan)。這是最大的警訊，意味著資料庫需要逐行檢查整張表，沒有使用任何索引。 尚可 (index)：掃描了整個索引，比 ALL 好，但仍有優化空間。 良好 (range, ref, eq_ref)：有效地使用了索引進行範圍查找或精準匹配。 最佳 (const, system)：查詢常數或結果只有一行，速度極快。 key (使用的索引)：顯示資料庫實際決定使用的索引。如果這個欄位是 NULL，而且 type 是 ALL，那幾乎可以確定是索引問題。 rows (掃描的行數)：資料庫預估為了找出結果需要掃描的資料行數。這個數字愈小愈好。如果它遠大於實際返回的行數，代表查詢效率很低。 Extra (額外資訊)： Using filesort：當索引無法滿足排序需求時，資料庫需要將資料拉到記憶體或磁碟中進行額外排序，這會消耗大量資源。 Using temporary：資料庫需要建立一個暫存資料表來處理查詢，通常發生在 GROUP BY 或 UNION 操作中，同樣是效能瓶頸。 結論：執行計畫是破案地圖。學會解讀它，就掌握了 SQL 調校的 80% 技巧。 第三步：深入調查 — 常見的效能元兇 根據執行計畫提供的線索，可以開始聚焦在幾個常見的問題點上。 1. 索引問題 (The Usual Suspect) 這是最常見、也最容易解決的問題。 缺少索引：WHERE 條件、JOIN 的關聯欄位 (ON 後面的欄位)、ORDER BY 的欄位沒有建立適當的索引。 索引失效 (Non-SARGable)：在索引欄位上使用函數、進行計算或型別轉換，會導致資料庫無法使用索引。-- Bad: 索引失效 WHERE YEAR(order_date) = 2023 -- Good: 讓索引有效 WHERE order_date &gt;= &#x27;2023-01-01&#x27; AND order_date &lt; &#x27;2024-01-01&#x27; 複合索引順序錯誤：對於 WHERE a = 1 AND b = 2 的查詢，INDEX(a, b) 的效率遠高於 INDEX(b, a)。 2. 查詢語句本身的問題 SELECT *：請求了不必要的欄位，增加了網路傳輸和資料庫 I/O 的負擔。 不必要的 JOIN：關聯了過多的資料表，或進行了複雜的子查詢。 OR 條件過多：有時將 OR 查詢拆成多個 UNION ALL 查詢，效率反而更高。 3. 資料庫狀態問題 統計資訊過時 (Outdated Statistics)：資料庫的查詢優化器依賴統計資訊來制定最佳執行計畫。如果資料表經過大量增刪改後沒有更新統計資訊 (ANALYZE TABLE)，優化器可能會做出錯誤的判斷。 資料庫鎖 (Locking / Deadlock)：查詢可能不慢，但它正在等待其他事務釋放鎖。在高併發的系統中，長時間的交易或不當的鎖定策略會導致查詢阻塞。 4. 系統層面的問題 如果查詢本身和索引都已優化，問題可能出在更底層。 硬體瓶頸：CPU 使用率過高、記憶體不足、或是磁碟 I/O 達到上限。 資料庫設定不當：例如 MySQL 的 innodb_buffer_pool_size 設定過小，導致資料庫頻繁地從磁碟讀取資料，而非記憶體。 總結 步驟 目標 核心工具/方法 1. 發現 從生產環境中找出具體的慢查詢 Slow Query Log、應用效能監控 (APM) 2. 分析 理解資料庫如何執行該查詢 EXPLAIN / Execution Plan 3. 診斷 根據執行計畫，定位根本原因 檢查索引、查詢寫法、鎖定情況 4. 優化 修正問題並驗證效果 建立/修改索引、重寫 SQL、調整設定 5. 監控 持續觀察，防止問題復發 定期檢視日誌，設定警報 SQL 效能調校是一門結合了科學與經驗的藝術。掌握這個系統化的流程，就能自信地應對資料庫效能難題。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/10/26/SQL%20%E6%95%88%E8%83%BD%E8%AA%BF%E6%A0%A1/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1330,92 +1416,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/10/10/TCP%20vs%20UDP/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/08/%E6%B7%B1%E5%85%A5%E6%8E%A2%E7%B4%A2%E4%BA%8B%E4%BB%B6%E9%A9%85%E5%8B%95%E6%9E%B6%E6%A7%8B%20Event-Driven%20Architecture/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/10/08/%E6%B7%B1%E5%85%A5%E6%8E%A2%E7%B4%A2%E4%BA%8B%E4%BB%B6%E9%A9%85%E5%8B%95%E6%9E%B6%E6%A7%8B%20Event-Driven%20Architecture/" class="post-title-link" itemprop="url">
-              深入探索事件驅動架構 (Event-Driven Architecture)
-            </a>
-            <a href="/my-blog/2025/10/08/%E6%B7%B1%E5%85%A5%E6%8E%A2%E7%B4%A2%E4%BA%8B%E4%BB%B6%E9%A9%85%E5%8B%95%E6%9E%B6%E6%A7%8B%20Event-Driven%20Architecture/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-10-08 00:00:00 / 修改時間：22:50:38" itemprop="dateCreated datePublished" datetime="2025-10-08T00:00:00+08:00">2025-10-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">讓我們想像一個傳統的餐廳廚房。一位服務生接到了客人的訂單，他必須親自跑到廚師面前，喊出訂單內容，然後站在原地等待，直到廚師把菜做好，再親手端回給客人。如果廚師很忙，或是同時有多位服務生在排隊，那麼整個流程就會被阻塞 (Blocking)。這位服務生什麼也做不了，只能乾等。 這就是熟悉的請求-回應 (Request-Response) 模型。客戶端（服務生）發出一個請求，然後同步等待伺服器（廚師）的回應。在簡單的場景下，它清晰且有效。但在複雜、高併發的分散式系統中，這種緊密耦合的「命令鏈」會變得極其脆弱和低效。 看看現代化的智慧廚房是如何運作的。服務生在 POS 機上點完單，系統會立即打印出一張訂單貼紙（一個事件）。廚房、吧台、甜點站各自都有一個顯示器，它們只關心與自己相關的訂單。廚師看到炒菜訂單就開始備料，吧台看到飲料訂單就開始調製。服務生下完單後，可以立刻去招呼下一桌客人，完全無需等待。各個站點獨立運作、並行處理。 這個智慧廚房的運作模式，完美地詮釋了這篇文章的主角——事件驅動架構 (Event-Driven Architecture, EDA)。 什麼是「Event-Driven Architecture」？ Event-Driven Architecture (EDA) 是一種軟體架構風格，核心思想是： 👉 系統透過事件 (Event) 進行溝通，事件發生後觸發相應的處理或工作流，而不是傳統的同步請求/回應模式。 事件驅動架構圍繞著事件 (Event) 的產生、偵測、消費和反應來構建應用程式。在這種模式下，系統中的各個元件（服務）之間不再直接調用，而是通過非同步地發送和接收事件來進行通信。 為什麼用 EDA？ 傳統架構（Request-Response，同步 API 呼叫）存在問題： 高度耦合：服務之間要知道彼此的 API。 可擴展性差：要同時通知多個服務，會變得複雜。 延遲高：一個服務等待另一個回應，效能受限。 從「命令鏈」轉向「事件廣播」，EDA為我們的系統帶來了巨大的好處： 低耦合：服務只需「發佈事件」或「訂閱事件」，不用知道誰會處理。 可擴展性：多個服務可同時訂閱同一事件。 即時處理：適合需要快速響應的場景（像支付、通知、IoT）。 真正的解耦合 (Decoupling) 在 EDA 中，事件產生者完全不需要知道有哪些消費者，或它們將如何處理事件。它只需「廣而告之」。這種鬆散的耦合關係，讓我們可以輕鬆地新增、移除或修改消費者，而無需對產生者做任何改動。 彈性與可擴展性 (Scalability &amp; Elasticity) 如果通知服務因為活動期間郵件量暴增而變慢，這不會影響到核心的訂單創建流程。可以獨立地擴展通知服務的實例數量（增加更多的消費者），以處理積壓的事件，整個系統的吞吐量也隨之提升。 更強的韌性與容錯能力 (Resilience &amp; Fault Tolerance) 想像一下，庫存服務突然掛了。在請求-回應模型中，整個訂單流程可能會因此失敗。但在 EDA 中，OrderCreated 事件會安全地存放在事件代理中，直到庫存服務恢復正常，它便可以繼續處理那些積壓的事件。系統能夠優雅地降級 (Graceful Degradation)，而不是完全崩潰。 擁抱非同步工作流 (Asynchronous Workflows) 事件的產生者在發布事件後，可以立即繼續執行其他任務，無需等待任何回應。這極大地提高了系統的響應速度和使用者體驗。 Event-Driven 架構的組成 事件 (Event): 代表系統中「發生了某件事」的訊號，一個已經發生的事實或狀態的變化，它應該是不可變的。例如，「訂單已創建 (OrderCreated)」、「付款已成功 (PaymentSucceeded)」，而不是「創建訂單」或「處理付款」。這是一個微妙但極其重要的區別。 事件產生者 (Producer / Publisher): * 發布事件的來源。例如，訂單服務在成功創建一筆訂單後，會發布一個 OrderCreated 事件。 事件消費者 (Consumer / Subscriber): 訂閱並處理事件。例如，庫存服務會訂閱 OrderCreated 事件以扣減庫存；通知服務會訂閱它以發送確認郵件。 事件代理 (Event Broker / Message Bus): 負責從產生者那裡接收事件，並將它們可靠地路由到所有感興趣的消費者。它扮演著中間人的角色，是整個架構的神經中樞（例如 Kafka, RabbitMQ, AWS SNS/SQS, Google Pub/Sub）。 與 Request-Response 的比較 特性 Request-Response（同步） Event-Driven（非同步） 耦合度 高，需要知道對方 API 低，只需發佈/訂閱事件 延遲 可能受限於下游速度 非同步，較快回應 擴展性 難以同時通知多個服務 輕鬆支援多消費者 適合場景 查詢、即時需要回應 高併發、事件通知、IoT、支付 兩種主要的 EDA 模式：編排 vs. 協調 編排 (Choreography): 就像智慧廚房。沒有中央指揮官，每個服務都訂閱它關心的事件，並知道自己該做什麼。這是一種去中心化的模式，更加靈活，但也可能讓複雜的業務流程難以追蹤。 協調 (Orchestration): 引入一個中央的「協調器 (Orchestrator)」。它負責監聽事件，並根據預定義的流程，明確地告訴每個服務下一步該做什麼。這種模式更易於監控和管理複雜的工作流，但可能會引入新的中心點。 在實際應用中，這兩種模式常常被結合使用。 何時應該考慮使用 EDA？ EDA 並非萬靈丹。對於簡單的、需要強一致性事務的場景，傳統的請求-回應可能更合適。但如果面臨以下情況，EDA 將會是有力武器： 正在构建微服務架構，需要一種有效的服務間通信方式。 系統需要處理高併發的異步任務（例如，圖像處理、數據分析）。 希望提高系統的容錯能力和可用性。 業務需要能夠輕鬆地擴展或集成新的功能模塊。 結論 Event-Driven Architecture = 一種 非同步、低耦合的架構模式，透過事件來連接不同服務，能夠提高系統的擴展性、彈性與即時性。 EDA 不僅僅是一種技術選擇，它更是一種思維方式的轉變——從設計線性的、命令式的流程，轉向設計響應式的、並行的生態系統。 它鼓勵我們將系統視為一個由獨立、自主的元件組成的網路，這些元件通過共享「事實」（事件）來協同工作。擁抱這種模式，將幫助構建出更具適應性、更富彈性、更能從容應對未來未知挑戰的現代化應用程式。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/10/08/%E6%B7%B1%E5%85%A5%E6%8E%A2%E7%B4%A2%E4%BA%8B%E4%BB%B6%E9%A9%85%E5%8B%95%E6%9E%B6%E6%A7%8B%20Event-Driven%20Architecture/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>
