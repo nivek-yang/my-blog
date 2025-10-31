@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">115</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">116</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">56</span></a>
       <ul class="sub-menu">
   
@@ -351,7 +351,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/OOP/">
         OOP
-        <span class="post-count">(2)</span>
+        <span class="post-count">(3)</span>
       </a>
     </li>
   
@@ -541,7 +541,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">115</span>
+          <span class="site-state-item-count">116</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -566,6 +566,98 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/21/%E8%A7%A3%E6%9E%90%20Message%20Queues%20%E8%88%87%20PubSub%20%E7%9A%84%E5%B7%AE%E5%88%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/07/21/%E8%A7%A3%E6%9E%90%20Message%20Queues%20%E8%88%87%20PubSub%20%E7%9A%84%E5%B7%AE%E5%88%A5/" class="post-title-link" itemprop="url">
+              解析 Message Queues 與 Pub/Sub 的差別
+            </a>
+            <a href="/my-blog/2025/07/21/%E8%A7%A3%E6%9E%90%20Message%20Queues%20%E8%88%87%20PubSub%20%E7%9A%84%E5%B7%AE%E5%88%A5/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2025-07-21 00:00:00" itemprop="dateCreated datePublished" datetime="2025-07-21T00:00:00+08:00">2025-07-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-07-22 00:13:31" itemprop="dateModified" datetime="2025-07-22T00:13:31+08:00">2025-07-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">在現代分散式系統架構中，非同步訊息傳遞是實現服務解耦、提升系統擴展性與可靠性的關鍵。而在眾多訊息傳遞模式中，Message Queues (消息隊列) 與 Publish-Subscribe (發布/訂閱，簡稱 Pub/Sub) 是最常被討論也最容易被混淆的兩種。本文將深入探討這兩種模式的核心差異、應用場景及各自的優缺點，幫助在系統設計時做出更明智的選擇。 關於術語的重要說明 在深入探討之前，必須澄清一個常見的混淆點。術語「Message Queue」常被用於兩種不同的語境： 作為一種設計模式 (Pattern)：特指本文將要介紹的「點對點」一對一訊息傳遞模型。 作為一類技術產品 (Technology)：泛指像 RabbitMQ、Apache Kafka、AWS SQS 等訊息中介軟體 (Message-Oriented Middleware)。 值得注意的是，大多數我們稱為「Message Queue」的技術產品，其功能非常強大，通常同時支援「點對點的佇列模式」和「一對多的發布/訂閱模式」。本文為了清晰地比較這兩種核心設計理念，將嚴格按照設計模式進行劃分，分別探討「Message Queue (點對點模式)」與「Pub/Sub (發布/訂閱模式)」的差異。 什麼是 Message Queue？ Message Queue (MQ) 遵循的是「點對點」(point-to-point) 的通訊模型、消費者競爭 (Competing Consumers) 模式。在這個模型中，訊息的生產者 (Producer) 將訊息發送到一個佇列 (Queue)，而消費者 (Consumer) 則從這個佇列中取出並處理訊息。 核心特性： 一對一消費與負載平衡：一則訊息只會被一個消費者成功處理，這是此模式的黃金法則。即使有多個消費者（通常是同一個服務的多個實例）同時監聽同一個佇列，佇列中的一則訊息也只會被其中一個消費者取出處理。這種機制被稱為「競爭消費者」(Competing Consumers)，是實現任務分發與負載平衡的關鍵。 訊息保留與確認：訊息在被消費者成功處理並發出確認 (Acknowledgement) 之前，會一直保留在佇列中，確保訊息不會遺失。如果消費者處理失敗，訊息可以被放回佇列由其他消費者處理。 任務導向：此模式的意圖是委派一個任務。生產者不關心是哪個消費者執行，只關心這個任務最終會被完成。 順序性：在許多使用案例中，Message Queue 能確保訊息的先進先出 (FIFO)，不過實際的傳遞順序有時會依據實作與設定而異。 理想應用場景： 任務分發與負載平衡：當需要將耗時的任務分配給多個背景工作者 (Worker) 處理時，Message Queue 是絕佳選擇。 非同步處理：將非必要的任務（如寄送電子郵件、產生報表）丟入佇列，讓主要應用程式能立即回應使用者請求，提升反應速度。 流量削峰：在高併發場景下，利用佇列作為緩衝區，可以避免瞬間流量衝垮後端服務。 流程圖：競爭消費者模型 這個流程圖展示了典型的「競爭消費者」場景。多個背景工作者實例監聽同一個任務佇列，並從中競爭任務來執行，實現了工作負載的均衡。 sequenceDiagram participant Producer as 生產者 (Producer) participant Queue as 訊息佇列 (Queue) participant ConsumerA as 消費者 A (Consumer A) participant ConsumerB as 消費者 B (Consumer B) autonumber Producer-&gt;&gt;+Queue: 發送訊息 M1 note right of Producer: 訊息 M1 進入佇列等待處理 Producer-&gt;&gt;+Queue: 發送訊息 M2 note right of Producer: 訊息 M2 進入佇列等待處理 alt 訊息處理 Queue--&gt;&gt;-ConsumerA: 分派訊息 M1 note left of ConsumerA: 消費者 A 取得 M1 並開始處理 Queue--&gt;&gt;-ConsumerB: 分派訊息 M2 note right of ConsumerB: 消費者 B 取得 M2 並開始處理 end ConsumerA-&gt;&gt;Queue: 確認 (Ack) M1 處理完畢 ConsumerB-&gt;&gt;Queue: 確認 (Ack) M2 處理完畢 這個模式的核心是 工作分發 和 負載均衡。 發送訊息：生產者產生了兩則訊息 (M1, M2) 並把它們發送到同一個訊息佇列中。 訊息分派：佇列將訊息 M1 分派給了消費者 A，同時將訊息 M2 分派給了消費者 B。關鍵點在於，M1 不會再被 B 處理，M2 也不會再被 A 處理。 處理與確認：消費者各自處理完訊息後，會向佇列發送一個「確認 (Acknowledgement)」，通知佇列該訊息已被成功處理，可以從佇列中永久移除了。 什麼是 Publish-Subscribe (Pub/Sub)？ 當需求從「把工作分給下一個有空的人」變成「把消息告訴所有關心這件事的人」時，就跨入了 Pub/Sub 的領域。 Publish-Subscribe (Pub/Sub) 是一種「一對多」的廣播模型。在此模型中，發布者 (Publisher) 將訊息（或事件）發布到一個特定的「主題」(Topic)，所有訂閱了該主題的訂閱者 (Subscriber) 都會收到這則訊息的副本並各自處理。 核心特性： 一對多通訊：一則訊息可以被多個訂閱者接收並各自處理。 發布者與訂閱者之間是解耦的，發布者不需要知道有誰訂閱了訊息，甚至不知道是否有任何訂閱者存在。 事件導向：此模式的意圖是廣播一個事件。發布者只是在宣告「某件事發生了」（例如：使用者下單了），而不關心後續誰會對這個事件做出反應，也不關心反應是什麼。 主題式分類：訊息是依據「主題」進行分類的，訂閱者可以選擇性地訂閱感興趣的主題。 即時性：Pub/Sub 通常被用於即時事件的通知與傳播，採取的是「即發即忘」(fire-and-forget) 的模式，可靠性保障通常較 Message Queue 低。 理想應用場景： 事件驅動架構 (Event-Driven Architecture)：當系統中某個狀態發生改變時（例如：使用者下單），透過 Pub/Sub 將此「事件」通知給所有相關的不同微服務（如庫存服務、通知服務、數據分析服務）。 即時通知：應用於推播通知、即時聊天、股價更新等需要將單一事件廣播給大量使用者的場景。 數據扇出 (Data Fan-out)：將一份數據（如 IoT 感測器數據）同時發送給多個後端系統進行儲存、分析和監控。 流程圖 這個流程圖展示了「一對多」的廣播模式。不同的服務訂閱同一個主題，當事件發生時，它們都會收到通知並執行各自的業務邏輯。 sequenceDiagram participant Publisher as 發布者 participant Topic as 主題 (Topic/Exchange) participant QueueA as 佇列 A (給庫存服務) participant QueueB as 佇列 B (給通知服務) participant StockService as 庫存服務 participant NotificationService as 通知服務 autonumber Publisher-&gt;&gt;Topic: 發布「使用者下單」事件 note over Topic, QueueB: Topic 將事件扇出 (Fan-out) 給所有訂閱者 par Topic--&gt;&gt;QueueA: 複製事件到佇列 A and Topic--&gt;&gt;QueueB: 複製事件到佇列 B end QueueA--&gt;&gt;StockService: 傳遞事件 StockService-&gt;&gt;StockService: 處理：扣減庫存 QueueB--&gt;&gt;NotificationService: 傳遞事件 NotificationService-&gt;&gt;NotificationService: 處理：寄送 E-mail 發布事件：發布者向主題發布一個 E1 事件。 並行廣播 (par…end)：par 區塊表示動作是同時發生的。主題將事件並行地廣播給所有訂閱者。 獨立處理：每個訂閱者在收到事件後，開始執行各自的內部邏輯，彼此之間互不干擾。 核心差異總結 特性 Message Queue Publish-Subscribe (Pub/Sub) 核心意圖 任務導向 (Task-Oriented) 事件導向 (Event-Oriented) 通訊模型 點對點 (一對一) 發布/訂閱 (一對多) 訊息消耗 一則訊息只被一個消費者處理。 一則訊息會被所有訂閱者處理。 耦合度 生產者與單一消費者解耦。 發布者與多個訂閱者完全解耦。 可靠性 可靠性高，通常有訊息確認機制。 可靠性相對較低，可能因訂閱者離線而遺失訊息。 主要用途 任務分發、負載平衡、非同步處理。 事件廣播、即時通知、數據串流。 備註: 雖然 Pub/Sub 可以配置為「即發即忘」(fire-and-forget) 模式，但現代主流系統（如 Kafka, RabbitMQ）通常會為訂閱者維護獨立的佇列或日誌偏移量 (offset)，確保即使訂閱者短暫離線，也能在重新上線後接收到錯過的訊息，實現高可靠性。 如何選擇？ 選擇 Message Queue 還是 Pub/Sub，完全取決於具體需求： 如果需要確保每一項任務都只被執行一次，並且希望在多個工作者之間分攤處理壓力，那麼 Message Queue 是首選。 如果需要將一個事件通知給多個不同的處理單元，並且強調服務間的完全解耦與即時性，那麼 Pub/Sub 會是更合適的模式。 在某些複雜的系統中，甚至會將兩者結合使用。例如，一個服務透過 Pub/Sub 接收到事件通知後，再將具體的處理任務放入 Message Queue 中，交由後端工作者執行。 結論 Message Queues 和 Pub/Sub 都是構成現代化分散式系統的重要基石。理解它們之間最根本的差異——「一對一」的任務導向與「一對多」的事件廣播——是設計出高效、可擴展且穩健系統的第一步。希望本文釐清了術語上的混淆，並能幫助你在未來的技術選型中，更有信心地從設計意圖出發，做出正確的決策。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/07/21/%E8%A7%A3%E6%9E%90%20Message%20Queues%20%E8%88%87%20PubSub%20%E7%9A%84%E5%B7%AE%E5%88%A5/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1342,92 +1434,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/07/06/Nginx%E5%9C%A8%E5%B0%88%E6%A1%88%E4%B8%AD%E7%9A%84%E8%A7%92%E8%89%B2%E8%88%87%E8%A8%AD%E5%AE%9A%E5%AF%A6%E4%BE%8B/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/07/05/%E7%94%A8Ruff%E6%89%93%E9%80%A0%E8%87%AA%E5%8B%95%E5%8C%96Python%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%88%87%E9%9D%9C%E6%85%8B%E6%AA%A2%E6%9F%A5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/07/05/%E7%94%A8Ruff%E6%89%93%E9%80%A0%E8%87%AA%E5%8B%95%E5%8C%96Python%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%88%87%E9%9D%9C%E6%85%8B%E6%AA%A2%E6%9F%A5/" class="post-title-link" itemprop="url">
-              用 Ruff 打造自動化 Python 格式化與靜態檢查（VS Code 實戰）
-            </a>
-            <a href="/my-blog/2025/07/05/%E7%94%A8Ruff%E6%89%93%E9%80%A0%E8%87%AA%E5%8B%95%E5%8C%96Python%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%88%87%E9%9D%9C%E6%85%8B%E6%AA%A2%E6%9F%A5/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-07-05 00:00:00 / 修改時間：23:36:44" itemprop="dateCreated datePublished" datetime="2025-07-05T00:00:00+08:00">2025-07-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">在現代 Python 專案中，維持一致的程式碼風格與自動排版已成為團隊協作的基本需求。Ruff 是一套超快速、全方位的 Python linter 與 formatter，能同時做到靜態檢查、import 排序與自動格式化。 本文將介紹 Ruff 的安裝、基本設定與常見用法，以及如何在 VS Code 開發環境下，讓 Ruff 在每次儲存檔案時自動執行，確保團隊程式碼品質一致。 Ruff 是什麼？ Ruff 是用 Rust 開發的 Python 靜態分析工具，主打「快」與「多合一」： Linter：檢查語法錯誤、潛在 bug、PEP8 風格等 Formatter：自動排版、統一引號、行寬等 Import 排序：自動整理 import 順序 如何安裝 Ruff 可以直接用 pip 安裝： pip install ruff 如果專案有 pyproject.toml，也可以直接在 dev dependencies 加入： [dependency-groups] dev = [ &quot;ruff&gt;=0.12.0&quot;, ] 設定 Ruff：pyproject.toml Ruff 支援在 pyproject.toml 設定，常見設定如下： [tool.ruff] select = [&quot;E&quot;, &quot;F&quot;, &quot;I&quot;] # 啟用基本錯誤檢查與 import 排序 exclude = [&quot;venv&quot;, &quot;.venv&quot;, &quot;__pycache__&quot;, &quot;migrations&quot;] # 排除目錄 line-length = 88 target-version = &quot;py311&quot; fix = true # 預設自動修復違規 [tool.ruff.format] quote-style = &quot;single&quot; # 統一用單引號 line-ending = &quot;lf&quot; # 換行符號 [tool.ruff.isort] combine-as-imports = true # 排序 import 時合併 as 語法 VS Code 設定：儲存時自動執行 Ruff 安裝 Python 與 Ruff 擴充套件 安裝 Python extension for VS Code 安裝 Ruff extension for VS Code 編輯 .vscode/settings.json 在專案根目錄建立或編輯 .vscode/settings.json，加入： &#123; &quot;python.formatting.provider&quot;: &quot;ruff&quot;, &quot;editor.formatOnSave&quot;: true, &quot;ruff.enable&quot;: true, &quot;ruff.formatOnSave&quot;: true, &quot;python.linting.enabled&quot;: true, &quot;python.linting.ruffEnabled&quot;: true &#125; 若同時有安裝 black/autopep8/yapf，請確保 python.formatting.provider 設為 &quot;ruff&quot;。 實際效果 每次儲存 Python 檔案時，Ruff 會自動格式化、排序 import、修正違規 所有格式與靜態檢查規則都依 pyproject.toml 設定 團隊協作時，程式碼風格一致，減少 review friction 常用指令 自動格式化所有 Python 檔案 ruff format . 檢查並自動修正違規 ruff check . --fix 只檢查，不修正 ruff check . 結論 Ruff 結合 VS Code 的自動化設定，能大幅提升 Python 專案的開發效率與品質。 只要簡單設定，從此不再為格式與 import 排序煩惱！</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/07/05/%E7%94%A8Ruff%E6%89%93%E9%80%A0%E8%87%AA%E5%8B%95%E5%8C%96Python%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%88%87%E9%9D%9C%E6%85%8B%E6%AA%A2%E6%9F%A5/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>

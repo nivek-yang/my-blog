@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">115</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">116</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">56</span></a>
       <ul class="sub-menu">
   
@@ -351,7 +351,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/OOP/">
         OOP
-        <span class="post-count">(2)</span>
+        <span class="post-count">(3)</span>
       </a>
     </li>
   
@@ -541,7 +541,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">115</span>
+          <span class="site-state-item-count">116</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -566,6 +566,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/11/%E5%96%AE%E4%B8%80%E7%99%BB%E5%85%A5%20Single%20Sign-On%20%E8%A9%B3%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/10/11/%E5%96%AE%E4%B8%80%E7%99%BB%E5%85%A5%20Single%20Sign-On%20%E8%A9%B3%E8%A7%A3/" class="post-title-link" itemprop="url">
+              單一登入 (Single Sign-On, SSO) 詳解
+            </a>
+            <a href="/my-blog/2025/10/11/%E5%96%AE%E4%B8%80%E7%99%BB%E5%85%A5%20Single%20Sign-On%20%E8%A9%B3%E8%A7%A3/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-10-11 00:00:00 / 修改時間：22:13:51" itemprop="dateCreated datePublished" datetime="2025-10-11T00:00:00+08:00">2025-10-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">是否曾覺得自己的大腦快被各種密碼塞爆了？一組用於電子郵件，另一組給公司的協作平台，第三組用於專案管理，第四組給雲端硬碟……這簡直是一場數位鑰匙的惡夢，也是一個巨大的安全隱患。 如果只需輸入一次主密碼，就能存取所有需要的工具，那該有多好？這並非幻想，而是單一登入 (Single Sign-On, SSO) 所實現的現實。 這篇文章將揭開 SSO 的神秘面紗。 SSO 之前的世界：每項設施都要單獨買票 想像一個超大型的主題樂園，在這裡，每一項遊樂設施、每一個食品攤、每一家紀念品店，都要求在它自己的售票亭單獨買票。想玩雲霄飛車，得排隊付錢；想買個椒鹽卷餅，得去另一個隊伍再付一次錢；想進鬼屋，又是一次排隊、一張新門票。 這就是沒有 SSO 的網路世界。每個應用程式（Slack、Salesforce、Google Drive 等）都是一項獨立的設施。每一個都強迫你透過輸入使用者名稱和密碼來證明身份。這效率低下、令人沮喪，而且很可能弄丟其中一張「門票」（密碼）。 SSO 的運作原理 想像一個現代化的主題樂園。抵達樂園正門，出示身份證明，一次性付清費用。作為回報，他們會給你一個安全、全通行的手環。 在接下來的一整天，都可以自由暢行，再也不用買新的門票。設施的操作員不需要知道你的信用卡詳細資訊，只需要相信樂園正門給了你一個有效的手環。 這正是 SSO 的運作方式。來定義一下這個比喻中的關鍵角色： 使用者 User: 主題樂園的遊客。 樂園正門 (身份提供者 Identity Provider - IdP): 這是驗證身份的中央權威機構。可以把它想像成 Google、Microsoft (Azure AD)，或是公司的登入入口網站。它們是保管密碼的地方。 遊樂設施 (服務提供者 Service Provider - SP): 這些是想要使用的應用程式，如 Salesforce、Slack 或 Dropbox。它們提供服務，但不會直接處理密碼。 魔法手環 (SSO 權杖 Token): 這是一小段安全的數位資訊（通常是 SAML Assertion 或 JWT），在成功登入後，由 IdP 交給瀏覽器。這是一個加密的憑證，相當於：「已經驗證了這個人。可以信任他。」 SSO 的流程 將這趟樂園之旅轉化為技術流程。這一切通常在幾秒鐘內完成： 嘗試進入一項設施 (SP)： 瀏覽 slack.com。 設施將你引導至正門 (IdP)： Slack 發現尚未登入。它不會顯示自己的密碼輸入框，而是將你「重定向」到公司的 SSO 登入頁面（也就是 IdP）。 證明自己的身份： 在 IdP 的登入頁面，輸入帳號密碼（可能還需要多因子認證碼）。 獲得了魔法手環 (Token)： IdP 驗證身份後，會生成一個安全的 SSO 權杖，並將它傳回給瀏覽器。 瀏覽器向設施出示手環： 瀏覽器會自動將這個權杖發送給 Slack。 設施信任這個手環： Slack 收到權杖後，由於它已被設定為信任公司的 IdP，它會驗證權杖的數位簽章，確認是有效使用者，並授予存取權限。 現在，已經成功登入 Slack，而 Slack 根本不知道你的密碼！更棒的是，當下一個目的地是 dropbox.com 時，Dropbox 可能會發現你已經擁有一個來自 IdP 的有效手環，於是自動就讓你登入了，完全無需任何操作。 SSO 的溝通語言：關鍵協議 IdP 和 SP 之間需要一種通用的、安全的語言來交換權杖資訊。目前最常見的兩種協議是： SAML (Security Assertion Markup Language): 企業級 SSO 的主力，尤其適用於網頁應用程式。它功能強大、安全，使用 XML 格式來傳遞資訊。可以把它想像成一份用於身份驗證的、正式且經過公證的信函。 OpenID Connect (OIDC) &amp; OAuth 2.0: 這是現代的標準，尤其適用於手機 App 和 API。嚴格來說，OAuth 2.0 用於授權（允許應用程式存取資源），而 OIDC 是建立在其之上的協定，用於認證（證明你是誰）。它通常使用一種更輕量的權杖格式，稱為 JSON Web Token (JWT)。 為什麼 SSO 能創造三贏局面？ 採用 SSO 為所有相關方都帶來了巨大的好處。 角色 帶來的好處 使用者 ✅ 便利性： 登入一次，通行無阻。告別密碼疲勞。 IT 與資安管理員 ✅ 集中化的安全管理： 在單一位置強制執行強密碼策略和多因子認證 (MFA)。 ✅ 簡化的帳號管理： 新員工入職？只需建立一個帳號。員工離職？停用一個帳號即可立即撤銷所有存取權限。 ✅ 更佳的可見性： 從單一入口追蹤誰在存取哪些資源。 企業 ✅ 提升生產力： 減少因忘記密碼或等待 IT 重設而浪費的時間。 ✅ 降低風險： 杜絕密碼重用等危險行為，強化整體安全態勢。 開發者視角：SSO 實戰應用與觀念釐清 作為一名網站開發者，最關心的問題是： 該如何實作 SSO？ 這跟平時用 JWT 做的登入功能，到底有什麼差別？ 如果網站只有一個，需要自己蓋一個 IdP 嗎？ 1. 在開發網站時要如何應用 SSO？ 在絕大多數情況下，網站會扮演服務提供者 (Service Provider - SP) 的角色。你的任務不是去「打造」一個 SSO 系統，而是去「整合」一個既有的 SSO 系統。 實作的流程大致如下： 選擇對應的協議庫 (Library): 絕對不需要從零開始手刻 SAML 或 OIDC 協議。社群中已經有非常成熟的函式庫可以幫助處理掉 90% 的複雜工作。 Node.js: passport.js 搭配對應的 SAML (passport-saml) 或 OIDC (passport-openidconnect) 策略。 Java: Spring Security 內建了強大的 SAML 和 OAuth 2.0/OIDC 支援。 Python/Django: django-allauth 或 python-social-auth 都是很棒的選擇。 與 IdP 進行「信任交換」設定: 這是最關鍵的一步。需要在應用程式後台，以及 IdP 的管理後台（例如 Google、Okta、Azure AD）進行雙向設定。 在 IdP 後台: 需要註冊你的應用程式，並提供一個重要的資訊：回調 URL (Callback URL / Redirect URI)。這個 URL 告訴 IdP 在使用者成功登入後，要把瀏覽器帶回到網站的哪個地址。IdP 會給一組 Client ID 和 Client Secret。 在應用程式後台: 需要配置 IdP 的資訊，例如它的登入端點 URL、發行者資訊 (Issuer)、以及剛才拿到的 Client ID 和 Secret。 處理回調 (Handle the Callback): 當使用者從 IdP 被引導回來時，回調 URL 會收到一個授權碼 (Authorization Code) 或權杖 (Token)。 後端程式用這個 Code 向 IdP 換取真正的 Access Token 和 ID Token。 選擇的函式庫會自動幫你驗證這個 Token 的簽章是否合法、是否過期。 驗證通過後，從 Token 中解析出使用者資訊（如 Email、姓名）。 核心邏輯: 拿這個 Email 查詢你的資料庫。如果使用者已存在，就幫他建立一個登入狀態（例如 Session）；如果不存在，就為他自動建立一個新帳號，然後再建立登入狀態。 從頭到尾，網站都沒有接觸到使用者的密碼。這就是 SSO 作為 SP 的精髓。 2. SSO 與網站自身的 JWT 認證有何差別？ 這是最容易混淆的地方。許多開發者會說：「自己用 JWT 做的登入也是一種 Token-based 認證啊？」是的，但核心區別在於信任的來源。 特性 網站自身的 JWT 認證 SSO (聯邦式認證) 比喻 自己家的鑰匙 公司大樓的門禁卡 誰驗證密碼？ 自己。 後端程式負責驗證使用者提交的帳號密碼是否正確。 外部的 IdP。 完全不管密碼，只相信 IdP 的驗證結果。 誰簽發 Token？ 自己。 驗證密碼成功後，由伺服器簽發一個 JWT 給前端。 外部的 IdP。 IdP 驗證成功後，簽發 Token (SAML/JWT) 並傳遞給你。 誰驗證 Token？ 自己。 前端每次請求都帶著你發的 JWT，後端驗證這個 JWT 是不是自己簽的。 驗證 IdP 的簽章。 收到 IdP 發來的 Token，要驗證這個 Token 確實是由你所信任的那個 IdP 簽發的。 信任範圍 內部 (Internal Trust)。 網站只相信自己發行的 Token。 聯邦式 (Federated Trust)。 網站選擇信任一個外部權威機構發行的 Token。 主要目的 讓使用者在你的單一網站內保持登入狀態。 讓使用者用一組帳密登入多個互相信任的網站。 簡單來說，傳統的 JWT 認證是 「我是法官，我說了算」；而 SSO 整合則是 「我信任隔壁的法官，他蓋了章的文件我都認」。 3. 單一網站需要自己建立一個 IdP 嗎？ 通常完全不需要。 建立和維護一個 IdP 是極其龐大且複雜的工程。它的核心價值在於為多個應用程式提供統一的身份驗證服務。如果只有一個網站，那自己就是所有使用者身份的「權威來源」。 在這種情況下，應該選擇的架構是**「網站自身的 JWT 認證」**。由網站自己管理使用者資料庫（包含加密後的密碼）、自己處理登入邏輯、自己簽發和驗證 JWT。這就是絕大多數網站的標準做法。 只有當你是一家大型企業，需要為內部數十個系統（HR、CRM、ERP…）提供統一登入，或者正在開發一個類似 Okta 的商業產品時，才需要考慮建立自己的 IdP。 結論 從本質上，單一登入 (SSO) 的核心在於信任的集中化。不再讓每個應用程式各自為政地負責安全，而是將這項關鍵任務委託給一個單一、強大且高度可信的身份提供者 (IdP)。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/10/11/%E5%96%AE%E4%B8%80%E7%99%BB%E5%85%A5%20Single%20Sign-On%20%E8%A9%B3%E8%A7%A3/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1330,92 +1416,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/09/28/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%BB%9F%E9%AB%94%E9%96%8B%E7%99%BC%E4%B8%AD%E7%9A%84%E9%A0%98%E5%9F%9F%E9%A9%85%E5%8B%95%E8%A8%AD%E8%A8%88/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/27/Cookie%20Session%20JWT%20%E7%9A%84%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%E8%88%87%E6%AF%94%E8%BC%83/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/09/27/Cookie%20Session%20JWT%20%E7%9A%84%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%E8%88%87%E6%AF%94%E8%BC%83/" class="post-title-link" itemprop="url">
-              Cookie, Session, JWT 的深度解析與比較
-            </a>
-            <a href="/my-blog/2025/09/27/Cookie%20Session%20JWT%20%E7%9A%84%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%E8%88%87%E6%AF%94%E8%BC%83/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-09-27 00:00:00 / 修改時間：20:55:51" itemprop="dateCreated datePublished" datetime="2025-09-27T00:00:00+08:00">2025-09-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">在瀏覽的網站和使用的應用程式背後，存在一個至關重要的任務：如何安全、有效地管理用戶的狀態與身份？ 無論是登入電商網站後，能繼續購物而無需重複登入；還是呼叫各種 API 服務，系統都能知道是誰、擁有什麼權限，這一切都離不開身份驗證和狀態管理的機制。 長久以來，Cookie 和 Session 一直是網頁應用領域的兩大基石。然而，隨著分散式系統、API 服務和行動應用的興起，一種新的、更具彈性的解決方案逐漸浮現——JWT (JSON Web Token)。這三者各有千秋，但它們的設計理念、工作方式和適用場景卻大相徑庭。 理解它們之間的差異，不僅能幫助在系統設計時做出更明智的選擇，更能在構建安全、高效和可擴展的應用程式時如虎添翼。 Cookie：客戶端的「小紙條」 什麼是 Cookie？ Cookie 是一小段文本信息，由網站的伺服器發送給瀏覽器，然後瀏覽器將其儲存在用戶的本地電腦上。當瀏覽器再次向同一伺服器發送請求時，會將這個 Cookie 攜帶回伺服器。它的主要目的是在無狀態的 HTTP 協議上實現狀態管理。 工作原理 當訪問一個網站時，伺服器通過 HTTP 響應頭的 Set-Cookie 字段發送一個或多個 Cookie 給瀏覽器。 瀏覽器接收到 Cookie 後，將其保存在本地。 之後每一次向該網站發送請求，瀏覽器都會自動將相關的 Cookie 附加在 HTTP 請求頭的 Cookie 字段中發送給伺服器。 伺服器根據接收到的 Cookie 識別用戶或獲取用戶的狀態信息。 主要屬性 Name=Value：Cookie 的名稱和值。 Expires / Max-Age：Cookie 的有效期，決定它是會話 Cookie (瀏覽器關閉即失效) 還是持久 Cookie。 Domain：指定哪些域名可以讀取這個 Cookie。 Path：指定哪些路徑下的請求會發送這個 Cookie。 HttpOnly：防止 JavaScript 讀取 Cookie，降低 XSS 攻擊風險。 Secure：只在 HTTPS 連接下發送 Cookie。 SameSite：防止 CSRF 攻擊 (Strict, Lax, None)。 優點 實現狀態管理：克服 HTTP 無狀態的限制。 數據持久化：可以將數據持久化在客戶端，即使瀏覽器關閉也能保留 (持久 Cookie)。 易於實現：瀏覽器和伺服器都內建支援。 缺點 安全性較差：容易受到 XSS (跨站腳本攻擊) 和 CSRF (跨站請求偽造) 攻擊，特別是沒有設置 HttpOnly 和 SameSite 的 Cookie。 容量限制：每個 Cookie 有大小限制 (通常 4KB)，每個域名下的 Cookie 數量也有限制。 性能開銷：每次 HTTP 請求都會攜帶 Cookie，增加請求頭大小，影響性能。 私隱問題：常用於追蹤用戶行為。 跨域限制：受同源策略限制，難以跨域共享。 適用場景 記住用戶登入狀態 (與 Session ID 配合)。 購物車信息。 用戶偏好設置、主題。 網站分析和追蹤用戶行為。 Session：伺服器端的「會客紀錄」 什麼是 Session？ Session 是一種伺服器端的機制，用於儲存用戶在某個網站上整個會話期間的狀態信息。由於 HTTP 是無狀態的，Session 提供了一種方式，讓伺服器能夠「記住」用戶從一個請求到另一個請求的上下文。 工作原理 當用戶首次訪問應用程式時，伺服器會創建一個唯一的 Session Id (會話 ID)。 這個 Session Id 通常會通過 Cookie (稱為 Session Cookie) 發送給客戶端，或者通過 URL 重寫的方式。 客戶端每次發送請求時，都會將這個 Session Id 帶回伺服器。 伺服器根據 Session Id 去查找對應的 Session 數據（通常儲存在記憶體、資料庫或快取中），從而識別用戶及其狀態。 主要特點 數據儲存在伺服器端：這意味著敏感數據不會暴露在客戶端。 依賴 Cookie：大多數情況下，Session Id 是透過 Cookie 傳遞的。 有限生命週期：Session 可以設定過期時間，也可以在瀏覽器關閉後失效。 優點 安全性高：所有用戶的敏感數據都儲存在伺服器端，客戶端只保留一個 Session ID，降低了數據洩露的風險。 容量無限制：只要伺服器儲存空間允許，Session 大小沒有理論限制。 易於管理：伺服器可以更好地控制和管理用戶狀態。 缺點 伺服器資源消耗：每個活躍的用戶 Session 都會佔用伺服器資源（記憶體、CPU），在高併發下可能會成為瓶頸。 擴展性問題：在分散式系統或負載均衡環境下，Session 共享變得複雜 (需要引入 Session 共享機制，如 Redis、資料庫集中儲存 Session)。 跨域困難：Session 天然綁定到特定伺服器和域名，跨域或多系統之間共享狀態比較困難。 適用場景 傳統的 Web 應用程式 (如使用 JSP, ASP.NET, PHP 等技術棧)。 需要儲存大量或敏感用戶狀態的場景 (如金融交易)。 用戶登入狀態管理。 JWT (JSON Web Token)：輕量級的「數位簽名令牌」 什麼是 JWT？ JWT (JSON Web Token) 是一個開放標準 (RFC 7519)，它定義了一種緊湊、自包含的方式，用於在各方之間安全地傳輸資訊作為 JSON 物件。這些資訊是數位簽名過的，因此可以被驗證和信任。 JWT 通常用於身份驗證和資訊交換。 結構 一個 JWT 包含了三部分，由點 (.) 分隔：Header.Payload.Signature。 Header (頭部)： 通常包含兩個字段：typ (Token 類型，通常為 “JWT”) 和 alg (使用的簽名算法，例如 HMACS SHA256 或 RSA)。 範例：&#123;&quot;alg&quot;: &quot;HS256&quot;, &quot;typ&quot;: &quot;JWT&quot;&#125; 接著會用 Base64URL 編碼。 Payload (載荷)： 包含實際需要傳輸的數據，稱為 claims (聲明)。 claims 又分為三種類型： 標準聲明 (Registered Claims)：如 iss (發布者), exp (過期時間), sub (主題), aud (接收者) 等，建議使用但非強制。 公開聲明 (Public Claims)：用戶自定義的聲明，但為避免衝突，建議將其定義為 URI 形式。 私有聲明 (Private Claims)：應用程式之間自定義的聲明，不需要唯一性。 範例：&#123;&quot;sub&quot;: &quot;1234567890&quot;, &quot;name&quot;: &quot;John Doe&quot;, &quot;admin&quot;: true, &quot;exp&quot;: 1678880000&#125; 接著也會用 Base64URL 編碼。 Signature (簽名)： 將編碼後的 Header 和 Payload，以及一個祕密 (secret) 或私鑰，使用 Header 中指定的算法進行簽名。 公式：HMACSHA256(base64UrlEncode(header) + &quot;.&quot; + base64UrlEncode(payload), secret) 簽名的目的是驗證 Token 的完整性（確保沒有被篡改）和真實性（證明是由已知簽發者簽發）。 工作原理 用戶登入時，伺服器驗證其憑證。 驗證成功後，伺服器生成一個 JWT，其中包含用戶的身份信息和權限。 伺服器將這個 JWT 返回給客戶端（通常在 HTTP 響應體中或作為 Cookie）。 客戶端（例如瀏覽器/行動應用）接收到 JWT 後，將其儲存在本地（例如 Local Storage、Session Storage 或 Cookie）。 之後每一次發送需要驗證的請求時，客戶端將 JWT 附加在 HTTP 請求頭的 Authorization 字段中（通常以 Bearer 方案）。 伺服器接收到請求後，會使用相同的祕密或公鑰驗證 JWT 的簽名。 驗證成功後，解析 Payload 獲取用戶身份和權限，然後處理請求。伺服器不需要儲存任何 Session 狀態。 優點 無狀態 (Stateless)：伺服器無需儲存用戶 Session 狀態，提升了伺服器擴展性 (特別是對於分佈式系統和微服務)。 可擴展性高：由於無狀態，容易在多個伺服器之間共享，非常適合微服務架構和負載均衡。 跨域/跨平台：可以在不同域名或不同應用程式 (Web, Mobile App) 之間傳遞和驗證。 資訊自包含：Token 中包含所有必要信息，減少資料庫查詢。 安全性 (簽名)：Token 經過簽名，防止篡改，保證數據完整性。 缺點 Token 無法作廢：一旦簽發，在過期時間之前，無法直接讓其失效（除非伺服器另設黑名單機制）。這對安全性有影響 (例如用戶登出或權限變更時)。 Secret 洩漏風險：如果用於簽名的 Secret 洩漏，Token 可能被偽造。 Token 容量：如果 Payload 包含過多信息，JWT 會變大，增加網絡傳輸開銷。 安全性 (未加密)：Payload 只是 Base64 編碼，並非加密，任何人都可解碼讀取。因此不適合儲存敏感數據。 XSS 風險：如果 JWT 儲存在 Local Storage，容易受到 XSS 攻擊而洩漏。 適用場景 API 身份驗證：特別是 RESTful API，不需要傳統 Session 狀態。 微服務架構：服務間進行身份和權限驗證。 單點登入 (SSO)：在多個應用程式之間共享用戶身份。 行動應用：作為身份驗證憑證。 Cookie, Session, JWT 的核心差異對照表 特性 Cookie Session JWT (JSON Web Token) 儲存位置 客戶端 (瀏覽器) 伺服器端 (記憶體、DB、Redis 等) 客戶端 (Local Storage, Session Storage, Cookie) 伺服器狀態 無狀態 (但與 Session 搭配時傳遞 Session ID) 有狀態 (伺服器需維護 Session 數據) 無狀態 (伺服器不儲存 Token 數據，只驗證簽名) 擴展性 差 (受限於同源策略和容量限制) 差 (須額外機制實現 Session 共享) 高 (天然支援分散式和負載均衡) 安全性 容易被 XSS/CSRF 攻擊 (若無適當防護) 高 (敏感數據在伺服器) 簽名防篡改，但數據公開，需防 XSS 洩漏 Token 數據容量 小 (通常 4KB) 大 (理論上無限，受限於伺服器資源) 通常較小 (越大傳輸開銷越大) 傳輸開銷 每次請求都會攜帶，增加請求頭大小。 攜帶 Session ID (通常較小)。 每次請求攜帶整個 Token，Token 越大開銷越大。 作廢機制 可直接設定過期時間或伺服器移除。 伺服器可隨時失效 Session。 需額外黑名單機制，否則過期前無法直接作廢。 主要用途 用戶偏好、狀態追蹤，傳遞 Session ID 用戶登入狀態、購物車、敏感數據儲存 API 身份驗證、單點登入、微服務認證 什麼時候選用誰？ 傳統的 Web 應用，且大部分操作圍繞單一伺服器 (單體架構) → Cookie + Session 這種組合在許多傳統 Web 框架中是預設且成熟的方案。 安全性較高，因為敏感數據仍保留在伺服器。 缺點是橫向擴展性差，需要考慮 Session 共享問題。 需要無狀態、高擴展性、跨域/跨平台的 API 認證，特別是微服務、前後端分離、行動應用 → JWT JWT 讓 API 變得真正無狀態，便於擴展和部署。 適用於需要為眾多客戶端（Web, iOS, Android）提供統一認證接口的場景。 但需要注意 Token 的安全儲存 (避免 XSS 攻擊) 和作廢機制。 在有狀態的應用中，需要儲存少量的非敏感信息在客戶端，或用於與 Session 搭配傳遞 Session ID → 純 Cookie 例如記錄用戶的語言偏好、夜間模式設置等。 HttpOnly 和 Secure 屬性必須嚴格設定以增強安全性。 最佳實踐與結合使用 有時候，甚至會將 JWT 和 Cookie 結合起來使用，以發揮各自的優勢並彌補不足： HttpOnly Cookie 儲存 JWT： 將 JWT 儲存在設定了 HttpOnly 和 Secure 屬性的 Cookie 中。 HttpOnly 可以防止 XSS 攻擊直接從 JavaScript 讀取 JWT。 Secure 可以確保 JWT 只在 HTTPS 連接中傳輸，防止中間人攻擊。 這樣做既利用了 JWT 的無狀態特點，又利用了 Cookie 的安全性優勢 (對抗 XSS)。 但仍可能面臨 CSRF 攻擊，需要搭配 SameSite 屬性或 CSRF Token 來防範。 結論 Cookie、Session 和 JWT 各自在 Web 應用和 API 身份驗證與狀態管理中扮演著不可或缺的角色。它們就像是工具箱中的不同工具，沒有絕對的優劣，只有最適合特定任務的選擇。 理解它們的設計哲學、技術細節和權衡考量，是成為一名優秀的系統設計者和開發者的關鍵一步。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/09/27/Cookie%20Session%20JWT%20%E7%9A%84%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%E8%88%87%E6%AF%94%E8%BC%83/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>
