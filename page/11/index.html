@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">116</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">117</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">56</span></a>
       <ul class="sub-menu">
   
@@ -225,7 +225,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Distributed-System/">
         Distributed System
-        <span class="post-count">(1)</span>
+        <span class="post-count">(2)</span>
       </a>
     </li>
   
@@ -323,7 +323,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Message-Queue/">
         Message Queue
-        <span class="post-count">(2)</span>
+        <span class="post-count">(3)</span>
       </a>
     </li>
   
@@ -541,7 +541,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">116</span>
+          <span class="site-state-item-count">117</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -575,7 +575,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/29/HTMX%E5%92%8CDjango%E5%AF%A6%E7%8F%BE%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E8%88%87%E5%BE%8C%E7%AB%AF%E6%B8%B2%E6%9F%93/">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/30/Django%20messages/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/my-blog/images/avatar.gif">
@@ -594,10 +594,10 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/my-blog/2025/04/29/HTMX%E5%92%8CDjango%E5%AF%A6%E7%8F%BE%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E8%88%87%E5%BE%8C%E7%AB%AF%E6%B8%B2%E6%9F%93/" class="post-title-link" itemprop="url">
-              HTMX 與 Django 實現局部更新與後端渲染
+            <a href="/my-blog/2025/04/30/Django%20messages/" class="post-title-link" itemprop="url">
+              Django Messages 快閃訊息的運作機制
             </a>
-            <a href="/my-blog/2025/04/29/HTMX%E5%92%8CDjango%E5%AF%A6%E7%8F%BE%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E8%88%87%E5%BE%8C%E7%AB%AF%E6%B8%B2%E6%9F%93/" class="card-link-overlay"></a>
+            <a href="/my-blog/2025/04/30/Django%20messages/" class="card-link-overlay"></a>
         </h2>
 
         <div class="post-meta-container">
@@ -609,7 +609,7 @@
       <span class="post-meta-item-text">發表於</span>
       
 
-      <time title="創建時間：2025-04-29 00:00:00 / 修改時間：23:00:19" itemprop="dateCreated datePublished" datetime="2025-04-29T00:00:00+08:00">2025-04-29</time>
+      <time title="創建時間：2025-04-30 00:00:00 / 修改時間：21:38:46" itemprop="dateCreated datePublished" datetime="2025-04-30T00:00:00+08:00">2025-04-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -631,7 +631,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">功能概述 此功能實現了一個按讚（收藏）按鈕，使用者可以對特定的項目（如面試記錄）進行按讚或取消按讚操作。按鈕的狀態（已收藏或收藏）由後端決定，並通過 HTMX 局部更新頁面。 技術細節 1. 前端模板設計 favorite.html 這個模板負責渲染按讚按鈕，按鈕的狀態根據使用者是否已經按讚來決定。 &#123;% if user in interview.favorited_by.all %&#125; 已收藏 &#123;% else %&#125; 收藏 &#123;% endif %&#125; hx-post: 當按鈕被點擊時，發送一個 POST 請求到指定的 URL。 hx-swap=&quot;outerHTML&quot;: 指定 HTMX 替換整個按鈕的 HTML，而不僅僅是按鈕內的內容。 按鈕狀態: 使用 Django 模板語法 `</div>
+          <div class="post-card-content">什麼是 Django Messages？ Django 提供了一個內建的訊息框架（django.contrib.messages），用於在請求之間傳遞提示訊息，這些訊息通常用於通知使用者某些操作的結果，例如成功、錯誤或警告等。這類訊息被稱為 「快閃訊息」（Flash Messages），因為它們只會在下一次請求中顯示，然後自動消失。 使用場景 Django Messages 適合用於以下場景： 表單提交成功或失敗的提示。 操作完成後的通知（例如：資料已儲存、刪除成功）。 錯誤或警告訊息的顯示。 快閃訊息的類型 Django 提供了以下內建的訊息類型： messages.debug: 用於調試訊息。 messages.info: 一般資訊提示。 messages.success: 成功訊息。 messages.warning: 警告訊息。 messages.error: 錯誤訊息。 如何使用 Django Messages？ 1. 啟用 Messages 確保 django.contrib.messages 已包含在 INSTALLED_APPS 中，並且模板中已載入 messages 中間件。 settings.py: INSTALLED_APPS = [ ... &#x27;django.contrib.messages&#x27;, ... ] MIDDLEWARE = [ ... &#x27;django.contrib.messages.middleware.MessageMiddleware&#x27;, ... ] 2. 在視圖中添加訊息 使用 messages 模組在視圖中添加訊息。 範例： from django.contrib import messages from django.shortcuts import redirect def my_view(request): # 添加成功訊息 messages.success(request, &quot;操作成功！&quot;) # 添加警告訊息 messages.warning(request, &quot;這是警告訊息！&quot;) return redirect(&quot;home&quot;) 3. 在模板中顯示訊息 在模板中使用 messages 模板標籤來顯示訊息。 範例： &#123;% if messages %&#125; &#123;% for message in messages %&#125; &#123;&#123; message &#125;&#125; &#123;% endfor %&#125; &#123;% endif %&#125; message.tags: 自動添加的 CSS 樣式類型（如 success、warning）。 message: 訊息的內容。 4. 自訂樣式 可以根據訊息類型自訂樣式，提升用戶體驗。 範例（CSS）： .messages &#123; list-style: none; padding: 0; &#125; .messages .success &#123; color: green; &#125; .messages .warning &#123; color: orange; &#125; .messages .error &#123; color: red; &#125; 完整範例 以下是使用 DaisyUI 和 Alpine.js 實現的完整範例，包含可點擊 x 按鈕關閉訊息的功能，並根據訊息類型（如 success、warning、error）自動套用樣式： &#123;% if messages %&#125; &#123;% for message in messages %&#125; &#123;&#123; message &#125;&#125; x &#123;% endfor %&#125; &#123;% endif %&#125; 功能說明 Alpine.js 的 x-data 和 x-if: 使用 x-data=&quot;&#123; show: true &#125;&quot; 初始化訊息的顯示狀態。 使用 x-if=&quot;show&quot; 控制訊息是否顯示，點擊 x 按鈕後將 show 設為 false，隱藏訊息。 DaisyUI 的 alert 樣式: 使用 alert 類別來套用 DaisyUI 的樣式。 根據 message.tags 動態添加樣式類別（如 alert-success、alert-warning、alert-error 等）。 s 關閉按鈕: 使用 DaisyUI 的按鈕樣式 btn btn-xs btn-circle btn-outline。 點擊按鈕時，透過 Alpine.js 的 @click 事件隱藏訊息。 Alpine.js 和 DaisyUI 的引入 Alpine.js 的引入: 確保在模板中已經引入 Alpine.js CDN： &lt;script src=&quot;https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js&quot; defer&gt;&lt;/script&gt; DaisyUI 的安裝: DaisyUI 是基於 Tailwind CSS 的元件庫，確保已正確安裝並配置 Tailwind 和 DaisyUI。 這樣的設計不僅美觀，還能提供良好的用戶體驗，適合用於各種 Django 項目中需要提示訊息的場景。 注意事項 訊息的持久性: Django Messages 預設只會在下一次請求中顯示，之後會自動清除。 如果需要更長時間的訊息顯示，可以考慮自訂訊息存儲（Message Storage）。 訊息存儲後端: 預設使用 CookieStorage 或 SessionStorage。 可以在 settings.py 中自訂：MESSAGE_STORAGE = &#x27;django.contrib.messages.storage.session.SessionStorage&#x27; 多條訊息顯示: 如果在同一個請求中添加多條訊息，messages 會以列表的形式顯示。 總結 Django Messages 是一個簡單而強大的工具，適合用於提示訊息的顯示。通過內建的訊息類型和模板標籤，可以快速實現用戶友好的通知功能，並提升應用的交互體驗。</div>
       
     </div>
 
@@ -641,7 +641,7 @@
 
     <footer class="post-footer">
         <div class="post-card-readmore">
-          <a href="/my-blog/2025/04/29/HTMX%E5%92%8CDjango%E5%AF%A6%E7%8F%BE%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E8%88%87%E5%BE%8C%E7%AB%AF%E6%B8%B2%E6%9F%93/" class="btn">
+          <a href="/my-blog/2025/04/30/Django%20messages/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>
@@ -728,6 +728,92 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/04/29/HTMX%E7%B0%A1%E4%BB%8B/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/29/HTMX%E5%92%8CDjango%E5%AF%A6%E7%8F%BE%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E8%88%87%E5%BE%8C%E7%AB%AF%E6%B8%B2%E6%9F%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/04/29/HTMX%E5%92%8CDjango%E5%AF%A6%E7%8F%BE%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E8%88%87%E5%BE%8C%E7%AB%AF%E6%B8%B2%E6%9F%93/" class="post-title-link" itemprop="url">
+              HTMX 與 Django 實現局部更新與後端渲染
+            </a>
+            <a href="/my-blog/2025/04/29/HTMX%E5%92%8CDjango%E5%AF%A6%E7%8F%BE%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E8%88%87%E5%BE%8C%E7%AB%AF%E6%B8%B2%E6%9F%93/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-04-29 00:00:00 / 修改時間：23:00:19" itemprop="dateCreated datePublished" datetime="2025-04-29T00:00:00+08:00">2025-04-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">功能概述 此功能實現了一個按讚（收藏）按鈕，使用者可以對特定的項目（如面試記錄）進行按讚或取消按讚操作。按鈕的狀態（已收藏或收藏）由後端決定，並通過 HTMX 局部更新頁面。 技術細節 1. 前端模板設計 favorite.html 這個模板負責渲染按讚按鈕，按鈕的狀態根據使用者是否已經按讚來決定。 &#123;% if user in interview.favorited_by.all %&#125; 已收藏 &#123;% else %&#125; 收藏 &#123;% endif %&#125; hx-post: 當按鈕被點擊時，發送一個 POST 請求到指定的 URL。 hx-swap=&quot;outerHTML&quot;: 指定 HTMX 替換整個按鈕的 HTML，而不僅僅是按鈕內的內容。 按鈕狀態: 使用 Django 模板語法 `</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/04/29/HTMX%E5%92%8CDjango%E5%AF%A6%E7%8F%BE%E5%B1%80%E9%83%A8%E6%9B%B4%E6%96%B0%E8%88%87%E5%BE%8C%E7%AB%AF%E6%B8%B2%E6%9F%93/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>
@@ -1342,92 +1428,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/04/23/%E7%82%BA%20Django%20Model%20%E6%96%B0%E5%A2%9E%20User%20%E6%AC%84%E4%BD%8D%E7%9A%84%E8%B3%87%E6%96%99%E8%99%95%E7%90%86%E6%8A%80%E5%B7%A7/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/22/TimeTracker%E6%99%82%E9%96%93%E8%BF%BD%E8%B9%A4%E5%B7%A5%E5%85%B7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/04/22/TimeTracker%E6%99%82%E9%96%93%E8%BF%BD%E8%B9%A4%E5%B7%A5%E5%85%B7/" class="post-title-link" itemprop="url">
-              個人開發：TimeTracker 時間追蹤工具
-            </a>
-            <a href="/my-blog/2025/04/22/TimeTracker%E6%99%82%E9%96%93%E8%BF%BD%E8%B9%A4%E5%B7%A5%E5%85%B7/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-04-22 00:00:00 / 修改時間：22:34:03" itemprop="dateCreated datePublished" datetime="2025-04-22T00:00:00+08:00">2025-04-22</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">這份筆記記錄了 TimeTracker 工具的設計與實現過程，該工具用於追蹤專案和功能的開發時間，並將數據保存為 JSON 格式，以便後續分析與展示。 一、專案目標 記錄專案開始與結束時間 紀錄每個功能（feature）的開發時間 自動計算持續時間 將數據存儲為 JSON，方便持久化與後續處理 提供命令列介面與 Makefile 支援，簡化操作流程 二、使用技術 datetime：記錄時間戳並計算時間差 json：將追蹤數據序列化為 JSON os：檢查檔案存在性，確保初始化與讀寫流程穩定 sys：處理命令列參數，實現靈活的命令操作 Makefile：簡化常用命令的執行 三、程式架構 my_project/ ├── time_tracking/ │ ├── main.py # 命令列介面入口 │ ├── time_tracker.py # 核心邏輯，負責時間記錄與計算 ├── Makefile # 提供簡化操作的命令 3.1 類別與方法概覽 time_tracker.py 物件導向設計：TimeTracker 類封裝了所有時間追蹤的邏輯。 方法： _load_data()：讀取或初始化 JSON 檔案數據 _save_data()：將當前數據寫入 JSON 檔案 _current_time()：取得當前時間字串 ('%Y-%m-%d %H:%M:%S') _calc_duration(start, end)：計算並返回時間差字串 start_project()/end_project()：記錄專案整體時間 start_feature(name)/end_feature(name)：記錄單一功能的時間 main.py 提供命令列介面，支援以下命令： start_project：開始專案 end_project：結束專案 start_feature &lt;feature_name&gt;：開始功能 end_feature &lt;feature_name&gt;：結束功能 Makefile 提供簡化操作的命令： make start_project：開始專案 make end_project：結束專案 make start_feature feature=&lt;feature_name&gt;：開始功能 make end_feature feature=&lt;feature_name&gt;：結束功能 四、核心實現 4.1 time_tracker.py 的物件導向設計 初始化與數據管理 class TimeTracker: def __init__(self, filename=&#x27;time_log.json&#x27;): self.filename = filename self.data = self._load_data() def _load_data(self): if os.path.exists(self.filename): with open(self.filename, &#x27;r&#x27;) as f: return json.load(f) return &#123;&quot;project&quot;: &#123;&#125;, &quot;features&quot;: &#123;&#125;&#125; def _save_data(self): with open(self.filename, &#x27;w&#x27;) as f: json.dump(self.data, f, indent=4) __init__：初始化 TimeTracker 物件，並讀取或初始化數據。 _load_data()：若檔案存在，載入 JSON；否則回傳預設空結構。 _save_data()：將當前內存中的 self.data 寫回檔案，保持持久化。 時間處理 def _current_time(self): return datetime.now().strftime(&#x27;%Y-%m-%d %H:%M:%S&#x27;) def _calc_duration(self, start, end): start_dt = datetime.strptime(start, &#x27;%Y-%m-%d %H:%M:%S&#x27;) end_dt = datetime.strptime(end, &#x27;%Y-%m-%d %H:%M:%S&#x27;) return str(end_dt - start_dt) _current_time()：取得格式化的當前時間。 _calc_duration()：計算起訖時間差，並轉為字串。 專案與功能時間追蹤 def start_project(self): self.data[&#x27;project&#x27;][&#x27;start_time&#x27;] = self._current_time() self._save_data() print(&quot;Project started.&quot;) def end_project(self): self.data[&#x27;project&#x27;][&#x27;end_time&#x27;] = self._current_time() self.data[&#x27;project&#x27;][&#x27;duration&#x27;] = self._calc_duration( self.data[&#x27;project&#x27;][&#x27;start_time&#x27;], self.data[&#x27;project&#x27;][&#x27;end_time&#x27;] ) self._save_data() print(&quot;Project ended.&quot;) def start_feature(self, name): if name not in self.data[&#x27;features&#x27;]: self.data[&#x27;features&#x27;][name] = &#123;&#125; self.data[&#x27;features&#x27;][name][&#x27;start_time&#x27;] = self._current_time() self._save_data() print(f&quot;Feature &#x27;&#123;name&#125;&#x27; started.&quot;) def end_feature(self, name): feat = self.data[&#x27;features&#x27;].get(name) if feat and &#x27;start_time&#x27; in feat: feat[&#x27;end_time&#x27;] = self._current_time() feat[&#x27;duration&#x27;] = self._calc_duration( feat[&#x27;start_time&#x27;], feat[&#x27;end_time&#x27;] ) self._save_data() print(f&quot;Feature &#x27;&#123;name&#125;&#x27; ended.&quot;) else: print(f&quot;Feature &#x27;&#123;name&#125;&#x27; has not been started.&quot;) start_project()/end_project()：記錄專案的開始與結束時間，並計算總持續時間。 start_feature(name)/end_feature(name)：記錄功能的開始與結束時間，並計算功能持續時間。 4.2 main.py 的命令列介面 import sys from time_tracking.time_tracker import TimeTracker tracker = TimeTracker() def main(): if len(sys.argv) &lt; 2: print(&quot;Usage: python main.py [command] [feature_name (optional)]&quot;) sys.exit(1) command = sys.argv[1] feature = sys.argv[2] if len(sys.argv) &gt;= 3 else None if command == &quot;start_project&quot;: tracker.start_project() elif command == &quot;end_project&quot;: tracker.end_project() elif command == &quot;start_feature&quot; and feature: tracker.start_feature(feature) elif command == &quot;end_feature&quot; and feature: tracker.end_feature(feature) else: print(&quot;Invalid command or missing feature name.&quot;) if __name__ == &quot;__main__&quot;: main() 命令列支援： start_project：開始專案。 end_project：結束專案。 start_feature &lt;feature_name&gt;：開始功能。 end_feature &lt;feature_name&gt;：結束功能。 4.3 Makefile 的簡化操作 (用 uv 建置環境) start_project: uv run python -m time_tracking.main start_project end_project: uv run python -m time_tracking.main end_project start_feature: uv run python -m time_tracking.main start_feature $(feature) end_feature: uv run python -m time_tracking.main end_feature $(feature) make start_project：執行 start_project 命令。 make end_project：執行 end_project 命令。 make start_feature feature=&lt;feature_name&gt;：開始功能。 make end_feature feature=&lt;feature_name&gt;：結束功能。 五、改進建議 加入檔案讀寫錯誤處理，提升穩定性。 提供更詳細的狀態檢視功能（如顯示所有功能的持續時間）。 考慮輸出 CSV 或 HTML 報表，便於後續分析。 整合可視化模組（matplotlib, plotly）展示時間分佈圖。 支援更多命令列參數（如自定義輸出檔案名稱）。 六、結語 TimeTracker 是一個輕量且實用的時間追蹤工具，適合個人或小團隊使用。透過物件導向設計與命令列支援，開發者可以輕鬆掌握開發進度並進行效率分析。同時，結合 Makefile 的支援，進一步簡化了操作流程。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/04/22/TimeTracker%E6%99%82%E9%96%93%E8%BF%BD%E8%B9%A4%E5%B7%A5%E5%85%B7/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>

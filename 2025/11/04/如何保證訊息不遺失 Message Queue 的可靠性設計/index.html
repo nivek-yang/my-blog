@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="在現代微服務與分散式系統架構中，訊息佇列（Message Queue, MQ）扮演著不可或缺的角色。它作為系統間的非同步通訊中樞，有效地實現了服務解耦、流量削峰、以及最終一致性。然而，一個關鍵問題始終縈繞在架構師和開發者的心頭：「如何才能 100% 保證訊息不會遺失？」 事實上，「100% 不遺失」是一個極限目標，但在實務中，可以透過一系列精密的設計，將訊息遺失的風險降至無限趨近於零。 本篇文章文">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何保證訊息不遺失？深入剖析 Message Queue 的可靠性設計">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/11/04/%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AD%89%E8%A8%8A%E6%81%AF%E4%B8%8D%E9%81%BA%E5%A4%B1%20Message%20Queue%20%E7%9A%84%E5%8F%AF%E9%9D%A0%E6%80%A7%E8%A8%AD%E8%A8%88/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="在現代微服務與分散式系統架構中，訊息佇列（Message Queue, MQ）扮演著不可或缺的角色。它作為系統間的非同步通訊中樞，有效地實現了服務解耦、流量削峰、以及最終一致性。然而，一個關鍵問題始終縈繞在架構師和開發者的心頭：「如何才能 100% 保證訊息不會遺失？」 事實上，「100% 不遺失」是一個極限目標，但在實務中，可以透過一系列精密的設計，將訊息遺失的風險降至無限趨近於零。 本篇文章文">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-11-03T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-04T15:33:04.615Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Message Queue">
+<meta property="article:tag" content="Distributed System">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/11/04/%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AD%89%E8%A8%8A%E6%81%AF%E4%B8%8D%E9%81%BA%E5%A4%B1%20Message%20Queue%20%E7%9A%84%E5%8F%AF%E9%9D%A0%E6%80%A7%E8%A8%AD%E8%A8%88/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/11/04/%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AD%89%E8%A8%8A%E6%81%AF%E4%B8%8D%E9%81%BA%E5%A4%B1%20Message%20Queue%20%E7%9A%84%E5%8F%AF%E9%9D%A0%E6%80%A7%E8%A8%AD%E8%A8%88/","path":"2025/11/04/如何保證訊息不遺失 Message Queue 的可靠性設計/","title":"如何保證訊息不遺失？深入剖析 Message Queue 的可靠性設計"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>如何保證訊息不遺失？深入剖析 Message Queue 的可靠性設計 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">117</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">56</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cloud-Computing/">
+        Cloud Computing
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Concurrency/">
+        Concurrency
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cybersecurity/">
+        Cybersecurity
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(23)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Design-Pattern/">
+        Design Pattern
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/DevOps/">
+        DevOps
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(17)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/OOP/">
+        OOP
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Serverless/">
+        Serverless
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(8)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(6)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A8%8A%E6%81%AF%E5%82%B3%E9%81%9E%E7%9A%84%E4%B8%89%E5%80%8B%E9%97%9C%E9%8D%B5%E9%9A%8E%E6%AE%B5"><span class="nav-number">1.</span> <span class="nav-text"> 訊息傳遞的三個關鍵階段</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%94%9F%E7%94%A2%E9%9A%8E%E6%AE%B5%E7%A2%BA%E4%BF%9D%E8%A8%8A%E6%81%AF%E6%88%90%E5%8A%9F%E6%8A%B5%E9%81%94-broker"><span class="nav-number">1.1.</span> <span class="nav-text"> 1. 生產階段：確保訊息成功抵達 Broker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%84%B2%E5%AD%98%E9%9A%8E%E6%AE%B5%E7%A2%BA%E4%BF%9D-broker-%E4%B8%8D%E6%9C%83%E5%BC%84%E4%B8%9F%E8%A8%8A%E6%81%AF"><span class="nav-number">1.2.</span> <span class="nav-text"> 2. 儲存階段：確保 Broker 不會弄丟訊息</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-%E6%8C%81%E4%B9%85%E5%8C%96-persistence"><span class="nav-number">1.2.1.</span> <span class="nav-text"> a. 持久化 (Persistence)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-%E5%8F%A2%E9%9B%86%E5%90%8C%E6%AD%A5-clusteringreplication"><span class="nav-number">1.2.2.</span> <span class="nav-text"> b. 叢集同步 (Clustering&#x2F;Replication)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%B6%88%E8%B2%BB%E9%9A%8E%E6%AE%B5%E7%A2%BA%E4%BF%9D%E8%A8%8A%E6%81%AF%E8%A2%AB%E6%88%90%E5%8A%9F%E8%99%95%E7%90%86"><span class="nav-number">1.3.</span> <span class="nav-text"> 3. 消費階段：確保訊息被成功處理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%9C%E9%8D%B5%E7%9A%84%E9%99%84%E5%B8%B6%E5%95%8F%E9%A1%8C%E5%86%AA%E7%AD%89%E6%80%A7-idempotency"><span class="nav-number">2.</span> <span class="nav-text"> 關鍵的附帶問題：冪等性 (Idempotency)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">3.</span> <span class="nav-text"> 總結</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">117</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">56</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/11/04/%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AD%89%E8%A8%8A%E6%81%AF%E4%B8%8D%E9%81%BA%E5%A4%B1%20Message%20Queue%20%E7%9A%84%E5%8F%AF%E9%9D%A0%E6%80%A7%E8%A8%AD%E8%A8%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="如何保證訊息不遺失？深入剖析 Message Queue 的可靠性設計 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何保證訊息不遺失？深入剖析 Message Queue 的可靠性設計
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-11-04 00:00:00 / 修改時間：23:33:04" itemprop="dateCreated datePublished" datetime="2025-11-04T00:00:00+08:00">2025-11-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在現代微服務與分散式系統架構中，訊息佇列（Message Queue, MQ）扮演著不可或缺的角色。它作為系統間的非同步通訊中樞，有效地實現了服務解耦、流量削峰、以及最終一致性。然而，一個關鍵問題始終縈繞在架構師和開發者的心頭：「如何才能 100% 保證訊息不會遺失？」</p>
+<p>事實上，「100% 不遺失」是一個極限目標，但在實務中，可以透過一系列精密的設計，將訊息遺失的風險降至無限趨近於零。</p>
+<p>本篇文章文將深入訊息傳遞的完整生命週期，剖析每個環節可能出現的風險，並探討 MQ 系統是如何透過各種機制來確保訊息的高可靠性。</p>
+<h1 id="訊息傳遞的三個關鍵階段"><a class="markdownIt-Anchor" href="#訊息傳遞的三個關鍵階段"></a> 訊息傳遞的三個關鍵階段</h1>
+<p>一則訊息從誕生到消亡，主要會經歷三個階段：</p>
+<ol>
+<li><strong>生產階段</strong>：從生產者（Producer）創建訊息，到成功將其發送到 MQ Broker。</li>
+<li><strong>儲存階段</strong>：訊息在 MQ Broker 中被安全地儲存，等待消費者來擷取。</li>
+<li><strong>消費階段</strong>：從 MQ Broker 將訊息推送（或被拉取）給消費者（Consumer），直到消費者成功處理完畢。</li>
+</ol>
+<p>任何一個環節出現問題，都可能導致訊息遺失。因此，可靠性設計必須針對這三個階段分別進行。</p>
+<hr />
+<h2 id="1-生產階段確保訊息成功抵達-broker"><a class="markdownIt-Anchor" href="#1-生產階段確保訊息成功抵達-broker"></a> 1. 生產階段：確保訊息成功抵達 Broker</h2>
+<p><strong>風險點</strong>：生產者發送訊息後，可能因為網路抖動、Broker 瞬間故障等原因，導致訊息並未真正送達 Broker。生產者若對此不知情，便會造成訊息的遺失。</p>
+<p><strong>解決方案</strong>：<strong>異步確認機制 (Confirmation)</strong></p>
+<p>絕大多數主流的 MQ 都提供了發送方確認機制。其核心思想是，Broker 在收到訊息並完成相應處理（如寫入磁碟）後，會回傳一個確認（ACK）或不確認（NACK）的回應給生產者。</p>
+<ul>
+<li><strong>ACK (Acknowledge)</strong>：表示訊息已成功接收。</li>
+<li><strong>NACK (Negative Acknowledge)</strong>：表示訊息因某種原因（如佇列已滿）被拒絕。</li>
+</ul>
+<p><strong>實作策略：</strong></p>
+<ol>
+<li><strong>開啟 Confirm 模式</strong>：在生產者端設定，要求 Broker 對每條訊息進行確認。</li>
+<li><strong>處理回呼</strong>：生產者需要實作監聽回呼函式。當收到 ACK 時，表示發送成功；當收到 NACK 或在一定時間內未收到任何回應（Timeout），則表示發送失敗。</li>
+<li><strong>失敗重試</strong>：對於發送失敗的訊息，生產者必須要有<strong>重試機制</strong>。可以將失敗的訊息暫存於記憶體、資料庫或日誌檔案中，然後定時重新發送，直到收到 Broker 的 ACK 為止。</li>
+</ol>
+<blockquote>
+<p><strong>注意</strong>：重試機制可能會導致訊息重複發送。這就引出了一個極其重要的概念——<strong>生產端冪等性</strong>，將在文末統一探討。</p>
+</blockquote>
+<hr />
+<h2 id="2-儲存階段確保-broker-不會弄丟訊息"><a class="markdownIt-Anchor" href="#2-儲存階段確保-broker-不會弄丟訊息"></a> 2. 儲存階段：確保 Broker 不會弄丟訊息</h2>
+<p><strong>風險點</strong>：訊息雖然成功抵達 Broker，但如果只存在於記憶體中，一旦 Broker 程式當機或伺服器斷電，所有訊息將會灰飛煙滅。</p>
+<p><strong>解決方案</strong>：<strong>持久化 (Persistence) + 叢集同步 (Clustering/Replication)</strong></p>
+<h3 id="a-持久化-persistence"><a class="markdownIt-Anchor" href="#a-持久化-persistence"></a> a. 持久化 (Persistence)</h3>
+<p>這是最基本的可靠性保障。當 Broker 收到訊息後，不是只放在記憶體，而是將其寫入磁碟。這樣即使 Broker 崩潰重啟，也能從磁碟中恢復訊息資料，不會遺失。</p>
+<ul>
+<li><strong>RabbitMQ</strong>：需要將佇列（Queue）和訊息（Message）都設定為 <code>durable</code>。</li>
+<li><strong>Kafka</strong>：其設計天生就是基於磁碟日誌檔案（Log），所有訊息都會被追加到磁碟上的 Partition 檔案中，因此本身就具備高度的持久化能力。</li>
+</ul>
+<blockquote>
+<p><strong>權衡</strong>：持久化會帶來 I/O 開銷，犧牲一定的效能來換取高可靠性。</p>
+</blockquote>
+<h3 id="b-叢集同步-clusteringreplication"><a class="markdownIt-Anchor" href="#b-叢集同步-clusteringreplication"></a> b. 叢集同步 (Clustering/Replication)</h3>
+<p>單點的磁碟持久化只能防止單機故障，但如果整台伺服器或磁碟損壞，訊息依然會遺失。為了解決單點故障（Single Point of Failure），需要將 Broker 組成叢集，並啟用資料同步機制。</p>
+<ul>
+<li><strong>Kafka</strong>：採用 Leader-Follower 的副本（Replica）機制。生產者只向 Leader 分區寫入訊息，Follower 分區會自動從 Leader 同步資料。只有當訊息被同步到指定數量（<code>min.insync.replicas</code>）的副本後，Broker 才會向生產者發送 ACK。這確保了即使 Leader 節點掛掉，訊息依然在其他 Follower 節點上有備份。</li>
+<li><strong>RabbitMQ</strong>：提供 Mirrored Queues（鏡像佇列）功能，可以將一個佇列的訊息完整地複製到叢集中的多個節點上。</li>
+</ul>
+<hr />
+<h2 id="3-消費階段確保訊息被成功處理"><a class="markdownIt-Anchor" href="#3-消費階段確保訊息被成功處理"></a> 3. 消費階段：確保訊息被成功處理</h2>
+<p><strong>風險點</strong>：這是最容易被忽視，也是最常出問題的地方。Broker 將訊息發送給消費者後，如果消費者在處理訊息的過程中（例如，寫入資料庫）突然崩潰，而 Broker 卻以為訊息已經被成功消費並將其刪除，這條訊息就永遠遺失了。</p>
+<p><strong>解決方案</strong>：<strong>手動 ACK 機制 (Manual Acknowledgement)</strong></p>
+<p>為了避免這種情況，MQ 提供了消費者確認機制。</p>
+<ul>
+<li><strong>自動 ACK (Auto ACK)</strong>：Broker 發出訊息後，<strong>立即</strong>將其標記為已消費。這種模式非常高效，但極其不安全，<strong>生產環境應避免使用</strong>。</li>
+<li><strong>手動 ACK (Manual ACK)</strong>：Broker 發出訊息後，會將該訊息標記為「投遞中」（unacked），並等待消費者的明確回覆。
+<ul>
+<li>消費者必須在<strong>業務邏輯完全處理成功後</strong>，才向 Broker 發送 <code>ACK</code> 指令。Broker 收到 <code>ACK</code> 後，才會將訊息徹底刪除。</li>
+<li>如果消費者在處理過程中崩潰，或者明確發送了 <code>NACK</code>（或<code>Reject</code>），Broker 將會在一段時間後將這條訊息<strong>重新投遞</strong>給另一個（或同一個）消費者。</li>
+</ul>
+</li>
+</ul>
+<p><strong>正確的消費流程：</strong></p>
+<pre class="highlight"><code class="">// 偽代碼
+function processMessage(message) &#123;
+    try &#123;
+        // 1. 執行核心業務邏輯，例如寫入資料庫
+        saveToDatabase(message.data);
+
+        // 2. 業務成功後，才手動發送 ACK
+        channel.ack(message);
+
+    &#125; catch (error) &#123;
+        // 3. 業務處理失敗
+        // 可以選擇 NACK 並讓訊息重回佇列 (requeue=true)
+        // 或將訊息發送到一個專門的「死信佇列」(Dead-Letter Queue) 以便後續分析
+        channel.nack(message, &#123; requeue: false &#125;);
+        logError(error);
+    &#125;
+&#125;
+</code></pre>
+<hr />
+<h1 id="關鍵的附帶問題冪等性-idempotency"><a class="markdownIt-Anchor" href="#關鍵的附帶問題冪等性-idempotency"></a> 關鍵的附帶問題：冪等性 (Idempotency)</h1>
+<p>無論是生產端的重試，還是消費端的重queue，都會導致<strong>同一條訊息被多次處理</strong>的可能。如果業務邏輯不具備冪等性，就會產生嚴重的副作用（例如，重複下單、重複扣款）。</p>
+<blockquote>
+<p><strong>冪等性</strong>：指對同一個操作執行一次或多次，其產生的影響和結果都是相同的。</p>
+</blockquote>
+<p><strong>如何保證冪等性？</strong></p>
+<ul>
+<li><strong>唯一 ID + 判重表</strong>：為每條訊息生成一個全域唯一的業務 ID。在消費端建立一張紀錄表，處理訊息前先查詢該 ID 是否已被處理過。</li>
+<li><strong>資料庫唯一約束</strong>：利用資料庫的 <code>UNIQUE KEY</code> 約束，當重複插入具有相同唯一鍵的資料時，操作會失敗，從而避免重複處理。</li>
+<li><strong>樂觀鎖</strong>：使用版本號（version）機制，更新資料前檢查版本號是否匹配，避免併發場景下的重複更新。</li>
+</ul>
+<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
+<p>要保證訊息不遺失，需要從生產、儲存到消費的全鏈路進行系統性設計：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">階段</th>
+<th style="text-align:left">可靠性機制</th>
+<th style="text-align:left">關鍵配置/實作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>生產階段</strong></td>
+<td style="text-align:left"><strong>發送方確認 (Confirm)</strong></td>
+<td style="text-align:left">- 開啟 Confirm 模式<br>- 實作 ACK/NACK 回呼<br>- 建立失敗重試機制</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>儲存階段</strong></td>
+<td style="text-align:left"><strong>持久化 (Persistence)</strong></td>
+<td style="text-align:left">- Queue 和 Message 設為 durable (RabbitMQ)<br>- Topic 資料本身就是持久化的 (Kafka)</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"><strong>叢集與副本 (Replication)</strong></td>
+<td style="text-align:left">- 配置主從副本 (Kafka)<br>- 使用鏡像佇列 (RabbitMQ)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>消費階段</strong></td>
+<td style="text-align:left"><strong>手動 ACK (Manual Ack)</strong></td>
+<td style="text-align:left">- 關閉 Auto ACK<br>- 業務處理成功後再手動 ACK<br>- 處理失敗時轉入死信佇列</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>全鏈路</strong></td>
+<td style="text-align:left"><strong>冪等性保障 (Idempotency)</strong></td>
+<td style="text-align:left">- 為訊息建立唯一業務 ID<br>- 消費端進行重複處理判斷</td>
+</tr>
+</tbody>
+</table>
+<p>訊息傳遞的可靠性並非單一技術，而是一套組合拳。透過對每個環節的精雕細琢，才能構建出一個真正健壯、值得信賴的分散式系統。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Message-Queue/" rel="tag"># Message Queue</a>
+              <a href="/my-blog/tags/Distributed-System/" rel="tag"># Distributed System</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/10/31/%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88%20OOP%20%E6%A0%B8%E5%BF%83%E8%A7%80%E5%BF%B5%E8%A7%A3%E6%9E%90%E8%88%87%E5%AF%A6%E5%8B%99%E6%87%89%E7%94%A8/" rel="prev" title="物件導向程式設計 (OOP) 核心觀念解析與實務應用">
+                  <i class="fa fa-angle-left"></i> 物件導向程式設計 (OOP) 核心觀念解析與實務應用
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
