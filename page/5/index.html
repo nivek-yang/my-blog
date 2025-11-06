@@ -105,8 +105,8 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">117</span></a>
-  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">56</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">118</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">57</span></a>
       <ul class="sub-menu">
   
   
@@ -176,6 +176,13 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Concurrency/">
         Concurrency
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cryptography/">
+        Cryptography
         <span class="post-count">(1)</span>
       </a>
     </li>
@@ -541,7 +548,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">117</span>
+          <span class="site-state-item-count">118</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -549,7 +556,7 @@
     
       <div class="site-state-item site-state-tags">
           <a href="/my-blog/tags/">
-        <span class="site-state-item-count">56</span>
+        <span class="site-state-item-count">57</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -566,6 +573,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/05/HTTP%20vs%20HTTPS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/09/05/HTTP%20vs%20HTTPS/" class="post-title-link" itemprop="url">
+              HTTP vs. HTTPS：為什麼多一個 "S" 如此重要？
+            </a>
+            <a href="/my-blog/2025/09/05/HTTP%20vs%20HTTPS/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-09-05 00:00:00 / 修改時間：23:24:59" itemprop="dateCreated datePublished" datetime="2025-09-05T00:00:00+08:00">2025-09-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">當打開瀏覽器，輸入網址，或是點擊一個連結時，我們都在無意識地使用著網路上最重要的應用層協定之一——HTTP。然而，隨著網路威脅的日益增長，單純的 HTTP 已經遠遠不足以保護資料安全。這就是為什麼需要它的安全進化版：HTTPS。 HTTP：網路世界的「公開信件」 HTTP，全名為「超文本傳輸協定 (Hypertext Transfer Protocol)」，是網際網路中最廣泛使用的協定，用於在全球資訊網 (World Wide Web) 上傳輸各種格式的超文本資料。它可以說是瀏覽器與網站伺服器之間進行「對話」的基本語言。 工作層次：HTTP 工作在 OSI 模型的應用層 (Application Layer, Layer 7)。 運作方式： 客戶端-伺服器模型：瀏覽器 (客戶端) 向網站伺服器 (伺服器端) 發出請求 (Request)，伺服器收到請求後，回應相應的網頁內容 (Response)。 請求-回應機制：每次溝通都由客戶端發起請求，伺服器進行回應。 無狀態 (Stateless)：HTTP 本身不保存客戶端的過去互動狀態。每個請求都是獨立的。 預設埠：HTTP 的預設埠號是 80。 用途：主要用於取得 HTML 文件、圖片、聲音、影片等多媒體資訊。 HTTP 的本質弱點：透明的溝通 想像一下，和朋友用明信片進行溝通。明信片上的內容清晰可見，任何人，路過的郵差、分揀員，甚至是好奇的旁觀者都能讀取你寫的訊息。 這正是 HTTP 的問題所在：它以純文字 (Plain Text) 的形式傳輸資料。這意味著： 資料未加密：輸入的用戶名、密碼、信用卡號碼等敏感資訊，在網路傳輸過程中是完全暴露的，任何人透過截取網路流量就能直接讀取。 無法驗證資訊來源：無法確定正在訪問的網站是否真的是預期的網站，還是有人偽裝了它。 資料完整性未受保護：傳輸途中的資料可能會被惡意篡改，卻渾然不知。 在沒有這些保護的情況下，瀏覽活動和個人資料很容易受到「中間人攻擊 (Man-in-the-Middle, MITM)」、網路竊聽、資料篡改等威脅。 HTTPS：加上「安全鎖」的溝通方式 HTTPS，全名為「超文本傳輸安全協定 (Hypertext Transfer Protocol Secure)」，是 HTTP 的安全版本。它本質上是在 HTTP 上層疊加了一個安全層 (SSL/TLS)，為資料加上了一道堅不可摧的保護網。 這個多出來的 S，代表的就是 Secure (安全)。 工作層次：HTTPS 雖然仍是應用層協定，但其安全性關鍵在於引入了傳輸層安全協議 (TLS, Transport Layer Security)，它取代了其前身 安全通訊端層 (SSL, Secure Sockets Layer)。TLS/SSL 工作在 OSI 模型的會話層、表示層和傳輸層之間。 運作方式： 在客戶端和伺服器建立 HTTP 通訊之前，會先建立一個 TLS/SSL 安全通道。 在這個通道內，所有通過 HTTP 傳輸的資料都會被加密。 HTTPS 的預設埠號是 443。 HTTPS 如何提供安全性？三大支柱： HTTPS 透過 TLS/SSL 協議，提供了三大核心安全特性，就像是把公開的明信片放進了一個加密的信封，並且加上了寄件人身份證明和防篡改印章： 資料加密 (Encryption)： 所有在客戶端和伺服器之間傳輸的資料都會被加密，使其變得不可讀。即使資料被截取，竊聽者也無法理解其內容。 這確保了敏感資訊（如登入憑證、交易細節）在傳輸過程中是安全的。 身份驗證 (Authentication)： 伺服器會向客戶端提供一個數位憑證 (Digital Certificate)，該憑證由受信任的憑證頒發機構 (Certificate Authority, CA) 簽發。 客戶端可以驗證這個憑證的有效性，從而確認網站的身份是真實的，而非惡意網站的偽裝。這有效防止了中間人攻擊。 資料完整性 (Data Integrity)： TLS/SSL 協議會使用訊息摘要 (Message Digest) 或雜湊函數 (Hash Function) 來檢測資料在傳輸過程中是否被篡改。 如果資料在途中被修改，接收方會立即發現並拒絕該資料。這保證了收到的資訊是期望收到的、未被動手腳的資訊。 HTTPS 的運作機制簡介：SSL/TLS 握手 當嘗試訪問一個 HTTPS 網站時，會發生一個複雜而精密的「SSL/TLS 握手」過程： 客戶端發送 Hello：瀏覽器向伺服器發送一個「Client Hello」，聲明它支持的 TLS 版本、加密演算法等。 伺服器回應 Hello 和憑證：伺服器回應「Server Hello」，選擇一個共同支持的加密組，並將自己的數位憑證發送給瀏覽器。 瀏覽器驗證憑證：瀏覽器檢查憑證的有效性（是否由受信任的 CA 簽發、是否過期等），以確認伺服器的真實身份。 密鑰交換：驗證成功後，瀏覽器生成一個對稱加密金鑰 (Symmetric Key)，使用伺服器憑證中的公開金鑰加密後發送給伺服器。只有擁有私有金鑰的伺服器才能解密這個對稱金鑰。 建立安全通道：雙方都獲得了相同的對稱金鑰後，這個金鑰將用於後續所有資料的加密和解密。 資料傳輸：之後，所有 HTTP 資料都在這個由對稱金鑰加密的 TLS 安全通道中傳輸，確保安全。 這個過程雖然看起來複雜，但都發生在毫秒之間，對使用者來說是完全透明的。 為什麼 HTTPS 不再是選項，而是必需？ 如今，HTTPS 已經不再是「錦上添花」的優勢，而是任何網站的必要條件： 保護用戶隱私與數據安全：這是最核心的價值。無論是個人資料、商務交易還是日常瀏覽，HTTPS 都能有效防止資料洩露和被篡改。 建立信任：網址列上的綠色小鎖頭和 https:// 已經成為用戶判斷網站是否安全可信的標誌。沒有 HTTPS 的網站會被瀏覽器標記為「不安全」，嚴重損害網站形象。 搜尋引擎優化 (SEO)：Google 等主流搜尋引擎已將 HTTPS 作為排名考量因素之一。使用 HTTPS 的網站會獲得更好的搜尋排名。 支援新網路技術：許多現代網路技術和協議（如 HTTP/2）都要求或強烈建議使用 TLS/SSL。HTTP/2 在 HTTPS 的基礎上提供了更快的連線速度和更高的效率。 遵守法規合規性：GDPR 等資料保護法規要求網站必須採取足夠的技術措施來保護用戶數據，HTTPS 是實現這一目標的基礎。 HTTP vs. HTTPS：核心差異一覽 特性 HTTP (Hypertext Transfer Protocol) HTTPS (Hypertext Transfer Protocol Secure) 安全性 無加密，資料以純文字傳輸，易被竊聽與篡改。 加密，資料透過 SSL/TLS 加密傳輸，防竊聽、防篡改。 連接埠 預設使用 80 埠。 預設使用 443 埠。 憑證 無需憑證。 需要 SSL/TLS 數位憑證，由 CA 簽發。 身份驗證 無伺服器身份驗證，無法確認網站真實性。 提供伺服器身份驗證，確認網站是可信的。 資料完整性 無資料完整性保護。 提供資料完整性檢查，確保資料未被篡改。 成本 零 (設定簡易)。 憑證費 (雖然現在有免費憑證如 Let’s Encrypt)，伺服器資源消耗略高。 SEO 影響 負面影響，可能降低搜尋排名。 正面影響，有助於提升搜尋排名。 瀏覽器顯示 顯示 http://，常被標示為「不安全」或無鎖圖示。 顯示 https://，有綠色鎖頭或安全標誌。 結論 在資訊安全日益重要的今天，HTTP 已經成為過時且危險的通訊方式。而 HTTPS 則作為現代網路的標準，以其強大的加密、身份驗證和資料完整性機制，為每一次點擊、每一次輸入提供保護。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/09/05/HTTP%20vs%20HTTPS/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1330,92 +1423,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/08/25/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20TCP%20%E7%A2%BA%E4%BF%9D%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E5%8F%AF%E9%9D%A0%E9%80%9A%E8%A8%8A%E7%9A%84%E5%B9%95%E5%BE%8C%E5%8A%9F%E8%87%A3/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/24/%E6%8E%8C%E6%8F%A1%E7%8F%BE%E4%BB%A3%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88%E7%9A%84%E4%BA%94%E5%A4%A7%E5%BF%83%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/08/24/%E6%8E%8C%E6%8F%A1%E7%8F%BE%E4%BB%A3%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88%E7%9A%84%E4%BA%94%E5%A4%A7%E5%BF%83%E6%B3%95/" class="post-title-link" itemprop="url">
-              掌握現代系統設計的五大心法
-            </a>
-            <a href="/my-blog/2025/08/24/%E6%8E%8C%E6%8F%A1%E7%8F%BE%E4%BB%A3%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88%E7%9A%84%E4%BA%94%E5%A4%A7%E5%BF%83%E6%B3%95/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-08-24 00:00:00 / 修改時間：23:33:07" itemprop="dateCreated datePublished" datetime="2025-08-24T00:00:00+08:00">2025-08-24</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">是否曾經想過，像 Google、Netflix、Amazon 這樣的巨頭，是如何支撐起每天數十億次的請求？他們的系統是如何做到幾乎從不間斷，並且在流量洪峰來臨時依然穩如泰山？ 這背後是一套經過千錘百鍊的設計哲學。這篇文章將分享支撐起這些大規模系統的五大核心心法。掌握它們，將能設計出更健壯、更有彈性、更能從容應對未來的系統。 這五大心法分別是： 水平擴張 (Horizontal Scaling) 快取 (Caching) 非同步 (Asynchrony) 避免單點故障 (No Single Point of Failure) 監控 (Monitoring) 心法一：水平擴張 (Horizontal Scaling) - 人多好辦事 想像一下，一家生意火爆的拉麵店，最初只有一位大廚。當客人越來越多時，大廚忙不過來了。 垂直擴張 (Vertical Scaling)：給這位大廚換上更好的鍋子、更快的爐火。他的極限依然是有的。 水平擴張 (Horizontal Scaling)：再請來好幾位一樣厲害的大廚，每個人負責一部分訂單。理論上，只要店面夠大，可以無限增加廚師。 在系統設計中： 垂直擴張 就是提升單一伺服器的硬體規格（更強的 CPU、更多的 RAM）。它成本高昂，且有物理極限。 水平擴張 則是增加更多普通的伺服器，透過負載平衡器 (Load Balancer) 將流量分發給它們。 核心思想：用數量的增加，來應對質量的挑戰。 水平擴張是現代雲端架構的基石。它讓我們能夠根據流量動態增減機器數量（Auto-scaling），實現彈性計算，用最具性價比的方式應對流量波動。 心法二：快取 (Caching) - 凡事預則立，不勞而獲 回到拉麵店的比喻。如果每碗拉麵都要從頭開始熬製高湯，那速度肯定快不了。聰明的大廚會提前熬好一大鍋高湯（快取），放在手邊隨時取用，而不是每次都去後面的儲藏室（資料庫）慢慢熬。 快取就是將頻繁存取且不常變動的資料，存放在一個比主要資料來源（如資料庫）更快速的儲存體中（通常是記憶體，如 Redis、Memcached）。 核心思想：用空間換時間，減少對慢速資源的依賴。 一個請求進來，系統會先檢查快取： 快取命中 (Cache Hit)：直接從快取返回資料，速度極快，並大大減輕了後端資料庫的壓力。 快取未命中 (Cache Miss)：才去請求資料庫，並將結果存入快取，以備下次使用。 快取是提升系統讀取效能最直接、最有效的手段。 心法三：非同步 (Asynchrony) - 你先忙，好了叫我 想像一下在星巴克點咖啡。點完餐，付了錢，店員會給你一個取餐呼叫器，然後你就去旁邊找位子坐下或滑手機了。不用親自站在吧台前，盯著咖啡師的每一個步驟。這就是非同步。 在系統中，並非所有操作都需要立即得到結果。例如：使用者註冊後的歡迎郵件、下單後的庫存扣減、數據分析日誌的寫入等。如果讓使用者在網頁上等待這些操作全部完成，體驗會非常糟糕。 核心思想：將耗時且非核心的任務，從主流程中剝離，實現解耦與削峰填谷。 通常使用訊息佇列 (Message Queue)，如 RabbitMQ 或 Kafka 來實現非同步。主流程（例如下單 API）只需快速地將一個「任務訊息」丟進佇列，就可以立刻回應使用者「下單成功」。後台會有專門的服務（Worker）從佇列中取出任務，慢慢處理。 非同步不僅優化了用戶體驗，還能像緩衝區一樣，應對突發的流量洪峰，保護後端脆弱的服務。 心法四：避免單點故障 (No SPOF) - 別把雞蛋放同一個籃子 一座宏偉的橋樑，如果只依賴單一根支柱，那這根支柱一旦斷裂，整座橋就會崩塌。這個支柱，就是單點故障 (Single Point of Failure, SPOF)。 在系統中，任何一個元件，如果它的故障會導致整個系統停擺，那它就是一個 SPOF。常見的 SPOF 包括單一的伺服器、單一的資料庫、單一的負載平衡器等。 核心思想：透過備援 (Redundancy)，確保系統中的任何單一元件失效，都不會造成災難性後果。 如何避免？ 伺服器層：使用水平擴張，至少部署兩台以上的伺服器。 資料庫層：採用主從複製 (Master-Slave) 或多主架構 (Multi-Master)，確保資料有多份拷貝。 基礎設施層：負載平衡器、閘道器等關鍵元件也要做高可用叢集。 跨區域部署：更進一步，可以將服務部署在不同的地理區域（機房），防止單一機房的災難。 建立一個沒有單點故障的系統，是邁向「高可用性」(High Availability) 的必經之路。 心法五：監控 (Monitoring) - 沒有測量，就無法改進 敢開一輛沒有儀表板（時速表、油量表、引擎溫度燈）的車在高速公路上狂飆嗎？我想你不敢。 監控就是系統的儀表板。它告訴你系統當前的運行狀態，是健康、是亞健康、還是即將崩潰。沒有監控，就等於是閉著眼睛在維護一個黑盒子。 核心思想：收集並可視化關鍵指標，讓我們能洞察系統狀態、預警潛在問題、並在故障發生時快速定位。 需要監控什麼？ 系統指標：CPU 使用率、記憶體、硬碟空間、網路流量。 應用指標：API 請求量 (QPS)、回應延遲、錯誤率。 業務指標：用戶註冊數、訂單量、在線人數。 透過像 Prometheus + Grafana 或 Datadog 這樣的工具，可以建立儀表板、設定告警，讓系統不再是無法預測的猛獸，而是手中可控的精密儀器。 總結：五大心法，環環相扣 這五大心法並非孤立存在，它們相輔相成，共同構成一個健壯系統的骨架： 用 水平擴張 來應對流量，但如果沒有 監控，不知道何時該擴張。 加入了 快取 來加速讀取，但這又可能成為新的 單點故障，需要備援。 使用 非同步 來削峰填谷，但訊息佇列的堆積情況也需要被 監控。 避免單點故障 是所有擴張、快取、非同步設計的基礎前提。 系統設計是一場在成本、效能、複雜度和可靠性之間不斷權衡的藝術。它沒有終點，只有不斷的迭代與優化。這五大心法能幫助打造出更優秀、更可靠的系統。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/08/24/%E6%8E%8C%E6%8F%A1%E7%8F%BE%E4%BB%A3%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88%E7%9A%84%E4%BA%94%E5%A4%A7%E5%BF%83%E6%B3%95/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>

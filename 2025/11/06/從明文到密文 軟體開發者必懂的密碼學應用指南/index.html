@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="作為軟體開發者，我們不僅是功能的創造者，更是使用者資料的守護者。如何確保資料在儲存、傳輸的過程中不被竊取或竄改？答案就是密碼學 (Cryptography)。 本篇文章將走進密碼學的世界，從核心概念講起，用實際的 Python 程式碼展示三種關鍵的密碼學技術，並了解它們在真實世界中是如何協同工作的。   為什麼開發者需要懂密碼學？ 簡單來說，是為了保護資料的三個核心特性，又稱為「CIA Triad">
+<meta property="og:type" content="article">
+<meta property="og:title" content="從明文到密文：軟體開發者必懂的密碼學應用指南">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/11/06/%E5%BE%9E%E6%98%8E%E6%96%87%E5%88%B0%E5%AF%86%E6%96%87%20%E8%BB%9F%E9%AB%94%E9%96%8B%E7%99%BC%E8%80%85%E5%BF%85%E6%87%82%E7%9A%84%E5%AF%86%E7%A2%BC%E5%AD%B8%E6%87%89%E7%94%A8%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="作為軟體開發者，我們不僅是功能的創造者，更是使用者資料的守護者。如何確保資料在儲存、傳輸的過程中不被竊取或竄改？答案就是密碼學 (Cryptography)。 本篇文章將走進密碼學的世界，從核心概念講起，用實際的 Python 程式碼展示三種關鍵的密碼學技術，並了解它們在真實世界中是如何協同工作的。   為什麼開發者需要懂密碼學？ 簡單來說，是為了保護資料的三個核心特性，又稱為「CIA Triad">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-11-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-06T15:15:17.291Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Cryptography">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/11/06/%E5%BE%9E%E6%98%8E%E6%96%87%E5%88%B0%E5%AF%86%E6%96%87%20%E8%BB%9F%E9%AB%94%E9%96%8B%E7%99%BC%E8%80%85%E5%BF%85%E6%87%82%E7%9A%84%E5%AF%86%E7%A2%BC%E5%AD%B8%E6%87%89%E7%94%A8%E6%8C%87%E5%8D%97/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/11/06/%E5%BE%9E%E6%98%8E%E6%96%87%E5%88%B0%E5%AF%86%E6%96%87%20%E8%BB%9F%E9%AB%94%E9%96%8B%E7%99%BC%E8%80%85%E5%BF%85%E6%87%82%E7%9A%84%E5%AF%86%E7%A2%BC%E5%AD%B8%E6%87%89%E7%94%A8%E6%8C%87%E5%8D%97/","path":"2025/11/06/從明文到密文 軟體開發者必懂的密碼學應用指南/","title":"從明文到密文：軟體開發者必懂的密碼學應用指南"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>從明文到密文：軟體開發者必懂的密碼學應用指南 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">118</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">57</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cloud-Computing/">
+        Cloud Computing
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Concurrency/">
+        Concurrency
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cryptography/">
+        Cryptography
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cybersecurity/">
+        Cybersecurity
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(23)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Design-Pattern/">
+        Design Pattern
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/DevOps/">
+        DevOps
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(17)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/OOP/">
+        OOP
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Serverless/">
+        Serverless
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(8)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(6)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%96%8B%E7%99%BC%E8%80%85%E9%9C%80%E8%A6%81%E6%87%82%E5%AF%86%E7%A2%BC%E5%AD%B8"><span class="nav-number">1.</span> <span class="nav-text"> 為什麼開發者需要懂密碼學？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A1%9E%E5%9E%8B%E4%B8%80%E5%B0%8D%E7%A8%B1%E5%8A%A0%E5%AF%86-symmetric-cryptography"><span class="nav-number">2.</span> <span class="nav-text"> 類型一：對稱加密 (Symmetric Cryptography)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#python-%E5%AF%A6%E4%BD%9Caes-%E5%8A%A0%E5%AF%86"><span class="nav-number">2.1.</span> <span class="nav-text"> Python 實作：AES 加密</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A1%9E%E5%9E%8B%E4%BA%8C%E9%9D%9E%E5%B0%8D%E7%A8%B1%E5%8A%A0%E5%AF%86-asymmetric-cryptography"><span class="nav-number">3.</span> <span class="nav-text"> 類型二：非對稱加密 (Asymmetric Cryptography)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#python-%E5%AF%A6%E4%BD%9Crsa-%E5%8A%A0%E5%AF%86"><span class="nav-number">3.1.</span> <span class="nav-text"> Python 實作：RSA 加密</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A1%9E%E5%9E%8B%E4%B8%89%E9%9B%9C%E6%B9%8A%E5%87%BD%E5%BC%8F-hashing"><span class="nav-number">4.</span> <span class="nav-text"> 類型三：雜湊函式 (Hashing)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#python-%E5%AF%A6%E4%BD%9Csha-256-%E9%9B%9C%E6%B9%8A"><span class="nav-number">4.1.</span> <span class="nav-text"> Python 實作：SHA-256 雜湊</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%84%AA%E7%BC%BA%E9%BB%9E%E6%AF%94%E8%BC%83%E8%88%87%E5%8D%94%E5%90%8C%E5%B7%A5%E4%BD%9C"><span class="nav-number">5.</span> <span class="nav-text"> 優缺點比較與協同工作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8F%BE%E5%AF%A6%E4%B8%96%E7%95%8C%E4%B8%AD%E7%9A%84%E5%AE%8C%E7%BE%8E%E7%B5%90%E5%90%88%E6%B7%B7%E5%90%88%E5%8A%A0%E5%AF%86%E7%B3%BB%E7%B5%B1-hybrid-cryptosystem"><span class="nav-number">5.1.</span> <span class="nav-text"> 現實世界中的完美結合：混合加密系統 (Hybrid Cryptosystem)**</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">6.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">57</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/11/06/%E5%BE%9E%E6%98%8E%E6%96%87%E5%88%B0%E5%AF%86%E6%96%87%20%E8%BB%9F%E9%AB%94%E9%96%8B%E7%99%BC%E8%80%85%E5%BF%85%E6%87%82%E7%9A%84%E5%AF%86%E7%A2%BC%E5%AD%B8%E6%87%89%E7%94%A8%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="從明文到密文：軟體開發者必懂的密碼學應用指南 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          從明文到密文：軟體開發者必懂的密碼學應用指南
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-11-06 00:00:00 / 修改時間：23:15:17" itemprop="dateCreated datePublished" datetime="2025-11-06T00:00:00+08:00">2025-11-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>作為軟體開發者，我們不僅是功能的創造者，更是使用者資料的守護者。如何確保資料在儲存、傳輸的過程中不被竊取或竄改？答案就是<strong>密碼學 (Cryptography)</strong>。</p>
+<p>本篇文章將走進密碼學的世界，從核心概念講起，用實際的 Python 程式碼展示三種關鍵的密碼學技術，並了解它們在真實世界中是如何協同工作的。</p>
+<hr />
+<h1 id="為什麼開發者需要懂密碼學"><a class="markdownIt-Anchor" href="#為什麼開發者需要懂密碼學"></a> 為什麼開發者需要懂密碼學？</h1>
+<p>簡單來說，是為了保護資料的三個核心特性，又稱為「CIA Triad」：</p>
+<ol>
+<li><strong>機密性 (Confidentiality)</strong>：確保只有授權的人才能讀取資料。就像把信件放進只有收信人有鑰匙的信箱。</li>
+<li><strong>完整性 (Integrity)</strong>：確保資料在傳輸或儲存過程中沒有被偷偷修改。就像在信封上貼一個特殊的封條，一旦被撕開就會留下痕跡。</li>
+<li><strong>可用性 (Availability)</strong>：確保授權使用者在需要時可以存取資料。雖然這與加密的關聯較間接，但不當的加密實現可能影響可用性。</li>
+</ol>
+<p>當處理使用者密碼、API 金鑰、個人身份資訊 (PII) 或任何敏感資料時，密碼學是必需品。</p>
+<hr />
+<h1 id="類型一對稱加密-symmetric-cryptography"><a class="markdownIt-Anchor" href="#類型一對稱加密-symmetric-cryptography"></a> 類型一：對稱加密 (Symmetric Cryptography)</h1>
+<p>這是最直觀的加密方式，就像家裡的大門鑰匙，用同一把鑰匙上鎖和開鎖。</p>
+<ul>
+<li><strong>核心概念</strong>：加密和解密使用<strong>同一把密鑰 (Secret Key)</strong>。</li>
+<li><strong>優點</strong>：
+<ul>
+<li><strong>速度快</strong>：演算法計算開銷小，非常適合加密大量資料，如檔案、影片串流等。</li>
+</ul>
+</li>
+<li><strong>缺點</strong>：
+<ul>
+<li><strong>密鑰分發問題</strong>：最大的挑戰在於，如何安全地將這把唯一的密鑰交給對方？如果在傳遞過程中密鑰被攔截，那麼整個加密就失去了意義。</li>
+</ul>
+</li>
+</ul>
+<h2 id="python-實作aes-加密"><a class="markdownIt-Anchor" href="#python-實作aes-加密"></a> Python 實作：AES 加密</h2>
+<p>AES (Advanced Encryption Standard) 是目前最流行的對稱加密演算法。使用 Python 中最權威的 <code>cryptography</code> 函式庫來實作。</p>
+<pre class="highlight"><code class="bash">pip install cryptography
+</code></pre>
+<pre class="highlight"><code class="python"><span class="hljs-keyword">from</span> cryptography.hazmat.primitives.ciphers <span class="hljs-keyword">import</span> Cipher, algorithms, modes
+<span class="hljs-keyword">from</span> cryptography.hazmat.primitives <span class="hljs-keyword">import</span> padding
+<span class="hljs-keyword">from</span> cryptography.hazmat.backends <span class="hljs-keyword">import</span> default_backend
+<span class="hljs-keyword">import</span> os
+
+<span class="hljs-comment"># --- 準備工作 ---</span>
+<span class="hljs-comment"># 1. 一把 32 bytes (256 bits) 的密鑰。在真實應用中，這應該來自安全的金鑰管理系統。</span>
+<span class="hljs-comment">#    絕對不要硬編碼 (hardcode) 在程式碼裡</span>
+key = os.urandom(<span class="hljs-number">32</span>)
+
+<span class="hljs-comment"># 2. 一個 16 bytes 的初始化向量 (IV)。IV 確保即使使用相同的密鑰加密相同的明文，</span>
+<span class="hljs-comment">#    每次產生的密文也不同。IV 不需要保密，但每次加密都必須是唯一的。</span>
+iv = os.urandom(<span class="hljs-number">16</span>)
+
+<span class="hljs-comment"># 3. 要加密的訊息 (必須是 bytes)</span>
+message = <span class="hljs-string">b&quot;This is a secret message for symmetric encryption.&quot;</span>
+
+<span class="hljs-comment"># --- 加密過程 ---</span>
+<span class="hljs-comment"># 創建一個 AES Cipher 物件，使用 CBC 模式</span>
+cipher = Cipher(algorithms.AES(key), modes.CBC(iv), backend=default_backend())
+encryptor = cipher.encryptor()
+
+<span class="hljs-comment"># PKCS7 填充，確保訊息長度是區塊大小的整數倍</span>
+padder = padding.PKCS7(algorithms.AES.block_size).padder()
+padded_data = padder.update(message) + padder.finalize()
+
+<span class="hljs-comment"># 進行加密</span>
+ct = encryptor.update(padded_data) + encryptor.finalize()
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;原始訊息: <span class="hljs-subst">&#123;message.decode(<span class="hljs-string">&#x27;utf-8&#x27;</span>)&#125;</span>&quot;</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;加密後的密文 (Ciphertext): <span class="hljs-subst">&#123;ct.<span class="hljs-built_in">hex</span>()&#125;</span>&quot;</span>)
+
+<span class="hljs-comment"># --- 解密過程 ---</span>
+<span class="hljs-comment"># 使用相同的 key 和 iv 進行解密</span>
+decryptor = cipher.decryptor()
+decrypted_padded_data = decryptor.update(ct) + decryptor.finalize()
+
+<span class="hljs-comment"># 移除填充</span>
+unpadder = padding.PKCS7(algorithms.AES.block_size).unpadder()
+decrypted_data = unpadder.update(decrypted_padded_data) + unpadder.finalize()
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;解密後的訊息: <span class="hljs-subst">&#123;decrypted_data.decode(<span class="hljs-string">&#x27;utf-8&#x27;</span>)&#125;</span>&quot;</span>)
+
+<span class="hljs-keyword">assert</span> message == decrypted_data
+</code></pre>
+<hr />
+<h1 id="類型二非對稱加密-asymmetric-cryptography"><a class="markdownIt-Anchor" href="#類型二非對稱加密-asymmetric-cryptography"></a> 類型二：非對稱加密 (Asymmetric Cryptography)</h1>
+<p>為了解決對稱加密的密鑰分發問題，非對稱加密應運而生。它也被稱為<strong>公開金鑰加密 (Public-key Cryptography)</strong>。</p>
+<ul>
+<li><strong>核心概念</strong>：使用一對數學上相關的密鑰：<strong>公鑰 (Public Key)</strong> 和 <strong>私鑰 (Private Key)</strong>。
+<ul>
+<li>公鑰可以自由分發，任何人都可以擁有。</li>
+<li>私鑰必須嚴格保密，只有自己能持有。</li>
+<li><strong>用公鑰加密的資料，只能用對應的私鑰解密。</strong></li>
+</ul>
+</li>
+<li><strong>優點</strong>：
+<ul>
+<li><strong>解決了密鑰分發問題</strong>：可以把公鑰給任何人，他們用公鑰加密訊息後傳給你，只有擁有私鑰的你才能解開。</li>
+<li><strong>可用於數位簽章</strong>：反過來，用私鑰加密（簽章）的內容，可以用公鑰驗證，證明訊息確實來自你。</li>
+</ul>
+</li>
+<li><strong>缺點</strong>：
+<ul>
+<li><strong>速度非常慢</strong>：計算複雜度遠高於對稱加密，不適合用來加密大量資料。</li>
+</ul>
+</li>
+</ul>
+<h2 id="python-實作rsa-加密"><a class="markdownIt-Anchor" href="#python-實作rsa-加密"></a> Python 實作：RSA 加密</h2>
+<p>RSA 是最廣為人知的非對稱加密演算法。</p>
+<pre class="highlight"><code class="python"><span class="hljs-keyword">from</span> cryptography.hazmat.primitives <span class="hljs-keyword">import</span> hashes
+<span class="hljs-keyword">from</span> cryptography.hazmat.primitives.asymmetric <span class="hljs-keyword">import</span> rsa, padding
+
+<span class="hljs-comment"># --- 準備工作：產生金鑰對 ---</span>
+<span class="hljs-comment"># 在真實應用中，金鑰對應該只產生一次並妥善保存</span>
+private_key = rsa.generate_private_key(
+    public_exponent=<span class="hljs-number">65537</span>,
+    key_size=<span class="hljs-number">2048</span>,
+)
+public_key = private_key.public_key()
+
+<span class="hljs-comment"># 2. 要加密的訊息</span>
+message = <span class="hljs-string">b&quot;A secret message for asymmetric encryption.&quot;</span>
+
+<span class="hljs-comment"># --- 加密過程 (使用公鑰) ---</span>
+ciphertext = public_key.encrypt(
+    message,
+    padding.OAEP(
+        mgf=padding.MGF1(algorithm=hashes.SHA256()),
+        algorithm=hashes.SHA256(),
+        label=<span class="hljs-literal">None</span>
+    )
+)
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;原始訊息: <span class="hljs-subst">&#123;message.decode(<span class="hljs-string">&#x27;utf-8&#x27;</span>)&#125;</span>&quot;</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;加密後的密文 (Ciphertext): <span class="hljs-subst">&#123;ciphertext.<span class="hljs-built_in">hex</span>()&#125;</span>&quot;</span>)
+
+
+<span class="hljs-comment"># --- 解密過程 (使用私鑰) ---</span>
+plaintext = private_key.decrypt(
+    ciphertext,
+    padding.OAEP(
+        mgf=padding.MGF1(algorithm=hashes.SHA256()),
+        algorithm=hashes.SHA256(),
+        label=<span class="hljs-literal">None</span>
+    )
+)
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;解密後的訊息: <span class="hljs-subst">&#123;plaintext.decode(<span class="hljs-string">&#x27;utf-8&#x27;</span>)&#125;</span>&quot;</span>)
+
+<span class="hljs-keyword">assert</span> message == plaintext
+</code></pre>
+<hr />
+<h1 id="類型三雜湊函式-hashing"><a class="markdownIt-Anchor" href="#類型三雜湊函式-hashing"></a> 類型三：雜湊函式 (Hashing)</h1>
+<p>雜湊與加密不同，它是一個<strong>單向</strong>的過程，無法逆向還原。它就像是為資料產生一個獨一無二的「數位指紋」。</p>
+<ul>
+<li><strong>核心概念</strong>：將任意長度的輸入，轉換成一個固定長度的輸出（雜湊值）。</li>
+<li><strong>特性</strong>：
+<ol>
+<li><strong>不可逆性</strong>：無法從雜湊值反推出原始輸入。</li>
+<li><strong>確定性</strong>：相同的輸入永遠會得到相同的輸出。</li>
+<li><strong>雪崩效應</strong>：輸入的微小改變會導致輸出的巨大差異。</li>
+</ol>
+</li>
+<li><strong>用途</strong>：
+<ul>
+<li><strong>密碼儲存</strong>：<strong>永遠不要直接儲存使用者的明文密碼</strong> 應該儲存密碼經過加鹽 (Salting) 後的雜湊值。驗證時，將使用者輸入的密碼用同樣的方式雜湊，再比對雜湊值是否相符。</li>
+<li><strong>資料完整性驗證</strong>：下載檔案時常見的 SHA256 校驗碼，就是用來確保檔案在下載過程中沒有被竄改或損壞。</li>
+</ul>
+</li>
+</ul>
+<h2 id="python-實作sha-256-雜湊"><a class="markdownIt-Anchor" href="#python-實作sha-256-雜湊"></a> Python 實作：SHA-256 雜湊</h2>
+<p>Python 內建的 <code>hashlib</code> 函式庫可以輕鬆實現。</p>
+<pre class="highlight"><code class="python"><span class="hljs-keyword">import</span> hashlib
+
+<span class="hljs-comment"># 建立一個 SHA-256 hash 物件</span>
+hasher = hashlib.sha256()
+
+<span class="hljs-comment"># 餵入要雜湊的資料 (必須是 bytes)</span>
+message1 = <span class="hljs-string">b&quot;Hello, world!&quot;</span>
+hasher.update(message1)
+
+<span class="hljs-comment"># 取得雜湊值的十六進位表示</span>
+hash1 = hasher.hexdigest()
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;&#x27;<span class="hljs-subst">&#123;message1.decode()&#125;</span>&#x27; 的 SHA-256 雜湊值: <span class="hljs-subst">&#123;hash1&#125;</span>&quot;</span>)
+
+<span class="hljs-comment"># 再次計算，證明其確定性</span>
+hasher2 = hashlib.sha256()
+hasher2.update(message1)
+<span class="hljs-keyword">assert</span> hash1 == hasher2.hexdigest()
+
+<span class="hljs-comment"># 稍微修改輸入，觀察雪崩效應</span>
+message2 = <span class="hljs-string">b&quot;Hello, World!&quot;</span> <span class="hljs-comment"># W 大寫</span>
+hasher3 = hashlib.sha256()
+hasher3.update(message2)
+hash3 = hasher3.hexdigest()
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;&#x27;<span class="hljs-subst">&#123;message2.decode()&#125;</span>&#x27; 的 SHA-256 雜湊值: <span class="hljs-subst">&#123;hash3&#125;</span>&quot;</span>)
+</code></pre>
+<hr />
+<h1 id="優缺點比較與協同工作"><a class="markdownIt-Anchor" href="#優缺點比較與協同工作"></a> 優缺點比較與協同工作</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">類型</th>
+<th style="text-align:left">主要用途</th>
+<th style="text-align:left">金鑰</th>
+<th style="text-align:left">速度</th>
+<th style="text-align:left">核心優點</th>
+<th style="text-align:left">核心缺點</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>對稱加密</strong></td>
+<td style="text-align:left">資料機密性 (大量)</td>
+<td style="text-align:left">單一密鑰</td>
+<td style="text-align:left"><strong>快</strong></td>
+<td style="text-align:left">效能高，適合加密檔案/串流</td>
+<td style="text-align:left">密鑰分發困難</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>非對稱加密</strong></td>
+<td style="text-align:left">金鑰交換、數位簽章</td>
+<td style="text-align:left">公鑰/私鑰對</td>
+<td style="text-align:left"><strong>慢</strong></td>
+<td style="text-align:left">安全的金鑰交換</td>
+<td style="text-align:left">效能低，不適合加密大量資料</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>雜湊</strong></td>
+<td style="text-align:left">資料完整性、密碼儲存</td>
+<td style="text-align:left">無金鑰</td>
+<td style="text-align:left"><strong>極快</strong></td>
+<td style="text-align:left">單向不可逆，驗證快速</td>
+<td style="text-align:left">不能用於資料機密性</td>
+</tr>
+</tbody>
+</table>
+<h2 id="現實世界中的完美結合混合加密系統-hybrid-cryptosystem"><a class="markdownIt-Anchor" href="#現實世界中的完美結合混合加密系統-hybrid-cryptosystem"></a> 現實世界中的完美結合：混合加密系統 (Hybrid Cryptosystem)**</h2>
+<p>這三者並非互相排斥，而是相輔相成。現代網路安全通訊的基石 <strong>TLS/SSL (HTTPS)</strong> 就是一個典型的混合加密應用：</p>
+<ol>
+<li><strong>非對稱加密</strong>：瀏覽器和伺服器先用非對稱加密（如 RSA）來安全地協商出一把<strong>一次性的對稱密鑰</strong>。</li>
+<li><strong>對稱加密</strong>：一旦雙方都擁有了這把共享的對稱密鑰，後續所有的應用資料（瀏覽的網頁內容）都將使用這把密鑰進行對稱加密（如 AES），因為它速度快。</li>
+<li><strong>雜湊</strong>：通訊過程中會使用雜湊函式（如 HMAC）來確保每個訊息的完整性，防止被中間人竄改。</li>
+</ol>
+<hr />
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<ol>
+<li><strong>不要自己發明加密演算法</strong>：使用經過業界多年驗證的標準演算法（AES, RSA, SHA-256 等）。</li>
+<li><strong>使用成熟的函式庫</strong>：像 Python 的 <code>cryptography</code> 函式庫已經處理了許多底層的複雜細節和安全陷阱。</li>
+<li><strong>理解所用的工具</strong>：知道何時該用對稱加密，何時該用非對稱加密，以及為何要對密碼進行雜湊。</li>
+<li><strong>金鑰管理是核心</strong>：演算法再強，金鑰洩漏了也無濟於事。學習如何安全地儲存和管理密鑰。</li>
+</ol>
+<p>密碼學是一個深邃的領域，但掌握其在軟體開發中的基本應用，是每位現代開發者保護自己產品和使用者的必備技能。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Cryptography/" rel="tag"># Cryptography</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/11/04/%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AD%89%E8%A8%8A%E6%81%AF%E4%B8%8D%E9%81%BA%E5%A4%B1%20Message%20Queue%20%E7%9A%84%E5%8F%AF%E9%9D%A0%E6%80%A7%E8%A8%AD%E8%A8%88/" rel="prev" title="如何保證訊息不遺失？深入剖析 Message Queue 的可靠性設計">
+                  <i class="fa fa-angle-left"></i> 如何保證訊息不遺失？深入剖析 Message Queue 的可靠性設計
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
