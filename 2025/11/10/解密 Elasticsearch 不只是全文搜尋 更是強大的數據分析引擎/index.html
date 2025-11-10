@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="是否曾經對應用程式中緩慢的 LIKE &#39;%keyword%&#39; 資料庫查詢感到沮喪？或者好奇像 Netflix、GitHub、維基百科這樣的大型平台，是如何在數十億筆資料中實現快速且精準的搜尋體驗？答案的核心，往往指向一個共同的技術：Elasticsearch。 本篇文章將深入淺出地說明 Elasticsearch 是什麼，探索其核心概念，並展示它在現實世界中的多元應用場景。   什麼是 Elast">
+<meta property="og:type" content="article">
+<meta property="og:title" content="解密 Elasticsearch：不只是全文搜尋，更是強大的數據分析引擎">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/11/10/%E8%A7%A3%E5%AF%86%20Elasticsearch%20%E4%B8%8D%E5%8F%AA%E6%98%AF%E5%85%A8%E6%96%87%E6%90%9C%E5%B0%8B%20%E6%9B%B4%E6%98%AF%E5%BC%B7%E5%A4%A7%E7%9A%84%E6%95%B8%E6%93%9A%E5%88%86%E6%9E%90%E5%BC%95%E6%93%8E/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="是否曾經對應用程式中緩慢的 LIKE &#39;%keyword%&#39; 資料庫查詢感到沮喪？或者好奇像 Netflix、GitHub、維基百科這樣的大型平台，是如何在數十億筆資料中實現快速且精準的搜尋體驗？答案的核心，往往指向一個共同的技術：Elasticsearch。 本篇文章將深入淺出地說明 Elasticsearch 是什麼，探索其核心概念，並展示它在現實世界中的多元應用場景。   什麼是 Elast">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-11-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-10T14:25:42.306Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Database">
+<meta property="article:tag" content="Search">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/11/10/%E8%A7%A3%E5%AF%86%20Elasticsearch%20%E4%B8%8D%E5%8F%AA%E6%98%AF%E5%85%A8%E6%96%87%E6%90%9C%E5%B0%8B%20%E6%9B%B4%E6%98%AF%E5%BC%B7%E5%A4%A7%E7%9A%84%E6%95%B8%E6%93%9A%E5%88%86%E6%9E%90%E5%BC%95%E6%93%8E/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/11/10/%E8%A7%A3%E5%AF%86%20Elasticsearch%20%E4%B8%8D%E5%8F%AA%E6%98%AF%E5%85%A8%E6%96%87%E6%90%9C%E5%B0%8B%20%E6%9B%B4%E6%98%AF%E5%BC%B7%E5%A4%A7%E7%9A%84%E6%95%B8%E6%93%9A%E5%88%86%E6%9E%90%E5%BC%95%E6%93%8E/","path":"2025/11/10/解密 Elasticsearch 不只是全文搜尋 更是強大的數據分析引擎/","title":"解密 Elasticsearch：不只是全文搜尋，更是強大的數據分析引擎"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>解密 Elasticsearch：不只是全文搜尋，更是強大的數據分析引擎 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">119</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">58</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cloud-Computing/">
+        Cloud Computing
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Concurrency/">
+        Concurrency
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cryptography/">
+        Cryptography
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cybersecurity/">
+        Cybersecurity
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(24)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Design-Pattern/">
+        Design Pattern
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/DevOps/">
+        DevOps
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(17)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/OOP/">
+        OOP
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Search/">
+        Search
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Serverless/">
+        Serverless
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(8)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(6)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-elasticsearch"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是 Elasticsearch？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5elasticsearch-%E5%A6%82%E4%BD%95%E9%81%8B%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text"> 核心概念：Elasticsearch 如何運作？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%87%89%E7%94%A8-elasticsearch%E5%9B%9B%E5%A4%A7%E7%9C%9F%E5%AF%A6%E5%A0%B4%E6%99%AF"><span class="nav-number">3.</span> <span class="nav-text"> 如何應用 Elasticsearch？四大真實場景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%85%A8%E6%96%87%E6%90%9C%E5%B0%8B-full-text-search"><span class="nav-number">3.1.</span> <span class="nav-text"> 1. 全文搜尋 (Full-Text Search)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8F%AF%E8%A7%80%E6%B8%AC%E6%80%A7-observability-log-metrics-%E8%88%87-apm"><span class="nav-number">3.2.</span> <span class="nav-text"> 2. 可觀測性 (Observability) - Log、Metrics 與 APM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%95%86%E6%A5%AD%E8%88%87%E6%95%B8%E6%93%9A%E5%88%86%E6%9E%90-business-analytics"><span class="nav-number">3.3.</span> <span class="nav-text"> 3. 商業與數據分析 (Business Analytics)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%9C%B0%E7%90%86%E7%A9%BA%E9%96%93%E8%B3%87%E6%96%99%E5%88%86%E6%9E%90-geospatial-analysis"><span class="nav-number">3.4.</span> <span class="nav-text"> 4. 地理空間資料分析 (Geospatial Analysis)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC-crud-%E6%93%8D%E4%BD%9C%E7%AF%84%E4%BE%8B"><span class="nav-number">4.</span> <span class="nav-text"> 基本 CRUD 操作範例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#elasticsearch-vs-%E4%B8%BB%E6%B5%81%E8%B3%87%E6%96%99%E5%BA%AB%E6%8A%80%E8%A1%93%E6%AF%94%E8%BC%83"><span class="nav-number">5.</span> <span class="nav-text"> Elasticsearch vs. 主流資料庫技術比較</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E6%AF%94%E5%96%BB%E4%BE%86%E7%90%86%E8%A7%A3%E5%AE%83%E5%80%91%E7%9A%84%E5%B7%AE%E7%95%B0"><span class="nav-number">5.1.</span> <span class="nav-text"> 用比喻來理解它們的差異</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">6.</span> <span class="nav-text"> 總結</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">119</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/11/10/%E8%A7%A3%E5%AF%86%20Elasticsearch%20%E4%B8%8D%E5%8F%AA%E6%98%AF%E5%85%A8%E6%96%87%E6%90%9C%E5%B0%8B%20%E6%9B%B4%E6%98%AF%E5%BC%B7%E5%A4%A7%E7%9A%84%E6%95%B8%E6%93%9A%E5%88%86%E6%9E%90%E5%BC%95%E6%93%8E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="解密 Elasticsearch：不只是全文搜尋，更是強大的數據分析引擎 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          解密 Elasticsearch：不只是全文搜尋，更是強大的數據分析引擎
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-11-10 00:00:00 / 修改時間：22:25:42" itemprop="dateCreated datePublished" datetime="2025-11-10T00:00:00+08:00">2025-11-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>是否曾經對應用程式中緩慢的 <code>LIKE '%keyword%'</code> 資料庫查詢感到沮喪？或者好奇像 Netflix、GitHub、維基百科這樣的大型平台，是如何在數十億筆資料中實現快速且精準的搜尋體驗？答案的核心，往往指向一個共同的技術：<strong>Elasticsearch</strong>。</p>
+<p>本篇文章將深入淺出地說明 Elasticsearch 是什麼，探索其核心概念，並展示它在現實世界中的多元應用場景。</p>
+<hr />
+<h1 id="什麼是-elasticsearch"><a class="markdownIt-Anchor" href="#什麼是-elasticsearch"></a> 什麼是 Elasticsearch？</h1>
+<p>Elasticsearch 是一個<strong>開源、分散式、可擴展、即時的搜尋與分析引擎</strong>。它基於 <a target="_blank" rel="noopener" href="https://lucene.apache.org/">Apache Lucene</a> 函式庫建構，並透過簡單易用的 RESTful API 讓我們能輕鬆地與其互動。</p>
+<p>它是一個以搜尋引擎為核心的數據儲存與分析平台，可以想像成一個專為「搜尋」而生的超級資料庫。它不僅能儲存大量非結構化資料（如 JSON 文件），更重要的是，它能以毫秒級的速度對這些資料進行複雜的查詢。</p>
+<p>其主要特性包括：</p>
+<ul>
+<li><strong>極致速度</strong>：得益於其底層的「倒排索引」結構，Elasticsearch 在處理全文搜尋時速度極快。</li>
+<li><strong>高可擴展性</strong>：採用分散式架構，可以輕易地擴展到數百台伺服器，處理 PB 等級的資料。</li>
+<li><strong>高可用性</strong>：透過複本（Replica）機制，確保即使部分節點故障，資料依然安全且服務不中斷。</li>
+<li><strong>靈活的資料模型</strong>：原生支援 JSON 格式，無需預先定義嚴格的 Schema，適合處理複雜多變的資料。</li>
+<li><strong>強大的生態系</strong>：與 Logstash（資料收集）、Kibana（資料視覺化）合稱 <strong>Elastic Stack (ELK)</strong>，提供從資料收集、儲存、搜尋到分析視覺化的一站式解決方案。</li>
+</ul>
+<hr />
+<h1 id="核心概念elasticsearch-如何運作"><a class="markdownIt-Anchor" href="#核心概念elasticsearch-如何運作"></a> 核心概念：Elasticsearch 如何運作？</h1>
+<p>要理解 Elasticsearch 的強大之處，需要先了解幾個核心概念：</p>
+<ol>
+<li>
+<p><strong>文件 (Document)</strong>：Elasticsearch 中儲存資料的基本單位，以 JSON 格式表示。相當於關聯式資料庫中的一筆「資料列 (Row)」。</p>
+</li>
+<li>
+<p><strong>索引 (Index)</strong>：一個索引是具有相似特徵的文件集合。相當於關聯式資料庫中的「資料表 (Table)」。例如: <code>products</code> 索引來存放所有商品文件。</p>
+</li>
+<li>
+<p><strong>節點 (Node)</strong>：單一的 Elasticsearch 伺服器實例。</p>
+</li>
+<li>
+<p><strong>叢集 (Cluster)</strong>：由一個或多個節點組成的集合，它們共同持有所有資料，並提供聯合的索引和搜尋能力。</p>
+</li>
+<li>
+<p><strong>分片 (Shard)</strong>：當索引的資料量太大時，Elasticsearch 會將其水平分割成多個部分，稱為分片。每個分片都是一個功能完整的獨立索引。這是 Elasticsearch 實現<strong>水平擴展</strong>的關鍵。</p>
+</li>
+<li>
+<p><strong>複本 (Replica)</strong>：每個分片都可以有一個或多個複本。複本是分片的完整拷貝，主要有兩個作用：</p>
+<ul>
+<li><strong>高可用性</strong>：當主分片 (Primary Shard) 所在的節點故障時，複本分片可以被提升為新的主分片，確保服務不中斷。</li>
+<li><strong>提升讀取效能</strong>：搜尋請求可以同時在主分片和複本分片上執行，分攤讀取負載。</li>
+</ul>
+</li>
+<li>
+<p><strong>倒排索引 (Inverted Index)</strong>：這是 Elasticsearch 實現快速全文搜尋的秘密武器。傳統資料庫是「文件 -&gt; 詞彙」，而倒排索引則是「<strong>詞彙 -&gt; 文件</strong>」。它就像一本書最後的索引頁，記錄了每個詞彙出現在哪些文件中，讓搜尋引擎不必遍歷所有文件，而是直接找到包含關鍵字的文件列表。</p>
+</li>
+</ol>
+<hr />
+<h1 id="如何應用-elasticsearch四大真實場景"><a class="markdownIt-Anchor" href="#如何應用-elasticsearch四大真實場景"></a> 如何應用 Elasticsearch？四大真實場景</h1>
+<p>Elasticsearch 的應用遠不止於網站的搜尋框。以下是幾個最常見的應用場景：</p>
+<h2 id="1-全文搜尋-full-text-search"><a class="markdownIt-Anchor" href="#1-全文搜尋-full-text-search"></a> 1. 全文搜尋 (Full-Text Search)</h2>
+<p>這是 Elasticsearch 最核心、最廣為人知的應用。</p>
+<ul>
+<li><strong>電商網站</strong>：提供商品搜尋、篩選、自動完成建議等功能。</li>
+<li><strong>企業級搜尋</strong>：在公司內部網路中搜尋各種文件、郵件、報告。</li>
+<li><strong>應用程式內搜尋</strong>：讓使用者能在 App 內快速找到所需的內容，例如在 Stack Overflow 搜尋問題。</li>
+</ul>
+<h2 id="2-可觀測性-observability-log-metrics-與-apm"><a class="markdownIt-Anchor" href="#2-可觀測性-observability-log-metrics-與-apm"></a> 2. 可觀測性 (Observability) - Log、Metrics 與 APM</h2>
+<p>在現代微服務架構中，系統會產生海量的日誌 (Log)、指標 (Metrics) 和應用程式效能追蹤 (APM) 資料。Elasticsearch 是儲存和分析這些資料的理想選擇。</p>
+<ul>
+<li><strong>日誌分析</strong>：集中收集所有伺服器和應用程式的日誌，快速搜尋錯誤訊息、分析使用者行為、監控系統狀態。</li>
+<li><strong>指標監控</strong>：儲存 CPU 使用率、記憶體、網路流量等系統指標，並透過 Kibana 建立即時監控儀表板。</li>
+<li><strong>安全分析 (SIEM)</strong>：收集和分析所有安全相關事件，偵測潛在的威脅與攻擊。</li>
+</ul>
+<h2 id="3-商業與數據分析-business-analytics"><a class="markdownIt-Anchor" href="#3-商業與數據分析-business-analytics"></a> 3. 商業與數據分析 (Business Analytics)</h2>
+<p>憑藉其強大的彙總 (Aggregation) 功能，Elasticsearch 可以快速地對海量資料進行統計與分析，從中挖掘商業價值。</p>
+<ul>
+<li><strong>銷售數據分析</strong>：即時分析銷售趨勢、熱銷商品、顧客購買行為。</li>
+<li><strong>輿情監控</strong>：分析社群媒體和新聞文章，了解市場對品牌的看法。</li>
+<li><strong>使用者行為分析</strong>：追蹤使用者在網站或 App 上的點擊、瀏覽等行為，以優化產品設計。</li>
+</ul>
+<h2 id="4-地理空間資料分析-geospatial-analysis"><a class="markdownIt-Anchor" href="#4-地理空間資料分析-geospatial-analysis"></a> 4. 地理空間資料分析 (Geospatial Analysis)</h2>
+<p>Elasticsearch 對地理位置資料（經緯度）有著出色的支援，可以輕鬆實現地理空間搜尋與分析。</p>
+<ul>
+<li><strong>地圖搜尋</strong>：在地圖上搜尋附近的餐廳、飯店或加油站。</li>
+<li><strong>物流追蹤</strong>：即時追蹤貨物運輸的地理位置。</li>
+<li><strong>共享經濟應用</strong>：如 Uber 或 foodpanda，根據使用者位置匹配最近的司機或外送員。</li>
+</ul>
+<hr />
+<h1 id="基本-crud-操作範例"><a class="markdownIt-Anchor" href="#基本-crud-操作範例"></a> 基本 CRUD 操作範例</h1>
+<p>可以透過 Docker、Elastic Cloud 或直接下載安裝來啟動 Elasticsearch。一旦啟動，就可以透過 cURL 或 Kibana 開發工具的 Console 與它互動。</p>
+<p>以下是幾個基本操作的範例：</p>
+<pre class="highlight"><code class="json"><span class="hljs-comment">// 1. 新增一筆文件 (Create)</span>
+<span class="hljs-comment">// 向 &#x27;products&#x27; 索引中新增一個 id 為 1 的文件</span>
+PUT /products/_doc/<span class="hljs-number">1</span>
+<span class="hljs-punctuation">&#123;</span>
+  <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Elasticsearch: The Definitive Guide&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;author&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Clinton Gormley&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;price&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">39.99</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;tags&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;search&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;analytics&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;guide&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;available&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span>
+<span class="hljs-punctuation">&#125;</span>
+
+<span class="hljs-comment">// 2. 查詢一筆文件 (Read)</span>
+GET /products/_doc/<span class="hljs-number">1</span>
+
+<span class="hljs-comment">// 3. 執行一個簡單的搜尋 (Search)</span>
+<span class="hljs-comment">// 搜尋所有 &#x27;tags&#x27; 欄位包含 &#x27;search&#x27; 的商品</span>
+GET /products/_search
+<span class="hljs-punctuation">&#123;</span>
+  <span class="hljs-attr">&quot;query&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span>
+    <span class="hljs-attr">&quot;match&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span>
+      <span class="hljs-attr">&quot;tags&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;search&quot;</span>
+    <span class="hljs-punctuation">&#125;</span>
+  <span class="hljs-punctuation">&#125;</span>
+<span class="hljs-punctuation">&#125;</span>
+
+<span class="hljs-comment">// 4. 更新一筆文件 (Update)</span>
+POST /products/_update/<span class="hljs-number">1</span>
+<span class="hljs-punctuation">&#123;</span>
+  <span class="hljs-attr">&quot;doc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span>
+    <span class="hljs-attr">&quot;price&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">35.99</span>
+  <span class="hljs-punctuation">&#125;</span>
+<span class="hljs-punctuation">&#125;</span>
+
+<span class="hljs-comment">// 5. 刪除一筆文件 (Delete)</span>
+DELETE /products/_doc/<span class="hljs-number">1</span>
+</code></pre>
+<hr />
+<h1 id="elasticsearch-vs-主流資料庫技術比較"><a class="markdownIt-Anchor" href="#elasticsearch-vs-主流資料庫技術比較"></a> Elasticsearch vs. 主流資料庫技術比較</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">特性 (Feature)</th>
+<th style="text-align:left">Elasticsearch</th>
+<th style="text-align:left">SQL 資料庫 (如 MySQL, PostgreSQL)</th>
+<th style="text-align:left">NoSQL 資料庫 (如 MongoDB, Cassandra)</th>
+<th style="text-align:left">Redis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>主要用途</strong></td>
+<td style="text-align:left"><strong>全文搜尋、日誌分析、數據可觀測性、商業智慧 (BI)</strong></td>
+<td style="text-align:left"><strong>交易處理 (OLTP)、資料一致性要求高的應用</strong></td>
+<td style="text-align:left"><strong>大數據、高擴展性應用、非結構化資料儲存</strong></td>
+<td style="text-align:left"><strong>快取、Session 管理、即時排行榜、訊息佇列</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>資料模型</strong></td>
+<td style="text-align:left">JSON 文件 (Documents)</td>
+<td style="text-align:left">帶有嚴格 Schema 的資料表 (Tables &amp; Rows)</td>
+<td style="text-align:left">多樣化（文件、鍵值、欄式、圖形）</td>
+<td style="text-align:left">鍵值 (Key-Value)，但 Value 支援多種資料結構</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>核心強項</strong></td>
+<td style="text-align:left"><strong>倒排索引</strong>，帶來極速的全文搜尋和複雜彙總分析能力</td>
+<td style="text-align:left"><strong>ACID 交易</strong>，保證資料的強一致性和可靠性</td>
+<td style="text-align:left"><strong>水平擴展</strong>和<strong>靈活的 Schema</strong>，適合快速迭代和海量資料</td>
+<td style="text-align:left"><strong>基於記憶體</strong>，提供微秒級的超低延遲讀寫</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>查詢語言</strong></td>
+<td style="text-align:left">JSON-based Query DSL (Domain Specific Language) / SQL</td>
+<td style="text-align:left">SQL (Structured Query Language)</td>
+<td style="text-align:left">各有不同 (如 MQL, CQL)，或提供特定 API</td>
+<td style="text-align:left">Redis Commands</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>一致性</strong></td>
+<td style="text-align:left"><strong>近乎即時 (Near Real-Time)</strong>，最終一致性模型</td>
+<td style="text-align:left"><strong>強一致性 (Strong Consistency)</strong>，寫入後立即可以被讀取</td>
+<td style="text-align:left">通常是<strong>最終一致性</strong>，但可依需求調整</td>
+<td style="text-align:left"><strong>單執行緒</strong>，操作具原子性。持久化可選。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Schema</strong></td>
+<td style="text-align:left">靈活，可無 Schema 或部分定義 (Dynamic Mapping)</td>
+<td style="text-align:left">嚴格，寫入前必須定義好資料表結構 (Schema-on-write)</td>
+<td style="text-align:left">靈活，無需預先定義 Schema (Schema-on-read)</td>
+<td style="text-align:left">無 Schema</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>適合場景</strong></td>
+<td style="text-align:left">1. 電商網站商品搜尋<br>2. Log 系統日誌分析<br>3. 監控指標數據分析 (Metrics)<br>4. 地理位置搜尋</td>
+<td style="text-align:left">1. 金融交易系統<br>2. 企業資源規劃 (ERP)<br>3. 任何需要關聯和資料完整性的系統</td>
+<td style="text-align:left">1. 社群媒體<br>2. 物聯網 (IoT) 數據<br>3. 內容管理系統</td>
+<td style="text-align:left">1. 網站頁面快取<br>2. 使用者登入狀態 (Session)<br>3. 遊戲即時積分榜</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="用比喻來理解它們的差異"><a class="markdownIt-Anchor" href="#用比喻來理解它們的差異"></a> 用比喻來理解它們的差異</h2>
+<p>想像一下在管理一個巨大的圖書館：</p>
+<ul>
+<li>
+<p><strong>SQL 資料庫 (如 MySQL)</strong> 是圖書館的<strong>館藏目錄系統</strong>。</p>
+<ul>
+<li>每一本書（資料列）都有一個精確的編號 (Primary Key)，存放在特定的書架（資料表）上。</li>
+<li>想找書，必須先查目錄，知道它的確切位置。這個系統非常嚴謹、可靠，絕不會出錯（ACID），適合管理借閱紀錄這種絕不能出錯的事務。但如果想找「所有內容包含『魔法』和『龍』的書」，這個目錄系統會非常吃力，可能要一本一本地翻。</li>
+</ul>
+</li>
+<li>
+<p><strong>Elasticsearch</strong> 是圖書館聘請的<strong>超級搜尋專家</strong>。</p>
+<ul>
+<li>他讀過每一本書的「所有內容」，並製作了一份超級索引（倒排索引），記錄了每個詞彙出現在哪些書的哪些頁面。</li>
+<li>問他「找找看紅色封面、關於魔法、最近五年出版的書」，他能在幾秒鐘內給一份精準的清單。他專為「搜尋」和「分析」而生，但如果要他處理複雜的借書還書交易，可能不如目錄系統那樣嚴謹。</li>
+</ul>
+</li>
+<li>
+<p><strong>NoSQL 資料庫 (如 MongoDB)</strong> 像是圖書館裡的<strong>各種主題閱覽室</strong>。</p>
+<ul>
+<li>有的放期刊、有的放地圖、有的放手稿（不同的資料模型）。每個閱覽室都可以輕易擴建（水平擴展），而且放進來的資料格式可以很多元（靈活 Schema）。管理起來很彈性，適合存放大量且多樣化的館藏，但要跨閱覽室進行關聯查詢就比較複雜。</li>
+</ul>
+</li>
+<li>
+<p><strong>Redis</strong> 是<strong>櫃檯館員的桌面</strong>。</p>
+<ul>
+<li>桌上放著最近最熱門、最多人借的幾本書（快取），還有便條紙記錄著待辦事項（Session、佇列）。</li>
+<li>當有人要借這些熱門書時，館員能立刻從桌上拿給他，速度飛快（基於記憶體）。但桌面空間有限，不可能把整個圖書館的書都放上來。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
+<p><strong>Elasticsearch 不是要取代傳統資料庫，而是與它們協同工作。</strong></p>
+<p>一個常見的架構是：</p>
+<ol>
+<li><strong>主要資料儲存</strong>：使用 MySQL 或 PostgreSQL 這類 SQL 資料庫來處理交易，確保資料的強一致性。</li>
+<li><strong>搜尋與分析引擎</strong>：將需要被搜尋的資料同步到 Elasticsearch 中。</li>
+<li><strong>快取層</strong>：使用 Redis 來快取熱點數據，降低後端資料庫的壓力。</li>
+</ol>
+<p>Elasticsearch 不僅是全文搜尋引擎，它更是一個功能強大、用途廣泛的即時數據分析平台。無論是想為網站增加一個高效的搜尋功能，還是需要建構一個複雜的日誌監控系統，甚至是挖掘大數據背後的商業洞察，Elasticsearch 都會是得力的助手。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Database/" rel="tag"># Database</a>
+              <a href="/my-blog/tags/Search/" rel="tag"># Search</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/11/06/%E5%BE%9E%E6%98%8E%E6%96%87%E5%88%B0%E5%AF%86%E6%96%87%20%E8%BB%9F%E9%AB%94%E9%96%8B%E7%99%BC%E8%80%85%E5%BF%85%E6%87%82%E7%9A%84%E5%AF%86%E7%A2%BC%E5%AD%B8%E6%87%89%E7%94%A8%E6%8C%87%E5%8D%97/" rel="prev" title="從明文到密文：軟體開發者必懂的密碼學應用指南">
+                  <i class="fa fa-angle-left"></i> 從明文到密文：軟體開發者必懂的密碼學應用指南
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
