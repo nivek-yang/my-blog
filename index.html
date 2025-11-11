@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">119</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">120</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">58</span></a>
       <ul class="sub-menu">
   
@@ -211,7 +211,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Database/">
         Database
-        <span class="post-count">(24)</span>
+        <span class="post-count">(25)</span>
       </a>
     </li>
   
@@ -421,7 +421,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Search/">
         Search
-        <span class="post-count">(1)</span>
+        <span class="post-count">(2)</span>
       </a>
     </li>
   
@@ -555,7 +555,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">119</span>
+          <span class="site-state-item-count">120</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -580,6 +580,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/11/11/Elasticsearch%20%E7%9A%84%E9%83%A8%E7%BD%B2%E8%88%87%E8%B3%87%E6%96%99%E5%90%8C%E6%AD%A5%E5%AF%A6%E6%88%B0%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/11/11/Elasticsearch%20%E7%9A%84%E9%83%A8%E7%BD%B2%E8%88%87%E8%B3%87%E6%96%99%E5%90%8C%E6%AD%A5%E5%AF%A6%E6%88%B0%E6%8C%87%E5%8D%97/" class="post-title-link" itemprop="url">
+              Elasticsearch 的部署與資料同步實戰指南
+            </a>
+            <a href="/my-blog/2025/11/11/Elasticsearch%20%E7%9A%84%E9%83%A8%E7%BD%B2%E8%88%87%E8%B3%87%E6%96%99%E5%90%8C%E6%AD%A5%E5%AF%A6%E6%88%B0%E6%8C%87%E5%8D%97/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-11-11 00:00:00 / 修改時間：23:54:12" itemprop="dateCreated datePublished" datetime="2025-11-11T00:00:00+08:00">2025-11-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">在上一篇文章 《解密 Elasticsearch：不只是全文搜尋，更是強大的數據分析引擎》已經了解了 Elasticsearch 的強大之處，也透過 cURL 或 Kibana 執行了幾個基本的 CRUD 操作。這時，一個關鍵的問題浮現腦海：「在真實的專案中，該如何部署 Elasticsearch？又要如何讓現有資料庫的資料跑到 Elasticsearch 裡面去？」 本篇文章將深入探討兩個核心主題： 環境建置：從本機開發到生產環境，選擇最適合的部署策略。 資料同步：探討將資料從主資料庫（如 SQL）導入 Elasticsearch 的主流架構與最佳實踐。 建置 Elasticsearch 叢集 部署 Elasticsearch 從來不是「one-size-fits-all」。目標是快速原型開發，還是建立一個穩如磐石的生產系統，將決定你選擇的道路。 在本機 (Local) 開發：擁抱 Docker Compose 在開發階段，追求的是速度、一致性與隔離性。沒有什麼比 Docker Compose 更適合這個任務了，用一個設定檔，就能一鍵啟動 Elasticsearch、Kibana 以及未來可能需要的任何相依服務。 最佳實踐： 使用 Docker Compose 將環境容器化。 為何選擇它？ 環境一致性：告別「在我電腦上可以跑」的窘境，確保團隊成員使用完全相同的環境。 快速啟動與銷毀：docker compose up 啟動所有服務，docker compose down -v 徹底清除，不留任何殘跡。 版本控制：在 YAML 檔中輕鬆切換 Elasticsearch 版本，進行相容性測試。 docker-compose.yml 範例： version: &#x27;3.7&#x27; services: # Elasticsearch 服務 elasticsearch: image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1 # 明確指定版本 container_name: es01 environment: # 設定為單節點模式 - discovery.type=single-node # 開發時可關閉安全驗證以求方便，生產環境切勿如此 - xpack.security.enabled=false ports: - &quot;9200:9200&quot; # REST API - &quot;9300:9300&quot; # 內部節點通訊 volumes: - es_data:/usr/share/elasticsearch/data # Kibana 服務 kibana: image: docker.elastic.co/kibana/kibana:8.11.1 container_name: kibana01 ports: - &quot;5601:5601&quot; depends_on: - elasticsearch # 確保 ES 啟動後再啟動 Kibana # Docker Volume，用於持久化 ES 資料 volumes: es_data: 將以上內容存為 docker-compose.yml，在本機執行 docker compose up，一個完整的開發環境就緒了。 在生產 (Production) 環境部署 生產環境的關鍵詞是：高可用、可擴展、安全、易於維護。除非有一個經驗豐富的 SRE/DevOps 團隊，否則自建維運叢集將會是一場惡夢。 最佳實踐： 優先選擇託管服務 (Managed Service)。 將叢集的監控、備份、升級、擴展等繁重工作，交給最了解 Elasticsearch 的專家。 Elastic Cloud：官方提供的服務，功能最完整，與最新版本同步，並提供專業技術支援。支援部署在 AWS, GCP, Azure。 雲端供應商服務：如 AWS OpenSearch Service、GCP 的 Elasticsearch Service 等。優點是與該雲端平台的生態系整合度高。 次要選擇：自建 (Self-Hosted) 僅在特殊合規要求或內部技術力雄厚時考慮。 在 Kubernetes 上部署 (ECK Operator)：這是現代自建的首選。Elastic 官方提供的 ECK Operator 能大幅簡化在 K8s 上部署、管理和升級的複雜度。 在虛擬機/實體機上部署：使用 Ansible, Terraform 等自動化工具進行部署。需要投入大量心力處理叢集維運的各種細節。 從資料庫到 Elasticsearch 的同步策略 「需要把整個資料庫都同步過去嗎？」 答案是：千萬不要！ 請牢記這個核心架構原則：主資料庫（SQL DB）是「唯一真實來源 (Source of Truth)」，而 Elasticsearch 是為了特定目的（搜尋、分析）建立的「特化索引 (Specialized Index)」。 只需要將需要被搜尋和分析的資料子集同步過去。例如，商品的名稱、描述、分類、價格，絕不是使用者的密碼雜湊值或內部的訂單狀態碼。 如何實現資料同步？ 資料同步的方案眾多，從簡單到複雜，以下是三種主流方案的權衡： 方案一：定時批次處理 (Batch Polling) 寫一個排程任務（Cron Job），每隔幾分鐘就去掃描資料庫，找出異動的資料，然後批次更新到 Elasticsearch。 優點：實現相對簡單。 缺點：延遲性高、對主資料庫效能衝擊大。不適合需要即時搜尋的場景。 方案二：應用程式雙寫 (Dual Writes) 在應用程式程式碼中，當更新資料庫後，立刻再發一個請求去更新 Elasticsearch。 優點：邏輯直觀。 缺點：資料一致性的惡夢。如果資料庫寫入成功，但 Elasticsearch 寫入失敗怎麼辦？處理這種分散式交易的複雜度非常高，容易造成兩邊資料不一致。 方案三：變更資料擷取 (Change Data Capture, CDC) - 最佳實踐 這是現代系統中最可靠、高效的方案。它不去「查詢」資料庫，而是去「監聽」資料庫的交易日誌 (Transaction Log，如 MySQL 的 Binlog)。任何資料的改動都會被即時捕捉。 典型架構： 資料庫 Log -&gt; Debezium -&gt; Kafka -&gt; Logstash/Consumer -&gt; Elasticsearch 優點： 近乎即時：從資料變更到可被搜尋，延遲通常在毫秒或秒級。 高可靠性：基於交易日誌，確保不會遺漏任何變更。 完全解耦：同步邏輯與主應用程式完全分離，對主資料庫效能影響極小。 缺點：架構較複雜，需要引入 Debezium、Kafka 等額外元件。但對於嚴謹的生產系統而言，這份前期投入是絕對值得的。 好的，這就將一個完整的 Python + PostgreSQL + Elasticsearch 全文搜尋實戰範例，無縫地整合到我們剛才撰寫的部落格文章中。 我會在文章中新增一個**「Part 3: 實戰演練」**章節，讓理論與實踐完美結合。 … (文章前兩個部分維持不變) … 🚀 在生產 (Production) 環境：穩定壓倒一切 … (此處內容不變) … 實戰演練 - 用 Python 與 Docker Compose 打造全文搜尋 用一個具體的技術棧——Python (FastAPI)、PostgreSQL、Elasticsearch 來搭建一個文章搜尋服務。將使用 Docker Compose 來管理整個環境，並採用「應用程式雙寫」這種相對簡單的方式來進行資料同步，非常適合原型開發和快速驗證。 Step 1: 專案結構與 Docker Compose 設定 建立專案結構： fulltext-search-demo/ ├── app/ │ ├── main.py # FastAPI 應用程式 │ ├── database.py # 資料庫連線設定 │ ├── models.py # SQLAlchemy 模型 │ └── es_client.py # Elasticsearch 客戶端 ├── docker-compose.yml # 環境定義檔 └── requirements.txt # Python 依賴 requirements.txt fastapi uvicorn[standard] sqlalchemy psycopg2-binary elasticsearch docker-compose.yml 這份設定檔是整個專案的核心。它定義了四個服務：Python 應用、PostgreSQL 資料庫、Elasticsearch 和 Kibana。 version: &#x27;3.8&#x27; services: # Python FastAPI 應用程式 api: build: . container_name: search_api command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload volumes: - ./app:/app ports: - &quot;8000:8000&quot; depends_on: - db - elasticsearch # PostgreSQL 資料庫 (Source of Truth) db: image: postgres:14 container_name: postgres_db environment: - POSTGRES_USER=user - POSTGRES_PASSWORD=password - POSTGRES_DB=blogdb volumes: - postgres_data:/var/lib/postgresql/data ports: - &quot;5432:5432&quot; # Elasticsearch 服務 elasticsearch: image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1 container_name: es01 environment: - discovery.type=single-node - xpack.security.enabled=false - ELASTIC_PASSWORD=changeme # 即使安全關閉，也最好設定 ports: - &quot;9200:9200&quot; volumes: - es_data:/usr/share/elasticsearch/data # Kibana 服務 (可選，但強烈推薦) kibana: image: docker.elastic.co/kibana/kibana:8.11.1 container_name: kibana01 ports: - &quot;5601:5601&quot; depends_on: - elasticsearch volumes: postgres_data: es_data: 在專案根目錄下，還需要一個 Dockerfile 來建置 Python 應用映像檔： FROM python:3.9-slim WORKDIR /app COPY requirements.txt . RUN pip install --no-cache-dir -r requirements.txt COPY ./app /app Step 2: 撰寫 Python 應用程式 現在來填充 app/ 目錄下的 Python 檔案。 database.py - 設定 PostgreSQL 連線 from sqlalchemy import create_engine from sqlalchemy.ext.declarative import declarative_base from sqlalchemy.orm import sessionmaker DATABASE_URL = &quot;postgresql://user:password@db/blogdb&quot; engine = create_engine(DATABASE_URL) SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine) Base = declarative_base() def get_db(): db = SessionLocal() try: yield db finally: db.close() models.py - 定義我們的文章模型 from sqlalchemy import Column, Integer, String, Text from .database import Base class Article(Base): __tablename__ = &quot;articles&quot; id = Column(Integer, primary_key=True, index=True) title = Column(String, index=True) content = Column(Text) es_client.py - 設定 Elasticsearch 連線 from elasticsearch import Elasticsearch # 連接到 Docker Compose 中定義的 elasticsearch 服務 es = Elasticsearch(&quot;http://elasticsearch:9200&quot;) INDEX_NAME = &quot;articles&quot; def create_es_index(): &quot;&quot;&quot;如果索引不存在，則建立它&quot;&quot;&quot; if not es.indices.exists(index=INDEX_NAME): es.indices.create(index=INDEX_NAME) print(f&quot;Index &#x27;&#123;INDEX_NAME&#125;&#x27; created.&quot;) main.py - 應用程式主邏輯 (FastAPI) 這是最關鍵的部分。將實現兩個主要功能： 建立文章：同時寫入 PostgreSQL 和 Elasticsearch (雙寫)。 搜尋文章：從 Elasticsearch 中進行全文搜尋。 from fastapi import FastAPI, Depends, HTTPException from sqlalchemy.orm import Session from typing import List from . import models, es_client from .database import engine, get_db # 建立資料庫表格 models.Base.metadata.create_all(bind=engine) app = FastAPI() @app.on_event(&quot;startup&quot;) def on_startup(): # 應用啟動時確保 Elasticsearch 索引存在 es_client.create_es_index() # --- API Endpoints --- @app.post(&quot;/articles/&quot;) def create_article(title: str, content: str, db: Session = Depends(get_db)): &quot;&quot;&quot; 建立新文章：同時寫入 PostgreSQL 和 Elasticsearch &quot;&quot;&quot; # 1. 寫入 PostgreSQL (Source of Truth) db_article = models.Article(title=title, content=content) db.add(db_article) db.commit() db.refresh(db_article) # 2. 寫入 Elasticsearch es_doc = &#123; &quot;db_id&quot;: db_article.id, &quot;title&quot;: db_article.title, &quot;content&quot;: db_article.content &#125; es_client.es.index(index=es_client.INDEX_NAME, id=db_article.id, document=es_doc) return &#123;&quot;message&quot;: &quot;Article created successfully&quot;, &quot;article_id&quot;: db_article.id&#125; @app.get(&quot;/search/&quot;) def search_articles(q: str): &quot;&quot;&quot; 從 Elasticsearch 進行全文搜尋 &quot;&quot;&quot; if not q: return &#123;&quot;results&quot;: []&#125; # 使用 match query 進行全文搜尋 query = &#123; &quot;query&quot;: &#123; &quot;multi_match&quot;: &#123; &quot;query&quot;: q, &quot;fields&quot;: [&quot;title&quot;, &quot;content&quot;] &#125; &#125; &#125; response = es_client.es.search(index=es_client.INDEX_NAME, body=query) # 整理回傳結果 hits = [hit[&#x27;_source&#x27;] for hit in response[&#x27;hits&#x27;][&#x27;hits&#x27;]] return &#123;&quot;results&quot;: hits&#125; Step 3: 啟動並測試 在專案根目錄下，執行 docker compose up --build。Docker 將會建置 Python 映像檔並啟動所有四個容器。 等待所有服務啟動完成。 建立文章：使用 curl 或 API 測試工具 (如 Postman) 呼叫 POST http://localhost:8000/articles/。curl -X POST &quot;http://localhost:8000/articles/?title=Hello%20Elasticsearch&amp;content=This%20is%20a%20test%20about%20the%20powerful%20search%20capabilities.&quot; curl -X POST &quot;http://localhost:8000/articles/?title=Python%20Best%20Practices&amp;content=Learn%20how%20to%20write%20clean%20and%20efficient%20code.&quot; 驗證資料： 可以連線到 PostgreSQL 查看 articles 表格中是否有資料。 打開瀏覽器訪問 Kibana (http://localhost:5601)，使用開發工具 (Dev Tools) 查詢 Elasticsearch 中的資料：GET /articles/_search 進行搜尋：呼叫搜尋 API。# 搜尋 &quot;powerful search&quot; curl &quot;http://localhost:8000/search/?q=powerful%20search&quot; # 回傳第一篇文章 # 搜尋 &quot;python code&quot; curl &quot;http://localhost:8000/search/?q=python%20code&quot; # 回傳第二篇文章 這個範例展示了如何將多個服務整合在一起，並實現了核心的「雙寫」同步邏輯。雖然在生產環境中會選擇更穩健的 CDC 方案，但這個範例已經鋪平了通往全文搜尋功能的康莊大道。 結論 開發階段：採用 Docker Compose，享受快速迭代的便利。 生產部署：評估使用 Elastic Cloud 或其他託管服務，將寶貴時間專注在業務邏輯上，而非基礎設施的維運。 資料同步：將 SQL 資料庫視為「真實來源」，僅同步必要的資料子集。優先研究並導入基於 CDC（Change Data Capture）的同步架構，為應用提供最即時、最可靠的搜尋體驗。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/11/11/Elasticsearch%20%E7%9A%84%E9%83%A8%E7%BD%B2%E8%88%87%E8%B3%87%E6%96%99%E5%90%8C%E6%AD%A5%E5%AF%A6%E6%88%B0%E6%8C%87%E5%8D%97/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1344,92 +1430,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/10/20/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20SOLID%20%E5%8E%9F%E5%89%87%20%E6%89%93%E9%80%A0%E7%A9%A9%E5%81%A5%E5%8F%AF%E7%B6%AD%E8%AD%B7%E7%9A%84%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91%E8%A8%AD%E8%A8%88/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/18/%E8%B3%87%E6%96%99%E5%BA%AB%E5%A6%82%E4%BD%95%E5%9C%A8%E7%A3%81%E7%A2%9F%E4%B8%8A%E5%84%B2%E5%AD%98%E8%B3%87%E6%96%99%E4%B8%A6%E9%80%8F%E9%81%8E%20SQL%20%E9%AB%98%E6%95%88%E6%9F%A5%E8%A9%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/10/18/%E8%B3%87%E6%96%99%E5%BA%AB%E5%A6%82%E4%BD%95%E5%9C%A8%E7%A3%81%E7%A2%9F%E4%B8%8A%E5%84%B2%E5%AD%98%E8%B3%87%E6%96%99%E4%B8%A6%E9%80%8F%E9%81%8E%20SQL%20%E9%AB%98%E6%95%88%E6%9F%A5%E8%A9%A2/" class="post-title-link" itemprop="url">
-              深入底層：資料庫如何在磁碟上儲存資料並透過 SQL 高效查詢？
-            </a>
-            <a href="/my-blog/2025/10/18/%E8%B3%87%E6%96%99%E5%BA%AB%E5%A6%82%E4%BD%95%E5%9C%A8%E7%A3%81%E7%A2%9F%E4%B8%8A%E5%84%B2%E5%AD%98%E8%B3%87%E6%96%99%E4%B8%A6%E9%80%8F%E9%81%8E%20SQL%20%E9%AB%98%E6%95%88%E6%9F%A5%E8%A9%A2/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-10-18 00:00:00 / 修改時間：23:33:42" itemprop="dateCreated datePublished" datetime="2025-10-18T00:00:00+08:00">2025-10-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">身為開發者，我們使用 SELECT、INSERT 等 SQL 語法與資料庫互動，但是否曾深入思考：當執行一條查詢時，資料庫的「底層」究竟發生了什麼事？資料表中的數百萬筆紀錄，實際上是以何種形式存在硬碟上？為什麼一個簡單的索引就能讓查詢速度產生天壤之別？ 本篇文章將深入資料庫的儲存核心，從磁碟的物理結構開始，逐步揭開資料儲存的神秘面紗，並解析強大的 B-tree/B+ tree 索引是如何幫助 SQL 實現高效的資料操作。 資料實際儲存在哪裡？ 當資料儲存在資料庫（如 MySQL 或 PostgreSQL）中時，資料最終是以區塊（Blocks）的形式儲存在磁碟（Disk）上。 磁碟結構與資料單位 磁碟的組成： 磁碟由多個同心圓（邏輯圓圈）組成，這些圓圈稱為磁軌（Tracks）。 區塊/扇區 (Blocks/Sectors)： 磁軌進一步被劃分成扇區（Sectors）。磁軌和扇區的交集部分就是區塊（Blocks）。 資料儲存單位： 資料庫（DBMS）中的資料總是以區塊為單位進行讀取和寫入。一個區塊的大小通常是固定的（例如，出於研究目的，假設為 512 位元組；但在實際資料庫中，例如 PostgreSQL，區塊大小通常為 8K）。 區塊位址： 磁碟上的任何位置都可以透過磁軌號碼和扇區號碼來定位，這就是區塊位址（Block Address）。若要存取區塊中的特定位元組，還需要知道偏移量（Offset）。DBMS 透過這個位址來精準定位資料 從資料表到區塊的映射 資料表 (Table) 在儲存時，會被 DBMS 進行切分，塞進一個個區塊中。 資料表轉換為區塊： 資料表中的每一行（Record/Row）都有特定的位元組大小。 記錄打包： 一個資料表由多筆記錄 (Records/Rows) 組成。DBMS 會計算一條記錄的大小，然後決定一個區塊能容納多少條記錄。如果一條記錄是 128 位元組，那麼一個 512 位元組的區塊就可以儲存 4 條記錄。 分散儲存： 整個資料表會被分割並儲存到多個磁碟區塊中。例如，包含 100 條記錄的表可能需要 25 個區塊來儲存。 主記憶體與磁碟的關係 資料的處理並非直接在磁碟上進行。任何運算都必須遵循「磁碟 -&gt; 記憶體 -&gt; CPU」的流程： 間接存取： 資料不能直接在磁碟上進行處理。 載入 (Load)： DBMS 根據請求，將儲存資料的磁碟區塊讀取到主記憶體 (Main Memory/RAM) 中。 處理 (Process)： 應用程式的程式碼 (例如 SQL 引擎) 在記憶體中對這些資料進行操作。 寫回 (Write-back)： 如果資料被修改，更新後的區塊會被寫回到磁碟上，完成持久化。 DBMS 的核心職責之一，就是設計出一套高效的磁碟資料組織方式，以最小化昂貴的磁碟 I/O 次數。 用 SQL 語法操作資料庫時是怎麼做的？ 當使用 SQL 語法（例如 SELECT）查詢資料時，資料庫的目標是最小化磁碟 I/O（Disk Input/Output）操作。這是透過**索引（Indexing）**機制來實現的，特別是透過 B 樹 (B-tree) 和 B+ 樹 (B+ tree) 結構。 索引的必要性與功能 全表掃描的問題： 如果沒有索引，當要查詢一條記錄時，資料庫可能必須執行全表掃描（Full Table Scan），即逐一存取所有儲存該資料表的磁碟區塊。這在大資料量時非常緩慢。 索引的目的： 索引就像一本書的目錄，它是一個獨立於資料的、經過優化的資料結構，可以讓資料庫快速定位所需的資料。 索引的儲存： 索引本身也儲存在磁碟上。索引通常包含一個鍵值（Key）和一個指向資料記錄的指標（Pointer）。 B 樹與 B+ 樹作為索引 B 樹和 B+ 樹是自管理的多級索引（Self-manage Multi-level Indexing），它們是高效能資料庫索引的基礎。 透過索引進行搜尋的流程 (Search Operation) 當執行帶有 WHERE 條件的查詢時，DBMS 的執行流程如下： 搜尋索引： 資料庫從 B 樹或 B+ 樹的**根節點（Root Node）**開始。 節點遍歷： 根據查詢的鍵值（Key，例如 1007）與當前節點中的鍵值進行比較，決定要沿著哪個**子指標（Child Pointer）**向下遍歷。 減少 I/O： 由於 B 樹/B+ 樹具有高分岔度（Degree），意味著一個節點可以有很多子節點。這使得樹的高度非常淺。例如，儲存上億筆記錄的索引樹，其高度可能只有 4-5 層。這也意味著，只需 4-5 次磁碟 I/O，就能從根節點遍歷到包含目標資料指標的葉節點。每往下一個層級，搜索空間就會迅速縮小。樹的高度（即層級數）非常淺，因此只需要存取極少的磁碟區塊就能找到目標。 取得記錄： B 樹： 鍵值與指向實際資料的指標（Record Pointer）可能儲存在樹的任何節點中。一旦找到鍵值，即獲得記錄指標，然後存取包含該記錄的磁碟區塊。 B+ 樹： 鍵值與實際資料（或資料指標）**只儲存在葉節點（Leaf Nodes）**中。找到葉節點後，即可取得資料。 最終，DBMS 只需讀取少數幾個索引區塊和一個資料區塊，就能完成查詢，相較於全表掃描，效能提升是指數級的。 減少 I/O 的實際效益 以 B+ 樹為例： 搜尋過程會讀取索引區塊（非葉節點），然後讀取包含實際資料的區塊。 假設一個表有 25 個資料區塊，如果使用索引，可能只需要讀取 4 個索引區塊和 1 個資料區塊，總共只需存取 5 個區塊，而不是 25 個區塊。這極大地提升了查詢速度。 寫入操作與樹的自平衡 (INSERT / DELETE) 當執行 INSERT 或 DELETE 時，DBMS 不僅要修改資料區塊，還必須同步更新索引樹，並維持其平衡： 寫入資料區塊： 將實際資料寫入或從磁碟區塊中移除。 更新索引樹： 根據 B 樹或 B+ 樹的規則，在索引中插入或刪除對應的鍵值。 維持平衡： 插入 (Insertion)： 若插入導致某個節點的鍵值數量超出上限，該節點會發生分裂 (Splitting)，並將一個中間鍵值上推 (Promoted) 至父節點。此過程可能沿著樹一路向上傳遞，最壞情況下會導致根節點分裂，使樹的高度增加一層。 刪除 (Deletion)： 若刪除導致節點的鍵值數量低於下限 (Underflow)，DBMS 會嘗試從相鄰的兄弟節點借用 (Borrowing) 鍵值，或者與兄弟節點合併 (Merging)。 這些自平衡機制確保了無論資料如何變動，索引樹總能維持極淺的高度，從而保障查詢效能的穩定。 B+ 樹在範圍查詢上的優勢 B+ Tree 相較於 B-Tree 有一個重要的優化：所有的葉節點都透過一個雙向鏈結串列 (Doubly Linked List) 連接在一起，並且是按鍵值順序排序的。 這個特性使得 B+ Tree 在處理範圍查詢 (Range Queries)（例如 WHERE age BETWEEN 20 AND 30）時極為高效： DBMS 只需透過樹結構找到範圍的起始點 (例如 age = 20)。 然後，它可以順著葉節點的鏈結串列向後掃描，直到範圍的結束點 (例如 age = 30)，而無需反覆遍歷樹的上層結構。這使得 B+ 樹在處理資料排序和掃描（Sorting and Scanning）方面更有效率。 這就是為什麼 B+ Tree 成為了現代關聯式資料庫索引結構的事實標準。 結論 從磁碟上零散的區塊，到記憶體中待處理的資料，再到 B+ Tree 索引的高效導航，我們可以看到，一個看似簡單的 SQL 查詢背後，是資料庫管理系統數十年來精心設計與優化的結果。理解這些底層原理，不僅能幫助我們寫出更高效能的 SQL，更能讓我們在面對複雜的系統設計與效能瓶頸時，擁有更深刻的洞察力。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/10/18/%E8%B3%87%E6%96%99%E5%BA%AB%E5%A6%82%E4%BD%95%E5%9C%A8%E7%A3%81%E7%A2%9F%E4%B8%8A%E5%84%B2%E5%AD%98%E8%B3%87%E6%96%99%E4%B8%A6%E9%80%8F%E9%81%8E%20SQL%20%E9%AB%98%E6%95%88%E6%9F%A5%E8%A9%A2/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>

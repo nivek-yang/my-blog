@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="在上一篇文章 《解密 Elasticsearch：不只是全文搜尋，更是強大的數據分析引擎》已經了解了 Elasticsearch 的強大之處，也透過 cURL 或 Kibana 執行了幾個基本的 CRUD 操作。這時，一個關鍵的問題浮現腦海：「在真實的專案中，該如何部署 Elasticsearch？又要如何讓現有資料庫的資料跑到 Elasticsearch 裡面去？」 本篇文章將深入探討兩個核心主">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Elasticsearch 的部署與資料同步實戰指南">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/11/11/Elasticsearch%20%E7%9A%84%E9%83%A8%E7%BD%B2%E8%88%87%E8%B3%87%E6%96%99%E5%90%8C%E6%AD%A5%E5%AF%A6%E6%88%B0%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="在上一篇文章 《解密 Elasticsearch：不只是全文搜尋，更是強大的數據分析引擎》已經了解了 Elasticsearch 的強大之處，也透過 cURL 或 Kibana 執行了幾個基本的 CRUD 操作。這時，一個關鍵的問題浮現腦海：「在真實的專案中，該如何部署 Elasticsearch？又要如何讓現有資料庫的資料跑到 Elasticsearch 裡面去？」 本篇文章將深入探討兩個核心主">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-11-10T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-11T15:54:12.878Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Database">
+<meta property="article:tag" content="Search">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/11/11/Elasticsearch%20%E7%9A%84%E9%83%A8%E7%BD%B2%E8%88%87%E8%B3%87%E6%96%99%E5%90%8C%E6%AD%A5%E5%AF%A6%E6%88%B0%E6%8C%87%E5%8D%97/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/11/11/Elasticsearch%20%E7%9A%84%E9%83%A8%E7%BD%B2%E8%88%87%E8%B3%87%E6%96%99%E5%90%8C%E6%AD%A5%E5%AF%A6%E6%88%B0%E6%8C%87%E5%8D%97/","path":"2025/11/11/Elasticsearch 的部署與資料同步實戰指南/","title":"Elasticsearch 的部署與資料同步實戰指南"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Elasticsearch 的部署與資料同步實戰指南 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">120</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">58</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cloud-Computing/">
+        Cloud Computing
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Concurrency/">
+        Concurrency
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cryptography/">
+        Cryptography
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cybersecurity/">
+        Cybersecurity
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(25)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Design-Pattern/">
+        Design Pattern
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/DevOps/">
+        DevOps
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(17)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/OOP/">
+        OOP
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Search/">
+        Search
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Serverless/">
+        Serverless
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(8)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(6)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E7%BD%AE-elasticsearch-%E5%8F%A2%E9%9B%86"><span class="nav-number">1.</span> <span class="nav-text"> 建置 Elasticsearch 叢集</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E6%9C%AC%E6%A9%9F-local-%E9%96%8B%E7%99%BC%E6%93%81%E6%8A%B1-docker-compose"><span class="nav-number">1.1.</span> <span class="nav-text"> 在本機 (Local) 開發：擁抱 Docker Compose</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E7%94%9F%E7%94%A2-production-%E7%92%B0%E5%A2%83%E9%83%A8%E7%BD%B2"><span class="nav-number">1.2.</span> <span class="nav-text"> 在生產 (Production) 環境部署</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BE%9E%E8%B3%87%E6%96%99%E5%BA%AB%E5%88%B0-elasticsearch-%E7%9A%84%E5%90%8C%E6%AD%A5%E7%AD%96%E7%95%A5"><span class="nav-number">2.</span> <span class="nav-text"> 從資料庫到 Elasticsearch 的同步策略</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%AF%A6%E7%8F%BE%E8%B3%87%E6%96%99%E5%90%8C%E6%AD%A5"><span class="nav-number">2.1.</span> <span class="nav-text"> 如何實現資料同步？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%A1%88%E4%B8%80%E5%AE%9A%E6%99%82%E6%89%B9%E6%AC%A1%E8%99%95%E7%90%86-batch-polling"><span class="nav-number">2.1.1.</span> <span class="nav-text"> 方案一：定時批次處理 (Batch Polling)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%A1%88%E4%BA%8C%E6%87%89%E7%94%A8%E7%A8%8B%E5%BC%8F%E9%9B%99%E5%AF%AB-dual-writes"><span class="nav-number">2.1.2.</span> <span class="nav-text"> 方案二：應用程式雙寫 (Dual Writes)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%A1%88%E4%B8%89%E8%AE%8A%E6%9B%B4%E8%B3%87%E6%96%99%E6%93%B7%E5%8F%96-change-data-capture-cdc-%E6%9C%80%E4%BD%B3%E5%AF%A6%E8%B8%90"><span class="nav-number">2.1.3.</span> <span class="nav-text"> 方案三：變更資料擷取 (Change Data Capture, CDC) - 最佳實踐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E7%94%9F%E7%94%A2-production-%E7%92%B0%E5%A2%83%E7%A9%A9%E5%AE%9A%E5%A3%93%E5%80%92%E4%B8%80%E5%88%87"><span class="nav-number">2.1.4.</span> <span class="nav-text"> 🚀 在生產 (Production) 環境：穩定壓倒一切</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%A6%E6%88%B0%E6%BC%94%E7%B7%B4-%E7%94%A8-python-%E8%88%87-docker-compose-%E6%89%93%E9%80%A0%E5%85%A8%E6%96%87%E6%90%9C%E5%B0%8B"><span class="nav-number">3.</span> <span class="nav-text"> 實戰演練 - 用 Python 與 Docker Compose 打造全文搜尋</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#step-1-%E5%B0%88%E6%A1%88%E7%B5%90%E6%A7%8B%E8%88%87-docker-compose-%E8%A8%AD%E5%AE%9A"><span class="nav-number">3.1.</span> <span class="nav-text"> Step 1: 專案結構與 Docker Compose 設定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#step-2-%E6%92%B0%E5%AF%AB-python-%E6%87%89%E7%94%A8%E7%A8%8B%E5%BC%8F"><span class="nav-number">3.2.</span> <span class="nav-text"> Step 2: 撰寫 Python 應用程式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#step-3-%E5%95%9F%E5%8B%95%E4%B8%A6%E6%B8%AC%E8%A9%A6"><span class="nav-number">3.3.</span> <span class="nav-text"> Step 3: 啟動並測試</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">4.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">120</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/11/11/Elasticsearch%20%E7%9A%84%E9%83%A8%E7%BD%B2%E8%88%87%E8%B3%87%E6%96%99%E5%90%8C%E6%AD%A5%E5%AF%A6%E6%88%B0%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Elasticsearch 的部署與資料同步實戰指南 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Elasticsearch 的部署與資料同步實戰指南
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-11-11 00:00:00 / 修改時間：23:54:12" itemprop="dateCreated datePublished" datetime="2025-11-11T00:00:00+08:00">2025-11-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在上一篇文章 《解密 Elasticsearch：不只是全文搜尋，更是強大的數據分析引擎》已經了解了 Elasticsearch 的強大之處，也透過 cURL 或 Kibana 執行了幾個基本的 CRUD 操作。這時，一個關鍵的問題浮現腦海：「在真實的專案中，該如何部署 Elasticsearch？又要如何讓現有資料庫的資料跑到 Elasticsearch 裡面去？」</p>
+<p>本篇文章將深入探討兩個核心主題：</p>
+<ol>
+<li><strong>環境建置</strong>：從本機開發到生產環境，選擇最適合的部署策略。</li>
+<li><strong>資料同步</strong>：探討將資料從主資料庫（如 SQL）導入 Elasticsearch 的主流架構與最佳實踐。</li>
+</ol>
+<hr />
+<h1 id="建置-elasticsearch-叢集"><a class="markdownIt-Anchor" href="#建置-elasticsearch-叢集"></a> 建置 Elasticsearch 叢集</h1>
+<p>部署 Elasticsearch 從來不是「one-size-fits-all」。目標是快速原型開發，還是建立一個穩如磐石的生產系統，將決定你選擇的道路。</p>
+<h2 id="在本機-local-開發擁抱-docker-compose"><a class="markdownIt-Anchor" href="#在本機-local-開發擁抱-docker-compose"></a> 在本機 (Local) 開發：擁抱 Docker Compose</h2>
+<p>在開發階段，追求的是<strong>速度、一致性與隔離性</strong>。沒有什麼比 Docker Compose 更適合這個任務了，用一個設定檔，就能一鍵啟動 Elasticsearch、Kibana 以及未來可能需要的任何相依服務。</p>
+<p><strong>最佳實踐：</strong> 使用 Docker Compose 將環境容器化。</p>
+<ul>
+<li><strong>為何選擇它？</strong>
+<ul>
+<li><strong>環境一致性</strong>：告別「在我電腦上可以跑」的窘境，確保團隊成員使用完全相同的環境。</li>
+<li><strong>快速啟動與銷毀</strong>：<code>docker compose up</code> 啟動所有服務，<code>docker compose down -v</code> 徹底清除，不留任何殘跡。</li>
+<li><strong>版本控制</strong>：在 YAML 檔中輕鬆切換 Elasticsearch 版本，進行相容性測試。</li>
+</ul>
+</li>
+</ul>
+<p><strong><code>docker-compose.yml</code> 範例：</strong></p>
+<pre class="highlight"><code class="yaml"><span class="hljs-attr">version:</span> <span class="hljs-string">&#x27;3.7&#x27;</span>
+<span class="hljs-attr">services:</span>
+  <span class="hljs-comment"># Elasticsearch 服務</span>
+  <span class="hljs-attr">elasticsearch:</span>
+    <span class="hljs-attr">image:</span> <span class="hljs-string">docker.elastic.co/elasticsearch/elasticsearch:8.11.1</span> <span class="hljs-comment"># 明確指定版本</span>
+    <span class="hljs-attr">container_name:</span> <span class="hljs-string">es01</span>
+    <span class="hljs-attr">environment:</span>
+      <span class="hljs-comment"># 設定為單節點模式</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">discovery.type=single-node</span>
+      <span class="hljs-comment"># 開發時可關閉安全驗證以求方便，生產環境切勿如此</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">xpack.security.enabled=false</span>
+    <span class="hljs-attr">ports:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;9200:9200&quot;</span> <span class="hljs-comment"># REST API</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;9300:9300&quot;</span> <span class="hljs-comment"># 內部節點通訊</span>
+    <span class="hljs-attr">volumes:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">es_data:/usr/share/elasticsearch/data</span>
+
+  <span class="hljs-comment"># Kibana 服務</span>
+  <span class="hljs-attr">kibana:</span>
+    <span class="hljs-attr">image:</span> <span class="hljs-string">docker.elastic.co/kibana/kibana:8.11.1</span>
+    <span class="hljs-attr">container_name:</span> <span class="hljs-string">kibana01</span>
+    <span class="hljs-attr">ports:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;5601:5601&quot;</span>
+    <span class="hljs-attr">depends_on:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">elasticsearch</span> <span class="hljs-comment"># 確保 ES 啟動後再啟動 Kibana</span>
+
+<span class="hljs-comment"># Docker Volume，用於持久化 ES 資料</span>
+<span class="hljs-attr">volumes:</span>
+  <span class="hljs-attr">es_data:</span>
+</code></pre>
+<p>將以上內容存為 <code>docker-compose.yml</code>，在本機執行 <code>docker compose up</code>，一個完整的開發環境就緒了。</p>
+<h2 id="在生產-production-環境部署"><a class="markdownIt-Anchor" href="#在生產-production-環境部署"></a> 在生產 (Production) 環境部署</h2>
+<p>生產環境的關鍵詞是：<strong>高可用、可擴展、安全、易於維護</strong>。除非有一個經驗豐富的 SRE/DevOps 團隊，否則自建維運叢集將會是一場惡夢。</p>
+<p><strong>最佳實踐：</strong> 優先選擇託管服務 (Managed Service)。</p>
+<p>將叢集的監控、備份、升級、擴展等繁重工作，交給最了解 Elasticsearch 的專家。</p>
+<ol>
+<li><strong>Elastic Cloud</strong>：官方提供的服務，功能最完整，與最新版本同步，並提供專業技術支援。支援部署在 AWS, GCP, Azure。</li>
+<li><strong>雲端供應商服務</strong>：如 AWS OpenSearch Service、GCP 的 Elasticsearch Service 等。優點是與該雲端平台的生態系整合度高。</li>
+</ol>
+<p><strong>次要選擇：自建 (Self-Hosted)</strong><br />
+僅在特殊合規要求或內部技術力雄厚時考慮。</p>
+<ul>
+<li><strong>在 Kubernetes 上部署 (ECK Operator)</strong>：這是現代自建的首選。Elastic 官方提供的 ECK Operator 能大幅簡化在 K8s 上部署、管理和升級的複雜度。</li>
+<li><strong>在虛擬機/實體機上部署</strong>：使用 Ansible, Terraform 等自動化工具進行部署。需要投入大量心力處理叢集維運的各種細節。</li>
+</ul>
+<hr />
+<h1 id="從資料庫到-elasticsearch-的同步策略"><a class="markdownIt-Anchor" href="#從資料庫到-elasticsearch-的同步策略"></a> 從資料庫到 Elasticsearch 的同步策略</h1>
+<blockquote>
+<p>「需要把整個資料庫都同步過去嗎？」</p>
+</blockquote>
+<p>答案是：<strong>千萬不要！</strong></p>
+<p>請牢記這個核心架構原則：<strong>主資料庫（SQL DB）是「唯一真實來源 (Source of Truth)」，而 Elasticsearch 是為了特定目的（搜尋、分析）建立的「特化索引 (Specialized Index)」。</strong></p>
+<p>只需要將<strong>需要被搜尋和分析的資料子集</strong>同步過去。例如，商品的名稱、描述、分類、價格，絕不是使用者的密碼雜湊值或內部的訂單狀態碼。</p>
+<h2 id="如何實現資料同步"><a class="markdownIt-Anchor" href="#如何實現資料同步"></a> 如何實現資料同步？</h2>
+<p>資料同步的方案眾多，從簡單到複雜，以下是三種主流方案的權衡：</p>
+<h3 id="方案一定時批次處理-batch-polling"><a class="markdownIt-Anchor" href="#方案一定時批次處理-batch-polling"></a> 方案一：定時批次處理 (Batch Polling)</h3>
+<p>寫一個排程任務（Cron Job），每隔幾分鐘就去掃描資料庫，找出異動的資料，然後批次更新到 Elasticsearch。</p>
+<ul>
+<li><strong>優點</strong>：實現相對簡單。</li>
+<li><strong>缺點</strong>：<strong>延遲性高</strong>、對主資料庫<strong>效能衝擊大</strong>。不適合需要即時搜尋的場景。</li>
+</ul>
+<h3 id="方案二應用程式雙寫-dual-writes"><a class="markdownIt-Anchor" href="#方案二應用程式雙寫-dual-writes"></a> 方案二：應用程式雙寫 (Dual Writes)</h3>
+<p>在應用程式程式碼中，當更新資料庫後，立刻再發一個請求去更新 Elasticsearch。</p>
+<ul>
+<li><strong>優點</strong>：邏輯直觀。</li>
+<li><strong>缺點</strong>：<strong>資料一致性的惡夢</strong>。如果資料庫寫入成功，但 Elasticsearch 寫入失敗怎麼辦？處理這種分散式交易的複雜度非常高，容易造成兩邊資料不一致。</li>
+</ul>
+<h3 id="方案三變更資料擷取-change-data-capture-cdc-最佳實踐"><a class="markdownIt-Anchor" href="#方案三變更資料擷取-change-data-capture-cdc-最佳實踐"></a> 方案三：變更資料擷取 (Change Data Capture, CDC) - 最佳實踐</h3>
+<p>這是現代系統中最可靠、高效的方案。它不去「查詢」資料庫，而是去「監聽」資料庫的交易日誌 (Transaction Log，如 MySQL 的 Binlog)。任何資料的改動都會被即時捕捉。</p>
+<ul>
+<li>
+<p><strong>典型架構</strong>：<br />
+<code>資料庫 Log -&gt; Debezium -&gt; Kafka -&gt; Logstash/Consumer -&gt; Elasticsearch</code></p>
+</li>
+<li>
+<p><strong>優點</strong>：</p>
+<ul>
+<li><strong>近乎即時</strong>：從資料變更到可被搜尋，延遲通常在毫秒或秒級。</li>
+<li><strong>高可靠性</strong>：基於交易日誌，確保不會遺漏任何變更。</li>
+<li><strong>完全解耦</strong>：同步邏輯與主應用程式完全分離，對主資料庫效能影響極小。</li>
+</ul>
+</li>
+<li>
+<p><strong>缺點</strong>：架構較複雜，需要引入 Debezium、Kafka 等額外元件。但對於嚴謹的生產系統而言，這份前期投入是絕對值得的。</p>
+</li>
+</ul>
+<hr />
+<p>好的，這就將一個完整的 Python + PostgreSQL + Elasticsearch 全文搜尋實戰範例，無縫地整合到我們剛才撰寫的部落格文章中。</p>
+<p>我會在文章中新增一個**「Part 3: 實戰演練」**章節，讓理論與實踐完美結合。</p>
+<hr />
+<p>… (文章前兩個部分維持不變) …</p>
+<h3 id="在生產-production-環境穩定壓倒一切"><a class="markdownIt-Anchor" href="#在生產-production-環境穩定壓倒一切"></a> 🚀 在生產 (Production) 環境：穩定壓倒一切</h3>
+<p>… (此處內容不變) …</p>
+<hr />
+<h1 id="實戰演練-用-python-與-docker-compose-打造全文搜尋"><a class="markdownIt-Anchor" href="#實戰演練-用-python-與-docker-compose-打造全文搜尋"></a> 實戰演練 - 用 Python 與 Docker Compose 打造全文搜尋</h1>
+<p>用一個具體的技術棧——<strong>Python (FastAPI)、PostgreSQL、Elasticsearch</strong> 來搭建一個文章搜尋服務。將使用 Docker Compose 來管理整個環境，並採用「應用程式雙寫」這種相對簡單的方式來進行資料同步，非常適合原型開發和快速驗證。</p>
+<h2 id="step-1-專案結構與-docker-compose-設定"><a class="markdownIt-Anchor" href="#step-1-專案結構與-docker-compose-設定"></a> Step 1: 專案結構與 Docker Compose 設定</h2>
+<p>建立專案結構：</p>
+<pre class="highlight"><code class="">fulltext-search-demo/
+├── app/
+│   ├── main.py         # FastAPI 應用程式
+│   ├── database.py     # 資料庫連線設定
+│   ├── models.py       # SQLAlchemy 模型
+│   └── es_client.py    # Elasticsearch 客戶端
+├── docker-compose.yml  # 環境定義檔
+└── requirements.txt    # Python 依賴
+</code></pre>
+<p><strong><code>requirements.txt</code></strong></p>
+<pre class="highlight"><code class="txt">fastapi
+uvicorn[standard]
+sqlalchemy
+psycopg2-binary
+elasticsearch
+</code></pre>
+<p><strong><code>docker-compose.yml</code></strong><br />
+這份設定檔是整個專案的核心。它定義了四個服務：Python 應用、PostgreSQL 資料庫、Elasticsearch 和 Kibana。</p>
+<pre class="highlight"><code class="yaml"><span class="hljs-attr">version:</span> <span class="hljs-string">&#x27;3.8&#x27;</span>
+<span class="hljs-attr">services:</span>
+  <span class="hljs-comment"># Python FastAPI 應用程式</span>
+  <span class="hljs-attr">api:</span>
+    <span class="hljs-attr">build:</span> <span class="hljs-string">.</span>
+    <span class="hljs-attr">container_name:</span> <span class="hljs-string">search_api</span>
+    <span class="hljs-attr">command:</span> <span class="hljs-string">uvicorn</span> <span class="hljs-string">app.main:app</span> <span class="hljs-string">--host</span> <span class="hljs-number">0.0</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span> <span class="hljs-string">--port</span> <span class="hljs-number">8000</span> <span class="hljs-string">--reload</span>
+    <span class="hljs-attr">volumes:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">./app:/app</span>
+    <span class="hljs-attr">ports:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;8000:8000&quot;</span>
+    <span class="hljs-attr">depends_on:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">db</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">elasticsearch</span>
+
+  <span class="hljs-comment"># PostgreSQL 資料庫 (Source of Truth)</span>
+  <span class="hljs-attr">db:</span>
+    <span class="hljs-attr">image:</span> <span class="hljs-string">postgres:14</span>
+    <span class="hljs-attr">container_name:</span> <span class="hljs-string">postgres_db</span>
+    <span class="hljs-attr">environment:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">POSTGRES_USER=user</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">POSTGRES_PASSWORD=password</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">POSTGRES_DB=blogdb</span>
+    <span class="hljs-attr">volumes:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">postgres_data:/var/lib/postgresql/data</span>
+    <span class="hljs-attr">ports:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;5432:5432&quot;</span>
+
+  <span class="hljs-comment"># Elasticsearch 服務</span>
+  <span class="hljs-attr">elasticsearch:</span>
+    <span class="hljs-attr">image:</span> <span class="hljs-string">docker.elastic.co/elasticsearch/elasticsearch:8.11.1</span>
+    <span class="hljs-attr">container_name:</span> <span class="hljs-string">es01</span>
+    <span class="hljs-attr">environment:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">discovery.type=single-node</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">xpack.security.enabled=false</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">ELASTIC_PASSWORD=changeme</span> <span class="hljs-comment"># 即使安全關閉，也最好設定</span>
+    <span class="hljs-attr">ports:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;9200:9200&quot;</span>
+    <span class="hljs-attr">volumes:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">es_data:/usr/share/elasticsearch/data</span>
+
+  <span class="hljs-comment"># Kibana 服務 (可選，但強烈推薦)</span>
+  <span class="hljs-attr">kibana:</span>
+    <span class="hljs-attr">image:</span> <span class="hljs-string">docker.elastic.co/kibana/kibana:8.11.1</span>
+    <span class="hljs-attr">container_name:</span> <span class="hljs-string">kibana01</span>
+    <span class="hljs-attr">ports:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;5601:5601&quot;</span>
+    <span class="hljs-attr">depends_on:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">elasticsearch</span>
+
+<span class="hljs-attr">volumes:</span>
+  <span class="hljs-attr">postgres_data:</span>
+  <span class="hljs-attr">es_data:</span>
+</code></pre>
+<p>在專案根目錄下，還需要一個 <code>Dockerfile</code> 來建置 Python 應用映像檔：</p>
+<pre class="highlight"><code class="Dockerfile"><span class="hljs-keyword">FROM</span> python:<span class="hljs-number">3.9</span>-slim
+<span class="hljs-keyword">WORKDIR</span><span class="language-bash"> /app</span>
+<span class="hljs-keyword">COPY</span><span class="language-bash"> requirements.txt .</span>
+<span class="hljs-keyword">RUN</span><span class="language-bash"> pip install --no-cache-dir -r requirements.txt</span>
+<span class="hljs-keyword">COPY</span><span class="language-bash"> ./app /app</span>
+</code></pre>
+<h2 id="step-2-撰寫-python-應用程式"><a class="markdownIt-Anchor" href="#step-2-撰寫-python-應用程式"></a> Step 2: 撰寫 Python 應用程式</h2>
+<p>現在來填充 <code>app/</code> 目錄下的 Python 檔案。</p>
+<p><strong><code>database.py</code></strong> - 設定 PostgreSQL 連線</p>
+<pre class="highlight"><code class="python"><span class="hljs-keyword">from</span> sqlalchemy <span class="hljs-keyword">import</span> create_engine
+<span class="hljs-keyword">from</span> sqlalchemy.ext.declarative <span class="hljs-keyword">import</span> declarative_base
+<span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> sessionmaker
+
+DATABASE_URL = <span class="hljs-string">&quot;postgresql://user:password@db/blogdb&quot;</span>
+
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=<span class="hljs-literal">False</span>, autoflush=<span class="hljs-literal">False</span>, bind=engine)
+Base = declarative_base()
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">get_db</span>():
+    db = SessionLocal()
+    <span class="hljs-keyword">try</span>:
+        <span class="hljs-keyword">yield</span> db
+    <span class="hljs-keyword">finally</span>:
+        db.close()
+</code></pre>
+<p><strong><code>models.py</code></strong> - 定義我們的文章模型</p>
+<pre class="highlight"><code class="python"><span class="hljs-keyword">from</span> sqlalchemy <span class="hljs-keyword">import</span> Column, Integer, String, Text
+<span class="hljs-keyword">from</span> .database <span class="hljs-keyword">import</span> Base
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Article</span>(<span class="hljs-title class_ inherited__">Base</span>):
+    __tablename__ = <span class="hljs-string">&quot;articles&quot;</span>
+    <span class="hljs-built_in">id</span> = Column(Integer, primary_key=<span class="hljs-literal">True</span>, index=<span class="hljs-literal">True</span>)
+    title = Column(String, index=<span class="hljs-literal">True</span>)
+    content = Column(Text)
+</code></pre>
+<p><strong><code>es_client.py</code></strong> - 設定 Elasticsearch 連線</p>
+<pre class="highlight"><code class="python"><span class="hljs-keyword">from</span> elasticsearch <span class="hljs-keyword">import</span> Elasticsearch
+
+<span class="hljs-comment"># 連接到 Docker Compose 中定義的 elasticsearch 服務</span>
+es = Elasticsearch(<span class="hljs-string">&quot;http://elasticsearch:9200&quot;</span>)
+
+INDEX_NAME = <span class="hljs-string">&quot;articles&quot;</span>
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">create_es_index</span>():
+    <span class="hljs-string">&quot;&quot;&quot;如果索引不存在，則建立它&quot;&quot;&quot;</span>
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> es.indices.exists(index=INDEX_NAME):
+        es.indices.create(index=INDEX_NAME)
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Index &#x27;<span class="hljs-subst">&#123;INDEX_NAME&#125;</span>&#x27; created.&quot;</span>)
+</code></pre>
+<p><strong><code>main.py</code></strong> - 應用程式主邏輯 (FastAPI)<br />
+這是最關鍵的部分。將實現兩個主要功能：</p>
+<ol>
+<li><strong>建立文章</strong>：同時寫入 PostgreSQL 和 Elasticsearch (雙寫)。</li>
+<li><strong>搜尋文章</strong>：從 Elasticsearch 中進行全文搜尋。</li>
+</ol>
+<pre class="highlight"><code class="python"><span class="hljs-keyword">from</span> fastapi <span class="hljs-keyword">import</span> FastAPI, Depends, HTTPException
+<span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> Session
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> <span class="hljs-type">List</span>
+
+<span class="hljs-keyword">from</span> . <span class="hljs-keyword">import</span> models, es_client
+<span class="hljs-keyword">from</span> .database <span class="hljs-keyword">import</span> engine, get_db
+
+<span class="hljs-comment"># 建立資料庫表格</span>
+models.Base.metadata.create_all(bind=engine)
+
+app = FastAPI()
+
+<span class="hljs-meta">@app.on_event(<span class="hljs-params"><span class="hljs-string">&quot;startup&quot;</span></span>)</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">on_startup</span>():
+    <span class="hljs-comment"># 應用啟動時確保 Elasticsearch 索引存在</span>
+    es_client.create_es_index()
+
+<span class="hljs-comment"># --- API Endpoints ---</span>
+
+<span class="hljs-meta">@app.post(<span class="hljs-params"><span class="hljs-string">&quot;/articles/&quot;</span></span>)</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">create_article</span>(<span class="hljs-params">title: <span class="hljs-built_in">str</span>, content: <span class="hljs-built_in">str</span>, db: Session = Depends(<span class="hljs-params">get_db</span>)</span>):
+    <span class="hljs-string">&quot;&quot;&quot;
+    建立新文章：同時寫入 PostgreSQL 和 Elasticsearch
+    &quot;&quot;&quot;</span>
+    <span class="hljs-comment"># 1. 寫入 PostgreSQL (Source of Truth)</span>
+    db_article = models.Article(title=title, content=content)
+    db.add(db_article)
+    db.commit()
+    db.refresh(db_article)
+
+    <span class="hljs-comment"># 2. 寫入 Elasticsearch</span>
+    es_doc = &#123;
+        <span class="hljs-string">&quot;db_id&quot;</span>: db_article.<span class="hljs-built_in">id</span>,
+        <span class="hljs-string">&quot;title&quot;</span>: db_article.title,
+        <span class="hljs-string">&quot;content&quot;</span>: db_article.content
+    &#125;
+    es_client.es.index(index=es_client.INDEX_NAME, <span class="hljs-built_in">id</span>=db_article.<span class="hljs-built_in">id</span>, document=es_doc)
+  
+    <span class="hljs-keyword">return</span> &#123;<span class="hljs-string">&quot;message&quot;</span>: <span class="hljs-string">&quot;Article created successfully&quot;</span>, <span class="hljs-string">&quot;article_id&quot;</span>: db_article.<span class="hljs-built_in">id</span>&#125;
+
+<span class="hljs-meta">@app.get(<span class="hljs-params"><span class="hljs-string">&quot;/search/&quot;</span></span>)</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">search_articles</span>(<span class="hljs-params">q: <span class="hljs-built_in">str</span></span>):
+    <span class="hljs-string">&quot;&quot;&quot;
+    從 Elasticsearch 進行全文搜尋
+    &quot;&quot;&quot;</span>
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> q:
+        <span class="hljs-keyword">return</span> &#123;<span class="hljs-string">&quot;results&quot;</span>: []&#125;
+
+    <span class="hljs-comment"># 使用 match query 進行全文搜尋</span>
+    query = &#123;
+        <span class="hljs-string">&quot;query&quot;</span>: &#123;
+            <span class="hljs-string">&quot;multi_match&quot;</span>: &#123;
+                <span class="hljs-string">&quot;query&quot;</span>: q,
+                <span class="hljs-string">&quot;fields&quot;</span>: [<span class="hljs-string">&quot;title&quot;</span>, <span class="hljs-string">&quot;content&quot;</span>]
+            &#125;
+        &#125;
+    &#125;
+  
+    response = es_client.es.search(index=es_client.INDEX_NAME, body=query)
+  
+    <span class="hljs-comment"># 整理回傳結果</span>
+    hits = [hit[<span class="hljs-string">&#x27;_source&#x27;</span>] <span class="hljs-keyword">for</span> hit <span class="hljs-keyword">in</span> response[<span class="hljs-string">&#x27;hits&#x27;</span>][<span class="hljs-string">&#x27;hits&#x27;</span>]]
+    <span class="hljs-keyword">return</span> &#123;<span class="hljs-string">&quot;results&quot;</span>: hits&#125;
+</code></pre>
+<h2 id="step-3-啟動並測試"><a class="markdownIt-Anchor" href="#step-3-啟動並測試"></a> Step 3: 啟動並測試</h2>
+<ol>
+<li>在專案根目錄下，執行 <code>docker compose up --build</code>。Docker 將會建置 Python 映像檔並啟動所有四個容器。</li>
+<li>等待所有服務啟動完成。</li>
+<li><strong>建立文章</strong>：使用 <code>curl</code> 或 API 測試工具 (如 Postman) 呼叫 <code>POST http://localhost:8000/articles/</code>。<pre class="highlight"><code class="bash">curl -X POST <span class="hljs-string">&quot;http://localhost:8000/articles/?title=Hello%20Elasticsearch&amp;content=This%20is%20a%20test%20about%20the%20powerful%20search%20capabilities.&quot;</span>
+
+curl -X POST <span class="hljs-string">&quot;http://localhost:8000/articles/?title=Python%20Best%20Practices&amp;content=Learn%20how%20to%20write%20clean%20and%20efficient%20code.&quot;</span>
+</code></pre>
+</li>
+<li><strong>驗證資料</strong>：
+<ul>
+<li>可以連線到 PostgreSQL 查看 <code>articles</code> 表格中是否有資料。</li>
+<li>打開瀏覽器訪問 Kibana (<code>http://localhost:5601</code>)，使用開發工具 (Dev Tools) 查詢 Elasticsearch 中的資料：<pre class="highlight"><code class="json">GET /articles/_search
+</code></pre>
+</li>
+</ul>
+</li>
+<li><strong>進行搜尋</strong>：呼叫搜尋 API。<pre class="highlight"><code class="bash"><span class="hljs-comment"># 搜尋 &quot;powerful search&quot;</span>
+curl <span class="hljs-string">&quot;http://localhost:8000/search/?q=powerful%20search&quot;</span>
+<span class="hljs-comment"># 回傳第一篇文章</span>
+
+<span class="hljs-comment"># 搜尋 &quot;python code&quot;</span>
+curl <span class="hljs-string">&quot;http://localhost:8000/search/?q=python%20code&quot;</span>
+<span class="hljs-comment"># 回傳第二篇文章</span>
+</code></pre>
+</li>
+</ol>
+<p>這個範例展示了如何將多個服務整合在一起，並實現了核心的「雙寫」同步邏輯。雖然在生產環境中會選擇更穩健的 CDC 方案，但這個範例已經鋪平了通往全文搜尋功能的康莊大道。</p>
+<hr />
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<ol>
+<li><strong>開發階段</strong>：採用 <strong>Docker Compose</strong>，享受快速迭代的便利。</li>
+<li><strong>生產部署</strong>：評估使用 <strong>Elastic Cloud</strong> 或其他託管服務，將寶貴時間專注在業務邏輯上，而非基礎設施的維運。</li>
+<li><strong>資料同步</strong>：將 SQL 資料庫視為「真實來源」，僅同步必要的資料子集。優先研究並導入基於 <strong>CDC（Change Data Capture）的同步架構</strong>，為應用提供最即時、最可靠的搜尋體驗。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Database/" rel="tag"># Database</a>
+              <a href="/my-blog/tags/Search/" rel="tag"># Search</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/11/10/%E8%A7%A3%E5%AF%86%20Elasticsearch%20%E4%B8%8D%E5%8F%AA%E6%98%AF%E5%85%A8%E6%96%87%E6%90%9C%E5%B0%8B%20%E6%9B%B4%E6%98%AF%E5%BC%B7%E5%A4%A7%E7%9A%84%E6%95%B8%E6%93%9A%E5%88%86%E6%9E%90%E5%BC%95%E6%93%8E/" rel="prev" title="解密 Elasticsearch：不只是全文搜尋，更是強大的數據分析引擎">
+                  <i class="fa fa-angle-left"></i> 解密 Elasticsearch：不只是全文搜尋，更是強大的數據分析引擎
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
