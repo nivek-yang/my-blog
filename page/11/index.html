@@ -105,8 +105,8 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">120</span></a>
-  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">58</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">121</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">59</span></a>
       <ul class="sub-menu">
   
   
@@ -323,6 +323,13 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Load-Balancer/">
         Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Logging/">
+        Logging
         <span class="post-count">(1)</span>
       </a>
     </li>
@@ -555,7 +562,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">120</span>
+          <span class="site-state-item-count">121</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -563,7 +570,7 @@
     
       <div class="site-state-item site-state-tags">
           <a href="/my-blog/tags/">
-        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-count">59</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -580,6 +587,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/05/05/Supabase%20PostgreSQL%20%E9%81%A0%E7%AB%AF%E8%B3%87%E6%96%99%E5%BA%AB%E5%BB%BA%E7%AB%8B%E8%88%87%E9%80%A3%E6%8E%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/05/05/Supabase%20PostgreSQL%20%E9%81%A0%E7%AB%AF%E8%B3%87%E6%96%99%E5%BA%AB%E5%BB%BA%E7%AB%8B%E8%88%87%E9%80%A3%E6%8E%A5/" class="post-title-link" itemprop="url">
+              Supabase PostgreSQL 遠端資料庫建立與連接
+            </a>
+            <a href="/my-blog/2025/05/05/Supabase%20PostgreSQL%20%E9%81%A0%E7%AB%AF%E8%B3%87%E6%96%99%E5%BA%AB%E5%BB%BA%E7%AB%8B%E8%88%87%E9%80%A3%E6%8E%A5/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-05-05 00:00:00 / 修改時間：23:13:25" itemprop="dateCreated datePublished" datetime="2025-05-05T00:00:00+08:00">2025-05-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">使用 Supabase 替代本機安裝的 PostgreSQL 並連接至 Django 在開發應用程式時，許多開發者會選擇在本機安裝 PostgreSQL 資料庫。然而，隨著雲端技術的普及，使用遠端資料庫如 Supabase 提供的 PostgreSQL 不僅可以減少本機配置的麻煩，也能讓資料庫更容易在團隊間共享。 以下是完整的指南，教導如何取代本機安裝的 PostgreSQL，並利用 Django 連接至 Supabase 資料庫。 1. 在 Supabase 官網建立資料庫 前往 Supabase 官網 並註冊帳號。 登入後，點擊 “New Project” 按鈕建立新的專案。 填寫相關資訊： Project name: 為專案命名。 Database password: 設定資料庫的密碼（請妥善保存）。 Region: 選擇靠近的伺服器區域以減少延遲。 點擊 “Create New Project”，Supabase 將自動配置資料庫，這過程大約需 2-3 分鐘。 完成後，可以在專案的 Settings 頁面下找到資料庫的連線資訊，包括 Host、Port、Database name 和 User credentials。 2. 安裝 Django 和必要的套件 如果尚未安裝 Django，請在專案環境中安裝 Django 以及支援 PostgreSQL 的套件： uv add &quot;psycopg[binary]&quot; 3. 配置 Django 專案連接 Supabase 在 Django 專案中，修改 settings.py 文件，將資料庫設定更改為 Supabase 提供的連線資訊： import os from pathlib import Path import environ # env init env = environ.Env() # 預設會讀取專案根目錄的 `.env` environ.Env.read_env(os.path.join(BASE_DIR, &#x27;.env&#x27;)) DATABASES = &#123; &#x27;default&#x27;: &#123; &#x27;ENGINE&#x27;: &#x27;django.db.backends.postgresql&#x27;, &#x27;NAME&#x27;: env(&#x27;DB_NAME&#x27;), &#x27;USER&#x27;: env(&#x27;DB_USER&#x27;), &#x27;PASSWORD&#x27;: env(&#x27;DB_PASSWORD&#x27;), &#x27;HOST&#x27;: env(&#x27;DB_HOST&#x27;), &#x27;PORT&#x27;: env(&#x27;DB_PORT&#x27;), &#125; &#125; 在專案根目錄建立一個 .env 檔案，並填入以下設定（請將值替換為 Supabase 提供的實際資訊）： DB_NAME=your_database_name DB_USER=postgres DB_PASSWORD=your_database_password DB_HOST=db.xxxxxxxxxxxx.supabase.co DB_PORT=5432 請注意： 確保 .env 檔案已加入到 .gitignore 中，避免敏感資訊被上傳到版本控制系統。 資料庫使用者名稱通常是 postgres，這是 Supabase 的預設設定。 資料庫密碼是建立專案時設定的密碼。 主機名稱和連接埠可以在 Supabase 專案的設定頁面中找到。 4. 測試連線 執行以下指令以測試資料庫是否正確連接： uv run python manage.py migrate 如果配置無誤，會看到 Django 成功執行資料庫遷移。 5. 小結 至此，完成將本機 PostgreSQL 替換為 Supabase 遠端資料庫，並成功使用 Django 進行連接。不僅減少了本機安裝的負擔，還能利用 Supabase 提供的強大功能，如即時同步和 API 支援，提升開發效率。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/05/05/Supabase%20PostgreSQL%20%E9%81%A0%E7%AB%AF%E8%B3%87%E6%96%99%E5%BA%AB%E5%BB%BA%E7%AB%8B%E8%88%87%E9%80%A3%E6%8E%A5/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1373,94 +1466,8 @@
 
 
 
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/04/25/macOS%20%E5%AE%89%E8%A3%9D%20PostgreSQL%20%E7%9A%84%E6%B5%81%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/04/25/macOS%20%E5%AE%89%E8%A3%9D%20PostgreSQL%20%E7%9A%84%E6%B5%81%E7%A8%8B/" class="post-title-link" itemprop="url">
-              macOS 安裝 PostgreSQL 的流程
-            </a>
-            <a href="/my-blog/2025/04/25/macOS%20%E5%AE%89%E8%A3%9D%20PostgreSQL%20%E7%9A%84%E6%B5%81%E7%A8%8B/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-04-25 00:00:00 / 修改時間：02:42:56" itemprop="dateCreated datePublished" datetime="2025-04-25T00:00:00+08:00">2025-04-25</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">以下是安裝 PostgreSQL 以及基本使用的完整流程與注意事項。 1. 安裝 PostgreSQL 使用 Homebrew 安裝指定版本的 PostgreSQL： brew install postgresql@17 確認安裝路徑： brew --prefix postgresql # 範例輸出：/usr/local/opt/postgresql@17 將 PostgreSQL 的執行檔加入環境變數： export PATH=&quot;/usr/local/opt/postgresql@17/bin:$PATH&quot; &gt;&gt; ~/.zshrc source ~/.zshrc 確認安裝是否成功： psql --version 2. 啟動 PostgreSQL 服務 啟動 PostgreSQL： brew services start postgresql@17 若啟動失敗，可能需要初始化資料庫： initdb -D /usr/local/var/postgresql@17 brew services restart postgresql@17 檢查 PostgreSQL 狀態： pg_ctl -D /usr/local/var/postgresql@17 status 3. 建立使用者與資料庫 建立預設的 postgres 使用者與資料庫： createuser -s postgres createdb -U postgres postgres 4. 使用 psql 連線到資料庫 連線到 PostgreSQL： psql -h localhost -U postgres -d postgres 進入 psql 後，建立新的資料庫： CREATE DATABASE testdb; 切換到新建立的資料庫： \c testdb 建立資料表範例： CREATE TABLE user ( id UUID PRIMARY KEY, name TEXT, birthday DATE ); 5. 檢查 PostgreSQL 狀態的自動化腳本 建立一個檢查 PostgreSQL 狀態的腳本 check_postgres.sh： #!/bin/bash PGDATA=&quot;/usr/local/var/postgresql@17&quot; echo &quot;🔍 Checking PostgreSQL status...&quot; pg_ctl -D &quot;$PGDATA&quot; status if [ $? -ne 0 ]; then echo &quot;🚀 PostgreSQL not running, attempting to start...&quot; pg_ctl -D &quot;$PGDATA&quot; start else echo &quot;✅ PostgreSQL already running.&quot; fi echo &quot;🌐 Checking port 5432...&quot; lsof -iTCP:5432 -sTCP:LISTEN || echo &quot;❌ Not listening on port 5432&quot; echo &quot;📋 Existing databases:&quot; psql -l || echo &quot;⚠️ psql failed. Is PostgreSQL running?&quot; 執行腳本檢查 PostgreSQL 狀態： bash check_postgres.sh 6. 常見問題與解決方法 問題 1：psql: 錯誤: role &quot;postgres&quot; does not exist 解決方法： 使用 createuser -s postgres 建立 postgres 使用者。 問題 2：啟動 PostgreSQL 時出現 Bootstrap failed: 5: Input/output error 解決方法： 刪除舊的啟動檔案並重新啟動服務：rm ~/Library/LaunchAgents/homebrew.mxcl.postgresql@17.plist brew services cleanup brew services start postgresql@17 7. 注意事項 版本管理：安裝多個版本的 PostgreSQL 時，需確認環境變數是否正確指向目標版本。 資料庫初始化：若安裝後無法啟動，可能需要手動執行 initdb 初始化資料庫。 權限問題：確保使用者擁有足夠的權限來操作資料庫。 服務管理：使用 brew services 管理 PostgreSQL 的啟動與停止。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/04/25/macOS%20%E5%AE%89%E8%A3%9D%20PostgreSQL%20%E7%9A%84%E6%B5%81%E7%A8%8B/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一頁" aria-label="上一頁" href="/my-blog/page/10/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/my-blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/my-blog/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/my-blog/page/12/">12</a><a class="extend next" rel="next" title="下一頁" aria-label="下一頁" href="/my-blog/page/12/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="上一頁" aria-label="上一頁" href="/my-blog/page/10/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/my-blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/my-blog/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/my-blog/page/12/">12</a><a class="page-number" href="/my-blog/page/13/">13</a><a class="extend next" rel="next" title="下一頁" aria-label="下一頁" href="/my-blog/page/12/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

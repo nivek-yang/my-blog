@@ -105,8 +105,8 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">120</span></a>
-  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">58</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">121</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">59</span></a>
       <ul class="sub-menu">
   
   
@@ -323,6 +323,13 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Load-Balancer/">
         Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Logging/">
+        Logging
         <span class="post-count">(1)</span>
       </a>
     </li>
@@ -555,7 +562,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">120</span>
+          <span class="site-state-item-count">121</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -563,7 +570,7 @@
     
       <div class="site-state-item site-state-tags">
           <a href="/my-blog/tags/">
-        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-count">59</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -580,6 +587,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/11/12/ELK%20Stack%20%E5%85%A8%E6%96%B9%E4%BD%8D%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/11/12/ELK%20Stack%20%E5%85%A8%E6%96%B9%E4%BD%8D%E6%8C%87%E5%8D%97/" class="post-title-link" itemprop="url">
+              ELK Stack 全方位指南
+            </a>
+            <a href="/my-blog/2025/11/12/ELK%20Stack%20%E5%85%A8%E6%96%B9%E4%BD%8D%E6%8C%87%E5%8D%97/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-11-12 00:00:00 / 修改時間：15:49:27" itemprop="dateCreated datePublished" datetime="2025-11-12T00:00:00+08:00">2025-11-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">身為開發者，都曾有過這樣的夢魘：線上服務出現緊急問題，需要在數十台伺服器中穿梭，用 ssh 登入，然後對著無盡的日誌檔案執行 grep 和 tail，試圖在混亂的文字海中找到那條關鍵的錯誤訊息。這不僅效率低下，而且讓人壓力倍增。 如果有一種方法，能將所有分散的日誌集中管理，自動解析，並用一個漂亮的儀表板來搜尋、分析和視覺化，那該有多好？ 這就是 ELK Stack 存在的意義。它是一套強大的開源工具組合，能將我們從日誌的泥沼中解放出來，將原始、混亂的數據轉化為有價值的商業洞見。 什麼是 ELK Stack？ ELK 是三個開源專案的縮寫，它們分別是： Elasticsearch：搜尋與分析引擎。 Logstash：伺服器端的資料處理管道。 Kibana：資料視覺化與儀表板。 近年來，隨著 Beats（輕量級資料採集器）的加入，ELK Stack 已經演進為 Elastic Stack。但 ELK 這個名字依然深入人心。 一個簡單的類比： 把日誌數據想像成一個大型物流公司的貨物。 Beats (Filebeat) 是在各地收貨的「快遞員」，負責快速、輕量地收集貨物（日誌）。 Logstash 是「區域處理中心」，快遞員把貨物(資料)送到這裡進行清洗、分類、貼標籤（解析、轉換、豐富數據）。 Elasticsearch 是龐大的「中央智慧倉儲」，所有處理好的貨物都存放在這裡，並且有著超強的索引系統，可以在毫秒內找到任何貨物。 Kibana 是「總控儀表板」，用圖表和報告直觀地看到倉儲中的所有數據，例如哪個地區的貨物最多、哪類貨物最受歡迎等。 各元件深度解析 1. Elasticsearch：堆疊的核心 (The Heart) Elasticsearch 是一個基於 Apache Lucene 的分散式搜尋與分析引擎。它不僅僅是儲存數據，更是為「速度」和「規模」而生。 核心原理：倒排索引 (Inverted Index)。傳統資料庫是「正排索引」（從文件找到關鍵字），而倒排索引是「反過來」（從關鍵字找到文件）。這正是它能實現全文搜尋毫秒級響應的秘密。 文件導向：所有數據都以 JSON 格式的「文件 (Document)」儲存，非常適合現代應用的複雜數據結構。 水平擴展：透過分片 (Shards) 和副本 (Replicas) 機制，可以輕鬆地將 Elasticsearch 叢集擴展到數百個節點，處理 PB 級的數據。 2. Logstash：強大的數據處理管道 (The Workhorse) Logstash 是靈活的數據處理工具，它可以從各種來源收集數據，動態地進行轉換，然後發送到選擇的目的地。 它的工作流程分為三個階段：Inputs → Filters → Outputs。 Inputs：定義數據從哪裡來。可以是檔案 (file)、網路協議 (beats, tcp)、消息隊列 (kafka) 等。 Filters：這是 Logstash 的核心所在。可以解析非結構化數據、豐富數據、轉換格式。其中最著名的過濾器是 grok，它能用正則表達式將一行日誌文字解析成結構化的欄位。 範例：解析一行 Nginx 訪問日誌 # Logstash Filter 配置 filter &#123; grok &#123; match =&gt; &#123; &quot;message&quot; =&gt; &quot;%&#123;IPORHOST:clientip&#125; %&#123;USER:ident&#125; %&#123;USER:auth&#125; \[%&#123;HTTPDATE:timestamp&#125;\] \&quot;%&#123;WORD:verb&#125; %&#123;URIPATHPARAM:request&#125; HTTP/%&#123;NUMBER:httpversion&#125;\&quot; %&#123;NUMBER:response:int&#125; %&#123;NUMBER:bytes:int&#125;&quot; &#125; &#125; &#125; 這段配置能將 127.0.0.1 - - [10/Oct/2023:13:55:36 +0000] &quot;GET /api/v1/users HTTP/1.1&quot; 200 150 這樣的文字，解析成包含 clientip, timestamp, verb, response 等欄位的 JSON 物件。 Outputs：定義處理完的數據要去哪裡。最常見的目的地就是 Elasticsearch，但也可以是檔案、消息隊列，甚至觸發告警。 3. Kibana：洞見之窗 (The Window) Kibana 是 Elasticsearch 的 Web UI。它讓你能夠以最直觀的方式與數據互動。 Discover：像在 Google 搜尋一樣，自由地搜尋和篩選日誌數據。 Visualize：提供豐富的圖表類型（長條圖、餅圖、地圖、指標等），將數據從枯燥的數字變成生動的故事。 Dashboard：將多個視覺化圖表組合在一個儀表板上，打造專屬的業務監控中心、應用性能儀表板或安全告警看板。 4. Beats：輕量級數據搬運工 (The Agents) Beats 是一系列輕量級的單一用途數據採集器。它們安裝在伺服器上，負責收集不同類型的數據並轉發給 Logstash 或 Elasticsearch。 Filebeat：最常用的 Beat，用於收集和轉發日誌檔案。 Metricbeat：收集作業系統和服務的指標（CPU、記憶體、Redis、Nginx 等）。 Packetbeat：監控網路流量，分析應用協議。 ELK Stack 的典型工作流程 一個完整的日誌處理流程通常如下圖所示： graph TD A[應用伺服器] --&gt;|寫入日誌檔案| B(日誌檔案); B --&gt; C&#123;Filebeat&#125;; C --&gt;|轉發日誌行| D1[&quot;Logstash: 解析 (Grok)&quot;]; D1 --&gt; D2[&quot;豐富 (GeoIP)&quot;]; D2 --&gt; D3[轉換]; D3 --&gt;|發送結構化 JSON| E[Elasticsearch]; E --&gt;|儲存 &amp; 索引| E; F[開發者/維運人員] --&gt;|透過瀏覽器| G[Kibana]; G --&gt;|查詢 &amp; 聚合| E; 收集：Filebeat 在應用伺服器上監控日誌檔案的變化。 處理：一旦有新日誌寫入，Filebeat 就會將其發送到 Logstash。 解析：Logstash 使用 Grok 等過濾器將日誌解析成結構化的 JSON。 儲存：Logstash 將處理好的 JSON 數據發送到 Elasticsearch 進行儲存和索引。 視覺化：開發者透過 Kibana 連接到 Elasticsearch，可以自由地搜尋、分析和建立儀表板。 為什麼開發者應該關心 ELK？ 主動式除錯 (Proactive Debugging)：不用再等用戶回報錯誤。透過 Kibana 儀表板監控錯誤率，設定告警，可以在問題擴大前就發現並定位它。 應用性能監控 (APM)：分析 Nginx/API Gateway 的日誌，可以輕鬆得到 API 的平均響應時間、P95/P99 延遲、請求量 (QPS) 等關鍵性能指標。 業務洞察 (Business Insights)：日誌不僅僅包含錯誤。用戶註冊、訂單生成、商品點擊… 這些都是有價值的業務數據。透過 ELK 分析這些日誌，可以得到用戶行為分析、業務漏斗模型等。 結語 ELK Stack 是一項革命性的技術，它將日誌數據從一個被動的、僅供事後排查的負擔，轉變為一個主動的、充滿洞察力的寶貴資產。它不僅簡化了日誌管理，更為開發、維運和業務團隊之間架起了一座數據驅動的橋樑。 如果還在 grep 的世界裡掙扎，是時候擁抱 ELK Stack 了。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/11/12/ELK%20Stack%20%E5%85%A8%E6%96%B9%E4%BD%8D%E6%8C%87%E5%8D%97/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1355,94 +1448,8 @@
 
 
 
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/20/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20SOLID%20%E5%8E%9F%E5%89%87%20%E6%89%93%E9%80%A0%E7%A9%A9%E5%81%A5%E5%8F%AF%E7%B6%AD%E8%AD%B7%E7%9A%84%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91%E8%A8%AD%E8%A8%88/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/10/20/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20SOLID%20%E5%8E%9F%E5%89%87%20%E6%89%93%E9%80%A0%E7%A9%A9%E5%81%A5%E5%8F%AF%E7%B6%AD%E8%AD%B7%E7%9A%84%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91%E8%A8%AD%E8%A8%88/" class="post-title-link" itemprop="url">
-              深入淺出 SOLID 原則：打造穩健、可維護的物件導向設計
-            </a>
-            <a href="/my-blog/2025/10/20/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20SOLID%20%E5%8E%9F%E5%89%87%20%E6%89%93%E9%80%A0%E7%A9%A9%E5%81%A5%E5%8F%AF%E7%B6%AD%E8%AD%B7%E7%9A%84%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91%E8%A8%AD%E8%A8%88/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-10-20 00:00:00 / 修改時間：15:22:34" itemprop="dateCreated datePublished" datetime="2025-10-20T00:00:00+08:00">2025-10-20</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">在軟體開發的領域中，我們都追求撰寫出「好」的程式碼。但什麼是「好」的程式碼？除了能夠正確執行外，它還必須具備可讀性、可擴展性、可維護性。隨著專案規模擴大、需求不斷變更，混亂的程式碼結構會成為開發團隊的夢魘。 為了解決這個問題，軟體設計大師 Robert C. Martin (人稱 “Uncle Bob”) 提出了五個物件導向設計的基本原則，也就是著名的 SOLID 原則。遵循這些原則，可以幫助我們建立更穩健、更有彈性、更易於維護的軟體架構。 本篇文章將逐一深入了解 SOLID 的五大原則，並透過簡單的程式碼範例，掌握其核心思想。 Why SOLID? 為何需要這套原則？ 在深入每個原則的細節之前，必須先回答一個根本的問題：為什麼需要關心 SOLID？它僅僅是一套學術理論，還是能解決真實世界問題的實用工具？ 想像一下，是否遇過以下情境： 脆弱的程式碼：只不過修改了一個看似無關緊要的小地方，卻意外地導致系統其他部分崩潰。 僵化的系統：一個簡單的需求變更，卻需要花費數天甚至數週的時間，在程式碼中進行大規模的修改。 難以重複使用的元件：某個模組的邏輯與系統其他部分緊緊綁在一起，導致無法將它抽出來用在新的專案或功能上。 這些都是「軟體腐敗」(Software Rot) 的典型症狀。SOLID 原則就是對抗這種腐敗的強力武器。它不是一套生硬的規則，而是一套設計哲學，旨在幫助我們從一開始就建立健康的軟體架構。 遵循 SOLID 原則能為帶來以下核心價值： 1. 打造易於維護的程式碼 (Maintainability) 這是最直接的好處。透過單一職責和介面隔離，每個類別的職責都變得清晰且專一。當 bug 出現或需求變更時，能更快地定位到需要修改的程式碼，並且修改所造成的「漣漪效應」也會被控制在最小範圍內。 2. 提升系統的擴展性 (Extensibility) 商業需求總是不斷變化的。開放封閉原則是實現高擴展性的核心。它指導我們設計出這樣的系統：在增加新功能時，只需要新增程式碼，而不是去修改那些已經穩定運行的舊程式碼。這讓系統在成長的過程中依然保持穩定。 3. 降低耦合，提高靈活性 (Decoupling &amp; Flexibility) 依賴反轉原則是實現「解耦」的關鍵。當高階模組（業務邏輯）與低階模組（實作細節，如資料庫、API）分離開來，並同時依賴於抽象介面時，系統就變得極其靈活。可以輕易抽換掉某個元件（例如，將資料庫從 MySQL 換成 PostgreSQL），而不需要改動核心的業務邏輯。 4. 增強程式碼的可讀性與團隊協作 (Readability &amp; Collaboration) 一個遵循 SOLID 原則的專案，其架構是清晰的、可預測的。團隊中的任何人都能更容易地理解每個模組的用途和它們之間的關係，這大大降低了溝通成本，使得團隊協作更加順暢。 5. 讓測試更容易 (Testability) 當類別職責單一且依賴於抽象時，進行單元測試會變得非常簡單。可以輕鬆地為其依賴的抽象介面建立一個「測試替身」(Test Double 或 Mock Object)，從而專注於測試當前類別的邏輯，而不用擔心其依賴項的複雜性。 投入時間學習和實踐 SOLID 原則，是對專案未來的一項重要投資。它能幫助我們避免陷入維護的泥沼，打造出能夠從容應對變化、可持續發展的軟體系統。 什麼是 SOLID？ SOLID 是五個設計原則的縮寫，分別代表： S - 單一職責原則 (Single Responsibility Principle) O - 開放封閉原則 (Open/Closed Principle) L - 里氏替換原則 (Liskov Substitution Principle) I - 介面隔離原則 (Interface Segregation Principle) D - 依賴反轉原則 (Dependency Inversion Principle) 單一職責 (SRP)：讓類別保持專注。 開放封閉 (OCP)：擁抱擴展，避免修改。 里氏替換 (LSP)：確保繼承不會帶來意外。 介面隔離 (ISP)：保持介面的精簡與專一。 依賴反轉 (DIP)：依賴抽象，而非具體實現。 S：單一職責原則 (Single Responsibility Principle, SRP) 核心概念 一個類別 (Class) 應該只有一個引起它變更的原因。 簡單來說，一個類別只應該做好一件事情。如果一個類別承擔了過多的職責，那麼當其中任何一個職責需要變更時，都可能影響到其他的職責，導致類別變得脆弱且難以維護。 為何重要？ 降低複雜度：每個類別的職責清晰，更容易被理解。 提高內聚力：相關的功能被集中在同一個類別中。 降低耦合度：職責分離，修改一個職責不會影響到另一個。 易於測試：可以針對單一職責進行單元測試。 程式碼範例 ❌ 反面教材：一個類別處理太多事 假設有一個 User 類別，它不僅管理使用者資料，還負責將資料存入資料庫。 class User: def __init__(self, name: str, email: str): self.name = name self.email = email def get_user_info(self) -&gt; dict: return &#123;&quot;name&quot;: self.name, &quot;email&quot;: self.email&#125; def save_to_database(self): # 複雜的資料庫連線與儲存邏輯... print(f&quot;Saving &#123;self.name&#125; to the database...&quot;) 這個 User 類別違反了 SRP，因為它有兩個變更的理由： 使用者資料結構的變更 (例如新增年齡屬性)。 資料庫儲存邏輯的變更 (例如從 MySQL 換成 PostgreSQL)。 ✅ 良好實踐：職責分離 應該將職責拆分開來，讓 User 只負責管理使用者資料，並建立一個 UserRepository 專門負責資料庫操作。 class User: def __init__(self, name: str, email: str): self.name = name self.email = email def get_user_info(self) -&gt; dict: return &#123;&quot;name&quot;: self.name, &quot;email&quot;: self.email&#125; class UserRepository: def save(self, user: User): # 複雜的資料庫連線與儲存邏輯... print(f&quot;Saving &#123;user.name&#125; to the database...&quot;) 如此一來，當資料庫邏輯需要修改時，只需要改動 UserRepository，完全不會影響到 User 類別。 O：開放封閉原則 (Open/Closed Principle, OCP) 核心概念 軟體實體 (類別、模組、函式) 應該對於擴展是開放的，但對於修改是封閉的。 這意味著當需要為軟體增加新功能時，應該是透過增加新的程式碼來實現，而不是去修改已經存在的程式碼。 為何重要？ 穩定性：避免修改現有且穩定的程式碼，減少引入新 Bug 的風險。 擴展性：系統可以輕鬆地增加新功能，而不需要重構核心邏輯。 可維護性：新舊功能彼此獨立，降低維護成本。 程式碼範例 ❌ 反面教材：用 if-else 應對新需求 假設有一個 AreaCalculator 用來計算不同形狀的面積。 class Rectangle: def __init__(self, width, height): self.width = width self.height = height class AreaCalculator: def calculate(self, shapes: list) -&gt; float: total_area = 0 for shape in shapes: if isinstance(shape, Rectangle): total_area += shape.width * shape.height # 如果要新增 Circle，就必須修改這裡！ # if isinstance(shape, Circle): # total_area += shape.radius ** 2 * 3.14 return total_area 每當需要支援新的形狀 (如 Circle)，就必須回到 AreaCalculator 中增加 if-else 判斷，這就違反了 OCP。 ✅ 良好實踐：使用抽象和多型 可以定義一個抽象的 Shape 介面 (或基底類別)，讓所有具體的形狀去實作它。 from abc import ABC, abstractmethod class Shape(ABC): @abstractmethod def area(self) -&gt; float: pass class Rectangle(Shape): def __init__(self, width, height): self.width = width self.height = height def area(self) -&gt; float: return self.width * self.height class Circle(Shape): def __init__(self, radius): self.radius = radius def area(self) -&gt; float: return self.radius ** 2 * 3.14159 class AreaCalculator: def calculate(self, shapes: list[Shape]) -&gt; float: total_area = 0 for shape in shapes: total_area += shape.area() # 不需要知道具體形狀 return total_area 現在，AreaCalculator 對於修改是封閉的。無論未來增加多少種新形狀 (例如 Triangle)，只要它實作了 Shape 介面，AreaCalculator 的程式碼就完全不需要變動。只需要新增一個 Triangle 類別，這就是對擴展開放。 L：里氏替換原則 (Liskov Substitution Principle, LSP) 核心概念 子類別必須可以替換掉它們的父類別，而不會產生錯誤或破壞程式的行為。 簡單來說，任何使用父類別的地方，都應該能夠透明地使用其子類別的物件，而程式的邏輯不應該因此被破壞。子類別不應該改變父類別預期的行為。 為何重要？ 確保繼承的正確性：防止繼承被濫用，確保子類別與父類別行為的一致性。 可預測性：程式的行為不會因為傳入的是子類別物件而產生意外。 程式碼範例 ❌ 反面教材：破壞父類別行為的子類別 一個經典的例子是「長方形」和「正方形」。在數學上，正方形是一種特殊的長方形。但在程式設計中，直接繼承可能會出問題。 class Rectangle: def __init__(self, width, height): self.width = width self.height = height def set_width(self, width): self.width = width def set_height(self, height): self.height = height def get_area(self) -&gt; float: return self.width * self.height class Square(Rectangle): def __init__(self, size): super().__init__(size, size) def set_width(self, width): self.width = width self.height = width # 正方形的寬高必須相等 def set_height(self, height): self.width = height self.height = height 讓我們看看一個使用 Rectangle 的函式： def test_area(rect: Rectangle): rect.set_width(5) rect.set_height(4) # 我們預期面積是 5 * 4 = 20 print(f&quot;Expected 20, Got: &#123;rect.get_area()&#125;&quot;) # 使用父類別，行為正常 r = Rectangle(2, 3) test_area(r) # &gt;&gt; Expected 20, Got: 20 # 使用子類別，行為異常！ s = Square(2) test_area(s) # &gt;&gt; Expected 20, Got: 16 當 test_area 函式傳入 Square 物件時，set_height(4) 意外地改變了 width，破壞了函式原本的預期行為。這就違反了 LSP。 ✅ 良好實踐：使用組合或抽象 解決方案通常是避免不恰當的繼承，可以考慮使用抽象基底類別，讓 Rectangle 和 Square 實作共同的 Shape 介面，而不是讓 Square 繼承 Rectangle。 問題回顧：為什麼繼承是錯的？ Square 繼承 Rectangle 的問題在於，子類 Square 為了維持「寬高必須相等」這個屬於自己的規則，改變了父類 Rectangle 的預期行為（set_width 和 set_height 應該是獨立的）。這就破壞了父類的「契約」(contract)，導致使用父類別的地方無法安全地替換成子類別。 解決方案：從「是一種」(Is-A) 轉向「都屬於」(Is-A-Type-Of) 思維需要轉變： 錯誤的思維：一個正方形「是一種」長方形 (A Square is a Rectangle)。這在數學上對，但在程式行為上是錯的。 正確的思維：一個正方形和一個長方形「都屬於」形狀的一種類型 (A Square and a Rectangle are both types of Shape)。 這個思維轉變引導我們去找出共通的抽象——Shape。 具體實作步驟 步驟 1：定義共通的抽象介面 Shape 使用 Python 的 abc (Abstract Base Classes) 模組來建立一個抽象介面。這個介面的作用是定義一個「契約」：任何自稱是 Shape 的東西，都必須要有一個計算面積 (area) 的方法。 from abc import ABC, abstractmethod # 定義一個抽象的 Shape 介面 class Shape(ABC): &quot;&quot;&quot; 這是一個 Shape 的抽象基底類別 (介面)。 它定義了所有 &#x27;形狀&#x27; 都應該具備的行為契約。 &quot;&quot;&quot; @abstractmethod def area(self) -&gt; float: &quot;&quot;&quot; 任何繼承 Shape 的子類別，都必須實作這個 area 方法。 &quot;&quot;&quot; pass ABC: 表示這是一個抽象基底類別。 @abstractmethod: 裝飾器，標明這是一個抽象方法，子類別必須覆寫 (override) 它。 步驟 2：讓 Rectangle 和 Square 都去實作 Shape 介面 讓 Rectangle 和 Square 成為平等的類別，它們不再有繼承關係，而是共同去遵守 Shape 這個契約。 實作 Rectangle 類別： class Rectangle(Shape): def __init__(self, width: float, height: float): self.width = width self.height = height # 遵守 Shape 契約，提供 area 方法 def area(self) -&gt; float: return self.width * self.height def set_width(self, width: float): self.width = width def set_height(self, height: float): self.height = height 實作 Square 類別： class Square(Shape): def __init__(self, side_length: float): self.side_length = side_length # 同樣遵守 Shape 契約，提供自己的 area 實作 def area(self) -&gt; float: return self.side_length ** 2 def set_side_length(self, side_length: float): self.side_length = side_length Square 不再繼承 Rectangle。它們都直接繼承 Shape。 它們各自擁有最適合自己的屬性 (width, height vs side_length) 和方法。 它們都履行了 Shape 的契約，提供了 area() 方法。 步驟 3：修改客戶端程式碼，使其依賴於抽象 Shape 現在，任何需要使用形狀計算面積的函式，不應該依賴於具體的 Rectangle 或 Square，而應該依賴於抽象的 Shape。 # 這個函式依賴於抽象的 Shape，而不是具體的類別 def print_area(shape: Shape): &quot;&quot;&quot; 這個函式可以接受任何 &#x27;Shape&#x27; 類型的物件， 並印出它的面積，它不在乎傳進來的是 Rectangle 還是 Square。 &quot;&quot;&quot; calculated_area = shape.area() print(f&quot;The area of the shape is: &#123;calculated_area&#125;&quot;) # --- 現在來使用它 --- # 建立一個 Rectangle 物件 rect = Rectangle(5, 4) # 建立一個 Square 物件 sq = Square(5) # 將不同類型的物件傳入同一個函式 print(&quot;Testing with a Rectangle:&quot;) print_area(rect) # 輸出: The area of the shape is: 20.0 print(&quot;Testing with a Square:&quot;) print_area(sq) # 輸出: The area of the shape is: 25.0 在這個新的設計中，print_area 函式可以安全地接收任何 Shape 的子類別，因為它只使用了 Shape 契約中保證存在的方法 (area())。它完全不會觸發之前那個因為 set_width 帶來副作用的 bug。 這種做法帶來了顯而易見的好處： 完全符合 LSP：任何 Shape 的子類別（Rectangle, Square）都可以無縫替換 Shape，而不會產生任何非預期的行為。 高內聚，低耦合：Square 和 Rectangle 的內部邏輯是獨立的（高內聚）。它們之間沒有了繼承關係，耦合度降到最低，只透過 Shape 介面產生關聯。 程式碼更清晰穩定：Square 就是 Square，Rectangle 就是 Rectangle。它們的屬性和方法都清晰直觀，符合各自的定義。 更好的擴展性（符合 OCP）：如果想新增一個 Circle 類別，只需要讓 Circle 也去繼承 Shape 並實作 area 方法，完全不需要修改 print_area 這個函式。 透過這個重構，不僅解決了 LSP 的問題，還讓整個設計變得更加靈活、穩健和可維護。 I：介面隔離原則 (Interface Segregation Principle, ISP) 核心概念 客戶端 (使用介面的類別) 不應該被強迫依賴它們用不到的方法。 與其建立一個龐大、臃腫的「胖介面」(fat interface)，不如將其拆分成多個更小、更具體的介面。 為何重要？ 降低耦合：客戶端只需要關心與自己相關的方法。 提高內聚力：每個介面都只服務於一個特定的目的。 靈活性：類別可以根據需要選擇實作哪些小介面。 程式碼範例 ❌ 反面教材：一個胖介面 假設有一個 IWorker 介面，定義了工作者的所有行為。 from abc import ABC, abstractmethod class IWorker(ABC): @abstractmethod def work(self): pass @abstractmethod def eat(self): pass class HumanWorker(IWorker): def work(self): print(&quot;Human working...&quot;) def eat(self): print(&quot;Human eating...&quot;) class RobotWorker(IWorker): def work(self): print(&quot;Robot working...&quot;) def eat(self): # 機器人不需要吃東西，但被迫實作這個方法！ pass RobotWorker被迫實作一個它根本用不到的 eat 方法，這就是胖介面的問題。 ✅ 良好實踐：拆分介面 應該將介面拆分成更小的、職責單一的介面。 class IWorkable(ABC): @abstractmethod def work(self): pass class IFeedable(ABC): @abstractmethod def eat(self): pass class HumanWorker(IWorkable, IFeedable): def work(self): print(&quot;Human working...&quot;) def eat(self): print(&quot;Human eating...&quot;) class RobotWorker(IWorkable): def work(self): print(&quot;Robot working...&quot;) 現在，HumanWorker 同時實作了 IWorkable 和 IFeedable，而 RobotWorker 只需要實作它真正需要的 IWorkable 介面。 D：依賴反轉原則 (Dependency Inversion Principle, DIP) 核心概念 高階模組不應該依賴於低階模組，兩者都應該依賴於抽象。 抽象不應該依賴於細節，細節應該依賴於抽象。 簡單來說，就是要「面向介面程式設計」，而不是「面向實作程式設計」。程式碼的依賴關係應該是指向抽象 (介面、抽象類別)，而不是具體的實作類別。 為何重要？ 解耦合：高階模組和低階模組之間的耦合度大大降低。 靈活性與可替換性：可以輕易地替換掉低階模組的具體實作，而不影響高階模組。 易於測試：在測試高階模組時，可以輕易地傳入一個「測試用的假物件」(Mock Object)。 程式碼範例 ❌ 反面教材：高階模組依賴具體實作 假設有一個 Notification 服務，它需要發送 Email。 class EmailSender: def send(self, message: str): print(f&quot;Sending email: &#123;message&#125;&quot;) class Notification: def __init__(self): # 直接依賴具體的 EmailSender self.sender = EmailSender() def send_notification(self, message: str): self.sender.send(message) 這裡，高階模組 Notification 直接依賴了低階模組 EmailSender。如果未來需要增加發送 SMS 或 Push Notification 的功能，就必須修改 Notification 類別，違反了 OCP。 ✅ 良好實踐：依賴於抽象 應該定義一個抽象的 IMessageSender 介面，讓高階模組依賴它。 from abc import ABC, abstractmethod # 1. 定義抽象 class IMessageSender(ABC): @abstractmethod def send(self, message: str): pass # 2. 低階模組依賴 (實作) 抽象 class EmailSender(IMessageSender): def send(self, message: str): print(f&quot;Sending email: &#123;message&#125;&quot;) class SmsSender(IMessageSender): def send(self, message: str): print(f&quot;Sending SMS: &#123;message&#125;&quot;) # 3. 高階模組依賴抽象 class Notification: def __init__(self, sender: IMessageSender): # 透過依賴注入 self.sender = sender def send_notification(self, message: str): self.sender.send(message) # 使用方式 email_sender = EmailSender() notification_email = Notification(email_sender) notification_email.send_notification(&quot;Hello via Email!&quot;) sms_sender = SmsSender() notification_sms = Notification(sms_sender) notification_sms.send_notification(&quot;Hello via SMS!&quot;) 現在，Notification 不再關心是誰在發送訊息，它只依賴於 IMessageSender 這個抽象。可以輕易地注入不同的發送器 (EmailSender, SmsSender) 來改變其行為，而無需修改 Notification 的任何程式碼。這也常被稱為依賴注入 (Dependency Injection)，是實現 DIP 的一種常見模式。 總結 SOLID 原則不是生硬的教條，而是一套經過業界長期實踐、能引導我們寫出更優秀程式碼的設計哲學。 單一職責 (SRP)：讓類別保持專注。 開放封閉 (OCP)：擁抱擴展，避免修改。 里氏替換 (LSP)：確保繼承不會帶來意外。 介面隔離 (ISP)：保持介面的精簡與專一。 依賴反轉 (DIP)：依賴抽象，而非具體實現。 初學者可能覺得要一次遵循所有原則很困難，但不必氣餒。從理解它們背後的思想開始，在下一個專案或下一次重構中，嘗試應用其中一兩個原則。久而久之，將會自然地將這些思想融入程式設計風格中，並體會到它們為專案帶來的巨大好處。 打造一個穩健、可維護的系統，就從實踐 SOLID 開始吧！</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/10/20/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20SOLID%20%E5%8E%9F%E5%89%87%20%E6%89%93%E9%80%A0%E7%A9%A9%E5%81%A5%E5%8F%AF%E7%B6%AD%E8%AD%B7%E7%9A%84%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91%E8%A8%AD%E8%A8%88/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/my-blog/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/my-blog/page/12/">12</a><a class="extend next" rel="next" title="下一頁" aria-label="下一頁" href="/my-blog/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/my-blog/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/my-blog/page/13/">13</a><a class="extend next" rel="next" title="下一頁" aria-label="下一頁" href="/my-blog/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

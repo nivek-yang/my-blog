@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="身為開發者，都曾有過這樣的夢魘：線上服務出現緊急問題，需要在數十台伺服器中穿梭，用 ssh 登入，然後對著無盡的日誌檔案執行 grep 和 tail，試圖在混亂的文字海中找到那條關鍵的錯誤訊息。這不僅效率低下，而且讓人壓力倍增。 如果有一種方法，能將所有分散的日誌集中管理，自動解析，並用一個漂亮的儀表板來搜尋、分析和視覺化，那該有多好？ 這就是 ELK Stack 存在的意義。它是一套強大的開源工">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ELK Stack 全方位指南">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/11/12/ELK%20Stack%20%E5%85%A8%E6%96%B9%E4%BD%8D%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="身為開發者，都曾有過這樣的夢魘：線上服務出現緊急問題，需要在數十台伺服器中穿梭，用 ssh 登入，然後對著無盡的日誌檔案執行 grep 和 tail，試圖在混亂的文字海中找到那條關鍵的錯誤訊息。這不僅效率低下，而且讓人壓力倍增。 如果有一種方法，能將所有分散的日誌集中管理，自動解析，並用一個漂亮的儀表板來搜尋、分析和視覺化，那該有多好？ 這就是 ELK Stack 存在的意義。它是一套強大的開源工">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-11-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-12T07:49:27.484Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Logging">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/11/12/ELK%20Stack%20%E5%85%A8%E6%96%B9%E4%BD%8D%E6%8C%87%E5%8D%97/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/11/12/ELK%20Stack%20%E5%85%A8%E6%96%B9%E4%BD%8D%E6%8C%87%E5%8D%97/","path":"2025/11/12/ELK Stack 全方位指南/","title":"ELK Stack 全方位指南"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ELK Stack 全方位指南 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">121</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">59</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cloud-Computing/">
+        Cloud Computing
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Concurrency/">
+        Concurrency
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cryptography/">
+        Cryptography
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cybersecurity/">
+        Cybersecurity
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(25)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Design-Pattern/">
+        Design Pattern
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/DevOps/">
+        DevOps
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Logging/">
+        Logging
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(17)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/OOP/">
+        OOP
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Search/">
+        Search
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Serverless/">
+        Serverless
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(8)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(6)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-elk-stack"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是 ELK Stack？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%84%E5%85%83%E4%BB%B6%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text"> 各元件深度解析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-elasticsearch%E5%A0%86%E7%96%8A%E7%9A%84%E6%A0%B8%E5%BF%83-the-heart"><span class="nav-number">2.1.</span> <span class="nav-text"> 1. Elasticsearch：堆疊的核心 (The Heart)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-logstash%E5%BC%B7%E5%A4%A7%E7%9A%84%E6%95%B8%E6%93%9A%E8%99%95%E7%90%86%E7%AE%A1%E9%81%93-the-workhorse"><span class="nav-number">2.2.</span> <span class="nav-text"> 2. Logstash：強大的數據處理管道 (The Workhorse)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-kibana%E6%B4%9E%E8%A6%8B%E4%B9%8B%E7%AA%97-the-window"><span class="nav-number">2.3.</span> <span class="nav-text"> 3. Kibana：洞見之窗 (The Window)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-beats%E8%BC%95%E9%87%8F%E7%B4%9A%E6%95%B8%E6%93%9A%E6%90%AC%E9%81%8B%E5%B7%A5-the-agents"><span class="nav-number">2.4.</span> <span class="nav-text"> 4. Beats：輕量級數據搬運工 (The Agents)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#elk-stack-%E7%9A%84%E5%85%B8%E5%9E%8B%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text"> ELK Stack 的典型工作流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%96%8B%E7%99%BC%E8%80%85%E6%87%89%E8%A9%B2%E9%97%9C%E5%BF%83-elk"><span class="nav-number">4.</span> <span class="nav-text"> 為什麼開發者應該關心 ELK？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AA%9E"><span class="nav-number">5.</span> <span class="nav-text"> 結語</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/11/12/ELK%20Stack%20%E5%85%A8%E6%96%B9%E4%BD%8D%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ELK Stack 全方位指南 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ELK Stack 全方位指南
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-11-12 00:00:00 / 修改時間：15:49:27" itemprop="dateCreated datePublished" datetime="2025-11-12T00:00:00+08:00">2025-11-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>身為開發者，都曾有過這樣的夢魘：線上服務出現緊急問題，需要在數十台伺服器中穿梭，用 <code>ssh</code> 登入，然後對著無盡的日誌檔案執行 <code>grep</code> 和 <code>tail</code>，試圖在混亂的文字海中找到那條關鍵的錯誤訊息。這不僅效率低下，而且讓人壓力倍增。</p>
+<p>如果有一種方法，能將所有分散的日誌集中管理，自動解析，並用一個漂亮的儀表板來搜尋、分析和視覺化，那該有多好？</p>
+<p>這就是 <strong>ELK Stack</strong> 存在的意義。它是一套強大的開源工具組合，能將我們從日誌的泥沼中解放出來，將原始、混亂的數據轉化為有價值的商業洞見。</p>
+<h1 id="什麼是-elk-stack"><a class="markdownIt-Anchor" href="#什麼是-elk-stack"></a> 什麼是 ELK Stack？</h1>
+<p>ELK 是三個開源專案的縮寫，它們分別是：</p>
+<ul>
+<li><strong>E</strong>lasticsearch：搜尋與分析引擎。</li>
+<li><strong>L</strong>ogstash：伺服器端的資料處理管道。</li>
+<li><strong>K</strong>ibana：資料視覺化與儀表板。</li>
+</ul>
+<p>近年來，隨著 <strong>Beats</strong>（輕量級資料採集器）的加入，ELK Stack 已經演進為 <strong>Elastic Stack</strong>。但 ELK 這個名字依然深入人心。</p>
+<blockquote>
+<p><strong>一個簡單的類比：</strong><br />
+把日誌數據想像成一個大型物流公司的貨物。</p>
+<ul>
+<li><strong>Beats (Filebeat)</strong> 是在各地收貨的「快遞員」，負責快速、輕量地收集貨物（日誌）。</li>
+<li><strong>Logstash</strong> 是「區域處理中心」，快遞員把貨物(資料)送到這裡進行清洗、分類、貼標籤（解析、轉換、豐富數據）。</li>
+<li><strong>Elasticsearch</strong> 是龐大的「中央智慧倉儲」，所有處理好的貨物都存放在這裡，並且有著超強的索引系統，可以在毫秒內找到任何貨物。</li>
+<li><strong>Kibana</strong> 是「總控儀表板」，用圖表和報告直觀地看到倉儲中的所有數據，例如哪個地區的貨物最多、哪類貨物最受歡迎等。</li>
+</ul>
+</blockquote>
+<h1 id="各元件深度解析"><a class="markdownIt-Anchor" href="#各元件深度解析"></a> 各元件深度解析</h1>
+<h2 id="1-elasticsearch堆疊的核心-the-heart"><a class="markdownIt-Anchor" href="#1-elasticsearch堆疊的核心-the-heart"></a> 1. Elasticsearch：堆疊的核心 (The Heart)</h2>
+<p>Elasticsearch 是一個基於 Apache Lucene 的分散式搜尋與分析引擎。它不僅僅是儲存數據，更是為「速度」和「規模」而生。</p>
+<ul>
+<li><strong>核心原理</strong>：<strong>倒排索引 (Inverted Index)</strong>。傳統資料庫是「正排索引」（從文件找到關鍵字），而倒排索引是「反過來」（從關鍵字找到文件）。這正是它能實現全文搜尋毫秒級響應的秘密。</li>
+<li><strong>文件導向</strong>：所有數據都以 JSON 格式的「文件 (Document)」儲存，非常適合現代應用的複雜數據結構。</li>
+<li><strong>水平擴展</strong>：透過分片 (Shards) 和副本 (Replicas) 機制，可以輕鬆地將 Elasticsearch 叢集擴展到數百個節點，處理 PB 級的數據。</li>
+</ul>
+<h2 id="2-logstash強大的數據處理管道-the-workhorse"><a class="markdownIt-Anchor" href="#2-logstash強大的數據處理管道-the-workhorse"></a> 2. Logstash：強大的數據處理管道 (The Workhorse)</h2>
+<p>Logstash 是靈活的數據處理工具，它可以從各種來源收集數據，動態地進行轉換，然後發送到選擇的目的地。</p>
+<p>它的工作流程分為三個階段：<strong>Inputs → Filters → Outputs</strong>。</p>
+<ul>
+<li>
+<p><strong>Inputs</strong>：定義數據從哪裡來。可以是檔案 (<code>file</code>)、網路協議 (<code>beats</code>, <code>tcp</code>)、消息隊列 (<code>kafka</code>) 等。</p>
+</li>
+<li>
+<p><strong>Filters</strong>：這是 Logstash 的核心所在。可以解析非結構化數據、豐富數據、轉換格式。其中最著名的過濾器是 <code>grok</code>，它能用正則表達式將一行日誌文字解析成結構化的欄位。</p>
+<p><strong>範例：解析一行 Nginx 訪問日誌</strong></p>
+<pre class="highlight"><code class="groovy"># Logstash Filter 配置
+filter &#123;
+  grok &#123;
+    match =&gt; &#123; <span class="hljs-string">&quot;message&quot;</span> =&gt; <span class="hljs-string">&quot;%&#123;IPORHOST:clientip&#125; %&#123;USER:ident&#125; %&#123;USER:auth&#125; \[%&#123;HTTPDATE:timestamp&#125;\] \&quot;%&#123;WORD:verb&#125; %&#123;URIPATHPARAM:request&#125; HTTP/%&#123;NUMBER:httpversion&#125;\&quot; %&#123;NUMBER:response:int&#125; %&#123;NUMBER:bytes:int&#125;&quot;</span> &#125;
+  &#125;
+&#125;
+</code></pre>
+<p>這段配置能將 <code>127.0.0.1 - - [10/Oct/2023:13:55:36 +0000] &quot;GET /api/v1/users HTTP/1.1&quot; 200 150</code> 這樣的文字，解析成包含 <code>clientip</code>, <code>timestamp</code>, <code>verb</code>, <code>response</code> 等欄位的 JSON 物件。</p>
+</li>
+<li>
+<p><strong>Outputs</strong>：定義處理完的數據要去哪裡。最常見的目的地就是 Elasticsearch，但也可以是檔案、消息隊列，甚至觸發告警。</p>
+</li>
+</ul>
+<h2 id="3-kibana洞見之窗-the-window"><a class="markdownIt-Anchor" href="#3-kibana洞見之窗-the-window"></a> 3. Kibana：洞見之窗 (The Window)</h2>
+<p>Kibana 是 Elasticsearch 的 Web UI。它讓你能夠以最直觀的方式與數據互動。</p>
+<ul>
+<li><strong>Discover</strong>：像在 Google 搜尋一樣，自由地搜尋和篩選日誌數據。</li>
+<li><strong>Visualize</strong>：提供豐富的圖表類型（長條圖、餅圖、地圖、指標等），將數據從枯燥的數字變成生動的故事。</li>
+<li><strong>Dashboard</strong>：將多個視覺化圖表組合在一個儀表板上，打造專屬的業務監控中心、應用性能儀表板或安全告警看板。</li>
+</ul>
+<h2 id="4-beats輕量級數據搬運工-the-agents"><a class="markdownIt-Anchor" href="#4-beats輕量級數據搬運工-the-agents"></a> 4. Beats：輕量級數據搬運工 (The Agents)</h2>
+<p>Beats 是一系列輕量級的單一用途數據採集器。它們安裝在伺服器上，負責收集不同類型的數據並轉發給 Logstash 或 Elasticsearch。</p>
+<ul>
+<li><strong>Filebeat</strong>：最常用的 Beat，用於收集和轉發日誌檔案。</li>
+<li><strong>Metricbeat</strong>：收集作業系統和服務的指標（CPU、記憶體、Redis、Nginx 等）。</li>
+<li><strong>Packetbeat</strong>：監控網路流量，分析應用協議。</li>
+</ul>
+<h1 id="elk-stack-的典型工作流程"><a class="markdownIt-Anchor" href="#elk-stack-的典型工作流程"></a> ELK Stack 的典型工作流程</h1>
+<p>一個完整的日誌處理流程通常如下圖所示：</p>
+<pre class="highlight"><code class="mermaid">graph TD
+    A[應用伺服器] --&gt;|寫入日誌檔案| B(日誌檔案);
+    B --&gt; C&#123;Filebeat&#125;;
+    C --&gt;|轉發日誌行| D1[&quot;Logstash: 解析 (Grok)&quot;];
+    D1 --&gt; D2[&quot;豐富 (GeoIP)&quot;];
+    D2 --&gt; D3[轉換];
+    D3 --&gt;|發送結構化 JSON| E[Elasticsearch];
+    E --&gt;|儲存 &amp; 索引| E;
+    F[開發者/維運人員] --&gt;|透過瀏覽器| G[Kibana];
+    G --&gt;|查詢 &amp; 聚合| E;
+</code></pre>
+<ol>
+<li><strong>收集</strong>：Filebeat 在應用伺服器上監控日誌檔案的變化。</li>
+<li><strong>處理</strong>：一旦有新日誌寫入，Filebeat 就會將其發送到 Logstash。</li>
+<li><strong>解析</strong>：Logstash 使用 Grok 等過濾器將日誌解析成結構化的 JSON。</li>
+<li><strong>儲存</strong>：Logstash 將處理好的 JSON 數據發送到 Elasticsearch 進行儲存和索引。</li>
+<li><strong>視覺化</strong>：開發者透過 Kibana 連接到 Elasticsearch，可以自由地搜尋、分析和建立儀表板。</li>
+</ol>
+<h1 id="為什麼開發者應該關心-elk"><a class="markdownIt-Anchor" href="#為什麼開發者應該關心-elk"></a> 為什麼開發者應該關心 ELK？</h1>
+<ul>
+<li><strong>主動式除錯 (Proactive Debugging)</strong>：不用再等用戶回報錯誤。透過 Kibana 儀表板監控錯誤率，設定告警，可以在問題擴大前就發現並定位它。</li>
+<li><strong>應用性能監控 (APM)</strong>：分析 Nginx/API Gateway 的日誌，可以輕鬆得到 API 的平均響應時間、P95/P99 延遲、請求量 (QPS) 等關鍵性能指標。</li>
+<li><strong>業務洞察 (Business Insights)</strong>：日誌不僅僅包含錯誤。用戶註冊、訂單生成、商品點擊… 這些都是有價值的業務數據。透過 ELK 分析這些日誌，可以得到用戶行為分析、業務漏斗模型等。</li>
+</ul>
+<h1 id="結語"><a class="markdownIt-Anchor" href="#結語"></a> 結語</h1>
+<p>ELK Stack 是一項革命性的技術，它將日誌數據從一個被動的、僅供事後排查的負擔，轉變為一個主動的、充滿洞察力的寶貴資產。它不僅簡化了日誌管理，更為開發、維運和業務團隊之間架起了一座數據驅動的橋樑。</p>
+<p>如果還在 <code>grep</code> 的世界裡掙扎，是時候擁抱 ELK Stack 了。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Logging/" rel="tag"># Logging</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/11/11/Elasticsearch%20%E7%9A%84%E9%83%A8%E7%BD%B2%E8%88%87%E8%B3%87%E6%96%99%E5%90%8C%E6%AD%A5%E5%AF%A6%E6%88%B0%E6%8C%87%E5%8D%97/" rel="prev" title="Elasticsearch 的部署與資料同步實戰指南">
+                  <i class="fa fa-angle-left"></i> Elasticsearch 的部署與資料同步實戰指南
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
