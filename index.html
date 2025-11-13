@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">121</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">122</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">59</span></a>
       <ul class="sub-menu">
   
@@ -211,7 +211,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Database/">
         Database
-        <span class="post-count">(25)</span>
+        <span class="post-count">(26)</span>
       </a>
     </li>
   
@@ -562,7 +562,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-count">122</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -587,6 +587,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/11/13/%E5%91%8A%E5%88%A5%E6%89%B9%E6%AC%A1%E8%99%95%E7%90%86%20Change%20Data%20Capture%20CDC%20%E7%9A%84%E7%95%B0%E6%AD%A5%E9%9D%A9%E5%91%BD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/11/13/%E5%91%8A%E5%88%A5%E6%89%B9%E6%AC%A1%E8%99%95%E7%90%86%20Change%20Data%20Capture%20CDC%20%E7%9A%84%E7%95%B0%E6%AD%A5%E9%9D%A9%E5%91%BD/" class="post-title-link" itemprop="url">
+              告別批次處理：Change Data Capture (CDC) 的異步革命
+            </a>
+            <a href="/my-blog/2025/11/13/%E5%91%8A%E5%88%A5%E6%89%B9%E6%AC%A1%E8%99%95%E7%90%86%20Change%20Data%20Capture%20CDC%20%E7%9A%84%E7%95%B0%E6%AD%A5%E9%9D%A9%E5%91%BD/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-11-13 00:00:00 / 修改時間：23:46:47" itemprop="dateCreated datePublished" datetime="2025-11-13T00:00:00+08:00">2025-11-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">在數據驅動的時代，對數據的「即時性」要求越來越高。然而，許多系統的數據同步仍然依賴著一種古老而笨拙的方式——批次處理 (Batch Processing)。 想像一下這個場景： 一個 ETL (Extract-Transform-Load) 任務在每天午夜執行，將線上交易資料庫 (OLTP) 的數據同步到數據倉庫 (Data Warehouse)。這意味著業務分析師看到的報表，永遠是昨天的數據。 為了更新搜尋引擎中的商品資訊，需要寫一個定時任務，每 10 分鐘輪詢一次商品資料表，找出 updated_at 在最近 10 分鐘內的記錄。這種輪詢不僅給資料庫帶來了不必要的壓力，還可能遺漏「刪除」操作。 這些方法的共同問題是：延遲、資源浪費和數據不一致。 有沒有一種更優雅、更即時的方式？答案就是 Change Data Capture (CDC)。 什麼是 CDC (Change Data Capture)？ CDC 是一種軟體設計模式，用於識別和捕獲資料庫中的數據變更（INSERT, UPDATE, DELETE），並將這些變更事件以串流 (Stream) 的形式，即時地傳遞給下游的消費者。 一個絕佳的類比： 傳統輪詢：就像每小時打電話給圖書館，詢問「有沒有新書到？」，圖書館員需要放下手邊工作，幫你查一遍。這既打擾了圖書館員，也無法第一時間知道新書上架的消息。 CDC：就像向圖書館「訂閱」了新書通知服務。一旦有新書上架，圖書館會立刻發一條簡訊給你。無需再主動詢問，總能即時獲取資訊，而且圖書館員的壓力也大大降低。 CDC 的核心思想是，將資料庫視為一個產生「事實」的地方，而每一次數據變更，都是一個不可變的「事件」。我們的工作，就是去監聽並響應這些事件。 CDC 是如何運作的？深入核心原理 CDC 的實現方式有多種，但它們的優劣和對源資料庫的影響差異巨大。 1. 基於查詢 (Query-Based) - 最不推薦 這是最原始的方式，通常依賴於一個 last_updated_at 之類的時間戳欄位。 工作方式：定時執行 SELECT * FROM table WHERE updated_at &gt; ? 查詢。 缺點： 無法捕獲 DELETE：一行記錄被刪除後，就再也查不到它了。 高延遲：數據同步的即時性取決於輪詢頻率。 性能開銷：頻繁的全表或索引掃描會給源資料庫帶來巨大壓力。 2. 基於觸發器 (Trigger-Based) 在資料庫層面，為要監控的表建立 INSERT, UPDATE, DELETE 觸發器。 工作方式：當主表發生變更時，觸發器會將變更的內容（舊數據、新數據）寫入一個獨立的「日誌表」或「事件表」。CDC 工具再從這張表中讀取數據。 缺點： 侵入性強：需要在源資料庫中建立額外的資料庫物件。 性能影響：觸發器在原始的資料庫交易中同步執行，會增加主業務的響應延遲。 3. 基於交易日誌 (Log-Based) - 現代 CDC 的黃金標準 這是目前最流行、最高效的方式。它利用了資料庫自身的交易日誌 (Transaction Log)。 幾乎所有主流資料庫（如 MySQL 的 binlog、PostgreSQL 的 WAL、Oracle 的 Redo Log）都有一個交易日誌。這個日誌的原始目的是為了數據庫的備份、還原和主從複製。它以極高的效率，忠實地記錄了資料庫中發生的每一次數據變更。 工作方式：CDC 工具偽裝成一個從庫 (Slave/Replica)，去讀取並解析資料庫的交易日誌。它將日誌中的底層變更事件（如 “在 users 表的 offset 123 處，將欄位 ‘status’ 的值從 ‘active’ 改為 ‘inactive’”）轉換為更易於理解的數據事件流。 優點： 低延遲、高吞吐：直接讀取日誌，繞過了 SQL 查詢層，接近即時。 對源資料庫性能影響極小：讀取日誌是一個非同步的、輕量級的操作。 數據完整性高：可以捕獲包括 DELETE 在內的所有操作，甚至 DDL（如 ALTER TABLE）變更。 非侵入性：無需修改源資料庫的 Schema。 主流 CDC 架構與生態系 現代基於日誌的 CDC 架構，通常以 Debezium + Kafka 為核心。 Debezium：一個開源的分散式 CDC 平台，是這個領域的事實標準。它為主流資料庫（MySQL, PostgreSQL, MongoDB 等）提供了源連接器 (Source Connector)。 Kafka Connect：一個用於在 Apache Kafka 和其他系統之間可靠地串流數據的框架。Debezium 的連接器就運行在 Kafka Connect 之上。 Apache Kafka：一個高吞吐、可擴展的分散式消息佇列，是 CDC 事件流的完美載體和緩衝區。 這個架構的工作流程如下： graph TD subgraph Source_Database A[OLTP Database] -- writes --&gt; B[&quot;Transaction Log&lt;br/&gt;(e.g., binlog, WAL)&quot;] end subgraph CDC_Platform C[&quot;Debezium Connector&lt;br/&gt;(on Kafka Connect)&quot;] -- reads &amp; parses --&gt; B C -- produces event stream --&gt; D[Apache Kafka Topic] end subgraph Downstream_Consumers D --&gt; E[&quot;Microservice A&lt;br/&gt;(e.g., Cache Invalidation)&quot;] D --&gt; F[&quot;Search Index&lt;br/&gt;(e.g., Elasticsearch)&quot;] D --&gt; G[&quot;Data Warehouse / Lake&lt;br/&gt;(e.g., Snowflake, BigQuery)&quot;] end 為什麼應該在專案中使用 CDC？核心應用場景 CDC 不僅僅是一項技術，它是一種能解鎖眾多架構可能性的「催化劑」。 微服務間的數據同步 在微服務架構中，每個服務都擁有自己的資料庫。當服務 A 需要服務 B 的數據時，傳統做法是透過 API 呼叫。但如果服務 A 需要對 B 的數據進行複雜查詢或聚合，API 模式就會變得低效。透過 CDC，服務 B 可以將其數據變更發佈到 Kafka，服務 A 可以訂閱這些變更，在自己的資料庫中維護一份「物化視圖」，從而實現高效的本地查詢。 即時數據倉儲與分析 告別 T+1 的數據延遲。透過 CDC，交易數據可以即時地流入數據倉庫或數據湖，讓業務分析師能夠基於最新的數據進行決策。 快取同步與失效 (Cache Invalidation) 當資料庫中的數據更新後，如何保證 Redis 等快取中的數據也能同步更新？CDC 提供了完美的解決方案。監聽資料庫的變更事件，一旦有更新或刪除，就發送一個命令去清除或更新 Redis 中的對應快取。 搜尋引擎同步 保持 Elasticsearch 或 OpenSearch 中的索引與主資料庫同步，是 CDC 的一個經典應用。任何商品的增、刪、改，都能即時反映到搜尋引擎中，確保用戶搜到的永遠是最新資訊。 T+1 的數據延遲，意思是：今天（T日）產生的數據，要到明天（T+1日）才能被查詢、分析或使用。 挑戰與考量 CDC 雖然強大，但也並非萬能藥。在實施前需要考慮： 初始快照 (Initial Snapshot)：在開始監聽增量變更之前，如何獲取數據庫的全量基準數據？Debezium 等工具提供了對此的內建支援。 Schema 演進：當源資料庫的表結構發生變化時（如增加欄位），CDC 管道需要能夠優雅地處理這些 DDL 變更。 事件傳遞保證：需要理解 Kafka 等消息系統提供的「至少一次 (at-least-once)」或「精確一次 (exactly-once)」傳遞語義，以應對可能的重複事件。 At-Most-Once (最多一次):消息最多只會被傳遞一次。可能會丟失，但絕不會重複。 At-Least-Once (至少一次):消息保證會被傳遞，絕不會丟失，但可能會重複。 Exactly-Once (精確一次):消息不多不少，精確地被傳遞一次。既不丟失，也不重複。 結論 CDC 代表了一種從「請求-響應」的批次思維，到「事件驅動」的串流思維的轉變。它將資料庫從一個被動的數據孤島，轉變為一個主動的、即時的事件源泉。 透過解耦數據的生產者和消費者，CDC 為構建高彈性、可擴展、即時響應的現代數據架構鋪平了道路。如果還在為數據同步的延遲和複雜性而煩惱，那麼，是時候深入了解 Change Data Capture 了。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/11/13/%E5%91%8A%E5%88%A5%E6%89%B9%E6%AC%A1%E8%99%95%E7%90%86%20Change%20Data%20Capture%20CDC%20%E7%9A%84%E7%95%B0%E6%AD%A5%E9%9D%A9%E5%91%BD/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1351,92 +1437,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/10/22/The%20Twelve-Factor%20App%20%E6%96%B9%E6%B3%95%E8%AB%96/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/20/%E5%BE%9E%20if-else%20%E5%88%B0%20SOLID%20%E5%9C%A8%E7%90%86%E6%83%B3%E6%9E%B6%E6%A7%8B%E8%88%87%E7%8F%BE%E5%AF%A6%E9%80%9F%E5%BA%A6%E4%B9%8B%E9%96%93%E8%A9%B2%E5%A6%82%E4%BD%95%E6%8A%89%E6%93%87/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/10/20/%E5%BE%9E%20if-else%20%E5%88%B0%20SOLID%20%E5%9C%A8%E7%90%86%E6%83%B3%E6%9E%B6%E6%A7%8B%E8%88%87%E7%8F%BE%E5%AF%A6%E9%80%9F%E5%BA%A6%E4%B9%8B%E9%96%93%E8%A9%B2%E5%A6%82%E4%BD%95%E6%8A%89%E6%93%87/" class="post-title-link" itemprop="url">
-              從 if-else 到 SOLID：在理想架構與現實速度之間，該如何抉擇？
-            </a>
-            <a href="/my-blog/2025/10/20/%E5%BE%9E%20if-else%20%E5%88%B0%20SOLID%20%E5%9C%A8%E7%90%86%E6%83%B3%E6%9E%B6%E6%A7%8B%E8%88%87%E7%8F%BE%E5%AF%A6%E9%80%9F%E5%BA%A6%E4%B9%8B%E9%96%93%E8%A9%B2%E5%A6%82%E4%BD%95%E6%8A%89%E6%93%87/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-10-20 00:00:00 / 修改時間：16:03:00" itemprop="dateCreated datePublished" datetime="2025-10-20T00:00:00+08:00">2025-10-20</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">軟體開發中，需要考慮理想架構與現實速度的權衡。if-else 加上 Feature Flag 的組合，是快速回應需求的利器；而 SOLID 原則，則是追求程式碼長期健康的方案。 這兩者是水火不容的嗎？不。它們其實是功能生命週期的不同階段，一位成熟的工程師，懂得如何在正確的時機使用正確的工具。 The Tactical Choice: if-else + Feature Flag 的戰術價值 首先必須承認，用 if-else 快速增加新功能分支，並不是一種「壞」的實踐，而是一種戰術性選擇。它的核心價值不在於程式碼的優雅，而在於風險控制與快速部署。 優點： 極致的速度：在既有邏輯上增加一個判斷分支，是實現需求最快的方式。 強大的風險控制：新功能有 Bug？關掉 Feature Flag，系統立即恢復舊有行為，無需緊急回滾。 靈活的部署策略：可以輕鬆實現 A/B 測試、灰度發布（Canary Release），將新功能逐步開放給特定用戶群。 缺點： 違反開放封閉原則 (OCP)：直接修改了現有的、本應穩定的程式碼。 累積技術債：每個 if-else 都是一個需要被記住的決策點。當這些分支越積越多，程式碼的複雜度會呈指數級增長，最終變得難以維護。 範例程式碼： def handle_payment(request): # 用一個 flag 快速切換新舊邏輯 if feature_flags.is_enabled(&#x27;new-payment-gateway&#x27;): # 快速實現的新支付邏輯 return new_payment_service.process(request) else: # 原有的穩定邏輯 return old_payment_service.process(request) 結論：Feature Flag 是一種強大的部署工具，而非設計工具。它讓我們能安全地「把鷹架搭在正在行駛的火車上」，但它本身不該成為火車結構的一部分。 The Strategic Goal: SOLID 原則的戰略藍圖 與戰術性的 if-else 相對的，是以 SOLID（特別是開放封閉原則）為代表的戰略性架構。它的目標不是眼前的苟且，而是系統的長期健康與可持續發展。 優點： 結構清晰：職責被清晰地劃分到不同的類別中（符合單一職責）。 易於擴展：未來再增加第三、第四種支付方式時，只需新增對應的策略類別，完全不需碰觸現有穩定程式碼。 可測試性高：每個支付策略都可以被獨立進行單元測試。 缺點： 前期成本較高：為了一個小功能，需要建立介面、建立新類別、修改依賴注入的配置，投入時間較多。 過度設計風險：對於一個不確定是否會長期存在的功能，一開始就投入完整的設計，可能是一種浪費。 範例程式碼 (使用策略模式重構)： from abc import ABC, abstractmethod # 1. 定義一個抽象的 &quot;契約&quot; class PaymentGateway(ABC): @abstractmethod def process(self, request): pass # 2. 建立具體的 &quot;策略&quot; class OldPaymentService(PaymentGateway): def process(self, request): # 原有的穩定邏輯 print(&quot;Processing with old gateway...&quot;) class NewPaymentService(PaymentGateway): def process(self, request): # 新的支付邏輯 print(&quot;Processing with NEW gateway...&quot;) # 3. 執行程式依賴於 &quot;契約&quot;，而非具體實作 class PaymentHandler: def __init__(self, gateway: PaymentGateway): self._gateway = gateway def handle_payment(self, request): # 這裡不再有 if-else self._gateway.process(request) # 在應用程式的配置層或工廠中，決定要注入哪個實例 # 這部分可以根據設定檔或環境變數來決定 if settings.USE_NEW_GATEWAY: gateway_instance = NewPaymentService() else: gateway_instance = OldPaymentService() payment_handler = PaymentHandler(gateway_instance) payment_handler.handle_payment(some_request) 結論：SOLID 設計是我們追求的最終穩態。它像是一座設計精良的城市，道路寬闊，分區明確，無論未來要蓋新學校還是新醫院，都能輕鬆地找到合適的位置，而不會造成交通堵塞。 實踐之道：一個務實的兩階段工作流 既然兩者各有優劣，該如何結合它們的長處？答案是：將功能開發視為一個從「戰術」到「戰略」的演進過程。 階段一：戰術性部署 (Tactical Deployment) 當接到一個不確定性高或需要快速驗證的需求時： 擁抱 Feature Flag：大膽地使用 if-else + Feature Flag 的方式，快速將功能交付上線。 安全驗證：在生產環境中，透過開關 Flag 來驗證功能的正確性與市場反應。 【最關鍵的一步】建立技術債門票：在專案管理工具（如 Jira, Trello）中，立刻為自己建立一張技術債票，標題為：「重構支付功能的 Feature Flag，將其改為策略模式」。給它設定一個合理的到期日（例如：兩週內）。 階段二：戰略性重構 (Strategic Refactoring) 當新功能被證明是成功的、會長期存在的，就是償還技術債的時候了。 規劃重構：將技術債門票排入近期的開發週期 (Sprint)。這一步驟必須像開發新功能一樣被正式對待。 實踐 SOLID：動手移除 if-else，將其重構成前面提到的策略模式。 清理 Flag：在重構完成並上線穩定後，將無用的 Feature Flag 從程式碼和配置系統中徹底移除。 一個絕佳的比喻是「鷹架」： Feature Flag 就像蓋大樓時搭的鷹架。它是施工期間保證安全的必要工具，但大樓竣工後，必須把它拆掉。沒有人會住在一個滿是鷹架的房子裡。 SOLID 設計則是大樓穩固的鋼骨結構。 總結 回到最初的問題：實務上該如何選擇？答案是，不必在「單一風格」的死胡同裡打轉，而應該兩者兼顧，並建立一套清晰的團隊紀律。 情境 初期選擇 後續行動 高度不確定的實驗性功能 if-else + Feature Flag 若功能成功，必須排程重構成 SOLID 設計 需要 A/B 測試或灰度發布 if-else + Feature Flag 測試結束後，移除失敗分支並重構保留的分支 確定會長期存在的變化 優先考慮 SOLID 設計 若時間緊迫，可先用 Flag，但要立即建立技術債票 臨時性活動功能 if-else + Feature Flag 活動結束後，必須將整個分支和 Flag 移除 實務上，一個優秀的工程師，既懂得如何利用「鷹架」快速安全地完成工作，也懂得在工作完成後，拆除鷹架，留下一個乾淨、堅固、美觀的建築。兩者兼顧，才是專業的體現。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/10/20/%E5%BE%9E%20if-else%20%E5%88%B0%20SOLID%20%E5%9C%A8%E7%90%86%E6%83%B3%E6%9E%B6%E6%A7%8B%E8%88%87%E7%8F%BE%E5%AF%A6%E9%80%9F%E5%BA%A6%E4%B9%8B%E9%96%93%E8%A9%B2%E5%A6%82%E4%BD%95%E6%8A%89%E6%93%87/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>
