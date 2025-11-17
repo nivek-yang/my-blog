@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">122</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">123</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">59</span></a>
       <ul class="sub-menu">
   
@@ -204,14 +204,14 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Cybersecurity/">
         Cybersecurity
-        <span class="post-count">(4)</span>
+        <span class="post-count">(5)</span>
       </a>
     </li>
   
     <li class="menu-item-child">
       <a href="/my-blog/tags/Database/">
         Database
-        <span class="post-count">(26)</span>
+        <span class="post-count">(27)</span>
       </a>
     </li>
   
@@ -562,7 +562,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">122</span>
+          <span class="site-state-item-count">123</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -587,6 +587,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/11/17/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20RLS%20%E8%B3%87%E6%96%99%E5%88%97%E5%B1%A4%E7%B4%9A%E5%AE%89%E5%85%A8%E6%80%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/11/17/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20RLS%20%E8%B3%87%E6%96%99%E5%88%97%E5%B1%A4%E7%B4%9A%E5%AE%89%E5%85%A8%E6%80%A7/" class="post-title-link" itemprop="url">
+              解鎖資料庫的守門人：深入淺出 RLS (資料列層級安全性)
+            </a>
+            <a href="/my-blog/2025/11/17/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20RLS%20%E8%B3%87%E6%96%99%E5%88%97%E5%B1%A4%E7%B4%9A%E5%AE%89%E5%85%A8%E6%80%A7/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-11-17 00:00:00 / 修改時間：23:33:33" itemprop="dateCreated datePublished" datetime="2025-11-17T00:00:00+08:00">2025-11-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">在日常開發中，資料庫的權限管理是個永遠繞不開的話題。常常會遇到這樣的場景： 一個銷售團隊的 CRM 系統，每個業務員只能看到自己名下的客戶資料。 一個多租戶 (Multi-tenant) 的 SaaS 應用，A 公司的用戶絕對不能看到 B 公司的數據。 醫院的病歷系統，醫生只能查詢自己負責的病患資訊。 過去，要實現這種精細的存取控制，通常會怎麼做？也許是在應用程式的後端程式碼中加入大量的 if-else 判斷，或為每個角色建立複雜的資料庫視圖 (View)。這些方法雖然可行，但往往會讓應用程式邏輯變得臃腫，且難以維護與審計。 本篇文章將分享一個更優雅、強大的解決方案，它將安全邏輯直接下沉到資料庫層——這就是 資料列層級安全性 (Row-Level Security, RLS)。 什麼是 RLS？一個神奇的隱形濾鏡 簡單來說，RLS 是一種資料庫安全功能，它允許我們根據執行查詢的使用者身份或上下文，來控制他們能存取資料表中的哪些「資料列 (Row)」。 可以把它想像成一個為每個用戶量身打造的 「隱形濾鏡」。當用戶 SELECT * FROM Orders 時，資料庫會自動、透明地在這個查詢後面追加一個 WHERE 條件，例如 WHERE SalespersonID = 'CURRENT_USER_ID'。 核心優勢： 對於應用程式來說，查詢語句依然是簡潔的 SELECT * FROM Orders。它完全不知道背後發生了什麼，安全邏輯被完美地封裝在資料庫內部，實現了應用程式與安全策略的解耦。 為什麼需要 RLS？三大核心價值 可能會問：「在後端寫邏輯不是也一樣嗎？」 RLS 帶來的價值遠不止於此。 集中化的安全控管 (Centralized Security Control) 所有存取規則都定義在資料庫的一個地方（安全性原則），而不是散落在各個應用程式的程式碼中。這使得安全策略的審計、修改和維護變得極其簡單。 簡化應用程式開發 (Simplified Application Logic) 開發人員不再需要為數據權限絞盡腦汁。可以專注於業務邏輯，撰寫簡單的數據查詢，把安全問題交給資料庫管理員 (DBA) 和資料庫本身。 提升數據安全性與合規性 (Enhanced Data Security &amp; Compliance) 由於安全規則在資料庫層級強制執行，大大降低了因應用程式漏洞導致的數據洩露風險。無論是透過應用程式、報表工具還是直接連線查詢，用戶都只能看到他們被授權的數據，這對於滿足 GDPR、HIPAA 等法規至關重要。 GDPR 是針對歐盟的通用個人資料保護法。 HIPAA 是針對美國的醫療健康資訊保護法。 RLS 的運作原理：策略 (Policy) 與 USING 表達式 要理解 RLS，需要認識其核心元件（以 PostgreSQL 為例）： 在 PostgreSQL 中，RLS 的核心概念與其他資料庫相似，但實現的語法更加直接。它不依賴於外部的函式，而是將安全邏輯直接寫入一個稱為 「策略 (Policy)」 的資料庫物件中。 要理解 RLS，只需要認識一個核心元件： 安全性策略 (Security Policy) 這是一個直接附加在資料表上的規則。 它使用一個 USING 表達式來定義 「哪些資料列是可見的」。這個表達式必須返回一個布林值 (true 或 false)。 當使用者查詢這張表時，PostgreSQL 會將這個 USING 表達式自動、隱性地當作 WHERE 條件附加到查詢上。 運作流程如下： graph TD A[使用者執行查詢: SELECT * FROM sales] --&gt; B&#123;資料庫引擎&#125;; B --&gt; C&#123;檢查 sales 表是否啟用 RLS 且有對應的 Policy&#125;; C -- 有 --&gt; D&#123;取得 Policy 中的 USING 表達式&#125;; D -- 為每一行計算權限 --&gt; E&#123;自動在查詢後附加 WHERE 條件&#125;; E --&gt; F[返回過濾後的結果]; C -- 沒有 --&gt; G[返回所有結果]; F --&gt; H[用戶看到符合權限的資料]; G --&gt; H; 實戰演練：為銷售團隊建立 RLS 策略 場景： 有一個 sales 表。業務員 (sales_role) 只能看到自己的銷售紀錄，而經理 (manager_role) 可以看到所有人的紀錄。 第 1 步：建立範例資料與角色 -- 建立範例資料表 CREATE TABLE sales ( order_id INT PRIMARY KEY, product VARCHAR(50), amount DECIMAL(10, 2), salesperson TEXT -- 使用 TEXT 或 VARCHAR 來儲存使用者名稱 ); -- 插入一些資料 INSERT INTO sales VALUES (1, &#x27;Laptop&#x27;, 1200.00, &#x27;alice&#x27;), (2, &#x27;Mouse&#x27;, 25.00, &#x27;alice&#x27;), (3, &#x27;Keyboard&#x27;, 75.00, &#x27;bob&#x27;), (4, &#x27;Monitor&#x27;, 300.00, &#x27;bob&#x27;), (5, &#x27;Webcam&#x27;, 50.00, &#x27;charlie&#x27;); -- 建立角色 (在 PostgreSQL 中，使用者和群組都被視為 &quot;角色&quot;) CREATE ROLE sales_role; CREATE ROLE manager_role; -- 建立測試使用者並賦予他們角色 CREATE ROLE alice LOGIN PASSWORD &#x27;password&#x27; IN ROLE sales_role; CREATE ROLE bob LOGIN PASSWORD &#x27;password&#x27; IN ROLE sales_role; CREATE ROLE charlie LOGIN PASSWORD &#x27;password&#x27; IN ROLE sales_role; CREATE ROLE manager_user LOGIN PASSWORD &#x27;password&#x27; IN ROLE manager_role; -- 授予角色查詢權限 GRANT SELECT ON sales TO sales_role; GRANT SELECT ON sales TO manager_role; 第 2 步：在資料表上啟用 RLS 這是 PostgreSQL 的一個關鍵步驟。必須明確地告訴資料庫，這張表要開始強制執行 RLS 策略。 ALTER TABLE sales ENABLE ROW LEVEL SECURITY; 注意： 在啟用 RLS 後，如果沒有任何策略，預設的行為是 「全部拒絕 (Deny All)」。這意味著此時沒有人（除了超級使用者和表擁有者）能看到任何資料。 第 3 步：建立安全性策略 現在來定義規則。在 PostgreSQL 中，可以為不同角色建立不同的策略，這非常靈活。 -- 策略1：為 sales_role 的成員建立策略 -- 他們只能看到 salesperson 欄位是自己使用者名稱的資料列 CREATE POLICY sales_policy ON sales FOR SELECT TO sales_role USING (salesperson = current_user); -- 策略2：為 manager_role 的成員建立策略 -- USING (true) 是一個簡單的技巧，表示 &quot;永遠允許&quot;，也就是能看到所有資料列 CREATE POLICY manager_policy ON sales FOR SELECT TO manager_role USING (true); 第 4 步：驗收成果 模擬不同使用者來查詢同一張表。在 PostgreSQL 中，使用 SET ROLE 來切換身份。 -- 模擬 alice 查詢 SET ROLE alice; SELECT * FROM sales; -- 預期結果：只會看到 alice 的兩筆訂單 -- 切換回原來身份 RESET ROLE; -- 模擬 bob 查詢 SET ROLE bob; SELECT * FROM sales; -- 預期結果：只會看到 bob 的兩筆訂單 -- 切換回原來身份 RESET ROLE; -- 模擬 manager_user 查詢 SET ROLE manager_user; SELECT * FROM sales; -- 預期結果：看到所有五筆訂單 -- 切換回原來身份 RESET ROLE; 實現了 一個查詢，多種結果 的目標，且安全邏輯完全由資料庫掌控。這種將規則直接定義在策略中的方式，讓整個設定過程顯得更加清晰和一體化。 好的，當然！將「注意事項與最佳實踐」章節也更新為 PostgreSQL 的版本是非常重要的一步，因為兩者在細節上確實存在差異。 這是我為您準備的 PostgreSQL 版本。 注意事項與最佳實踐 雖然 PostgreSQL 的 RLS 功能強大且直觀，但在實際應用中，仍有一些關鍵點需要特別留意，以確保系統的安全、穩定與高效。 性能考量：保持 USING 與 WITH CHECK 表達式高效 RLS 策略中的 USING (針對現有資料列) 和 WITH CHECK (針對新/修改的資料列) 表達式會在相關查詢執行時，為每一行潛在的資料列進行評估。因此，這些表達式的性能至關重要。 最佳實踐： 盡量使用簡單的比較運算和內建的、被標記為 STABLE 或 IMMUTABLE 的函式 (例如 current_user, session_user)。 避免在策略表達式中進行複雜的子查詢或呼叫計算成本高昂的自訂函式。如果邏輯複雜，考慮將其結果預先計算並儲存在如 current_setting() 的會話變數中，然後在策略中直接引用該變數。 測試，測試，再測試！ 安全策略的任何一個小疏忽都可能導致嚴重的數據洩露。在部署任何 RLS 策略之前，必須進行徹底的測試。 最佳實踐： 為系統中的每種角色 (sales_role, manager_role 等) 建立一套完整的測試案例。 使用 SET ROLE 命令模擬不同用戶，驗證他們在 SELECT, INSERT, UPDATE, DELETE 操作下，是否只能看到和操作預期中的數據。 繞過 RLS 的權限：了解誰是例外 在 PostgreSQL 中，並非所有用戶都受 RLS 策略的約束。了解這些例外情況對於管理和除錯至關重要。 不受 RLS 限制的角色包括： 超級使用者 (Superusers)。 表的擁有者 (Table Owner)。 具有 BYPASSRLS 屬性的角色 (CREATE ROLE dba_user BYPASSRLS;)。 這意味著，當以這些身份連線時，將看到所有資料，這在進行數據管理或排查 RLS 策略問題時非常有用。 不僅是讀取：善用 USING 與 WITH CHECK RLS 的強大之處在於它能保護所有 DML 操作。PostgreSQL 為此提供了精細的控制： USING (expression)：定義哪些現存的資料列是可見的。它適用於 SELECT, UPDATE 和 DELETE。可以把它想成一個自動的 WHERE 子句。 WITH CHECK (expression)：定義哪些新資料或修改後的資料是允許被寫入的。它適用於 INSERT 和 UPDATE。可以把它想成一個自動的 CHECK 約束。 範例：防止業務員為他人新增訂單 -- 首先移除之前的 SELECT 策略，改為一個更全面的策略 DROP POLICY sales_policy ON sales; -- 建立一個適用於所有操作的策略 CREATE POLICY sales_all_access_policy ON sales FOR ALL -- 適用於 SELECT, INSERT, UPDATE, DELETE TO sales_role USING (salesperson = current_user) -- 只能看到/修改/刪除自己的資料 WITH CHECK (salesperson = current_user); -- 只能新增/更新為自己的資料 有了 WITH CHECK 子句，如果 alice 嘗試執行 INSERT INTO sales VALUES (6, 'Printer', 150.00, 'bob');，這個操作將會被資料庫直接拒絕，因為 'bob' != current_user (alice)。這提供了一個無法繞過的堅實保護層。 常見問題與深入探討 (FAQ) 在將 RLS 整合到實際專案中時，開發者經常會遇到一些關於它如何與現有工具（如 ORM）互動，以及其底層運作機制的疑問。 Q1: 我能透過 ORM (例如 Django ORM, SQLAlchemy) 設定 RLS 嗎？ 簡短回答： 不行，設定 RLS 幾乎總是需要直接使用 SQL 語法。 詳細解釋： ORM (Object-Relational Mapper) 的核心設計目的是抽象化資料操作 (DML)，而非資料庫結構與安全管理 (DDL/DCL)。 ORM 的強項： 將程式碼中的物件（例如 Sale class）對應到資料庫的資料表 (sales)，並將 sale.save()、Sale.get(id=1) 這類操作轉換成 INSERT、SELECT 等 SQL 語句。它處理的是資料本身。 RLS 的範疇： RLS 屬於資料庫的安全定義。CREATE POLICY 和 ALTER TABLE ... ENABLE ROW LEVEL SECURITY 是用來修改資料庫規則的 DDL (Data Definition Language) 指令，這與建立資料表、新增索引屬於同一類別，超出了典型 ORM 的職責範圍。 最佳實踐：使用「資料庫遷移 (Database Migrations)」 在現代開發流程中，不應手動連線到資料庫執行這些 DDL 指令。正確的做法是將這些 SQL 語法寫在 「遷移檔案 (Migration Files)」 中。 不論使用 Django、Ruby on Rails 還是 SQLAlchemy (搭配 Alembic)，都可以建立一個新的遷移檔案，並在其中撰寫原生 SQL 來啟用 RLS 和建立策略。 -- 這段 SQL 程式碼應該放在一個遷移檔案中 ALTER TABLE sales ENABLE ROW LEVEL SECURITY; CREATE POLICY sales_policy ON sales FOR SELECT TO sales_role USING (salesperson = current_user); 結論： 應用程式和 ORM 會自動遵守並受益於 RLS（因為資料庫會在底層過濾資料），但 RLS 的設定工作應透過資料庫遷移檔案中的原生 SQL 來完成，以確保版本控制和環境一致性。 Q2: PostgreSQL 預設就啟用 RLS 嗎？為什麼在設定 RLS 之前，還是能查到所有資料？ 簡短回答： 不，RLS 預設是關閉的。在啟用它之前，資料庫的存取權限由另一套更傳統、更寬鬆的權限系統所控制。 詳細解釋： 可以將 PostgreSQL 的安全模型想像成兩個層次： 第 1 層：物件級權限 (預設運作模式) 這是傳統的權限模型，透過 GRANT 和 REVOKE 指令來運作。當執行： GRANT SELECT ON sales TO sales_role; 這是在說：「授予 sales_role 這個角色讀取 sales 這張表的權限」。在這個模型下，權限是「全有或全無」的。一旦被授權，該角色就能看到表中的所有資料列。這就是為什麼在啟用 RLS 之前，能查詢到所有資料。 第 2 層：資料列級安全性 (Row-Level Security, RLS) 當對一張表執行 ALTER TABLE sales ENABLE ROW LEVEL SECURITY; 時，就啟動了這個更嚴格、更精細的安全層。 啟用 RLS 後，權限的判斷邏輯會變成： 先檢查物件級權限：使用者是否有 SELECT 這張表的權限？如果沒有，直接拒絕。 再檢查資料列級權限：如果使用者有 SELECT 權限，資料庫會接著為每一筆資料列尋找適用的 POLICY。 最關鍵的轉變在於，啟用 RLS 後，預設規則從「預設允許」翻轉為 「預設拒絕 (Deny by Default)」。 這意味著，如果資料庫找不到任何 POLICY 明確允許 (USING 表達式返回 true) 使用者查看某個資料列，那麼該資料列就會被隱藏。這就是為什麼一旦啟用 RLS 卻沒有建立任何策略，所有普通用戶都會突然查不到任何資料的原因，因為沒有任何規則明確地允許他們存取。 結論 資料列層級安全性 (RLS) 不是一個新技術，但它絕對是現代資料庫架構中一個被低估的強大工具。它將複雜的存取控制邏輯從應用程式中解放出來，回歸到數據本身，實現了真正的「以數據為中心」的安全模型。 下次當再遇到需要精細權限控制的需求時，不妨思考一下，是否可以讓資料庫的「隱形守門人」——RLS——來為你優雅地解決這個問題。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/11/17/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20RLS%20%E8%B3%87%E6%96%99%E5%88%97%E5%B1%A4%E7%B4%9A%E5%AE%89%E5%85%A8%E6%80%A7/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -630,7 +716,7 @@
       <span class="post-meta-item-text">發表於</span>
       
 
-      <time title="創建時間：2025-11-13 00:00:00 / 修改時間：23:46:47" itemprop="dateCreated datePublished" datetime="2025-11-13T00:00:00+08:00">2025-11-13</time>
+      <time title="創建時間：2025-11-13 00:00:00 / 修改時間：23:48:39" itemprop="dateCreated datePublished" datetime="2025-11-13T00:00:00+08:00">2025-11-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1351,92 +1437,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/10/26/SQL%20%E6%95%88%E8%83%BD%E8%AA%BF%E6%A0%A1/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/22/The%20Twelve-Factor%20App%20%E6%96%B9%E6%B3%95%E8%AB%96/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/10/22/The%20Twelve-Factor%20App%20%E6%96%B9%E6%B3%95%E8%AB%96/" class="post-title-link" itemprop="url">
-              The Twelve-Factor App 方法論
-            </a>
-            <a href="/my-blog/2025/10/22/The%20Twelve-Factor%20App%20%E6%96%B9%E6%B3%95%E8%AB%96/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-10-22 00:00:00 / 修改時間：23:48:06" itemprop="dateCreated datePublished" datetime="2025-10-22T00:00:00+08:00">2025-10-22</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">在複雜的現代軟體世界裡，為了解決以及應對雲端時代帶來的挑戰，一套旨在建立穩健、可擴展、易於維護的應用程式的最佳實踐——The Twelve-Factor App——應運而生。 這套方法論最初由 Heroku 的工程師們提出，它不僅僅是一套技術規範，更是一種開發哲學。它為建構「軟體即服務 (SaaS)」應用程式提供了一個清晰的藍圖。無論是在開發一個新創公司的 MVP，還是在維護一個大型企業的複雜系統，理解並實踐這十二個原則，都將使應用程式更具彈性與生命力。 讓我們逐一深入探討這十二個要素。 The Twelve Factors I. 基線 (Codebase) 一份基線，追蹤在版本控制系統中，可N次部署。 一個應用程式的所有程式碼都應該儲存在一個單一的版本控制儲存庫中（例如 Git）。這份程式碼庫將是所有部署（開發、測試、正式環境）的唯一來源 (Single Source of Truth)。 為何重要？：確保了程式碼的一致性。團隊成員可以輕鬆協作，追蹤變更歷史，並避免因程式碼版本混亂而導致的部署災難。 實踐：使用 Git，並為你的專案建立一個獨立的 repository。 II. 依賴 (Dependencies) 明確地宣告與隔離依賴。 應用程式永遠不應該依賴系統環境中隱含的套件或函式庫。所有依賴都必須透過依賴宣告檔案（如 Python 的 requirements.txt、Node.js 的 package.json）來明確定義，並使用依賴隔離工具（如 virtualenv、npm、Docker 容器）來確保環境的純粹性。 為何重要？：消除了「在我電腦上可以跑」的窘境。讓新進開發者或自動化建置系統可以簡單、可靠地設定開發環境。 實踐：在專案根目錄下維護 package.json 或 requirements.txt 檔案，並在 README 中說明如何安裝依賴。 III. 設定 (Config) 將設定儲存在環境變數中。 設定（Config）是指那些在不同部署環境中會變動的資訊，例如資料庫連線資訊、第三方服務的 API Key 等。這些資訊絕對不能寫死在程式碼中，而應該儲存在環境變數裡。 為何重要？： 安全性：避免將敏感資訊（如密碼、金鑰）洩漏在程式碼庫中。 靈活性：同一份程式碼，不需任何修改，就可以部署到不同的環境。 實踐：# Bad: 硬編碼在程式碼中 db_url = &quot;postgres://user:password@host:port/dbname&quot; # Good: 從環境變數讀取 import os db_url = os.getenv(&quot;DATABASE_URL&quot;) IV. 後端服務 (Backing Services) 將後端服務視為附加資源。 後端服務是指應用程式在運行時所依賴的任何服務，例如資料庫 (MySQL, PostgreSQL)、快取系統 (Redis)、訊息佇列 (RabbitMQ) 等。對應用程式而言，這些服務都應該是可替換的資源，透過一個 URL 或其他定位資訊來存取。 為何重要？：實現了應用程式與底層服務的鬆耦合。可以輕易地將本地的 MySQL 資料庫換成雲端的 RDS 服務，而不需要修改任何程式碼，只需更改環境變數中的 DATABASE_URL 即可。 V. 建置、發行、執行 (Build, Release, Run) 嚴格區分建置、發行、執行三個階段。 建置 (Build)：將程式碼轉換為可執行包的過程，包含編譯、打包、安裝依賴等。 發行 (Release)：將「建置」階段的產出，與「設定」結合，形成一個不可變的版本。一旦建立，就不能再修改。 執行 (Run)：在特定環境中運行「發行」階段的產物。 為何重要？：確保部署的穩定性與可追溯性。任何修改都必須經過新的 Build -&gt; Release 流程，禁止直接在線上環境修改程式碼，這為 CI/CD 提供了堅實的基礎。 VI. 行程 (Processes) 應用程式應作為一個或多個無狀態 (Stateless) 的行程來執行。 任何需要被持久化的資料，都必須儲存在後端服務（如資料庫或檔案儲存）中。應用程式本身應該是無狀態 (Stateless) 且無共享 (Share-Nothing) 的。這意味著來自同一個用戶的兩次請求，可能會被路由到兩個完全不同的行程處理，而不影響功能。 為何重要？：這是水平擴展 (Horizontal Scaling) 的關鍵。當流量增加時，可以簡單地增加更多的行程實例來分擔負載，而不用擔心狀態同步的問題。 VII. 埠號綁定 (Port Binding) 透過埠號綁定來對外提供服務。 應用程式應該是自我包含的，不依賴於外部的網路伺服器（如 Apache, Nginx）來啟動。它應該自己綁定一個埠號，並監聽來自該埠號的請求。 為何重要？：使應用程式可以作為其他服務的後端服務。例如，一個 API 服務可以綁定 8000 埠，然後由另一個路由層（如 Nginx）將外部請求轉發給它。 實踐：在 Node.js 中使用 app.listen(port)，在 Python Django 中使用 runserver。 VIII. 並行 (Concurrency) 透過行程模型來達成擴展。 基於第六點「無狀態行程」，應用程式應該能夠透過水平擴展來增加並行處理能力。這意味著不應該依賴垂直擴展（增加單一機器的 CPU/RAM），而是透過增加更多的行程實例來應對負載。 為何重要？：提供了彈性且成本效益高的擴展方式，完美契合雲端環境的特性。 實踐：在 Docker Swarm 或 Kubernetes 環境中，只需調整服務的 replicas 數量即可。 IX. 易處理 (Disposability) 快速啟動與優雅地關閉，以最大化系統的穩健性。 應用程式的行程應該是可拋棄的，意味著它們可以隨時被啟動或停止。這要求它們啟動時間要快，並能優雅地關閉（例如，在收到 SIGTERM 信號時，完成當前請求後再退出）。 為何重要？：這對於彈性擴展、快速部署和從故障中恢復至關重要。當系統需要增減實例，或部署新版本時，快速啟動與關閉的能力是必需的。 X. 開發/正式環境對等 (Dev/Prod Parity) 讓開發、測試、正式環境盡可能地相似。 傳統開發模式中，開發環境（開發者的筆電）與正式環境（伺服器）之間存在巨大差異，這導致許多「在我電腦上可以跑」的問題。應該盡力縮小這些差距。 為何重要？：減少因環境差異導致的 Bug，提升開發信心，實現持續部署。 實踐：使用 Docker、Vagrant 等容器化或虛擬化技術，確保所有環境（開發、測試、生產）使用相同的作業系統、依賴版本和後端服務。 XI. 日誌 (Logs) 將日誌視為事件串流 (Event Stream)。 應用程式本身不應該關心日誌的儲存與管理。它只需將所有日誌訊息，作為一個不間斷的事件串流，輸出到標準輸出 stdout 和標準錯誤 stderr。 為何重要？：將應用程式與日誌處理邏輯解耦。在雲端環境中，日誌的收集、彙總、分析應該交由專門的平台（如 ELK Stack, Splunk, Datadog）來處理。 實踐：在程式碼中直接使用 print() 或 console.log()，而非寫入到特定的檔案。 XII. 管理程序 (Admin Processes) 將管理或維護任務，作為一次性的行程來執行。 諸如資料庫遷移 (Database Migration)、執行一次性腳本等管理任務，應該在與應用程式正常運行時相同的環境中執行。這些腳本應該與應用程式的程式碼一同發布，以避免版本不一致的問題。 為何重要？：確保管理任務與應用程式使用相同的設定和依賴，避免因環境不一致導致操作失敗。 實踐：將管理腳本放在程式碼庫中，並透過如 heroku run bash 或 kubectl exec 等機制來執行。 總結 The Twelve-Factor App 並不是一套僵化的法律，而是一套經過實戰驗證的、極具價值的指導原則。它描繪了一個理想的雲原生應用應有的樣貌：高內聚、低耦合、易於擴展、穩健可靠。 在下一個專案中，或是在重構現有系統時，不妨將這十二個要素作為檢查清單。也許無法一次全部達成，但每朝著這些原則邁進一步，應用程式就會離現代化、雲原生的目標更近一步。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/10/22/The%20Twelve-Factor%20App%20%E6%96%B9%E6%B3%95%E8%AB%96/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>

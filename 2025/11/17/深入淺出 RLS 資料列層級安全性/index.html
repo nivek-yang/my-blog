@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="在日常開發中，資料庫的權限管理是個永遠繞不開的話題。常常會遇到這樣的場景：  一個銷售團隊的 CRM 系統，每個業務員只能看到自己名下的客戶資料。 一個多租戶 (Multi-tenant) 的 SaaS 應用，A 公司的用戶絕對不能看到 B 公司的數據。 醫院的病歷系統，醫生只能查詢自己負責的病患資訊。  過去，要實現這種精細的存取控制，通常會怎麼做？也許是在應用程式的後端程式碼中加入大量的 if">
+<meta property="og:type" content="article">
+<meta property="og:title" content="解鎖資料庫的守門人：深入淺出 RLS (資料列層級安全性)">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/11/17/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20RLS%20%E8%B3%87%E6%96%99%E5%88%97%E5%B1%A4%E7%B4%9A%E5%AE%89%E5%85%A8%E6%80%A7/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="在日常開發中，資料庫的權限管理是個永遠繞不開的話題。常常會遇到這樣的場景：  一個銷售團隊的 CRM 系統，每個業務員只能看到自己名下的客戶資料。 一個多租戶 (Multi-tenant) 的 SaaS 應用，A 公司的用戶絕對不能看到 B 公司的數據。 醫院的病歷系統，醫生只能查詢自己負責的病患資訊。  過去，要實現這種精細的存取控制，通常會怎麼做？也許是在應用程式的後端程式碼中加入大量的 if">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-11-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-17T15:33:33.181Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Database">
+<meta property="article:tag" content="Cybersecurity">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/11/17/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20RLS%20%E8%B3%87%E6%96%99%E5%88%97%E5%B1%A4%E7%B4%9A%E5%AE%89%E5%85%A8%E6%80%A7/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/11/17/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20RLS%20%E8%B3%87%E6%96%99%E5%88%97%E5%B1%A4%E7%B4%9A%E5%AE%89%E5%85%A8%E6%80%A7/","path":"2025/11/17/深入淺出 RLS 資料列層級安全性/","title":"解鎖資料庫的守門人：深入淺出 RLS (資料列層級安全性)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>解鎖資料庫的守門人：深入淺出 RLS (資料列層級安全性) | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">123</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">59</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cloud-Computing/">
+        Cloud Computing
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Concurrency/">
+        Concurrency
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cryptography/">
+        Cryptography
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cybersecurity/">
+        Cybersecurity
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(27)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Design-Pattern/">
+        Design Pattern
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/DevOps/">
+        DevOps
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Logging/">
+        Logging
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(17)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/OOP/">
+        OOP
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Search/">
+        Search
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Serverless/">
+        Serverless
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(8)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(6)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-rls%E4%B8%80%E5%80%8B%E7%A5%9E%E5%A5%87%E7%9A%84%E9%9A%B1%E5%BD%A2%E6%BF%BE%E9%8F%A1"><span class="nav-number">1.</span> <span class="nav-text"> 什麼是 RLS？一個神奇的隱形濾鏡</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E9%9C%80%E8%A6%81-rls%E4%B8%89%E5%A4%A7%E6%A0%B8%E5%BF%83%E5%83%B9%E5%80%BC"><span class="nav-number">2.</span> <span class="nav-text"> 為什麼需要 RLS？三大核心價值</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rls-%E7%9A%84%E9%81%8B%E4%BD%9C%E5%8E%9F%E7%90%86%E7%AD%96%E7%95%A5-policy-%E8%88%87-using-%E8%A1%A8%E9%81%94%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text"> RLS 的運作原理：策略 (Policy) 與 USING 表達式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%A6%E6%88%B0%E6%BC%94%E7%B7%B4%E7%82%BA%E9%8A%B7%E5%94%AE%E5%9C%98%E9%9A%8A%E5%BB%BA%E7%AB%8B-rls-%E7%AD%96%E7%95%A5"><span class="nav-number">4.</span> <span class="nav-text"> 實戰演練：為銷售團隊建立 RLS 策略</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC-1-%E6%AD%A5%E5%BB%BA%E7%AB%8B%E7%AF%84%E4%BE%8B%E8%B3%87%E6%96%99%E8%88%87%E8%A7%92%E8%89%B2"><span class="nav-number">4.1.</span> <span class="nav-text"> 第 1 步：建立範例資料與角色</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC-2-%E6%AD%A5%E5%9C%A8%E8%B3%87%E6%96%99%E8%A1%A8%E4%B8%8A%E5%95%9F%E7%94%A8-rls"><span class="nav-number">4.2.</span> <span class="nav-text"> 第 2 步：在資料表上啟用 RLS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC-3-%E6%AD%A5%E5%BB%BA%E7%AB%8B%E5%AE%89%E5%85%A8%E6%80%A7%E7%AD%96%E7%95%A5"><span class="nav-number">4.3.</span> <span class="nav-text"> 第 3 步：建立安全性策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC-4-%E6%AD%A5%E9%A9%97%E6%94%B6%E6%88%90%E6%9E%9C"><span class="nav-number">4.4.</span> <span class="nav-text"> 第 4 步：驗收成果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A0%85%E8%88%87%E6%9C%80%E4%BD%B3%E5%AF%A6%E8%B8%90"><span class="nav-number">5.</span> <span class="nav-text"> 注意事項與最佳實踐</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E8%A6%8B%E5%95%8F%E9%A1%8C%E8%88%87%E6%B7%B1%E5%85%A5%E6%8E%A2%E8%A8%8E-faq"><span class="nav-number">6.</span> <span class="nav-text"> 常見問題與深入探討 (FAQ)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#q1-%E6%88%91%E8%83%BD%E9%80%8F%E9%81%8E-orm-%E4%BE%8B%E5%A6%82-django-orm-sqlalchemy-%E8%A8%AD%E5%AE%9A-rls-%E5%97%8E"><span class="nav-number">6.1.</span> <span class="nav-text"> Q1: 我能透過 ORM (例如 Django ORM, SQLAlchemy) 設定 RLS 嗎？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#q2-postgresql-%E9%A0%90%E8%A8%AD%E5%B0%B1%E5%95%9F%E7%94%A8-rls-%E5%97%8E%E7%82%BA%E4%BB%80%E9%BA%BC%E5%9C%A8%E8%A8%AD%E5%AE%9A-rls-%E4%B9%8B%E5%89%8D%E9%82%84%E6%98%AF%E8%83%BD%E6%9F%A5%E5%88%B0%E6%89%80%E6%9C%89%E8%B3%87%E6%96%99"><span class="nav-number">6.2.</span> <span class="nav-text"> Q2: PostgreSQL 預設就啟用 RLS 嗎？為什麼在設定 RLS 之前，還是能查到所有資料？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">7.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">123</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/11/17/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20RLS%20%E8%B3%87%E6%96%99%E5%88%97%E5%B1%A4%E7%B4%9A%E5%AE%89%E5%85%A8%E6%80%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="解鎖資料庫的守門人：深入淺出 RLS (資料列層級安全性) | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          解鎖資料庫的守門人：深入淺出 RLS (資料列層級安全性)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-11-17 00:00:00 / 修改時間：23:33:33" itemprop="dateCreated datePublished" datetime="2025-11-17T00:00:00+08:00">2025-11-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在日常開發中，資料庫的權限管理是個永遠繞不開的話題。常常會遇到這樣的場景：</p>
+<ul>
+<li>一個銷售團隊的 CRM 系統，每個業務員只能看到自己名下的客戶資料。</li>
+<li>一個多租戶 (Multi-tenant) 的 SaaS 應用，A 公司的用戶絕對不能看到 B 公司的數據。</li>
+<li>醫院的病歷系統，醫生只能查詢自己負責的病患資訊。</li>
+</ul>
+<p>過去，要實現這種精細的存取控制，通常會怎麼做？也許是在應用程式的後端程式碼中加入大量的 <code>if-else</code> 判斷，或為每個角色建立複雜的資料庫視圖 (View)。這些方法雖然可行，但往往會讓應用程式邏輯變得臃腫，且難以維護與審計。</p>
+<p>本篇文章將分享一個更優雅、強大的解決方案，它將安全邏輯直接下沉到資料庫層——這就是 <strong>資料列層級安全性 (Row-Level Security, RLS)</strong>。</p>
+<hr />
+<h1 id="什麼是-rls一個神奇的隱形濾鏡"><a class="markdownIt-Anchor" href="#什麼是-rls一個神奇的隱形濾鏡"></a> 什麼是 RLS？一個神奇的隱形濾鏡</h1>
+<p>簡單來說，RLS 是一種資料庫安全功能，它允許我們根據執行查詢的使用者身份或上下文，來控制他們能存取資料表中的哪些「資料列 (Row)」。</p>
+<p>可以把它想像成一個為每個用戶量身打造的 <strong>「隱形濾鏡」</strong>。當用戶 <code>SELECT * FROM Orders</code> 時，資料庫會自動、透明地在這個查詢後面追加一個 <code>WHERE</code> 條件，例如 <code>WHERE SalespersonID = 'CURRENT_USER_ID'</code>。</p>
+<blockquote>
+<p><strong>核心優勢：</strong> 對於應用程式來說，查詢語句依然是簡潔的 <code>SELECT * FROM Orders</code>。它完全不知道背後發生了什麼，安全邏輯被完美地封裝在資料庫內部，實現了應用程式與安全策略的解耦。</p>
+</blockquote>
+<hr />
+<h1 id="為什麼需要-rls三大核心價值"><a class="markdownIt-Anchor" href="#為什麼需要-rls三大核心價值"></a> 為什麼需要 RLS？三大核心價值</h1>
+<p>可能會問：「在後端寫邏輯不是也一樣嗎？」 RLS 帶來的價值遠不止於此。</p>
+<ol>
+<li>
+<p><strong>集中化的安全控管 (Centralized Security Control)</strong></p>
+<ul>
+<li>所有存取規則都定義在資料庫的一個地方（安全性原則），而不是散落在各個應用程式的程式碼中。這使得安全策略的審計、修改和維護變得極其簡單。</li>
+</ul>
+</li>
+<li>
+<p><strong>簡化應用程式開發 (Simplified Application Logic)</strong></p>
+<ul>
+<li>開發人員不再需要為數據權限絞盡腦汁。可以專注於業務邏輯，撰寫簡單的數據查詢，把安全問題交給資料庫管理員 (DBA) 和資料庫本身。</li>
+</ul>
+</li>
+<li>
+<p><strong>提升數據安全性與合規性 (Enhanced Data Security &amp; Compliance)</strong></p>
+<ul>
+<li>由於安全規則在資料庫層級強制執行，大大降低了因應用程式漏洞導致的數據洩露風險。無論是透過應用程式、報表工具還是直接連線查詢，用戶都只能看到他們被授權的數據，這對於滿足 GDPR、HIPAA 等法規至關重要。</li>
+</ul>
+<blockquote>
+<p>GDPR 是針對歐盟的通用個人資料保護法。<br />
+HIPAA 是針對美國的醫療健康資訊保護法。</p>
+</blockquote>
+</li>
+</ol>
+<hr />
+<h1 id="rls-的運作原理策略-policy-與-using-表達式"><a class="markdownIt-Anchor" href="#rls-的運作原理策略-policy-與-using-表達式"></a> RLS 的運作原理：策略 (Policy) 與 <code>USING</code> 表達式</h1>
+<p>要理解 RLS，需要認識其核心元件（以 PostgreSQL 為例）：</p>
+<p>在 PostgreSQL 中，RLS 的核心概念與其他資料庫相似，但實現的語法更加直接。它不依賴於外部的函式，而是將安全邏輯直接寫入一個稱為 <strong>「策略 (Policy)」</strong> 的資料庫物件中。</p>
+<p>要理解 RLS，只需要認識一個核心元件：</p>
+<ol>
+<li><strong>安全性策略 (Security Policy)</strong>
+<ul>
+<li>這是一個直接附加在資料表上的規則。</li>
+<li>它使用一個 <code>USING</code> 表達式來定義 <strong>「哪些資料列是可見的」</strong>。這個表達式必須返回一個布林值 (<code>true</code> 或 <code>false</code>)。</li>
+<li>當使用者查詢這張表時，PostgreSQL 會將這個 <code>USING</code> 表達式自動、隱性地當作 <code>WHERE</code> 條件附加到查詢上。</li>
+</ul>
+</li>
+</ol>
+<p><strong>運作流程如下：</strong></p>
+<pre class="highlight"><code class="mermaid">graph TD
+    A[使用者執行查詢: SELECT * FROM sales] --&gt; B&#123;資料庫引擎&#125;;
+    B --&gt; C&#123;檢查 sales 表是否啟用 RLS 且有對應的 Policy&#125;;
+    C -- 有 --&gt; D&#123;取得 Policy 中的 USING 表達式&#125;;
+    D -- 為每一行計算權限 --&gt; E&#123;自動在查詢後附加 WHERE 條件&#125;;
+    E --&gt; F[返回過濾後的結果];
+    C -- 沒有 --&gt; G[返回所有結果];
+    F --&gt; H[用戶看到符合權限的資料];
+    G --&gt; H;
+</code></pre>
+<hr />
+<h1 id="實戰演練為銷售團隊建立-rls-策略"><a class="markdownIt-Anchor" href="#實戰演練為銷售團隊建立-rls-策略"></a> 實戰演練：為銷售團隊建立 RLS 策略</h1>
+<p><strong>場景：</strong> 有一個 <code>sales</code> 表。業務員 (<code>sales_role</code>) 只能看到自己的銷售紀錄，而經理 (<code>manager_role</code>) 可以看到所有人的紀錄。</p>
+<h2 id="第-1-步建立範例資料與角色"><a class="markdownIt-Anchor" href="#第-1-步建立範例資料與角色"></a> 第 1 步：建立範例資料與角色</h2>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 建立範例資料表</span>
+<span class="hljs-keyword">CREATE TABLE</span> sales (
+    order_id <span class="hljs-type">INT</span> <span class="hljs-keyword">PRIMARY KEY</span>,
+    product <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">50</span>),
+    amount <span class="hljs-type">DECIMAL</span>(<span class="hljs-number">10</span>, <span class="hljs-number">2</span>),
+    salesperson TEXT <span class="hljs-comment">-- 使用 TEXT 或 VARCHAR 來儲存使用者名稱</span>
+);
+
+<span class="hljs-comment">-- 插入一些資料</span>
+<span class="hljs-keyword">INSERT INTO</span> sales <span class="hljs-keyword">VALUES</span>
+(<span class="hljs-number">1</span>, <span class="hljs-string">&#x27;Laptop&#x27;</span>, <span class="hljs-number">1200.00</span>, <span class="hljs-string">&#x27;alice&#x27;</span>),
+(<span class="hljs-number">2</span>, <span class="hljs-string">&#x27;Mouse&#x27;</span>, <span class="hljs-number">25.00</span>, <span class="hljs-string">&#x27;alice&#x27;</span>),
+(<span class="hljs-number">3</span>, <span class="hljs-string">&#x27;Keyboard&#x27;</span>, <span class="hljs-number">75.00</span>, <span class="hljs-string">&#x27;bob&#x27;</span>),
+(<span class="hljs-number">4</span>, <span class="hljs-string">&#x27;Monitor&#x27;</span>, <span class="hljs-number">300.00</span>, <span class="hljs-string">&#x27;bob&#x27;</span>),
+(<span class="hljs-number">5</span>, <span class="hljs-string">&#x27;Webcam&#x27;</span>, <span class="hljs-number">50.00</span>, <span class="hljs-string">&#x27;charlie&#x27;</span>);
+
+<span class="hljs-comment">-- 建立角色 (在 PostgreSQL 中，使用者和群組都被視為 &quot;角色&quot;)</span>
+<span class="hljs-keyword">CREATE</span> ROLE sales_role;
+<span class="hljs-keyword">CREATE</span> ROLE manager_role;
+
+<span class="hljs-comment">-- 建立測試使用者並賦予他們角色</span>
+<span class="hljs-keyword">CREATE</span> ROLE alice LOGIN PASSWORD <span class="hljs-string">&#x27;password&#x27;</span> <span class="hljs-keyword">IN</span> ROLE sales_role;
+<span class="hljs-keyword">CREATE</span> ROLE bob LOGIN PASSWORD <span class="hljs-string">&#x27;password&#x27;</span> <span class="hljs-keyword">IN</span> ROLE sales_role;
+<span class="hljs-keyword">CREATE</span> ROLE charlie LOGIN PASSWORD <span class="hljs-string">&#x27;password&#x27;</span> <span class="hljs-keyword">IN</span> ROLE sales_role;
+<span class="hljs-keyword">CREATE</span> ROLE manager_user LOGIN PASSWORD <span class="hljs-string">&#x27;password&#x27;</span> <span class="hljs-keyword">IN</span> ROLE manager_role;
+
+<span class="hljs-comment">-- 授予角色查詢權限</span>
+<span class="hljs-keyword">GRANT</span> <span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">ON</span> sales <span class="hljs-keyword">TO</span> sales_role;
+<span class="hljs-keyword">GRANT</span> <span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">ON</span> sales <span class="hljs-keyword">TO</span> manager_role;
+</code></pre>
+<h2 id="第-2-步在資料表上啟用-rls"><a class="markdownIt-Anchor" href="#第-2-步在資料表上啟用-rls"></a> 第 2 步：在資料表上啟用 RLS</h2>
+<p>這是 PostgreSQL 的一個<strong>關鍵步驟</strong>。必須明確地告訴資料庫，這張表要開始強制執行 RLS 策略。</p>
+<pre class="highlight"><code class="sql"><span class="hljs-keyword">ALTER TABLE</span> sales ENABLE <span class="hljs-type">ROW</span> LEVEL SECURITY;
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong> 在啟用 RLS 後，如果沒有任何策略，預設的行為是 <strong>「全部拒絕 (Deny All)」</strong>。這意味著此時沒有人（除了超級使用者和表擁有者）能看到任何資料。</p>
+</blockquote>
+<h2 id="第-3-步建立安全性策略"><a class="markdownIt-Anchor" href="#第-3-步建立安全性策略"></a> 第 3 步：建立安全性策略</h2>
+<p>現在來定義規則。在 PostgreSQL 中，可以為不同角色建立不同的策略，這非常靈活。</p>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 策略1：為 sales_role 的成員建立策略</span>
+<span class="hljs-comment">-- 他們只能看到 salesperson 欄位是自己使用者名稱的資料列</span>
+<span class="hljs-keyword">CREATE</span> POLICY sales_policy <span class="hljs-keyword">ON</span> sales
+<span class="hljs-keyword">FOR</span> <span class="hljs-keyword">SELECT</span>
+<span class="hljs-keyword">TO</span> sales_role
+<span class="hljs-keyword">USING</span> (salesperson <span class="hljs-operator">=</span> <span class="hljs-built_in">current_user</span>);
+
+<span class="hljs-comment">-- 策略2：為 manager_role 的成員建立策略</span>
+<span class="hljs-comment">-- USING (true) 是一個簡單的技巧，表示 &quot;永遠允許&quot;，也就是能看到所有資料列</span>
+<span class="hljs-keyword">CREATE</span> POLICY manager_policy <span class="hljs-keyword">ON</span> sales
+<span class="hljs-keyword">FOR</span> <span class="hljs-keyword">SELECT</span>
+<span class="hljs-keyword">TO</span> manager_role
+<span class="hljs-keyword">USING</span> (<span class="hljs-literal">true</span>);
+</code></pre>
+<h2 id="第-4-步驗收成果"><a class="markdownIt-Anchor" href="#第-4-步驗收成果"></a> 第 4 步：驗收成果</h2>
+<p>模擬不同使用者來查詢同一張表。在 PostgreSQL 中，使用 <code>SET ROLE</code> 來切換身份。</p>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 模擬 alice 查詢</span>
+<span class="hljs-keyword">SET</span> ROLE alice;
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> sales;
+<span class="hljs-comment">-- 預期結果：只會看到 alice 的兩筆訂單</span>
+
+<span class="hljs-comment">-- 切換回原來身份</span>
+RESET ROLE;
+
+<span class="hljs-comment">-- 模擬 bob 查詢</span>
+<span class="hljs-keyword">SET</span> ROLE bob;
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> sales;
+<span class="hljs-comment">-- 預期結果：只會看到 bob 的兩筆訂單</span>
+
+<span class="hljs-comment">-- 切換回原來身份</span>
+RESET ROLE;
+
+<span class="hljs-comment">-- 模擬 manager_user 查詢</span>
+<span class="hljs-keyword">SET</span> ROLE manager_user;
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> sales;
+<span class="hljs-comment">-- 預期結果：看到所有五筆訂單</span>
+
+<span class="hljs-comment">-- 切換回原來身份</span>
+RESET ROLE;
+</code></pre>
+<p>實現了 <strong>一個查詢，多種結果</strong> 的目標，且安全邏輯完全由資料庫掌控。這種將規則直接定義在策略中的方式，讓整個設定過程顯得更加清晰和一體化。</p>
+<p>好的，當然！將「注意事項與最佳實踐」章節也更新為 PostgreSQL 的版本是非常重要的一步，因為兩者在細節上確實存在差異。</p>
+<p>這是我為您準備的 PostgreSQL 版本。</p>
+<hr />
+<h1 id="注意事項與最佳實踐"><a class="markdownIt-Anchor" href="#注意事項與最佳實踐"></a> 注意事項與最佳實踐</h1>
+<p>雖然 PostgreSQL 的 RLS 功能強大且直觀，但在實際應用中，仍有一些關鍵點需要特別留意，以確保系統的安全、穩定與高效。</p>
+<ul>
+<li>
+<p><strong>性能考量：保持 <code>USING</code> 與 <code>WITH CHECK</code> 表達式高效</strong></p>
+<ul>
+<li>RLS 策略中的 <code>USING</code> (針對現有資料列) 和 <code>WITH CHECK</code> (針對新/修改的資料列) 表達式會在相關查詢執行時，為每一行潛在的資料列進行評估。因此，這些表達式的性能至關重要。</li>
+<li><strong>最佳實踐：</strong>
+<ul>
+<li>盡量使用簡單的比較運算和內建的、被標記為 <code>STABLE</code> 或 <code>IMMUTABLE</code> 的函式 (例如 <code>current_user</code>, <code>session_user</code>)。</li>
+<li>避免在策略表達式中進行複雜的子查詢或呼叫計算成本高昂的自訂函式。如果邏輯複雜，考慮將其結果預先計算並儲存在如 <code>current_setting()</code> 的會話變數中，然後在策略中直接引用該變數。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>測試，測試，再測試！</strong></p>
+<ul>
+<li>安全策略的任何一個小疏忽都可能導致嚴重的數據洩露。在部署任何 RLS 策略之前，必須進行徹底的測試。</li>
+<li><strong>最佳實踐：</strong>
+<ul>
+<li>為系統中的每種角色 (<code>sales_role</code>, <code>manager_role</code> 等) 建立一套完整的測試案例。</li>
+<li>使用 <code>SET ROLE</code> 命令模擬不同用戶，驗證他們在 <code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code> 操作下，是否只能看到和操作預期中的數據。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>繞過 RLS 的權限：了解誰是例外</strong></p>
+<ul>
+<li>在 PostgreSQL 中，並非所有用戶都受 RLS 策略的約束。了解這些例外情況對於管理和除錯至關重要。</li>
+<li><strong>不受 RLS 限制的角色包括：</strong>
+<ol>
+<li><strong>超級使用者 (Superusers)</strong>。</li>
+<li><strong>表的擁有者 (Table Owner)</strong>。</li>
+<li>具有 <code>BYPASSRLS</code> 屬性的角色 (<code>CREATE ROLE dba_user BYPASSRLS;</code>)。</li>
+</ol>
+</li>
+<li>這意味著，當以這些身份連線時，將看到所有資料，這在進行數據管理或排查 RLS 策略問題時非常有用。</li>
+</ul>
+</li>
+<li>
+<p><strong>不僅是讀取：善用 <code>USING</code> 與 <code>WITH CHECK</code></strong></p>
+<ul>
+<li>
+<p>RLS 的強大之處在於它能保護所有 DML 操作。PostgreSQL 為此提供了精細的控制：</p>
+<ul>
+<li><code>USING (expression)</code>：定義<strong>哪些現存的資料列是可見的</strong>。它適用於 <code>SELECT</code>, <code>UPDATE</code> 和 <code>DELETE</code>。可以把它想成一個自動的 <code>WHERE</code> 子句。</li>
+<li><code>WITH CHECK (expression)</code>：定義<strong>哪些新資料或修改後的資料是允許被寫入的</strong>。它適用於 <code>INSERT</code> 和 <code>UPDATE</code>。可以把它想成一個自動的 <code>CHECK</code> 約束。</li>
+</ul>
+</li>
+<li>
+<p><strong>範例：防止業務員為他人新增訂單</strong></p>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 首先移除之前的 SELECT 策略，改為一個更全面的策略</span>
+<span class="hljs-keyword">DROP</span> POLICY sales_policy <span class="hljs-keyword">ON</span> sales;
+
+<span class="hljs-comment">-- 建立一個適用於所有操作的策略</span>
+<span class="hljs-keyword">CREATE</span> POLICY sales_all_access_policy <span class="hljs-keyword">ON</span> sales
+<span class="hljs-keyword">FOR</span> <span class="hljs-keyword">ALL</span> <span class="hljs-comment">-- 適用於 SELECT, INSERT, UPDATE, DELETE</span>
+<span class="hljs-keyword">TO</span> sales_role
+<span class="hljs-keyword">USING</span> (salesperson <span class="hljs-operator">=</span> <span class="hljs-built_in">current_user</span>)       <span class="hljs-comment">-- 只能看到/修改/刪除自己的資料</span>
+<span class="hljs-keyword">WITH</span> <span class="hljs-keyword">CHECK</span> (salesperson <span class="hljs-operator">=</span> <span class="hljs-built_in">current_user</span>); <span class="hljs-comment">-- 只能新增/更新為自己的資料</span>
+</code></pre>
+<p>有了 <code>WITH CHECK</code> 子句，如果 <code>alice</code> 嘗試執行 <code>INSERT INTO sales VALUES (6, 'Printer', 150.00, 'bob');</code>，這個操作將會被資料庫直接拒絕，因為 <code>'bob' != current_user</code> (<code>alice</code>)。這提供了一個無法繞過的堅實保護層。</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h1 id="常見問題與深入探討-faq"><a class="markdownIt-Anchor" href="#常見問題與深入探討-faq"></a> 常見問題與深入探討 (FAQ)</h1>
+<p>在將 RLS 整合到實際專案中時，開發者經常會遇到一些關於它如何與現有工具（如 ORM）互動，以及其底層運作機制的疑問。</p>
+<h2 id="q1-我能透過-orm-例如-django-orm-sqlalchemy-設定-rls-嗎"><a class="markdownIt-Anchor" href="#q1-我能透過-orm-例如-django-orm-sqlalchemy-設定-rls-嗎"></a> Q1: 我能透過 ORM (例如 Django ORM, SQLAlchemy) 設定 RLS 嗎？</h2>
+<p><strong>簡短回答：</strong> 不行，設定 RLS 幾乎總是需要直接使用 SQL 語法。</p>
+<p><strong>詳細解釋：</strong></p>
+<p>ORM (Object-Relational Mapper) 的核心設計目的是<strong>抽象化資料操作 (DML)</strong>，而非<strong>資料庫結構與安全管理 (DDL/DCL)</strong>。</p>
+<ul>
+<li><strong>ORM 的強項：</strong> 將程式碼中的物件（例如 <code>Sale</code> class）對應到資料庫的資料表 (<code>sales</code>)，並將 <code>sale.save()</code>、<code>Sale.get(id=1)</code> 這類操作轉換成 <code>INSERT</code>、<code>SELECT</code> 等 SQL 語句。它處理的是<strong>資料本身</strong>。</li>
+<li><strong>RLS 的範疇：</strong> RLS 屬於資料庫的<strong>安全定義</strong>。<code>CREATE POLICY</code> 和 <code>ALTER TABLE ... ENABLE ROW LEVEL SECURITY</code> 是用來修改資料庫規則的 DDL (Data Definition Language) 指令，這與建立資料表、新增索引屬於同一類別，超出了典型 ORM 的職責範圍。</li>
+</ul>
+<p><strong>最佳實踐：使用「資料庫遷移 (Database Migrations)」</strong></p>
+<p>在現代開發流程中，不應手動連線到資料庫執行這些 DDL 指令。正確的做法是將這些 SQL 語法寫在 <strong>「遷移檔案 (Migration Files)」</strong> 中。</p>
+<p>不論使用 Django、Ruby on Rails 還是 SQLAlchemy (搭配 Alembic)，都可以建立一個新的遷移檔案，並在其中撰寫原生 SQL 來啟用 RLS 和建立策略。</p>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 這段 SQL 程式碼應該放在一個遷移檔案中</span>
+<span class="hljs-keyword">ALTER TABLE</span> sales ENABLE <span class="hljs-type">ROW</span> LEVEL SECURITY;
+
+<span class="hljs-keyword">CREATE</span> POLICY sales_policy <span class="hljs-keyword">ON</span> sales
+<span class="hljs-keyword">FOR</span> <span class="hljs-keyword">SELECT</span>
+<span class="hljs-keyword">TO</span> sales_role
+<span class="hljs-keyword">USING</span> (salesperson <span class="hljs-operator">=</span> <span class="hljs-built_in">current_user</span>);
+</code></pre>
+<p><strong>結論：</strong> 應用程式和 ORM <strong>會自動遵守並受益於</strong> RLS（因為資料庫會在底層過濾資料），但 RLS 的<strong>設定工作</strong>應透過資料庫遷移檔案中的原生 SQL 來完成，以確保版本控制和環境一致性。</p>
+<hr />
+<h2 id="q2-postgresql-預設就啟用-rls-嗎為什麼在設定-rls-之前還是能查到所有資料"><a class="markdownIt-Anchor" href="#q2-postgresql-預設就啟用-rls-嗎為什麼在設定-rls-之前還是能查到所有資料"></a> Q2: PostgreSQL 預設就啟用 RLS 嗎？為什麼在設定 RLS 之前，還是能查到所有資料？</h2>
+<p><strong>簡短回答：</strong> 不，RLS <strong>預設是關閉的</strong>。在啟用它之前，資料庫的存取權限由另一套更傳統、更寬鬆的權限系統所控制。</p>
+<p><strong>詳細解釋：</strong></p>
+<p>可以將 PostgreSQL 的安全模型想像成兩個層次：</p>
+<p><strong>第 1 層：物件級權限 (預設運作模式)</strong></p>
+<p>這是傳統的權限模型，透過 <code>GRANT</code> 和 <code>REVOKE</code> 指令來運作。當執行：</p>
+<pre class="highlight"><code class="sql"><span class="hljs-keyword">GRANT</span> <span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">ON</span> sales <span class="hljs-keyword">TO</span> sales_role;
+</code></pre>
+<p>這是在說：「授予 <code>sales_role</code> 這個角色<strong>讀取 <code>sales</code> 這張表的權限</strong>」。在這個模型下，權限是「全有或全無」的。一旦被授權，該角色就能看到表中的<strong>所有資料列</strong>。這就是為什麼在啟用 RLS 之前，能查詢到所有資料。</p>
+<p><strong>第 2 層：資料列級安全性 (Row-Level Security, RLS)</strong></p>
+<p>當對一張表執行 <code>ALTER TABLE sales ENABLE ROW LEVEL SECURITY;</code> 時，就啟動了這個更嚴格、更精細的安全層。</p>
+<p>啟用 RLS 後，權限的判斷邏輯會變成：</p>
+<ol>
+<li><strong>先檢查物件級權限</strong>：使用者是否有 <code>SELECT</code> 這張表的權限？如果沒有，直接拒絕。</li>
+<li><strong>再檢查資料列級權限</strong>：如果使用者有 <code>SELECT</code> 權限，資料庫會接著為每一筆資料列尋找適用的 <code>POLICY</code>。</li>
+</ol>
+<p>最關鍵的轉變在於，啟用 RLS 後，預設規則從「預設允許」翻轉為 <strong>「預設拒絕 (Deny by Default)」</strong>。</p>
+<p>這意味著，如果資料庫找不到任何 <code>POLICY</code> 明確允許 (<code>USING</code> 表達式返回 <code>true</code>) 使用者查看某個資料列，那麼該資料列就會被隱藏。這就是為什麼一旦啟用 RLS 卻沒有建立任何策略，所有普通用戶都會突然查不到任何資料的原因，因為沒有任何規則明確地允許他們存取。</p>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>資料列層級安全性 (RLS) 不是一個新技術，但它絕對是現代資料庫架構中一個被低估的強大工具。它將複雜的存取控制邏輯從應用程式中解放出來，回歸到數據本身，實現了真正的「以數據為中心」的安全模型。</p>
+<p>下次當再遇到需要精細權限控制的需求時，不妨思考一下，是否可以讓資料庫的「隱形守門人」——RLS——來為你優雅地解決這個問題。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Database/" rel="tag"># Database</a>
+              <a href="/my-blog/tags/Cybersecurity/" rel="tag"># Cybersecurity</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/11/13/%E5%91%8A%E5%88%A5%E6%89%B9%E6%AC%A1%E8%99%95%E7%90%86%20Change%20Data%20Capture%20CDC%20%E7%9A%84%E7%95%B0%E6%AD%A5%E9%9D%A9%E5%91%BD/" rel="prev" title="告別批次處理：Change Data Capture (CDC) 的異步革命">
+                  <i class="fa fa-angle-left"></i> 告別批次處理：Change Data Capture (CDC) 的異步革命
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
