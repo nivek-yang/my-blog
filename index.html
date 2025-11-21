@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">123</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">124</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">59</span></a>
       <ul class="sub-menu">
   
@@ -211,7 +211,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Database/">
         Database
-        <span class="post-count">(27)</span>
+        <span class="post-count">(28)</span>
       </a>
     </li>
   
@@ -442,7 +442,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/SQL/">
         SQL
-        <span class="post-count">(8)</span>
+        <span class="post-count">(9)</span>
       </a>
     </li>
   
@@ -562,7 +562,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">123</span>
+          <span class="site-state-item-count">124</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -587,6 +587,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/11/21/Raw%20SQL%20%E5%AF%A6%E6%88%B0%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/11/21/Raw%20SQL%20%E5%AF%A6%E6%88%B0%E6%8C%87%E5%8D%97/" class="post-title-link" itemprop="url">
+              當 ORM 不夠用時：一份 Raw SQL 實戰指南
+            </a>
+            <a href="/my-blog/2025/11/21/Raw%20SQL%20%E5%AF%A6%E6%88%B0%E6%8C%87%E5%8D%97/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-11-21 00:00:00 / 修改時間：23:57:45" itemprop="dateCreated datePublished" datetime="2025-11-21T00:00:00+08:00">2025-11-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">身為 軟體開發者，我們都熱愛 ORM。它優雅、直觀，將複雜的 SQL 操作抽象化為簡潔的程式碼，讓我們能專注於業務邏輯。但在開發過程中，總會遇到一些時刻，發現碰到了 ORM 的天花板。 有些任務，無論是為了極致的效能、絕對的資料完整性，還是為了利用特定資料庫的獨門絕技，都無法單純依靠 ORM 來完成。 本篇文章將以 Python Django 框架為實戰案例，探討如何使用 Django Migrations 中的 migrations.RunSQL 來釋放資料庫的潛能。從關鍵的安全性實戰案例: 行級安全性 (Row-Level Security, RLS) 開始，探索一系列 ORM 無法觸及，但對專業應用至關重要的強大功能。 用 Django Migration 優雅地管理 RLS 想像一下，有一個多銷售員的應用，每個銷售員都應該只能看到自己的銷售紀錄。通常會在每個查詢後面加上 .filter(salesperson=request.user)。但如果忘了呢？ 這就是 PostgreSQL 的資料列層級安全性 (Row-Level Security, RLS) 大顯身手的地方。它是一道資料庫層級的安全網，確保即使應用程式程式碼有疏漏，資料庫本身也會強制執行存取規則。而管理這些規則最專業的方式，就是透過 Migrations。 場景：銷售模型 # sales_app/models.py from django.db import models from django.contrib.auth.models import User class Sale(models.Model): product = models.CharField(max_length=100) amount = models.DecimalField(max_digits=10, decimal_places=2) salesperson = models.ForeignKey(User, on_delete=models.CASCADE) 步驟 1：建立一個空的 Migration 檔案 因為不修改模型結構，所以需要手動建立一個空的遷移檔案來存放 SQL。 python manage.py makemigrations sales_app --empty --name add_rls_to_sales 步驟 2：使用 migrations.RunSQL 打開新建立的遷移檔案 (sales_app/migrations/0002_...py)，用以下內容替換它。RunSQL 允許定義「正向」(套用規則) 和「反向」(撤銷規則) 的 SQL，這對於版本控制至關重要。 # sales_app/migrations/0002_add_rls_to_sales.py from django.db import migrations TABLE_NAME = &quot;sales_app_sale&quot; APPLY_RLS_SQL = f&quot;&quot;&quot; -- 1. 在資料表上啟用 RLS 總開關 ALTER TABLE &#123;TABLE_NAME&#125; ENABLE ROW LEVEL SECURITY; -- 2. 建立核心策略 CREATE POLICY select_own_sales_policy ON &#123;TABLE_NAME&#125; FOR SELECT USING (salesperson_id = ( SELECT id FROM auth_user WHERE username = current_user )); -- 3. (建議) 強制連資料表擁有者也遵守 RLS ALTER TABLE &#123;TABLE_NAME&#125; FORCE ROW LEVEL SECURITY; &quot;&quot;&quot; REMOVE_RLS_SQL = f&quot;&quot;&quot; DROP POLICY IF EXISTS select_own_sales_policy ON &#123;TABLE_NAME&#125;; ALTER TABLE &#123;TABLE_NAME&#125; DISABLE ROW LEVEL SECURITY; &quot;&quot;&quot; class Migration(migrations.Migration): dependencies = [ (&#x27;sales_app&#x27;, &#x27;0001_initial&#x27;), ] operations = [ migrations.RunSQL( sql=APPLY_RLS_SQL, reverse_sql=REMOVE_RLS_SQL, ) ] 關鍵解析：USING 子句中的子查詢是連接 Django 和 PostgreSQL 的橋樑。current_user 是 PostgreSQL 中代表當前資料庫連線角色的變數。這個子查詢找到了與當前連線角色同名的 Django 使用者的 id，並用它來過濾銷售紀錄。 步驟 3：套用 Migration python manage.py migrate 資料庫現在有了一道安全防線。任何繞過應用程式邏輯的查詢，都將被 RLS 策略攔截。 Raw SQL 的其他應用 RLS 只是冰山一角。一旦掌握了 migrations.RunSQL，一整個新世界的大門就此打開。以下是幾個 ORM 鞭長莫及，但 Raw SQL 極其有用的場景： 1. 查詢計畫分析 (EXPLAIN) 說明 EXPLAIN 是資料庫的自我剖析工具，描述它將如何執行一個查詢。這是資料庫效能調校的第一神器。 ORM 為何做不到？ ORM 的工作是產生 SQL，而 EXPLAIN 的工作是分析 SQL。 實戰技巧：可以輕鬆地在 Django 中分析任何 QuerySet 的效能。 from django.db import connection # 建立一個想分析的 QuerySet slow_queryset = Sale.objects.filter(amount__gt=1000).select_related(&#x27;salesperson&#x27;) # 取得它將產生的 SQL sql_query, params = slow_queryset.query.sql_with_params() # 加上 EXPLAIN ANALYZE explain_sql = f&quot;EXPLAIN (ANALYZE, BUFFERS) &#123;sql_query&#125;&quot; # 執行並印出查詢計畫 with connection.cursor() as cursor: cursor.execute(explain_sql, params) query_plan = &quot;\n&quot;.join(row[0] for row in cursor.fetchall()) print(query_plan) 2. 資料庫視圖 (Database Views) 說明 一個由 SELECT 查詢定義的「虛擬資料表」，用來簡化複雜的 JOIN 查詢，讓我們把多張表的關聯資料當作一張單一的表來查詢。 ORM 為何做不到？ ORM 的核心是將 Python class 對應到實際儲存資料的資料表。它沒有內建語法來定義一個基於查詢的虛擬結構。 實戰技巧：在 migration 中建立 View，然後在 Django 中為它建立一個 managed = False 的模型。這樣能兩全其美：在資料庫層級擁有高效能的 View，在 Django 層級又能用優雅的 ORM 語法來操作它。 好的，完全理解！只展示 SQL 字串確實不夠完整，一個好的範例需要包含完整的 Migration 程式碼。 我會將這段程式碼補全，並直接更新到先前產出的部落格文章中，讓範例更具體、更可操作。 更新後的部落格文章片段 （…前文省略…） 2. 資料庫視圖 (Database Views) 這是什麼？ 一個由 SELECT 查詢定義的「虛擬資料表」，用來簡化複雜的 JOIN 查詢，讓你把多張表的關聯資料當作一張單一的表來查詢。 ORM 為何做不到？ ORM 的核心是將 Python class 對應到實際儲存資料的資料表。它沒有內建語法來定義一個基於查詢的虛擬結構。 實戰技巧：在 migration 中建立 View，然後在 Django 中為它建立一個 managed = False 的模型。這樣你就兩全其美：在資料庫層級擁有高效能的 View，在 Django 層級又能用優雅的 ORM 語法來操作它。 步驟 1: 建立空的 Migration python manage.py makemigrations sales_app --empty --name create_sales_report_view 步驟 2: 撰寫 Migration 檔案 編寫完整的 migration 檔案，包含正向和反向的 SQL。 # sales_app/migrations/0003_create_sales_report_view.py from django.db import migrations CREATE_VIEW_SQL = &quot;&quot;&quot; CREATE OR REPLACE VIEW sales_report_view AS SELECT s.id, s.product, s.amount, u.username as salesperson_name FROM sales_app_sale s JOIN auth_user u ON s.salesperson_id = u.id; &quot;&quot;&quot; DROP_VIEW_SQL = &quot;DROP VIEW IF EXISTS sales_report_view;&quot; class Migration(migrations.Migration): dependencies = [ (&#x27;sales_app&#x27;, &#x27;0002_add_rls_to_sales&#x27;), # 依賴於 sales_app_sale 表已存在 ] operations = [ migrations.RunSQL( sql=CREATE_VIEW_SQL, reverse_sql=DROP_VIEW_SQL, ) ] 步驟 3: 建立對應的 Django 模型 接著，在 models.py 中建立一個模型來「對應」這個 View。 # sales_app/models.py class SalesReportView(models.Model): # 欄位必須和 View 中的 SELECT 欄位完全對應 product = models.CharField(max_length=100) amount = models.DecimalField(max_digits=10, decimal_places=2) salesperson_name = models.CharField(max_length=150) class Meta: managed = False # 關鍵！告訴 Django 不要管理這張表的建立、修改、刪除 db_table = &#x27;sales_report_view&#x27; verbose_name = &#x27;Sales Report&#x27; 注意：因為 View 沒有單一的主鍵，在模型中省略了 Django 自動產生的 id 欄位。Django 在查詢時會自動處理。如果 View 中有明確且唯一的欄位可以當作主鍵，可以加上 primary_key=True。 步驟 4: 套用 Migration 並使用 python manage.py migrate 現在，可以像查詢任何普通模型一樣，用優雅的 ORM 語法來查詢這個複雜的報表了！ # 在 views.py 或 shell 中 from .models import SalesReportView # 獲取所有報表資料 reports = SalesReportView.objects.all() # 進行過濾 high_value_reports = SalesReportView.objects.filter(amount__gt=5000) for report in high_value_reports: print(f&quot;Product: &#123;report.product&#125;, Sold by: &#123;report.salesperson_name&#125;, Amount: &#123;report.amount&#125;&quot;) 這個範例完美地展示了如何結合 Raw SQL 的強大能力和 Django ORM 的便利性。 3. 觸發器 (Triggers) 說明 當資料表發生 INSERT, UPDATE, DELETE 時自動執行的程序，常用於建立稽核日誌 (Audit Logs) 或維護複雜的資料一致性。 ORM 為何做不到？ 這是資料庫層級的自動化邏輯，比 Django Signals 更底層、更可靠。 實戰技巧：在 migration 中建立一個函式和一個觸發器，自動記錄價格變動。 -- migrations/000X_add_audit_trigger.py CREATE_TRIGGER_SQL = &quot;&quot;&quot; CREATE OR REPLACE FUNCTION log_price_changes() RETURNS TRIGGER AS $$ BEGIN IF (NEW.price &lt;&gt; OLD.price) THEN INSERT INTO price_history(product_id, old_price, new_price, changed_at) VALUES(OLD.id, OLD.price, NEW.price, now()); END IF; RETURN NEW; END; $$ LANGUAGE plpgsql; CREATE TRIGGER price_changes_trigger AFTER UPDATE ON products_app_product FOR EACH ROW EXECUTE FUNCTION log_price_changes(); &quot;&quot;&quot; # ... 在 RunSQL 中執行 ... 4. 進階全文檢索設定 說明 Django 內建的全文檢索很棒，但要支援中文分詞 (如 jieba) 或自訂同義詞，就需要直接設定資料庫的文字搜尋組態。 ORM 為何做不到？ ORM 沒有提供 CREATE TEXT SEARCH CONFIGURATION 這種底層的 DDL 指令。 實戰技巧：在 migration 中建立一個為中文優化的搜尋組態。 -- migrations/000X_create_chinese_fts.py (假設已安裝 pg_jieba) CREATE_FTS_CONFIG_SQL = &quot;&quot;&quot; CREATE TEXT SEARCH CONFIGURATION chinese_jieba (PARSER = pg_catalog.default); ALTER TEXT SEARCH CONFIGURATION chinese_jieba ALTER MAPPING FOR n,v,a,i,e,l,j WITH jieba, simple; &quot;&quot;&quot; # ... 在 RunSQL 中執行 ... 5. 管理資料庫擴充套件 (Extensions) 說明 啟用 PostgreSQL 強大的擴充套件，如 PostGIS (地理資訊)、pg_trgm (模糊字串比對) 等。 ORM 為何做不到？ CREATE EXTENSION 是資料庫管理指令。 實戰技巧：Django 為一些常用擴充套件提供了專門的 Migration 操作，這比手寫 RunSQL 更佳。 # migrations/000X_enable_pg_trgm.py from django.contrib.postgres.operations import TrigramExtension class Migration(migrations.Migration): operations = [ TrigramExtension(), ] 指導原則 該如何決定何時使用 ORM，何時使用 Raw SQL 呢？有一個簡單的原則： ORM 是應用程式與資料模型之間的橋樑，專注於資料的 CRUD 和關聯。而任何涉及到「資料庫本身的管理、效能內省、行為設定、功能擴充」的操作，都超出了它的職責範圍，需要下降到 SQL 層次來處理。 結論 透過熟練運用 migrations.RunSQL 和原生 SQL，不僅能解決 ORM 無法處理的難題，更能將我們的應用程式提升到一個新的高度——更安全、更高性能、功能更強大。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/11/21/Raw%20SQL%20%E5%AF%A6%E6%88%B0%E6%8C%87%E5%8D%97/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1351,92 +1437,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/10/29/%E5%BE%9E%20SQL%20Injection%20%E5%88%B0%20OAuth%202.0%20%E5%BF%85%E5%82%99%E7%9A%84%E8%B3%87%E5%AE%89%E6%94%BB%E9%98%B2%E7%9F%A5%E8%AD%98/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/26/SQL%20%E6%95%88%E8%83%BD%E8%AA%BF%E6%A0%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/10/26/SQL%20%E6%95%88%E8%83%BD%E8%AA%BF%E6%A0%A1/" class="post-title-link" itemprop="url">
-              SQL 效能調校：當查詢變慢時，該如何找出問題癥結？
-            </a>
-            <a href="/my-blog/2025/10/26/SQL%20%E6%95%88%E8%83%BD%E8%AA%BF%E6%A0%A1/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-10-26 00:00:00 / 修改時間：23:24:20" itemprop="dateCreated datePublished" datetime="2025-10-26T00:00:00+08:00">2025-10-26</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">“這個查詢在測試環境只要 0.5 秒，為什麼在正式環境要跑 30 秒？” 這句話，可能是每個與資料庫打交道的工程師都曾面臨的惡夢。一個緩慢的 SQL 查詢，輕則影響使用者體驗，重則可能拖垮整個系統。 當問題發生時，不能像無頭蒼蠅一樣亂猜。幸運的是，資料庫本身提供了豐富的線索，我們需要的是一套系統性的偵探方法，從蛛絲馬跡中找出真正的元兇。 這篇文章將提供一個從宏觀到微觀的診斷框架，幫助一步步定位並解決 SQL 效能問題。 第一步：找出有問題的 SQL 先確定「誰」是效能不佳的查詢。 主要工具：慢查詢日誌 (Slow Query Log) 這是生產環境中最直接的線索來源。資料庫可以被設定為自動記錄執行時間超過特定閾值（例如 1 秒）的所有查詢。 如何使用：在資料庫設定檔 (my.cnf for MySQL) 中啟用 slow_query_log，並設定 long_query_time。 可以發現： 哪些查詢經常執行緩慢。 查詢的執行時間、掃描的行數等關鍵指標。 是否有特定使用者或應用程式頻繁發出慢查詢。 重點：定期檢視慢查詢日誌，是主動發現效能隱患的最佳實踐。 第二步：分析執行計畫 (Execution Plan) 找到了慢查詢，下一步就是深入理解資料庫「打算如何執行」這個查詢。這一步是整個效能調校過程的核心。 主要工具：EXPLAIN / Execution Plan 在 SQL 查詢語句前加上 EXPLAIN (MySQL/PostgreSQL) 或檢視 Execution Plan (SQL Server)，資料庫會回傳一份詳細的「執行計畫」，告訴我們它將如何讀取資料、使用索引、以及連接資料表。 EXPLAIN SELECT * FROM orders o JOIN users u ON o.user_id = u.id WHERE o.created_at &gt; &#x27;2023-01-01&#x27;; 該關注的關鍵指標： type (訪問類型)：這是最重要的指標之一。 極差 (ALL)：全資料表掃描 (Full Table Scan)。這是最大的警訊，意味著資料庫需要逐行檢查整張表，沒有使用任何索引。 尚可 (index)：掃描了整個索引，比 ALL 好，但仍有優化空間。 良好 (range, ref, eq_ref)：有效地使用了索引進行範圍查找或精準匹配。 最佳 (const, system)：查詢常數或結果只有一行，速度極快。 key (使用的索引)：顯示資料庫實際決定使用的索引。如果這個欄位是 NULL，而且 type 是 ALL，那幾乎可以確定是索引問題。 rows (掃描的行數)：資料庫預估為了找出結果需要掃描的資料行數。這個數字愈小愈好。如果它遠大於實際返回的行數，代表查詢效率很低。 Extra (額外資訊)： Using filesort：當索引無法滿足排序需求時，資料庫需要將資料拉到記憶體或磁碟中進行額外排序，這會消耗大量資源。 Using temporary：資料庫需要建立一個暫存資料表來處理查詢，通常發生在 GROUP BY 或 UNION 操作中，同樣是效能瓶頸。 結論：執行計畫是破案地圖。學會解讀它，就掌握了 SQL 調校的 80% 技巧。 第三步：深入調查 — 常見的效能元兇 根據執行計畫提供的線索，可以開始聚焦在幾個常見的問題點上。 1. 索引問題 (The Usual Suspect) 這是最常見、也最容易解決的問題。 缺少索引：WHERE 條件、JOIN 的關聯欄位 (ON 後面的欄位)、ORDER BY 的欄位沒有建立適當的索引。 索引失效 (Non-SARGable)：在索引欄位上使用函數、進行計算或型別轉換，會導致資料庫無法使用索引。-- Bad: 索引失效 WHERE YEAR(order_date) = 2023 -- Good: 讓索引有效 WHERE order_date &gt;= &#x27;2023-01-01&#x27; AND order_date &lt; &#x27;2024-01-01&#x27; 複合索引順序錯誤：對於 WHERE a = 1 AND b = 2 的查詢，INDEX(a, b) 的效率遠高於 INDEX(b, a)。 2. 查詢語句本身的問題 SELECT *：請求了不必要的欄位，增加了網路傳輸和資料庫 I/O 的負擔。 不必要的 JOIN：關聯了過多的資料表，或進行了複雜的子查詢。 OR 條件過多：有時將 OR 查詢拆成多個 UNION ALL 查詢，效率反而更高。 3. 資料庫狀態問題 統計資訊過時 (Outdated Statistics)：資料庫的查詢優化器依賴統計資訊來制定最佳執行計畫。如果資料表經過大量增刪改後沒有更新統計資訊 (ANALYZE TABLE)，優化器可能會做出錯誤的判斷。 資料庫鎖 (Locking / Deadlock)：查詢可能不慢，但它正在等待其他事務釋放鎖。在高併發的系統中，長時間的交易或不當的鎖定策略會導致查詢阻塞。 4. 系統層面的問題 如果查詢本身和索引都已優化，問題可能出在更底層。 硬體瓶頸：CPU 使用率過高、記憶體不足、或是磁碟 I/O 達到上限。 資料庫設定不當：例如 MySQL 的 innodb_buffer_pool_size 設定過小，導致資料庫頻繁地從磁碟讀取資料，而非記憶體。 總結 步驟 目標 核心工具/方法 1. 發現 從生產環境中找出具體的慢查詢 Slow Query Log、應用效能監控 (APM) 2. 分析 理解資料庫如何執行該查詢 EXPLAIN / Execution Plan 3. 診斷 根據執行計畫，定位根本原因 檢查索引、查詢寫法、鎖定情況 4. 優化 修正問題並驗證效果 建立/修改索引、重寫 SQL、調整設定 5. 監控 持續觀察，防止問題復發 定期檢視日誌，設定警報 SQL 效能調校是一門結合了科學與經驗的藝術。掌握這個系統化的流程，就能自信地應對資料庫效能難題。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/10/26/SQL%20%E6%95%88%E8%83%BD%E8%AA%BF%E6%A0%A1/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>

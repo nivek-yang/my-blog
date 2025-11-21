@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">123</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">124</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">59</span></a>
       <ul class="sub-menu">
   
@@ -211,7 +211,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Database/">
         Database
-        <span class="post-count">(27)</span>
+        <span class="post-count">(28)</span>
       </a>
     </li>
   
@@ -442,7 +442,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/SQL/">
         SQL
-        <span class="post-count">(8)</span>
+        <span class="post-count">(9)</span>
       </a>
     </li>
   
@@ -562,7 +562,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">123</span>
+          <span class="site-state-item-count">124</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -587,6 +587,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/01/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20ICMP%20%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E7%9A%84%E5%A0%B1%E9%8C%AF%E8%88%87%E8%A8%BA%E6%96%B7%E5%B0%88%E5%AE%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/09/01/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20ICMP%20%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E7%9A%84%E5%A0%B1%E9%8C%AF%E8%88%87%E8%A8%BA%E6%96%B7%E5%B0%88%E5%AE%B6/" class="post-title-link" itemprop="url">
+              深入淺出 ICMP：網路世界的「報錯與診斷專家」
+            </a>
+            <a href="/my-blog/2025/09/01/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20ICMP%20%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E7%9A%84%E5%A0%B1%E9%8C%AF%E8%88%87%E8%A8%BA%E6%96%B7%E5%B0%88%E5%AE%B6/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-09-01 00:00:00 / 修改時間：23:19:14" itemprop="dateCreated datePublished" datetime="2025-09-01T00:00:00+08:00">2025-09-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">在之前的文章中，探討了 TCP（可靠的傳輸）、UDP（快速的傳輸）、IP（資料包的地址與身份），以及路由 (Routing) 如何指引這些資料包找到路徑，甚至還有 NAT 這個聰明的「地址翻譯官」來解決 IPv4 地址短缺的問題。 資料能夠在網路上找到地址並被有效傳送，這是一回事。但如果資料送不過去怎麼辦？如果路上出了問題，誰來告訴我們？這時就需要一位「網路世界的品管經理」或者「診斷報告員」——也就是本篇文章的主角：ICMP (Internet Control Message Protocol)。 什麼是 ICMP？ ICMP，全名為「網際網路控制訊息協定」（Internet Control Message Protocol），它是一個在 IP 協定之上運行的網路層 (Layer 3) 協定。 與 TCP 或 UDP 不同，ICMP 不負責傳輸用戶應用程式的資料。它的主要任務是報告網路狀況、傳送錯誤訊息，以及提供診斷功能。可以把它想像成 IP 協定的「服務回饋機制」或「問題報告系統」。 當網路設備（如路由器、主機）在處理 IP 資料包時遇到問題，例如目的地無法到達、資料包在網路中停留太久等，ICMP 就會發出特定的訊息，通知原始發送者出了什麼狀況。 ICMP 訊息本身很簡單，通常包含一個「類型 (Type)」和「代碼 (Code)」字段，用來指示訊息的類別和具體原因。這些訊息會被封裝在標準的 IP 資料包中傳送。 ICMP 的核心用途：錯誤報告與網路診斷 ICMP 的作用可以大致分為兩大類： 1. 錯誤報告 (Error Reporting) 當 IP 資料包在網路上傳輸時遇到問題，路由器或其他網路設備會產生 ICMP 錯誤訊息並發回給資料包的來源主機。常見的 ICMP 錯誤訊息包括： 目的地無法到達 (Destination Unreachable) - Type 3： Code 0: 網路無法到達 (Network Unreachable) Code 1: 主機無法到達 (Host Unreachable) Code 2: 協定無法到達 (Protocol Unreachable) Code 3: 埠無法到達 (Port Unreachable) 當路由器不知道如何到達目標網路，或目標主機根本不存在、目標服務埠未開放時，會發送此訊息。 時間超時 (Time Exceeded) - Type 11： Code 0: TTL 值超時 (Time-to-Live Exceeded in Transit) 每個 IP 資料包在傳輸時都會有一個 TTL (Time-to-Live) 值，每經過一個路由器，TTL 就減 1。當 TTL 歸零時，路由器會丟棄該資料包並發送此 ICMP 訊息。這有助於防止資料包在網路中無限循環。 Code 1: 片段重組超時 (Fragment Reassembly Time Exceeded) 參數問題 (Parameter Problem) - Type 12： Code 0: 指向一個錯誤的 IP 封頭選項 (Pointer Indicates the Error) 當 IP 資料包的封頭中有錯誤或無法識別的選項時，會發送此訊息。 源抑制 (Source Quench) - Type 4： （已不建議使用）過去用於流量控制，當路由器由於緩衝區滿載而丟棄資料包時，會通知發送者降低傳輸速率。 這些錯誤報告對於網路管理員和開發者來說極為寶貴，它們能幫助我們迅速定位網路故障的根本原因。 2. 網路診斷 (Network Diagnostics) ICMP 最廣為人知的應用，就是日常會用到的網路診斷工具： PING (Packet Internet Groper)： 原理：Ping 工具發送 ICMP Echo Request (Type 8) 訊息到目標主機，目標主機收到後，會回覆 ICMP Echo Reply (Type 0) 訊息。 作用：用來測試目標主機是否可達，以及往返時間 (Round Trip Time, RTT)，即資料包到達目標並返回所需的總時間（網路延遲）。 比喻：就像對著山谷喊「哈囉！」(Echo Request)，然後等待回音「哈囉！」(Echo Reply)，來確認前面是否有障礙，以及回音多久才回來。 TRACEROUTE (Windows 下是 TRACERT)： 原理：TraceRoute 工具巧妙地利用了 ICMP 的「時間超時 (Time Exceeded)」訊息。它會從 TTL=1 開始發送一系列 IP 資料包，每發送一次，將 TTL 加 1。 當 TTL=1 的資料包到達第一個路由器時，TTL 歸零，路由器丟棄並發送一個 ICMP Time Exceeded 訊息回源主機，告訴它「我就是第一個路由器！」 然後發送 TTL=2 的資料包，它能通過第一個路由器，在第二個路由器時 TTL 歸零，第二個路由器回覆 ICMP Time Exceeded。 依此類推，直到資料包到達目的地。 作用：用來顯示從來源主機到目標主機之間所經過的所有路由器（跳點，Hop），以及到達每個跳點的延遲，從而繪製出資料包的完整路徑。 比喻：就像一個偵察兵，每次只帶著能走一步的能量出發，遇到檢查站能量耗盡就向你報告檢查站的地址，然後再派一個能走兩步的偵察兵，直到抵達目的地。 ICMPv6：IPv6 世界的控制協定 在 IPv6 的世界裡，ICMP 仍然是核心。事實上，ICMPv6 (IPv6 的 ICMP 協定) 比 IPv4 的 ICMP 承載了更多的功能。除了錯誤報告和診斷功能外，ICMPv6 還整合了 IPv4 中 ARP 和 IGMP 的部分功能，例如： 鄰居探索協定 (Neighbor Discovery Protocol, NDP)：取代了 IPv4 中的 ARP，用於解決 MAC 地址。 路由器請求 (Router Solicitation) 和 路由器公告 (Router Advertisement)：用於主機自動發現本地路由器和獲取網路配置資訊（如自動生成 IPv6 地址）。 這使得 ICMPv6 在 IPv6 網路中扮演了更為關鍵的角色。 ICMP 的安全性考慮：一把雙面刃 儘管 ICMP 對於網路診斷和運行至關重要，但它也常常成為攻擊者利用的目標： 阻斷服務 (Denial of Service, DoS) 攻擊：例如「Ping Flood」，攻擊者發送大量的 ICMP Echo Request，試圖淹沒目標主機或網路設備，使其無法響應正常請求。 網路偵察 (Network Reconnaissance)：攻擊者可以發送 ICMP Echo Request 到一個 IP 範圍，藉由回應來判斷哪些主機是存活的。 Smurf 攻擊：利用 ICMP 回聲請求的反射和廣播特性，放大攻擊流量。 由於這些安全風險，許多防火牆會限制或阻擋某些 ICMP 訊息。然而，完全阻擋所有 ICMP 訊息並非總是最佳做法，因為這可能會阻礙網路故障排除，甚至影響某些應用程式的正常運行（例如，路徑 MTU 發現功能可能需要 ICMP 訊息）。 最佳實踐通常是：允許必要的 ICMP 類型（如 Echo Reply、Destination Unreachable、Time Exceeded），同時限制其他可能被濫用的類型或流量速率。 結論 ICMP 雖然不如 TCP 或 UDP 那樣直接傳輸用戶資料，但它在網路世界中扮演著不可或缺的「診斷與報告」角色。它像一個忠實的網路哨兵，時刻監測著資料包的旅程，並在出現問題時發出警告。 理解 ICMP 的運作原理，能幫助我們更有效地進行網路故障排除、安全防護規劃，並對資料在網際網路中的流動有更全面的掌握。下次當使用 Ping 或 Traceroute 時，記得是 ICMP 在背後默默地提供著關於網路世界的寶貴資訊！</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/09/01/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20ICMP%20%E7%B6%B2%E8%B7%AF%E4%B8%96%E7%95%8C%E7%9A%84%E5%A0%B1%E9%8C%AF%E8%88%87%E8%A8%BA%E6%96%B7%E5%B0%88%E5%AE%B6/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1351,92 +1437,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/08/21/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88%E4%B8%AD%E7%9A%84%20CAP%20%E7%90%86%E8%AB%96/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/20/%E7%90%86%E8%A7%A3%20BASE%20%E7%90%86%E8%AB%96%20%E5%9C%A8%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1%E4%B8%AD%E7%9A%84%E8%B3%87%E6%96%99%E4%B8%80%E8%87%B4%E6%80%A7%E5%8F%96%E6%8D%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/08/20/%E7%90%86%E8%A7%A3%20BASE%20%E7%90%86%E8%AB%96%20%E5%9C%A8%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1%E4%B8%AD%E7%9A%84%E8%B3%87%E6%96%99%E4%B8%80%E8%87%B4%E6%80%A7%E5%8F%96%E6%8D%A8/" class="post-title-link" itemprop="url">
-              理解 BASE 理論：在分散式系統中的資料一致性取捨
-            </a>
-            <a href="/my-blog/2025/08/20/%E7%90%86%E8%A7%A3%20BASE%20%E7%90%86%E8%AB%96%20%E5%9C%A8%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1%E4%B8%AD%E7%9A%84%E8%B3%87%E6%96%99%E4%B8%80%E8%87%B4%E6%80%A7%E5%8F%96%E6%8D%A8/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-08-20 00:00:00 / 修改時間：23:42:29" itemprop="dateCreated datePublished" datetime="2025-08-20T00:00:00+08:00">2025-08-20</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">在分散式系統與大型資料庫設計中，一致性 (Consistency)、可用性 (Availability) 與 容錯性 (Fault Tolerance) 之間往往存在取捨。除了大家熟知的 CAP 理論，另一個常被提及的關鍵概念是 BASE 理論。 BASE 理論並不是與 ACID 相對立的「替代方案」，而是針對 大規模分散式系統 中，為了確保高可用性與可擴展性，而在一致性上做出彈性調整的一種設計哲學。 BASE 理論的核心精神 BASE 是三個英文字的縮寫： Basically Available（基本可用） 系統在大部分情況下能提供服務，即便部分節點出現故障，整體系統仍能維持「可用」狀態。這代表可能會犧牲部分一致性或性能，以確保使用者請求能被回應。 Soft State（軟狀態） 系統的狀態不必在任何時刻都保持一致，允許中間狀態存在。數據在不同節點間同步需要時間，因此資料庫可能暫時「不一致」，但設計上容忍這種情況。 Eventual Consistency（最終一致性） 系統保證在沒有新的更新操作後，經過一段時間後，所有節點最終會達到一致。這與 ACID 中要求的「強一致性」不同，BASE 更注重的是「最終收斂的一致性」。 最終一致性示意圖 以下示意圖展示了 最終一致性 (Eventual Consistency) 的概念： 資料更新後，不同節點可能暫時不同步，但隨著時間推進，最終會趨於一致。 sequenceDiagram participant Client as 用戶端 participant NodeA as 節點 A participant NodeB as 節點 B participant NodeC as 節點 C Client-&gt;&gt;NodeA: 更新資料 X=100 NodeA--&gt;&gt;Client: 更新成功 (基本可用) Note over NodeA: 立即更新為 X=100 NodeA--&gt;&gt;NodeB: 異步同步 X=100 NodeA--&gt;&gt;NodeC: 異步同步 X=100 Note over NodeB,NodeC: 短暫時間內仍舊是 X=90 Note over NodeB,NodeC: 經過一段時間後 -&gt; X=100 BASE 與 ACID 的比較 %% ACID vs BASE 對照圖 %% 使用 Mermaid 的 classDiagram 模擬比較表 classDiagram class ACID &#123; +Atomicity(原子性) +Consistency(一致性) +Isolation(隔離性) +Durability(持久性) &#125; class BASE &#123; +Basically~Available~(基本可用) +Soft~State~(軟狀態) +Eventual~Consistency~(最終一致性) &#125; ACID &lt;..&gt; BASE : 對比 特性 ACID 理論 BASE 理論 一致性 強一致性 (Strong Consistency) 最終一致性 (Eventual Consistency) 可用性 通常會犧牲部分可用性 保證基本可用 (Basically Available) 狀態 硬狀態 (操作結束即一致) 軟狀態 (允許暫時不一致) 適用場景 金融交易、銀行系統等需要嚴格一致的場景 分散式服務、大數據系統、社交平台、電商 為什麼需要 BASE 理論？ 在現代大型分散式應用中，要求 強一致性 (Strong Consistency) 會帶來以下問題： 性能下降：每次操作都要確保所有節點同步，導致響應延遲增加。 可用性降低：若某個節點故障，整體系統可能無法對外提供服務。 擴展困難：節點數量增加時，同步成本隨之上升。 相反地，BASE 理論允許 部分時間的不一致，但保證 最終一致，讓系統能在大規模、高併發環境下仍維持可用性。 實際應用場景 電商平台的庫存系統 商品庫存可能會在不同地區的節點上稍有差異，但最終會同步。 即便某瞬間數據不同步，用戶仍能下單 (結合業務補救機制（如鎖、隊列、補償交易），來達到「最終一致性」的同時，避免影響用戶體驗)。 社交媒體的訊息流 貼文可能在部分用戶的時間軸上延遲出現，但最終所有人都能看到。 大型分散式快取系統（如 Redis、Cassandra） 為了高效能與可用性，往往遵循 BASE 理論，允許資料在短時間內不一致。 總結 BASE 理論不是要完全取代 ACID，而是為了應對 分散式架構下的一致性挑戰，提出的一種設計哲學： 優先保證系統可用性 允許暫時的不一致 確保最終一致性 在實務中，開發者需要根據業務需求權衡： 金融交易、醫療系統 → 強一致性 (ACID) 優先 社交媒體、電商、大數據系統 → 高可用性 (BASE) 更重要 最終，關鍵在於理解 一致性與可用性之間的取捨，並根據應用場景選擇最合適的策略。 👉 下一篇我可以幫你寫 CAP 理論與 BASE 理論的關聯，更完整地解釋它們在系統設計中的角色。 要不要我幫你加上 示意圖 (例如最終一致性的數據同步流程圖)，讓文章更直觀？</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/08/20/%E7%90%86%E8%A7%A3%20BASE%20%E7%90%86%E8%AB%96%20%E5%9C%A8%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1%E4%B8%AD%E7%9A%84%E8%B3%87%E6%96%99%E4%B8%80%E8%87%B4%E6%80%A7%E5%8F%96%E6%8D%A8/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>

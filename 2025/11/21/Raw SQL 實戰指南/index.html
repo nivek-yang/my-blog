@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="身為 軟體開發者，我們都熱愛 ORM。它優雅、直觀，將複雜的 SQL 操作抽象化為簡潔的程式碼，讓我們能專注於業務邏輯。但在開發過程中，總會遇到一些時刻，發現碰到了 ORM 的天花板。 有些任務，無論是為了極致的效能、絕對的資料完整性，還是為了利用特定資料庫的獨門絕技，都無法單純依靠 ORM 來完成。 本篇文章將以 Python Django 框架為實戰案例，探討如何使用 Django Migra">
+<meta property="og:type" content="article">
+<meta property="og:title" content="當 ORM 不夠用時：一份 Raw SQL 實戰指南">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/11/21/Raw%20SQL%20%E5%AF%A6%E6%88%B0%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="身為 軟體開發者，我們都熱愛 ORM。它優雅、直觀，將複雜的 SQL 操作抽象化為簡潔的程式碼，讓我們能專注於業務邏輯。但在開發過程中，總會遇到一些時刻，發現碰到了 ORM 的天花板。 有些任務，無論是為了極致的效能、絕對的資料完整性，還是為了利用特定資料庫的獨門絕技，都無法單純依靠 ORM 來完成。 本篇文章將以 Python Django 框架為實戰案例，探討如何使用 Django Migra">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-11-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-21T15:57:45.021Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Database">
+<meta property="article:tag" content="SQL">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/11/21/Raw%20SQL%20%E5%AF%A6%E6%88%B0%E6%8C%87%E5%8D%97/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/11/21/Raw%20SQL%20%E5%AF%A6%E6%88%B0%E6%8C%87%E5%8D%97/","path":"2025/11/21/Raw SQL 實戰指南/","title":"當 ORM 不夠用時：一份 Raw SQL 實戰指南"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>當 ORM 不夠用時：一份 Raw SQL 實戰指南 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">124</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">59</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cloud-Computing/">
+        Cloud Computing
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Concurrency/">
+        Concurrency
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cryptography/">
+        Cryptography
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cybersecurity/">
+        Cybersecurity
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(28)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Design-Pattern/">
+        Design Pattern
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/DevOps/">
+        DevOps
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Logging/">
+        Logging
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(17)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/OOP/">
+        OOP
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Search/">
+        Search
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Serverless/">
+        Serverless
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(6)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8-django-migration-%E5%84%AA%E9%9B%85%E5%9C%B0%E7%AE%A1%E7%90%86-rls"><span class="nav-number">1.</span> <span class="nav-text"> 用 Django Migration 優雅地管理 RLS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A0%B4%E6%99%AF%E9%8A%B7%E5%94%AE%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.1.</span> <span class="nav-text"> 場景：銷售模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F-1%E5%BB%BA%E7%AB%8B%E4%B8%80%E5%80%8B%E7%A9%BA%E7%9A%84-migration-%E6%AA%94%E6%A1%88"><span class="nav-number">1.1.1.</span> <span class="nav-text"> 步驟 1：建立一個空的 Migration 檔案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F-2%E4%BD%BF%E7%94%A8-migrationsrunsql"><span class="nav-number">1.1.2.</span> <span class="nav-text"> 步驟 2：使用 migrations.RunSQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F-3%E5%A5%97%E7%94%A8-migration"><span class="nav-number">1.1.3.</span> <span class="nav-text"> 步驟 3：套用 Migration</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#raw-sql-%E7%9A%84%E5%85%B6%E4%BB%96%E6%87%89%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text"> Raw SQL 的其他應用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%9F%A5%E8%A9%A2%E8%A8%88%E7%95%AB%E5%88%86%E6%9E%90-explain"><span class="nav-number">2.1.</span> <span class="nav-text"> 1. 查詢計畫分析 (EXPLAIN)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%B3%87%E6%96%99%E5%BA%AB%E8%A6%96%E5%9C%96-database-views"><span class="nav-number">2.2.</span> <span class="nav-text"> 2. 資料庫視圖 (Database Views)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0%E5%BE%8C%E7%9A%84%E9%83%A8%E8%90%BD%E6%A0%BC%E6%96%87%E7%AB%A0%E7%89%87%E6%AE%B5"><span class="nav-number">2.2.1.</span> <span class="nav-text"> 更新後的部落格文章片段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%B3%87%E6%96%99%E5%BA%AB%E8%A6%96%E5%9C%96-database-views-2"><span class="nav-number">2.2.2.</span> <span class="nav-text"> 2. 資料庫視圖 (Database Views)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F-1-%E5%BB%BA%E7%AB%8B%E7%A9%BA%E7%9A%84-migration"><span class="nav-number">2.2.2.1.</span> <span class="nav-text"> 步驟 1: 建立空的 Migration</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F-2-%E6%92%B0%E5%AF%AB-migration-%E6%AA%94%E6%A1%88"><span class="nav-number">2.2.2.2.</span> <span class="nav-text"> 步驟 2: 撰寫 Migration 檔案</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F-3-%E5%BB%BA%E7%AB%8B%E5%B0%8D%E6%87%89%E7%9A%84-django-%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.2.2.3.</span> <span class="nav-text"> 步驟 3: 建立對應的 Django 模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A5%E9%A9%9F-4-%E5%A5%97%E7%94%A8-migration-%E4%B8%A6%E4%BD%BF%E7%94%A8"><span class="nav-number">2.2.2.4.</span> <span class="nav-text"> 步驟 4: 套用 Migration 並使用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%A7%B8%E7%99%BC%E5%99%A8-triggers"><span class="nav-number">2.3.</span> <span class="nav-text"> 3. 觸發器 (Triggers)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E9%80%B2%E9%9A%8E%E5%85%A8%E6%96%87%E6%AA%A2%E7%B4%A2%E8%A8%AD%E5%AE%9A"><span class="nav-number">2.4.</span> <span class="nav-text"> 4. 進階全文檢索設定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E7%AE%A1%E7%90%86%E8%B3%87%E6%96%99%E5%BA%AB%E6%93%B4%E5%85%85%E5%A5%97%E4%BB%B6-extensions"><span class="nav-number">2.5.</span> <span class="nav-text"> 5. 管理資料庫擴充套件 (Extensions)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8C%87%E5%B0%8E%E5%8E%9F%E5%89%87"><span class="nav-number">3.</span> <span class="nav-text"> 指導原則</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">4.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/11/21/Raw%20SQL%20%E5%AF%A6%E6%88%B0%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="當 ORM 不夠用時：一份 Raw SQL 實戰指南 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          當 ORM 不夠用時：一份 Raw SQL 實戰指南
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-11-21 00:00:00 / 修改時間：23:57:45" itemprop="dateCreated datePublished" datetime="2025-11-21T00:00:00+08:00">2025-11-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>身為 軟體開發者，我們都熱愛 ORM。它優雅、直觀，將複雜的 SQL 操作抽象化為簡潔的程式碼，讓我們能專注於業務邏輯。但在開發過程中，總會遇到一些時刻，發現碰到了 ORM 的天花板。</p>
+<p>有些任務，無論是為了極致的效能、絕對的資料完整性，還是為了利用特定資料庫的獨門絕技，都無法單純依靠 ORM 來完成。</p>
+<p>本篇文章將以 Python Django 框架為實戰案例，探討如何使用 Django Migrations 中的 <code>migrations.RunSQL</code> 來釋放資料庫的潛能。從關鍵的安全性實戰案例: <strong>行級安全性 (Row-Level Security, RLS)</strong> 開始，探索一系列 ORM 無法觸及，但對專業應用至關重要的強大功能。</p>
+<hr />
+<h1 id="用-django-migration-優雅地管理-rls"><a class="markdownIt-Anchor" href="#用-django-migration-優雅地管理-rls"></a> 用 Django Migration 優雅地管理 RLS</h1>
+<p>想像一下，有一個多銷售員的應用，每個銷售員都應該只能看到自己的銷售紀錄。通常會在每個查詢後面加上 <code>.filter(salesperson=request.user)</code>。但如果忘了呢？</p>
+<p>這就是 PostgreSQL 的<strong>資料列層級安全性 (Row-Level Security, RLS)</strong> 大顯身手的地方。它是一道<strong>資料庫層級</strong>的安全網，確保即使應用程式程式碼有疏漏，資料庫本身也會強制執行存取規則。而管理這些規則最專業的方式，就是透過 Migrations。</p>
+<h2 id="場景銷售模型"><a class="markdownIt-Anchor" href="#場景銷售模型"></a> 場景：銷售模型</h2>
+<pre class="highlight"><code class="python"><span class="hljs-comment"># sales_app/models.py</span>
+<span class="hljs-keyword">from</span> django.db <span class="hljs-keyword">import</span> models
+<span class="hljs-keyword">from</span> django.contrib.auth.models <span class="hljs-keyword">import</span> User
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Sale</span>(models.Model):
+    product = models.CharField(max_length=<span class="hljs-number">100</span>)
+    amount = models.DecimalField(max_digits=<span class="hljs-number">10</span>, decimal_places=<span class="hljs-number">2</span>)
+    salesperson = models.ForeignKey(User, on_delete=models.CASCADE)
+</code></pre>
+<h3 id="步驟-1建立一個空的-migration-檔案"><a class="markdownIt-Anchor" href="#步驟-1建立一個空的-migration-檔案"></a> 步驟 1：建立一個空的 Migration 檔案</h3>
+<p>因為不修改模型結構，所以需要手動建立一個空的遷移檔案來存放 SQL。</p>
+<pre class="highlight"><code class="bash">python manage.py makemigrations sales_app --empty --name add_rls_to_sales
+</code></pre>
+<h3 id="步驟-2使用-migrationsrunsql"><a class="markdownIt-Anchor" href="#步驟-2使用-migrationsrunsql"></a> 步驟 2：使用 <code>migrations.RunSQL</code></h3>
+<p>打開新建立的遷移檔案 (<code>sales_app/migrations/0002_...py</code>)，用以下內容替換它。<code>RunSQL</code> 允許定義「正向」(套用規則) 和「反向」(撤銷規則) 的 SQL，這對於版本控制至關重要。</p>
+<pre class="highlight"><code class="python"><span class="hljs-comment"># sales_app/migrations/0002_add_rls_to_sales.py</span>
+<span class="hljs-keyword">from</span> django.db <span class="hljs-keyword">import</span> migrations
+
+TABLE_NAME = <span class="hljs-string">&quot;sales_app_sale&quot;</span>
+
+APPLY_RLS_SQL = <span class="hljs-string">f&quot;&quot;&quot;
+-- 1. 在資料表上啟用 RLS 總開關
+ALTER TABLE <span class="hljs-subst">&#123;TABLE_NAME&#125;</span> ENABLE ROW LEVEL SECURITY;
+
+-- 2. 建立核心策略
+CREATE POLICY select_own_sales_policy ON <span class="hljs-subst">&#123;TABLE_NAME&#125;</span>
+FOR SELECT
+USING (salesperson_id = (
+    SELECT id FROM auth_user WHERE username = current_user
+));
+
+-- 3. (建議) 強制連資料表擁有者也遵守 RLS
+ALTER TABLE <span class="hljs-subst">&#123;TABLE_NAME&#125;</span> FORCE ROW LEVEL SECURITY;
+&quot;&quot;&quot;</span>
+
+REMOVE_RLS_SQL = <span class="hljs-string">f&quot;&quot;&quot;
+DROP POLICY IF EXISTS select_own_sales_policy ON <span class="hljs-subst">&#123;TABLE_NAME&#125;</span>;
+ALTER TABLE <span class="hljs-subst">&#123;TABLE_NAME&#125;</span> DISABLE ROW LEVEL SECURITY;
+&quot;&quot;&quot;</span>
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Migration</span>(migrations.Migration):
+    dependencies = [
+        (<span class="hljs-string">&#x27;sales_app&#x27;</span>, <span class="hljs-string">&#x27;0001_initial&#x27;</span>),
+    ]
+    operations = [
+        migrations.RunSQL(
+            sql=APPLY_RLS_SQL,
+            reverse_sql=REMOVE_RLS_SQL,
+        )
+    ]
+</code></pre>
+<p><strong>關鍵解析</strong>：<code>USING</code> 子句中的子查詢是連接 Django 和 PostgreSQL 的橋樑。<code>current_user</code> 是 PostgreSQL 中代表當前資料庫連線角色的變數。這個子查詢找到了與當前連線角色同名的 Django 使用者的 <code>id</code>，並用它來過濾銷售紀錄。</p>
+<h3 id="步驟-3套用-migration"><a class="markdownIt-Anchor" href="#步驟-3套用-migration"></a> 步驟 3：套用 Migration</h3>
+<pre class="highlight"><code class="bash">python manage.py migrate
+</code></pre>
+<p>資料庫現在有了一道安全防線。任何繞過應用程式邏輯的查詢，都將被 RLS 策略攔截。</p>
+<hr />
+<h1 id="raw-sql-的其他應用"><a class="markdownIt-Anchor" href="#raw-sql-的其他應用"></a> Raw SQL 的其他應用</h1>
+<p>RLS 只是冰山一角。一旦掌握了 <code>migrations.RunSQL</code>，一整個新世界的大門就此打開。以下是幾個 ORM 鞭長莫及，但 Raw SQL 極其有用的場景：</p>
+<h2 id="1-查詢計畫分析-explain"><a class="markdownIt-Anchor" href="#1-查詢計畫分析-explain"></a> 1. 查詢計畫分析 (<code>EXPLAIN</code>)</h2>
+<p><strong>說明</strong> <code>EXPLAIN</code> 是資料庫的自我剖析工具，描述它將如何執行一個查詢。這是<strong>資料庫效能調校的第一神器</strong>。</p>
+<p><strong>ORM 為何做不到？</strong> ORM 的工作是<strong>產生</strong> SQL，而 <code>EXPLAIN</code> 的工作是<strong>分析</strong> SQL。</p>
+<p><strong>實戰技巧</strong>：可以輕鬆地在 Django 中分析任何 <code>QuerySet</code> 的效能。</p>
+<pre class="highlight"><code class="python"><span class="hljs-keyword">from</span> django.db <span class="hljs-keyword">import</span> connection
+
+<span class="hljs-comment"># 建立一個想分析的 QuerySet</span>
+slow_queryset = Sale.objects.<span class="hljs-built_in">filter</span>(amount__gt=<span class="hljs-number">1000</span>).select_related(<span class="hljs-string">&#x27;salesperson&#x27;</span>)
+
+<span class="hljs-comment"># 取得它將產生的 SQL</span>
+sql_query, params = slow_queryset.query.sql_with_params()
+
+<span class="hljs-comment"># 加上 EXPLAIN ANALYZE</span>
+explain_sql = <span class="hljs-string">f&quot;EXPLAIN (ANALYZE, BUFFERS) <span class="hljs-subst">&#123;sql_query&#125;</span>&quot;</span>
+
+<span class="hljs-comment"># 執行並印出查詢計畫</span>
+<span class="hljs-keyword">with</span> connection.cursor() <span class="hljs-keyword">as</span> cursor:
+    cursor.execute(explain_sql, params)
+    query_plan = <span class="hljs-string">&quot;\n&quot;</span>.join(row[<span class="hljs-number">0</span>] <span class="hljs-keyword">for</span> row <span class="hljs-keyword">in</span> cursor.fetchall())
+    <span class="hljs-built_in">print</span>(query_plan)
+</code></pre>
+<h2 id="2-資料庫視圖-database-views"><a class="markdownIt-Anchor" href="#2-資料庫視圖-database-views"></a> 2. 資料庫視圖 (Database Views)</h2>
+<p><strong>說明</strong> 一個由 <code>SELECT</code> 查詢定義的「虛擬資料表」，用來簡化複雜的 <code>JOIN</code> 查詢，讓我們把多張表的關聯資料當作一張單一的表來查詢。</p>
+<p><strong>ORM 為何做不到？</strong> ORM 的核心是將 Python class 對應到實際儲存資料的資料表。它沒有內建語法來定義一個基於查詢的虛擬結構。</p>
+<p><strong>實戰技巧</strong>：在 migration 中建立 View，然後在 Django 中為它建立一個 managed = False 的模型。這樣能兩全其美：在資料庫層級擁有高效能的 View，在 Django 層級又能用優雅的 ORM 語法來操作它。</p>
+<p>好的，完全理解！只展示 SQL 字串確實不夠完整，一個好的範例需要包含完整的 Migration 程式碼。</p>
+<p>我會將這段程式碼補全，並直接更新到先前產出的部落格文章中，讓範例更具體、更可操作。</p>
+<hr />
+<h3 id="更新後的部落格文章片段"><a class="markdownIt-Anchor" href="#更新後的部落格文章片段"></a> 更新後的部落格文章片段</h3>
+<p>（…前文省略…）</p>
+<h3 id="2-資料庫視圖-database-views-2"><a class="markdownIt-Anchor" href="#2-資料庫視圖-database-views-2"></a> 2. 資料庫視圖 (Database Views)</h3>
+<p><strong>這是什麼？</strong> 一個由 <code>SELECT</code> 查詢定義的「虛擬資料表」，用來簡化複雜的 <code>JOIN</code> 查詢，讓你把多張表的關聯資料當作一張單一的表來查詢。</p>
+<p><strong>ORM 為何做不到？</strong> ORM 的核心是將 Python class 對應到<strong>實際儲存資料的</strong>資料表。它沒有內建語法來定義一個基於查詢的虛擬結構。</p>
+<p><strong>實戰技巧</strong>：在 migration 中建立 View，然後在 Django 中為它建立一個 <code>managed = False</code> 的模型。這樣你就兩全其美：在資料庫層級擁有高效能的 View，在 Django 層級又能用優雅的 ORM 語法來操作它。</p>
+<h4 id="步驟-1-建立空的-migration"><a class="markdownIt-Anchor" href="#步驟-1-建立空的-migration"></a> 步驟 1: 建立空的 Migration</h4>
+<pre class="highlight"><code class="bash">python manage.py makemigrations sales_app --empty --name create_sales_report_view
+</code></pre>
+<h4 id="步驟-2-撰寫-migration-檔案"><a class="markdownIt-Anchor" href="#步驟-2-撰寫-migration-檔案"></a> 步驟 2: 撰寫 Migration 檔案</h4>
+<p>編寫完整的 migration 檔案，包含正向和反向的 SQL。</p>
+<pre class="highlight"><code class="python"><span class="hljs-comment"># sales_app/migrations/0003_create_sales_report_view.py</span>
+<span class="hljs-keyword">from</span> django.db <span class="hljs-keyword">import</span> migrations
+
+CREATE_VIEW_SQL = <span class="hljs-string">&quot;&quot;&quot;
+CREATE OR REPLACE VIEW sales_report_view AS
+SELECT
+    s.id,
+    s.product,
+    s.amount,
+    u.username as salesperson_name
+FROM
+    sales_app_sale s
+JOIN
+    auth_user u ON s.salesperson_id = u.id;
+&quot;&quot;&quot;</span>
+
+DROP_VIEW_SQL = <span class="hljs-string">&quot;DROP VIEW IF EXISTS sales_report_view;&quot;</span>
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Migration</span>(migrations.Migration):
+    dependencies = [
+        (<span class="hljs-string">&#x27;sales_app&#x27;</span>, <span class="hljs-string">&#x27;0002_add_rls_to_sales&#x27;</span>), <span class="hljs-comment"># 依賴於 sales_app_sale 表已存在</span>
+    ]
+    operations = [
+        migrations.RunSQL(
+            sql=CREATE_VIEW_SQL,
+            reverse_sql=DROP_VIEW_SQL,
+        )
+    ]
+</code></pre>
+<h4 id="步驟-3-建立對應的-django-模型"><a class="markdownIt-Anchor" href="#步驟-3-建立對應的-django-模型"></a> 步驟 3: 建立對應的 Django 模型</h4>
+<p>接著，在 <code>models.py</code> 中建立一個模型來「對應」這個 View。</p>
+<pre class="highlight"><code class="python"><span class="hljs-comment"># sales_app/models.py</span>
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">SalesReportView</span>(models.Model):
+    <span class="hljs-comment"># 欄位必須和 View 中的 SELECT 欄位完全對應</span>
+    product = models.CharField(max_length=<span class="hljs-number">100</span>)
+    amount = models.DecimalField(max_digits=<span class="hljs-number">10</span>, decimal_places=<span class="hljs-number">2</span>)
+    salesperson_name = models.CharField(max_length=<span class="hljs-number">150</span>)
+
+    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Meta</span>:
+        managed = <span class="hljs-literal">False</span>  <span class="hljs-comment"># 關鍵！告訴 Django 不要管理這張表的建立、修改、刪除</span>
+        db_table = <span class="hljs-string">&#x27;sales_report_view&#x27;</span>
+        verbose_name = <span class="hljs-string">&#x27;Sales Report&#x27;</span>
+</code></pre>
+<p><strong>注意</strong>：因為 View 沒有單一的主鍵，在模型中省略了 Django 自動產生的 <code>id</code> 欄位。Django 在查詢時會自動處理。如果 View 中有明確且唯一的欄位可以當作主鍵，可以加上 <code>primary_key=True</code>。</p>
+<h4 id="步驟-4-套用-migration-並使用"><a class="markdownIt-Anchor" href="#步驟-4-套用-migration-並使用"></a> 步驟 4: 套用 Migration 並使用</h4>
+<pre class="highlight"><code class="bash">python manage.py migrate
+</code></pre>
+<p>現在，可以像查詢任何普通模型一樣，用優雅的 ORM 語法來查詢這個複雜的報表了！</p>
+<pre class="highlight"><code class="python"><span class="hljs-comment"># 在 views.py 或 shell 中</span>
+<span class="hljs-keyword">from</span> .models <span class="hljs-keyword">import</span> SalesReportView
+
+<span class="hljs-comment"># 獲取所有報表資料</span>
+reports = SalesReportView.objects.<span class="hljs-built_in">all</span>()
+
+<span class="hljs-comment"># 進行過濾</span>
+high_value_reports = SalesReportView.objects.<span class="hljs-built_in">filter</span>(amount__gt=<span class="hljs-number">5000</span>)
+
+<span class="hljs-keyword">for</span> report <span class="hljs-keyword">in</span> high_value_reports:
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Product: <span class="hljs-subst">&#123;report.product&#125;</span>, Sold by: <span class="hljs-subst">&#123;report.salesperson_name&#125;</span>, Amount: <span class="hljs-subst">&#123;report.amount&#125;</span>&quot;</span>)
+</code></pre>
+<p>這個範例完美地展示了如何結合 Raw SQL 的強大能力和 Django ORM 的便利性。</p>
+<h2 id="3-觸發器-triggers"><a class="markdownIt-Anchor" href="#3-觸發器-triggers"></a> 3. 觸發器 (Triggers)</h2>
+<p><strong>說明</strong> 當資料表發生 <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code> 時自動執行的程序，常用於建立稽核日誌 (Audit Logs) 或維護複雜的資料一致性。</p>
+<p><strong>ORM 為何做不到？</strong> 這是資料庫層級的自動化邏輯，比 Django Signals 更底層、更可靠。</p>
+<p><strong>實戰技巧</strong>：在 migration 中建立一個函式和一個觸發器，自動記錄價格變動。</p>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- migrations/000X_add_audit_trigger.py</span>
+CREATE_TRIGGER_SQL <span class="hljs-operator">=</span> &quot;&quot;&quot;
+CREATE OR REPLACE FUNCTION log_price_changes()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF (NEW.price &lt;&gt; OLD.price) THEN
+        INSERT INTO price_history(product_id, old_price, new_price, changed_at)
+        VALUES(OLD.id, OLD.price, NEW.price, now());
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER price_changes_trigger
+AFTER UPDATE ON products_app_product
+FOR EACH ROW EXECUTE FUNCTION log_price_changes();
+&quot;&quot;&quot;
+# ... 在 RunSQL 中執行 ...
+</code></pre>
+<h2 id="4-進階全文檢索設定"><a class="markdownIt-Anchor" href="#4-進階全文檢索設定"></a> 4. 進階全文檢索設定</h2>
+<p><strong>說明</strong> Django 內建的全文檢索很棒，但要支援中文分詞 (如 <code>jieba</code>) 或自訂同義詞，就需要直接設定資料庫的文字搜尋組態。</p>
+<p><strong>ORM 為何做不到？</strong> ORM 沒有提供 <code>CREATE TEXT SEARCH CONFIGURATION</code> 這種底層的 DDL 指令。</p>
+<p><strong>實戰技巧</strong>：在 migration 中建立一個為中文優化的搜尋組態。</p>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- migrations/000X_create_chinese_fts.py (假設已安裝 pg_jieba)</span>
+CREATE_FTS_CONFIG_SQL <span class="hljs-operator">=</span> &quot;&quot;&quot;
+CREATE TEXT SEARCH CONFIGURATION chinese_jieba (PARSER = pg_catalog.default);
+ALTER TEXT SEARCH CONFIGURATION chinese_jieba
+    ALTER MAPPING FOR n,v,a,i,e,l,j
+    WITH jieba, simple;
+&quot;&quot;&quot;
+# ... 在 RunSQL 中執行 ...
+</code></pre>
+<h2 id="5-管理資料庫擴充套件-extensions"><a class="markdownIt-Anchor" href="#5-管理資料庫擴充套件-extensions"></a> 5. 管理資料庫擴充套件 (Extensions)</h2>
+<p><strong>說明</strong> 啟用 PostgreSQL 強大的擴充套件，如 <code>PostGIS</code> (地理資訊)、<code>pg_trgm</code> (模糊字串比對) 等。</p>
+<p><strong>ORM 為何做不到？</strong> <code>CREATE EXTENSION</code> 是資料庫管理指令。</p>
+<p><strong>實戰技巧</strong>：Django 為一些常用擴充套件提供了專門的 Migration 操作，這比手寫 <code>RunSQL</code> 更佳。</p>
+<pre class="highlight"><code class="python"><span class="hljs-comment"># migrations/000X_enable_pg_trgm.py</span>
+<span class="hljs-keyword">from</span> django.contrib.postgres.operations <span class="hljs-keyword">import</span> TrigramExtension
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Migration</span>(migrations.Migration):
+    operations = [
+        TrigramExtension(),
+    ]
+</code></pre>
+<hr />
+<h1 id="指導原則"><a class="markdownIt-Anchor" href="#指導原則"></a> 指導原則</h1>
+<p>該如何決定何時使用 ORM，何時使用 Raw SQL 呢？有一個簡單的原則：</p>
+<blockquote>
+<p><strong>ORM 是應用程式與資料模型之間的橋樑，專注於資料的 CRUD 和關聯。而任何涉及到「資料庫本身的管理、效能內省、行為設定、功能擴充」的操作，都超出了它的職責範圍，需要下降到 SQL 層次來處理。</strong></p>
+</blockquote>
+<hr />
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>透過熟練運用 <code>migrations.RunSQL</code> 和原生 SQL，不僅能解決 ORM 無法處理的難題，更能將我們的應用程式提升到一個新的高度——更安全、更高性能、功能更強大。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Database/" rel="tag"># Database</a>
+              <a href="/my-blog/tags/SQL/" rel="tag"># SQL</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/11/17/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20RLS%20%E8%B3%87%E6%96%99%E5%88%97%E5%B1%A4%E7%B4%9A%E5%AE%89%E5%85%A8%E6%80%A7/" rel="prev" title="解鎖資料庫的守門人：深入淺出 RLS (資料列層級安全性)">
+                  <i class="fa fa-angle-left"></i> 解鎖資料庫的守門人：深入淺出 RLS (資料列層級安全性)
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
