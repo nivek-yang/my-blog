@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="身為軟體工程師，我們很少打造一個完全獨立運作的系統。從支付串接、雲端通訊、身份驗證，到各式各樣的 SaaS 服務，系統總是需要與外部世界溝通。 「整合」看似簡單，但不同的場景需要不同的策略。選擇錯誤的整合模式，輕則導致效能低落、資源浪費；重則可能造成資料遺失、系統崩潰。 本篇文章將深入五種主流的系統整合模式，並用流程圖解析它們的運作方式。   最直觀的互動 — Direct API Call (同">
+<meta property="og:type" content="article">
+<meta property="og:title" content="現代後端架構中的第三方系統整合模式">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/11/25/%E7%8F%BE%E4%BB%A3%E5%BE%8C%E7%AB%AF%E6%9E%B6%E6%A7%8B%E4%B8%AD%E7%9A%84%E7%AC%AC%E4%B8%89%E6%96%B9%E7%B3%BB%E7%B5%B1%E6%95%B4%E5%90%88%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="身為軟體工程師，我們很少打造一個完全獨立運作的系統。從支付串接、雲端通訊、身份驗證，到各式各樣的 SaaS 服務，系統總是需要與外部世界溝通。 「整合」看似簡單，但不同的場景需要不同的策略。選擇錯誤的整合模式，輕則導致效能低落、資源浪費；重則可能造成資料遺失、系統崩潰。 本篇文章將深入五種主流的系統整合模式，並用流程圖解析它們的運作方式。   最直觀的互動 — Direct API Call (同">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-11-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-25T04:59:39.796Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="API Integration">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/11/25/%E7%8F%BE%E4%BB%A3%E5%BE%8C%E7%AB%AF%E6%9E%B6%E6%A7%8B%E4%B8%AD%E7%9A%84%E7%AC%AC%E4%B8%89%E6%96%B9%E7%B3%BB%E7%B5%B1%E6%95%B4%E5%90%88%E6%A8%A1%E5%BC%8F/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/11/25/%E7%8F%BE%E4%BB%A3%E5%BE%8C%E7%AB%AF%E6%9E%B6%E6%A7%8B%E4%B8%AD%E7%9A%84%E7%AC%AC%E4%B8%89%E6%96%B9%E7%B3%BB%E7%B5%B1%E6%95%B4%E5%90%88%E6%A8%A1%E5%BC%8F/","path":"2025/11/25/現代後端架構中的第三方系統整合模式/","title":"現代後端架構中的第三方系統整合模式"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>現代後端架構中的第三方系統整合模式 | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">125</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">60</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Integration/">
+        API Integration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cloud-Computing/">
+        Cloud Computing
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Concurrency/">
+        Concurrency
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cryptography/">
+        Cryptography
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cybersecurity/">
+        Cybersecurity
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(28)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Design-Pattern/">
+        Design Pattern
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/DevOps/">
+        DevOps
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Logging/">
+        Logging
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(17)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/OOP/">
+        OOP
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Search/">
+        Search
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Serverless/">
+        Serverless
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(6)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E7%9B%B4%E8%A7%80%E7%9A%84%E4%BA%92%E5%8B%95-direct-api-call-%E5%90%8C%E6%AD%A5%E8%AB%8B%E6%B1%82"><span class="nav-number">1.</span> <span class="nav-text"> 最直觀的互動 — Direct API Call (同步請求)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%8B%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text"> 運作流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%84%AA%E7%BC%BA%E9%BB%9E%E5%88%86%E6%9E%90"><span class="nav-number">1.2.</span> <span class="nav-text"> 優缺點分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%A9%E7%94%A8%E5%A0%B4%E6%99%AF"><span class="nav-number">1.3.</span> <span class="nav-text"> 適用場景</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8B%A4%E5%8B%9E%E7%9A%84%E8%A9%A2%E5%95%8F%E8%80%85-polling-%E8%BC%AA%E8%A9%A2"><span class="nav-number">2.</span> <span class="nav-text"> 勤勞的詢問者 — Polling (輪詢)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%8B%E4%BD%9C%E6%B5%81%E7%A8%8B-2"><span class="nav-number">2.1.</span> <span class="nav-text"> 運作流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%84%AA%E7%BC%BA%E9%BB%9E%E5%88%86%E6%9E%90-2"><span class="nav-number">2.2.</span> <span class="nav-text"> 優缺點分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%A9%E7%94%A8%E5%A0%B4%E6%99%AF-2"><span class="nav-number">2.3.</span> <span class="nav-text"> 適用場景</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%84%AA%E9%9B%85%E7%9A%84%E5%9B%9E%E8%AA%BF-webhook-%E4%BA%8B%E4%BB%B6%E9%A9%85%E5%8B%95"><span class="nav-number">3.</span> <span class="nav-text"> 優雅的回調 — Webhook (事件驅動)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%8B%E4%BD%9C%E6%B5%81%E7%A8%8B-3"><span class="nav-number">3.1.</span> <span class="nav-text"> 運作流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%84%AA%E7%BC%BA%E9%BB%9E%E5%88%86%E6%9E%90-3"><span class="nav-number">3.2.</span> <span class="nav-text"> 優缺點分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%A9%E7%94%A8%E5%A0%B4%E6%99%AF-3"><span class="nav-number">3.3.</span> <span class="nav-text"> 適用場景</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B0%B8%E4%B8%8D%E6%96%B7%E7%B7%9A%E7%9A%84%E5%B0%8D%E8%A9%B1-websockets"><span class="nav-number">4.</span> <span class="nav-text"> 永不斷線的對話 — Websockets</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%8B%E4%BD%9C%E6%B5%81%E7%A8%8B-4"><span class="nav-number">4.1.</span> <span class="nav-text"> 運作流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%84%AA%E7%BC%BA%E9%BB%9E%E5%88%86%E6%9E%90-4"><span class="nav-number">4.2.</span> <span class="nav-text"> 優缺點分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%A9%E7%94%A8%E5%A0%B4%E6%99%AF-4"><span class="nav-number">4.3.</span> <span class="nav-text"> 適用場景</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%82%E6%A5%B5%E8%A7%A3%E8%80%A6-message-queue-%E8%A8%8A%E6%81%AF%E4%BD%87%E5%88%97"><span class="nav-number">5.</span> <span class="nav-text"> 終極解耦 — Message Queue (訊息佇列)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%8B%E4%BD%9C%E6%B5%81%E7%A8%8B-5"><span class="nav-number">5.1.</span> <span class="nav-text"> 運作流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%84%AA%E7%BC%BA%E9%BB%9E%E5%88%86%E6%9E%90-5"><span class="nav-number">5.2.</span> <span class="nav-text"> 優缺點分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%A9%E7%94%A8%E5%A0%B4%E6%99%AF-5"><span class="nav-number">5.3.</span> <span class="nav-text"> 適用場景</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B4%E5%90%88%E6%A8%A1%E5%BC%8F%E6%AF%94%E8%BC%83"><span class="nav-number">6.</span> <span class="nav-text"> 整合模式比較</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">7.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">125</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/11/25/%E7%8F%BE%E4%BB%A3%E5%BE%8C%E7%AB%AF%E6%9E%B6%E6%A7%8B%E4%B8%AD%E7%9A%84%E7%AC%AC%E4%B8%89%E6%96%B9%E7%B3%BB%E7%B5%B1%E6%95%B4%E5%90%88%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="現代後端架構中的第三方系統整合模式 | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          現代後端架構中的第三方系統整合模式
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-11-25 00:00:00 / 修改時間：12:59:39" itemprop="dateCreated datePublished" datetime="2025-11-25T00:00:00+08:00">2025-11-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>身為軟體工程師，我們很少打造一個完全獨立運作的系統。從支付串接、雲端通訊、身份驗證，到各式各樣的 SaaS 服務，系統總是需要與外部世界溝通。</p>
+<p>「整合」看似簡單，但不同的場景需要不同的策略。選擇錯誤的整合模式，輕則導致效能低落、資源浪費；重則可能造成資料遺失、系統崩潰。</p>
+<p>本篇文章將深入五種主流的系統整合模式，並用流程圖解析它們的運作方式。</p>
+<hr />
+<h1 id="最直觀的互動-direct-api-call-同步請求"><a class="markdownIt-Anchor" href="#最直觀的互動-direct-api-call-同步請求"></a> 最直觀的互動 — Direct API Call (同步請求)</h1>
+<p>這是最基礎、最常見的模式。當系統需要第三方系統的資料或服務來完成某個任務時，就發起一個 API 請求，然後<strong>原地等待</strong>，直到對方回傳結果。</p>
+<p><strong>生活比喻</strong>：去咖啡店點餐，然後站在櫃檯前等待，直到店員把做好的咖啡交給你。</p>
+<h2 id="運作流程"><a class="markdownIt-Anchor" href="#運作流程"></a> 運作流程</h2>
+<pre class="highlight"><code class="mermaid">sequenceDiagram
+    participant User as 使用者
+    participant SystemA as 你的系統
+    participant SystemB as 第三方系統
+
+    User-&gt;&gt;SystemA: 發起請求 (例如：下訂單)
+    SystemA-&gt;&gt;SystemB: 發起 API 請求 (例如：驗證信用卡)
+    note right of SystemA: 系統 A 處理程序被阻擋 (Blocked)，&lt;br/&gt;等待系統 B 回應。
+    SystemB--&gt;&gt;SystemA: 回應 API 結果 (成功/失敗)
+    SystemA--&gt;&gt;User: 回應最終結果
+</code></pre>
+<h2 id="優缺點分析"><a class="markdownIt-Anchor" href="#優缺點分析"></a> 優缺點分析</h2>
+<ul>
+<li><strong>優點</strong>：
+<ul>
+<li><strong>實現簡單</strong>：邏輯直觀，就是一次函式呼叫。</li>
+<li><strong>即時回饋</strong>：可以立即知道操作成功或失敗。</li>
+</ul>
+</li>
+<li><strong>缺點</strong>：
+<ul>
+<li><strong>緊密耦合 (Tightly Coupled)</strong>：系統 A 強烈依賴系統 B 的穩定性與效能。</li>
+<li><strong>阻塞等待</strong>：如果系統 B 回應緩慢，系統 A 的執行緒會被長時間佔用，影響自身服務的吞吐量。</li>
+<li><strong>超時風險</strong>：網路延遲或系統 B 處理時間過長，容易導致請求超時失敗。</li>
+</ul>
+</li>
+</ul>
+<h2 id="適用場景"><a class="markdownIt-Anchor" href="#適用場景"></a> 適用場景</h2>
+<ul>
+<li>需要<strong>立即性</strong>和<strong>原子性</strong>結果的操作。</li>
+<li><strong>範例</strong>：信用卡授權、驗證使用者身份、查詢即時庫存。</li>
+</ul>
+<hr />
+<h1 id="勤勞的詢問者-polling-輪詢"><a class="markdownIt-Anchor" href="#勤勞的詢問者-polling-輪詢"></a> 勤勞的詢問者 — Polling (輪詢)</h1>
+<p>當要等待一個來自第三方系統的非同步任務完成時，最簡單粗暴的方法就是輪詢。系統會每隔一段時間就主動去問第三方系統：「嘿，那個任務完成了嗎？」</p>
+<p><strong>生活比喻</strong>：在微波爐前，每 10 秒鐘就打開一次門，看看食物熱好了沒有。</p>
+<h2 id="運作流程-2"><a class="markdownIt-Anchor" href="#運作流程-2"></a> 運作流程</h2>
+<pre class="highlight"><code class="mermaid">sequenceDiagram
+    participant SystemA as 你的系統
+    participant SystemB as 第三方系統
+
+    SystemA-&gt;&gt;SystemB: 發起一個非同步任務 (例如：產生報表)
+    SystemB--&gt;&gt;SystemA: 回應 (任務已開始，ID: 123)
+
+    loop 每隔 X 秒/分鐘
+        SystemA-&gt;&gt;SystemB: 查詢任務狀態 (ID: 123)
+        SystemB--&gt;&gt;SystemA: 回應 (處理中...)
+    end
+
+    SystemA-&gt;&gt;SystemB: 查詢任務狀態 (ID: 123)
+    SystemB--&gt;&gt;SystemA: 回應 (已完成，下載連結: ...)
+</code></pre>
+<h2 id="優缺點分析-2"><a class="markdownIt-Anchor" href="#優缺點分析-2"></a> 優缺點分析</h2>
+<ul>
+<li><strong>優點</strong>：
+<ul>
+<li><strong>實現簡單</strong>：在客戶端（你的系統）側的邏輯很單純，就是一個定時任務。</li>
+<li><strong>對第三方系統要求低</strong>：對方不需要支援任何特殊功能，只要提供一個狀態查詢的 API 即可。</li>
+</ul>
+</li>
+<li><strong>缺點</strong>：
+<ul>
+<li><strong>資源浪費</strong>：大量的查詢請求可能都是無效的（任務還在處理中），造成網路頻寬和伺服器資源的浪費。</li>
+<li><strong>延遲性</strong>：無法即時得知任務完成。如果輪詢間隔是 1 分鐘，那麼最多會有 1 分鐘的延遲。</li>
+<li><strong>擴展性差</strong>：當需要輪詢的任務數量增加時，對雙方系統的壓力都會劇增。</li>
+</ul>
+</li>
+</ul>
+<h2 id="適用場景-2"><a class="markdownIt-Anchor" href="#適用場景-2"></a> 適用場景</h2>
+<ul>
+<li>第三方系統<strong>不支援</strong> Webhook。</li>
+<li>對任務完成的即時性要求不高。</li>
+<li><strong>範例</strong>：等待一份大型報表產生、查詢 AI 模型訓練進度。</li>
+</ul>
+<hr />
+<h1 id="優雅的回調-webhook-事件驅動"><a class="markdownIt-Anchor" href="#優雅的回調-webhook-事件驅動"></a> 優雅的回調 — Webhook (事件驅動)</h1>
+<p>Webhook 徹底反轉了 Polling 的溝通模式，從「我來問你」變成了「你來通知我」。在發起任務時，會提供一個回調 URL (Callback URL)，告訴第三方系統：「任務完成後，請往這個地址發一個 HTTP POST 請求通知我。」</p>
+<p><strong>生活比喻</strong>：在餐廳候位，不用一直去問櫃檯，而是留下手機號碼，輪到你時餐廳會主動打電話來。</p>
+<h2 id="運作流程-3"><a class="markdownIt-Anchor" href="#運作流程-3"></a> 運作流程</h2>
+<pre class="highlight"><code class="mermaid">sequenceDiagram
+    participant SystemA as 你的系統
+    participant SystemB as 第三方系統
+
+    note over SystemA, SystemB: 階段一：註冊回調
+    SystemA-&gt;&gt;SystemB: 發起任務，並提供 Webhook URL
+    SystemB--&gt;&gt;SystemA: 回應 (任務已收到)
+
+    note over SystemA, SystemB: 階段二：任務完成後，非同步通知
+    SystemB-&gt;&gt;SystemA: 向註冊的 Webhook URL 發送 POST 請求 (攜帶結果資料)
+    SystemA--&gt;&gt;SystemB: 回應 HTTP 200 OK (表示已收到通知)
+</code></pre>
+<h2 id="優缺點分析-3"><a class="markdownIt-Anchor" href="#優缺點分析-3"></a> 優缺點分析</h2>
+<ul>
+<li><strong>優點</strong>：
+<ul>
+<li><strong>高效率</strong>：沒有多餘的查詢請求，只有在事件發生時才會通訊。</li>
+<li><strong>近乎即時</strong>：事件完成後能立刻收到通知。</li>
+<li><strong>伺服器友好</strong>：大大降低了雙方系統的負載。</li>
+</ul>
+</li>
+<li><strong>缺點</strong>：
+<ul>
+<li><strong>需要公網端點 (Endpoint)</strong>：系統必須提供一個能從公網訪問的 URL。</li>
+<li><strong>可靠性問題</strong>：如果通知當下系統剛好故障或在部署，這次通知就可能遺失（除非對方有重試機制）。</li>
+<li><strong>安全性考量</strong>：需要驗證收到的請求確實來自於第三方系統，而不是惡意偽造的（通常使用簽章驗證）。</li>
+</ul>
+</li>
+</ul>
+<h2 id="適用場景-3"><a class="markdownIt-Anchor" href="#適用場景-3"></a> 適用場景</h2>
+<ul>
+<li>主流的事件驅動整合方式。</li>
+<li><strong>範例</strong>：支付成功通知、GitHub push 後觸發 CI/CD、收到新郵件或簡訊的通知。</li>
+</ul>
+<hr />
+<h1 id="永不斷線的對話-websockets"><a class="markdownIt-Anchor" href="#永不斷線的對話-websockets"></a> 永不斷線的對話 — Websockets</h1>
+<p>當需要與第三方系統進行<strong>持續性、雙向、即時</strong>的溝通時，以上模式可能都不夠用。Websockets 會建立一個長連線 (Persistent Connection)，允許雙方在任何時候互相發送訊息。</p>
+<p><strong>生活比喻</strong>：不是打電話和掛斷，而是一直保持通話的對講機。</p>
+<h2 id="運作流程-4"><a class="markdownIt-Anchor" href="#運作流程-4"></a> 運作流程</h2>
+<pre class="highlight"><code class="mermaid">sequenceDiagram
+    participant SystemA as 你的系統
+    participant SystemB as 第三方系統
+
+    SystemA-&gt;&gt;SystemB: 發起 HTTP Request (請求升級為 Websocket)
+    SystemB--&gt;&gt;SystemA: 回應 HTTP 101 (切換協議)
+    note over SystemA, SystemB: Websocket 連線建立成功
+
+    SystemB-&gt;&gt;SystemA: 推送即時訊息 (例如：股價更新)
+    SystemB-&gt;&gt;SystemA: 推送另一條訊息
+    SystemA-&gt;&gt;SystemB: 發送指令 (例如：訂閱其他股票)
+</code></pre>
+<h2 id="優缺點分析-4"><a class="markdownIt-Anchor" href="#優缺點分析-4"></a> 優缺點分析</h2>
+<ul>
+<li><strong>優點</strong>：
+<ul>
+<li><strong>極低延遲</strong>：真正的即時通訊，訊息傳遞非常快。</li>
+<li><strong>雙向溝通</strong>：不像 Webhook 只能單向通知，Websockets 允許雙方隨時互傳資料。</li>
+<li><strong>效能高</strong>：連線建立後，後續的訊息交換省去了 HTTP 的標頭開銷。</li>
+</ul>
+</li>
+<li><strong>缺點</strong>：
+<ul>
+<li><strong>狀態管理複雜</strong>：需要維護連線的生命週期（建立、心跳、斷線重連）。</li>
+<li><strong>伺服器資源</strong>：維持大量長連線會消耗伺服器內存。</li>
+<li><strong>支援度</strong>：並非所有第三方服務都提供 Websockets API。</li>
+</ul>
+</li>
+</ul>
+<h2 id="適用場景-4"><a class="markdownIt-Anchor" href="#適用場景-4"></a> 適用場景</h2>
+<ul>
+<li>需要高頻率、雙向的即時資料交換。</li>
+<li><strong>範例</strong>：交易所的即時報價 API、線上多人協作工具、網頁聊天室。</li>
+</ul>
+<hr />
+<h1 id="終極解耦-message-queue-訊息佇列"><a class="markdownIt-Anchor" href="#終極解耦-message-queue-訊息佇列"></a> 終極解耦 — Message Queue (訊息佇列)</h1>
+<p>在複雜的分散式系統或微服務架構中，可以使用一個中介層——訊息佇列（如 RabbitMQ, Kafka）來徹底解耦系統。系統 A 只需將訊息（任務）發布到佇列中，就可以立即完成自己的工作。系統 B（或其他消費者）則在自己有空時去佇列中取出訊息進行處理。</p>
+<p><strong>生活比喻</strong>：把信件投進郵筒就離開了，郵差會在稍後的時間點來收信並完成投遞，整個過程無需等待。</p>
+<h2 id="運作流程-5"><a class="markdownIt-Anchor" href="#運作流程-5"></a> 運作流程</h2>
+<pre class="highlight"><code class="mermaid">sequenceDiagram
+    participant SystemA as 生產者 (Producer)
+    participant Broker as 訊息佇列 (Message Queue)
+    participant SystemB as 消費者 (Consumer)
+
+    SystemA-&gt;&gt;Broker: 發布訊息 (Publish Message)
+    note right of SystemA: SystemA 的任務完成，&lt;br/&gt;無需關心誰來處理。
+
+    Broker-&gt;&gt;SystemB: 推送/拉取訊息
+    SystemB-&gt;&gt;SystemB: 處理訊息...
+    SystemB-&gt;&gt;Broker: 確認訊息已處理 (Acknowledge)
+</code></pre>
+<h2 id="優缺點分析-5"><a class="markdownIt-Anchor" href="#優缺點分析-5"></a> 優缺點分析</h2>
+<ul>
+<li><strong>優點</strong>：
+<ul>
+<li><strong>極致解耦</strong>：生產者和消費者完全獨立，互不感知對方存在。</li>
+<li><strong>高可靠性與韌性</strong>：即使消費者系統當機，訊息仍會安全地保存在佇列中，待其恢復後再處理。</li>
+<li><strong>削峰填谷 (Load Balancing)</strong>：能有效應對瞬間的流量洪峰，保護後端服務不被衝垮。</li>
+<li><strong>易於擴展</strong>：可以輕鬆地增加更多消費者來平行處理訊息，提高系統吞吐量。</li>
+</ul>
+</li>
+<li><strong>缺點</strong>：
+<ul>
+<li><strong>架構複雜度</strong>：需要引入並維護一個新的中介層（Broker）。</li>
+<li><strong>非同步</strong>：不適用於需要即時回饋的場景。</li>
+<li><strong>最終一致性</strong>：資料的處理是非同步的，需要接受短時間的資料不一致。</li>
+</ul>
+</li>
+</ul>
+<h2 id="適用場景-5"><a class="markdownIt-Anchor" href="#適用場景-5"></a> 適用場景</h2>
+<ul>
+<li>微服務之間的通訊。</li>
+<li>處理耗時的背景任務（影片轉檔、發送大量通知）。</li>
+<li>需要保證訊息 100% 不遺失的關鍵業務流程。</li>
+</ul>
+<hr />
+<h1 id="整合模式比較"><a class="markdownIt-Anchor" href="#整合模式比較"></a> 整合模式比較</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">整合模式</th>
+<th style="text-align:left">耦合度</th>
+<th style="text-align:left">即時性</th>
+<th style="text-align:left">效率</th>
+<th style="text-align:left">實現複雜度</th>
+<th style="text-align:left">核心場景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Direct API Call</strong></td>
+<td style="text-align:left">高</td>
+<td style="text-align:left"><strong>最高</strong></td>
+<td style="text-align:left">中 (受對方影響)</td>
+<td style="text-align:left"><strong>低</strong></td>
+<td style="text-align:left">同步、原子性操作</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Polling</strong></td>
+<td style="text-align:left">中</td>
+<td style="text-align:left">差</td>
+<td style="text-align:left"><strong>低</strong></td>
+<td style="text-align:left">低</td>
+<td style="text-align:left">兜底方案，對方無 Webhook</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Webhook</strong></td>
+<td style="text-align:left">低</td>
+<td style="text-align:left"><strong>高</strong></td>
+<td style="text-align:left"><strong>高</strong></td>
+<td style="text-align:left">中</td>
+<td style="text-align:left">非同步事件通知</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Websockets</strong></td>
+<td style="text-align:left">中</td>
+<td style="text-align:left"><strong>最高</strong></td>
+<td style="text-align:left">高</td>
+<td style="text-align:left">高</td>
+<td style="text-align:left">持續性雙向通訊</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Message Queue</strong></td>
+<td style="text-align:left"><strong>極低</strong></td>
+<td style="text-align:left">差 (非同步)</td>
+<td style="text-align:left">極高</td>
+<td style="text-align:left"><strong>高</strong></td>
+<td style="text-align:left">系統解耦、流量削峰</td>
+</tr>
+</tbody>
+</table>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>沒有最好的整合模式，只有最適合你的業務場景的模式。在設計系統時，問自己幾個問題：</p>
+<ul>
+<li>需要即時的結果嗎？還是可以非同步處理？</li>
+<li>第三方系統支援哪些整合方式？</li>
+<li>對系統的可靠性、擴展性要求有多高？</li>
+<li>願意為了更高的韌性而增加架構的複雜度嗎？</li>
+</ul>
+<p>理解這些模式的本質與權衡，將使你在架構設計的路上走得更遠、更穩。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/API-Integration/" rel="tag"># API Integration</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/11/21/Raw%20SQL%20%E5%AF%A6%E6%88%B0%E6%8C%87%E5%8D%97/" rel="prev" title="當 ORM 不夠用時：一份 Raw SQL 實戰指南">
+                  <i class="fa fa-angle-left"></i> 當 ORM 不夠用時：一份 Raw SQL 實戰指南
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

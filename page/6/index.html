@@ -105,8 +105,8 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">124</span></a>
-  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">59</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">125</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">60</span></a>
       <ul class="sub-menu">
   
   
@@ -120,6 +120,13 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/API-Gateway/">
         API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Integration/">
+        API Integration
         <span class="post-count">(1)</span>
       </a>
     </li>
@@ -562,7 +569,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-count">125</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -570,7 +577,7 @@
     
       <div class="site-state-item site-state-tags">
           <a href="/my-blog/tags/">
-        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-count">60</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -587,6 +594,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/09/02/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20MAC%20Address%20%E8%88%87%20ARP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/09/02/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20MAC%20Address%20%E8%88%87%20ARP/" class="post-title-link" itemprop="url">
+              深入淺出 MAC Address 與 ARP：網路世界裡的「身分證」與「尋人啟事」
+            </a>
+            <a href="/my-blog/2025/09/02/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20MAC%20Address%20%E8%88%87%20ARP/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-09-02 00:00:00 / 修改時間：23:17:54" itemprop="dateCreated datePublished" datetime="2025-09-02T00:00:00+08:00">2025-09-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">IP 地址 無疑是網路世界最廣為人知的地址，它讓我們能夠在全球範圍內識別和定位設備。然而，當資料包抵達它的目的網路後，如何才能精準地傳遞給該網路中的特定設備呢？這就好像郵差已經把信件送到了正確的社區，但他還需要知道具體是社區裡的哪一棟房子、哪一個門牌號碼。 這時，需要引入兩個在網路（特別是區域網路）中舉足輕重的概念：MAC 地址 (Media Access Control Address) 和 ARP (Address Resolution Protocol)。它們是讓資料包在「最後一哩路」上能夠精準投遞的關鍵。 什麼是 MAC Address？ MAC 地址，全名為「媒體存取控制位址」，它是一個燒錄在網路介面卡 (Network Interface Card, NIC) 上的物理地址。可以把它想像成網路設備的全球唯一身分證號碼。 唯一性：理論上，世界上每一張網路卡都擁有一個獨一無二的 MAC 地址。這是由 IEEE (電機電子工程師學會) 負責分配的。 格式：MAC 地址通常由 12 個十六進位數字組成，以冒號、連字號或點號分隔為 6 組或 3 組，例如 00:1A:2B:3C:4D:5E 或 00-1A-2B-3C-4D-5E。 前六位（例如 00:1A:2B）是廠商識別碼 (Organizationally Unique Identifier, OUI)，用來識別生產該網路卡的製造商。 後六位（例如 3C:4D:5E）是網路卡自身的序列號碼，由製造商分配，確保唯一性。 工作層次：MAC 地址工作在 OSI 模型的第二層：資料連結層 (Data Link Layer)。這意味著它主要用於識別和通訊在同一區域網路 (LAN) 內的設備。 比喻：如果 IP 地址是家的「郵遞區號 + 地址」，那麼 MAC 地址就是家「門牌號碼」或汽車的「車身識別碼 (VIN Number)」——它固定且是設備實體的唯一標識。 MAC 地址的特性： 物理性：它與硬體綁定，通常是不可更改的（儘管有些軟體工具可以臨時修改，稱為 MAC Spoofing）。 非路由性：路由器不會根據 MAC 地址來決定資料包的轉發路徑。MAC 地址的功用僅限於在同一個廣播域（區域網路）內傳輸資料。 MAC Address 與 IP Address：各司其職，緊密合作 已經知道 IP 地址是可路由的邏輯地址，那為什麼還需要 MAC 地址呢？ 特性 MAC Address IP Address 層次 (OSI) 資料連結層 (Layer 2) 網路層 (Layer 3) 性質 物理地址 / 硬體地址 邏輯地址 / 軟體地址 範圍 區域網路內 (Local Network) 全球網際網路 (Global Internet) 唯一性 硬體出廠唯一（同一廣播域不會重複） 全球唯一（公網 IP），或區域網路唯一（私網 IP） 可變性 通常固定不變（燒錄在網卡中），但可被模擬 (Spoof) 可變（手動設定或 DHCP 動態分配、NAT 轉換） 用途 區域網路內設備識別與傳輸 跨網路識別設備，數據包路由 (Routing) 資訊 形象比喻 門牌號碼、車身號碼 (VIN) 郵遞區號 + 地址、郵箱號碼 關鍵在於： 跨網路傳輸 需要 IP 地址 來指示資料包的目的地網路和主機。 在同一個區域網路 (LAN) 內部傳輸 (「最後一哩路」) 需要 MAC 地址 來精準投遞給目標設備。 也就是說，當資料要從 A 電腦發到 B 電腦，首先會用 IP 地址來確認 B 電腦屬於哪個網路區段，讓路由器把資料包送到正確的區域網路。一旦資料包到達 B 電腦所在的區域網路，此時就需要利用 B 電腦的 MAC 地址，才能在眾多設備中找到那個「正確的門牌號碼」，將資料幀 (Ethernet Frame) 準確地傳遞給 B 電腦。 而將 IP 地址轉換為 MAC 地址的過程，就是由 ARP 來完成的。 什麼是 ARP (Address Resolution Protocol)？ ARP，全名為「地址解析協定」，就像它的名字一樣，它是一個用於將 IP 地址 (Layer 3 邏輯地址) 解析/轉換成 MAC 地址 (Layer 2 物理地址) 的協定。它工作在網路層和資料連結層之間。 ARP 的運作方式（「尋人啟事」）： 想像在一個辦公室裡，知道某位同事的名字（IP 地址），但不知道他坐在哪個座位（MAC 地址），於是會： ARP Request (ARP 請求)： 當 A 電腦想與同網段的 B 電腦通訊，但它只知道 B 電腦的 IP 地址，不知道其 MAC 地址時。 A 電腦會發出一個特殊的廣播 (Broadcast) 訊息到整個區域網路：「請問，IP 地址是 192.168.1.100 的設備，你的 MAC 地址是什麼？」 這個訊息的目標 MAC 地址是 FF:FF:FF:FF:FF:FF（表示廣播給所有設備）。 ARP Reply (ARP 回覆)： 區域網路內的所有設備都會收到這個廣播。 只有 IP 地址為 192.168.1.100 的 B 電腦會回應這個請求。 B 電腦會發送一個單播 (Unicast) 訊息給 A 電腦：「我就是 192.168.1.100，我的 MAC 地址是 00:1A:2B:3C:4D:5E。」 ARP 快取 (ARP Cache)： A 電腦收到 B 電腦的回覆後，會將 192.168.1.100 對應 00:1A:2B:3C:4D:5E 的映射關係儲存在自己的 ARP 快取表 中。 下一次 A 電腦需要與 B 電腦通訊時，會先查詢自己的 ARP 快取，如果找到對應關係，就可以直接使用 MAC 地址進行通訊，而無需再次發送 ARP 請求，提高了效率。 ARP 快取中的條目通常有生命週期，過期後會自動清除或重新查詢。 路由器的 ARP 作用： 當 A 電腦要和不同網段的 C 電腦通訊時： A 電腦知道 C 電腦不在同個網段，所以它會把資料包發給預設閘道 (Default Gateway)，也就是路由器。 A 電腦會發出 ARP 請求：「請問，預設閘道 (例如 192.168.1.1) 的 MAC 地址是什麼？」 路由器回覆自己的 MAC 地址。 A 電腦收到路由器的 MAC 地址後，將資料包的目的 MAC 地址設定為路由器的 MAC 地址，並將資料包送給路由器。 路由器收到資料包後，會解開 IP 封包，根據目的 IP 地址查詢自己的路由表，然後再針對下一個跳點（可能是另一個路由器或目標主機）執行 ARP 過程，將資料包傳遞下去。 ARP 的安全性風險：ARP 欺騙 (ARP Spoofing) 由於 ARP 協定在設計時，基於對區域網路內所有設備的「信任」，它沒有任何身份驗證機制。這使得 ARP 非常容易受到惡意攻擊，其中最危險的就是「ARP 欺騙 (ARP Spoofing)」或「ARP 毒化 (ARP Poisoning)」。 原理：攻擊者偽造 ARP 響應訊息，對網路中的其他設備（例如，將自己偽裝成閘道器，或將自己偽裝成其他主機）發送錯誤的 IP-MAC 映射關係。 後果： 中間人攻擊 (Man-in-the-Middle, MITM)：攻擊者可以攔截、監聽甚至修改流經的資料。例如，讓所有發往閘道器的流量都先經過攻擊者的電腦。 阻斷服務 (Denial of Service, DoS)：攻擊者可以發送錯誤的 ARP 映射，使得某些主機無法正確找到目標主機或閘道器，導致網路通訊中斷。 為了防範 ARP 欺騙，可以採取一些措施，例如： 靜態 ARP 條目：在重要主機或伺服器上配置閘道器的靜態 ARP 條目。 ARP 監控工具：使用工具監測 ARP 數據包，檢測異常。 網路安全設備：部署具有 ARP 緩解功能的交換器或防火牆。 結論 MAC 地址與 ARP 協定是現代網路基礎設施中不可或缺的基石。MAC 地址為每個網路設備提供了獨一無二的物理身份，而 ARP 則巧妙地扮演了 IP 地址與 MAC 地址之間的「翻譯官」角色，確保了資料包能夠在區域網路中被精準投遞。 理解這兩者如何協同工作，不僅能幫助我們更深入地了解網路的底層運作原理，也能讓我們對網路安全有更清晰的認識。下次當電腦發送一個資料包時，請記得，在它的旅程中，MAC 地址和 ARP 正默默地發揮著關鍵作用！</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/09/02/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20MAC%20Address%20%E8%88%87%20ARP/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1351,92 +1444,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/08/22/%E5%BE%9E%20CAP%20%E7%9A%84%E6%8A%89%E6%93%87%E5%88%B0%20BASE%20%E7%9A%84%E5%AF%A6%E8%B8%90%20%E7%8F%BE%E4%BB%A3%E5%88%86%E6%95%A3%E5%BC%8F%E7%B3%BB%E7%B5%B1%E7%9A%84%E8%A8%AD%E8%A8%88%E5%93%B2%E5%AD%B8/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/08/21/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88%E4%B8%AD%E7%9A%84%20CAP%20%E7%90%86%E8%AB%96/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/08/21/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88%E4%B8%AD%E7%9A%84%20CAP%20%E7%90%86%E8%AB%96/" class="post-title-link" itemprop="url">
-              系統設計中的 CAP 理論
-            </a>
-            <a href="/my-blog/2025/08/21/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88%E4%B8%AD%E7%9A%84%20CAP%20%E7%90%86%E8%AB%96/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-08-21 00:00:00 / 修改時間：23:40:58" itemprop="dateCreated datePublished" datetime="2025-08-21T00:00:00+08:00">2025-08-21</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">當從單體應用程式 (Monolithic Application) 走向微服務或任何分散式架構時，享受了擴展性與彈性的好處，但也必須面對一個新的挑戰：如何在多個節點之間維持資料的可靠性與服務的可用性？ 想像一下這個場景：在一個全球知名的電商平台搶購限量版球鞋。當按下「購買」的瞬間，系統背後可能有數十甚至數百台伺服器在同時運作。系統如何確保你買到的這雙鞋不會同時被另一個人買走？又如何保證即使某個地區的機房發生網路問題，依然能順利完成交易？ 這就是 CAP 理論要解決的核心問題。 在分散式系統設計中，CAP 理論（CAP Theorem）是一個核心概念，用來描述在分散式資料庫中，系統無法同時滿足 一致性（Consistency）、可用性（Availability）、分區容錯性（Partition Tolerance） 這三大特性。理解 CAP 理論對於後端工程師在設計資料庫架構或分散式系統時至關重要。 什麼是 CAP 理論？ CAP 理論，又稱布魯爾定理 (Brewer’s Theorem)，由電腦科學家 Eric Brewer 在 2000 年提出。它指出，任何一個分散式資料儲存系統，最多只能同時滿足以下三個特性中的兩項。 在一個分散式系統中，一致性 (Consistency)、可用性 (Availability) 和 分區容錯性 (Partition Tolerance)，這三者無法兼得。 CAP 三大特性 1. 一致性（Consistency） 定義：所有節點在同一時間點讀取到的資料，必須是完全相同的。 白話解釋：當成功寫入一筆新資料後，任何後續的讀取操作，都應該要能讀到這筆最新的資料。系統就像只有一個「真相」來源，絕不允許讀到舊的或不一致的資料。 優點：避免資料不同步問題，提供強一致性體驗。 缺點：可能需要等待資料同步完成，導致延遲。 2. 可用性（Availability） 定義：每一次的請求，不論是讀取或寫入，都必須收到一個（非錯誤的）回應。 白話解釋：系統永遠處於「開機」狀態。只要使用者發出請求，系統就一定會回應，它不能因為內部忙碌或網路問題就直接拋出錯誤或無止盡地等待。不過，它不保證回傳的資料是最新的。 優點：系統可靠、不間斷服務。 缺點：可能回傳舊資料，導致一致性下降。 3. 分區容錯性（Partition Tolerance） 定義：即使叢集中的部分節點之間因為網路問題而無法互相通訊（也就是發生「網路分區」），系統整體仍然能夠繼續運作。 白話解釋：在現代雲端架構中，網路閃爍、交換機故障、機房斷線是家常便飯。分區容錯性意味著系統設計必須能容忍這些意外，不能因為兩個節點「失聯」就導致整個系統崩潰。 優點：保證系統在網路異常下仍能運行。 缺點：必須在一致性與可用性之間做取捨。 CAP 不可能三角 CAP 理論指出，在發生網路分區的情況下，系統只能同時滿足 一致性（C） 和 可用性（A） 其中之一，而無法同時兼顧。這就是所謂的 「不可能三角」。 用圖來表示如下： graph TD C[一致性&lt;br&gt;Consistency] --- A[可用性&lt;br&gt;Availability] A --- P[分區容錯性&lt;br&gt;Partition Tolerance] P --- C style C fill:#d6f0ff,stroke:#3399ff,stroke-width:2px style A fill:#d6f0ff,stroke:#3399ff,stroke-width:2px style P fill:#d6f0ff,stroke:#3399ff,stroke-width:2px CAP 理論最關鍵的部分在於：P (分區容錯性) 在現今的分散式系統中，是一個「必選項」，而不是「可選項」。 只要系統部署在多台機器上，就必須假設網路隨時可能出問題。因此，系統設計的真正權衡，其實是在網路分區發生時，必須在 C (一致性) 和 A (可用性) 之間做出抉擇。 用一個簡單的圖示來思考： [資料庫節點 A] &lt;---- 網路連線正常 ----&gt; [資料庫節點 B] (資料: v1) (資料: v1) 假設此時，一個寫入請求進來，將資料更新為 v2。資料成功寫入節點 A，並開始同步到節點 B。 [資料庫節點 A] &lt;---- 同步中 ----&gt; [資料庫節點 B] (資料: v2) (資料: v1) 就在這個瞬間，網路發生了分區！ [資料庫節點 A] &lt;---- X 網路中斷 X ----&gt; [資料庫節點 B] (資料: v2) (資料: v1) 現在，一個讀取請求進來了，它可以被路由到節點 A 或節點 B。這時面臨了抉擇： 選擇 C (一致性)，放棄 A (可用性) - 稱為 CP 系統 為了保證一致性，節點 B 因為無法與節點 A 同步以獲取最新的 v2 資料，它必須拒絕所有的讀取請求，或者回傳錯誤。 這樣做確保了任何讀取請求都不會讀到舊的資料 (v1)，維持了資料的強一致性。但犧牲了節點 B 的可用性。 選擇 A (可用性)，放棄 C (一致性) - 稱為 AP 系統 為了保證可用性，節點 B 即使知道自己可能不是最新的，它仍然會回傳它目前擁有的資料 (v1)。 這樣做確保了系統永遠可以回應使用者的請求，但犧牲了資料的一致性（使用者可能會讀到舊資料）。 現實世界的例子 CP 系統 (Consistency &gt; Availability) 當資料的正確性至關重要，不容許絲毫偏差時，就會選擇 CP。 應用場景：銀行交易、金融系統、訂單管理。絕對不希望因為讀到舊的餘額資料而造成超額提款，或因為庫存資料不一致而超賣商品。 代表技術：MongoDB、Redis、HBase。這些系統都提供了調整一致性等級的選項，在需要時可以配置為強一致性模式。 AP 系統 (Availability &gt; Consistency) 當使用者體驗和系統的永遠在線比短暫的資料不一致更重要時，就會選擇 AP。 應用場景：社群媒體的按讚數、貼文瀏覽次數、電商網站的商品評論。晚幾秒鐘看到最新的按讚數不會造成嚴重後果，但如果網站頻繁顯示錯誤訊息，使用者會立刻流失。 代表技術：Cassandra、DynamoDB (Amazon)、CouchDB。它們天生就是為了高可用性和高擴展性而設計的，採用的是「最終一致性」(Eventual Consistency) 模型。 那 CA 系統呢？ 理論上，一個沒有分區容錯需求的系統就是 CA 系統。這意味著什麼？它只有一個節點！傳統的單體關聯式資料庫（如 MySQL、PostgreSQL）可以被視為 CA 系統。它們在單機內保證了強大的 ACID 一致性與可用性，但一旦這台機器掛了，或是網路斷了，整個系統就無法服務了。這在分散式架構中是不可行的。 結論 CAP 理論不是一個僵硬的規則，而是一個幫助我們理解分散式系統設計權衡的框架。它提醒我們： 在分散式世界裡，網路分區 (P) 是必然的，必須為它設計。 你的選擇是在發生分區時，要 犧牲一致性 © 還是可用性 (A)。 這個選擇沒有絕對的好壞，完全取決於業務需求。問問自己：是「絕對不能出錯的資料」比較重要，還是「永不中斷的服務」比較重要？ 在設計分散式系統時，不可能同時兼顧 一致性、可用性、分區容錯性 三者，只能依照應用場景做出取捨。 金融或高敏感度資料 → CP 系統 高可用、用戶體驗優先 → AP 系統 小型單機系統 → CA 系統 理解 CAP 理論，能幫助我們在不同業務需求下選擇合適的架構，設計更可靠與合理的分散式系統。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/08/21/%E7%B3%BB%E7%B5%B1%E8%A8%AD%E8%A8%88%E4%B8%AD%E7%9A%84%20CAP%20%E7%90%86%E8%AB%96/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>
