@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="本篇文章將探索 HTTP&#x2F;1.1、HTTP&#x2F;2，以及革命性的 HTTP&#x2F;3 之間的演進，並揭開其核心驅動力——QUIC 協議的神秘面紗。  HTTP&#x2F;1.1：穩固的基石與無法忽視的瓶頸 HTTP&#x2F;1.1 自 1997 年發布以來，一直為我們服務了二十多年。它奠定了現代網路的基礎，但其設計也帶來了幾個難以忽視的性能瓶頸。  核心問題：隊頭阻塞 (Head-of-Line Blocking) 想像一下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="從 HTTP&#x2F;1.1 到 HTTP&#x2F;3：網路世界的革命，QUIC 協議如何重塑未來？">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/12/01/%E5%BE%9E%20HTTP1.1%20%E5%88%B0%20HTTP3/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="本篇文章將探索 HTTP&#x2F;1.1、HTTP&#x2F;2，以及革命性的 HTTP&#x2F;3 之間的演進，並揭開其核心驅動力——QUIC 協議的神秘面紗。  HTTP&#x2F;1.1：穩固的基石與無法忽視的瓶頸 HTTP&#x2F;1.1 自 1997 年發布以來，一直為我們服務了二十多年。它奠定了現代網路的基礎，但其設計也帶來了幾個難以忽視的性能瓶頸。  核心問題：隊頭阻塞 (Head-of-Line Blocking) 想像一下">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-11-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-12-01T13:56:13.872Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Networking">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/12/01/%E5%BE%9E%20HTTP1.1%20%E5%88%B0%20HTTP3/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/12/01/%E5%BE%9E%20HTTP1.1%20%E5%88%B0%20HTTP3/","path":"2025/12/01/從 HTTP1.1 到 HTTP3/","title":"從 HTTP/1.1 到 HTTP/3：網路世界的革命，QUIC 協議如何重塑未來？"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>從 HTTP/1.1 到 HTTP/3：網路世界的革命，QUIC 協議如何重塑未來？ | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">126</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">60</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Integration/">
+        API Integration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cloud-Computing/">
+        Cloud Computing
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Concurrency/">
+        Concurrency
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cryptography/">
+        Cryptography
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cybersecurity/">
+        Cybersecurity
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(28)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Design-Pattern/">
+        Design Pattern
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/DevOps/">
+        DevOps
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Logging/">
+        Logging
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(18)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/OOP/">
+        OOP
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Search/">
+        Search
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Serverless/">
+        Serverless
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(6)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#http11%E7%A9%A9%E5%9B%BA%E7%9A%84%E5%9F%BA%E7%9F%B3%E8%88%87%E7%84%A1%E6%B3%95%E5%BF%BD%E8%A6%96%E7%9A%84%E7%93%B6%E9%A0%B8"><span class="nav-number">1.</span> <span class="nav-text"> HTTP&#x2F;1.1：穩固的基石與無法忽視的瓶頸</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%95%8F%E9%A1%8C%E9%9A%8A%E9%A0%AD%E9%98%BB%E5%A1%9E-head-of-line-blocking"><span class="nav-number">1.1.</span> <span class="nav-text"> 核心問題：隊頭阻塞 (Head-of-Line Blocking)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#http2%E5%A4%9A%E5%B7%A5%E8%99%95%E7%90%86%E7%9A%84%E9%87%8D%E5%A4%A7%E8%BA%8D%E9%80%B2"><span class="nav-number">2.</span> <span class="nav-text"> HTTP&#x2F;2：多工處理的重大躍進</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%94%B9%E9%80%B2%E5%A4%9A%E8%B7%AF%E5%BE%A9%E7%94%A8-multiplexing"><span class="nav-number">2.1.</span> <span class="nav-text"> 核心改進：多路復用 (Multiplexing)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E7%9A%84%E7%93%B6%E9%A0%B8tcp-%E5%B1%A4%E7%9A%84%E9%9A%8A%E9%A0%AD%E9%98%BB%E5%A1%9E"><span class="nav-number">2.2.</span> <span class="nav-text"> 新的瓶頸：TCP 層的隊頭阻塞</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#http3-%E8%88%87-quic%E4%B8%80%E6%AC%A1%E5%BE%B9%E5%BA%95%E7%9A%84%E9%9D%A9%E6%96%B0"><span class="nav-number">3.</span> <span class="nav-text"> HTTP&#x2F;3 與 QUIC：一次徹底的革新</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#quic-%E5%A6%82%E4%BD%95%E8%A7%A3%E6%B1%BA%E6%A0%B8%E5%BF%83%E5%95%8F%E9%A1%8C"><span class="nav-number">3.1.</span> <span class="nav-text"> QUIC 如何解決核心問題？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%9C%9F%E6%AD%A3%E8%A7%A3%E6%B1%BA%E9%9A%8A%E9%A0%AD%E9%98%BB%E5%A1%9E"><span class="nav-number">3.1.1.</span> <span class="nav-text"> 1. 真正解決隊頭阻塞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%9B%B4%E5%BF%AB%E7%9A%84%E9%80%A3%E7%B7%9A%E5%BB%BA%E7%AB%8B-0-rtt-1-rtt"><span class="nav-number">3.1.2.</span> <span class="nav-text"> 2. 更快的連線建立 (0-RTT &amp; 1-RTT)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E9%80%A3%E7%B7%9A%E9%81%B7%E7%A7%BB-connection-migration"><span class="nav-number">3.1.3.</span> <span class="nav-text"> 3. 連線遷移 (Connection Migration)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">4.</span> <span class="nav-text"> 總結</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text"> 結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">126</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/12/01/%E5%BE%9E%20HTTP1.1%20%E5%88%B0%20HTTP3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="從 HTTP&#x2F;1.1 到 HTTP&#x2F;3：網路世界的革命，QUIC 協議如何重塑未來？ | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          從 HTTP/1.1 到 HTTP/3：網路世界的革命，QUIC 協議如何重塑未來？
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-12-01 00:00:00 / 修改時間：21:56:13" itemprop="dateCreated datePublished" datetime="2025-12-01T00:00:00+08:00">2025-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>本篇文章將探索 HTTP/1.1、HTTP/2，以及革命性的 HTTP/3 之間的演進，並揭開其核心驅動力——QUIC 協議的神秘面紗。</p>
+<h1 id="http11穩固的基石與無法忽視的瓶頸"><a class="markdownIt-Anchor" href="#http11穩固的基石與無法忽視的瓶頸"></a> HTTP/1.1：穩固的基石與無法忽視的瓶頸</h1>
+<p>HTTP/1.1 自 1997 年發布以來，一直為我們服務了二十多年。它奠定了現代網路的基礎，但其設計也帶來了幾個難以忽視的性能瓶頸。</p>
+<h2 id="核心問題隊頭阻塞-head-of-line-blocking"><a class="markdownIt-Anchor" href="#核心問題隊頭阻塞-head-of-line-blocking"></a> 核心問題：隊頭阻塞 (Head-of-Line Blocking)</h2>
+<p>想像一下超市裡只有一個結帳櫃檯。即使只買了一瓶水，如果排在前面的人買了一整車的東西，也只能無奈地等待。</p>
+<p>這就是 HTTP/1.1 的工作模式。它在單一的 TCP 連線上，一次只能處理一個請求-回應。瀏覽器為了加快速度，會同時建立多個 TCP 連線（通常是 6 個），但這又帶來了新的資源開銷和 TCP 慢啟動問題。</p>
+<blockquote>
+<p><strong>HTTP/1.1 的主要瓶頸：</strong></p>
+<ol>
+<li><strong>應用層隊頭阻塞：</strong> 一個請求被阻塞，後續請求必須等待。</li>
+<li><strong>多個 TCP 連線開銷：</strong> 建立和維護多個連線消耗伺服器和客戶端資源。</li>
+<li><strong>無壓縮的標頭 (Header)：</strong> 每次請求都帶有大量重複的標頭資訊，浪費頻寬。</li>
+</ol>
+</blockquote>
+<h1 id="http2多工處理的重大躍進"><a class="markdownIt-Anchor" href="#http2多工處理的重大躍進"></a> HTTP/2：多工處理的重大躍進</h1>
+<p>為了解決 HTTP/1.1 的問題，HTTP/2 在 2015 年應運而生。它引入了幾個關鍵性的改進，堪稱一次重大升級。</p>
+<h2 id="核心改進多路復用-multiplexing"><a class="markdownIt-Anchor" href="#核心改進多路復用-multiplexing"></a> 核心改進：多路復用 (Multiplexing)</h2>
+<p>HTTP/2 最大的亮點是在<strong>單一 TCP 連線</strong>上實現了多路復用。</p>
+<blockquote>
+<p>想像一下，超市現在升級了，雖然出口還是只有一個，但開了好幾個結帳櫃檯。收銀員可以同時處理好幾個顧客的商品，然後將它們打包（打上標籤），一起送到出口。</p>
+</blockquote>
+<p>這就是 HTTP/2 的運作方式：</p>
+<ul>
+<li><strong>二進位分幀 (Binary Framing)：</strong> 將 HTTP 訊息分解成更小的、獨立的幀 (Frame)，並以二進位格式傳輸。</li>
+<li><strong>串流 (Streams)：</strong> 每個請求-回應都被分配一個獨立的串流 ID。這些串流中的幀可以交錯發送，最後在另一端根據 ID 重新組裝。</li>
+</ul>
+<p><strong>重要特性：</strong></p>
+<ul>
+<li><strong>標頭壓縮 (Header Compression)：</strong> 使用 HPACK 算法壓縮標頭，大幅減少了重複數據的傳輸。</li>
+<li><strong>伺服器推送 (Server Push)：</strong> 伺服器可以在客戶端請求之前，主動將預期資源（如 CSS、JS）推送過去。</li>
+</ul>
+<h2 id="新的瓶頸tcp-層的隊頭阻塞"><a class="markdownIt-Anchor" href="#新的瓶頸tcp-層的隊頭阻塞"></a> 新的瓶頸：TCP 層的隊頭阻塞</h2>
+<p>HTTP/2 完美嗎？不。它雖然解決了應用層的隊頭阻塞，但卻暴露了一個更深層次的問題——<strong>TCP 層的隊頭阻塞</strong>。</p>
+<p>因為所有串流都運行在同一個 TCP 連線上，TCP 協議為了保證數據的順序和可靠性，一旦某個數據包 (Packet) 遺失，它會要求重傳，並<strong>暫停後續所有數據包的處理</strong>，直到遺失的包被找回。</p>
+<blockquote>
+<p>這就像在多櫃檯結帳的超市，所有打包好的商品都裝在同一輛卡車上運送。如果卡車在路上掉了一個包裹，整輛卡車都必須停下來，直到找回那個包裹，才能繼續前進。這導致車上所有其他人的包裹（即使是完好的）都被延誤了。</p>
+</blockquote>
+<p>這對於網路不穩定（如行動網路）的環境來說，是個致命傷。</p>
+<h1 id="http3-與-quic一次徹底的革新"><a class="markdownIt-Anchor" href="#http3-與-quic一次徹底的革新"></a> HTTP/3 與 QUIC：一次徹底的革新</h1>
+<p>意識到 TCP 已經成為瓶頸後，業界決定繞過它。HTTP/3 不再基於 TCP，而是選擇了一個全新的傳輸層協議——<strong>QUIC (Quick UDP Internet Connections)</strong>。</p>
+<p>QUIC 最初由 Google 開發，它運行在 UDP 之上。UDP 是一個簡單、無連線的協議，它不保證數據順序或可靠性，像一張白紙，正好讓 QUIC 可以在其上重新實現一套現代化的傳輸機制。</p>
+<h2 id="quic-如何解決核心問題"><a class="markdownIt-Anchor" href="#quic-如何解決核心問題"></a> QUIC 如何解決核心問題？</h2>
+<h3 id="1-真正解決隊頭阻塞"><a class="markdownIt-Anchor" href="#1-真正解決隊頭阻塞"></a> 1. 真正解決隊頭阻塞</h3>
+<p>QUIC 繼承了 HTTP/2 的串流概念，但這些串流是<strong>完全獨立的</strong>。</p>
+<blockquote>
+<p>繼續我們的比喻：現在超市不再用一輛大卡車送貨，而是為每個顧客的包裹都配備了一架獨立的無人機。一架無人機（一個串流）的延誤或遺失，完全不會影響其他無人機的飛行。</p>
+</blockquote>
+<p>由於 QUIC 基於 UDP，一個串流的數據包遺失，只會影響該串流，協議棧會繼續處理其他串流的數據，從而徹底消除了隊頭阻塞問題。</p>
+<h3 id="2-更快的連線建立-0-rtt-1-rtt"><a class="markdownIt-Anchor" href="#2-更快的連線建立-0-rtt-1-rtt"></a> 2. 更快的連線建立 (0-RTT &amp; 1-RTT)</h3>
+<ul>
+<li><strong>TCP 連線：</strong> 需要 3 次握手。</li>
+<li><strong>TCP + TLS 1.2 連線：</strong> 總共需要 2-3 個 RTT (Round-Trip Time，來回時延)。</li>
+<li><strong>QUIC 連線：</strong> 將傳輸層和加密層的握手結合在一起。首次連線僅需 <strong>1-RTT</strong>。對於已經連線過的伺服器，客戶端可以發送加密的「0-RTT」數據，實現<strong>零時延</strong>的連線建立。</li>
+</ul>
+<p>這對於需要頻繁建立短連線的應用來說，性能提升是巨大的。</p>
+<h3 id="3-連線遷移-connection-migration"><a class="markdownIt-Anchor" href="#3-連線遷移-connection-migration"></a> 3. 連線遷移 (Connection Migration)</h3>
+<p>是否有過這樣的經歷：手機連著 Wi-Fi 看影片，走出家門後網路切換到 4G，影片卡頓了一下甚至需要重新加載？</p>
+<p>這是因為 TCP 連線是透過「來源 IP、來源埠、目標 IP、目標埠」這四元組來識別的。網路一換，IP 就變了，連線自然就斷了。</p>
+<p>QUIC 使用一個稱為<strong>連線 ID (Connection ID)</strong> 的獨特標識符來識別連線。無論網路如何切換（IP 地址改變），只要連線 ID 不變，QUIC 就可以無縫地維持連線，不會中斷。</p>
+<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">特性</th>
+<th style="text-align:left">HTTP/1.1</th>
+<th style="text-align:left">HTTP/2</th>
+<th style="text-align:left">HTTP/3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>底層協議</strong></td>
+<td style="text-align:left">TCP</td>
+<td style="text-align:left">TCP</td>
+<td style="text-align:left"><strong>UDP (QUIC)</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>多路復用</strong></td>
+<td style="text-align:left">無</td>
+<td style="text-align:left">有，單 TCP 連線</td>
+<td style="text-align:left">有，基於 QUIC 的多個獨立串流</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>隊頭阻塞</strong></td>
+<td style="text-align:left">應用層阻塞</td>
+<td style="text-align:left"><strong>TCP 層阻塞</strong></td>
+<td style="text-align:left"><strong>已解決</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>連線建立</strong></td>
+<td style="text-align:left">3-RTT (TCP + TLS)</td>
+<td style="text-align:left">3-RTT (TCP + TLS)</td>
+<td style="text-align:left"><strong>0-RTT 或 1-RTT</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>標頭壓縮</strong></td>
+<td style="text-align:left">無</td>
+<td style="text-align:left">HPACK</td>
+<td style="text-align:left"><strong>QPACK</strong> (基於 HPACK 改進)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>連線遷移</strong></td>
+<td style="text-align:left">不支援</td>
+<td style="text-align:left">不支援</td>
+<td style="text-align:left"><strong>支援</strong></td>
+</tr>
+</tbody>
+</table>
+<h1 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h1>
+<p>從 HTTP/1.1 到 HTTP/3 的演進，是網路協議設計思想的一次根本性變革。它從一個受制於底層 TCP 的應用層協議，演變成一個與傳輸層（QUIC）深度整合、專為現代網路（行動化、不穩定）而生的全新架構。</p>
+<p>HTTP/3 和 QUIC 的普及將為我們帶來更快速、更穩定、更安全的網路體驗。下一次當在手機上流暢地切換網路觀看影片時，或許就應該感謝這位幕後英雄——QUIC。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Networking/" rel="tag"># Networking</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/11/25/%E7%8F%BE%E4%BB%A3%E5%BE%8C%E7%AB%AF%E6%9E%B6%E6%A7%8B%E4%B8%AD%E7%9A%84%E7%AC%AC%E4%B8%89%E6%96%B9%E7%B3%BB%E7%B5%B1%E6%95%B4%E5%90%88%E6%A8%A1%E5%BC%8F/" rel="prev" title="現代後端架構中的第三方系統整合模式">
+                  <i class="fa fa-angle-left"></i> 現代後端架構中的第三方系統整合模式
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

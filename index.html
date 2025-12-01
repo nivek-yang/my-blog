@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">125</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">126</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">60</span></a>
       <ul class="sub-menu">
   
@@ -358,7 +358,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Networking/">
         Networking
-        <span class="post-count">(17)</span>
+        <span class="post-count">(18)</span>
       </a>
     </li>
   
@@ -569,7 +569,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">125</span>
+          <span class="site-state-item-count">126</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -594,6 +594,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/12/01/%E5%BE%9E%20HTTP1.1%20%E5%88%B0%20HTTP3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/12/01/%E5%BE%9E%20HTTP1.1%20%E5%88%B0%20HTTP3/" class="post-title-link" itemprop="url">
+              從 HTTP/1.1 到 HTTP/3：網路世界的革命，QUIC 協議如何重塑未來？
+            </a>
+            <a href="/my-blog/2025/12/01/%E5%BE%9E%20HTTP1.1%20%E5%88%B0%20HTTP3/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-12-01 00:00:00 / 修改時間：21:56:13" itemprop="dateCreated datePublished" datetime="2025-12-01T00:00:00+08:00">2025-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">本篇文章將探索 HTTP/1.1、HTTP/2，以及革命性的 HTTP/3 之間的演進，並揭開其核心驅動力——QUIC 協議的神秘面紗。 HTTP/1.1：穩固的基石與無法忽視的瓶頸 HTTP/1.1 自 1997 年發布以來，一直為我們服務了二十多年。它奠定了現代網路的基礎，但其設計也帶來了幾個難以忽視的性能瓶頸。 核心問題：隊頭阻塞 (Head-of-Line Blocking) 想像一下超市裡只有一個結帳櫃檯。即使只買了一瓶水，如果排在前面的人買了一整車的東西，也只能無奈地等待。 這就是 HTTP/1.1 的工作模式。它在單一的 TCP 連線上，一次只能處理一個請求-回應。瀏覽器為了加快速度，會同時建立多個 TCP 連線（通常是 6 個），但這又帶來了新的資源開銷和 TCP 慢啟動問題。 HTTP/1.1 的主要瓶頸： 應用層隊頭阻塞： 一個請求被阻塞，後續請求必須等待。 多個 TCP 連線開銷： 建立和維護多個連線消耗伺服器和客戶端資源。 無壓縮的標頭 (Header)： 每次請求都帶有大量重複的標頭資訊，浪費頻寬。 HTTP/2：多工處理的重大躍進 為了解決 HTTP/1.1 的問題，HTTP/2 在 2015 年應運而生。它引入了幾個關鍵性的改進，堪稱一次重大升級。 核心改進：多路復用 (Multiplexing) HTTP/2 最大的亮點是在單一 TCP 連線上實現了多路復用。 想像一下，超市現在升級了，雖然出口還是只有一個，但開了好幾個結帳櫃檯。收銀員可以同時處理好幾個顧客的商品，然後將它們打包（打上標籤），一起送到出口。 這就是 HTTP/2 的運作方式： 二進位分幀 (Binary Framing)： 將 HTTP 訊息分解成更小的、獨立的幀 (Frame)，並以二進位格式傳輸。 串流 (Streams)： 每個請求-回應都被分配一個獨立的串流 ID。這些串流中的幀可以交錯發送，最後在另一端根據 ID 重新組裝。 重要特性： 標頭壓縮 (Header Compression)： 使用 HPACK 算法壓縮標頭，大幅減少了重複數據的傳輸。 伺服器推送 (Server Push)： 伺服器可以在客戶端請求之前，主動將預期資源（如 CSS、JS）推送過去。 新的瓶頸：TCP 層的隊頭阻塞 HTTP/2 完美嗎？不。它雖然解決了應用層的隊頭阻塞，但卻暴露了一個更深層次的問題——TCP 層的隊頭阻塞。 因為所有串流都運行在同一個 TCP 連線上，TCP 協議為了保證數據的順序和可靠性，一旦某個數據包 (Packet) 遺失，它會要求重傳，並暫停後續所有數據包的處理，直到遺失的包被找回。 這就像在多櫃檯結帳的超市，所有打包好的商品都裝在同一輛卡車上運送。如果卡車在路上掉了一個包裹，整輛卡車都必須停下來，直到找回那個包裹，才能繼續前進。這導致車上所有其他人的包裹（即使是完好的）都被延誤了。 這對於網路不穩定（如行動網路）的環境來說，是個致命傷。 HTTP/3 與 QUIC：一次徹底的革新 意識到 TCP 已經成為瓶頸後，業界決定繞過它。HTTP/3 不再基於 TCP，而是選擇了一個全新的傳輸層協議——QUIC (Quick UDP Internet Connections)。 QUIC 最初由 Google 開發，它運行在 UDP 之上。UDP 是一個簡單、無連線的協議，它不保證數據順序或可靠性，像一張白紙，正好讓 QUIC 可以在其上重新實現一套現代化的傳輸機制。 QUIC 如何解決核心問題？ 1. 真正解決隊頭阻塞 QUIC 繼承了 HTTP/2 的串流概念，但這些串流是完全獨立的。 繼續我們的比喻：現在超市不再用一輛大卡車送貨，而是為每個顧客的包裹都配備了一架獨立的無人機。一架無人機（一個串流）的延誤或遺失，完全不會影響其他無人機的飛行。 由於 QUIC 基於 UDP，一個串流的數據包遺失，只會影響該串流，協議棧會繼續處理其他串流的數據，從而徹底消除了隊頭阻塞問題。 2. 更快的連線建立 (0-RTT &amp; 1-RTT) TCP 連線： 需要 3 次握手。 TCP + TLS 1.2 連線： 總共需要 2-3 個 RTT (Round-Trip Time，來回時延)。 QUIC 連線： 將傳輸層和加密層的握手結合在一起。首次連線僅需 1-RTT。對於已經連線過的伺服器，客戶端可以發送加密的「0-RTT」數據，實現零時延的連線建立。 這對於需要頻繁建立短連線的應用來說，性能提升是巨大的。 3. 連線遷移 (Connection Migration) 是否有過這樣的經歷：手機連著 Wi-Fi 看影片，走出家門後網路切換到 4G，影片卡頓了一下甚至需要重新加載？ 這是因為 TCP 連線是透過「來源 IP、來源埠、目標 IP、目標埠」這四元組來識別的。網路一換，IP 就變了，連線自然就斷了。 QUIC 使用一個稱為連線 ID (Connection ID) 的獨特標識符來識別連線。無論網路如何切換（IP 地址改變），只要連線 ID 不變，QUIC 就可以無縫地維持連線，不會中斷。 總結 特性 HTTP/1.1 HTTP/2 HTTP/3 底層協議 TCP TCP UDP (QUIC) 多路復用 無 有，單 TCP 連線 有，基於 QUIC 的多個獨立串流 隊頭阻塞 應用層阻塞 TCP 層阻塞 已解決 連線建立 3-RTT (TCP + TLS) 3-RTT (TCP + TLS) 0-RTT 或 1-RTT 標頭壓縮 無 HPACK QPACK (基於 HPACK 改進) 連線遷移 不支援 不支援 支援 結論 從 HTTP/1.1 到 HTTP/3 的演進，是網路協議設計思想的一次根本性變革。它從一個受制於底層 TCP 的應用層協議，演變成一個與傳輸層（QUIC）深度整合、專為現代網路（行動化、不穩定）而生的全新架構。 HTTP/3 和 QUIC 的普及將為我們帶來更快速、更穩定、更安全的網路體驗。下一次當在手機上流暢地切換網路觀看影片時，或許就應該感謝這位幕後英雄——QUIC。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/12/01/%E5%BE%9E%20HTTP1.1%20%E5%88%B0%20HTTP3/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1358,92 +1444,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/11/04/%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AD%89%E8%A8%8A%E6%81%AF%E4%B8%8D%E9%81%BA%E5%A4%B1%20Message%20Queue%20%E7%9A%84%E5%8F%AF%E9%9D%A0%E6%80%A7%E8%A8%AD%E8%A8%88/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/31/%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88%20OOP%20%E6%A0%B8%E5%BF%83%E8%A7%80%E5%BF%B5%E8%A7%A3%E6%9E%90%E8%88%87%E5%AF%A6%E5%8B%99%E6%87%89%E7%94%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/10/31/%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88%20OOP%20%E6%A0%B8%E5%BF%83%E8%A7%80%E5%BF%B5%E8%A7%A3%E6%9E%90%E8%88%87%E5%AF%A6%E5%8B%99%E6%87%89%E7%94%A8/" class="post-title-link" itemprop="url">
-              物件導向程式設計 (OOP) 核心觀念解析與實務應用
-            </a>
-            <a href="/my-blog/2025/10/31/%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88%20OOP%20%E6%A0%B8%E5%BF%83%E8%A7%80%E5%BF%B5%E8%A7%A3%E6%9E%90%E8%88%87%E5%AF%A6%E5%8B%99%E6%87%89%E7%94%A8/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-10-31 00:00:00 / 修改時間：10:06:25" itemprop="dateCreated datePublished" datetime="2025-10-31T00:00:00+08:00">2025-10-31</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">在現代軟體開發中，物件導向程式設計（Object-Oriented Programming, OOP）無疑是最主流的典範之一。它透過將現實世界的概念對映成程式碼中的「物件」，幫助我們建立更模組化、可擴充且易於維護的軟體。 本篇文章將深入探討 OOP 的四大核心概念：封裝、繼承、多型、抽象，並結合重要的設計原則和簡單的 Python CRUD 範例，帶你一窺 OOP 的奧妙。 四大核心概念 1. 封裝 (Encapsulation) 封裝是將物件的資料（屬性）和操作該資料的方法（行為）捆綁在一起的機制。這麼做的好處是隱藏物件內部的複雜實作細節，僅對外提供有限的介面（public methods）來進行互動。這就像操作一台微波爐，只需要按下按鈕（介面），而不需要理解內部的電路（實作細節）是如何運作的。 在 Python 中，通常使用 class 來實現封裝。雖然 Python 沒有像 Java 或 C++ 那樣的 private 關鍵字，但社群慣例會以單底線 _ 開頭的屬性或方法表示其為內部使用，不建議外部直接存取。 優點： 安全性：保護資料不被外部程式任意修改。 簡化複雜度：隱藏內部實作，讓物件更容易使用。 提高可維護性：當內部實作需要修改時，只要公開介面不變，就不會影響到外部的程式碼。 2. 繼承 (Inheritance) 繼承允許一個類別（子類別）獲取另一個類別（父類別）的屬性和方法。這是一種實現程式碼重用（code reuse）的強大機制。例如，「狗」和「貓」都可以繼承自「動物」類別，「狗」和「貓」將自動擁有「動物」的共同特徵（如：name, age）和行為（如：eat()），並可以各自擴充自己獨有的行為（如：bark() 或 meow()）。 優點： 程式碼重用：父類別的功能可以被多個子類別共享，減少重複程式碼。 建立層次結構：更清晰地表達類別之間的「is-a」（是一種）關係。 3. 多型 (Polymorphism) 多型的字面意思是「多種型態」。在 OOP 中，它指的是不同的物件可以使用相同的方法名稱，但會根據物件本身的型別而產生不同的行為。換句話說，父類別定義一個介面，讓不同的子類別用自己的方式去實現它。 例如，Animal 類別有一個 make_sound() 方法，「狗」物件呼叫時會發出「汪汪」聲，而「貓」物件呼叫時則發出「喵喵」聲。這就是多型。 優點： 彈性與擴充性：可以輕易地加入新的子類別，而不需要修改呼叫端的程式碼。 簡化程式邏輯：可以對一群不同型別的物件執行相同的操作，程式碼更簡潔。 4. 抽象 (Abstraction) 抽象專注於物件的必要特徵，而忽略不重要的細節。它透過定義抽象類別（Abstract Base Class, ABC）或介面（Interface）來規範一組子類別必須實現的方法。抽象類別本身通常不能被實例化，它的存在是為了被繼承。 例如，可以定義一個抽象的 Shape 類別，並宣告一個 calculate_area() 的抽象方法。任何繼承自 Shape 的具體類別（如 Circle, Square）都必須實作自己的 calculate_area() 方法，否則程式會報錯。 優點： 定義規範：確保所有相關的子類別都具備某些必要的功能。 降低耦合度：程式可以依賴於抽象介面，而不是具體的實作，使得系統更加靈活。 重要的設計原則 - SOLID 除了四大核心概念，遵循良好的設計原則能讓 OOP 程式碼品質更上一層樓。SOLID 是五個基本原則的縮寫： S - 單一職責原則 (Single Responsibility Principle)：一個類別應該只有一個引起它變更的原因。 O - 開放封閉原則 (Open/Closed Principle)：軟體實體（類別、模組、函式）應該對擴充開放，對修改封閉。 L - 里氏替換原則 (Liskov Substitution Principle)：子類別物件必須能夠替換掉任何父類別物件，而不會產生錯誤。 I - 介面隔離原則 (Interface Segregation Principle)：客戶端不應該被迫依賴它不需要的介面。 D - 依賴反轉原則 (Dependency Inversion Principle)：高階模組不應該依賴於低階模組，兩者都應該依賴於抽象。 遵循這些原則，可以讓系統更加健壯、靈活且易於維護。 Python CRUD 實務範例 接下來，用一個簡單的使用者管理系統來展示這些概念如何實際應用。這個系統將提供基本的建立（Create）、讀取（Read）、更新（Update）和刪除（Delete）功能。 from abc import ABC, abstractmethod # --- 4. 抽象 (Abstraction) --- # 定義一個資料儲存的抽象類別，規範所有儲存方式都必須有 CRUD 方法 class UserRepository(ABC): @abstractmethod def add(self, user): pass @abstractmethod def get(self, user_id): pass @abstractmethod def get_all(self): pass @abstractmethod def update(self, user): pass @abstractmethod def delete(self, user_id): pass # --- 1. 封裝 (Encapsulation) --- # 使用者類別，封裝了使用者的屬性和行為 class User: def __init__(self, user_id, name, email): self._user_id = user_id # 使用底線表示內部屬性 self._name = name self._email = email # 提供公開的 getter 方法來存取資料 @property def user_id(self): return self._user_id @property def name(self): return self._name @name.setter def name(self, value): if value: self._name = value else: print(&quot;Name cannot be empty.&quot;) @property def email(self): return self._email @email.setter def email(self, value): if &quot;@&quot; in value: self._email = value else: print(&quot;Invalid email format.&quot;) def __str__(self): return f&quot;User(ID: &#123;self.user_id&#125;, Name: &#123;self.name&#125;, Email: &#123;self.email&#125;)&quot; # --- 2. 繼承 (Inheritance) &amp; 3. 多型 (Polymorphism) --- # 實作一個基於記憶體字典的儲存庫 # 它繼承了 UserRepository，並提供了具體的 CRUD 方法實作 class InMemoryUserRepository(UserRepository): def __init__(self): self._users = &#123;&#125; def add(self, user): if user.user_id in self._users: print(f&quot;Error: User with ID &#123;user.user_id&#125; already exists.&quot;) return self._users[user.user_id] = user print(f&quot;User &#123;user.name&#125; added.&quot;) def get(self, user_id): return self._users.get(user_id) def get_all(self): return list(self._users.values()) def update(self, user): if user.user_id in self._users: self._users[user.user_id] = user print(f&quot;User &#123;user.name&#125; updated.&quot;) else: print(f&quot;Error: User with ID &#123;user.user_id&#125; not found.&quot;) def delete(self, user_id): if user_id in self._users: del self._users[user_id] print(f&quot;User with ID &#123;user_id&#125; deleted.&quot;) else: print(f&quot;Error: User with ID &#123;user_id&#125; not found.&quot;) # ---- 主程式：實際應用 ---- if __name__ == &quot;__main__&quot;: # 多型的應用：宣告變數的型別是抽象的 UserRepository # 但實際賦予它的是具體的 InMemoryUserRepository 實例 # 這符合依賴反轉原則：依賴於抽象，而非具體實現 repo: UserRepository = InMemoryUserRepository() # Create user1 = User(1, &quot;Alice&quot;, &quot;alice@example.com&quot;) user2 = User(2, &quot;Bob&quot;, &quot;bob@example.com&quot;) repo.add(user1) repo.add(user2) print(&quot;-&quot; * 20) # Read print(&quot;All users:&quot;) for user in repo.get_all(): print(user) print(&quot;-&quot; * 20) retrieved_user = repo.get(1) print(f&quot;Retrieved user: &#123;retrieved_user&#125;&quot;) print(&quot;-&quot; * 20) # Update if retrieved_user: retrieved_user.name = &quot;Alice Smith&quot; repo.update(retrieved_user) updated_user = repo.get(1) print(f&quot;Updated user name: &#123;updated_user.name&#125;&quot;) print(&quot;-&quot; * 20) # Delete repo.delete(2) print(&quot;All users after deletion:&quot;) for user in repo.get_all(): print(user) 範例解析： 抽象：UserRepository 是一個抽象基礎類別，它定義了所有使用者儲存庫應該具備的功能，但沒有提供任何實作。這為系統設立了一個標準契約。 繼承：InMemoryUserRepository 繼承自 UserRepository，並提供了所有抽象方法的具體實作。未來如果想改用資料庫儲存（例如 PostgresUserRepository），只需要再建立一個新的類別繼承 UserRepository 即可，符合開放封閉原則。 封裝：User 類別將 _user_id, _name, _email 等資料封裝起來。外部程式碼只能透過 @property 裝飾的 getter 和 setter 來讀取或修改這些資料，並在 setter 中加入了簡單的驗證邏輯。 多型：在主程式中，變數 repo 的型別是抽象的 UserRepository，但它實際指向一個 InMemoryUserRepository 的實例。這使得程式碼更加靈活。如果未來換成資料庫實作，主程式的邏輯完全不需要更動。 結論 物件導向程式設計不僅僅是學習如何寫 class，更重要的是理解其背後的四大核心概念與設計原則。透過封裝保護資料、繼承重用程式碼、多型增加彈性、抽象定義規範，可以建構出結構清晰、易於擴充且穩健的軟體系統。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/10/31/%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88%20OOP%20%E6%A0%B8%E5%BF%83%E8%A7%80%E5%BF%B5%E8%A7%A3%E6%9E%90%E8%88%87%E5%AF%A6%E5%8B%99%E6%87%89%E7%94%A8/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>
