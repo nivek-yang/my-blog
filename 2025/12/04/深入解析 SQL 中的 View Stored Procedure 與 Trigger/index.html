@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/my-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/my-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/my-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/my-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/my-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"nivek-yang.github.io","root":"/my-blog/","images":"/my-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"找到 ${hits} 個搜索結果（用時 ${time} 毫秒）","hits":"找到 ${hits} 個搜索結果"}}</script><script src="/my-blog/js/config.js" defer></script>
+
+    <meta name="description" content="在資料庫管理的世界中，除了基礎的 SELECT, INSERT, UPDATE, DELETE 操作外，還有許多強大的工具可以幫助我們更有效、更安全地管理資料。本篇文章將深入探討其中三個經常被提及的「SQL 三劍客」：View (檢視表)、Stored Procedure (預存程序) 和 Trigger (觸發器)。 理解它們是什麼、何時使用以及如何使用，將能大幅提升資料庫設計與開發能力。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入解析 SQL 中的 View、Stored Procedure 與 Trigger">
+<meta property="og:url" content="https://nivek-yang.github.io/2025/12/04/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20SQL%20%E4%B8%AD%E7%9A%84%20View%20Stored%20Procedure%20%E8%88%87%20Trigger/index.html">
+<meta property="og:site_name" content="我的技術部落格">
+<meta property="og:description" content="在資料庫管理的世界中，除了基礎的 SELECT, INSERT, UPDATE, DELETE 操作外，還有許多強大的工具可以幫助我們更有效、更安全地管理資料。本篇文章將深入探討其中三個經常被提及的「SQL 三劍客」：View (檢視表)、Stored Procedure (預存程序) 和 Trigger (觸發器)。 理解它們是什麼、何時使用以及如何使用，將能大幅提升資料庫設計與開發能力。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://nivek-yang.github.io/2025/12/04/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20SQL%20%E4%B8%AD%E7%9A%84%20View%20Stored%20Procedure%20%E8%88%87%20Trigger/sql.jpg">
+<meta property="article:published_time" content="2025-12-03T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-12-04T14:36:00.729Z">
+<meta property="article:author" content="Kaiwii">
+<meta property="article:tag" content="Database">
+<meta property="article:tag" content="SQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://nivek-yang.github.io/2025/12/04/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20SQL%20%E4%B8%AD%E7%9A%84%20View%20Stored%20Procedure%20%E8%88%87%20Trigger/sql.jpg">
+
+
+<link rel="canonical" href="https://nivek-yang.github.io/2025/12/04/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20SQL%20%E4%B8%AD%E7%9A%84%20View%20Stored%20Procedure%20%E8%88%87%20Trigger/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://nivek-yang.github.io/2025/12/04/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20SQL%20%E4%B8%AD%E7%9A%84%20View%20Stored%20Procedure%20%E8%88%87%20Trigger/","path":"2025/12/04/深入解析 SQL 中的 View Stored Procedure 與 Trigger/","title":"深入解析 SQL 中的 View、Stored Procedure 與 Trigger"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>深入解析 SQL 中的 View、Stored Procedure 與 Trigger | 我的技術部落格</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/my-blog/js/utils.js" defer></script><script src="/my-blog/js/motion.js" defer></script><script src="/my-blog/js/sidebar.js" defer></script><script src="/my-blog/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/my-blog/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/my-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/my-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">我的技術部落格</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">探索程式</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">127</span></a>
+  </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">60</span></a>
+      <ul class="sub-menu">
+  
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Agile-Development/">
+        Agile Development
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Gateway/">
+        API Gateway
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/API-Integration/">
+        API Integration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Application-Security/">
+        Application Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Async/">
+        Async
+        <span class="post-count">(7)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cache/">
+        Cache
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CDN/">
+        CDN
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Celery/">
+        Celery
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CI-CD/">
+        CI/CD
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cloud-Computing/">
+        Cloud Computing
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Concurrency/">
+        Concurrency
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cryptography/">
+        Cryptography
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/CSRF/">
+        CSRF
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cyber-Security/">
+        Cyber Security
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Cybersecurity/">
+        Cybersecurity
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Database/">
+        Database
+        <span class="post-count">(29)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Design-Pattern/">
+        Design Pattern
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/DevOps/">
+        DevOps
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-System/">
+        Distributed System
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Distributed-systems/">
+        Distributed systems
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Django/">
+        Django
+        <span class="post-count">(9)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Docker/">
+        Docker
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Environment-Variable/">
+        Environment Variable
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Git/">
+        Git
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Github-Actions/">
+        Github Actions
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/GitHub-Pages/">
+        GitHub Pages
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Hexo/">
+        Hexo
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/HTMX/">
+        HTMX
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/JavaScript/">
+        JavaScript
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Kafka/">
+        Kafka
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Linux/">
+        Linux
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Load-Balancer/">
+        Load Balancer
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Logging/">
+        Logging
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Message-Queue/">
+        Message Queue
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Microservices/">
+        Microservices
+        <span class="post-count">(4)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Networking/">
+        Networking
+        <span class="post-count">(18)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Nginx/">
+        Nginx
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/OOP/">
+        OOP
+        <span class="post-count">(3)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/PostgreSQL/">
+        PostgreSQL
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Postgresql/">
+        Postgresql
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Pub-Sub/">
+        Pub/Sub
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Python/">
+        Python
+        <span class="post-count">(14)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rate-Limiter/">
+        Rate Limiter
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Redis/">
+        Redis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Rendering/">
+        Rendering
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Ruff/">
+        Ruff
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Search/">
+        Search
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Serverless/">
+        Serverless
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SQL/">
+        SQL
+        <span class="post-count">(10)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSE/">
+        SSE
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/SSL-TLS/">
+        SSL/TLS
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-Design/">
+        System Design
+        <span class="post-count">(5)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/System-design/">
+        System design
+        <span class="post-count">(6)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/systemd/">
+        systemd
+        <span class="post-count">(2)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Systems-analysis/">
+        Systems analysis
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Task-Management/">
+        Task Management
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Team-Collaboration/">
+        Team Collaboration
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Version-Control/">
+        Version Control
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/Webhook/">
+        Webhook
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+    <li class="menu-item-child">
+      <a href="/my-blog/tags/%E7%B6%B2%E7%AB%99%E5%BB%BA%E7%BD%AE/">
+        網站建置
+        <span class="post-count">(1)</span>
+      </a>
+    </li>
+  
+</ul>
+    
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#view-%E6%AA%A2%E8%A6%96%E8%A1%A8%E7%B0%A1%E5%8C%96%E8%A4%87%E9%9B%9C%E6%9F%A5%E8%A9%A2%E7%9A%84%E8%99%9B%E6%93%AC%E8%A1%A8%E6%A0%BC"><span class="nav-number">1.</span> <span class="nav-text"> View (檢視表)：簡化複雜查詢的虛擬表格</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-view"><span class="nav-number">1.1.</span> <span class="nav-text"> 什麼是 View？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%87%89%E7%94%A8%E5%A0%B4%E6%99%AF"><span class="nav-number">1.2.</span> <span class="nav-text"> 應用場景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AF%84%E4%BE%8B%E4%BB%A3%E7%A2%BC"><span class="nav-number">1.3.</span> <span class="nav-text"> 範例代碼</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#stored-procedure-%E9%A0%90%E5%AD%98%E7%A8%8B%E5%BA%8F%E5%B0%81%E8%A3%9D%E6%A5%AD%E5%8B%99%E9%82%8F%E8%BC%AF%E7%9A%84%E5%9F%B7%E8%A1%8C%E8%85%B3%E6%9C%AC"><span class="nav-number">2.</span> <span class="nav-text"> Stored Procedure (預存程序)：封裝業務邏輯的執行腳本</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-stored-procedure"><span class="nav-number">2.1.</span> <span class="nav-text"> 什麼是 Stored Procedure？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%87%89%E7%94%A8%E5%A0%B4%E6%99%AF-2"><span class="nav-number">2.2.</span> <span class="nav-text"> 應用場景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AF%84%E4%BE%8B%E4%BB%A3%E7%A2%BC-2"><span class="nav-number">2.3.</span> <span class="nav-text"> 範例代碼</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#trigger-%E8%A7%B8%E7%99%BC%E5%99%A8%E8%87%AA%E5%8B%95%E5%9F%B7%E8%A1%8C%E7%9A%84%E8%B3%87%E6%96%99%E5%AE%88%E8%AD%B7%E8%80%85"><span class="nav-number">3.</span> <span class="nav-text"> Trigger (觸發器)：自動執行的資料守護者</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-trigger"><span class="nav-number">3.1.</span> <span class="nav-text"> 什麼是 Trigger？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%87%89%E7%94%A8%E5%A0%B4%E6%99%AF-3"><span class="nav-number">3.2.</span> <span class="nav-text"> 應用場景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AF%84%E4%BE%8B%E4%BB%A3%E7%A2%BC-3"><span class="nav-number">3.3.</span> <span class="nav-text"> 範例代碼</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">4.</span> <span class="nav-text"> 總結</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Kaiwii</p>
+  <div class="site-description" itemprop="description">分享程式技術</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/my-blog/archives/">
+          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+
+    
+      <div class="site-state-item site-state-tags">
+          <a href="/my-blog/tags/">
+        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/12/04/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20SQL%20%E4%B8%AD%E7%9A%84%20View%20Stored%20Procedure%20%E8%88%87%20Trigger/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="深入解析 SQL 中的 View、Stored Procedure 與 Trigger | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深入解析 SQL 中的 View、Stored Procedure 與 Trigger
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-12-04 00:00:00 / 修改時間：22:36:00" itemprop="dateCreated datePublished" datetime="2025-12-04T00:00:00+08:00">2025-12-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在資料庫管理的世界中，除了基礎的 <code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code> 操作外，還有許多強大的工具可以幫助我們更有效、更安全地管理資料。本篇文章將深入探討其中三個經常被提及的「SQL 三劍客」：<strong>View (檢視表)</strong>、<strong>Stored Procedure (預存程序)</strong> 和 <strong>Trigger (觸發器)</strong>。</p>
+<p>理解它們是什麼、何時使用以及如何使用，將能大幅提升資料庫設計與開發能力。</p>
+<hr />
+<h1 id="view-檢視表簡化複雜查詢的虛擬表格"><a class="markdownIt-Anchor" href="#view-檢視表簡化複雜查詢的虛擬表格"></a> View (檢視表)：簡化複雜查詢的虛擬表格</h1>
+<h2 id="什麼是-view"><a class="markdownIt-Anchor" href="#什麼是-view"></a> 什麼是 View？</h2>
+<p><strong>View</strong> 可以被視為一個「虛擬的表格」或「已儲存的查詢」。它本身不儲存任何實體資料，而是由一個 <code>SELECT</code> 查詢語句所定義。當查詢一個 View 時，資料庫會執行這個預先定義好的查詢，並將結果以表格的形式回傳。</p>
+<p>簡單來說，可以將一個複雜、需要連接 (JOIN) 多個表格的查詢儲存成一個 View，未來只需要像查詢一般表格一樣，直接 <code>SELECT * FROM your_view_name</code> 即可，大大簡化了操作。</p>
+<h2 id="應用場景"><a class="markdownIt-Anchor" href="#應用場景"></a> 應用場景</h2>
+<ul>
+<li><strong>簡化複雜性</strong>：將複雜的多表連接、彙總函數 (Aggregation) 或過濾條件包裝起來，讓使用者可以用一條簡單的語句取用結果。</li>
+<li><strong>提高安全性</strong>：可以限制使用者只能看到表格中的特定欄位或符合特定條件的資料列，而隱藏敏感資訊 (例如：薪資、個人身份資料)。</li>
+<li><strong>提供一致的資料接口</strong>：即使底層的實體表格結構發生改變 (例如：欄位改名、表格拆分)，只要 View 的定義保持不變，前端應用程式就不需要修改查詢語句，增加了系統的靈活性。</li>
+</ul>
+<h2 id="範例代碼"><a class="markdownIt-Anchor" href="#範例代碼"></a> 範例代碼</h2>
+<p>假設有兩個表格：<code>Employees</code> (員工) 和 <code>Departments</code> (部門)。</p>
+<p><strong><code>Employees</code> 表格:</strong></p>
+<table>
+<thead>
+<tr>
+<th>EmployeeID</th>
+<th>FirstName</th>
+<th>LastName</th>
+<th>DepartmentID</th>
+<th>Salary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>John</td>
+<td>Doe</td>
+<td>101</td>
+<td>60000</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Jane</td>
+<td>Smith</td>
+<td>102</td>
+<td>75000</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Peter</td>
+<td>Jones</td>
+<td>101</td>
+<td>55000</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>Departments</code> 表格:</strong></p>
+<table>
+<thead>
+<tr>
+<th>DepartmentID</th>
+<th>DepartmentName</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>101</td>
+<td>Engineering</td>
+</tr>
+<tr>
+<td>102</td>
+<td>Marketing</td>
+</tr>
+</tbody>
+</table>
+<p>希望建立一個 View 來顯示員工的姓名及其部門名稱，但不暴露他們的薪資。</p>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 建立 View</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">VIEW</span> V_EmployeeDepartment <span class="hljs-keyword">AS</span>
+<span class="hljs-keyword">SELECT</span>
+    e.EmployeeID,
+    e.FirstName,
+    e.LastName,
+    d.DepartmentName
+<span class="hljs-keyword">FROM</span>
+    Employees <span class="hljs-keyword">AS</span> e
+<span class="hljs-keyword">JOIN</span>
+    Departments <span class="hljs-keyword">AS</span> d <span class="hljs-keyword">ON</span> e.DepartmentID <span class="hljs-operator">=</span> d.DepartmentID;
+</code></pre>
+<p>現在，可以像查詢一個普通表格一樣使用這個 View：</p>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 查詢 View</span>
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> V_EmployeeDepartment;
+</code></pre>
+<p><strong>結果:</strong></p>
+<table>
+<thead>
+<tr>
+<th>EmployeeID</th>
+<th>FirstName</th>
+<th>LastName</th>
+<th>DepartmentName</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>John</td>
+<td>Doe</td>
+<td>Engineering</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Jane</td>
+<td>Smith</td>
+<td>Marketing</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Peter</td>
+<td>Jones</td>
+<td>Engineering</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="stored-procedure-預存程序封裝業務邏輯的執行腳本"><a class="markdownIt-Anchor" href="#stored-procedure-預存程序封裝業務邏輯的執行腳本"></a> Stored Procedure (預存程序)：封裝業務邏輯的執行腳本</h1>
+<h2 id="什麼是-stored-procedure"><a class="markdownIt-Anchor" href="#什麼是-stored-procedure"></a> 什麼是 Stored Procedure？</h2>
+<p><strong>Stored Procedure</strong> 是一組預先編譯好的 SQL 語句集合，被命名並儲存在資料庫中，以便重複使用。它可以接受輸入參數、執行一系列的資料庫操作 (查詢、新增、修改、刪除)，並回傳結果或狀態。</p>
+<p>可以把它想像成資料庫中的一個「函式 (Function)」，將常用的業務邏輯封裝起來，讓應用程式直接呼叫它，而不需要在程式碼中撰寫冗長的 SQL 語句。</p>
+<h2 id="應用場景-2"><a class="markdownIt-Anchor" href="#應用場景-2"></a> 應用場景</h2>
+<ul>
+<li><strong>提升效能</strong>：Stored Procedure 在首次執行時會被編譯和最佳化，之後的呼叫會直接使用已編譯的計畫，減少了 SQL 解析和編譯的開銷，執行速度通常比單獨的 SQL 語句更快。</li>
+<li><strong>降低網路流量</strong>：應用程式只需要傳送 Stored Procedure 的名稱和參數，而不是整段冗長的 SQL 語句，減少了客戶端與伺服器之間的數據傳輸量。</li>
+<li><strong>強化安全性</strong>：可以授予使用者執行特定 Stored Procedure 的權限，而不是直接存取底層表格的權限。這樣可以精確控制使用者能執行的操作，防止未經授權的資料修改。</li>
+<li><strong>程式碼模組化與重用</strong>：將複雜的業務邏輯（例如：註冊新用戶、處理訂單）封裝在 Stored Procedure 中，不同的應用程式或模組都可以重複呼叫，方便維護和管理。</li>
+</ul>
+<h2 id="範例代碼-2"><a class="markdownIt-Anchor" href="#範例代碼-2"></a> 範例代碼</h2>
+<p>假設要建立一個 Stored Procedure 來新增一名員工，並傳入相關資訊。</p>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 建立 Stored Procedure (以 SQL Server 的 T-SQL 語法為例)</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">PROCEDURE</span> sp_AddEmployee
+    <span class="hljs-variable">@FirstName</span> NVARCHAR(<span class="hljs-number">50</span>),
+    <span class="hljs-variable">@LastName</span> NVARCHAR(<span class="hljs-number">50</span>),
+    <span class="hljs-variable">@DepartmentID</span> <span class="hljs-type">INT</span>,
+    <span class="hljs-variable">@Salary</span> <span class="hljs-type">DECIMAL</span>(<span class="hljs-number">10</span>, <span class="hljs-number">2</span>)
+<span class="hljs-keyword">AS</span>
+<span class="hljs-keyword">BEGIN</span>
+    <span class="hljs-comment">-- 設定為不回傳執行筆數的訊息，可提升效能</span>
+    <span class="hljs-keyword">SET</span> NOCOUNT <span class="hljs-keyword">ON</span>;
+
+    <span class="hljs-comment">-- 檢查部門是否存在</span>
+    IF <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">EXISTS</span> (<span class="hljs-keyword">SELECT</span> <span class="hljs-number">1</span> <span class="hljs-keyword">FROM</span> Departments <span class="hljs-keyword">WHERE</span> DepartmentID <span class="hljs-operator">=</span> <span class="hljs-variable">@DepartmentID</span>)
+    <span class="hljs-keyword">BEGIN</span>
+        <span class="hljs-comment">-- 如果部門不存在，可以回傳錯誤訊息或代碼</span>
+        RAISERROR (<span class="hljs-string">&#x27;Invalid Department ID.&#x27;</span>, <span class="hljs-number">16</span>, <span class="hljs-number">1</span>);
+        <span class="hljs-keyword">RETURN</span>;
+    <span class="hljs-keyword">END</span>
+
+    <span class="hljs-comment">-- 新增員工資料</span>
+    <span class="hljs-keyword">INSERT INTO</span> Employees (FirstName, LastName, DepartmentID, Salary)
+    <span class="hljs-keyword">VALUES</span> (<span class="hljs-variable">@FirstName</span>, <span class="hljs-variable">@LastName</span>, <span class="hljs-variable">@DepartmentID</span>, <span class="hljs-variable">@Salary</span>);
+<span class="hljs-keyword">END</span>;
+</code></pre>
+<p>要使用這個 Stored Procedure 時，只需執行：</p>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 呼叫 Stored Procedure</span>
+<span class="hljs-keyword">EXEC</span> sp_AddEmployee
+    <span class="hljs-variable">@FirstName</span> <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Alice&#x27;</span>,
+    <span class="hljs-variable">@LastName</span> <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Williams&#x27;</span>,
+    <span class="hljs-variable">@DepartmentID</span> <span class="hljs-operator">=</span> <span class="hljs-number">102</span>,
+    <span class="hljs-variable">@Salary</span> <span class="hljs-operator">=</span> <span class="hljs-number">80000</span>;
+</code></pre>
+<hr />
+<h1 id="trigger-觸發器自動執行的資料守護者"><a class="markdownIt-Anchor" href="#trigger-觸發器自動執行的資料守護者"></a> Trigger (觸發器)：自動執行的資料守護者</h1>
+<h2 id="什麼是-trigger"><a class="markdownIt-Anchor" href="#什麼是-trigger"></a> 什麼是 Trigger？</h2>
+<p><strong>Trigger</strong> 是一種特殊的 Stored Procedure，它與特定的表格相關聯，並在該表格發生特定事件 (例如 <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>) 時「自動被觸發」執行。無法手動呼叫 Trigger，它總是被動地回應資料的變動。</p>
+<p>可以把它想像成一個安裝在表格上的「監聽器」或「自動化規則」。</p>
+<h2 id="應用場景-3"><a class="markdownIt-Anchor" href="#應用場景-3"></a> 應用場景</h2>
+<ul>
+<li><strong>資料稽核 (Auditing)</strong>：當表格中的資料被修改或刪除時，自動在另一個稽核記錄表 (Audit Log) 中新增一筆記錄，追蹤是誰、在什麼時候、做了什麼變更。</li>
+<li><strong>維護資料完整性與複雜約束</strong>：執行比標準 <code>CHECK</code> 約束更複雜的業務規則。例如，當訂單數量超過庫存時，自動阻止該筆訂單的新增。</li>
+<li><strong>自動化衍生計算</strong>：當一個表格的資料變動時，自動更新另一個相關表格的彙總數據。例如，每當 <code>OrderDetails</code> 表格新增一筆項目時，自動更新 <code>Products</code> 表格的總銷售數量。</li>
+</ul>
+<h2 id="範例代碼-3"><a class="markdownIt-Anchor" href="#範例代碼-3"></a> 範例代碼</h2>
+<p>假設想建立一個 Trigger，每當有員工的薪資被更新時，就將舊的薪資和變更時間記錄到 <code>SalaryAudit</code> 表格中。</p>
+<p>首先，建立稽核記錄表：</p>
+<pre class="highlight"><code class="sql"><span class="hljs-keyword">CREATE TABLE</span> SalaryAudit (
+    AuditID <span class="hljs-type">INT</span> <span class="hljs-keyword">IDENTITY</span>(<span class="hljs-number">1</span>,<span class="hljs-number">1</span>) <span class="hljs-keyword">PRIMARY KEY</span>,
+    EmployeeID <span class="hljs-type">INT</span>,
+    OldSalary <span class="hljs-type">DECIMAL</span>(<span class="hljs-number">10</span>, <span class="hljs-number">2</span>),
+    ChangeDate DATETIME <span class="hljs-keyword">DEFAULT</span> GETDATE()
+);
+</code></pre>
+<p>接著，在 <code>Employees</code> 表格上建立 Trigger：</p>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 建立 Trigger (以 SQL Server 的 T-SQL 語法為例)</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TRIGGER</span> trg_AuditSalaryChange
+<span class="hljs-keyword">ON</span> Employees
+AFTER <span class="hljs-keyword">UPDATE</span> <span class="hljs-comment">-- 在更新操作之後觸發</span>
+<span class="hljs-keyword">AS</span>
+<span class="hljs-keyword">BEGIN</span>
+    <span class="hljs-keyword">SET</span> NOCOUNT <span class="hljs-keyword">ON</span>;
+
+    <span class="hljs-comment">-- 檢查 Salary 欄位是否有被更新</span>
+    IF <span class="hljs-keyword">UPDATE</span>(Salary)
+    <span class="hljs-keyword">BEGIN</span>
+        <span class="hljs-comment">-- 將被更新前的舊資料 (deleted 虛擬表) 插入到稽核記錄表中</span>
+        <span class="hljs-keyword">INSERT INTO</span> SalaryAudit (EmployeeID, OldSalary)
+        <span class="hljs-keyword">SELECT</span>
+            d.EmployeeID,
+            d.Salary
+        <span class="hljs-keyword">FROM</span>
+            deleted d; <span class="hljs-comment">-- &#x27;deleted&#x27; 是一個虛擬表，存放了更新前的資料</span>
+    <span class="hljs-keyword">END</span>
+<span class="hljs-keyword">END</span>;
+</code></pre>
+<p>現在，當更新任何員工的薪資時：</p>
+<pre class="highlight"><code class="sql"><span class="hljs-comment">-- 更新員工薪資</span>
+<span class="hljs-keyword">UPDATE</span> Employees
+<span class="hljs-keyword">SET</span> Salary <span class="hljs-operator">=</span> <span class="hljs-number">65000</span>
+<span class="hljs-keyword">WHERE</span> EmployeeID <span class="hljs-operator">=</span> <span class="hljs-number">1</span>;
+</code></pre>
+<p>這個 Trigger 會自動被觸發，並在 <code>SalaryAudit</code> 表格中新增一條記錄，內容會是 <code>EmployeeID</code> 為 1，<code>OldSalary</code> 為 60000。</p>
+<hr />
+<h1 id="總結"><a class="markdownIt-Anchor" href="#總結"></a> 總結</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">特性</th>
+<th style="text-align:left">View (檢視表)</th>
+<th style="text-align:left">Stored Procedure (預存程序)</th>
+<th style="text-align:left">Trigger (觸發器)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>本質</strong></td>
+<td style="text-align:left">虛擬表格 (儲存的查詢)</td>
+<td style="text-align:left">可執行的程式碼區塊</td>
+<td style="text-align:left">自動執行的特殊程序</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>如何執行</strong></td>
+<td style="text-align:left">透過 <code>SELECT</code> 語句查詢</td>
+<td style="text-align:left">透過 <code>EXEC</code> 或 <code>CALL</code> 手動呼叫</td>
+<td style="text-align:left">由 <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code> 事件自動觸發</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>參數</strong></td>
+<td style="text-align:left">不接受參數</td>
+<td style="text-align:left">可接受輸入/輸出參數</td>
+<td style="text-align:left">不接受參數</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>主要目的</strong></td>
+<td style="text-align:left">簡化查詢、資料安全性</td>
+<td style="text-align:left">封裝業務邏輯、提升效能</td>
+<td style="text-align:left">資料稽核、自動化、強制複雜規則</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>回傳值</strong></td>
+<td style="text-align:left">回傳一個結果集 (表格)</td>
+<td style="text-align:left">可回傳狀態碼、結果集或輸出參數</td>
+<td style="text-align:left">不直接回傳值給使用者</td>
+</tr>
+</tbody>
+</table>
+<p><img src="sql.jpg" alt="圖解" /></p>
+<p>理解 SQL 中的 View、Stored Procedure 和 Trigger 這三項工具，資料庫將會變得更加強大、安全且易於維護！</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/my-blog/tags/Database/" rel="tag"># Database</a>
+              <a href="/my-blog/tags/SQL/" rel="tag"># SQL</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/my-blog/2025/12/01/%E5%BE%9E%20HTTP1.1%20%E5%88%B0%20HTTP3/" rel="prev" title="從 HTTP&#x2F;1.1 到 HTTP&#x2F;3：網路世界的革命，QUIC 協議如何重塑未來？">
+                  <i class="fa fa-angle-left"></i> 從 HTTP/1.1 到 HTTP/3：網路世界的革命，QUIC 協議如何重塑未來？
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kaiwii</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

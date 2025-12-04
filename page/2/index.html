@@ -105,7 +105,7 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/my-blog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
-  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">126</span></a>
+  </li><li class="menu-item menu-item-archives"><a href="/my-blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>文章<span class="badge">127</span></a>
   </li><li class="menu-item menu-item-tags"><a href="/my-blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">60</span></a>
       <ul class="sub-menu">
   
@@ -218,7 +218,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/Database/">
         Database
-        <span class="post-count">(28)</span>
+        <span class="post-count">(29)</span>
       </a>
     </li>
   
@@ -449,7 +449,7 @@
     <li class="menu-item-child">
       <a href="/my-blog/tags/SQL/">
         SQL
-        <span class="post-count">(9)</span>
+        <span class="post-count">(10)</span>
       </a>
     </li>
   
@@ -569,7 +569,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/my-blog/archives/">
-          <span class="site-state-item-count">126</span>
+          <span class="site-state-item-count">127</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -594,6 +594,92 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block post-card">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/11/04/%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AD%89%E8%A8%8A%E6%81%AF%E4%B8%8D%E9%81%BA%E5%A4%B1%20Message%20Queue%20%E7%9A%84%E5%8F%AF%E9%9D%A0%E6%80%A7%E8%A8%AD%E8%A8%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/my-blog/images/avatar.gif">
+      <meta itemprop="name" content="Kaiwii">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的技術部落格">
+      <meta itemprop="description" content="分享程式技術">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 我的技術部落格">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/my-blog/2025/11/04/%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AD%89%E8%A8%8A%E6%81%AF%E4%B8%8D%E9%81%BA%E5%A4%B1%20Message%20Queue%20%E7%9A%84%E5%8F%AF%E9%9D%A0%E6%80%A7%E8%A8%AD%E8%A8%88/" class="post-title-link" itemprop="url">
+              如何保證訊息不遺失？深入剖析 Message Queue 的可靠性設計
+            </a>
+            <a href="/my-blog/2025/11/04/%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AD%89%E8%A8%8A%E6%81%AF%E4%B8%8D%E9%81%BA%E5%A4%B1%20Message%20Queue%20%E7%9A%84%E5%8F%AF%E9%9D%A0%E6%80%A7%E8%A8%AD%E8%A8%88/" class="card-link-overlay"></a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2025-11-04 00:00:00 / 修改時間：23:33:04" itemprop="dateCreated datePublished" datetime="2025-11-04T00:00:00+08:00">2025-11-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="post-card-content">在現代微服務與分散式系統架構中，訊息佇列（Message Queue, MQ）扮演著不可或缺的角色。它作為系統間的非同步通訊中樞，有效地實現了服務解耦、流量削峰、以及最終一致性。然而，一個關鍵問題始終縈繞在架構師和開發者的心頭：「如何才能 100% 保證訊息不會遺失？」 事實上，「100% 不遺失」是一個極限目標，但在實務中，可以透過一系列精密的設計，將訊息遺失的風險降至無限趨近於零。 本篇文章文將深入訊息傳遞的完整生命週期，剖析每個環節可能出現的風險，並探討 MQ 系統是如何透過各種機制來確保訊息的高可靠性。 訊息傳遞的三個關鍵階段 一則訊息從誕生到消亡，主要會經歷三個階段： 生產階段：從生產者（Producer）創建訊息，到成功將其發送到 MQ Broker。 儲存階段：訊息在 MQ Broker 中被安全地儲存，等待消費者來擷取。 消費階段：從 MQ Broker 將訊息推送（或被拉取）給消費者（Consumer），直到消費者成功處理完畢。 任何一個環節出現問題，都可能導致訊息遺失。因此，可靠性設計必須針對這三個階段分別進行。 1. 生產階段：確保訊息成功抵達 Broker 風險點：生產者發送訊息後，可能因為網路抖動、Broker 瞬間故障等原因，導致訊息並未真正送達 Broker。生產者若對此不知情，便會造成訊息的遺失。 解決方案：異步確認機制 (Confirmation) 絕大多數主流的 MQ 都提供了發送方確認機制。其核心思想是，Broker 在收到訊息並完成相應處理（如寫入磁碟）後，會回傳一個確認（ACK）或不確認（NACK）的回應給生產者。 ACK (Acknowledge)：表示訊息已成功接收。 NACK (Negative Acknowledge)：表示訊息因某種原因（如佇列已滿）被拒絕。 實作策略： 開啟 Confirm 模式：在生產者端設定，要求 Broker 對每條訊息進行確認。 處理回呼：生產者需要實作監聽回呼函式。當收到 ACK 時，表示發送成功；當收到 NACK 或在一定時間內未收到任何回應（Timeout），則表示發送失敗。 失敗重試：對於發送失敗的訊息，生產者必須要有重試機制。可以將失敗的訊息暫存於記憶體、資料庫或日誌檔案中，然後定時重新發送，直到收到 Broker 的 ACK 為止。 注意：重試機制可能會導致訊息重複發送。這就引出了一個極其重要的概念——生產端冪等性，將在文末統一探討。 2. 儲存階段：確保 Broker 不會弄丟訊息 風險點：訊息雖然成功抵達 Broker，但如果只存在於記憶體中，一旦 Broker 程式當機或伺服器斷電，所有訊息將會灰飛煙滅。 解決方案：持久化 (Persistence) + 叢集同步 (Clustering/Replication) a. 持久化 (Persistence) 這是最基本的可靠性保障。當 Broker 收到訊息後，不是只放在記憶體，而是將其寫入磁碟。這樣即使 Broker 崩潰重啟，也能從磁碟中恢復訊息資料，不會遺失。 RabbitMQ：需要將佇列（Queue）和訊息（Message）都設定為 durable。 Kafka：其設計天生就是基於磁碟日誌檔案（Log），所有訊息都會被追加到磁碟上的 Partition 檔案中，因此本身就具備高度的持久化能力。 權衡：持久化會帶來 I/O 開銷，犧牲一定的效能來換取高可靠性。 b. 叢集同步 (Clustering/Replication) 單點的磁碟持久化只能防止單機故障，但如果整台伺服器或磁碟損壞，訊息依然會遺失。為了解決單點故障（Single Point of Failure），需要將 Broker 組成叢集，並啟用資料同步機制。 Kafka：採用 Leader-Follower 的副本（Replica）機制。生產者只向 Leader 分區寫入訊息，Follower 分區會自動從 Leader 同步資料。只有當訊息被同步到指定數量（min.insync.replicas）的副本後，Broker 才會向生產者發送 ACK。這確保了即使 Leader 節點掛掉，訊息依然在其他 Follower 節點上有備份。 RabbitMQ：提供 Mirrored Queues（鏡像佇列）功能，可以將一個佇列的訊息完整地複製到叢集中的多個節點上。 3. 消費階段：確保訊息被成功處理 風險點：這是最容易被忽視，也是最常出問題的地方。Broker 將訊息發送給消費者後，如果消費者在處理訊息的過程中（例如，寫入資料庫）突然崩潰，而 Broker 卻以為訊息已經被成功消費並將其刪除，這條訊息就永遠遺失了。 解決方案：手動 ACK 機制 (Manual Acknowledgement) 為了避免這種情況，MQ 提供了消費者確認機制。 自動 ACK (Auto ACK)：Broker 發出訊息後，立即將其標記為已消費。這種模式非常高效，但極其不安全，生產環境應避免使用。 手動 ACK (Manual ACK)：Broker 發出訊息後，會將該訊息標記為「投遞中」（unacked），並等待消費者的明確回覆。 消費者必須在業務邏輯完全處理成功後，才向 Broker 發送 ACK 指令。Broker 收到 ACK 後，才會將訊息徹底刪除。 如果消費者在處理過程中崩潰，或者明確發送了 NACK（或Reject），Broker 將會在一段時間後將這條訊息重新投遞給另一個（或同一個）消費者。 正確的消費流程： // 偽代碼 function processMessage(message) &#123; try &#123; // 1. 執行核心業務邏輯，例如寫入資料庫 saveToDatabase(message.data); // 2. 業務成功後，才手動發送 ACK channel.ack(message); &#125; catch (error) &#123; // 3. 業務處理失敗 // 可以選擇 NACK 並讓訊息重回佇列 (requeue=true) // 或將訊息發送到一個專門的「死信佇列」(Dead-Letter Queue) 以便後續分析 channel.nack(message, &#123; requeue: false &#125;); logError(error); &#125; &#125; 關鍵的附帶問題：冪等性 (Idempotency) 無論是生產端的重試，還是消費端的重queue，都會導致同一條訊息被多次處理的可能。如果業務邏輯不具備冪等性，就會產生嚴重的副作用（例如，重複下單、重複扣款）。 冪等性：指對同一個操作執行一次或多次，其產生的影響和結果都是相同的。 如何保證冪等性？ 唯一 ID + 判重表：為每條訊息生成一個全域唯一的業務 ID。在消費端建立一張紀錄表，處理訊息前先查詢該 ID 是否已被處理過。 資料庫唯一約束：利用資料庫的 UNIQUE KEY 約束，當重複插入具有相同唯一鍵的資料時，操作會失敗，從而避免重複處理。 樂觀鎖：使用版本號（version）機制，更新資料前檢查版本號是否匹配，避免併發場景下的重複更新。 總結 要保證訊息不遺失，需要從生產、儲存到消費的全鏈路進行系統性設計： 階段 可靠性機制 關鍵配置/實作 生產階段 發送方確認 (Confirm) - 開啟 Confirm 模式- 實作 ACK/NACK 回呼- 建立失敗重試機制 儲存階段 持久化 (Persistence) - Queue 和 Message 設為 durable (RabbitMQ)- Topic 資料本身就是持久化的 (Kafka) 叢集與副本 (Replication) - 配置主從副本 (Kafka)- 使用鏡像佇列 (RabbitMQ) 消費階段 手動 ACK (Manual Ack) - 關閉 Auto ACK- 業務處理成功後再手動 ACK- 處理失敗時轉入死信佇列 全鏈路 冪等性保障 (Idempotency) - 為訊息建立唯一業務 ID- 消費端進行重複處理判斷 訊息傳遞的可靠性並非單一技術，而是一套組合拳。透過對每個環節的精雕細琢，才能構建出一個真正健壯、值得信賴的分散式系統。</div>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-card-readmore">
+          <a href="/my-blog/2025/11/04/%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AD%89%E8%A8%8A%E6%81%AF%E4%B8%8D%E9%81%BA%E5%A4%B1%20Message%20Queue%20%E7%9A%84%E5%8F%AF%E9%9D%A0%E6%80%A7%E8%A8%AD%E8%A8%88/" class="btn">
+            閱讀全文 &raquo;
+          </a>
+        </div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1358,92 +1444,6 @@
     <footer class="post-footer">
         <div class="post-card-readmore">
           <a href="/my-blog/2025/10/14/PostgreSQL%20%E7%82%BA%E4%BD%95%E8%83%BD%E8%B6%85%E8%B6%8A%20MySQL/" class="btn">
-            閱讀全文 &raquo;
-          </a>
-        </div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block post-card">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://nivek-yang.github.io/2025/10/14/%E8%A7%A3%E5%AF%86%20SSO%20%E8%88%87%20OAuth%202.0%20%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%E7%94%A8%20Google%20%E7%99%BB%E5%85%A5%E7%9A%84%E6%89%80%E6%9C%89%E7%A5%95%E5%AF%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/my-blog/images/avatar.gif">
-      <meta itemprop="name" content="Kaiwii">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的技術部落格">
-      <meta itemprop="description" content="分享程式技術">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 我的技術部落格">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/my-blog/2025/10/14/%E8%A7%A3%E5%AF%86%20SSO%20%E8%88%87%20OAuth%202.0%20%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%E7%94%A8%20Google%20%E7%99%BB%E5%85%A5%E7%9A%84%E6%89%80%E6%9C%89%E7%A5%95%E5%AF%86/" class="post-title-link" itemprop="url">
-              解密 SSO 與 OAuth 2.0：一次搞懂「用 Google 登入」的所有祕密
-            </a>
-            <a href="/my-blog/2025/10/14/%E8%A7%A3%E5%AF%86%20SSO%20%E8%88%87%20OAuth%202.0%20%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%E7%94%A8%20Google%20%E7%99%BB%E5%85%A5%E7%9A%84%E6%89%80%E6%9C%89%E7%A5%95%E5%AF%86/" class="card-link-overlay"></a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-      
-
-      <time title="創建時間：2025-10-14 00:00:00 / 修改時間：00:43:02" itemprop="dateCreated datePublished" datetime="2025-10-14T00:00:00+08:00">2025-10-14</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/my-blog/categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">技術筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="post-card-content">你一定每天都在用它：在登入某個新服務時，毫不猶豫地點下「使用 Google 帳戶繼續」。幾秒鐘內，就完成了註冊和登入。 這個背後藏著網路世界最重要的幾個概念：SSO、OAuth 2.0、OIDC。它們是現代網路應用安全的基石。 這篇文章將從最核心的問題開始，用最簡單的比喻，一步步揭開「用 Google 登入」的所有祕密。 最根本的區別 - 身份驗證 vs. 授權？ 在開始之前，必須先釐清兩個基本概念，這是一切的基礎： 身份驗證 (Authentication - AuthN): 你是誰？ 這是驗證身份的過程。就像在飯店櫃檯出示身份證，向櫃檯人員證明你就是預訂房間的人。 授權 (Authorization - AuthZ): 你能做什麼？ 這是授予權限的過程。在證明是你之後，櫃檯會給一張房卡。這張房卡授權你進入 305 號房、使用健身房，但不能進入別人的房間。 記住這個區別，已經掌握了理解 SSO 和 OAuth 2.0 的鑰匙。 認識兩位主角 - OAuth 2.0 與 SSO 很多人會把這兩者劃上等號，但它們其實是解決不同問題的工具。 OAuth 2.0：它是「授權」的委託書 OAuth 2.0 的核心是「代理」或「委託」。它允許一個應用程式（例如 Canva）在不獲取密碼的情況下，去請求另一個應用程式（例如 Google Drive）中屬於你的資源。 比喻：泊車小弟 (Valet Key) 去一家高級餐廳，想讓泊車小弟幫你停車。不會把家裡所有的鑰匙都給他，只會給他一把功能受限的汽車鑰匙。這把鑰匙只能用來開車門和發動引擎，但不能打開後車廂。 你 (資源擁有者): 汽車的主人。 泊車小弟 (客戶端應用): Canva。 你的車 (資源伺服器): Google Drive 上的照片。 汽車鑰匙 (Access Token): 這是一把臨時的、有權限限制的鑰匙。 當 Canva 提示「允許 Canva 存取您的 Google Drive 照片嗎？」，點擊「同意」時，就是在授權 Google 給 Canva 一把「泊車鑰匙」(Access Token)。自始至終，Canva 都不知道你的 Google 密碼。 SSO：它是「身份驗證」的通行證 SSO (Single Sign-On) 的核心是「信任」與「便利」。它的目標是讓你登入一次，就能存取多個互相信任的系統。 最佳比喻：主題樂園的魔法手環 在樂園正門（身份提供者 IdP，如 Google）驗證了身份，拿到了一個手環。之後，去玩雲霄飛車（服務提供者 SP 1，如 Slack）、去餐廳吃飯（SP 2，如 Dropbox），都只需要掃一下手環。每個設施都信任發行這個手環的樂園正門。 關鍵結論 OAuth 2.0 解決的是授權問題（你能做什麼）。 SSO 解決的是身份驗證問題（你是誰）。 OIDC 如何將兩者串連起來？ 這時會問：既然 OAuth 2.0 是關於「授權」，為什麼「用 Google 登入」卻完成了「身份驗證」呢？ 答案是 OpenID Connect (OIDC)。 OIDC 是建立在 OAuth 2.0 之上的一個身份驗證層。 可以這樣理解：OIDC 借用了 OAuth 2.0 的「泊車小弟」流程，但在給出那把「汽車鑰匙 (Access Token)」的同時，還多給了一張 「數位身分證 (ID Token)」。 這張數位身分證上清楚地寫著：「我是 Google，我證明這個用戶的 Email 是 user@gmail.com，他的名字是…」。 因此，「用 Google 登入」的完整真相是： 它是一個 OIDC 流程，這個流程利用了 OAuth 2.0 的框架來安全地傳遞身份資訊，從而實現了 SSO 的體驗。 實戰演練 - 從 Slack 到 Dropbox 的無縫登入 理論說完了，讓我們看看在真實世界中，這一切是如何運作的。 假设瀏覽器是乾淨的，尚未登入任何服務。 第一步：登入 Slack 前往 Slack.com，點擊「Continue with Google」。 被重定向到 Google，輸入帳號密碼。 此時，Google 在你的瀏覽器中建立了一個有效的 Google 會話 (拿到了主題樂園的魔法手環)，然後把你送回 Slack。 Slack 透過 OIDC 流程，收到了 Google 發來的數位身分證，確認了你的身份，並為你建立了 Slack 會話。 結果：成功登入 Slack。 第二步：前往 Dropbox 打開一個新分頁，前往 Dropbox.com。會發現，並未登入 Dropbox。 核心釐清 - 登入 Slack 就等於登入 Dropbox 了嗎？ 答案是：絕對沒有。 SSO 的「單一登入」並不是「登入一個，就自動登入了所有」。它的真正意思是「一次驗證，多次使用」。 回到比喻： 拿到手環後，去玩了雲霄飛車 (Slack)。此刻，你只在玩雲霄飛車，並沒有同時在吃披薩 (Dropbox)。 仍然需要親自走到披薩店門口，並再次出示你的手環。 繼續剛才的流程： 第三步：登入 Dropbox 在 Dropbox 頁面上點擊「Continue with Google」。 被重定向到 Google。 【SSO 的便利性體現】 Google 的伺服器檢查你的瀏覽器，發現已經有一個有效的 Google 會話了 (它看到了手環)！ 因為身份已經被驗證過了，Google 跳過了要求你輸入密碼的步驟，直接把你送回 Dropbox，並告訴 Dropbox：「這個人是我認證過的，可信！」 Dropbox 確認信號後，為你建立了 Dropbox 會話。 結果：幾乎是「瞬間」登入了 Dropbox，完全沒有輸入密碼。 深度剖析：瀏覽器中到底發生了什麼？ 瀏覽器、Slack 的伺服器和 Google 的伺服器之間，到底交換了哪些精密的資訊。 這個過程可以分解為「前端重定向」和「後端通訊」兩個主要階段。 階段一：前端重定向 (Browser-side Redirects) - 資訊的公開傳遞 瀏覽器在這個階段扮演著一個「信使」的角色。 第 1 步：請求授權 (從 Slack 到 Google) 當在 Slack 點擊「Continue with Google」時，Slack 並不是隨便把你送到 google.com。它會精心建構一個 URL，然後讓你的瀏覽器跳轉過去。這個 URL 大致長這樣： https://accounts.google.com/o/oauth2/v2/auth? client_id=SLACK_CLIENT_ID.apps.googleusercontent.com&amp; redirect_uri=https://slack.com/oauth/google/callback&amp; response_type=code&amp; scope=openid%20profile%20email&amp; state=aRandomStringForSecurity 拆解這些「URL 參數」的意義： client_id: 告訴 Google，是「Slack」這個已註冊的應用程式在發起請求。 redirect_uri: 告訴 Google，在完成授權後，要把使用者送回的確切地址。這是個重要的安全機制，防止憑證被送到惡意網站。 response_type=code: 指定我們想要的是一個授權碼 (Authorization Code)。這是目前最安全、最推薦的流程（稱為「授權碼流程」）。 scope: 請求的權限範圍。openid 是 OIDC 的標準要求，表示要進行身份驗證；profile 和 email 則表示希望獲取使用者的基本資料和 Email。 state: 一個由 Slack 產生的隨機字串，用於防止 CSRF (跨站請求偽造) 攻擊，確保整個流程的完整性。 第 2 步：使用者同意並取得授權碼 (從 Google 回到 Slack) 在 Google 的頁面登入並點擊「同意」後，Google 會把瀏覽器重定向回 redirect_uri，並在後面附上兩個重要的參數： https://slack.com/oauth/google/callback? code=A_VERY_LONG_TEMPORARY_AUTHORIZATION_CODE&amp; state=aRandomStringForSecurity code: 這就是授權碼！它是一個短期的、一次性的憑證。請注意：這還不是最終的登入令牌！ 它更像一張「提貨券」。 state: Google 會原封不動地返回 Slack 最初傳送的 state 值。Slack 的伺服器會立刻檢查這個值是否與自己之前發送的一致，確保請求未被竄改。 到此為止，所有在瀏覽器地址欄中可見的資訊交換就結束了。接下來，是更為機密的後端通訊。 階段二：後端通訊 (Server-to-Server) - 機密資訊的交換 第 3 步：用授權碼交換權杖 (從 Slack 後端到 Google 後端) 現在，Slack 的後端伺服器拿到了這張「提貨券 (code)」。它會立刻在後端，向 Google 的一個專用 API 端點發起一個直接的、伺服器對伺服器的請求。這個請求是使用者完全看不到的。 請求中包含了： 剛剛收到的 code (授權碼)。 client_id (再次確認自己的身份)。 client_secret (這是 Slack 的應用程式密鑰，絕對不會在前端出現，如同應用的密碼)。 redirect_uri (再次驗證)。 grant_type=authorization_code (告知 Google 我是用授權碼來換東西)。 第 4 步：取得權杖 (Tokens) Google 的後端驗證了所有資訊（特別是 client_secret 和 code）無誤後，就會回傳一個 JSON 物件給 Slack 的後端： &#123; &quot;access_token&quot;: &quot;ACCESS_TOKEN_FOR_GOOGLE_API&quot;, &quot;expires_in&quot;: 3599, &quot;scope&quot;: &quot;openid https://www.googleapis.com/auth/userinfo.profile ...&quot;, &quot;token_type&quot;: &quot;Bearer&quot;, &quot;id_token&quot;: &quot;A_VERY_LONG_JWT_STRING&quot; &#125; 這裡有兩個核心的權杖： Access Token (存取權杖): 我們的「泊車鑰匙」。Slack 可以用它去呼叫 Google 的 API，例如讀取你授權的使用者基本資料。 ID Token (身份權杖): 我們的「數位身分證」。這是一個 JWT (JSON Web Token)，其中包含了經過 Google 數位簽章的使用者身份資訊（如 Email、姓名、頭像連結等）。Slack 的後端只需驗證這個簽章的有效性，就可以完全信任其中的資訊，並確認你的身份。 第 5 步：建立會話並完成登入 Slack 的後端驗證了 id_token 的簽章，從中解析出你的 Email，在自己的資料庫裡找到或創建了你的帳號，然後——這一步是關鍵——它會為你建立一個屬於 Slack 自己的登入會話，並將一個 Session Cookie 寫入你的瀏覽器。 從這一刻起，瀏覽器和 Slack 之間就有了自己的信任關係。之所以能在 Slack 保持登入狀態，是因為這個 Session Cookie，而不是因為 Google 的權杖。Google 的權杖只在登入那一刻扮演了「身份驗證官」的角色。 對比案例：登入 Dropbox (SSO 優勢的體現) 現在，瀏覽器中已經有了兩樣東西：一個有效的 Google 會話 (因為登入了 Slack) 和一個有效的 Slack 會話。 當前往 Dropbox.com 並點擊「Continue with Google」時，一個相似但更快的流程開始了。 階段一：前端重定向 (幾乎瞬間完成) 第 1 步：請求授權 (從 Dropbox 到 Google) 與 Slack 一樣，Dropbox 會建構一個授權請求 URL，並讓你的瀏覽器跳轉過去，只是 client_id 和 redirect_uri 換成了 Dropbox 的資訊。 第 2 步：神奇之處 - 無需再次驗證 這是與第一次登入 Slack 時最大的不同點： 當瀏覽器帶著請求訪問 Google 時，它會自動附上 google.com 網域下的 Cookies。 Google 伺服器檢查 Cookies，發現了一個有效的、活躍的 Google 登入會話。 Google 判斷：「我認得這個使用者」，因此完全跳過了登入頁面。 Google 立刻生成一個新的、專屬於 Dropbox 請求的授權碼 (code)，並直接將瀏覽器重定向回 Dropbox 的 redirect_uri。 對使用者來說，這個過程可能只是一次螢幕的快速閃爍。 階段二：後端通訊 (與之前一致) 從這裡開始，後端的流程與 Slack 的情況完全相同，只是主角換成了 Dropbox： 第 3 &amp; 4 步：用授權碼交換權杖 Dropbox 後端拿到這個一次性的 code。 它使用自己的 client_id 和 client_secret，向 Google 的後端交換 access_token 和 id_token。 第 5 步：建立會話並完成登入 Dropbox 後端驗證了 id_token，確認了你的身份。 它在自己的系統中為你建立一個屬於 Dropbox 的登入會話，並將專屬於 dropbox.com 的 Session Cookie 寫入你的瀏覽器。 登入流程對比 用表格對比這兩次登入的關鍵差異： 步驟 登入 Slack (首次) 登入 Dropbox (已登入Google) 差異說明 前端請求 瀏覽器跳轉到 Google 瀏覽器跳轉到 Google 相同 Google驗證 顯示登入頁，使用者輸入帳號密碼 檢測到有效Cookie，跳過登入頁 這是 SSO 便利性的核心！ 前端返回 Google 攜帶 code 返回 Slack Google 攜帶 code 返回 Dropbox 相同 後端交換 Slack 後端用 code 換取權杖 Dropbox 後端用 code 換取權杖 相同 會話建立 建立 Slack 會話 建立 Dropbox 會話 各自建立獨立的應用會話 這個對比完美地解釋了 SSO 的真諦：一次身份驗證，多處無縫登入。你只需要向「身份提供者」(Google) 證明一次你是誰，之後所有信任它的「服務提供者」(Slack, Dropbox) 都能快速地確認你的身份，而無需你反覆輸入密碼。 會話狀態對比 執行的動作 Google 會話 (手環) Slack 會話 Dropbox 會話 你的感受 (初始狀態) 無 無 無 需要登入才能使用 用 Google 登入 Slack 有效 ✅ 有效 ✅ 無 ❌ 成功登入 Slack 用 Google 登入 Dropbox 有效 ✅ 有效 ✅ 有效 ✅ 幾乎無感、瞬間登入 Dropbox 總結 下次，當點擊「用 Google 登入」時，將清楚地知道背後發生的一切： SSO 是我們的目標：一次驗證，暢行無阻。 OAuth 2.0 是底層的授權框架，像是一套安全的交通規則。 OIDC 是建立在這套規則之上的身份協議，它發放「數位身分證」。 Google 會話 (IdP Session) 是 SSO 便利性的核心，它讓你在不同服務間穿梭時，無需重複驗證自己。 登入了一個服務，不代表自動登入了所有服務。但只要「魔法手環」還在，進入下一個服務將會變得無比輕鬆。</div>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-card-readmore">
-          <a href="/my-blog/2025/10/14/%E8%A7%A3%E5%AF%86%20SSO%20%E8%88%87%20OAuth%202.0%20%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%E7%94%A8%20Google%20%E7%99%BB%E5%85%A5%E7%9A%84%E6%89%80%E6%9C%89%E7%A5%95%E5%AF%86/" class="btn">
             閱讀全文 &raquo;
           </a>
         </div>
